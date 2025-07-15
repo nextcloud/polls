@@ -103,8 +103,6 @@
     "You have changed your name" : "Je hebt je naam gewijzigd",
     "You have changed the share type" : "Je hebt het share type gewijzigd",
     "{actor} has changed the share type" : "{actor} heeft het share type gewijzigd",
-    "You have changed the registration constraints for share {sharee}" : "Je hebt de registratiebeperkingen voor deelname {sharee} gewijzigd",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} heeft de registratiebeperkingen voor share {sharee} gewijzigd",
     "You have registered to poll {pollTitle}" : "Je hebt peiling {pollTitle} geregistreerd",
     "{sharee} registered to poll {pollTitle}" : "{sharee} registeerde bij peiling {pollTitle}",
     "You have registered" : "Je hebt jezelf geregistreerd",

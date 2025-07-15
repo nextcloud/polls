@@ -113,8 +113,6 @@ OC.L10N.register(
     "Display name of {sharee} has been changed" : "Visningsnamnet för {sharee} har ändrats",
     "You have changed the share type" : "Du har ändrat delningstyp",
     "{actor} has changed the share type" : "{actor} har ändrat delningstypen",
-    "You have changed the registration constraints for share {sharee}" : "Du har ändrat registreringsbegränsningarna för delningen {sharee}",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} har ändrat registreringsbegränsningarna för delningen {sharee}",
     "You have registered to poll {pollTitle}" : "Du har registrerat dig till omröstningen {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} registrerad till omröstningen {pollTitle}",
     "You have registered" : "Du har registrerats",

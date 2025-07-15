@@ -144,8 +144,6 @@ OC.L10N.register(
     "You have changed the share label" : "Ha cambiado la etiqueta del recurso compartido",
     "You have changed the share type" : "Has cambiado el tipo de recurso compartido",
     "{actor} has changed the share type" : "{actor} ha cambiado el tipo de recurso compartido",
-    "You have changed the registration constraints for share {sharee}" : "Has cambiado los requerimientos de registro para el recurso compartido {sharee}",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} ha cambiado los requerimientos de registro al compartir con {sharee}",
     "You have registered to poll {pollTitle}" : "Te has registrado en la encuesta {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} se ha registrado en la encuesta {pollTitle}",
     "You have registered" : "Te has registrado",

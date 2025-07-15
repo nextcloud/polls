@@ -101,8 +101,6 @@
     "Email address of {sharee} has been changed" : "Η διεύθυνση του ηλεκτρονικού ταχυδρομείου του {sharee} έχει αλλάξει",
     "You have changed the share type" : "Έχετε αλλάξει τον τύπο κοινοποίησης ",
     "{actor} has changed the share type" : "{action} έχει αλλάξει τον τύπο κοινοποίησης ",
-    "You have changed the registration constraints for share {sharee}" : "Έχετε αλλάξει τους περιορισμούς εγγραφής για την κοινοποίηση {sharee} ",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} έχει αλλάξει τους περιορισμούς για την κοινοποίηση {sharee}",
     "You have registered to poll {pollTitle}" : "Έχετε εγγραφεί στη δημοσκόπηση {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} εγγράφηκε στη δημοσκόπηση {pollTitle}",
     "You have registered" : "Έχετε εγγραφεί",

@@ -112,8 +112,6 @@ OC.L10N.register(
     "Display name of {sharee} has been changed" : "Wyświetlana nazwa {sharee} została zmieniona",
     "You have changed the share type" : "Zmieniłeś typ udostępnienia",
     "{actor} has changed the share type" : "{actor} zmienił typ udostępnienia",
-    "You have changed the registration constraints for share {sharee}" : "Zmieniłeś ograniczenia rejestracji dla udostępnienia {sharee}",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} zmienił ograniczenia rejestracji dla udostępnienia {sharee}",
     "You have registered to poll {pollTitle}" : "Zarejestrowałeś się do sondy {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} zarejestrował się do sondy {pollTitle}",
     "You have registered" : "Zarejestrowałeś się",

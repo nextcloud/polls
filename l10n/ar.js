@@ -135,8 +135,6 @@ OC.L10N.register(
     "You have changed the share label" : "لقد قُمتَ بتغيير تسمية المُشاركة",
     "You have changed the share type" : "لقد قمت بتغيير نوع المشاركة",
     "{actor} has changed the share type" : "قام {actor} بتغيير نوع المشاركة",
-    "You have changed the registration constraints for share {sharee}" : "لقد قمت بتغيير قيود التسجيل للمشاركة {sharee}",
-    "{actor} has changed the registration constraints for share {sharee}" : "قام {actor} بتغيير قيود التسجيل للمشاركة {sharee}",
     "You have registered to poll {pollTitle}" : "لقد قمتَ بالتسجيل في استبيان {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "تمّ تسجيل {sharee} في استبيان {pollTitle}",
     "You have registered" : "أنت مُسجّل",

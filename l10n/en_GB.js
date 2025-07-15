@@ -144,8 +144,6 @@ OC.L10N.register(
     "You have changed the share label" : "You have changed the share label",
     "You have changed the share type" : "You have changed the share type",
     "{actor} has changed the share type" : "{actor} has changed the share type",
-    "You have changed the registration constraints for share {sharee}" : "You have changed the registration constraints for share {sharee}",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} has changed the registration constraints for share {sharee}",
     "You have registered to poll {pollTitle}" : "You have registered to poll {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} registered to poll {pollTitle}",
     "You have registered" : "You have registered",

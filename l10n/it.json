@@ -142,8 +142,6 @@
     "You have changed the share label" : "Hai cambiato l'etichetta di condivisione",
     "You have changed the share type" : "Hai cambiato il tipo di condivisione",
     "{actor} has changed the share type" : "{actor} ha cambiato il tipo di condivisione",
-    "You have changed the registration constraints for share {sharee}" : "Hai modificato i vincoli di registrazione per la condivisione {sharee}",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} ha modificato i vincoli di registrazione per la condivisione {sharee}",
     "You have registered to poll {pollTitle}" : "Ti sei registrato per il sondaggio {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} si è registrato per il sondaggio {pollTitle}",
     "You have registered" : "Ti sei registrato",

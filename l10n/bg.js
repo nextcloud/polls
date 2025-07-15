@@ -112,8 +112,6 @@ OC.L10N.register(
     "Display name of {sharee} has been changed" : "Името за визуализация на {sharee} беше променено",
     "You have changed the share type" : "Променихте типа споделяне",
     "{actor} has changed the share type" : "{actor} промени типа споделяне",
-    "You have changed the registration constraints for share {sharee}" : "Променихте регистрационните ограничения за споделяне {sharee}",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} промени регистрационните ограничения за споделяне {sharee}",
     "You have registered to poll {pollTitle}" : "Регистрирахте се за анкета {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} се регистрира за анкета {pollTitle}",
     "You have registered" : "Вие сте се регистрирали",

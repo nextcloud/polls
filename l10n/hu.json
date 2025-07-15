@@ -119,8 +119,6 @@
     "Display name of {sharee} has been changed" : "{sharee} megjelenítendő neve megváltozott",
     "You have changed the share type" : "Megváltoztatta a megosztás típusát",
     "{actor} has changed the share type" : "{actor} megváltoztatta a megosztás típusát",
-    "You have changed the registration constraints for share {sharee}" : "Módosította a(z) {share} megosztás regisztrációs megszorításait",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} módosította a(z) {share} megosztás regisztrációs megszorításait",
     "You have registered to poll {pollTitle}" : "Regisztrálta a(z) {pollTitle} szavazást",
     "{sharee} registered to poll {pollTitle}" : "{actor} regisztrálta a(z) {pollTitle} szavazást",
     "You have registered" : "Regisztrált",

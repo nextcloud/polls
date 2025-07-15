@@ -41,6 +41,7 @@ OC.L10N.register(
     "Back" : "Rudi",
     "Privacy policy" : "Sheria ya faragha",
     "Login" : "Ingia",
+    "Link copied to clipboard" : "Kiungo kimenakiliwa kwenye ubao wakunakilia",
     "Show QR code" : "Onesha msimbo wa QR",
     "No activity yet" : "Bado hakuna shughuli",
     "Public link" : "Kiungio cha umma",

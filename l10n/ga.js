@@ -144,8 +144,6 @@ OC.L10N.register(
     "You have changed the share label" : "D'athraigh tú an lipéad scaireanna",
     "You have changed the share type" : "D'athraigh tú an cineál scaire",
     "{actor} has changed the share type" : "D'athraigh {actor} an cineál comhroinnte",
-    "You have changed the registration constraints for share {sharee}" : "D'athraigh tú na srianta clárúcháin do scair {share}",
-    "{actor} has changed the registration constraints for share {sharee}" : "D'athraigh {actor} na srianta clárúcháin do scair {share}",
     "You have registered to poll {pollTitle}" : "Tá tú tar éis clárú le haghaidh vótaíochta {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "Chláraigh {sharee} don vótaíocht {pollTitle}",
     "You have registered" : "Tá tú cláraithe",

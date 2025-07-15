@@ -135,8 +135,6 @@ OC.L10N.register(
     "You have changed the share label" : "Du har endret delingsetiketten",
     "You have changed the share type" : "Du har endret delingstypen",
     "{actor} has changed the share type" : "{actor} har endret delingstypen",
-    "You have changed the registration constraints for share {sharee}" : "Du har endret registreringsbegrensningene for delt ressurs {sharee}",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} har endret registreringsbegrensningene for delt ressurs {sharee}",
     "You have registered to poll {pollTitle}" : "Du har registrert deg for avstemning {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} registrerte seg for avstemning {pollTitle}",
     "You have registered" : "Du har registrert deg",

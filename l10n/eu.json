@@ -113,8 +113,6 @@
     "Display name of {sharee} has been changed" : "{sharee}-(r)en izena aldatu da",
     "You have changed the share type" : "Partekatze mota aldatu duzu",
     "{actor} has changed the share type" : "{actor}-(e)k partekatze mota aldatu du",
-    "You have changed the registration constraints for share {sharee}" : "{sharee} partekatzeko erregistratzeko mugak aldatu dituzu",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor}-(e)k aldatu ditu partekatzeko {sharee} erregistratzeko mugak ",
     "You have registered to poll {pollTitle}" : "{pollTitle} galdeketan erregistratu zara",
     "{sharee} registered to poll {pollTitle}" : "{sharee} {pollTitle} galdeketan erregistratu da",
     "You have registered" : "Erregistratu zara",

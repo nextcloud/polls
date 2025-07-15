@@ -135,8 +135,6 @@ OC.L10N.register(
     "You have changed the share label" : "Heu canviat l'etiqueta de compartició",
     "You have changed the share type" : "Heu canviat el tipus de compartició",
     "{actor} has changed the share type" : "{actor} ha canviat el tipus de compartició",
-    "You have changed the registration constraints for share {sharee}" : "Heu canviat les restriccions de registre per compartir {sharee}",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} ha canviat les restriccions de registre per compartir {sharee}",
     "You have registered to poll {pollTitle}" : "Us heu registrat a l’enquesta {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} s'ha registrat a l'enquesta {pollTitle}",
     "You have registered" : "Us heu registrat",

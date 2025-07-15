@@ -144,8 +144,6 @@ OC.L10N.register(
     "You have changed the share label" : "您更改了分享標籤",
     "You have changed the share type" : "您更改了分享類型",
     "{actor} has changed the share type" : "{actor} 更改了分享類型",
-    "You have changed the registration constraints for share {sharee}" : "您更改了分享 {sharee} 的註冊限制",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} 更改了分享 {sharee} 的註冊限制",
     "You have registered to poll {pollTitle}" : "您已註冊民意調查 {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} 已註冊民意調查 {pollTitle}",
     "You have registered" : "您已註冊",

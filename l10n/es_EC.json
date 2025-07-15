@@ -110,8 +110,6 @@
     "Display name of {sharee} has been changed" : "Se ha cambiado el nombre de {sharee}",
     "You have changed the share type" : "Has cambiado el tipo de compartición",
     "{actor} has changed the share type" : "{actor} ha cambiado el tipo de compartición",
-    "You have changed the registration constraints for share {sharee}" : "Has cambiado las restricciones de registro para {sharee}",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} ha cambiado las restricciones de registro para {sharee}",
     "You have registered to poll {pollTitle}" : "Te has registrado en la encuesta {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} se ha registrado en la encuesta {pollTitle}",
     "You have registered" : "Te has registrado",

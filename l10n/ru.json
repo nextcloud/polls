@@ -107,8 +107,6 @@
     "Email address of {sharee} has been changed" : "Адрес электронной почты {sharee} был изменен",
     "You have changed the share type" : "Вы изменили вид раздачи",
     "{actor} has changed the share type" : "{actor} изменил вид раздачи",
-    "You have changed the registration constraints for share {sharee}" : "Вы изменили ограничения для раздачи {sharee}",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} изменил ограничения для раздачи {sharee}",
     "You have registered to poll {pollTitle}" : "Вы зарегистрировались для участия в опросе {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} зарегистрирован для участия в опросе {pollTitle}",
     "You have registered" : "Вы зарегистрировались",

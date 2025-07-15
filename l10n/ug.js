@@ -134,8 +134,6 @@ OC.L10N.register(
     "You have changed the share label" : "ھەمبەھىر بەلگىسىنى ئۆزگەرتتىڭىز",
     "You have changed the share type" : "ھەمبەھىر تىپىنى ئۆزگەرتتىڭىز",
     "{actor} has changed the share type" : "{actor} share ھەمبەھىر تىپىنى ئۆزگەرتتى",
-    "You have changed the registration constraints for share {sharee}" : "ئورتاقلىشىش {sharee} for نىڭ تىزىملىتىش چەكلىمىسىنى ئۆزگەرتتىڭىز",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} share ئورتاقلىشىش {sharee} for نىڭ تىزىملىتىش چەكلىمىسىنى ئۆزگەرتتى",
     "You have registered to poll {pollTitle}" : "راي سىناشقا تىزىملاتتىڭىز {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} راي سىناشقا تىزىملاتقان {pollTitle}",
     "You have registered" : "تىزىملاتتىڭىز",

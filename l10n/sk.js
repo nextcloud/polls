@@ -135,8 +135,6 @@ OC.L10N.register(
     "You have changed the share label" : "Zmenili ste štítok zdieľania",
     "You have changed the share type" : "Zmenili ste typ zdieľania",
     "{actor} has changed the share type" : "{actor} zmenil typ zdieľania",
-    "You have changed the registration constraints for share {sharee}" : "Zmenili ste obmedzenia registrácie pre zdieľanie {sharee}",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor} zmenil obmedzenia registrácie pre zdieľanie {sharee}",
     "You have registered to poll {pollTitle}" : "Zaregistrovali ste sa k ankete {pollTitle}",
     "{sharee} registered to poll {pollTitle}" : "{sharee} sa zaregistroval/a do ankety {pollTitle}",
     "You have registered" : "Ste zaregistrovaný",

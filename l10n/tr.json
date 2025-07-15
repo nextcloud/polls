@@ -142,8 +142,6 @@
     "You have changed the share label" : "Paylaşım etiketini değiştirdiniz",
     "You have changed the share type" : "Paylaşım türünü değiştirdiniz",
     "{actor} has changed the share type" : "{actor}, paylaşım türünü değiştirdi",
-    "You have changed the registration constraints for share {sharee}" : "{sharee} paylaşımı için kayıt kısıtlamalarını değiştirdiniz",
-    "{actor} has changed the registration constraints for share {sharee}" : "{actor}, {sharee} paylaşımı için kayıt kısıtlamalarını değiştirdi",
     "You have registered to poll {pollTitle}" : "{pollTitle} anketine kayıt oldunuz",
     "{sharee} registered to poll {pollTitle}" : "{sharee}, {pollTitle} anketine kayıt oldu",
     "You have registered" : "Kayıt oldunuz",
