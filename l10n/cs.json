@@ -327,7 +327,6 @@
     "Force confidential comments (only visible to you and the author)" : "Vynutit důvěrné komentáře (viditelné pouze vám a autorovi)",
     "Force confidential comments (only visible to {displayName} and the author)" : "Vynutit důvěrné komentáře (viditelné pouze {displayName} a autorovi)",
     "Limit \"Yes\" votes per option" : "Omezit počet hlasů „Ano“ na každou možnost",
-    "Hide unavailable Options" : "Skrýt nedostupné volby.",
     "Allow proposals" : "Povolit návrhy",
     "Proposal closing date" : "Datum uzavření návrhu",
     "Always show results" : "Výsledky vždy zobrazovat",
