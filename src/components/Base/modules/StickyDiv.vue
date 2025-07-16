@@ -92,4 +92,37 @@ const stickyClass = computed(() => ({
 .sticky-top.sticky-left {
 	z-index: 7;
 }
+
+/* TODO: Implement sticky right shadow
+	An Alternative could be using a grid instead of ::after
+	to be able to position multiple shadows in all directions */
+
+/*
+	padding-right: var(--shadow-height);
+
+	&::after {
+		content: '';
+		position: absolute;
+		right: 0;
+		top: -1px;
+		bottom: 0;
+		width: 0;
+		background: linear-gradient(
+			to right,
+			rgba(var(--color-box-shadow-rgb), 0.3),
+			rgba(var(--color-box-shadow-rgb), 0)
+		);
+		transition:
+			all var(--animation-slow) linear,
+			border 1ms;
+	}
+
+	&.sticky-right-shadow {
+		border-right: 0;
+		padding-right: var(--shadow-height);
+		margin-right: 0;
+		&::after {
+			width: var(--shadow-height);
+		}
+	} */
 </style>
