@@ -47,9 +47,6 @@ function toggleClamp() {
 	padding-inline: 56px 8px;
 	background-color: var(--color-main-background);
 	transition: all var(--animation-slow) linear;
-	&.sticky-top {
-		z-index: 9;
-	}
 
 	&::after {
 		border-top: 1px solid var(--color-border);

@@ -17,6 +17,7 @@ import { NcActionButton, NcActions, NcActionText } from '@nextcloud/vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import VoteMenu from './VoteMenu.vue'
 import { User } from '../../Types/index.ts'
+import { computed } from 'vue'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
@@ -32,6 +33,10 @@ async function removeUser(userId: string) {
 	await votesStore.resetUserVotes({ userId })
 	showSuccess(t('polls', 'Participant {userId} has been removed', { userId }))
 }
+
+const userItemClass = computed(() => ({
+	'current-user': user.id === sessionStore.currentUser.id,
+}))
 </script>
 
 <template>
@@ -39,12 +44,7 @@ async function removeUser(userId: string) {
 		v-if="pollStore.viewMode === 'table-view'"
 		:user="user"
 		condensed
-		:class="[
-			'participant',
-			{
-				'current-user': user.id === sessionStore.currentUser.id,
-			},
-		]">
+		:class="userItemClass">
 		<template
 			v-if="
 				pollStore.permissions.edit || user.id === sessionStore.currentUser.id

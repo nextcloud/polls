@@ -88,10 +88,8 @@ async function restoreComment(comment: Comment) {
 			<div
 				v-for="subComment in comment.comments"
 				:key="subComment.id"
-				:class="[
-					'comment-item__sub-comment',
-					{ deleted: subComment.deleted },
-				]">
+				class="comment-item__sub-comment"
+				:class="{ deleted: subComment.deleted }">
 				<!-- eslint-disable vue/no-v-html -->
 				<span v-html="linkify(subComment.comment)" />
 				<!-- eslint-enable vue/no-v-html -->
