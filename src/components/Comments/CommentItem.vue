@@ -15,10 +15,13 @@ import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'
 import { useCommentsStore } from '../../stores/comments.ts'
 import { Comment, CommentsGrouped } from '../../Types/index.ts'
+import { usePreferencesStore } from '../../stores/preferences.ts'
+import UserBubble from '../User/UserBubble.vue'
 
 const sessionStore = useSessionStore()
 const pollStore = usePollStore()
 const commentsStore = useCommentsStore()
+const preferencesStore = usePreferencesStore()
 
 const { comment } = defineProps<{ comment: CommentsGrouped }>()
 
@@ -73,14 +76,31 @@ async function restoreComment(comment: Comment) {
 		showError(t('polls', 'Error while restoring the comment'))
 	}
 }
+const deletable = computed(
+	() =>
+		comment.user.id === sessionStore.currentUser?.id
+		|| pollStore.currentUserStatus.isOwner,
+)
 </script>
 
 <template>
-	<div :class="['comment-item', { 'current-user': isCurrentUser }]">
-		<UserItem :user="comment.user" hide-names />
+	<div :class="['comment-item', { 'current-user': isCurrentUser }, deletable]">
+		<UserItem
+			v-if="!preferencesStore.user.useCommentsAlternativeStyling"
+			:user="comment.user"
+			hide-names />
+
 		<div class="comment-item__content">
-			<span class="comment-item__user">{{ comment.user.displayName }}</span>
+			<span
+				v-if="!preferencesStore.user.useCommentsAlternativeStyling"
+				class="comment-item__user">
+				{{ comment.user.displayName }}
+			</span>
+
+			<UserBubble v-else-if="!isCurrentUser" :user="comment.user" />
+
 			<span class="comment-item__date">{{ dateCommentedRelative }}</span>
+
 			<span v-if="isConfidential" class="comment-item__confidential">
 				{{ confidentialRecipient }}
 			</span>
@@ -90,6 +110,7 @@ async function restoreComment(comment: Comment) {
 				:key="subComment.id"
 				:class="[
 					'comment-item__sub-comment',
+					{ deletable },
 					{ deleted: subComment.deleted },
 				]">
 				<!-- eslint-disable vue/no-v-html -->
@@ -97,10 +118,7 @@ async function restoreComment(comment: Comment) {
 				<!-- eslint-enable vue/no-v-html -->
 
 				<ActionDelete
-					v-if="
-						comment.user.id === sessionStore.currentUser?.id
-						|| pollStore.currentUserStatus.isOwner
-					"
+					v-if="deletable"
 					:name="
 						subComment.deleted
 							? t('polls', 'Restore comment')
@@ -161,7 +179,7 @@ async function restoreComment(comment: Comment) {
 		display: flex;
 		align-items: center;
 
-		&:hover {
+		&.deletable:hover {
 			background: var(--color-background-hover);
 			.material-design-icon {
 				visibility: visible;
@@ -191,26 +209,43 @@ async function restoreComment(comment: Comment) {
 // experimental
 .alternativestyle {
 	.comment-item {
-		flex-direction: row-reverse;
+		flex-direction: row;
+		// margin-right: 44px;
 		&.current-user {
-			flex-direction: row;
+			flex-direction: row-reverse;
+			margin-right: 0;
+			margin-left: 88px;
+		}
+		&:not(.current-user) .comment-item__sub-comment {
+			margin-left: 1.5rem;
 		}
 	}
 
-	.comment-item__content {
-		border: solid 1px var(--color-primary-element-light);
-		border-radius: var(--border-radius-large);
-		background-color: var(--color-primary-element-light);
-		box-shadow: 2px 2px 6px var(--color-box-shadow);
-		padding-inline-start: 8px;
-		padding-bottom: 10px;
+	.current-user {
+		.user-item {
+			display: none;
+		}
+		.comment-item__date {
+			grid-row: 999;
+		}
+		.comment-item__content {
+			display: grid;
+			border: solid 1px var(--color-primary-element-light);
+			border-radius: var(--border-radius-large);
+			background-color: var(--color-primary-element-light);
+			box-shadow: 2px 2px 6px var(--color-box-shadow);
+			padding-inline-start: 8px;
+			padding-bottom: 10px;
+		}
+
+		.comment-item__user {
+			display: none;
+		}
 
 		.comment-item__sub-comment {
 			margin-inline-end: 4px;
 
-			&:hover {
-				background: var(--color-primary-element-hover);
-				color: var(--color-primary-element-light-hover);
+			&.deletable:hover {
 				margin-inline-start: -4px;
 				padding-inline-start: 4px;
 				border-radius: var(--border-radius-large);
