@@ -5,7 +5,6 @@ type: 'bug'
 
 body:
   - type: markdown
-    id: thankyou
     attributes:
       value: |
         ### 👍 Thank you for your time to contributing to our project!
@@ -17,17 +16,13 @@ body:
       description: All conditions are **required**. Your issue can be closed if these are checked incorrectly.
       options:
         - label: This is a **bug**, not a question or a configuration/webserver/proxy issue.
-          id: isbug
           required: true
         - label: This issue is **not** already reported on Github _(I've searched it)_.
-          id: isnew
           required: true
         - label: I agree to follow Nextcloud's [Code of Conduct](https://nextcloud.com/contribute/code-of-conduct/).
-          id: agree
           required: true
 
   - type: markdown
-    id: bugtext
     attributes:
       value: |
         ---
@@ -69,7 +64,6 @@ body:
       required: true
 
   - type: markdown
-    id: informationtext
     attributes:
       value: |
         ---
@@ -111,7 +105,6 @@ body:
       required: true
 
   - type: markdown
-    id: envtext
     attributes:
       value: |
         ---
@@ -166,7 +159,6 @@ body:
         Add additional information about your client environment (i.e. browser plug-ins).
 
   - type: markdown
-    id: serverenvtext
     attributes:
       value: |
         ---
