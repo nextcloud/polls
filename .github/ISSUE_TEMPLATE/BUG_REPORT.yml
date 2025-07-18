@@ -121,7 +121,7 @@ body:
         ⚠️ Please make sure browser extensions/plug-ins can be excluded as the bug source (especially script and ad blockers).
 
   - type: checkboxes
-    id: client-browser
+    id: extensions
     attributes:
       label: Can you rule out that any extension you use is involved in the issue?
       description: |
