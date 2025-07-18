@@ -28,7 +28,7 @@ import EmailIcon from 'vue-material-design-icons/Email.vue'
 
 import { MaybeIcon } from '../AppIcons/index.ts'
 
-import { BadgeDiv } from '../Base/index.ts'
+import BadgeDiv from '../Base/modules/BadgeDiv.vue'
 import UserBubble from '../User/UserBubble.vue'
 import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'

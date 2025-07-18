@@ -8,7 +8,7 @@ import { ref } from 'vue'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
-import { InputDiv } from '../Base/index.ts'
+import InputDiv from '../Base/modules/InputDiv.vue'
 import { SimpleOption, useOptionsStore } from '../../stores/options.ts'
 import { AxiosError } from '@nextcloud/axios'
 

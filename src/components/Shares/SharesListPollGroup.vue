@@ -8,7 +8,7 @@ import { t } from '@nextcloud/l10n'
 
 import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 
-import { ConfigBox } from '../Base/index.ts'
+import ConfigBox from '../Base/modules/ConfigBox.vue'
 import ShareItem from './ShareItem.vue'
 import UserSearch from '../User/UserSearch.vue'
 

@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { CardDiv } from '../../Base/index.ts'
+import CardDiv from '../../Base/modules/CardDiv.vue'
 import ActionDeleteOrphanedVotes from '../../Actions/modules/ActionDeleteOrphanedVotes.vue'
 import { t, n } from '@nextcloud/l10n'
 import { usePollStore } from '../../../stores/poll.ts'

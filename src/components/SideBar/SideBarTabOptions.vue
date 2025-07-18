@@ -11,7 +11,7 @@ import { t } from '@nextcloud/l10n'
 import { useOptionsStore } from '../../stores/options.ts'
 import { usePollStore } from '../../stores/poll.ts'
 
-import { ConfigBox } from '../Base/index.ts'
+import ConfigBox from '../Base/modules/ConfigBox.vue'
 import OptionsDate from '../Options/OptionsDate.vue'
 import OptionsDateShift from '../Options/OptionsDateShift.vue'
 import OptionsText from '../Options/OptionsText.vue'
