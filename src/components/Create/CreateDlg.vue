@@ -14,7 +14,9 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
-import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.ts'
+import InputDiv from '../Base/modules/InputDiv.vue'
+import RadioGroupDiv from '../Base/modules/RadioGroupDiv.vue'
+import ConfigBox from '../Base/modules/ConfigBox.vue'
 
 import { usePollStore, pollTypes, PollType } from '../../stores/poll.ts'
 

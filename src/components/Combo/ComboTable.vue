@@ -9,7 +9,7 @@ import UserItem from '../User/UserItem.vue'
 import { useComboStore } from '../../stores/combo.ts'
 import { ViewMode } from '../../Types/index.ts'
 
-const { viewMode } = defineProps<{ viewMode: ViewMode }>()
+const { viewMode = 'table-view' } = defineProps<{ viewMode?: ViewMode }>()
 
 const comboStore = useComboStore()
 </script>

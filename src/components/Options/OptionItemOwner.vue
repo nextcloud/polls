@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { ActionDelete } from '../Actions/index.ts'
+import ActionDelete from '../Actions/modules/ActionDelete.vue'
 import UserItem from '../User/UserItem.vue'
 import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../../stores/poll.ts'

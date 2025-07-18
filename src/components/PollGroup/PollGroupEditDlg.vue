@@ -10,7 +10,7 @@ import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import SpeakerBigIcon from 'vue-material-design-icons/BullhornVariant.vue'
 import DescriptionIcon from 'vue-material-design-icons/TextBox.vue'
 
-import { ConfigBox } from '../Base/index.ts'
+import ConfigBox from '../Base/modules/ConfigBox.vue'
 
 import { usePollGroupsStore } from '../../stores/pollGroups.ts'
 import { showError, showInfo } from '@nextcloud/dialogs'

@@ -9,7 +9,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 
-import { FlexSettings } from '../components/Base/index.ts'
+import FlexSettings from '../components/Base/modules/FlexSettings.vue'
 import {
 	CalendarSettings,
 	FeatureSettings,

@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { RadioGroupDiv } from '../Base/index.ts'
+import RadioGroupDiv from '../Base/modules/RadioGroupDiv.vue'
 import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../../stores/poll.ts'
 

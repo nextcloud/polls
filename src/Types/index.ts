@@ -99,13 +99,11 @@ export type UserType =
 	| 'public'
 	| 'circle'
 	| 'contactGroup'
-	| ''
-
-export type VirtualUserItemType =
-	| 'addPublicLink'
-	| 'internalAccess'
 	| 'deleted'
 	| 'anonymous'
+	| ''
+
+export type VirtualUserItemType = 'addPublicLink' | 'internalAccess'
 
 /**
  * Type of search that can be used in the search bar.
@@ -144,6 +142,7 @@ export type User = {
 	emailAddress: string
 	isAdmin: boolean
 	isNoUser: boolean
+	isGuest: boolean
 	type: UserType
 	subName: string | null
 	subtitle: string | null

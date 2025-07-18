@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { CardDiv } from '../../Base/index.ts'
+import CardDiv from '../../Base/modules/CardDiv.vue'
 import ActionOpenSharesSidebar from '../../Actions/modules/ActionOpenSharesSidebar.vue'
 import { t } from '@nextcloud/l10n'
 import { useVotesStore } from '../../../stores/votes.ts'

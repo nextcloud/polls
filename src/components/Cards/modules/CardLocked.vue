@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { CardDiv } from '../../Base/index.ts'
+import CardDiv from '../../Base/modules/CardDiv.vue'
 import { t } from '@nextcloud/l10n'
 import { useSessionStore } from '../../../stores/session.ts'
 

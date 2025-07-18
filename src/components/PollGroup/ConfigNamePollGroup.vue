@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { InputDiv } from '../Base/index.ts'
+import InputDiv from '../Base/modules/InputDiv.vue'
 import { t } from '@nextcloud/l10n'
 import { usePollGroupsStore } from '../../stores/pollGroups.ts'
 import { computed } from 'vue'

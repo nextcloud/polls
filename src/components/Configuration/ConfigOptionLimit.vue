@@ -9,7 +9,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
-import { InputDiv } from '../Base/index.ts'
+import InputDiv from '../Base/modules/InputDiv.vue'
 
 import { usePollStore } from '../../stores/poll.ts'
 

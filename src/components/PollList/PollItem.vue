@@ -8,7 +8,6 @@ import { RouterLink } from 'vue-router'
 import { computed } from 'vue'
 import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
-import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 
 import { usePollStore, Poll, pollTypes } from '../../stores/poll'
 import { usePreferencesStore } from '../../stores/preferences.ts'
@@ -26,6 +25,7 @@ import LockPollIcon from 'vue-material-design-icons/Security.vue'
 import ParticipantsIcon from 'vue-material-design-icons/AccountMultipleCheck.vue'
 import ParticipatedIcon from 'vue-material-design-icons/AccountCheck.vue'
 import AdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
+import UserBubble from '../User/UserBubble.vue'
 
 interface Props {
 	poll: Poll
@@ -244,11 +244,9 @@ const descriptionLine = computed(() => {
 				</template>
 			</BadgeSmallDiv>
 
-			<NcUserBubble
+			<UserBubble
 				v-if="preferencesStore.user.verbosePollsList"
-				:user="poll.owner.id"
-				:display-name="poll.owner.displayName"
-				:show-user-status="false"
+				:user="poll.owner"
 				:title="
 					t('polls', 'Poll owner: {ownerName}', {
 						ownerName: poll.owner.displayName,

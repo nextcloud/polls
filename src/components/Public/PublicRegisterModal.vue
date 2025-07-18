@@ -14,7 +14,7 @@ import { t } from '@nextcloud/l10n'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
-import { InputDiv } from '../Base/index.ts'
+import InputDiv from '../Base/modules/InputDiv.vue'
 import { SimpleLink, setCookie } from '../../helpers/index.ts'
 import { ValidatorAPI, PublicAPI } from '../../Api/index.ts'
 import { useSessionStore } from '../../stores/session.ts'

@@ -11,7 +11,8 @@ import NcModal from '@nextcloud/vue/components/NcModal'
 
 import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 
-import { ConfigBox, QrModal } from '../Base/index.ts'
+import QrModal from '../Base/modules/QrModal.vue'
+import ConfigBox from '../Base/modules/ConfigBox.vue'
 import ShareItem from './ShareItem.vue'
 import UserSearch from '../User/UserSearch.vue'
 import SharePublicAdd from './SharePublicAdd.vue'
