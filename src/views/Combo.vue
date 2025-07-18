@@ -59,6 +59,6 @@ onMounted(() => {
 			</NcEmptyContent>
 		</div>
 
-		<LoadingOverlay v-if="isLoading" />
+		<LoadingOverlay :name="t('polls', 'Loading …')" :show="isLoading" />
 	</NcAppContent>
 </template>
