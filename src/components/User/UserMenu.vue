@@ -34,12 +34,11 @@ import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOu
 import { PollsAPI, ValidatorAPI } from '../../Api/index.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 import { usePollStore } from '../../stores/poll.ts'
-import { usePreferencesStore } from '../../stores/preferences.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
-import { StatusResults, Event } from '../../Types/index.ts'
+import { StatusResults, Event, ViewMode } from '../../Types/index.ts'
 
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
 import { NcActionButtonGroup } from '@nextcloud/vue'
@@ -57,7 +56,6 @@ const optionsStore = useOptionsStore()
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 const subscriptionStore = useSubscriptionStore()
-const preferencesStore = usePreferencesStore()
 const votesStore = useVotesStore()
 const router = useRouter()
 const hasCookie = !!findCookieByValue(sessionStore.publicToken)
@@ -65,8 +63,9 @@ const viewMode = computed({
 	get() {
 		return pollStore.viewMode
 	},
-	set() {
-		changeView()
+	set(value: ViewMode) {
+		emit(Event.TransitionsOff, 500)
+		pollStore.setViewMode(value)
 	},
 })
 
@@ -126,22 +125,6 @@ async function resendInvitation() {
 			t('polls', 'Mail could not be resent to {emailAddress}', {
 				emailAddress: sessionStore.share.user.emailAddress,
 			}),
-		)
-	}
-}
-
-/**
- *
- */
-function changeView(): void {
-	emit(Event.TransitionsOff, 500)
-	if (pollStore.type === 'datePoll') {
-		preferencesStore.setViewDatePoll(
-			pollStore.viewMode === 'table-view' ? 'list-view' : 'table-view',
-		)
-	} else if (pollStore.type === 'textPoll') {
-		preferencesStore.setViewTextPoll(
-			pollStore.viewMode === 'table-view' ? 'list-view' : 'table-view',
 		)
 	}
 }

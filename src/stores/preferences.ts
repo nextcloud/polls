@@ -26,11 +26,6 @@ export type UserPreferences = {
 	verbosePollsList: boolean
 }
 
-export type SessionSettings = {
-	manualViewDatePoll: '' | ViewMode
-	manualViewTextPoll: '' | ViewMode
-}
-
 export type Calendar = {
 	key: string
 	name: string
@@ -41,7 +36,6 @@ export type Calendar = {
 
 export type Preferences = {
 	user: UserPreferences
-	session: SessionSettings
 	availableCalendars: Calendar[]
 }
 
@@ -62,34 +56,10 @@ export const usePreferencesStore = defineStore('preferences', {
 			useAlternativeStyling: false,
 			verbosePollsList: false,
 		},
-		session: {
-			manualViewDatePoll: '',
-			manualViewTextPoll: '',
-		},
 		availableCalendars: [],
 	}),
 
 	getters: {
-		viewTextPoll(state): ViewMode {
-			if (state.session.manualViewTextPoll) {
-				return state.session.manualViewTextPoll
-			}
-			if (window.innerWidth > 480) {
-				return state.user.defaultViewTextPoll
-			}
-			return 'list-view'
-		},
-
-		viewDatePoll(state): ViewMode {
-			if (state.session.manualViewDatePoll) {
-				return state.session.manualViewDatePoll
-			}
-			if (window.innerWidth > 480) {
-				return state.user.defaultViewDatePoll
-			}
-			return 'table-view'
-		},
-
 		useNcAppNavigationNew(state): boolean {
 			return (
 				!state.user.useNewPollDialogInNavigation
@@ -121,14 +91,6 @@ export const usePreferencesStore = defineStore('preferences', {
 				this.user.checkCalendars.splice(index, 1)
 			}
 			this.write()
-		},
-
-		setViewDatePoll(viewMode: ViewMode) {
-			this.session.manualViewDatePoll = viewMode
-		},
-
-		setViewTextPoll(viewMode: ViewMode) {
-			this.session.manualViewTextPoll = viewMode
 		},
 
 		async load(): Promise<void> {

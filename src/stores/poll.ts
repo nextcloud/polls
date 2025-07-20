@@ -23,9 +23,9 @@ import {
 	StatusResults,
 	User,
 	UserType,
+	ViewMode,
 } from '../Types/index.ts'
 
-import { usePreferencesStore, ViewMode } from './preferences.ts'
 import { useVotesStore, Answer } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { usePollsStore } from './polls.ts'
@@ -244,13 +244,13 @@ export const usePollStore = defineStore('poll', {
 
 	getters: {
 		viewMode(state): ViewMode {
-			const preferencesStore = usePreferencesStore()
+			const sessionStore = useSessionStore()
 			if (state.type === 'textPoll') {
-				return preferencesStore.viewTextPoll
+				return sessionStore.viewModeTextPoll
 			}
 
 			if (state.type === 'datePoll') {
-				return preferencesStore.viewDatePoll
+				return sessionStore.viewModeDatePoll
 			}
 			return 'table-view'
 		},
@@ -354,6 +354,11 @@ export const usePollStore = defineStore('poll', {
 	actions: {
 		reset(): void {
 			this.$reset()
+		},
+
+		setViewMode(viewMode: ViewMode): void {
+			const sessionStore = useSessionStore()
+			sessionStore.setViewMode(this.type, viewMode)
 		},
 
 		setProposalExpiration(payload: { expire: number }): void {

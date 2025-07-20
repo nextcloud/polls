@@ -8,12 +8,12 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { PublicAPI, SessionAPI } from '../Api/index.ts'
 import { createDefault, User, AppPermissions } from '../Types/index.ts'
 import { AppSettings, UpdateType } from './appSettings.ts'
-import { usePreferencesStore, ViewMode, SessionSettings } from './preferences.ts'
+import { usePreferencesStore, ViewMode } from './preferences.ts'
 import { FilterType, usePollsStore } from './polls.ts'
 import { Share } from './shares.ts'
 import { RouteLocationNormalized, RouteRecordNameGeneric } from 'vue-router'
 import { Logger } from '../helpers/index.ts'
-import { usePollStore } from './poll.ts'
+import { PollType, usePollStore } from './poll.ts'
 import { useSubscriptionStore } from './subscription.ts'
 import { AxiosError } from '@nextcloud/axios'
 import { t } from '@nextcloud/l10n'
@@ -36,6 +36,11 @@ export type Route = {
 export type UserStatus = {
 	isLoggedin: boolean
 	isAdmin: boolean
+}
+
+export type SessionSettings = {
+	viewModeDatePoll: '' | ViewMode
+	viewModeTextPoll: '' | ViewMode
 }
 
 export type Watcher = {
@@ -77,8 +82,8 @@ export const useSessionStore = defineStore('session', {
 			unrestrictedOwner: false,
 		},
 		sessionSettings: {
-			manualViewDatePoll: '',
-			manualViewTextPoll: '',
+			viewModeDatePoll: '',
+			viewModeTextPoll: '',
 		},
 		appSettings: {
 			allAccessGroups: [],
@@ -159,23 +164,24 @@ export const useSessionStore = defineStore('session', {
 			return 0
 		},
 
-		viewTextPoll(state): ViewMode {
-			const preferencesStore = usePreferencesStore()
-
-			if (state.sessionSettings.manualViewTextPoll) {
-				return state.sessionSettings.manualViewTextPoll
+		viewModeTextPoll(state): ViewMode {
+			if (state.sessionSettings.viewModeTextPoll) {
+				return state.sessionSettings.viewModeTextPoll
 			}
+
+			const preferencesStore = usePreferencesStore()
 			if (window.innerWidth > MOBILE_BREAKPOINT) {
 				return preferencesStore.user.defaultViewTextPoll
 			}
 			return 'list-view'
 		},
 
-		viewDatePoll(state): ViewMode {
-			const preferencesStore = usePreferencesStore()
-			if (state.sessionSettings.manualViewDatePoll) {
-				return state.sessionSettings.manualViewDatePoll
+		viewModeDatePoll(state): ViewMode {
+			if (state.sessionSettings.viewModeDatePoll) {
+				return state.sessionSettings.viewModeDatePoll
 			}
+
+			const preferencesStore = usePreferencesStore()
 			if (window.innerWidth > MOBILE_BREAKPOINT) {
 				return preferencesStore.user.defaultViewDatePoll
 			}
@@ -214,6 +220,25 @@ export const useSessionStore = defineStore('session', {
 	},
 
 	actions: {
+		getViewMode(pollType: PollType): ViewMode {
+			if (pollType === 'datePoll') {
+				return this.viewModeDatePoll
+			}
+			if (pollType === 'textPoll') {
+				return this.viewModeTextPoll
+			}
+			return 'list-view'
+		},
+
+		setViewMode(pollType: PollType, viewMode: ViewMode): void {
+			if (pollType === 'datePoll') {
+				this.sessionSettings.viewModeDatePoll = viewMode
+			}
+			if (pollType === 'textPoll') {
+				this.sessionSettings.viewModeTextPoll = viewMode
+			}
+		},
+
 		generateWatcherId() {
 			this.watcher.id = Math.random().toString(36).substring(2)
 		},
@@ -260,11 +285,11 @@ export const useSessionStore = defineStore('session', {
 		},
 
 		setViewDatePoll(viewMode: ViewMode) {
-			this.sessionSettings.manualViewDatePoll = viewMode
+			this.sessionSettings.viewModeDatePoll = viewMode
 		},
 
 		setViewTextPoll(viewMode: ViewMode) {
-			this.sessionSettings.manualViewTextPoll = viewMode
+			this.sessionSettings.viewModeTextPoll = viewMode
 		},
 
 		async setRouter(payload: RouteLocationNormalized) {
