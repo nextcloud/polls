@@ -210,18 +210,18 @@ function showMenu() {
 	// TODO: implement
 	return true
 }
+const componentClass = computed(() => [
+	'user-item',
+	typeComputed,
+	{
+		disabled,
+		condensed,
+	},
+])
 </script>
 
 <template>
-	<div
-		:class="[
-			'user-item',
-			typeComputed,
-			{
-				disabled,
-				condensed: condensed,
-			},
-		]">
+	<div :class="componentClass">
 		<div class="avatar-wrapper">
 			<NcAvatar
 				v-bind="avatarProps"

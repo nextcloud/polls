@@ -26,6 +26,7 @@ import VoteParticipant from './VoteParticipant.vue'
 import VoteItem from './VoteItem.vue'
 import { useSessionStore } from '../../stores/session.ts'
 import { User } from '../../Types/index.ts'
+import StickyDiv from '../Base/modules/StickyDiv.vue'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -71,10 +72,11 @@ function isVotable(participant: User, option: Option) {
 		:class="pollStore.viewMode"
 		class="vote-table"
 		:style="tableStyle">
-		<div
+		<StickyDiv
 			v-if="pollStore.viewMode === 'table-view'"
 			key="grid-info"
-			class="grid-info sticky-left">
+			sticky-left
+			class="grid-info">
 			<NcButton
 				v-show="votesStore.sortByOption > 0"
 				class="sort-indicator"
@@ -85,22 +87,29 @@ function isVotable(participant: User, option: Option) {
 					<SortNameIcon />
 				</template>
 			</NcButton>
-		</div>
+		</StickyDiv>
 
-		<div
+		<StickyDiv
 			v-if="pollStore.viewMode === 'table-view'"
-			key="option-spacer"
-			class="option-spacer sticky-left sticky-top"
-			:class="{ 'sticky-bottom-shadow': !downPage }" />
-		<div
-			v-if="pollStore.permissions.seeResults"
-			class="counter-spacer sticky-left" />
+			:id="`option-item-spacer`"
+			class="option-item-spacer"
+			sticky-top
+			sticky-left
+			:activate-bottom-shadow="!downPage">
+		</StickyDiv>
 
-		<template
+		<StickyDiv
+			v-if="pollStore.permissions.seeResults"
+			sticky-left
+			class="counter-spacer" />
+
+		<StickyDiv
 			v-for="participant in pollStore.safeParticipants"
-			:key="participant.id">
-			<VoteParticipant class="sticky-left" :user="participant" />
-		</template>
+			:key="participant.id"
+			class="participant"
+			sticky-left>
+			<VoteParticipant :user="participant" />
+		</StickyDiv>
 
 		<template v-for="option in optionsStore.orderedOptions" :key="option.id">
 			<div v-if="pollStore.viewMode === 'table-view'" class="option-menu-grid">
@@ -119,12 +128,14 @@ function isVotable(participant: User, option: Option) {
 					:title="t('polls', 'Click to remove sorting')"
 					@click="() => (votesStore.sortByOption = 0)" />
 			</div>
+			<StickyDiv
+				:id="`option-item-${option.id}`"
+				class="option-item"
+				sticky-top
+				:activate-bottom-shadow="!downPage">
+				<OptionItem :option="option" />
+			</StickyDiv>
 
-			<OptionItem
-				:id="`option-${option.id}`"
-				class="sticky-top"
-				:class="{ 'sticky-bottom-shadow': !downPage }"
-				:option="option" />
 			<Counter
 				v-if="pollStore.permissions.seeResults"
 				:id="`counter-${option.id}`"
@@ -220,11 +231,10 @@ function isVotable(participant: User, option: Option) {
 			background-color: var(--color-main-background);
 		}
 
-		.option-spacer {
+		.option-item-spacer {
 			grid-row: 2;
 			grid-column: 1;
 			inset-inline-start: 0;
-			background-color: var(--color-main-background);
 		}
 
 		.counter-spacer {
@@ -246,8 +256,11 @@ function isVotable(participant: User, option: Option) {
 
 		.option-item {
 			grid-row: 2;
-			background-color: var(--color-main-background);
 			border-inline-start: 1px solid var(--color-border);
+
+			.option-item-container {
+				background-color: var(--color-main-background);
+			}
 		}
 
 		.counter {

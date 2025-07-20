@@ -180,24 +180,25 @@ onBeforeUnmount(() => {
 	observer?.disconnect()
 	containerRef.value?.removeEventListener('scroll', updateOverflowIndicators)
 })
+
+const wrapperClass = computed(() => ({
+	collapsible_wrapper: true,
+	'has-top-shadow': hasTopOverflow.value,
+	'has-bottom-shadow': hasBottomOverflow.value,
+}))
+
+const containerClass = computed(() => ({
+	collapsible_container: true,
+	'no-transition': drag.isDragging,
+}))
 </script>
 
 <template>
 	<div class="collapsible">
-		<div
-			:class="[
-				'collapsible_wrapper',
-				{
-					'has-top-shadow': hasTopOverflow,
-					'has-bottom-shadow': hasBottomOverflow,
-				},
-			]">
+		<div :class="wrapperClass">
 			<div
 				ref="containerRef"
-				:class="[
-					'collapsible_container',
-					{ 'no-transition': drag.isDragging },
-				]"
+				:class="containerClass"
 				:style="{ height: height + 'px' }">
 				<div ref="slotWrapper" class="collapsible_content">
 					<slot />

@@ -5,6 +5,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+### changes
+ - Make vote cell focusable
+ - Make shadow of sticky items transparent
+
 ## [8.1.4] - 2025-07-15
 ### Fixes
  - Fixed some typos
