@@ -183,14 +183,22 @@ function subtract() {
 onMounted(() => {
 	assertBoundaries()
 })
+const componentClass = computed(() => [
+	'input-div',
+	{ numeric: useNumModifiers || inputmode === 'numeric' },
+])
+
+const inputClass = computed(() => [
+	{
+		'has-modifier': useNumModifiers && useNumericVariant,
+		'has-submit': submit,
+	},
+	computedSignalingClass.value,
+])
 </script>
 
 <template>
-	<div
-		:class="[
-			'input-div',
-			{ numeric: useNumModifiers || inputmode === 'numeric' },
-		]">
+	<div :class="componentClass">
 		<label v-if="label">
 			{{ label }}
 		</label>
@@ -214,13 +222,7 @@ onMounted(() => {
 				:type="type"
 				:inputmode="inputmode"
 				:placeholder="placeholder"
-				:class="[
-					{
-						'has-modifier': useNumModifiers && useNumericVariant,
-						'has-submit': submit,
-					},
-					computedSignalingClass,
-				]"
+				:class="inputClass"
 				@input="emit('input')"
 				@change="emit('change')"
 				@keyup.enter="emit('submit')" />

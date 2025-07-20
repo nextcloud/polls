@@ -36,6 +36,7 @@ import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
 import { useVotesStore } from '../stores/votes.ts'
 import { showError } from '@nextcloud/dialogs'
+import StickyDiv from '../components/Base/modules/StickyDiv.vue'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -137,30 +138,33 @@ onUnmounted(() => {
 	pollStore.reset()
 	unsubscribe(Event.LoadPoll, () => {})
 })
+
+const appClass = computed(() => [
+	pollStore.type,
+	pollStore.viewMode,
+	voteMainId,
+	{
+		scrolled,
+		'vote-style-beta-510': preferencesStore.user.useAlternativeStyling,
+	},
+])
 </script>
 
 <template>
-	<NcAppContent
-		:class="[
-			pollStore.type,
-			pollStore.viewMode,
-			voteMainId,
-			{
-				scrolled,
-				'vote-style-beta-510': preferencesStore.user.useAlternativeStyling,
-			},
-		]">
-		<HeaderBar class="sticky-top" :class="{ 'sticky-bottom-shadow': scrolled }">
-			<template #title>
-				{{ pollStore.configuration.title }}
-			</template>
+	<NcAppContent :class="appClass">
+		<StickyDiv sticky-top :activate-bottom-shadow="scrolled">
+			<HeaderBar>
+				<template #title>
+					{{ pollStore.configuration.title }}
+				</template>
 
-			<template #right>
-				<PollHeaderButtons />
-			</template>
+				<template #right>
+					<PollHeaderButtons />
+				</template>
 
-			<PollInfoLine />
-		</HeaderBar>
+				<PollInfoLine />
+			</HeaderBar>
+		</StickyDiv>
 
 		<div class="vote_main">
 			<IntersectionObserver id="top-observer" v-model="topObserverVisible" />
@@ -177,7 +181,8 @@ onUnmounted(() => {
 			<IntersectionObserver
 				v-if="pollStore.viewMode === 'table-view'"
 				id="table-observer"
-				v-model="tableSticky" />
+				v-model="tableSticky"
+				class="sticky-left" />
 
 			<VoteTable
 				v-show="optionsStore.options.length"

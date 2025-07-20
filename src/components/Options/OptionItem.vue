@@ -20,11 +20,17 @@ interface Props {
 
 const { option, draggable = false, showOwner = false } = defineProps<Props>()
 
+const containerClass = {
+	'option-item-container': true,
+	deleted: option.deleted !== 0,
+	draggable,
+}
+
 const pollStore = usePollStore()
 </script>
 
 <template>
-	<div :class="['option-item', { draggable, deleted: option.deleted !== 0 }]">
+	<div :class="containerClass">
 		<DragIcon v-if="draggable" class="grid-area-drag-icon" />
 
 		<OptionItemOwner
@@ -52,7 +58,7 @@ const pollStore = usePollStore()
 </template>
 
 <style lang="scss">
-.option-item {
+.option-item-container {
 	display: grid;
 	grid-template-columns: auto 1fr auto auto;
 	grid-template-areas: 'drag option owner actions';
