@@ -13,7 +13,7 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import ComboTable from '../components/Combo/ComboTable.vue'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 import { ActionToggleSidebar } from '../components/Actions'
-import { HeaderBar } from '../components/Base/index.ts'
+import HeaderBar from '../components/Base/modules/HeaderBar.vue'
 import { PollsAppIcon } from '../components/AppIcons/index.ts'
 import { useComboStore } from '../stores/combo.ts'
 
@@ -59,6 +59,6 @@ onMounted(() => {
 			</NcEmptyContent>
 		</div>
 
-		<LoadingOverlay v-if="isLoading" />
+		<LoadingOverlay :name="t('polls', 'Loading …')" :show="isLoading" />
 	</NcAppContent>
 </template>

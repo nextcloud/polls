@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { InputDiv } from '../Base/index.ts'
+import InputDiv from '../Base/modules/InputDiv.vue'
 import { usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits(['change'])

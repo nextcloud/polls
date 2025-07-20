@@ -8,8 +8,6 @@ import { computed } from 'vue'
 import moment from '@nextcloud/moment'
 import { t, n } from '@nextcloud/l10n'
 
-import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
-
 import OwnerIcon from 'vue-material-design-icons/Crown.vue'
 import SubscribedIcon from 'vue-material-design-icons/Bell.vue'
 import ProposalsAllowedIcon from 'vue-material-design-icons/Offer.vue'
@@ -30,7 +28,8 @@ import EmailIcon from 'vue-material-design-icons/Email.vue'
 
 import { MaybeIcon } from '../AppIcons/index.ts'
 
-import { BadgeDiv } from '../Base/index.ts'
+import BadgeDiv from '../Base/modules/BadgeDiv.vue'
+import UserBubble from '../User/UserBubble.vue'
 import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
@@ -102,10 +101,7 @@ const countUsedVotes = computed(
 				<OwnerIcon />
 			</template>
 			{{ t('polls', 'Poll owner:') }}
-			<NcUserBubble
-				v-if="pollStore.owner.id"
-				:user="pollStore.owner.id"
-				:display-name="pollStore.owner.displayName" />
+			<UserBubble :user="pollStore.owner" />
 		</BadgeDiv>
 		<BadgeDiv>
 			<template #icon>
