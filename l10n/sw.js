@@ -50,6 +50,7 @@ OC.L10N.register(
     "No activity yet" : "Bado hakuna shughuli",
     "Public link" : "Kiungio cha umma",
     "Switch to list view" : "Switch to list view",
+    "Other settings" : "Other settings",
     "Comments" : "Maoni",
     "Details" : "Maelezo ya kina",
     "Configuration" : "Usanidi",
@@ -62,6 +63,7 @@ OC.L10N.register(
     "Month" : "Mwezi",
     "Year" : "Mwaka",
     "Created" : "Imetengenezwa",
+    "Access" : "Ufikiaji",
     "Owner" : "Mmiliki",
     "Archive" : "Weka kumbukumbu"
 },

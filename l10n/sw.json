@@ -48,6 +48,7 @@
     "No activity yet" : "Bado hakuna shughuli",
     "Public link" : "Kiungio cha umma",
     "Switch to list view" : "Switch to list view",
+    "Other settings" : "Other settings",
     "Comments" : "Maoni",
     "Details" : "Maelezo ya kina",
     "Configuration" : "Usanidi",
@@ -60,6 +61,7 @@
     "Month" : "Mwezi",
     "Year" : "Mwaka",
     "Created" : "Imetengenezwa",
+    "Access" : "Ufikiaji",
     "Owner" : "Mmiliki",
     "Archive" : "Weka kumbukumbu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
