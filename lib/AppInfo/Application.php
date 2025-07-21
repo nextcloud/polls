@@ -42,6 +42,7 @@ use OCA\Polls\Event\ShareEvent;
 use OCA\Polls\Event\ShareLockedEvent;
 use OCA\Polls\Event\ShareRegistrationEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
+use OCA\Polls\Event\VoteDeletedOrphanedEvent;
 use OCA\Polls\Event\VoteEvent;
 use OCA\Polls\Event\VoteSetEvent;
 use OCA\Polls\Listener\CommentListener;
@@ -126,6 +127,7 @@ class Application extends App implements IBootstrap {
 
 		$context->registerEventListener(VoteEvent::class, VoteListener::class);
 		$context->registerEventListener(VoteSetEvent::class, VoteListener::class);
+		$context->registerEventListener(VoteDeletedOrphanedEvent::class, VoteListener::class);
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
 

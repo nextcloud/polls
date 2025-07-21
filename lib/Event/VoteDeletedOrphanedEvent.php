@@ -9,18 +9,13 @@ namespace OCA\Polls\Event;
 
 use OCA\Polls\Db\Vote;
 
-/**
- * @psalm-suppress UnusedProperty
- */
-abstract class VoteEvent extends BaseEvent {
-	public const SET = 'vote_set';
-	public const DELETED_ORPHANED = 'vote_deleted_orphaned';
-
+class VoteDeletedOrphanedEvent extends VoteEvent {
 	public function __construct(
 		protected Vote $vote,
+		protected bool $log = true,
 	) {
 		parent::__construct($vote);
-		$this->activityObjectType = 'poll';
-		$this->vote = $vote;
+		$this->log = $log;
+		$this->eventId = self::DELETED_ORPHANED;
 	}
 }
