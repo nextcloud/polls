@@ -6,9 +6,17 @@
 All notable changes to this project will be documented in this file.
 
 ## [unreleased]
-### changes
+### New
+ - Add option to delete orphaned votes
+
+### Changes
  - Make vote cell focusable
  - Make shadow of sticky items transparent
+ - Changed experimental comments layout
+
+### Fixes
+ - Force list view mode initially on mobile viewports
+ - Fix some viual issues of the vote page
 
 ## [8.1.4] - 2025-07-15
 ### Fixes
@@ -19,7 +27,7 @@ All notable changes to this project will be documented in this file.
  - Fixed visual bug when scrolling in list view
  - Fixed exception on notifications which may cause resending notification mails
 
-### changes
+### Changes
  - Center poll table
 
 ## [8.1.0] - 2025-07-13
