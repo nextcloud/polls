@@ -129,8 +129,6 @@ onUnmounted(() => {
 .app-content {
 	display: flex;
 	flex-direction: column;
-	padding: 0px 8px;
-	row-gap: 8px;
 
 	.clamped {
 		display: -webkit-box !important;

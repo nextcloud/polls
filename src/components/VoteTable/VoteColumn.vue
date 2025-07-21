@@ -12,6 +12,7 @@ import OptionItem from '../Options/OptionItem.vue'
 import VoteItem from './VoteItem.vue'
 import CalendarPeek from '../Calendar/CalendarPeek.vue'
 import { usePollStore } from '../../stores/poll.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 import { usePreferencesStore } from '../../stores/preferences.ts'
 import { Option } from '../../stores/options.ts'
 import OptionMenu from '../Options/OptionMenu.vue'
@@ -19,6 +20,7 @@ import OptionMenu from '../Options/OptionMenu.vue'
 const { option } = defineProps<{ option: Option }>()
 
 const pollStore = usePollStore()
+const votesStore = useVotesStore()
 const preferencesStore = usePreferencesStore()
 
 const componentClass = computed(() => {
@@ -65,7 +67,7 @@ const showCalendarPeek = computed(
 		</div>
 
 		<VoteItem
-			v-for="participant in pollStore.safeParticipants"
+			v-for="participant in votesStore.getChunkedParticipants"
 			:key="participant.id"
 			:user="participant"
 			:option="option" />
