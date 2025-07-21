@@ -4,10 +4,10 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { router } from '../../router.ts'
-import { t } from '@nextcloud/l10n'
-import { showError } from '@nextcloud/dialogs'
+import { n, t } from '@nextcloud/l10n'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
 import { usePollStore } from '../../stores/poll.ts'
@@ -17,6 +17,7 @@ import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue'
+import DeleteOrphanedIcon from 'vue-material-design-icons/CloseBoxMultipleOutline.vue'
 import TransferPollDialog from '../Modals/TransferPollDialog.vue'
 
 const pollStore = usePollStore()
@@ -38,6 +39,26 @@ function toggleArchive() {
 	}
 }
 
+const showDeleteOrphaned = computed(
+	() =>
+		pollStore.status.orphanedVotes > 0
+		&& pollStore.permissions.changeForeignVotes,
+)
+async function deleteOrphaned() {
+	try {
+		const deleted = await pollStore.removeOrphanedVotes()
+		showSuccess(
+			n(
+				'polls',
+				'Removed %n orphaned vote',
+				'Removed %n orphaned votes',
+				deleted,
+			),
+		)
+	} catch {
+		showError(t('polls', 'Error deleting orphaned votes.'))
+	}
+}
 function routeAway() {
 	router.push({
 		name: 'list',
@@ -78,6 +99,21 @@ function routeAway() {
 			</template>
 			<template #default>
 				{{ t('polls', 'Transfer poll') }}
+			</template>
+		</NcButton>
+		<NcButton v-if="showDeleteOrphaned" @click="deleteOrphaned">
+			<template #icon>
+				<DeleteOrphanedIcon />
+			</template>
+			<template #default>
+				{{
+					n(
+						'polls',
+						'Remove orphaned vote',
+						'Remove %n orphaned votes',
+						pollStore.status.orphanedVotes,
+					)
+				}}
 			</template>
 		</NcButton>
 	</div>

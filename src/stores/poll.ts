@@ -93,6 +93,7 @@ export type PollStatus = {
 	deletionDate: number
 	archivedDate: number
 	countParticipants: number
+	orphanedVotes: number
 }
 
 export type PollPermissions = {
@@ -193,6 +194,7 @@ export const usePollStore = defineStore('poll', {
 			deletionDate: 0,
 			archivedDate: 0,
 			countParticipants: 0,
+			orphanedVotes: 0,
 		},
 		currentUserStatus: {
 			groupInvitations: [],
@@ -397,6 +399,7 @@ export const usePollStore = defineStore('poll', {
 				}
 
 				this.$patch(response.data.poll)
+				this.status.orphanedVotes = response.data.orphaned
 				votesStore.votes = response.data.votes
 				optionsStore.options = response.data.options
 				sharesStore.shares = response.data.shares
@@ -528,6 +531,21 @@ export const usePollStore = defineStore('poll', {
 				throw error
 			} finally {
 				pollsStore.load()
+			}
+		},
+
+		async removeOrphanedVotes(): Promise<number> {
+			try {
+				const response = await PollsAPI.removeOrphanedVotes(this.id)
+				this.status.orphanedVotes =
+					this.status.orphanedVotes - response.data.deleted.length
+				return response.data.deleted.length
+			} catch (error) {
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return 0
+				}
+				Logger.error('Error deleting orphaned votes', { error })
+				throw error
 			}
 		},
 
