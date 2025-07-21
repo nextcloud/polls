@@ -10,6 +10,9 @@ namespace OCA\Polls\Event;
 use OCA\Polls\Db\Vote;
 
 class VoteDeletedOrphanedEvent extends VoteEvent {
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		protected Vote $vote,
 		protected bool $log = true,
