@@ -94,6 +94,12 @@ export const useVotesStore = defineStore('votes', {
 		 * @return
 		 */
 		getChunkedParticipants(state): User[] {
+			const sessionStore = useSessionStore()
+			const pollStore = usePollStore()
+			if (pollStore.viewMode === 'list-view') {
+				return [sessionStore.currentUser]
+			}
+
 			if (
 				this.participants.length > state.meta.chunks.size
 				&& this.participants.length

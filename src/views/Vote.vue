@@ -42,9 +42,9 @@ const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const preferencesStore = usePreferencesStore()
 const votesStore = useVotesStore()
-const voteMainId = 'watched-scroll-area'
+const voteMainId = 'vote-view'
 const topObserverVisible = ref(false)
-const tableSticky = ref(false)
+const tableObserverVisible = ref(false)
 const chunksLoading = ref(false)
 
 const loadingOverlayProps = {
@@ -112,7 +112,19 @@ const collapsibleProps = computed<CollapsibleProps>(() => ({
 	initialState: pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min',
 }))
 
-const scrolled = computed(() => !topObserverVisible.value && tableSticky.value)
+/*
+ * In table-view, the sticky header bar and the vote header should merge
+ * to a single header bar, once the vote header reaches it's sticky position ,too
+ */
+const mergeHeaders = computed(
+	() => pollStore.viewMode === 'table-view' && !tableObserverVisible.value,
+)
+
+/*
+ * Report scrolled, if the table observer is not visible except the headers
+ * are merged
+ */
+const scrolled = computed(() => !topObserverVisible.value && !mergeHeaders.value)
 
 const showBottomObserver = computed(
 	() =>
@@ -152,7 +164,7 @@ const appClass = computed(() => [
 
 <template>
 	<NcAppContent :class="appClass">
-		<StickyDiv sticky-top :activate-bottom-shadow="scrolled">
+		<StickyDiv :z-index="9" sticky-top :activate-bottom-shadow="scrolled">
 			<HeaderBar>
 				<template #title>
 					{{ pollStore.configuration.title }}
@@ -166,32 +178,30 @@ const appClass = computed(() => [
 			</HeaderBar>
 		</StickyDiv>
 
-		<div class="vote_main">
+		<div class="vote-main">
 			<IntersectionObserver id="top-observer" v-model="topObserverVisible" />
-
 			<Collapsible
 				v-if="pollStore.configuration.description"
-				class="sticky-left"
+				class="sticky-left area__top"
 				v-bind="collapsibleProps">
 				<MarkDownDescription />
 			</Collapsible>
 
-			<VoteInfoCards class="sticky-left" />
+			<VoteInfoCards class="sticky-left area__top" />
 
 			<IntersectionObserver
 				v-if="pollStore.viewMode === 'table-view'"
 				id="table-observer"
-				v-model="tableSticky"
-				class="sticky-left" />
+				v-model="tableObserverVisible" />
 
 			<VoteTable
 				v-show="optionsStore.options.length"
-				:down-page="tableSticky" />
+				class="area__vote"
+				:down-page="tableObserverVisible" />
 
 			<IntersectionObserver
 				v-if="showBottomObserver"
 				id="bottom-observer"
-				class="sticky-left"
 				:loading="chunksLoading"
 				@visible="loadChunks">
 				<div class="clickable_load_more" @click="loadChunks">
@@ -242,13 +252,13 @@ const appClass = computed(() => [
 	left: 70px;
 }
 
-.table-view .vote_main {
+.vote-main {
 	flex: 1;
 	overflow: auto;
 	overscroll-behavior-inline: contain;
-}
+	position: relative;
+	top: -8px;
 
-.vote_main {
 	.markdown-description {
 		margin: auto;
 		max-width: var(--cap-width);
@@ -257,23 +267,11 @@ const appClass = computed(() => [
 	& > * {
 		margin-top: 0.5rem;
 	}
-}
 
-.vote_head {
-	display: flex;
-	flex-wrap: wrap-reverse;
-	justify-content: flex-end;
-	.poll-title {
-		flex: 1 270px;
-	}
-}
-
-.top_area {
-	display: flex;
-	flex-wrap: wrap-reverse;
-	.description_container,
-	.cards_container {
-		flex: 1 50rem;
+	.area__footer,
+	.area__top,
+	.list-view.area__vote {
+		padding: 0 8px;
 	}
 }
 
@@ -281,12 +279,6 @@ const appClass = computed(() => [
 	display: block;
 	width: 44px;
 	height: 44px;
-}
-
-.card-with-action {
-	display: flex;
-	align-items: center;
-	column-gap: 8px;
 }
 
 .left-card-side {

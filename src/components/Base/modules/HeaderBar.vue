@@ -43,7 +43,6 @@ function toggleClamp() {
 }
 
 .header_bar {
-	margin-inline: -8px;
 	padding-inline: 56px 8px;
 	background-color: var(--color-main-background);
 	transition: all var(--animation-slow) linear;
@@ -88,7 +87,7 @@ function toggleClamp() {
 	}
 
 	.header_bar_bottom {
-		margin-bottom: 1rem;
+		padding-bottom: 1rem;
 	}
 
 	[class*='bar_'] {

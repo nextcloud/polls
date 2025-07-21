@@ -263,15 +263,6 @@ export const usePollStore = defineStore('poll', {
 			return [noString, 'yes']
 		},
 
-		safeParticipants(): User[] {
-			const sessionStore = useSessionStore()
-			const votesStore = useVotesStore()
-			if (this.viewMode === 'list-view') {
-				return [sessionStore.currentUser]
-			}
-			return votesStore.getChunkedParticipants
-		},
-
 		getProposalsOptions(): {
 			value: AllowProposals
 			label: string

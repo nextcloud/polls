@@ -39,7 +39,7 @@ const { downPage = false } = defineProps<{ downPage: boolean }>()
 const chunksLoading = ref(false)
 
 const tableStyle = computed(() => ({
-	'--participants-count': `${pollStore.safeParticipants.length}`,
+	'--participants-count': `${votesStore.getChunkedParticipants.length}`,
 	'--options-count': `${optionsStore.options.length}`,
 }))
 
@@ -73,7 +73,7 @@ function isVotable(participant: User, option: Option) {
 		class="vote-table"
 		:style="tableStyle">
 		<StickyDiv
-			v-if="pollStore.viewMode === 'table-view'"
+			v-show="pollStore.viewMode === 'table-view'"
 			key="grid-info"
 			sticky-left
 			class="grid-info">
@@ -90,7 +90,7 @@ function isVotable(participant: User, option: Option) {
 		</StickyDiv>
 
 		<StickyDiv
-			v-if="pollStore.viewMode === 'table-view'"
+			v-show="pollStore.viewMode === 'table-view'"
 			:id="`option-item-spacer`"
 			class="option-item-spacer"
 			sticky-top
@@ -100,11 +100,12 @@ function isVotable(participant: User, option: Option) {
 
 		<StickyDiv
 			v-if="pollStore.permissions.seeResults"
+			v-show="pollStore.viewMode === 'table-view'"
 			sticky-left
 			class="counter-spacer" />
 
 		<StickyDiv
-			v-for="participant in pollStore.safeParticipants"
+			v-for="participant in votesStore.getChunkedParticipants"
 			:key="participant.id"
 			class="participant"
 			sticky-left>
@@ -112,7 +113,9 @@ function isVotable(participant: User, option: Option) {
 		</StickyDiv>
 
 		<template v-for="option in optionsStore.orderedOptions" :key="option.id">
-			<div v-if="pollStore.viewMode === 'table-view'" class="option-menu-grid">
+			<div
+				v-show="pollStore.viewMode === 'table-view'"
+				class="option-menu-grid">
 				<CalendarPeek
 					v-if="showCalendarPeek"
 					:id="`peek-${option.id}`"
@@ -131,7 +134,7 @@ function isVotable(participant: User, option: Option) {
 			<StickyDiv
 				:id="`option-item-${option.id}`"
 				class="option-item"
-				sticky-top
+				:sticky-top="pollStore.viewMode === 'table-view'"
 				:activate-bottom-shadow="!downPage">
 				<OptionItem :option="option" />
 			</StickyDiv>
@@ -144,7 +147,7 @@ function isVotable(participant: User, option: Option) {
 				:option="option" />
 
 			<div
-				v-for="participant in pollStore.safeParticipants"
+				v-for="participant in votesStore.getChunkedParticipants"
 				:key="participant.id"
 				class="vote-cell"
 				:class="{ 'current-user': isCurrentUser(participant) }">
@@ -175,6 +178,7 @@ function isVotable(participant: User, option: Option) {
 	grid-auto-rows: auto;
 	grid-auto-flow: column;
 	overflow: scroll;
+	margin: auto;
 
 	.vote-cell {
 		padding: 0.4rem;
@@ -190,6 +194,11 @@ function isVotable(participant: User, option: Option) {
 
 		.user-actions {
 			visibility: hidden;
+		}
+
+		&.sticky-left {
+			left: -8px;
+			padding-left: 8px;
 		}
 
 		&:hover {
@@ -223,7 +232,6 @@ function isVotable(participant: User, option: Option) {
 		overflow: visible;
 		min-width: min-content;
 		max-width: max-content;
-		margin: auto;
 		.grid-info {
 			grid-row: 1;
 			grid-column: 1;
@@ -295,14 +303,15 @@ function isVotable(participant: User, option: Option) {
 	}
 
 	&.list-view {
-		grid-template-columns: auto 5rem 5rem;
+		row-gap: 8px;
+		grid-template-columns:
+			minmax(11rem, max-content)
+			minmax(4rem, max-content)
+			minmax(4rem, max-content);
 		max-width: var(--cap-width);
+		width: fit-content;
 
-		.grid-info,
-		.option-spacer,
-		.counter-spacer,
-		.participant,
-		.option-menu-grid {
+		.participant {
 			display: none;
 		}
 

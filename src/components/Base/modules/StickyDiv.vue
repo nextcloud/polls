@@ -7,18 +7,47 @@
 import { computed } from 'vue'
 
 interface Props {
-	stickyTop?: boolean
-	stickyLeft?: boolean
 	activateBottomShadow?: boolean
 	activateRightShadow?: boolean
+	stickyTop?: boolean
+	stickyLeft?: boolean
+	zIndex?: number
 }
 
 const {
-	stickyTop = false,
-	stickyLeft = false,
 	activateBottomShadow = false,
 	activateRightShadow = false,
+	stickyTop = false,
+	stickyLeft = false,
+	zIndex = undefined,
 } = defineProps<Props>()
+
+const style = computed(() => {
+	if (zIndex !== undefined && zIndex !== null) {
+		return {
+			'z-index': zIndex,
+		}
+	}
+	if (stickyTop && stickyLeft) {
+		return {
+			'z-index': 6,
+		}
+	}
+
+	if (stickyLeft) {
+		return {
+			'z-index': 5,
+		}
+	}
+
+	if (stickyTop) {
+		return {
+			'z-index': 4,
+		}
+	}
+
+	return {}
+})
 
 const stickyClass = computed(() => ({
 	container: true,
@@ -30,7 +59,7 @@ const stickyClass = computed(() => ({
 </script>
 
 <template>
-	<div :class="stickyClass">
+	<div :class="stickyClass" :style="style">
 		<slot name="default">
 			<div class="inner"></div>
 		</slot>
@@ -51,14 +80,12 @@ const stickyClass = computed(() => ({
 .sticky-left {
 	position: sticky;
 	left: 0;
-	z-index: 5;
 }
 
 .sticky-top {
 	--shadow-height: 10px;
 	position: sticky;
 	top: 0;
-	z-index: 4;
 	padding-bottom: 0px;
 	padding-bottom: var(--shadow-height);
 
@@ -87,10 +114,6 @@ const stickyClass = computed(() => ({
 			height: var(--shadow-height);
 		}
 	}
-}
-
-.sticky-top.sticky-left {
-	z-index: 7;
 }
 
 /* TODO: Implement sticky right shadow
