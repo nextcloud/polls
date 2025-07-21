@@ -94,6 +94,7 @@ class PublicController extends BaseController {
 				'poll' => $this->pollService->get($this->userSession->getShare()->getPollId()),
 				'options' => $this->optionService->list($this->userSession->getShare()->getPollId()),
 				'votes' => $this->voteService->list($this->userSession->getShare()->getPollId()),
+				'orphaned' => 0,
 				'comments' => $this->commentService->list($this->userSession->getShare()->getPollId()),
 				'shares' => $this->shareService->list($this->userSession->getShare()->getPollId()),
 				'subscribed' => $this->subscriptionService->get($this->userSession->getShare()->getPollId()),
