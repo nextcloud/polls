@@ -16,6 +16,7 @@ use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\VoteDeletedOrphanedEvent;
 use OCA\Polls\Event\VoteSetEvent;
+use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\VoteLimitExceededException;
 use OCA\Polls\UserSession;
@@ -138,11 +139,13 @@ class VoteService {
 	 * @return Vote[]
 	 */
 	public function getOprhanedVotes(int $pollId): array {
-		$poll = $this->pollMapper->get($pollId, withRoles: true);
-		$poll->request(Poll::PERMISSION_POLL_EDIT);
-
-		// get all votes of the poll, which are not assigned to an option
-		return $this->voteMapper->findOrphanedByPoll($pollId);
+		try {
+			$poll = $this->pollMapper->get($pollId, withRoles: true);
+			$poll->request(Poll::PERMISSION_POLL_EDIT);
+			return $this->voteMapper->findOrphanedByPoll($pollId);
+		} catch (ForbiddenException $e) {
+			return [];
+		}
 	}
 
 	/**
