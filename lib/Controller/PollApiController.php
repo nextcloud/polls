@@ -209,4 +209,12 @@ class PollApiController extends BaseApiV2Controller {
 			'deleted' => $this->voteService->deleteOrphanedVotes($pollId)
 		]);
 	}
+
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/enum', requirements: ['apiVersion' => '(v2)'])]
+	public function enum(): DataResponse {
+		return $this->response(fn () => ['enum' => $this->pollService->getValidEnum()]);
+	}
 }
