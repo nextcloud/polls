@@ -5,8 +5,7 @@
 import { AxiosResponse } from '@nextcloud/axios'
 import { Answer, Vote } from '../../stores/votes.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
-import { Option } from '../../stores/options.js'
-import { Poll } from '../../stores/poll.js'
+import { RemoveVotesResponse, setVoteResponse } from './api.types.js'
 
 const votes = {
 	getVotes(pollId: number): Promise<AxiosResponse<{ votes: Vote[] }>> {
@@ -24,9 +23,7 @@ const votes = {
 	setVote(
 		optionId: number,
 		setTo: Answer,
-	): Promise<
-		AxiosResponse<{ vote: Vote; poll: Poll; options: Option[]; votes: Vote[] }>
-	> {
+	): Promise<AxiosResponse<setVoteResponse>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: 'vote',
@@ -44,7 +41,7 @@ const votes = {
 	resetVotes(
 		pollId: number,
 		userId: string | null = null,
-	): Promise<AxiosResponse<{ poll: Poll; options: Option[]; votes: Vote[] }>> {
+	): Promise<AxiosResponse<RemoveVotesResponse>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: userId ? `poll/${pollId}/user/${userId}` : `poll/${pollId}/user`,
@@ -57,7 +54,7 @@ const votes = {
 
 	removeOrphanedVotes(
 		pollId: number,
-	): Promise<AxiosResponse<{ poll: Poll; options: Option[]; votes: Vote[] }>> {
+	): Promise<AxiosResponse<RemoveVotesResponse>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `poll/${pollId}/votes/orphaned`,
