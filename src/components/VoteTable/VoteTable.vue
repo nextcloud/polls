@@ -4,29 +4,31 @@
 -->
 
 <script setup lang="ts">
+import { computed, ref } from 'vue'
+import { NcButton } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
+import { getCurrentUser } from '@nextcloud/auth'
 
 import { usePollStore } from '../../stores/poll.ts'
 import { Option, useOptionsStore } from '../../stores/options.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
-import { NcButton } from '@nextcloud/vue'
-import SortNameIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
-import { computed, ref } from 'vue'
-import { getCurrentUser } from '@nextcloud/auth'
-import Counter from '../Options/Counter.vue'
+import StickyDiv from '../Base/modules/StickyDiv.vue'
 import CalendarPeek from '../Calendar/CalendarPeek.vue'
+import Counter from '../Options/Counter.vue'
 import OptionItem from '../Options/OptionItem.vue'
 import OptionMenu from '../Options/OptionMenu.vue'
+import VoteButton from './VoteButton.vue'
+import VoteItem from './VoteItem.vue'
+import VoteParticipant from './VoteParticipant.vue'
+
 import { usePreferencesStore } from '../../stores/preferences.ts'
+import { useSessionStore } from '../../stores/session.ts'
+
+import { User } from '../../Types/index.ts'
 
 import SortOptionIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
-import VoteButton from './VoteButton.vue'
-import VoteParticipant from './VoteParticipant.vue'
-import VoteItem from './VoteItem.vue'
-import { useSessionStore } from '../../stores/session.ts'
-import { User } from '../../Types/index.ts'
-import StickyDiv from '../Base/modules/StickyDiv.vue'
+import SortNameIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -134,6 +136,9 @@ function isVotable(participant: User, option: Option) {
 			<StickyDiv
 				:id="`option-item-${option.id}`"
 				class="option-item"
+				:class="{
+					confirmed: option.confirmed && pollStore.status.isExpired,
+				}"
 				:sticky-top="pollStore.viewMode === 'table-view'"
 				:activate-bottom-shadow="!downPage">
 				<OptionItem :option="option" />
@@ -143,6 +148,9 @@ function isVotable(participant: User, option: Option) {
 				v-if="pollStore.permissions.seeResults"
 				:id="`counter-${option.id}`"
 				:key="`counter-${option.id}`"
+				:class="{
+					confirmed: option.confirmed && pollStore.status.isExpired,
+				}"
 				:show-maybe="pollStore.configuration.allowMaybe"
 				:option="option" />
 
@@ -160,6 +168,7 @@ function isVotable(participant: User, option: Option) {
 					v-else
 					:key="`vote-${participant.id}-${option.id}`"
 					:user="participant"
+					:current-user="isCurrentUser(participant)"
 					:option="option" />
 			</div>
 		</template>
@@ -266,9 +275,9 @@ function isVotable(participant: User, option: Option) {
 			grid-row: 2;
 			border-inline-start: 1px solid var(--color-border);
 
-			.option-item-container {
-				background-color: var(--color-main-background);
-			}
+			// .option-item-container {
+			// 	background-color: var(--color-main-background);
+			// }
 		}
 
 		.counter {
@@ -310,6 +319,7 @@ function isVotable(participant: User, option: Option) {
 			minmax(4rem, max-content);
 		max-width: var(--cap-width);
 		width: fit-content;
+		align-items: center;
 
 		.participant {
 			display: none;
@@ -326,6 +336,8 @@ function isVotable(participant: User, option: Option) {
 
 		.vote-cell {
 			grid-column: 3;
+			width: 60px;
+			height: 60px;
 		}
 
 		@media only screen and (max-width: 340px) {

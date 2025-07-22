@@ -50,7 +50,6 @@ const style = computed(() => {
 })
 
 const stickyClass = computed(() => ({
-	container: true,
 	'sticky-top': stickyTop,
 	'sticky-left': stickyLeft,
 	'sticky-bottom-shadow': activateBottomShadow,
@@ -59,22 +58,88 @@ const stickyClass = computed(() => ({
 </script>
 
 <template>
-	<div :class="stickyClass" :style="style">
-		<slot name="default">
-			<div class="inner"></div>
-		</slot>
+	<div :class="['sticky-div', stickyClass]" :style="style">
+		<div class="top-left-corner"></div>
+		<div class="top"></div>
+		<div class="top-right-corner"></div>
+
+		<div class="right"></div>
+
+		<div class="bottom-right-corner"></div>
+		<div class="bottom"></div>
+		<div class="bottom-left-corner"></div>
+
+		<div class="left"></div>
+
+		<div class="stage outer" :style="style">
+			<slot name="default">
+				<div class="inner"></div>
+			</slot>
+		</div>
 	</div>
 </template>
 
 <style lang="scss" scoped>
-.container {
-	--shadow-height: 10px;
+.sticky-div {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	grid-template-rows: auto 1fr auto;
+	grid-template-areas:
+		'top-left-corner top top-right-corner'
+		'left center right'
+		'bottom-left-corner bottom bottom-right-corner';
 }
 
-.inner {
+.stage {
+	padding: 0.3rem;
+	grid-area: center;
 	width: 100%;
 	height: 100%;
 	background-color: var(--color-main-background);
+}
+
+.top-left-corner {
+	grid-area: top-left-corner;
+	height: 0;
+	width: 0;
+}
+
+.top {
+	grid-area: top;
+	height: 0;
+}
+
+.top-right-corner {
+	grid-area: top-right-corner;
+	height: 0;
+	width: 0;
+}
+
+.right {
+	grid-area: right;
+	width: 0;
+}
+
+.bottom-right-corner {
+	grid-area: bottom-right-corner;
+	height: 0;
+	width: 0;
+}
+
+.bottom {
+	grid-area: bottom;
+	height: 0;
+}
+
+.bottom-left-corner {
+	grid-area: bottom-left-corner;
+	height: 0;
+	width: 0;
+}
+
+.left {
+	grid-area: left;
+	width: 0;
 }
 
 .sticky-left {
@@ -83,69 +148,24 @@ const stickyClass = computed(() => ({
 }
 
 .sticky-top {
-	--shadow-height: 10px;
 	position: sticky;
 	top: 0;
-	padding-bottom: 0px;
-	padding-bottom: var(--shadow-height);
-
-	&::after {
-		content: '';
-		position: absolute;
-		bottom: 0;
-		left: -1px;
-		right: 0;
-		height: 0;
-		background: linear-gradient(
-			to bottom,
-			rgba(var(--color-box-shadow-rgb), 0.3),
-			rgba(var(--color-box-shadow-rgb), 0)
-		);
-		transition:
-			all var(--animation-slow) linear,
-			border 1ms;
-	}
-
-	&.sticky-bottom-shadow {
-		border-top: 0;
-		padding-bottom: var(--shadow-height);
-		margin-bottom: 0;
-		&::after {
-			height: var(--shadow-height);
-		}
-	}
 }
 
-/* TODO: Implement sticky right shadow
-	An Alternative could be using a grid instead of ::after
-	to be able to position multiple shadows in all directions */
+.bottom-right-corner,
+.bottom,
+.bottom-left-corner {
+	background: linear-gradient(
+		to bottom,
+		rgba(var(--color-box-shadow-rgb), 0.3),
+		rgba(var(--color-box-shadow-rgb), 0)
+	);
 
-/*
-	padding-right: var(--shadow-height);
-
-	&::after {
-		content: '';
-		position: absolute;
-		right: 0;
-		top: -1px;
-		bottom: 0;
-		width: 0;
-		background: linear-gradient(
-			to right,
-			rgba(var(--color-box-shadow-rgb), 0.3),
-			rgba(var(--color-box-shadow-rgb), 0)
-		);
-		transition:
-			all var(--animation-slow) linear,
-			border 1ms;
+	transition:
+		all var(--animation-slow) linear,
+		border 1ms;
+	.sticky-bottom-shadow & {
+		height: var(--shadow-height);
 	}
-
-	&.sticky-right-shadow {
-		border-right: 0;
-		padding-right: var(--shadow-height);
-		margin-right: 0;
-		&::after {
-			width: var(--shadow-height);
-		}
-	} */
+}
 </style>

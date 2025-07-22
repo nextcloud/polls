@@ -13,7 +13,6 @@ import { useSessionStore } from './session.ts'
 import { AxiosError } from '@nextcloud/axios'
 
 export type Answer = 'yes' | 'no' | 'maybe' | ''
-
 export type AnswerSymbol = '✔' | '❌' | '❔' | ''
 
 const answerSortOrder: { [key in Answer]: number } = {

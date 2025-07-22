@@ -15,34 +15,35 @@ import VoteIndicator from './VoteIndicator.vue'
 interface Props {
 	option: Option
 	user: User
+	currentUser?: boolean
 }
 
-const { option, user } = defineProps<Props>()
+const { option, user, currentUser = false } = defineProps<Props>()
 
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
-
-const answer = computed(
-	() =>
-		votesStore.getVote({
-			option,
-			user,
-		}).answer,
+const vote = computed(() =>
+	votesStore.getVote({
+		option,
+		user,
+	}),
 )
 
 const iconAnswer = computed(() => {
-	if (answer.value === 'no') {
-		return pollStore.isClosed && option.confirmed ? 'no' : ''
+	if (option.locked && currentUser && !pollStore.isClosed) {
+		return 'locked'
 	}
-	if (answer.value === '') {
-		return pollStore.isClosed && option.confirmed ? 'no' : ''
+
+	if (['', 'no'].includes(vote.value.answer)) {
+		return pollStore.isClosed && (option.confirmed || currentUser) ? 'no' : ''
 	}
-	return answer.value
+
+	return vote.value.answer
 })
 </script>
 
 <template>
-	<div class="vote-item" :class="answer">
+	<div class="vote-item" :class="vote.answer">
 		<VoteIndicator :answer="iconAnswer" />
 	</div>
 </template>

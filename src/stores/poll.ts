@@ -26,7 +26,7 @@ import {
 	ViewMode,
 } from '../Types/index.ts'
 
-import { useVotesStore, Answer } from './votes.ts'
+import { useVotesStore } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { usePollsStore } from './polls.ts'
 import { useSessionStore } from './session.ts'
@@ -253,14 +253,6 @@ export const usePollStore = defineStore('poll', {
 				return sessionStore.viewModeDatePoll
 			}
 			return 'table-view'
-		},
-
-		answerSequence(state): Answer[] {
-			const noString = state.configuration.useNo ? 'no' : ''
-			if (state.configuration.allowMaybe) {
-				return [noString, 'yes', 'maybe']
-			}
-			return [noString, 'yes']
 		},
 
 		getProposalsOptions(): {
