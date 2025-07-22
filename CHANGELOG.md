@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 ### New
  - Add option to delete orphaned votes
+ - Add vote indicator for locked options
 
 ### Changes
  - Make vote cell focusable
@@ -16,7 +17,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixes
  - Force list view mode initially on mobile viewports
- - Fix some viual issues of the vote page
+ - Fix some visual issues of the vote page
+ - Bring back indicator for confirmed options after closing the poll
 
 ## [8.1.4] - 2025-07-15
 ### Fixes
