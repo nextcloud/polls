@@ -5,11 +5,9 @@
 import { Poll, PollConfiguration, PollType } from '../../stores/poll.ts'
 import { AxiosResponse } from '@nextcloud/axios'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
-import { Option } from '../../stores/options.ts'
-import { Vote } from '../../stores/votes.ts'
-import { Share } from '../../stores/shares.ts'
-import { ApiEmailAdressList, Comment } from '../../Types/index.ts'
+import { ApiEmailAdressList, Vote } from '../../Types/index.ts'
 import { PollGroup } from '../../stores/pollGroups.types.ts'
+import { FullPollResponse } from './api.types.ts'
 
 export type Confirmations = {
 	sentMails: { emailAddress: string; displayName: string }[]
@@ -52,16 +50,7 @@ const polls = {
 		})
 	},
 
-	getFullPoll(pollId: number): Promise<
-		AxiosResponse<{
-			poll: Poll
-			options: Option[]
-			votes: Vote[]
-			comments: Comment[]
-			shares: Share[]
-			subscribed: boolean
-		}>
-	> {
+	getFullPoll(pollId: number): Promise<AxiosResponse<FullPollResponse>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}`,
@@ -146,6 +135,19 @@ const polls = {
 			cancelToken:
 				cancelTokenHandlerObject[
 					this.deletePoll.name
+				].handleRequestCancellation().token,
+		})
+	},
+
+	removeOrphanedVotes(
+		pollId: number,
+	): Promise<AxiosResponse<{ deleted: Vote[] }>> {
+		return httpInstance.request({
+			method: 'DELETE',
+			url: `poll/${pollId}/votes/orphaned/all`,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.removeOrphanedVotes.name
 				].handleRequestCancellation().token,
 		})
 	},

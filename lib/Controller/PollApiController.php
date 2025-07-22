@@ -67,6 +67,7 @@ class PollApiController extends BaseApiV2Controller {
 			'poll' => $this->pollService->get($pollId),
 			'options' => $this->optionService->list($pollId),
 			'votes' => $this->voteService->list($pollId),
+			'orphaned' => count($this->voteService->getOprhanedVotes($pollId)),
 			'comments' => $this->commentService->list($pollId),
 			'shares' => $this->shareService->list($pollId),
 			'subscribed' => $this->subscriptionService->get($pollId),
@@ -196,8 +197,19 @@ class PollApiController extends BaseApiV2Controller {
 	}
 
 	/**
-	 * Get valid values for configuration options
+	 * Delete orphaned votes from pollId
+	 * @param int $pollId poll id
 	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/poll/{pollId}/votes/orphaned/all', requirements: ['apiVersion' => '(v2)'])]
+	public function deleteOrphaned(int $pollId): DataResponse {
+		return $this->response(fn () => [
+			'deleted' => $this->voteService->deleteOrphanedVotes($pollId)
+		]);
+	}
+
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]

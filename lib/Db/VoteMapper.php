@@ -155,6 +155,26 @@ class VoteMapper extends QBMapperWithUser {
 	}
 
 	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Vote[]
+	 * @psalm-return array<array-key, Vote>
+	 */
+	public function findOrphanedByPoll(int $pollId): array {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select(self::TABLE . '.*')
+			->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'))
+			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id');
+
+		$optionAlias = $this->joinOption($qb, self::TABLE);
+
+		$qb->andWhere($qb->expr()->isNull($optionAlias . '.id'));
+		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+		return $this->findEntities($qb);
+	}
+
+	/**
 	 * Build the enhanced query with joined tables
 	 */
 	protected function find(int $id): Vote {

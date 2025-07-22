@@ -242,6 +242,12 @@ class ActivityService {
 				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have voted'),
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has voted'),
 			],
+			VoteEvent::DELETED_ORPHANED => [
+				self::FIRST_PERSON_FULL => $this->l10n->t('One or more orphaned votes heve been deleted from {pollTitle}'),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has deleted your orphaned polls from poll {pollTitle}'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('Orphaned votes deleted'),
+				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} deleted orphaned votes'),
+			],
 			ShareEvent::LOCKED => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have locked the share of {sharee}'),
 				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has locked the share of {sharee}'),

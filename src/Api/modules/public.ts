@@ -8,21 +8,17 @@ import { Session } from '../../stores/session.js'
 import { Answer, Vote } from '../../stores/votes.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 import { Comment } from '../../stores/comments.js'
-import { Poll } from '../../stores/poll.js'
 import { Share } from '../../stores/shares.js'
 import { SentResults } from './shares.js'
+import {
+	AddOptionResponse,
+	FullPollResponse,
+	RemoveVotesResponse,
+	setVoteResponse,
+} from './api.types.js'
 
 const publicPoll = {
-	getPoll(shareToken: string): Promise<
-		AxiosResponse<{
-			poll: Poll
-			options: Option[]
-			votes: Vote[]
-			comments: Comment[]
-			shares: Share[]
-			subscribed: boolean
-		}>
-	> {
+	getPoll(shareToken: string): Promise<AxiosResponse<FullPollResponse>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `/s/${shareToken}/poll`,
@@ -63,14 +59,7 @@ const publicPoll = {
 		option: SimpleOption,
 		sequence: Sequence | null,
 		voteYes: boolean = false,
-	): Promise<
-		AxiosResponse<{
-			option: Option
-			repetitions: Option[]
-			options: Option[]
-			votes: Vote[]
-		}>
-	> {
+	): Promise<AxiosResponse<AddOptionResponse>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `/s/${shareToken}/option`,
@@ -129,9 +118,7 @@ const publicPoll = {
 		shareToken: string,
 		optionId: number,
 		setTo: Answer,
-	): Promise<
-		AxiosResponse<{ vote: Vote; poll: Poll; options: Option[]; votes: Vote[] }>
-	> {
+	): Promise<AxiosResponse<setVoteResponse>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}/vote`,
@@ -146,9 +133,7 @@ const publicPoll = {
 		})
 	},
 
-	resetVotes(
-		shareToken: string,
-	): Promise<AxiosResponse<{ poll: Poll; options: Option[]; votes: Vote[] }>> {
+	resetVotes(shareToken: string): Promise<AxiosResponse<RemoveVotesResponse>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/user`,
@@ -161,7 +146,7 @@ const publicPoll = {
 
 	removeOrphanedVotes(
 		shareToken: string,
-	): Promise<AxiosResponse<{ poll: Poll; options: Option[]; votes: Vote[] }>> {
+	): Promise<AxiosResponse<RemoveVotesResponse>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/votes/orphaned`,
