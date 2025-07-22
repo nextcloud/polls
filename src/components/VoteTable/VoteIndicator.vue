@@ -4,15 +4,15 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
+import CancelIcon from 'vue-material-design-icons/Cancel.vue'
 import { MaybeIcon } from '../AppIcons/index.ts'
 import { Answer } from '../../Types/index.ts'
 
 const ICON_SIZE = 26
 
-const { answer } = defineProps<{ answer: Answer }>()
+const { answer } = defineProps<{ answer: Answer | 'locked' }>()
 
 const colorCodeNo = getComputedStyle(document.documentElement).getPropertyValue(
 	'--color-error',
@@ -23,31 +23,25 @@ const colorCodeYes = getComputedStyle(document.documentElement).getPropertyValue
 const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyValue(
 	'--color-warning',
 )
-
-const foregroundColor = computed(() => {
-	if (answer === 'yes') {
-		return colorCodeYes
-	}
-	if (answer === 'maybe') {
-		return colorCodeMaybe
-	}
-	return colorCodeNo
-})
 </script>
 
 <template>
 	<div class="vote-indicator">
 		<MaybeIcon
 			v-if="answer === 'maybe'"
-			:fill-color="foregroundColor"
+			:fill-color="colorCodeMaybe"
 			:size="ICON_SIZE" />
 		<CheckIcon
 			v-if="answer === 'yes'"
-			:fill-color="foregroundColor"
+			:fill-color="colorCodeYes"
 			:size="ICON_SIZE" />
 		<CloseIcon
 			v-if="answer === 'no'"
-			:fill-color="foregroundColor"
+			:fill-color="colorCodeNo"
+			:size="ICON_SIZE" />
+		<CancelIcon
+			v-if="answer === 'locked'"
+			:fill-color="colorCodeNo"
 			:size="ICON_SIZE" />
 	</div>
 </template>
@@ -60,10 +54,6 @@ const foregroundColor = computed(() => {
 	&,
 	* {
 		cursor: pointer;
-	}
-	.material-design-icon {
-		width: 26px;
-		height: 26px;
 	}
 
 	&:hover {

@@ -257,7 +257,8 @@ const appClass = computed(() => [
 	overflow: auto;
 	overscroll-behavior-inline: contain;
 	position: relative;
-	top: -8px;
+	top: var(--shadow-height-inverted);
+	padding-top: var(--shadow-height);
 
 	.markdown-description {
 		margin: auto;

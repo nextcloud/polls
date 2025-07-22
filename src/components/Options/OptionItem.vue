@@ -64,6 +64,17 @@ const pollStore = usePollStore()
 	grid-template-areas: 'drag option owner actions';
 	position: relative;
 	padding: 8px 0;
+	background-color: var(--color-main-background);
+	.confirmed & {
+		background-color: var(--color-polls-background-yes);
+		border-radius: var(--border-radius-container);
+		border: 2px solid var(--color-success-text);
+	}
+	.list-view .confirmed & {
+		padding-left: 0.5rem;
+		left: -0.5rem;
+		padding-right: 0.5rem;
+	}
 }
 
 .grid-area-drag-icon {

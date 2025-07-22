@@ -5,19 +5,31 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-
-import { usePollStore } from '../../stores/poll.ts'
-import { useVotesStore } from '../../stores/votes.ts'
-import { Option, User } from '../../Types/index.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 import { t } from '@nextcloud/l10n'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+
 import VoteIndicator from './VoteIndicator.vue'
-import { AxiosError } from '@nextcloud/axios'
+import { usePollStore } from '../../stores/poll.ts'
+import { Answer, useVotesStore } from '../../stores/votes.ts'
+import { Option, User } from '../../Types/index.ts'
 
 interface Props {
 	option: Option
 	user: User
+}
+
+export type richAnswer = {
+	name: Answer
+	translated: string
+}
+
+const richAnswers: { [key in Answer]: richAnswer } = {
+	yes: { name: 'yes', translated: t('polls', 'Yes') },
+	maybe: { name: 'maybe', translated: t('polls', 'Maybe') },
+	no: { name: 'no', translated: t('polls', 'No') },
+	'': { name: '', translated: t('polls', 'No answer') },
 }
 
 const { option, user } = defineProps<Props>()
@@ -25,44 +37,30 @@ const { option, user } = defineProps<Props>()
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
 
-const thisVote = computed(() =>
+const vote = computed(() =>
 	votesStore.getVote({
 		option,
 		user,
 	}),
 )
 
-const iconAnswer = computed(() => {
-	if (['no', ''].includes(thisVote.value.answer)) {
-		return pollStore.isClosed && option.confirmed ? 'no' : ''
+const nextAnswer = computed<richAnswer>(() => {
+	if (['no', ''].includes(vote.value.answer)) {
+		return richAnswers.yes
 	}
-	return thisVote.value.answer
-})
 
-const nextAnswer = computed(() => {
-	if (pollStore.answerSequence.indexOf(thisVote.value.answer) < 0) {
-		return pollStore.answerSequence[1]
+	if (vote.value.answer === 'yes' && pollStore.configuration.allowMaybe) {
+		return richAnswers.maybe
 	}
-	return pollStore.answerSequence[
-		(pollStore.answerSequence.indexOf(thisVote.value.answer) + 1)
-			% pollStore.answerSequence.length
-	]
-})
-const nextAnswerTranslated = computed(() => {
-	if (nextAnswer.value === 'yes') {
-		return t('polls', 'Yes')
-	}
-	if (nextAnswer.value === 'maybe') {
-		return t('polls', 'Maybe')
-	}
-	return t('polls', 'No')
+
+	return pollStore.configuration.useNo ? richAnswers.no : richAnswers['']
 })
 
 async function setVote() {
 	try {
 		await votesStore.set({
 			option,
-			setTo: nextAnswer.value,
+			setTo: nextAnswer.value.name,
 		})
 		showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
 	} catch (error) {
@@ -78,15 +76,15 @@ async function setVote() {
 <template>
 	<button
 		class="vote-button active"
-		:class="[thisVote.answer]"
+		:class="[vote.answer]"
 		:aria-label="
-			t('polls', 'Vote {nextAnswer} for {option}', {
+			t('polls', 'Click to vote with {nextAnswer} for option {option}', {
 				option: option.text,
-				nextAnswer: nextAnswerTranslated,
+				nextAnswer: nextAnswer.translated,
 			})
 		"
 		@click="setVote()">
-		<VoteIndicator :answer="iconAnswer" />
+		<VoteIndicator :answer="vote.answer" />
 	</button>
 </template>
 

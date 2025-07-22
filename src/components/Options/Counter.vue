@@ -6,8 +6,11 @@
 <script setup lang="ts">
 import YesCounterIcon from 'vue-material-design-icons/AccountCheck.vue'
 import MaybeCounterIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
+import CheckboxMarkedOutlinedIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import { Option } from '../../Types/index.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
+const pollStore = usePollStore()
 interface Props {
 	option: Option
 	showMaybe?: boolean
@@ -17,7 +20,10 @@ const { option, showMaybe = false } = defineProps<Props>()
 </script>
 
 <template>
-	<div class="counter">
+	<div v-if="option.confirmed && pollStore.status.isExpired" class="counter">
+		<CheckboxMarkedOutlinedIcon :size="20" />
+	</div>
+	<div v-else class="counter">
 		<div class="yes">
 			<YesCounterIcon
 				fill-color="var(--color-polls-foreground-yes)"
