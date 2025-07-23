@@ -656,7 +656,6 @@
     "Vote saved" : "Sábháladh an vóta",
     "Vote already booked out" : "Vóta curtha in áirithe cheana féin",
     "Error saving vote" : "Earráid agus an vóta á shábháil",
-    "Vote {nextAnswer} for {option}" : "Vótaigh {nextAnswer} do {option}",
     "Participant {userId} has been removed" : "Baineadh rannpháirtí {userId}",
     "Remove votes of {displayName}" : "Bain vótaí {displayName}",
     "Click to sort by name" : "Cliceáil chun sórtáil de réir ainm",

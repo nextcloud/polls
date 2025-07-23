@@ -658,7 +658,6 @@ OC.L10N.register(
     "Vote saved" : "Vote saved",
     "Vote already booked out" : "Vote already booked out",
     "Error saving vote" : "Error saving vote",
-    "Vote {nextAnswer} for {option}" : "Vote {nextAnswer} for {option}",
     "Participant {userId} has been removed" : "Participant {userId} has been removed",
     "Remove votes of {displayName}" : "Remove votes of {displayName}",
     "Click to sort by name" : "Click to sort by name",

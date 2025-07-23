@@ -658,7 +658,6 @@ OC.L10N.register(
     "Vote saved" : "Глас је сачуван",
     "Vote already booked out" : "Гласање је већ закључено",
     "Error saving vote" : "Грешка приликом чувања гласа",
-    "Vote {nextAnswer} for {option}" : "Гласај {nextAnswer} за {option}",
     "Participant {userId} has been removed" : "Уклоњен је учесник {userId}",
     "Remove votes of {displayName}" : "Уклони гласове {displayName}",
     "Click to sort by name" : "Кликните да се сортира по имену",

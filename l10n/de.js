@@ -658,7 +658,6 @@ OC.L10N.register(
     "Vote saved" : "Die Stimme wurde gespeichert",
     "Vote already booked out" : "Abstimmung bereits ausgebucht",
     "Error saving vote" : "Fehler beim Speichern der Stimmabgabe",
-    "Vote {nextAnswer} for {option}" : "Stimme {nextAnswer} für {option}",
     "Participant {userId} has been removed" : "Teilnehmer {userId} wurde entfernt",
     "Remove votes of {displayName}" : "Stimmen von {displayName} entfernen",
     "Click to sort by name" : "Klicken, um nach Namen zu sortieren",

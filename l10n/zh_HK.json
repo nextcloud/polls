@@ -656,7 +656,6 @@
     "Vote saved" : "投票已存儲",
     "Vote already booked out" : "投票已經預訂滿了",
     "Error saving vote" : "存儲投票時發生錯誤",
-    "Vote {nextAnswer} for {option}" : "為 {option} 投票 {nextAnswer}",
     "Participant {userId} has been removed" : "參與者 {userId} 已被移除",
     "Remove votes of {displayName}" : "移除 {displayName} 的投票",
     "Click to sort by name" : "點選以按名稱排序",

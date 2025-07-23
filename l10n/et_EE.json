@@ -626,7 +626,6 @@
     "Select users" : "Vali kasutajad",
     "Vote saved" : "Hääl salvestatud",
     "Error saving vote" : "Viga hääle salvestamisel",
-    "Vote {nextAnswer} for {option}" : "Hääleta „{nextAnswer}“: {option}",
     "Participant {userId} has been removed" : "Osaleja {userId}on eemaldatud.",
     "Remove votes of {displayName}" : "Eemalda „{displayName}“ antud hääled",
     "Click to sort by name" : "Nime alusel järjestamiseks klõpsi",
