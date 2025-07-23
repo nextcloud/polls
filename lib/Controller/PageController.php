@@ -15,6 +15,7 @@ use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
+use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -47,7 +48,12 @@ class PageController extends Controller {
 	public function index(): TemplateResponse {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
 		$this->eventDispatcher->dispatchTyped(new LoadAdditionalScriptsEvent());
-		return new TemplateResponse(AppConstants::APP_ID, 'main');
+		$response = new TemplateResponse(AppConstants::APP_ID, 'main');
+		$csp = new ContentSecurityPolicy();
+		$csp->addAllowedWorkerSrcDomain('blob:');
+		$csp->addAllowedWorkerSrcDomain("'self'");
+		$response->setContentSecurityPolicy($csp);
+		return $response;
 	}
 
 	/**
@@ -61,6 +67,11 @@ class PageController extends Controller {
 	public function vote(int $id): TemplateResponse {
 		$this->notificationService->removeNotificationsForPoll($id);
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
-		return new TemplateResponse(AppConstants::APP_ID, 'main');
+		$response = new TemplateResponse(AppConstants::APP_ID, 'main');
+		$csp = new ContentSecurityPolicy();
+		$csp->addAllowedWorkerSrcDomain('blob:');
+		$csp->addAllowedWorkerSrcDomain("'self'");
+		$response->setContentSecurityPolicy($csp);
+		return $response;
 	}
 }

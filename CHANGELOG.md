@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
  - Force list view mode initially on mobile viewports
  - Fix some visual issues of the vote page
  - Bring back indicator for confirmed options after closing the poll
+ - Add CSP to allow worker
 
 ## [8.1.4] - 2025-07-15
 ### Fixes
