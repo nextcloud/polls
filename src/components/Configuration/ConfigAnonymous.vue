@@ -62,7 +62,7 @@ function spawnConfirmationDialog(forceDialog: boolean = false) {
  *
  */
 function lockAnonymous() {
-	pollStore.LockAnonymous()
+	pollStore.lockAnonymous()
 	emit('change')
 }
 

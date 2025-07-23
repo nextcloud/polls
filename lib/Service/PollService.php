@@ -240,10 +240,15 @@ class PollService {
 
 	/**
 	 * Update poll configuration
-	 * @return Poll
+	 *
+	 * @param int $pollId Poll id
+	 * @param array $pollConfiguration Poll configuration
+	 * @return array
+	 *
+	 * @psalm-return array{poll: Poll, diff: array, changes: array}
 	 */
-	public function update(int $pollId, array $pollConfiguration): Poll {
-		$this->poll = $this->pollMapper->find($pollId);
+	public function update(int $pollId, array $pollConfiguration): array {
+		$this->poll = $this->pollMapper->get($pollId, withRoles: true);
 		$this->poll->request(Poll::PERMISSION_POLL_EDIT);
 
 		// Validate valuess
@@ -278,12 +283,19 @@ class PollService {
 			$pollConfiguration['expire'] = time();
 		}
 
+		$diff = new DiffService($this->poll);
+
 		$this->poll->deserializeArray($pollConfiguration);
 		$this->poll = $this->pollMapper->update($this->poll);
-
 		$this->eventDispatcher->dispatchTyped(new PollUpdatedEvent($this->poll));
 
-		return $this->poll;
+		$diff->setComparisonObject($this->poll);
+
+		return [
+			'poll' => $this->poll,
+			'diff' => $diff->getFullDiff(),
+			'changes' => $diff->getNewValuesDiff(),
+		];
 	}
 
 	/**
