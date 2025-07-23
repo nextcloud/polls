@@ -14,12 +14,14 @@ All notable changes to this project will be documented in this file.
  - Make vote cell focusable
  - Make shadow of sticky items transparent
  - Changed experimental comments layout
+ - improve poll loading times again by applying diffs after updates
 
 ### Fixes
  - Force list view mode initially on mobile viewports
  - Fix some visual issues of the vote page
  - Bring back indicator for confirmed options after closing the poll
  - Add CSP to allow worker
+ - fix loading archived polls
 
 ## [8.1.4] - 2025-07-15
 ### Fixes
