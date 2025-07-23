@@ -248,8 +248,8 @@ class PollService {
 	 * @psalm-return array{poll: Poll, diff: array, changes: array}
 	 */
 	public function update(int $pollId, array $pollConfiguration): array {
-		$this->poll = $this->pollMapper->get($pollId, withRoles: true);
-		$this->poll->request(Poll::PERMISSION_POLL_EDIT);
+		$this->poll = $this->pollMapper->get($pollId, withRoles: true)
+			->request(Poll::PERMISSION_POLL_EDIT);
 
 		// Validate valuess
 		if (isset($pollConfiguration['showResults']) && !in_array($pollConfiguration['showResults'], $this->getValidShowResults())) {
@@ -336,8 +336,8 @@ class PollService {
 	 * @return Poll
 	 */
 	public function toggleArchive(int $pollId): Poll {
-		$this->poll = $this->pollMapper->find($pollId);
-		$this->poll->request(Poll::PERMISSION_POLL_DELETE);
+		$this->poll = $this->pollMapper->find($pollId)
+			->request(Poll::PERMISSION_POLL_DELETE);
 
 		$this->poll->setDeleted($this->poll->getDeleted() ? 0 : time());
 		$this->poll = $this->pollMapper->update($this->poll);
@@ -357,12 +357,12 @@ class PollService {
 	 */
 	public function delete(int $pollId): Poll {
 		try {
-			$this->poll = $this->pollMapper->get($pollId, withRoles: true);
+			$this->poll = $this->pollMapper->get($pollId, withRoles: true)
+				->request(Poll::PERMISSION_POLL_DELETE);
 		} catch (DoesNotExistException $e) {
 			throw new AlreadyDeletedException('Poll not found, assume already deleted');
 		}
 
-		$this->poll->request(Poll::PERMISSION_POLL_DELETE);
 		$this->eventDispatcher->dispatchTyped(new PollDeletedEvent($this->poll));
 
 		$this->pollMapper->delete($this->poll);
@@ -374,7 +374,8 @@ class PollService {
 	 * @return Poll
 	 */
 	public function close(int $pollId): Poll {
-		$this->pollMapper->get($pollId, withRoles: true)->request(Poll::PERMISSION_POLL_EDIT);
+		$this->pollMapper->get($pollId, withRoles: true)
+			->request(Poll::PERMISSION_POLL_EDIT);
 		return $this->toggleClose($pollId, time() - 5);
 	}
 
@@ -383,7 +384,8 @@ class PollService {
 	 * @return Poll
 	 */
 	public function reopen(int $pollId): Poll {
-		$this->pollMapper->get($pollId, withRoles: true)->request(Poll::PERMISSION_POLL_EDIT);
+		$this->pollMapper->get($pollId, withRoles: true)
+			->request(Poll::PERMISSION_POLL_EDIT);
 		return $this->toggleClose($pollId, 0);
 	}
 
@@ -392,8 +394,8 @@ class PollService {
 	 * @return Poll
 	 */
 	private function toggleClose(int $pollId, int $expiry): Poll {
-		$this->poll = $this->pollMapper->find($pollId);
-		$this->poll->request(Poll::PERMISSION_POLL_EDIT);
+		$this->poll = $this->pollMapper->find($pollId)
+			->request(Poll::PERMISSION_POLL_EDIT);
 
 		$this->poll->setExpire($expiry);
 		if ($expiry > 0) {
@@ -412,8 +414,8 @@ class PollService {
 	 * @return Poll
 	 */
 	public function clone(int $pollId): Poll {
-		$origin = $this->pollMapper->get($pollId, withRoles: true);
-		$origin->request(Poll::PERMISSION_POLL_VIEW);
+		$origin = $this->pollMapper->get($pollId, withRoles: true)
+			->request(Poll::PERMISSION_POLL_VIEW);
 		$this->appSettings->getPollCreationAllowed();
 
 		$this->poll = new Poll();
@@ -444,8 +446,8 @@ class PollService {
 	 *
 	 */
 	public function getParticipantsEmailAddresses(int $pollId): array {
-		$this->poll = $this->pollMapper->get($pollId, withRoles: true);
-		$this->poll->request(Poll::PERMISSION_POLL_EDIT);
+		$this->poll = $this->pollMapper->get($pollId, withRoles: true)
+			->request(Poll::PERMISSION_POLL_EDIT);
 
 		$votes = $this->voteMapper->findParticipantsByPoll($this->poll->getId());
 		$list = [];

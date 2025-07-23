@@ -36,11 +36,11 @@ class CommentService {
 	 */
 	public function list(int $pollId): array {
 		try {
-			$this->pollMapper->get($pollId, withRoles: true)->request(Poll::PERMISSION_COMMENT_ADD);
+			$this->pollMapper->get($pollId, true, withRoles: true)
+				->request(Poll::PERMISSION_COMMENT_ADD);
 		} catch (Exception $e) {
 			return [];
 		}
-		$this->pollMapper->get($pollId, withRoles: true)->request(Poll::PERMISSION_COMMENT_ADD);
 
 		$comments = $this->commentMapper->findByPoll($pollId);
 		// treat comments from the same user within 5 minutes as grouped comments
@@ -66,8 +66,8 @@ class CommentService {
 	 * Add comment
 	 */
 	public function add(string $message, int $pollId, ?bool $confidential = false): Comment {
-		$poll = $this->pollMapper->get($pollId, withRoles: true);
-		$poll->request(Poll::PERMISSION_COMMENT_ADD);
+		$poll = $this->pollMapper->get($pollId, withRoles: true)
+			->request(Poll::PERMISSION_COMMENT_ADD);
 
 		if ($poll->getForceConfidentialComments()) {
 			$confidential = true;
@@ -104,7 +104,8 @@ class CommentService {
 		$this->comment = $this->commentMapper->find($commentId);
 
 		if (!$this->comment->getCurrentUserIsEntityUser()) {
-			$this->pollMapper->get($this->comment->getPollId(), withRoles: true)->request(Poll::PERMISSION_COMMENT_DELETE);
+			$this->pollMapper->get($this->comment->getPollId(), withRoles: true)
+				->request(Poll::PERMISSION_COMMENT_DELETE);
 		}
 
 		$this->comment->setDeleted($restore ? 0 : time());

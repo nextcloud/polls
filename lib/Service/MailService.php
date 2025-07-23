@@ -228,7 +228,8 @@ class MailService {
 	 * Send a confirmation mail for the poll to all participants
 	 */
 	public function sendConfirmations(int $pollId): SentResult {
-		$this->pollMapper->get($pollId, withRoles: true)->request(Poll::PERMISSION_POLL_EDIT);
+		$this->pollMapper->get($pollId, withRoles: true)
+			->request(Poll::PERMISSION_POLL_EDIT);
 		$sentResult = new SentResult();
 
 		$participants = $this->userMapper->getParticipants($pollId);

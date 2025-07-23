@@ -64,8 +64,8 @@ class PollGroupService {
 		?int $pollGroupId = null,
 		?string $pollGroupName = null,
 	): PollGroup {
-		$poll = $this->pollMapper->get($pollId, withRoles: true);
-		$poll->request(Poll::PERMISSION_POLL_EDIT);
+		$poll = $this->pollMapper->get($pollId, withRoles: true)
+			->request(Poll::PERMISSION_POLL_EDIT);
 
 		// Without poll group id, we create a new poll group
 		if ($pollGroupId === null
@@ -112,8 +112,8 @@ class PollGroupService {
 		int $pollId,
 		int $pollGroupId,
 	): ?PollGroup {
-		$poll = $this->pollMapper->get($pollId, withRoles: true);
-		$poll->request(Poll::PERMISSION_POLL_EDIT);
+		$poll = $this->pollMapper->get($pollId, withRoles: true)
+			->request(Poll::PERMISSION_POLL_EDIT);
 
 		$pollGroup = $this->pollGroupMapper->find($pollGroupId);
 
