@@ -161,6 +161,19 @@ class ShareService {
 			$this->share->setDisplayName('');
 		}
 
+		$poll = $this->pollMapper->get($this->share->getPollId(), withRoles: true);
+
+		if ($poll->getIsAllowed(Poll::PERMISSION_VOTE_EDIT)
+			|| $poll->getIsAllowed(Poll::PERMISSION_POLL_EDIT)
+		) {
+			// user is allowed to access the poll, continue without creating a new share
+			return $this->share;
+		}
+
+		if (!$poll->getIsAllowed(Poll::PERMISSION_POLL_VIEW)) {
+			throw new ForbiddenException('User is not allowed to access this poll');
+		}
+
 		// Exception: logged in user, accesses the poll via public share link
 		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userSession->getIsLoggedIn()) {
 			$this->convertPublicShareToPersonalShare();
