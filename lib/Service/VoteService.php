@@ -41,15 +41,16 @@ class VoteService {
 	 * @return Vote[]
 	 */
 	public function list(int $pollId): array {
-		$poll = $this->pollMapper->get($pollId, withRoles: true);
-		$poll->request(Poll::PERMISSION_POLL_VIEW);
+		$poll = $this->pollMapper->get($pollId, true, withRoles: true)
+			->request(Poll::PERMISSION_POLL_VIEW);
 
-		if (!$poll->getIsAllowed(Poll::PERMISSION_POLL_RESULTS_VIEW)) {
+		try {
+			$poll->request(Poll::PERMISSION_POLL_RESULTS_VIEW);
+			$votes = $this->voteMapper->findByPoll($pollId);
+		} catch (ForbiddenException $e) {
 			// Just return the participants votes, no further anoymizing or obfuscating is nessecary
-			return $this->voteMapper->findByPollAndUser($pollId, ($this->userSession->getCurrentUserId()));
+			$votes = $this->voteMapper->findByPollAndUser($pollId, ($this->userSession->getCurrentUserId()));
 		}
-
-		$votes = $this->voteMapper->findByPoll($pollId);
 
 		return $votes;
 	}
@@ -87,8 +88,8 @@ class VoteService {
 		} else {
 			$option = $this->optionMapper->find($optionOrOptionIdoptionId);
 		}
-		$poll = $this->pollMapper->get($option->getPollId(), withRoles: true);
-		$poll->request(Poll::PERMISSION_VOTE_EDIT);
+		$poll = $this->pollMapper->get($option->getPollId(), withRoles: true)
+			->request(Poll::PERMISSION_VOTE_EDIT);
 
 		if ($option->getIsLocked()) {
 			$this->checkVoteLimit($option);
@@ -140,8 +141,8 @@ class VoteService {
 	 */
 	public function getOprhanedVotes(int $pollId): array {
 		try {
-			$poll = $this->pollMapper->get($pollId, withRoles: true);
-			$poll->request(Poll::PERMISSION_POLL_EDIT);
+			$this->pollMapper->get($pollId, true, withRoles: true)
+				->request(Poll::PERMISSION_POLL_EDIT);
 			return $this->voteMapper->findOrphanedByPoll($pollId);
 		} catch (ForbiddenException $e) {
 			return [];
@@ -155,8 +156,8 @@ class VoteService {
 	 * @return Vote[]
 	 */
 	public function deleteOrphanedVotes(int $pollId): array {
-		$poll = $this->pollMapper->get($pollId, withRoles: true);
-		$poll->request(Poll::PERMISSION_VOTE_FOREIGN_CHANGE);
+		$this->pollMapper->get($pollId, withRoles: true)
+			->request(Poll::PERMISSION_VOTE_FOREIGN_CHANGE);
 
 		// delete all votes of the poll, which are not assigned to an option
 		$votes = $this->voteMapper->findOrphanedByPoll($pollId);
@@ -185,7 +186,7 @@ class VoteService {
 		// Set default right to delete all votes of the user
 		$checkRight = Poll::PERMISSION_VOTE_FOREIGN_CHANGE;
 		if ($userId === $this->userSession->getCurrentUserId()) {
-			// allow current user to remove his votes
+			// allow current user to remove his own votes
 			$checkRight = Poll::PERMISSION_VOTE_EDIT;
 		}
 

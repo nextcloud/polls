@@ -97,7 +97,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
 	public function update(int $pollId, array $pollConfiguration): DataResponse {
-		return $this->response(fn () => ['poll' => $this->pollService->update($pollId, $pollConfiguration)]);
+		return $this->response(fn () => $this->pollService->update($pollId, $pollConfiguration));
 	}
 
 	/**

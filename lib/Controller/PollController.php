@@ -196,9 +196,7 @@ class PollController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}')]
 	public function update(int $pollId, array $poll): JSONResponse {
-		return $this->response(fn () => [
-			'poll' => $this->pollService->update($pollId, $poll),
-		]);
+		return $this->response(fn () => $this->pollService->update($pollId, $poll));
 	}
 
 	/**

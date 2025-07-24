@@ -437,7 +437,7 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 
-		async LockAnonymous(): Promise<void> {
+		async lockAnonymous(): Promise<void> {
 			try {
 				await PollsAPI.lockAnonymous(this.id)
 			} catch (error) {
@@ -455,9 +455,48 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 
-		write(): void {
-			const pollsStore = usePollsStore()
+		/* Load all necessary stores based on the configuration change.
+		 * Avoid loading all dependent stores, if not necessary and reduce
+		 * the amount of db access and expensive mutations.
+		 *
+		 * TODO: Currently this is based on the changes reported by the API.
+		 * For large polls this is still bad UX, since loading of the poll
+		 * can take a while. Until then depending updates of the UI are
+		 * also delayed.
+		 *
+		 * We keep it for the moment to avoid breaking changes.
+		 */
+		async loadConsistentPoll(changes: Partial<Poll>): Promise<void> {
+			const dispatches = new Set()
 
+			if (
+				changes.configuration?.maxVotesPerUser !== undefined
+				|| changes.configuration?.maxVotesPerOption !== undefined
+				|| changes.configuration?.hideBookedUp !== undefined
+			) {
+				const optionsStore = useOptionsStore()
+				dispatches.add(optionsStore.load())
+			}
+
+			if (
+				changes.configuration?.allowComment !== undefined
+				|| changes.configuration?.forceConfidentialComments !== undefined
+			) {
+				const commentsStore = useCommentsStore()
+				dispatches.add(commentsStore.load())
+			}
+
+			if (changes.configuration?.anonymous !== undefined) {
+				const votesStore = useVotesStore()
+				dispatches.add(votesStore.load())
+			}
+
+			const pollsStore = usePollsStore()
+			dispatches.add(pollsStore.load())
+			Promise.all(dispatches)
+		},
+
+		write(): void {
 			const debouncedLoad = this.$debounce(async () => {
 				if (this.configuration.title === '') {
 					showError(t('polls', 'Title must not be empty!'))
@@ -469,11 +508,12 @@ export const usePollStore = defineStore('poll', {
 						this.id,
 						this.configuration,
 					)
-					this.$patch(response.data.poll)
+					this.$patch(response.data.changes)
 					emit(Event.UpdatePoll, {
 						store: 'poll',
 						message: t('polls', 'Poll updated'),
 					})
+					this.loadConsistentPoll(response.data.changes)
 				} catch (error) {
 					if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 						return
@@ -482,11 +522,9 @@ export const usePollStore = defineStore('poll', {
 						error,
 						poll: this.$state,
 					})
+					this.load()
 					showError(t('polls', 'Error writing poll'))
 					throw error
-				} finally {
-					this.load()
-					pollsStore.load()
 				}
 			}, 500)
 			debouncedLoad()

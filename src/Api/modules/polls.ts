@@ -105,7 +105,13 @@ const polls = {
 	writePoll(
 		pollId: number,
 		poll: PollConfiguration,
-	): Promise<AxiosResponse<{ poll: Poll }>> {
+	): Promise<
+		AxiosResponse<{
+			poll: Poll
+			diff: Partial<Poll>
+			changes: Partial<Poll>
+		}>
+	> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}`,

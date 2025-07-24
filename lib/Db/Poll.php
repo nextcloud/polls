@@ -559,13 +559,15 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	/**
 	 * Request a permission level and get exception if denied
+	 * @param string $permission The permission to request
+	 * @return Poll Returns the current poll object
 	 * @throws ForbiddenException Thrown if access is denied
 	 */
-	public function request(string $permission): bool {
+	public function request(string $permission): Poll {
 		if (!$this->getIsAllowed($permission)) {
 			throw new ForbiddenException('denied permission ' . $permission);
 		}
-		return true;
+		return $this;
 	}
 
 	/**
@@ -868,8 +870,13 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * Checks, if poll owner is allowed to deanonymize votes
 	 **/
 	private function getAllowDeanonymize(): bool {
-		// Current user is allowed to edit the poll and the owner of the poll is unrestricted
-		return $this->getAnonymous() > -1 && $this->getAllowEditPoll() && $this->getUser()->getIsUnrestrictedPollOwner();
+		// Deanonymization is only allowed,
+		// if the anonymize setting is not locked
+		// and the current user is allowed to edit the poll
+		// and the owner of the poll is unrestricted
+		return $this->getAnonymous() > -1
+			&& $this->getAllowEditPoll()
+			&& $this->getUser()->getIsUnrestrictedPollOwner();
 	}
 
 	/**
