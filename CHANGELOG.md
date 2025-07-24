@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
  - Bring back indicator for confirmed options after closing the poll
  - Add CSP to allow worker
  - fix loading archived polls
+ - broken access if a logged in user by public share enters a poll he already had access to
 
 ## [8.1.4] - 2025-07-15
 ### Fixes
