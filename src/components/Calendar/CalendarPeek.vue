@@ -18,7 +18,8 @@ import { CalendarAPI } from '../../Api/index.ts'
 import { Logger } from '../../helpers/index.ts'
 import { Option } from '../../Types/index.ts'
 import { AxiosError } from '@nextcloud/axios'
-import AlertIcon from 'vue-material-design-icons/Alert.vue'
+import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
+import { NcButton } from '@nextcloud/vue'
 
 export type CalendarEvent = {
 	id: number
@@ -97,12 +98,19 @@ onMounted(async () => {
 </script>
 
 <template>
-	<NcPopover v-if="events.length" v-bind="$attrs" class="calendar-peek">
+	<NcPopover
+		v-if="events.length"
+		v-bind="$attrs"
+		class="calendar-peek"
+		close-on-click-outside>
 		<template #trigger>
-			<AlertIcon
-				fill-color="var(--color-warning)"
-				:size="24"
-				:title="t('polls', 'Possible calendar conflicts')" />
+			<NcButton variant="tertiary-no-background">
+				<template #icon>
+					<CalendarIcon
+						:size="24"
+						:title="t('polls', 'Possibly affected calendar events')" />
+				</template>
+			</NcButton>
 		</template>
 		<div class="calendar-peek__grid">
 			<CalendarInfo
