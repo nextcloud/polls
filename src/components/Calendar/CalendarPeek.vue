@@ -35,6 +35,7 @@ export type CalendarEvent = {
 	status: string
 	summary: string
 	type: string
+	busy: boolean
 }
 
 const { option } = defineProps<{ option: Option }>()
@@ -78,6 +79,7 @@ const currentEvent = computed(
 		status: 'self',
 		summary: pollStore.configuration.title,
 		type: detectAllDay.value.type,
+		busy: false,
 	}),
 )
 

@@ -77,6 +77,14 @@ class CalendarEvent implements \JsonSerializable {
 		return $this->event['UID'][0];
 	}
 
+	public function getBusy(): bool {
+		$transp = $this->event['TRANSP'][0] ?? '';
+		if ($transp === 'TRANSPARENT') {
+			return false;
+		}
+		return true;
+	}
+
 	public function getSummary(): string {
 		return $this->event['SUMMARY'][0];
 	}
@@ -236,6 +244,7 @@ class CalendarEvent implements \JsonSerializable {
 			'status' => $this->getStatus(),
 			'summary' => $this->getSummary(),
 			'type' => $this->getType(),
+			'busy' => $this->getBusy(),
 		];
 	}
 }

@@ -75,6 +75,11 @@ const conflictLevel = computed(() => {
 		return 'conflict-no'
 	}
 
+	// No conflict, if calendarEvent is available (not busy)
+	if (!calendarEvent.busy) {
+		return 'conflict-no'
+	}
+
 	// No conflict, if calendarEvent ends before option
 	if (calendarEvent.end <= option.timestamp) {
 		return 'conflict-no'
