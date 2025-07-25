@@ -208,7 +208,10 @@ const pollCategories: PollCategoryList = {
 			const sessionStore = useSessionStore()
 			return !!sessionStore.currentUser?.isAdmin
 		},
-		filterCondition: (poll: Poll) => !poll.permissions.view,
+		filterCondition: (poll: Poll) => {
+			const sessionStore = useSessionStore()
+			return sessionStore.currentUser.id !== poll.owner.id
+		},
 	},
 }
 

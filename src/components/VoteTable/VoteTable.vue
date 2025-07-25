@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import { NcButton } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -14,7 +14,7 @@ import { Option, useOptionsStore } from '../../stores/options.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
 import StickyDiv from '../Base/modules/StickyDiv.vue'
-import CalendarPeek from '../Calendar/CalendarPeek.vue'
+// import CalendarPeek from '../Calendar/CalendarPeek.vue'
 import Counter from '../Options/Counter.vue'
 import OptionItem from '../Options/OptionItem.vue'
 import OptionMenu from '../Options/OptionMenu.vue'
@@ -35,6 +35,9 @@ const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
 const preferencesStore = usePreferencesStore()
 const sessionStore = useSessionStore()
+const CalendarPeek = defineAsyncComponent(
+	() => import('../Calendar/CalendarPeek.vue'),
+)
 
 const { downPage = false } = defineProps<{ downPage: boolean }>()
 

@@ -4,13 +4,20 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue'
+import {
+	ref,
+	computed,
+	defineAsyncComponent,
+	onMounted,
+	onUnmounted,
+	watchEffect,
+} from 'vue'
 import { debounce } from 'lodash'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 import NcContent from '@nextcloud/vue/components/NcContent'
 
-import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
+// import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 
 import { usePollWatcher } from './composables/usePollWatcher'
 
@@ -42,6 +49,10 @@ const appClass = computed(() => [
 		edit: pollStore.permissions.edit,
 	},
 ])
+
+const UserSettingsDlg = defineAsyncComponent(
+	() => import('./components/Settings/UserSettingsDlg.vue'),
+)
 
 const useNavigation = computed(() => sessionStore.userStatus.isLoggedin)
 const useSidebar = computed(
