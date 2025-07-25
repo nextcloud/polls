@@ -16,6 +16,7 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\TableManager;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -39,6 +40,7 @@ class JanitorCron extends TimedJob {
 		private OptionMapper $optionMapper,
 		private PollMapper $pollMapper,
 		private ShareMapper $shareMapper,
+		private VoteMapper $voteMapper,
 		private WatchMapper $watchMapper,
 		private TableManager $tableManager,
 	) {
@@ -65,10 +67,13 @@ class JanitorCron extends TimedJob {
 			// delete entries older than 1 day
 			$this->watchMapper->deleteOldEntries(time() - 86400);
 
-			// purge entries virtually deleted more than 12 hour ago
+			// purge entries virtually deleted more than 12 hours ago
 			$deleted['comments'] = $this->commentMapper->purgeDeletedComments(time() - 4320);
 			$deleted['options'] = $this->optionMapper->purgeDeletedOptions(time() - 4320);
 			$deleted['shares'] = $this->shareMapper->purgeDeletedShares(time() - 4320);
+
+			// purge orphaned votes; Votes without any corresponding option
+			$deleted['orphaned votes'] = $this->voteMapper->removeOrphanedVotes();
 
 			// delete polls after defined days after archiving date
 			$autoDeleteOffset = $this->appSettings->getAutoDeleteOffsetDays();

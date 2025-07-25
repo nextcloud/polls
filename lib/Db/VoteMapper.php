@@ -13,6 +13,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use PDO;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -174,6 +175,38 @@ class VoteMapper extends QBMapperWithUser {
 		return $this->findEntities($qb);
 	}
 
+	public function removeOrphanedVotes(): int {
+
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('votes.*');
+		$qb->from($this->getTableName(), 'votes');
+		$qb->leftJoin(
+				'votes',
+				OPTION::TABLE,
+				'options',
+				'votes.poll_id = options.poll_id AND votes.vote_option_text = options.poll_option_text'
+			);
+		$qb->where('options.poll_id IS NULL');
+
+		// get ids to delete from first column (=id of the vote table)
+		$idsToDelete = $qb->executeQuery()->fetchAll(PDO::FETCH_COLUMN, 0);
+
+		if (empty($idsToDelete)) {
+			return 0;
+		}
+
+		$delete = $this->db->getQueryBuilder()
+			->delete($this->getTableName())
+			->where('id IN (:ids)')
+			->setParameter('ids', $idsToDelete, IQueryBuilder::PARAM_INT_ARRAY);
+
+		$this->logger->debug('Removing orphaned votes', [
+			'ids' => $idsToDelete,
+		]);
+
+		return $delete->executeStatement();
+	}
 	/**
 	 * Build the enhanced query with joined tables
 	 */
