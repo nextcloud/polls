@@ -663,7 +663,7 @@
     "Vote saved" : "Ihre Stimmabgabe wurde gespeichert",
     "Vote already booked out" : "Abstimmung bereits ausgebucht",
     "Error saving vote" : "Fehler beim Speichern der Stimmabgabe",
-    "Click to vote with {nextAnswer} for option {option}" : "Klicken um mit {nextAnswer} für Option {option} abzustimmen",
+    "Click to vote with {nextAnswer} for option {option}" : "Klicken, um mit {nextAnswer} für Option {option} abzustimmen",
     "Participant {userId} has been removed" : "Teilnehmer {userId} wurde entfernt",
     "Remove votes of {displayName}" : "Stimmen von {displayName} entfernen",
     "Click to sort by name" : "Klicken, um nach Namen zu sortieren",

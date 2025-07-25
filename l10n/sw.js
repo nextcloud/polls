@@ -5,6 +5,7 @@ OC.L10N.register(
     "Group" : "Kundi",
     "Contact" : "Mawasiliano",
     "User" : "Mtumiaji",
+    "Access denied" : "Access denied",
     "Poll" : "Kura ya maoni",
     "Add option" : "Ongeza mbadala",
     "Delete" : "Futa",
