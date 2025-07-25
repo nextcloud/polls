@@ -29,10 +29,6 @@ const calendar = {
 				tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
 				time: +new Date(),
 			},
-			cancelToken:
-				cancelTokenHandlerObject[
-					this.getEvents.name
-				].handleRequestCancellation().token,
 		})
 	},
 }
