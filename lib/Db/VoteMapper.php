@@ -156,46 +156,32 @@ class VoteMapper extends QBMapperWithUser {
 	}
 
 	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Vote[]
-	 * @psalm-return array<array-key, Vote>
+	 * Remove all votes that no more belong to any existing option
+	 *
+	 * @return int Number of deleted votes
 	 */
-	public function findOrphanedByPoll(int $pollId): array {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select(self::TABLE . '.*')
-			->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'))
-			->from($this->getTableName(), self::TABLE)
-			->groupBy(self::TABLE . '.id');
-
-		$optionAlias = $this->joinOption($qb, self::TABLE);
-
-		$qb->andWhere($qb->expr()->isNull($optionAlias . '.id'));
-		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
-		return $this->findEntities($qb);
-	}
-
 	public function removeOrphanedVotes(): int {
-
 		$qb = $this->db->getQueryBuilder();
 
-		$qb->select('votes.*');
+		// get ids of votes that have no option
+		$qb->select('votes.id');
 		$qb->from($this->getTableName(), 'votes');
 		$qb->leftJoin(
-				'votes',
-				OPTION::TABLE,
-				'options',
-				'votes.poll_id = options.poll_id AND votes.vote_option_text = options.poll_option_text'
-			);
+			'votes',
+			Option::TABLE,
+			'options',
+			'votes.poll_id = options.poll_id AND votes.vote_option_text = options.poll_option_text'
+		);
 		$qb->where('options.poll_id IS NULL');
 
-		// get ids to delete from first column (=id of the vote table)
-		$idsToDelete = $qb->executeQuery()->fetchAll(PDO::FETCH_COLUMN, 0);
+		// get the ids as array
+		$idsToDelete = $qb->executeQuery()->fetchAll(PDO::FETCH_COLUMN);
 
 		if (empty($idsToDelete)) {
 			return 0;
 		}
 
+		// delete all votes contained in the id array
 		$delete = $this->db->getQueryBuilder()
 			->delete($this->getTableName())
 			->where('id IN (:ids)')
