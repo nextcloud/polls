@@ -254,7 +254,6 @@ OC.L10N.register(
     "Next day" : "Sonraki gün",
     "minus" : "eksi",
     "plus" : "artı",
-    "Possible calendar conflicts" : "Olası takvim çakışması",
     "Add" : "Ekle",
     "You are asked to propose more options." : "Daha fazla seçenek önermeniz istendi.",
     "The proposal period ends {timeRelative}." : "Öneri süresinin bitiş zamanı {timeRelative}",

@@ -260,7 +260,6 @@ OC.L10N.register(
     "minus" : "miinus",
     "plus" : "pluss",
     "Please wait…" : "Palun oota...",
-    "Possible calendar conflicts" : "Võimalikud kalendrikonfliktid",
     "Add" : "Lisa",
     "You are asked to propose more options." : "Küsitluse koostaja on palunud sul teha ettepanekuid valikute osas.",
     "The proposal period ends {timeRelative}." : "Ettepanekute tegemise aeg lõppeb {timeRelative}.",

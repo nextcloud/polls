@@ -255,7 +255,6 @@ OC.L10N.register(
     "minus" : "-",
     "plus" : "+",
     "Please wait…" : "Attendi...",
-    "Possible calendar conflicts" : "Possibili conflitti di calendario",
     "Add" : "Aggiungi",
     "You are asked to propose more options." : "Ti verrà chiesto di proporre altre opzioni.",
     "The proposal period ends {timeRelative}." : "Il periodo delle proposte termina {timeRelative}.",

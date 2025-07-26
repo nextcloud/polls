@@ -259,7 +259,6 @@ OC.L10N.register(
     "minus" : "  минус",
     "plus" : "плус",
     "Please wait…" : "Молимо сачекајте…",
-    "Possible calendar conflicts" : "Могући сукоби календара",
     "Add" : "Додај",
     "You are asked to propose more options." : "Од вас је затражено да предложите још опција.",
     "The proposal period ends {timeRelative}." : "Период за давање предлога се завршава за {timeRelative}",

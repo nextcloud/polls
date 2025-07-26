@@ -263,7 +263,6 @@ OC.L10N.register(
     "minus" : "減",
     "plus" : "加",
     "Please wait…" : "請稍候…",
-    "Possible calendar conflicts" : "可能的日曆衝突",
     "Add" : "添加",
     "You are asked to propose more options." : "請您提出更多選項。",
     "The proposal period ends {timeRelative}." : "提議期在  {timeRelative} 後結束。",

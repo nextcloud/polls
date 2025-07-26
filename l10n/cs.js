@@ -263,7 +263,6 @@ OC.L10N.register(
     "minus" : "mínus",
     "plus" : "plus",
     "Please wait…" : "Prosíme čekejte…",
-    "Possible calendar conflicts" : "Možné kolize v kalendáři",
     "Add" : "Přidat",
     "You are asked to propose more options." : "Byli jste požádáni o navržení více možností.",
     "The proposal period ends {timeRelative}." : "Termín návrhů volby skončí {timeRelative}.",
