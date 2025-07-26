@@ -121,9 +121,6 @@ class PollController extends BaseController {
 		$votes = $this->voteService->list($pollId);
 		$timerMicro['votes'] = microtime(true);
 
-		$orphaned = $this->voteService->getOprhanedVotes($pollId);
-		$timerMicro['orphaned'] = microtime(true);
-
 		$comments = $this->commentService->list($pollId);
 		$timerMicro['comments'] = microtime(true);
 
@@ -137,8 +134,7 @@ class PollController extends BaseController {
 		$diffMicro['poll'] = $timerMicro['poll'] - $timerMicro['start'];
 		$diffMicro['options'] = $timerMicro['options'] - $timerMicro['poll'];
 		$diffMicro['votes'] = $timerMicro['votes'] - $timerMicro['options'];
-		$diffMicro['orphaned'] = $timerMicro['orphaned'] - $timerMicro['votes'];
-		$diffMicro['comments'] = $timerMicro['comments'] - $timerMicro['orphaned'];
+		$diffMicro['comments'] = $timerMicro['comments'] - $timerMicro['votes'];
 		$diffMicro['shares'] = $timerMicro['shares'] - $timerMicro['comments'];
 		$diffMicro['subscribed'] = $timerMicro['subscribed'] - $timerMicro['shares'];
 
@@ -147,7 +143,6 @@ class PollController extends BaseController {
 				'poll' => $poll,
 				'options' => $options,
 				'votes' => $votes,
-				'orphaned' => count($orphaned),
 				'comments' => $comments,
 				'shares' => $shares,
 				'subscribed' => $subscribed,
@@ -158,7 +153,6 @@ class PollController extends BaseController {
 			'poll' => $poll,
 			'options' => $options,
 			'votes' => $votes,
-			'orphaned' => count($orphaned),
 			'comments' => $comments,
 			'shares' => $shares,
 			'subscribed' => $subscribed,
@@ -327,19 +321,6 @@ class PollController extends BaseController {
 	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}/addresses')]
 	public function getParticipantsEmailAddresses(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->getParticipantsEmailAddresses($pollId));
-	}
-
-	/**
-	 * Delete orphaned votes
-	 * @param int $pollId poll id
-	 */
-	#[NoAdminRequired]
-	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
-	#[FrontpageRoute(verb: 'DELETE', url: '/poll/{pollId}/votes/orphaned/all')]
-	public function deleteOrphaned(int $pollId): JSONResponse {
-		return $this->response(fn () => [
-			'deleted' => $this->voteService->deleteOrphanedVotes($pollId)
-		]);
 	}
 
 }

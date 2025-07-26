@@ -14,7 +14,6 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Event\VoteDeletedOrphanedEvent;
 use OCA\Polls\Event\VoteSetEvent;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\NotFoundException;
@@ -131,43 +130,6 @@ class VoteService {
 
 		$this->eventDispatcher->dispatchTyped(new VoteSetEvent($this->vote));
 		return $this->vote;
-	}
-
-	/**
-	 * Get all votes of a poll, which are not assigned to an option
-	 *
-	 * @param int $pollId poll id of the poll the votes get deleted from
-	 * @return Vote[]
-	 */
-	public function getOprhanedVotes(int $pollId): array {
-		try {
-			$this->pollMapper->get($pollId, true, withRoles: true)
-				->request(Poll::PERMISSION_POLL_EDIT);
-			return $this->voteMapper->findOrphanedByPoll($pollId);
-		} catch (ForbiddenException $e) {
-			return [];
-		}
-	}
-
-	/**
-	 * Delete all votes of a poll, which are not assigned to an option
-	 *
-	 * @param int $pollId poll id of the poll the votes get deleted from
-	 * @return Vote[]
-	 */
-	public function deleteOrphanedVotes(int $pollId): array {
-		$this->pollMapper->get($pollId, withRoles: true)
-			->request(Poll::PERMISSION_VOTE_FOREIGN_CHANGE);
-
-		// delete all votes of the poll, which are not assigned to an option
-		$votes = $this->voteMapper->findOrphanedByPoll($pollId);
-		foreach ($votes as $vote) {
-			$this->voteMapper->delete($vote);
-			// TODO: rework notification methods
-			// keep this dispatch as reminder
-			// $this->eventDispatcher->dispatchTyped(new VoteDeletedOrphanedEvent($this->vote, false));
-		}
-		return $votes;
 	}
 
 	/**

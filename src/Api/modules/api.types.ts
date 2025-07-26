@@ -9,7 +9,6 @@ export type FullPollResponse = {
 	poll: Poll
 	options: Option[]
 	votes: Vote[]
-	orphaned: number
 	comments: Comment[]
 	shares: Share[]
 	subscribed: boolean

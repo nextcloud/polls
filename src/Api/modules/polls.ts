@@ -5,7 +5,7 @@
 import { Poll, PollConfiguration, PollType } from '../../stores/poll.ts'
 import { AxiosResponse } from '@nextcloud/axios'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
-import { ApiEmailAdressList, Vote } from '../../Types/index.ts'
+import { ApiEmailAdressList } from '../../Types/index.ts'
 import { PollGroup } from '../../stores/pollGroups.types.ts'
 import { FullPollResponse } from './api.types.ts'
 
@@ -141,19 +141,6 @@ const polls = {
 			cancelToken:
 				cancelTokenHandlerObject[
 					this.deletePoll.name
-				].handleRequestCancellation().token,
-		})
-	},
-
-	removeOrphanedVotes(
-		pollId: number,
-	): Promise<AxiosResponse<{ deleted: Vote[] }>> {
-		return httpInstance.request({
-			method: 'DELETE',
-			url: `poll/${pollId}/votes/orphaned/all`,
-			cancelToken:
-				cancelTokenHandlerObject[
-					this.removeOrphanedVotes.name
 				].handleRequestCancellation().token,
 		})
 	},
