@@ -384,11 +384,8 @@ export const usePollStore = defineStore('poll', {
 						return PublicAPI.getPoll(sessionStore.route.params.token)
 					}
 					if (sessionStore.route.name === 'vote') {
-						return PollsAPI.getFullPoll(
-							pollId ?? sessionStore.currentPollId,
-						)
+						return PollsAPI.getPoll(pollId ?? sessionStore.currentPollId)
 					}
-					return null
 				})()
 
 				if (!response) {
@@ -396,12 +393,14 @@ export const usePollStore = defineStore('poll', {
 					return
 				}
 
-				this.$patch(response.data.poll)
-				votesStore.votes = response.data.votes
-				optionsStore.options = response.data.options
-				sharesStore.shares = response.data.shares
-				commentsStore.comments = response.data.comments
-				subscriptionStore.subscribed = response.data.subscribed
+				await Promise.all([
+					this.$patch(response.data.poll),
+					votesStore.load(),
+					optionsStore.load(),
+					sharesStore.load(),
+					commentsStore.load(),
+					subscriptionStore.load(),
+				])
 
 				this.meta.status = 'loaded'
 			} catch (error) {
