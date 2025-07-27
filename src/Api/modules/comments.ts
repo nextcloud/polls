@@ -4,7 +4,8 @@
  */
 import { AxiosResponse } from '@nextcloud/axios'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
-import { Comment } from '../../stores/comments.js'
+
+import type { Comment } from '../../stores/comments.types'
 
 const comments = {
 	getComments(pollId: number): Promise<AxiosResponse<{ comments: Comment[] }>> {

@@ -19,8 +19,9 @@ import { SimpleLink, setCookie } from '../../helpers/index.ts'
 import { ValidatorAPI, PublicAPI } from '../../Api/index.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'
-import { AxiosError } from '@nextcloud/axios'
-import { SignalingType } from '../../Types/index.ts'
+
+import type { AxiosError } from '@nextcloud/axios'
+import type { SignalingType } from '../../Types/index.ts'
 
 const route = useRoute()
 const router = useRouter()

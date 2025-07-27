@@ -26,12 +26,13 @@ import UnlockIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 
-import { AxiosError } from '@nextcloud/axios'
-
-import { useSharesStore, Share } from '../../stores/shares.ts'
-import { SentResults } from '../../Api/modules/shares.ts'
+import { useSharesStore } from '../../stores/shares.ts'
 import { usePollGroupsStore } from '../../stores/pollGroups.ts'
 import { usePollStore } from '../../stores/poll.ts'
+
+import type { AxiosError } from '@nextcloud/axios'
+import type { Share } from '../../stores/shares.types'
+import type { SentResults } from '../../Api/modules/shares.ts'
 
 const emit = defineEmits(['showQrCode'])
 

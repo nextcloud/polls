@@ -9,7 +9,7 @@ import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../../stores/poll.ts'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-import { NcDialog } from '@nextcloud/vue'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
 import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 const emit = defineEmits(['change'])

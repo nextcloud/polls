@@ -5,15 +5,19 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { AxiosError } from '@nextcloud/axios'
 
 import { t } from '@nextcloud/l10n'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 
 import VoteIndicator from './VoteIndicator.vue'
+
 import { usePollStore } from '../../stores/poll.ts'
-import { Answer, useVotesStore } from '../../stores/votes.ts'
-import { Option, User } from '../../Types/index.ts'
+import { useVotesStore } from '../../stores/votes.ts'
+
+import type { AxiosError } from '@nextcloud/axios'
+import type { User } from '../../Types/index.ts'
+import type { Option } from '../../stores/options.types'
+import type { Answer } from '../../stores/votes.types'
 
 interface Props {
 	option: Option

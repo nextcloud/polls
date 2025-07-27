@@ -7,13 +7,14 @@
 import { t } from '@nextcloud/l10n'
 
 import { useSessionStore } from '../../stores/session.ts'
-import { Poll } from '../../stores/poll.ts'
 import { computed } from 'vue'
 
-import { NcDialog } from '@nextcloud/vue'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
 import { showError } from '@nextcloud/dialogs'
 import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import { usePollsStore } from '../../stores/polls.ts'
+
+import type { Poll } from '../../stores/poll.types'
 
 const model = defineModel<boolean>({ required: true })
 const { poll } = defineProps<{ poll: Poll }>()

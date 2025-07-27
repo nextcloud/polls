@@ -4,8 +4,10 @@
 -->
 
 <script setup lang="ts">
-import CommentItem from './CommentItem.vue'
 import { t } from '@nextcloud/l10n'
+
+import CommentItem from './CommentItem.vue'
+
 import { usePreferencesStore } from '../../stores/preferences.ts'
 import { useCommentsStore } from '../../stores/comments.ts'
 

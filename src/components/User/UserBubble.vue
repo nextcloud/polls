@@ -5,10 +5,11 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-
-import { User } from '../../Types/index.ts'
-import { NcUserBubble } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
+
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
+
+import type { User } from '../../Types/index.ts'
 
 interface Props {
 	user: User

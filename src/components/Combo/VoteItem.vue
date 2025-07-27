@@ -7,7 +7,11 @@
 import VoteIndicator from '../VoteTable/VoteIndicator.vue'
 import { useComboStore } from '../../stores/combo.ts'
 import { computed } from 'vue'
-import { Option, Poll, Answer, User } from '../../Types/index.ts'
+
+import type { Answer } from '../../stores/votes.types'
+import type { Option } from '../../stores/options.types'
+import type { Poll } from '../../stores/poll.types'
+import type { User } from '../../Types/index.ts'
 
 interface Props {
 	option: Option

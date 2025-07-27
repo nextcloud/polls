@@ -2,10 +2,16 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { AxiosResponse } from '@nextcloud/axios'
-import { Share, ShareType, User } from '../../Types/index.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
-import { PublicPollEmailConditions, SharePurpose } from '../../stores/shares.js'
+
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { User } from '../../Types/index.js'
+import type {
+	PublicPollEmailConditions,
+	SharePurpose,
+	Share,
+	ShareType,
+} from '../../stores/shares.types'
 
 export type SentResults = {
 	sentMails: { emailAddress: string; displayName: string }[]

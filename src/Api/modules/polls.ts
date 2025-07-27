@@ -2,12 +2,12 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { Poll, PollConfiguration, PollType } from '../../stores/poll.ts'
-import { AxiosResponse } from '@nextcloud/axios'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
-import { ApiEmailAdressList } from '../../Types/index.ts'
-import { PollGroup } from '../../stores/pollGroups.types.ts'
-import { FullPollResponse } from './api.types.ts'
+
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { ApiEmailAdressList, FullPollResponse } from './api.types.ts'
+import type { PollGroup } from '../../stores/pollGroups.types.ts'
+import type { Poll, PollConfiguration, PollType } from '../../stores/poll.types'
 
 export type Confirmations = {
 	sentMails: { emailAddress: string; displayName: string }[]

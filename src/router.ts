@@ -9,7 +9,6 @@ import {
 	createRouter,
 } from 'vue-router'
 
-import { AxiosError } from 'axios'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { getCookieValue, Logger, setCookie } from './helpers/index.ts'
@@ -19,6 +18,8 @@ import Navigation from './views/Navigation.vue'
 
 import { usePollStore } from './stores/poll.ts'
 import { useSessionStore } from './stores/session.ts'
+
+import type { AxiosError } from 'axios'
 
 async function validateToken(to: RouteLocationNormalized) {
 	const sessionStore = useSessionStore()

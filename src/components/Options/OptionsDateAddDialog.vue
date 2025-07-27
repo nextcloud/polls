@@ -5,24 +5,29 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import { DateTime, Duration } from 'luxon'
+
 import { showError } from '@nextcloud/dialogs'
 import { n, t } from '@nextcloud/l10n'
 
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
-import { DateTime, Duration } from 'luxon'
+
+import DateBox from '../Base/modules/DateBox.vue'
+import DateTimePicker from '../Base/modules/DateTimePicker.vue'
+import InputDiv from '../Base/modules/InputDiv.vue'
+import { dateTimeUnitsKeyed } from '../../constants/dateUnits.ts'
+import { useResizeObserver } from '../../composables/elementWidth.ts'
+
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
-import InputDiv from '../Base/modules/InputDiv.vue'
-import DateTimePicker from '../Base/modules/DateTimePicker.vue'
-import { useOptionsStore, Sequence } from '../../stores/options'
-import { DurationType, dateTimeUnitsKeyed } from '../../constants/dateUnits.ts'
+import { useOptionsStore } from '../../stores/options'
 
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { AxiosError } from '@nextcloud/axios'
-
-import { useResizeObserver } from '../../composables/elementWidth.ts'
-import DateBox from '../Base/modules/DateBox.vue'
+import type { DurationType } from '../../constants/dateUnits.ts'
+import type { AxiosError } from '@nextcloud/axios'
+import type { Sequence } from '../../stores/options.types'
 
 const { isBelowWidthOffset } = useResizeObserver('add-date-options-container', 355)
 

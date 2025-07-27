@@ -10,7 +10,9 @@ import UserItem from '../User/UserItem.vue'
 import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../../stores/poll.ts'
 import { useSessionStore } from '../../stores/session.ts'
-import { useOptionsStore, Option } from '../../stores/options.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+
+import type { Option } from '../../stores/options.types'
 
 interface Props {
 	option: Option

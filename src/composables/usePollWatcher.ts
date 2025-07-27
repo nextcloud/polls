@@ -4,18 +4,20 @@
  */
 
 import { watch, onBeforeUnmount, onMounted } from 'vue'
-import { useSessionStore, Watcher } from '../stores/session'
 import { usePollStore } from '../stores/poll'
 import { generateUrl } from '@nextcloud/router'
 // eslint-disable-next-line import/default
 import PollWatcherWorker from '../workers/pollWatcher.worker?worker'
 import { Logger } from '../helpers/index.ts'
-import type { WatcherResponse } from './usePollWatcher.types'
-import { forEach } from 'lodash'
-import { usePollsStore } from '../stores/polls.ts'
-import { useOptionsStore } from '../stores/options.ts'
+
 import { useCommentsStore } from '../stores/comments.ts'
+import { useOptionsStore } from '../stores/options.ts'
+import { usePollsStore } from '../stores/polls.ts'
+import { useSessionStore } from '../stores/session'
 import { useVotesStore } from '../stores/votes.ts'
+
+import type { WatcherResponse } from './usePollWatcher.types'
+import type { Watcher } from '../stores/session.types'
 
 /**
  * poll watcher to keep polls collection and the current poll
@@ -155,7 +157,7 @@ export const usePollWatcher = (interval = 30000) => {
 	const handleWatcherTasks = (tasks: string[]) => {
 		Logger.info('[PollWatcher] Tasks to handle:', { tasks })
 
-		forEach(tasks, (task) => {
+		tasks.forEach((task: string) => {
 			switch (task) {
 				case 'poll':
 					pollStore.load()

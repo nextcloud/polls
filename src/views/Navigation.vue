@@ -5,17 +5,19 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
+import NcAppNavigationSpacer from '@nextcloud/vue/components/NcAppNavigationSpacer'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
 import NcAppNavigationNew from '@nextcloud/vue/components/NcAppNavigationNew'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
 import NcCounterBubble from '@nextcloud/vue/components/NcCounterBubble'
 
 // Icons
-import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'
 import ComboIcon from 'vue-material-design-icons/VectorCombine.vue'
 import AdministrationIcon from 'vue-material-design-icons/ShieldCrown.vue'
 import SettingsIcon from 'vue-material-design-icons/Cog.vue'
@@ -30,15 +32,17 @@ import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
 import GroupIcon from 'vue-material-design-icons/CodeBraces.vue'
 
+import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'
 import PollCreateDlg from '../components/Create/PollCreateDlg.vue'
-import { FilterType, usePollsStore } from '../stores/polls.ts'
+import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
+import { Event } from '../Types/index.ts'
+
+import { usePollsStore } from '../stores/polls.ts'
 import { usePollGroupsStore } from '../stores/pollGroups.ts'
 import { useSessionStore } from '../stores/session.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
-import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
-import { Event } from '../Types/index.ts'
-import { useRouter } from 'vue-router'
-import { NcAppNavigationSpacer } from '@nextcloud/vue'
+
+import type { FilterType } from '../stores/polls.types'
 
 const router = useRouter()
 

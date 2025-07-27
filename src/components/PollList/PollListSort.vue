@@ -4,14 +4,11 @@
 -->
 
 <script setup lang="ts">
-import { t } from '@nextcloud/l10n'
-import {
-	SortDirection,
-	sortTitlesMapping,
-	usePollsStore,
-} from '../../stores/polls.ts'
-import { SortType } from '../../Types'
+import { computed } from 'vue'
 
+import { t } from '@nextcloud/l10n'
+
+import NcActionButtonGroup from '@nextcloud/vue/components/NcActionButtonGroup'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
@@ -23,8 +20,10 @@ import GestureDoubleTapIcon from 'vue-material-design-icons/GestureDoubleTap.vue
 import CreationIcon from 'vue-material-design-icons/ClockPlusOutline.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
 import AccountCircleOutlineIcon from 'vue-material-design-icons/AccountCircleOutline.vue'
-import { NcActionButtonGroup } from '@nextcloud/vue'
-import { computed } from 'vue'
+
+import { sortTitlesMapping, usePollsStore } from '../../stores/polls.ts'
+
+import type { SortDirection, SortType } from '../../stores/polls.types'
 
 const pollsStore = usePollsStore()
 

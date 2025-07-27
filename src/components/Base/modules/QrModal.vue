@@ -7,7 +7,8 @@
 import QRCode from 'qrcode'
 import { Logger } from '../../../helpers/index.ts'
 import { onMounted, ref } from 'vue'
-import { AxiosError } from '@nextcloud/axios'
+
+import type { AxiosError } from '@nextcloud/axios'
 
 interface Props {
 	name?: string

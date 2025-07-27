@@ -4,11 +4,13 @@
 -->
 
 <script setup>
-import InputDiv from '../../Base/modules/InputDiv.vue'
-import { t } from '@nextcloud/l10n'
-import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 import { computed } from 'vue'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+
+import InputDiv from '../../Base/modules/InputDiv.vue'
+
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 const appSettingsStore = useAppSettingsStore()
 const placeholder = computed(() => {

@@ -14,7 +14,7 @@ import UserSearch from '../User/UserSearch.vue'
 
 import { useSharesStore } from '../../stores/shares.ts'
 import { showError } from '@nextcloud/dialogs'
-import { User } from '../../Types/index.ts'
+import type { User } from '../../Types/index.ts'
 
 const sharesStore = useSharesStore()
 const { info } = defineProps<{

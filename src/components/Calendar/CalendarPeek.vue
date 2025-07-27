@@ -10,16 +10,18 @@ import orderBy from 'lodash/orderBy'
 import moment from '@nextcloud/moment'
 
 import NcPopover from '@nextcloud/vue/components/NcPopover'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
-import { usePollStore } from '../../stores/poll.ts'
+import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
 
 import CalendarInfo from './CalendarInfo.vue'
 import { CalendarAPI } from '../../Api/index.ts'
 import { Logger } from '../../helpers/index.ts'
-import { Option } from '../../Types/index.ts'
-import { AxiosError } from '@nextcloud/axios'
-import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
-import { NcButton } from '@nextcloud/vue'
+
+import { usePollStore } from '../../stores/poll.ts'
+
+import type { AxiosError } from '@nextcloud/axios'
+import type { Option } from '../../stores/options.types'
 
 export type CalendarEvent = {
 	id: number

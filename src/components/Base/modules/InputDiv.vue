@@ -16,7 +16,7 @@ import { Spinner } from '../../AppIcons/index.ts'
 import { Logger } from '../../../helpers/index.ts'
 
 import { SignalingType } from '../../../Types/index.ts'
-import { NcButton } from '@nextcloud/vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
 import { t } from '@nextcloud/l10n'
 

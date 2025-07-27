@@ -5,13 +5,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { showError } from '@nextcloud/dialogs'
-import InputDiv from '../Base/modules/InputDiv.vue'
 import { t } from '@nextcloud/l10n'
+import { showError } from '@nextcloud/dialogs'
+
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+
+import InputDiv from '../Base/modules/InputDiv.vue'
 import UserItem from '../User/UserItem.vue'
+
 import { useSessionStore } from '../../stores/session.ts'
 import { useCommentsStore } from '../../stores/comments.ts'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { usePollStore } from '../../stores/poll.ts'
 
 const commentsStore = useCommentsStore()

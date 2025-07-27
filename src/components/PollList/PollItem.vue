@@ -4,14 +4,10 @@
 -->
 
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
 import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
-
-import { usePollStore, Poll, pollTypes } from '../../stores/poll'
-import { usePreferencesStore } from '../../stores/preferences.ts'
-import BadgeSmallDiv from '../Base/modules/BadgeSmallDiv.vue'
 
 // Icons
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
@@ -26,6 +22,13 @@ import ParticipantsIcon from 'vue-material-design-icons/AccountMultipleCheck.vue
 import ParticipatedIcon from 'vue-material-design-icons/AccountCheck.vue'
 import AdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
 import UserBubble from '../User/UserBubble.vue'
+
+import BadgeSmallDiv from '../Base/modules/BadgeSmallDiv.vue'
+
+import { usePollStore, pollTypes } from '../../stores/poll'
+import { usePreferencesStore } from '../../stores/preferences.ts'
+
+import type { Poll } from '../../stores/poll.types'
 
 interface Props {
 	poll: Poll

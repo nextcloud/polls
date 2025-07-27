@@ -3,9 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { useVotesStore, Vote } from '../../stores/votes'
+import { useVotesStore } from '../../stores/votes'
 import { Poll, usePollStore } from '../../stores/poll'
-import { Option, useOptionsStore } from '../../stores/options'
+import { useOptionsStore } from '../../stores/options'
+
+import type { Option } from '../../stores/options.types'
+import type { Vote } from '../../stores/votes.types'
 
 const StoreHelper = {
 	updateStores(data: { poll?: Poll; votes?: Vote[]; options?: Option[] }) {

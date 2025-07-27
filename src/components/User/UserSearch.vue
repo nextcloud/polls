@@ -13,7 +13,7 @@ import NcSelectUsers from '@nextcloud/vue/components/NcSelectUsers'
 import { AppSettingsAPI } from '../../Api/index.ts'
 import { Logger } from '../../helpers/index.ts'
 import { ISearchType, User } from '../../Types/index.ts'
-import { AxiosError } from '@nextcloud/axios'
+import type { AxiosError } from '@nextcloud/axios'
 
 interface Props {
 	placeholder?: string

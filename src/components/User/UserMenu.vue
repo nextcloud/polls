@@ -13,6 +13,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActionButtonGroup from '@nextcloud/vue/components/NcActionButtonGroup'
 import NcActionCheckbox from '@nextcloud/vue/components/NcActionCheckbox'
 import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
@@ -38,11 +39,12 @@ import { useSessionStore } from '../../stores/session.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
-import { StatusResults, Event, ViewMode } from '../../Types/index.ts'
-
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
-import { NcActionButtonGroup } from '@nextcloud/vue'
-import { AxiosError } from '@nextcloud/axios'
+
+import { Event } from '../../Types/index.ts'
+import type { StatusResults } from '../../Types/index.ts'
+import type { ViewMode } from '../../stores/preferences.types'
+import type { AxiosError } from '@nextcloud/axios'
 
 type InputProps = {
 	success: boolean

@@ -20,8 +20,10 @@ import OptionSortIcon from 'vue-material-design-icons/SortBoolAscendingVariant.v
 
 import OptionCloneDate from './OptionCloneDate.vue'
 import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore, Option } from '../../stores/options.ts'
+import { useOptionsStore } from '../../stores/options.ts'
 import { useVotesStore } from '../../stores/votes.ts'
+
+import type { Option } from '../../stores/options.types'
 
 interface Props {
 	option: Option

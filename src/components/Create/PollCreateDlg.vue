@@ -16,8 +16,10 @@ import InputDiv from '../Base/modules/InputDiv.vue'
 import RadioGroupDiv from '../Base/modules/RadioGroupDiv.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'
 
-import { PollType, pollTypes, usePollStore } from '../../stores/poll.ts'
+import { pollTypes, usePollStore } from '../../stores/poll.ts'
 import { showError, showSuccess } from '@nextcloud/dialogs'
+
+import type { PollType } from '../../stores/poll.types'
 
 const pollStore = usePollStore()
 

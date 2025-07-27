@@ -4,17 +4,20 @@
 -->
 
 <script setup lang="ts">
-import { t } from '@nextcloud/l10n'
-
-import { Poll, usePollStore } from '../../stores/poll.ts'
 import { computed, ref } from 'vue'
-
-import { NcDialog } from '@nextcloud/vue'
-import UserSearch from '../User/UserSearch.vue'
-import { User } from '../../Types/index.ts'
+import { t } from '@nextcloud/l10n'
 import { showSuccess, showError } from '@nextcloud/dialogs'
+
+import NcDialog from '@nextcloud/vue/components/NcDialog'
+
+import UserSearch from '../User/UserSearch.vue'
+
 import { usePollsStore } from '../../stores/polls.ts'
-import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import { usePollStore } from '../../stores/poll.ts'
+
+import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import type { User } from '../../Types/index.ts'
+import type { Poll } from '../../stores/poll.types'
 
 const emit = defineEmits(['accessDenied'])
 const { poll } = defineProps<{ poll: Poll }>()
