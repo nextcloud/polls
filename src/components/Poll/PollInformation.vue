@@ -26,7 +26,7 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import EmailIcon from 'vue-material-design-icons/Email.vue'
 
-import { MaybeIcon } from '../AppIcons/index.ts'
+import MaybeIcon from '../AppIcons/MaybeIcon.vue'
 
 import BadgeDiv from '../Base/modules/BadgeDiv.vue'
 import UserBubble from '../User/UserBubble.vue'

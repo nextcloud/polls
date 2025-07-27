@@ -7,7 +7,7 @@
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CancelIcon from 'vue-material-design-icons/Cancel.vue'
-import { MaybeIcon } from '../AppIcons/index.ts'
+import MaybeIcon from '../AppIcons/MaybeIcon.vue'
 import { Answer } from '../../stores/votes.types'
 
 const ICON_SIZE = 26

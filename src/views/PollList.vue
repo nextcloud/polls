@@ -15,7 +15,7 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
 import HeaderBar from '../components/Base/modules/HeaderBar.vue'
 import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
-import { PollsAppIcon } from '../components/AppIcons/index.ts'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 import PollItem from '../components/PollList/PollItem.vue'
 import PollListSort from '../components/PollList/PollListSort.vue'
 import PollItemActions from '../components/PollList/PollItemActions.vue'

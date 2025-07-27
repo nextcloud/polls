@@ -12,7 +12,7 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import AlertIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
-import { Spinner } from '../../AppIcons/index.ts'
+import Spinner from '../../AppIcons/Spinner.vue'
 import { Logger } from '../../../helpers/index.ts'
 
 import { SignalingType } from '../../../Types/index.ts'
