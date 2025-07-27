@@ -5,15 +5,16 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, VotesAPI } from '../Api/index.ts'
-import { Chunking, User } from '../Types/index.ts'
 import { Logger, StoreHelper } from '../helpers/index.ts'
-import { Option, useOptionsStore } from './options.ts'
+
 import { usePollStore } from './poll.ts'
 import { useSessionStore } from './session.ts'
-import { AxiosError } from '@nextcloud/axios'
+import { useOptionsStore } from './options.ts'
 
-export type Answer = 'yes' | 'no' | 'maybe' | ''
-export type AnswerSymbol = '✔' | '❌' | '❔' | ''
+import type { AxiosError } from '@nextcloud/axios'
+import type { User } from '../Types/index.ts'
+import type { Option } from './options.types'
+import type { Answer, Vote, VotesStore } from './votes.types'
 
 const answerSortOrder: { [key in Answer]: number } = {
 	yes: 1,
@@ -22,27 +23,8 @@ const answerSortOrder: { [key in Answer]: number } = {
 	'': 3,
 }
 
-export type Vote = {
-	id: number
-	pollId: number
-	optionText: string
-	answer: Answer
-	answerSymbol: AnswerSymbol
-	deleted: number
-	optionId: number
-	user: User
-}
-
-export type Votes = {
-	votes: Vote[]
-	sortByOption: number
-	meta: {
-		chunks: Chunking
-	}
-}
-
 export const useVotesStore = defineStore('votes', {
-	state: (): Votes => ({
+	state: (): VotesStore => ({
 		votes: [],
 		sortByOption: 0,
 		meta: {
@@ -75,7 +57,7 @@ export const useVotesStore = defineStore('votes', {
 				return 0
 			}),
 
-		loadedParticipants(state: Votes): number {
+		loadedParticipants(state: VotesStore): number {
 			return Math.min(
 				state.meta.chunks.loaded * state.meta.chunks.size,
 				this.participants.length,

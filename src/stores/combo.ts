@@ -4,27 +4,23 @@
  */
 
 import { defineStore } from 'pinia'
-import { VotesAPI, OptionsAPI, PollsAPI } from '../Api/index.ts'
-import { Participant } from '../Types/index.ts'
-import { Logger, uniqueOptions, uniqueParticipants } from '../helpers/index.ts'
-import { Option } from './options.ts'
-import { Poll } from './poll.ts'
-import { Vote } from './votes.ts'
 import { sortBy } from 'lodash'
+
+import { VotesAPI, OptionsAPI, PollsAPI } from '../Api/index.ts'
+import { Logger, uniqueOptions, uniqueParticipants } from '../helpers/index.ts'
+
 import { usePreferencesStore } from './preferences.ts'
 import { usePollsStore } from './polls.ts'
-import { AxiosError } from '@nextcloud/axios'
 
-export type Combo = {
-	id: number
-	options: Option[]
-	polls: Poll[]
-	participants: Participant[]
-	votes: Vote[]
-}
+import type { AxiosError } from '@nextcloud/axios'
+import type { Participant } from '../Types/index.ts'
+import type { Vote } from './votes.types'
+import type { Option } from './options.types'
+import type { Poll } from './poll.types'
+import type { ComboStore } from './combo.types'
 
 export const useComboStore = defineStore('combo', {
-	state: (): Combo => ({
+	state: (): ComboStore => ({
 		id: 1,
 		options: [],
 		polls: [],

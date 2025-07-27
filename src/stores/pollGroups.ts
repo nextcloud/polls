@@ -5,15 +5,20 @@
 
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { Poll } from '../Types/index'
+
+import { orderBy } from 'lodash'
+
+import { t } from '@nextcloud/l10n'
 import { useSessionStore } from './session'
 import { usePollsStore } from './polls'
-import { orderBy } from 'lodash'
-import type { PollGroup } from './pollGroups.types'
+
 import { PollGroupsAPI } from '../Api'
-import { AxiosError } from 'axios'
+
 import { Logger } from '../helpers'
-import { t } from '@nextcloud/l10n'
+
+import type { AxiosError } from 'axios'
+import type { Poll } from './poll.types'
+import type { PollGroup } from './pollGroups.types'
 
 export const usePollGroupsStore = defineStore('pollGroups', () => {
 	const pollGroups = ref<PollGroup[]>([])

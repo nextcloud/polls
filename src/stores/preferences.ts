@@ -4,43 +4,15 @@
  */
 
 import { defineStore } from 'pinia'
+
 import { CalendarAPI, UserSettingsAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
-import { AxiosError } from '@nextcloud/axios'
 
-export type ViewMode = 'table-view' | 'list-view'
-
-export type UserPreferences = {
-	calendarPeek: boolean
-	checkCalendars: string[]
-	checkCalendarsHoursBefore: number
-	checkCalendarsHoursAfter: number
-	defaultViewTextPoll: ViewMode
-	defaultViewDatePoll: ViewMode
-	pollCombo: number[]
-	relevantOffset: number
-	useNewPollDialogInNavigation: boolean
-	useNewPollInPollist: boolean
-	useCommentsAlternativeStyling: boolean
-	useAlternativeStyling: boolean
-	verbosePollsList: boolean
-}
-
-export type Calendar = {
-	key: string
-	name: string
-	calendarUri: string
-	displayColor: string
-	permissions: number
-}
-
-export type Preferences = {
-	user: UserPreferences
-	availableCalendars: Calendar[]
-}
+import type { AxiosError } from '@nextcloud/axios'
+import type { PreferencesStore, Calendar } from './preferences.types.ts'
 
 export const usePreferencesStore = defineStore('preferences', {
-	state: (): Preferences => ({
+	state: (): PreferencesStore => ({
 		user: {
 			calendarPeek: false,
 			checkCalendars: [],

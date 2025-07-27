@@ -4,55 +4,25 @@
  */
 
 import { defineStore } from 'pinia'
-import { SharesAPI } from '../Api/index.ts'
+
 import { Logger } from '../helpers/index.ts'
-import { useSessionStore } from './session.ts'
-import { User } from '../Types/index.ts'
-import { AxiosError } from '@nextcloud/axios'
-import { SentResults } from '../Api/modules/shares.ts'
+import { SharesAPI } from '../Api/index.ts'
+
 import { usePollGroupsStore } from './pollGroups.ts'
+import { useSessionStore } from './session.ts'
 
-export type ShareType =
-	| 'email'
-	| 'external'
-	| 'contact'
-	| 'user'
-	| 'group'
-	| 'admin'
-	| 'public'
-	| 'circle'
-	| 'contactGroup'
-
-export type PublicPollEmailConditions = 'mandatory' | 'optional' | 'disabled'
-
-export type SharePurpose = 'poll' | 'pollGroup'
-
-export type Share = {
-	displayName: string
-	id: string
-	invitationSent: boolean
-	locked: boolean
-	pollId: number | null
-	groupId: number | null
-	token: string
-	type: ShareType
-	emailAddress: string
-	userId: string
-	publicPollEmail: PublicPollEmailConditions
-	user: User
-	reminderSent: boolean
-	label: string
-	URL: string
-	voted: boolean
-	deleted: boolean
-}
-
-export type Shares = {
-	shares: Share[]
-}
+import type { AxiosError } from '@nextcloud/axios'
+import type { SentResults } from '../Api/modules/shares.ts'
+import type { User } from '../Types/index.ts'
+import type {
+	Share,
+	SharesStore,
+	SharePurpose,
+	PublicPollEmailConditions,
+} from './shares.types.ts'
 
 export const useSharesStore = defineStore('shares', {
-	state: (): Shares => ({
+	state: (): SharesStore => ({
 		shares: [],
 	}),
 

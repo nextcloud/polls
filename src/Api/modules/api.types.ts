@@ -5,6 +5,12 @@
 
 import { Comment, Option, Poll, Share, Vote } from '../../Types'
 
+export type ApiEmailAdressList = {
+	displayName: string
+	emailAddress: string
+	combined: string
+}
+
 export type FullPollResponse = {
 	poll: Poll
 	options: Option[]
