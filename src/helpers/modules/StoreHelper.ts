@@ -4,9 +4,10 @@
  */
 
 import { useVotesStore } from '../../stores/votes'
-import { Poll, usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll'
 import { useOptionsStore } from '../../stores/options'
 
+import type { Poll } from '../../stores/poll.types'
 import type { Option } from '../../stores/options.types'
 import type { Vote } from '../../stores/votes.types'
 
