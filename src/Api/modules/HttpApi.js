@@ -4,8 +4,7 @@
  */
 import axios from '@nextcloud/axios'
 import { generateUrl, generateOcsUrl } from '@nextcloud/router'
-import { useSessionStore } from '../../stores/session'
-// const clientSessionId = Math.random().toString(36).substring(2)
+import { useSessionStore } from '../../stores/session.ts'
 
 const axiosConfig = {
 	baseURL: generateUrl('apps/polls/'),
