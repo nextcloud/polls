@@ -6,7 +6,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import { orderBy } from 'lodash'
+import orderBy from 'lodash/orderBy'
 
 import { t } from '@nextcloud/l10n'
 import { useSessionStore } from './session'

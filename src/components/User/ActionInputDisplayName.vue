@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 

@@ -4,7 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { sortBy } from 'lodash'
+import sortBy from 'lodash/sortBy'
 
 import { VotesAPI, OptionsAPI, PollsAPI } from '../Api/index.ts'
 import { Logger, uniqueOptions, uniqueParticipants } from '../helpers/index.ts'

@@ -12,7 +12,7 @@ import {
 	onUnmounted,
 	watchEffect,
 } from 'vue'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 import NcContent from '@nextcloud/vue/components/NcContent'

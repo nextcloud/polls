@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { t } from '@nextcloud/l10n'
