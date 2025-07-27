@@ -20,11 +20,11 @@ import SharePublicAdd from './SharePublicAdd.vue'
 import ShareItemAllUsers from './ShareItemAllUsers.vue'
 import MarkDownDescription from '../Poll/MarkDownDescription.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useSharesStore } from '../../stores/shares.ts'
-import { useSessionStore } from '../../stores/session.ts'
+import { usePollStore } from '../../stores/poll'
+import { useSharesStore } from '../../stores/shares'
+import { useSessionStore } from '../../stores/session'
 
-import type { User } from '../../Types/index.ts'
+import type { User } from '../../Types'
 import type { Share } from '../../stores/shares.types'
 
 const pollStore = usePollStore()

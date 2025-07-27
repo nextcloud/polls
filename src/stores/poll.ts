@@ -14,27 +14,27 @@ import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 
-import { Logger } from '../helpers/index.ts'
-import { PublicAPI, PollsAPI } from '../Api/index.ts'
-import { createDefault, Event } from '../Types/index.ts'
+import { Logger } from '../helpers'
+import { PublicAPI, PollsAPI } from '../Api'
+import { createDefault, Event } from '../Types'
 
-import { useVotesStore } from './votes.ts'
-import { useOptionsStore } from './options.ts'
-import { usePollsStore } from './polls.ts'
-import { useSessionStore } from './session.ts'
-import { useSubscriptionStore } from './subscription.ts'
-import { useSharesStore } from './shares.ts'
-import { useCommentsStore } from './comments.ts'
+import { useVotesStore } from './votes'
+import { useOptionsStore } from './options'
+import { usePollsStore } from './polls'
+import { useSessionStore } from './session'
+import { useSubscriptionStore } from './subscription'
+import { useSharesStore } from './shares'
+import { useCommentsStore } from './comments'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { User } from '../Types/index.ts'
+import type { User } from '../Types'
 import type {
 	Poll,
 	PollType,
 	AllowProposals,
 	PollStore,
 	PollTypesType,
-} from './poll.types.ts'
+} from './poll.types'
 import type { ViewMode } from './preferences.types'
 
 const markedPrefix = {

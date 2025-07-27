@@ -23,10 +23,10 @@ import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
 import ActionToggleSidebar from '../components/Actions/modules/ActionToggleSidebar.vue'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 
-import { usePreferencesStore } from '../stores/preferences.ts'
-import { useSessionStore } from '../stores/session.ts'
-import { usePollsStore } from '../stores/polls.ts'
-import { usePollGroupsStore } from '../stores/pollGroups.ts'
+import { usePreferencesStore } from '../stores/preferences'
+import { useSessionStore } from '../stores/session'
+import { usePollsStore } from '../stores/polls'
+import { usePollGroupsStore } from '../stores/pollGroups'
 
 import type { FilterType } from '../stores/polls.types'
 

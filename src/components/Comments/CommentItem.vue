@@ -15,10 +15,10 @@ import ActionDelete from '../Actions/modules/ActionDelete.vue'
 import UserItem from '../User/UserItem.vue'
 import UserBubble from '../User/UserBubble.vue'
 
-import { useSessionStore } from '../../stores/session.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { useCommentsStore } from '../../stores/comments.ts'
-import { usePreferencesStore } from '../../stores/preferences.ts'
+import { useSessionStore } from '../../stores/session'
+import { usePollStore } from '../../stores/poll'
+import { useCommentsStore } from '../../stores/comments'
+import { usePreferencesStore } from '../../stores/preferences'
 
 import type { Comment, CommentsGrouped } from '../../stores/comments.types'
 

@@ -7,13 +7,13 @@
 import { onMounted, onUnmounted } from 'vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
-import { useSharesStore } from '../../stores/shares.ts'
-import { useSessionStore } from '../../stores/session.ts'
+import { useSharesStore } from '../../stores/shares'
+import { useSessionStore } from '../../stores/session'
 
 import SharesList from '../Shares/SharesList.vue'
 import SharesListUnsent from '../Shares/SharesListUnsent.vue'
 import SharesListLocked from '../Shares/SharesListLocked.vue'
-import { Event } from '../../Types/index.ts'
+import { Event } from '../../Types'
 
 const sharesStore = useSharesStore()
 const sessionStore = useSessionStore()

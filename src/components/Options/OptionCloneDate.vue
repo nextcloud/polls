@@ -13,9 +13,9 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 
 import InputDiv from '../Base/modules/InputDiv.vue'
 
-import { useOptionsStore } from '../../stores/options.ts'
+import { useOptionsStore } from '../../stores/options'
 
-import { dateTimeUnitsKeyed } from '../../constants/dateUnits.ts'
+import { dateTimeUnitsKeyed } from '../../constants/dateUnits'
 import type { Option, Sequence } from '../../stores/options.types'
 
 const { option } = defineProps<{ option: Option }>()

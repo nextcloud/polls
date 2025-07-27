@@ -4,7 +4,7 @@
  */
 
 import { createApp } from 'vue'
-import { pinia } from './stores/index.ts'
+import { pinia } from './stores'
 import { registerWidget } from '@nextcloud/vue/components/NcRichText'
 import Reference from './views/Reference.vue'
 import './assets/scss/polls-icon.scss'

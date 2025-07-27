@@ -10,7 +10,7 @@ import moment from '@nextcloud/moment'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
 
-import { GuestBubble, SimpleLink } from '../../helpers/index.ts'
+import { GuestBubble, SimpleLink } from '../../helpers'
 
 const props = defineProps({
 	activity: {

@@ -12,9 +12,9 @@ import { t } from '@nextcloud/l10n'
 import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
 
-import { ValidatorAPI } from '../../Api/index.ts'
-import { StatusResults } from '../../Types/index.ts'
-import { useSessionStore } from '../../stores/session.ts'
+import { ValidatorAPI } from '../../Api'
+import { StatusResults } from '../../Types'
+import { useSessionStore } from '../../stores/session'
 
 type InputProps = {
 	success: boolean

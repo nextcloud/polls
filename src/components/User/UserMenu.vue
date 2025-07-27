@@ -32,17 +32,17 @@ import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBullete
 import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
 import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 
-import { PollsAPI, ValidatorAPI } from '../../Api/index.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { useSubscriptionStore } from '../../stores/subscription.ts'
-import { useVotesStore } from '../../stores/votes.ts'
+import { PollsAPI, ValidatorAPI } from '../../Api'
+import { useOptionsStore } from '../../stores/options'
+import { usePollStore } from '../../stores/poll'
+import { useSessionStore } from '../../stores/session'
+import { useSubscriptionStore } from '../../stores/subscription'
+import { useVotesStore } from '../../stores/votes'
 
-import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
+import { deleteCookieByValue, findCookieByValue } from '../../helpers'
 
-import { Event } from '../../Types/index.ts'
-import type { StatusResults } from '../../Types/index.ts'
+import { Event } from '../../Types'
+import type { StatusResults } from '../../Types'
 import type { ViewMode } from '../../stores/preferences.types'
 import type { AxiosError } from '@nextcloud/axios'
 

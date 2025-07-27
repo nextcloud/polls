@@ -15,10 +15,10 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
 
 import CalendarInfo from './CalendarInfo.vue'
-import { CalendarAPI } from '../../Api/index.ts'
-import { Logger } from '../../helpers/index.ts'
+import { CalendarAPI } from '../../Api'
+import { Logger } from '../../helpers'
 
-import { usePollStore } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll'
 
 import type { AxiosError } from '@nextcloud/axios'
 import type { Option } from '../../stores/options.types'

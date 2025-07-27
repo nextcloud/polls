@@ -8,8 +8,8 @@ import { t } from '@nextcloud/l10n'
 
 import CommentItem from './CommentItem.vue'
 
-import { usePreferencesStore } from '../../stores/preferences.ts'
-import { useCommentsStore } from '../../stores/comments.ts'
+import { usePreferencesStore } from '../../stores/preferences'
+import { useCommentsStore } from '../../stores/comments'
 
 const commentsStore = useCommentsStore()
 const preferencesStore = usePreferencesStore()

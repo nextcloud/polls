@@ -35,12 +35,12 @@ import GroupIcon from 'vue-material-design-icons/CodeBraces.vue'
 import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'
 import PollCreateDlg from '../components/Create/PollCreateDlg.vue'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
-import { Event } from '../Types/index.ts'
+import { Event } from '../Types'
 
-import { usePollsStore } from '../stores/polls.ts'
-import { usePollGroupsStore } from '../stores/pollGroups.ts'
-import { useSessionStore } from '../stores/session.ts'
-import { usePreferencesStore } from '../stores/preferences.ts'
+import { usePollsStore } from '../stores/polls'
+import { usePollGroupsStore } from '../stores/pollGroups'
+import { useSessionStore } from '../stores/session'
+import { usePreferencesStore } from '../stores/preferences'
 
 import type { FilterType } from '../stores/polls.types'
 

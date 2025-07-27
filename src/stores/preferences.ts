@@ -5,11 +5,11 @@
 
 import { defineStore } from 'pinia'
 
-import { CalendarAPI, UserSettingsAPI } from '../Api/index.ts'
-import { Logger } from '../helpers/index.ts'
+import { CalendarAPI, UserSettingsAPI } from '../Api'
+import { Logger } from '../helpers'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { PreferencesStore, Calendar } from './preferences.types.ts'
+import type { PreferencesStore, Calendar } from './preferences.types'
 
 export const usePreferencesStore = defineStore('preferences', {
 	state: (): PreferencesStore => ({

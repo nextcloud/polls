@@ -13,9 +13,9 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import InputDiv from '../Base/modules/InputDiv.vue'
 import UserItem from '../User/UserItem.vue'
 
-import { useSessionStore } from '../../stores/session.ts'
-import { useCommentsStore } from '../../stores/comments.ts'
-import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session'
+import { useCommentsStore } from '../../stores/comments'
+import { usePollStore } from '../../stores/poll'
 
 const commentsStore = useCommentsStore()
 const sessionStore = useSessionStore()

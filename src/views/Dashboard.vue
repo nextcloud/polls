@@ -15,8 +15,8 @@ import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
-import { Logger } from '../helpers/index.ts'
-import { usePollsStore } from '../stores/polls.ts'
+import { Logger } from '../helpers'
+import { usePollsStore } from '../stores/polls'
 
 const dashboardWidgetProperties = {
 	emptyContentMessage: t('polls', 'No polls found for this category'),

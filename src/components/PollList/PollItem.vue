@@ -26,7 +26,7 @@ import UserBubble from '../User/UserBubble.vue'
 import BadgeSmallDiv from '../Base/modules/BadgeSmallDiv.vue'
 
 import { usePollStore, pollTypes } from '../../stores/poll'
-import { usePreferencesStore } from '../../stores/preferences.ts'
+import { usePreferencesStore } from '../../stores/preferences'
 
 import type { Poll } from '../../stores/poll.types'
 

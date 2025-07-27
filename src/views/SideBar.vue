@@ -10,10 +10,10 @@ import { t } from '@nextcloud/l10n'
 
 import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
 import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
-import { Event } from '../Types/index.ts'
+import { Event } from '../Types'
 
-import { usePollStore } from '../stores/poll.ts'
-import { useSessionStore } from '../stores/session.ts'
+import { usePollStore } from '../stores/poll'
+import { useSessionStore } from '../stores/session'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()

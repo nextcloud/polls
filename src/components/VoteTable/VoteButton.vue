@@ -11,11 +11,11 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 
 import VoteIndicator from './VoteIndicator.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useVotesStore } from '../../stores/votes.ts'
+import { usePollStore } from '../../stores/poll'
+import { useVotesStore } from '../../stores/votes'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { User } from '../../Types/index.ts'
+import type { User } from '../../Types'
 import type { Option } from '../../stores/options.types'
 import type { Answer } from '../../stores/votes.types'
 

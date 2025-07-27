@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Chunking, User } from '../Types/index.ts'
+import { Chunking, User } from '../Types'
 
 export type Answer = 'yes' | 'no' | 'maybe' | ''
 export type AnswerSymbol = '✔' | '❌' | '❔' | ''

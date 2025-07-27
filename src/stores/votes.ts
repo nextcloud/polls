@@ -4,15 +4,15 @@
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI, VotesAPI } from '../Api/index.ts'
-import { Logger, StoreHelper } from '../helpers/index.ts'
+import { PublicAPI, VotesAPI } from '../Api'
+import { Logger, StoreHelper } from '../helpers'
 
-import { usePollStore } from './poll.ts'
-import { useSessionStore } from './session.ts'
-import { useOptionsStore } from './options.ts'
+import { usePollStore } from './poll'
+import { useSessionStore } from './session'
+import { useOptionsStore } from './options'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { User } from '../Types/index.ts'
+import type { User } from '../Types'
 import type { Option } from './options.types'
 import type { Answer, Vote, VotesStore } from './votes.types'
 

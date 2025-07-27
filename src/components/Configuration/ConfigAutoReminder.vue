@@ -14,7 +14,7 @@ import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
 import AutoReminderInformation from './AutoReminderInformation.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll'
 
 const emit = defineEmits(['change'])
 

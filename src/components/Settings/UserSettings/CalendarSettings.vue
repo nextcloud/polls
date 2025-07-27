@@ -10,7 +10,7 @@ import { t } from '@nextcloud/l10n'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 import InputDiv from '../../Base/modules/InputDiv.vue'
-import { usePreferencesStore } from '../../../stores/preferences.ts'
+import { usePreferencesStore } from '../../../stores/preferences'
 const preferencesStore = usePreferencesStore()
 
 const calendarChoices = computed(() =>

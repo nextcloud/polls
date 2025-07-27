@@ -5,21 +5,21 @@
 
 import { defineStore } from 'pinia'
 
-import { Logger } from '../helpers/index.ts'
-import { SharesAPI } from '../Api/index.ts'
+import { Logger } from '../helpers'
+import { SharesAPI } from '../Api'
 
-import { usePollGroupsStore } from './pollGroups.ts'
-import { useSessionStore } from './session.ts'
+import { usePollGroupsStore } from './pollGroups'
+import { useSessionStore } from './session'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { SentResults } from '../Api/modules/shares.ts'
-import type { User } from '../Types/index.ts'
+import type { SentResults } from '../Api/modules/shares'
+import type { User } from '../Types'
 import type {
 	Share,
 	SharesStore,
 	SharePurpose,
 	PublicPollEmailConditions,
-} from './shares.types.ts'
+} from './shares.types'
 
 export const useSharesStore = defineStore('shares', {
 	state: (): SharesStore => ({

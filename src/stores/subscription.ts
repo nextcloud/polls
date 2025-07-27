@@ -6,10 +6,10 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-import { PublicAPI, PollsAPI } from '../Api/index.ts'
-import { Logger } from '../helpers/index.ts'
+import { PublicAPI, PollsAPI } from '../Api'
+import { Logger } from '../helpers'
 
-import { useSessionStore } from './session.ts'
+import { useSessionStore } from './session'
 
 import type { AxiosError } from '@nextcloud/axios'
 

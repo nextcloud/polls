@@ -18,7 +18,7 @@ import InputDiv from '../Base/modules/InputDiv.vue'
 import RadioGroupDiv from '../Base/modules/RadioGroupDiv.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'
 
-import { usePollStore, pollTypes } from '../../stores/poll.ts'
+import { usePollStore, pollTypes } from '../../stores/poll'
 
 import { PollType } from '../../stores/poll.types'
 

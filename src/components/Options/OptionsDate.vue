@@ -13,8 +13,8 @@ import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import OptionItem from './OptionItem.vue'
 import OptionMenu from './OptionMenu.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll'
+import { useOptionsStore } from '../../stores/options'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()

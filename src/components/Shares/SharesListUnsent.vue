@@ -14,9 +14,9 @@ import ShareItem from './ShareItem.vue'
 import BulkMailIcon from 'vue-material-design-icons/EmailMultipleOutline.vue'
 
 import ConfigBox from '../Base/modules/ConfigBox.vue'
-import { Logger } from '../../helpers/index.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSharesStore } from '../../stores/shares.ts'
+import { Logger } from '../../helpers'
+import { usePollStore } from '../../stores/poll'
+import { useSharesStore } from '../../stores/shares'
 
 const pollStore = usePollStore()
 const sharesStore = useSharesStore()

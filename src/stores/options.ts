@@ -6,21 +6,16 @@
 import { defineStore } from 'pinia'
 import orderBy from 'lodash/orderBy'
 
-import { PublicAPI, OptionsAPI } from '../Api/index.ts'
-import { Logger } from '../helpers/index.ts'
+import { PublicAPI, OptionsAPI } from '../Api'
+import { Logger } from '../helpers'
 
-import { usePollStore } from './poll.ts'
-import { useSessionStore } from './session.ts'
+import { usePollStore } from './poll'
+import { useSessionStore } from './session'
 import { useVotesStore } from './votes'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { TimeUnitsType } from '../constants/dateUnits.ts'
-import type {
-	Sequence,
-	SimpleOption,
-	Option,
-	OptionsStore,
-} from './options.types.ts'
+import type { TimeUnitsType } from '../constants/dateUnits'
+import type { Sequence, SimpleOption, Option, OptionsStore } from './options.types'
 
 export const useOptionsStore = defineStore('options', {
 	state: (): OptionsStore => ({

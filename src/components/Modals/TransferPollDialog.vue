@@ -12,11 +12,11 @@ import NcDialog from '@nextcloud/vue/components/NcDialog'
 
 import UserSearch from '../User/UserSearch.vue'
 
-import { usePollsStore } from '../../stores/polls.ts'
-import { usePollStore } from '../../stores/poll.ts'
+import { usePollsStore } from '../../stores/polls'
+import { usePollStore } from '../../stores/poll'
 
 import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
-import type { User } from '../../Types/index.ts'
+import type { User } from '../../Types'
 import type { Poll } from '../../stores/poll.types'
 
 const emit = defineEmits(['accessDenied'])

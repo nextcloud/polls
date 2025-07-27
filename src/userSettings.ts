@@ -4,7 +4,7 @@
  */
 
 import { createApp } from 'vue'
-import { pinia } from './stores/index.ts'
+import { pinia } from './stores'
 
 import UserSettingsPage from './views/UserSettingsPage.vue'
 

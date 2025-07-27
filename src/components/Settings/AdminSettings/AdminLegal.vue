@@ -10,7 +10,7 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 
 import InputDiv from '../../Base/modules/InputDiv.vue'
 
-import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+import { useAppSettingsStore } from '../../../stores/appSettings'
 
 const appSettingsStore = useAppSettingsStore()
 const placeholder = computed(() => {

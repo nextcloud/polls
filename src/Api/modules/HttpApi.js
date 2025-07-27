@@ -4,7 +4,7 @@
  */
 import axios from '@nextcloud/axios'
 import { generateUrl, generateOcsUrl } from '@nextcloud/router'
-import { useSessionStore } from '../../stores/session.ts'
+import { useSessionStore } from '../../stores/session'
 // const clientSessionId = Math.random().toString(36).substring(2)
 
 const axiosConfig = {

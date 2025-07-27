@@ -4,7 +4,7 @@
  */
 
 import { Poll } from './poll.types'
-import { Chunking, StatusResults } from '../Types/index.ts'
+import { Chunking, StatusResults } from '../Types'
 
 export type SortType =
 	| 'created'

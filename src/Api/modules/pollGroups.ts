@@ -2,11 +2,11 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi'
 
 import type { AxiosResponse } from '@nextcloud/axios'
 import type { Poll } from '../../stores/poll.types'
-import type { PollGroup } from '../../stores/pollGroups.types.ts'
+import type { PollGroup } from '../../stores/pollGroups.types'
 
 const pollGroups = {
 	getPollGroups(): Promise<AxiosResponse<{ pollGroups: PollGroup[] }>> {

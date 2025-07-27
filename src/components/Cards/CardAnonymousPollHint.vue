@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import CardDiv from '../Base/modules/CardDiv.vue'
 import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll'
 
 const cardType = 'warning'
 const pollStore = usePollStore()

@@ -8,21 +8,21 @@ import orderBy from 'lodash/orderBy'
 import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
 
-import { Logger } from '../helpers/index.ts'
-import { PollsAPI } from '../Api/index.ts'
+import { Logger } from '../helpers'
+import { PollsAPI } from '../Api'
 
-import { useSessionStore } from './session.ts'
-import { usePollGroupsStore } from './pollGroups.ts'
+import { useSessionStore } from './session'
+import { usePollGroupsStore } from './pollGroups'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { Poll } from './poll.types.ts'
+import type { Poll } from './poll.types'
 import type {
 	PollCategory,
 	PollCategoryList,
 	PollsStore,
 	FilterType,
 	SortType,
-} from './polls.types.ts'
+} from './polls.types'
 
 export const sortColumnsMapping: { [key in SortType]: string } = {
 	created: 'status.created',

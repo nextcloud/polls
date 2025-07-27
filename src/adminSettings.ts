@@ -4,7 +4,7 @@
  */
 
 import { createApp } from 'vue'
-import { pinia } from './stores/index.ts'
+import { pinia } from './stores'
 
 import AdminSettingsPage from './views/AdminSettingsPage.vue'
 

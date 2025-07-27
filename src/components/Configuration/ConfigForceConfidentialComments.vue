@@ -5,10 +5,10 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-import { useSessionStore } from '../../stores/session.ts'
+import { useSessionStore } from '../../stores/session'
 
 const emit = defineEmits(['change'])
 

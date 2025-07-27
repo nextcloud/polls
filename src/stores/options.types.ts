@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { User } from '../Types/index.ts'
-import type { DateTimeUnitType } from '../constants/dateUnits.ts'
+import type { User } from '../Types'
+import type { DateTimeUnitType } from '../constants/dateUnits'
 import type { Answer } from './votes.types'
 
 export type RankedType = 'yes' | 'no'

@@ -11,13 +11,13 @@ import {
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
-import { getCookieValue, Logger, setCookie } from './helpers/index.ts'
-import { loadContext } from './composables/context.ts'
+import { getCookieValue, Logger, setCookie } from './helpers'
+import { loadContext } from './composables/context'
 
 import Navigation from './views/Navigation.vue'
 
-import { usePollStore } from './stores/poll.ts'
-import { useSessionStore } from './stores/session.ts'
+import { usePollStore } from './stores/poll'
+import { useSessionStore } from './stores/session'
 
 import type { AxiosError } from 'axios'
 

@@ -25,13 +25,13 @@ import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
 
-import { ValidatorAPI } from '../../Api/index.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { useSubscriptionStore } from '../../stores/subscription.ts'
-import { useVotesStore } from '../../stores/votes.ts'
-import { StatusResults } from '../../Types/index.ts'
-import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
+import { ValidatorAPI } from '../../Api'
+import { usePollStore } from '../../stores/poll'
+import { useSessionStore } from '../../stores/session'
+import { useSubscriptionStore } from '../../stores/subscription'
+import { useVotesStore } from '../../stores/votes'
+import { StatusResults } from '../../Types'
+import { deleteCookieByValue, findCookieByValue } from '../../helpers'
 
 interface Props {
 	noMenuIcon: boolean

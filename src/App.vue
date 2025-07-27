@@ -21,11 +21,11 @@ import NcContent from '@nextcloud/vue/components/NcContent'
 
 import { usePollWatcher } from './composables/usePollWatcher'
 
-import { useSessionStore } from './stores/session.ts'
-import { usePollStore } from './stores/poll.ts'
-import { usePollGroupsStore } from './stores/pollGroups.ts'
+import { useSessionStore } from './stores/session'
+import { usePollStore } from './stores/poll'
+import { usePollGroupsStore } from './stores/pollGroups'
 import { showSuccess } from '@nextcloud/dialogs'
-import { Event } from './Types/index.ts'
+import { Event } from './Types'
 
 import '@nextcloud/dialogs/style.css'
 import './assets/scss/vars.scss'

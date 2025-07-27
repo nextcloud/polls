@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { usePollStore } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll'
 const pollStore = usePollStore()
 </script>
 

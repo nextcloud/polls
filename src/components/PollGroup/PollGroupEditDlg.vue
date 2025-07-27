@@ -12,10 +12,10 @@ import DescriptionIcon from 'vue-material-design-icons/TextBox.vue'
 
 import ConfigBox from '../Base/modules/ConfigBox.vue'
 
-import { usePollGroupsStore } from '../../stores/pollGroups.ts'
+import { usePollGroupsStore } from '../../stores/pollGroups'
 import { showError, showInfo } from '@nextcloud/dialogs'
 import { useRoute } from 'vue-router'
-import { router } from '../../router.ts'
+import { router } from '../../router'
 import ConfigTitlePollGroup from './ConfigNamePollGroup.vue'
 import ConfigTitleExtPollGroup from './ConfigTitleExtPollGroup.vue'
 import ConfigDescriptionPollGroup from './ConfigDescriptionPollGroup.vue'

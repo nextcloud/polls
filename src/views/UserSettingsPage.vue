@@ -14,7 +14,7 @@ import CalendarSettings from '../components/Settings/UserSettings/CalendarSettin
 import FeatureSettings from '../components/Settings/UserSettings/FeatureSettings.vue'
 import StyleSettings from '../components/Settings/UserSettings/StyleSettings.vue'
 
-import { usePreferencesStore } from '../stores/preferences.ts'
+import { usePreferencesStore } from '../stores/preferences'
 
 const preferencesStore = usePreferencesStore()
 

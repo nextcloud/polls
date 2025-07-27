@@ -13,11 +13,11 @@ import NcSelect from '@nextcloud/vue/components/NcSelect'
 import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
 import InputDiv from '../Base/modules/InputDiv.vue'
-import { dateTimeUnitsKeyed } from '../../constants/dateUnits.ts'
+import { dateTimeUnitsKeyed } from '../../constants/dateUnits'
 
-import { useOptionsStore } from '../../stores/options.ts'
+import { useOptionsStore } from '../../stores/options'
 
-import type { TimeUnitsType } from '../../constants/dateUnits.ts'
+import type { TimeUnitsType } from '../../constants/dateUnits'
 
 const optionsStore = useOptionsStore()
 

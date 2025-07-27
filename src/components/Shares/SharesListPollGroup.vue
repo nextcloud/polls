@@ -12,9 +12,9 @@ import ConfigBox from '../Base/modules/ConfigBox.vue'
 import ShareItem from './ShareItem.vue'
 import UserSearch from '../User/UserSearch.vue'
 
-import { useSharesStore } from '../../stores/shares.ts'
+import { useSharesStore } from '../../stores/shares'
 import { showError } from '@nextcloud/dialogs'
-import type { User } from '../../Types/index.ts'
+import type { User } from '../../Types'
 
 const sharesStore = useSharesStore()
 const { info } = defineProps<{

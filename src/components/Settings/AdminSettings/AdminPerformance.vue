@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import RadioGroupDiv from '../../Base/modules/RadioGroupDiv.vue'
 import { t } from '@nextcloud/l10n'
-import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+import { useAppSettingsStore } from '../../../stores/appSettings'
 
 const appSettingsStore = useAppSettingsStore()
 const updateTypeOptions = [

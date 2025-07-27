@@ -18,14 +18,14 @@ import NcSelect from '@nextcloud/vue/components/NcSelect'
 import DateBox from '../Base/modules/DateBox.vue'
 import DateTimePicker from '../Base/modules/DateTimePicker.vue'
 import InputDiv from '../Base/modules/InputDiv.vue'
-import { dateTimeUnitsKeyed } from '../../constants/dateUnits.ts'
-import { useResizeObserver } from '../../composables/elementWidth.ts'
+import { dateTimeUnitsKeyed } from '../../constants/dateUnits'
+import { useResizeObserver } from '../../composables/elementWidth'
 
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 import { useOptionsStore } from '../../stores/options'
 
-import type { DurationType } from '../../constants/dateUnits.ts'
+import type { DurationType } from '../../constants/dateUnits'
 import type { AxiosError } from '@nextcloud/axios'
 import type { Sequence } from '../../stores/options.types'
 

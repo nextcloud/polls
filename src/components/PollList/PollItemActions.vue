@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { router } from '../../router.ts'
+import { router } from '../../router'
 import { useRoute } from 'vue-router'
 
 import { t } from '@nextcloud/l10n'
@@ -29,9 +29,9 @@ import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue
 import DeletePollDialog from '../Modals/DeletePollDialog.vue'
 import TransferPollDialog from '../Modals/TransferPollDialog.vue'
 
-import { usePollsStore } from '../../stores/polls.ts'
-import { usePollGroupsStore } from '../../stores/pollGroups.ts'
-import { useSessionStore } from '../../stores/session.ts'
+import { usePollsStore } from '../../stores/polls'
+import { usePollGroupsStore } from '../../stores/pollGroups'
+import { useSessionStore } from '../../stores/session'
 
 import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import type { Poll } from '../../stores/poll.types'

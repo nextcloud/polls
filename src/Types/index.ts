@@ -8,7 +8,7 @@ export {
 	DateTimeUnitType,
 	TimeUnitsType,
 	DurationType,
-} from '../constants/dateUnits.ts'
+} from '../constants/dateUnits'
 
 export enum Event {
 	TransitionsOff = 'polls:transitions:off',

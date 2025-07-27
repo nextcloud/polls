@@ -8,7 +8,7 @@ import YesCounterIcon from 'vue-material-design-icons/AccountCheck.vue'
 import MaybeCounterIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
 import CheckboxMarkedOutlinedIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll'
 
 import type { Option } from '../../stores/options.types'
 

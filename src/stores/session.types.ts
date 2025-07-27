@@ -10,7 +10,7 @@ import { ViewMode } from './preferences.types'
 
 import type { Share } from './shares.types'
 import type { FilterType } from './polls.types'
-import type { User } from '../Types/index.ts'
+import type { User } from '../Types'
 import type { UpdateType } from './appSettings.types'
 
 interface RouteParams {

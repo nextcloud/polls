@@ -5,11 +5,11 @@
 
 import { defineStore } from 'pinia'
 
-import { AppSettingsAPI } from '../Api/index.ts'
-import { Logger } from '../helpers/index.ts'
+import { AppSettingsAPI } from '../Api'
+import { Logger } from '../helpers'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { AppSettingsStore } from './appSettings.types.ts'
+import type { AppSettingsStore } from './appSettings.types'
 
 export const useAppSettingsStore = defineStore('appSettings', {
 	state: (): AppSettingsStore => ({

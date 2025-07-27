@@ -17,11 +17,11 @@ import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import VoteMenu from './VoteMenu.vue'
 import UserItem from '../User/UserItem.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { useVotesStore } from '../../stores/votes.ts'
+import { usePollStore } from '../../stores/poll'
+import { useSessionStore } from '../../stores/session'
+import { useVotesStore } from '../../stores/votes'
 
-import type { User } from '../../Types/index.ts'
+import type { User } from '../../Types'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()

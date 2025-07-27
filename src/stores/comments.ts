@@ -5,13 +5,13 @@
 
 import { defineStore } from 'pinia'
 
-import { CommentsAPI, PublicAPI } from '../Api/index.ts'
-import { groupComments, Logger } from '../helpers/index.ts'
+import { CommentsAPI, PublicAPI } from '../Api'
+import { groupComments, Logger } from '../helpers'
 
-import { useSessionStore } from './session.ts'
+import { useSessionStore } from './session'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { Comment, CommentsStore } from './comments.types.ts'
+import type { Comment, CommentsStore } from './comments.types'
 
 export const useCommentsStore = defineStore('comments', {
 	state: (): CommentsStore => ({

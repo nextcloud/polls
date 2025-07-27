@@ -13,10 +13,10 @@ import CardRegister from './CardRegister.vue'
 import CardSendConfirmations from './CardSendConfirmations.vue'
 import CardUnpublishedPoll from './CardUnpublishedPoll.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-import { useSharesStore } from '../../stores/shares.ts'
-import { useSessionStore } from '../../stores/session.ts'
+import { usePollStore } from '../../stores/poll'
+import { useOptionsStore } from '../../stores/options'
+import { useSharesStore } from '../../stores/shares'
+import { useSessionStore } from '../../stores/session'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()

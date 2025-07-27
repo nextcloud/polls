@@ -20,13 +20,13 @@ import VoteButton from './VoteButton.vue'
 import VoteItem from './VoteItem.vue'
 import VoteParticipant from './VoteParticipant.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-import { useVotesStore } from '../../stores/votes.ts'
-import { usePreferencesStore } from '../../stores/preferences.ts'
-import { useSessionStore } from '../../stores/session.ts'
+import { usePollStore } from '../../stores/poll'
+import { useOptionsStore } from '../../stores/options'
+import { useVotesStore } from '../../stores/votes'
+import { usePreferencesStore } from '../../stores/preferences'
+import { useSessionStore } from '../../stores/session'
 
-import type { User } from '../../Types/index.ts'
+import type { User } from '../../Types'
 import type { Option } from '../../stores/options.types'
 
 const pollStore = usePollStore()

@@ -11,7 +11,7 @@ import { t } from '@nextcloud/l10n'
 
 import InputDiv from '../Base/modules/InputDiv.vue'
 
-import { useOptionsStore } from '../../stores/options.ts'
+import { useOptionsStore } from '../../stores/options'
 
 import type { SimpleOption } from '../../stores/options.types'
 import type { AxiosError } from '@nextcloud/axios'

@@ -6,13 +6,13 @@
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
 
-import { useSessionStore } from '../../stores/session.ts'
+import { useSessionStore } from '../../stores/session'
 import { computed } from 'vue'
 
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import { showError } from '@nextcloud/dialogs'
 import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
-import { usePollsStore } from '../../stores/polls.ts'
+import { usePollsStore } from '../../stores/polls'
 
 import type { Poll } from '../../stores/poll.types'
 

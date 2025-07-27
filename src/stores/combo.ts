@@ -6,14 +6,14 @@
 import { defineStore } from 'pinia'
 import sortBy from 'lodash/sortBy'
 
-import { VotesAPI, OptionsAPI, PollsAPI } from '../Api/index.ts'
-import { Logger, uniqueOptions, uniqueParticipants } from '../helpers/index.ts'
+import { VotesAPI, OptionsAPI, PollsAPI } from '../Api'
+import { Logger, uniqueOptions, uniqueParticipants } from '../helpers'
 
-import { usePreferencesStore } from './preferences.ts'
-import { usePollsStore } from './polls.ts'
+import { usePreferencesStore } from './preferences'
+import { usePollsStore } from './polls'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { Participant } from '../Types/index.ts'
+import type { Participant } from '../Types'
 import type { Vote } from './votes.types'
 import type { Option } from './options.types'
 import type { Poll } from './poll.types'

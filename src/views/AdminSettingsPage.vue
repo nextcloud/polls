@@ -28,7 +28,7 @@ import AdminSharePublicShowLogin from '../components/Settings/AdminSettings/Admi
 import AdminShowMailAddresses from '../components/Settings/AdminSettings/AdminShowMailAddresses.vue'
 import AdminUnrescrictedOwners from '../components/Settings/AdminSettings/AdminUnrescrictedOwners.vue'
 
-import { useAppSettingsStore } from '../stores/appSettings.ts'
+import { useAppSettingsStore } from '../stores/appSettings'
 import '../assets/scss/markdown.scss'
 
 const appSettingsStore = useAppSettingsStore()

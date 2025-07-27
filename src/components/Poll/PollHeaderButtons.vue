@@ -17,8 +17,8 @@ import ActionToggleSidebar from '../Actions/modules/ActionToggleSidebar.vue'
 import PollInformation from '../Poll/PollInformation.vue'
 import UserMenu from '../User/UserMenu.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
+import { usePollStore } from '../../stores/poll'
+import { useSessionStore } from '../../stores/session'
 
 const route = useRoute()
 const pollStore = usePollStore()

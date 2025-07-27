@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { AxiosResponse } from '@nextcloud/axios'
-import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi'
 
 import type { Comment } from '../../stores/comments.types'
 

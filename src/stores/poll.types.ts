@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Chunking, StatusResults, User, UserType } from '../Types/index.ts'
+import { Chunking, StatusResults, User, UserType } from '../Types'
 
 export type PollType = 'textPoll' | 'datePoll'
 

@@ -9,23 +9,23 @@ import { RouteLocationNormalized } from 'vue-router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 
-import { Logger } from '../helpers/index.ts'
-import { PublicAPI, SessionAPI } from '../Api/index.ts'
+import { Logger } from '../helpers'
+import { PublicAPI, SessionAPI } from '../Api'
 
-import { useSubscriptionStore } from './subscription.ts'
-import { usePollGroupsStore } from './pollGroups.ts'
-import { usePreferencesStore } from './preferences.ts'
-import { usePollStore } from './poll.ts'
+import { useSubscriptionStore } from './subscription'
+import { usePollGroupsStore } from './pollGroups'
+import { usePreferencesStore } from './preferences'
+import { usePollStore } from './poll'
 import { usePollsStore } from './polls'
 
-import { createDefault } from '../Types/index.ts'
+import { createDefault } from '../Types'
 
 import type { AxiosError } from '@nextcloud/axios'
 import type { ViewMode } from './preferences.types'
 import type { Share } from './shares.types'
 import type { PollType } from './poll.types'
 import type { FilterType } from './polls.types'
-import type { User } from '../Types/index.ts'
+import type { User } from '../Types'
 
 import type { SessionStore } from './session.types'
 

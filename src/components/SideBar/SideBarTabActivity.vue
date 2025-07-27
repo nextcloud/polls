@@ -13,8 +13,8 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
 import Activities from '../Activity/Activities.vue'
-import { useActivityStore } from '../../stores/activity.ts'
-import { Event } from '../../Types/index.ts'
+import { useActivityStore } from '../../stores/activity'
+import { Event } from '../../Types'
 
 const activityStore = useActivityStore()
 const emptyContentProps = {

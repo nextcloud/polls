@@ -5,12 +5,12 @@
 
 import { defineStore } from 'pinia'
 
-import { ActivityAPI } from '../Api/index.ts'
+import { ActivityAPI } from '../Api'
 
-import { useSessionStore } from './session.ts'
+import { useSessionStore } from './session'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { Activity, ActivitiyStore } from './activity.types.ts'
+import type { Activity, ActivitiyStore } from './activity.types'
 
 export const useActivityStore = defineStore('activity', {
 	state: (): ActivitiyStore => ({

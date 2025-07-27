@@ -13,9 +13,9 @@ import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 
 import UserItem from '../User/UserItem.vue'
-import { useSharesStore } from '../../stores/shares.ts'
+import { useSharesStore } from '../../stores/shares'
 
-import type { VirtualUserItemType } from '../../Types/index.ts'
+import type { VirtualUserItemType } from '../../Types'
 
 const sharesStore = useSharesStore()
 

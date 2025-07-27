@@ -9,7 +9,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 
-import type { User } from '../../Types/index.ts'
+import type { User } from '../../Types'
 
 interface Props {
 	user: User

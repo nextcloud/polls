@@ -7,7 +7,7 @@
 import { computed } from 'vue'
 import InputDiv from '../Base/modules/InputDiv.vue'
 import { t } from '@nextcloud/l10n'
-import { usePollGroupsStore } from '../../stores/pollGroups.ts'
+import { usePollGroupsStore } from '../../stores/pollGroups'
 
 const emit = defineEmits(['change'])
 

@@ -14,9 +14,9 @@ import CommentAdd from '../Comments/CommentAdd.vue'
 import Comments from '../Comments/Comments.vue'
 import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useCommentsStore } from '../../stores/comments.ts'
-import { Event } from '../../Types/index.ts'
+import { usePollStore } from '../../stores/poll'
+import { useCommentsStore } from '../../stores/comments'
+import { Event } from '../../Types'
 
 const pollStore = usePollStore()
 const commentsStore = useCommentsStore()

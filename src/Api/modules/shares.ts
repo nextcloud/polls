@@ -2,10 +2,10 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi'
 
 import type { AxiosResponse } from '@nextcloud/axios'
-import type { User } from '../../Types/index.js'
+import type { User } from '../../Types'
 import type {
 	PublicPollEmailConditions,
 	SharePurpose,

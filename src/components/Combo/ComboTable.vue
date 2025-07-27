@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import VoteColumn from './VoteColumn.vue'
 import UserItem from '../User/UserItem.vue'
-import { useComboStore } from '../../stores/combo.ts'
+import { useComboStore } from '../../stores/combo'
 
 import type { ViewMode } from '../../stores/preferences.types'
 
