@@ -274,6 +274,21 @@ export const useVotesStore = defineStore('votes', {
 		},
 
 		async set(payload: { option: Option; setTo: Answer }) {
+			// place a fake vote for a slightly better UX in huge polls
+			this.setItem({
+				option: payload.option,
+				vote: {
+					answer: payload.setTo,
+					optionText: payload.option.text,
+					user: useSessionStore().currentUser,
+					answerSymbol: '',
+					deleted: 0,
+					id: 0,
+					optionId: payload.option.id,
+					pollId: payload.option.pollId,
+				},
+			})
+
 			const sessionStore = useSessionStore()
 			const pollStore = usePollStore()
 			try {
