@@ -24,7 +24,7 @@ import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
 import OptionsAddModal from '../components/Modals/OptionsAddModal.vue'
 import ActionOpenOptionsSidebar from '../components/Actions/modules/ActionOpenOptionsSidebar.vue'
 import HeaderBar from '../components/Base/modules/HeaderBar.vue'
-import CardAnonymousPollHint from '../components/Cards/modules/CardAnonymousPollHint.vue'
+import CardAnonymousPollHint from '../components/Cards/CardAnonymousPollHint.vue'
 
 import { usePollStore } from '../stores/poll.ts'
 import { useOptionsStore } from '../stores/options.ts'

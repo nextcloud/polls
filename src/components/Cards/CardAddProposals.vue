@@ -4,11 +4,11 @@
 -->
 
 <script setup lang="ts">
-import CardDiv from '../../Base/modules/CardDiv.vue'
+import CardDiv from '../Base/modules/CardDiv.vue'
 import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../../stores/poll.ts'
-import ActionAddOption from '../../Actions/modules/ActionAddOption.vue'
-import OptionsTextAdd from '../../Options/OptionsTextAdd.vue'
+import { usePollStore } from '../../stores/poll.ts'
+import ActionAddOption from '../Actions/modules/ActionAddOption.vue'
+import OptionsTextAdd from '../Options/OptionsTextAdd.vue'
 
 const pollStore = usePollStore()
 const cardType = 'info'
