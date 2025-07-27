@@ -326,8 +326,6 @@ OC.L10N.register(
     "Close poll" : "Dún vótaíocht",
     "Poll closing date" : "Dáta deiridh na vótaíochta",
     "Error {action} poll." : "Vótaíocht earráide {action}.",
-    "_Removed %n orphaned vote_::_Removed %n orphaned votes_" : ["Baineadh %n vóta dílleachta","Baineadh %n vótaí dílleachta","Baineadh %n vótaí dílleachta","Baineadh %n vótaí dílleachta","Baineadh %n vótaí dílleachta"],
-    "Error deleting orphaned votes." : "Earráid ag scriosadh vótaí dílleachta.",
     "Restore poll" : "Athchóirigh vótaíocht",
     "Archive poll" : "Pobalbhreith cartlainne",
     "Delete poll" : "Scrios vótaíocht",

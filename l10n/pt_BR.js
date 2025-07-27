@@ -326,8 +326,6 @@ OC.L10N.register(
     "Close poll" : "Encerrar enquete",
     "Poll closing date" : "Data de encerramento da enquete",
     "Error {action} poll." : "Erro ao {action} a enquete.",
-    "_Removed %n orphaned vote_::_Removed %n orphaned votes_" : ["%n voto órfão foi removido","%n de votos órfãos foram removidos","%n votos órfãos foram removidos"],
-    "Error deleting orphaned votes." : "Erro ao excluir votos órfãos.",
     "Restore poll" : "Reativar enquete",
     "Archive poll" : "Arquivar enquete",
     "Delete poll" : "Excluir enquete",

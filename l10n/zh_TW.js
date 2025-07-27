@@ -326,8 +326,6 @@ OC.L10N.register(
     "Close poll" : "關閉投票",
     "Poll closing date" : "投票關閉日期",
     "Error {action} poll." : "錯誤 {action} 投票。",
-    "_Removed %n orphaned vote_::_Removed %n orphaned votes_" : ["已移除 %n 個無主投票"],
-    "Error deleting orphaned votes." : "刪除無主投票時發生錯誤。",
     "Restore poll" : "復原投票",
     "Archive poll" : "封存投票",
     "Delete poll" : "刪除投票",

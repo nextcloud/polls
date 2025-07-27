@@ -324,8 +324,6 @@
     "Close poll" : "Uzavřít anketu",
     "Poll closing date" : "Datum uzavření ankety",
     "Error {action} poll." : "Chyba {action} ankety.",
-    "_Removed %n orphaned vote_::_Removed %n orphaned votes_" : ["Odebrána %n osiřelá volba","Odebrány %n osiřelé volby","Odebráno %n osiřelých voleb","Odebrány %n osiřelé volby"],
-    "Error deleting orphaned votes." : "Chyba při mazání osiřelých voleb.",
     "Restore poll" : "Obnovit anketu",
     "Archive poll" : "Archivovat anketu",
     "Delete poll" : "Smazat anketu",

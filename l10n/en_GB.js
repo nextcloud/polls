@@ -326,8 +326,6 @@ OC.L10N.register(
     "Close poll" : "Close poll",
     "Poll closing date" : "Poll closing date",
     "Error {action} poll." : "Error {action} poll.",
-    "_Removed %n orphaned vote_::_Removed %n orphaned votes_" : ["Removed %n orphaned vote","Removed %n orphaned votes"],
-    "Error deleting orphaned votes." : "Error deleting orphaned votes.",
     "Restore poll" : "Restore poll",
     "Archive poll" : "Archive poll",
     "Delete poll" : "Delete poll",
