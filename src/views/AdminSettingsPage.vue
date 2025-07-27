@@ -10,24 +10,24 @@ import { t } from '@nextcloud/l10n'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 
 import FlexSettings from '../components/Base/modules/FlexSettings.vue'
-import {
-	AdminActivities,
-	AdminArchivePolls,
-	AdminCombo,
-	AdminDeletePolls,
-	AdminEmail,
-	AdminJobs,
-	AdminLegal,
-	AdminPerformance,
-	AdminPollCreation,
-	AdminPollDownload,
-	AdminPollsInNavigation,
-	AdminShareOpenPoll,
-	AdminSharePublicCreate,
-	AdminSharePublicShowLogin,
-	AdminShowMailAddresses,
-	AdminUnrescrictedOwners,
-} from '../components/Settings/AdminSettings/index.ts'
+
+import AdminActivities from '../components/Settings/AdminSettings/AdminActivities.vue'
+import AdminArchivePolls from '../components/Settings/AdminSettings/AdminArchivePolls.vue'
+import AdminCombo from '../components/Settings/AdminSettings/AdminCombo.vue'
+import AdminDeletePolls from '../components/Settings/AdminSettings/AdminDeletePolls.vue'
+import AdminEmail from '../components/Settings/AdminSettings/AdminEmail.vue'
+import AdminJobs from '../components/Settings/AdminSettings/AdminJobs.vue'
+import AdminLegal from '../components/Settings/AdminSettings/AdminLegal.vue'
+import AdminPerformance from '../components/Settings/AdminSettings/AdminPerformance.vue'
+import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCreation.vue'
+import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload.vue'
+import AdminPollsInNavigation from '../components/Settings/AdminSettings/AdminPollsInNavigation.vue'
+import AdminShareOpenPoll from '../components/Settings/AdminSettings/AdminShareOpenPoll.vue'
+import AdminSharePublicCreate from '../components/Settings/AdminSettings/AdminSharePublicCreate.vue'
+import AdminSharePublicShowLogin from '../components/Settings/AdminSettings/AdminSharePublicShowLogin.vue'
+import AdminShowMailAddresses from '../components/Settings/AdminSettings/AdminShowMailAddresses.vue'
+import AdminUnrescrictedOwners from '../components/Settings/AdminSettings/AdminUnrescrictedOwners.vue'
+
 import { useAppSettingsStore } from '../stores/appSettings.ts'
 import '../assets/scss/markdown.scss'
 

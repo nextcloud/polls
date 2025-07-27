@@ -4,7 +4,7 @@
 -->
 
 <script setup>
-import { Logger } from '../../../helpers/index.ts'
+import { Logger } from '../../../helpers/modules/logger.ts'
 import { t } from '@nextcloud/l10n'
 
 import NcButton from '@nextcloud/vue/components/NcButton'
