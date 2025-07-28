@@ -147,6 +147,7 @@ body:
     attributes:
       label: Add your browser log here
       description: |
+        ⚠️ Do NOT add debug or info log lines
         Provide the content of your browser console or network tab in case of errors (see developer tools of your browser).
       placeholder: This will be automatically formatted into code for better readability.
       render: json
@@ -248,6 +249,7 @@ body:
     attributes:
       label: Add your nextcloud server log here
       description: |
+        ⚠️ Do NOT add debug or info log lines
         Provide Nextcloud logs lines, which can give information about the bug.
         Copy all relevant contents from `data/nextcloud.log` or copy the a RAW entries from `/settings/admin/logging` section:
       placeholder: This will be automatically formatted into code for better readability.
