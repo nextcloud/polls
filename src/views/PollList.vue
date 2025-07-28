@@ -6,6 +6,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+
 import { showError } from '@nextcloud/dialogs'
 import { t, n } from '@nextcloud/l10n'
 
@@ -14,17 +15,20 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
 import HeaderBar from '../components/Base/modules/HeaderBar.vue'
 import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
-import { PollsAppIcon } from '../components/AppIcons/index.ts'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 import PollItem from '../components/PollList/PollItem.vue'
-import { FilterType, usePollsStore } from '../stores/polls.ts'
 import PollListSort from '../components/PollList/PollListSort.vue'
 import PollItemActions from '../components/PollList/PollItemActions.vue'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
-import { usePreferencesStore } from '../stores/preferences.ts'
-import { useSessionStore } from '../stores/session.ts'
 import ActionToggleSidebar from '../components/Actions/modules/ActionToggleSidebar.vue'
-import { usePollGroupsStore } from '../stores/pollGroups.ts'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
+
+import { usePreferencesStore } from '../stores/preferences'
+import { useSessionStore } from '../stores/session'
+import { usePollsStore } from '../stores/polls'
+import { usePollGroupsStore } from '../stores/pollGroups'
+
+import type { FilterType } from '../stores/polls.types'
 
 const pollsStore = usePollsStore()
 const pollGroupsStore = usePollGroupsStore()

@@ -13,9 +13,9 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 
 import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
 
-import { PollsAPI } from '../../../Api/index.ts'
-import { Logger } from '../../../helpers/index.ts'
-import { Confirmations } from '../../../Api/modules/polls.ts'
+import { PollsAPI } from '../../../Api'
+import { Logger } from '../../../helpers'
+import { Confirmations } from '../../../Api/modules/polls'
 
 const route = useRoute()
 const showModal = ref(false)

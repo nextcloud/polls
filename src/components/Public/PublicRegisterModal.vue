@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { t } from '@nextcloud/l10n'
@@ -15,12 +15,13 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import NcButton from '@nextcloud/vue/components/NcButton'
 
 import InputDiv from '../Base/modules/InputDiv.vue'
-import { SimpleLink, setCookie } from '../../helpers/index.ts'
-import { ValidatorAPI, PublicAPI } from '../../Api/index.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { AxiosError } from '@nextcloud/axios'
-import { SignalingType } from '../../Types/index.ts'
+import { SimpleLink, setCookie } from '../../helpers'
+import { ValidatorAPI, PublicAPI } from '../../Api'
+import { useSessionStore } from '../../stores/session'
+import { usePollStore } from '../../stores/poll'
+
+import type { AxiosError } from '@nextcloud/axios'
+import type { SignalingType } from '../../Types'
 
 const route = useRoute()
 const router = useRouter()

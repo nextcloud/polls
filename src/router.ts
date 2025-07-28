@@ -11,24 +11,15 @@ import {
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
-import { getCookieValue, Logger, setCookie } from './helpers/index.ts'
-import { loadContext } from './composables/context.ts'
-import { AxiosError } from 'axios'
+import { getCookieValue, Logger, setCookie } from './helpers'
+import { loadContext } from './composables/context'
 
 import Navigation from './views/Navigation.vue'
 
-import Combo from './views/Combo.vue'
-import Forbidden from './views/Forbidden.vue'
-import List from './views/PollList.vue'
-import NotFound from './views/NotFound.vue'
-import Vote from './views/Vote.vue'
+import { usePollStore } from './stores/poll'
+import { useSessionStore } from './stores/session'
 
-import SideBar from './views/SideBar.vue'
-import SideBarPollGroup from './views/SideBarPollGroup.vue'
-import SideBarCombo from './views/SideBarCombo.vue'
-
-import { usePollStore } from './stores/poll.ts'
-import { useSessionStore } from './stores/session.ts'
+import type { AxiosError } from 'axios'
 
 async function validateToken(to: RouteLocationNormalized) {
 	const sessionStore = useSessionStore()
@@ -87,6 +78,16 @@ async function validateToken(to: RouteLocationNormalized) {
 
 	pollStore.load()
 }
+
+const Combo = () => import('./views/Combo.vue')
+const Forbidden = () => import('./views/Forbidden.vue')
+const List = () => import('./views/PollList.vue')
+const NotFound = () => import('./views/NotFound.vue')
+const Vote = () => import('./views/Vote.vue')
+
+const SideBar = () => import('./views/SideBar.vue')
+const SideBarPollGroup = () => import('./views/SideBarPollGroup.vue')
+const SideBarCombo = () => import('./views/SideBarCombo.vue')
 
 const routes: RouteRecordRaw[] = [
 	{

@@ -10,8 +10,8 @@ import { t } from '@nextcloud/l10n'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionCheckbox from '@nextcloud/vue/components/NcActionCheckbox'
 
-import { useSubscriptionStore } from '../../stores/subscription.ts'
-import { useSessionStore } from '../../stores/session.ts'
+import { useSubscriptionStore } from '../../stores/subscription'
+import { useSessionStore } from '../../stores/session'
 
 const subscriptionStore = useSubscriptionStore()
 const sessionStore = useSessionStore()

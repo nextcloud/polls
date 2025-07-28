@@ -6,9 +6,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useVotesStore } from '../../stores/votes.ts'
-import { Option, User } from '../../Types/index.ts'
+import { usePollStore } from '../../stores/poll'
+import { useVotesStore } from '../../stores/votes'
+
+import type { User } from '../../Types'
+import type { Option } from '../../stores/options.types'
 
 import VoteIndicator from './VoteIndicator.vue'
 

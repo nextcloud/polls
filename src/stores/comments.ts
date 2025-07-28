@@ -4,40 +4,17 @@
  */
 
 import { defineStore } from 'pinia'
-import { CommentsAPI, PublicAPI } from '../Api/index.ts'
-import { User } from '../Types/index.ts'
-import { groupComments, Logger } from '../helpers/index.ts'
-import { useSessionStore } from './session.ts'
+
+import { CommentsAPI, PublicAPI } from '../Api'
+import { groupComments, Logger } from '../helpers'
+
+import { useSessionStore } from './session'
+
 import type { AxiosError } from '@nextcloud/axios'
-
-export type Comment = {
-	comment: string
-	deleted: number
-	id: number
-	parent: number
-	pollId: number
-	timestamp: number
-	user: User
-	confidential: number
-	recipient: User | null
-}
-
-export type ShortComment = {
-	comment: string
-	deleted: number
-	id: number
-}
-
-export type Comments = {
-	comments: Comment[]
-}
-
-export interface CommentsGrouped extends Comment {
-	comments: Comment[]
-}
+import type { Comment, CommentsStore } from './comments.types'
 
 export const useCommentsStore = defineStore('comments', {
-	state: (): Comments => ({
+	state: (): CommentsStore => ({
 		comments: [],
 	}),
 

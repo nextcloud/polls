@@ -15,7 +15,7 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 import ClosePollIcon from 'vue-material-design-icons/Lock.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll'
 
 const pollStore = usePollStore()
 

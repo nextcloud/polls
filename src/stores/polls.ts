@@ -8,67 +8,21 @@ import orderBy from 'lodash/orderBy'
 import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
 
-import { Logger } from '../helpers/index.ts'
-import { PollsAPI } from '../Api/index.ts'
+import { Logger } from '../helpers'
+import { PollsAPI } from '../Api'
 
-import { Poll } from './poll.ts'
-import { useSessionStore } from './session.ts'
-import { Chunking, StatusResults } from '../Types/index.ts'
-import { AxiosError } from '@nextcloud/axios'
-import { usePollGroupsStore } from './pollGroups.ts'
+import { useSessionStore } from './session'
+import { usePollGroupsStore } from './pollGroups'
 
-export type SortType =
-	| 'created'
-	| 'title'
-	| 'access'
-	| 'owner'
-	| 'expire'
-	| 'interaction'
-
-export type SortDirection = 'asc' | 'desc'
-
-export type FilterType =
-	| 'relevant'
-	| 'my'
-	| 'private'
-	| 'participated'
-	| 'open'
-	| 'all'
-	| 'closed'
-	| 'archived'
-	| 'admin'
-
-export type PollCategory = {
-	id: FilterType
-	title: string
-	titleExt: string
-	description: string
-	pinned: boolean
-	showInNavigation(): boolean
-	filterCondition(poll: Poll): boolean
-}
-
-export type PollCategoryList = Record<FilterType, PollCategory>
-
-export type Meta = {
-	chunks: Chunking
-	maxPollsInNavigation: number
-	status: StatusResults
-}
-
-export type PollList = {
-	polls: Poll[]
-	// pollGroups: PollGroup[]
-	meta: Meta
-	sort: {
-		by: SortType
-		reverse: boolean
-	}
-	status: {
-		loadingGroups: boolean
-	}
-	categories: PollCategoryList
-}
+import type { AxiosError } from '@nextcloud/axios'
+import type { Poll } from './poll.types'
+import type {
+	PollCategory,
+	PollCategoryList,
+	PollsStore,
+	FilterType,
+	SortType,
+} from './polls.types'
 
 export const sortColumnsMapping: { [key in SortType]: string } = {
 	created: 'status.created',
@@ -208,12 +162,15 @@ const pollCategories: PollCategoryList = {
 			const sessionStore = useSessionStore()
 			return !!sessionStore.currentUser?.isAdmin
 		},
-		filterCondition: (poll: Poll) => !poll.permissions.view,
+		filterCondition: (poll: Poll) => {
+			const sessionStore = useSessionStore()
+			return sessionStore.currentUser.id !== poll.owner.id
+		},
 	},
 }
 
 export const usePollsStore = defineStore('polls', {
-	state: (): PollList => ({
+	state: (): PollsStore => ({
 		polls: [],
 		meta: {
 			chunks: {
@@ -234,7 +191,7 @@ export const usePollsStore = defineStore('polls', {
 	}),
 
 	getters: {
-		navigationCategories(state: PollList): PollCategory[] {
+		navigationCategories(state: PollsStore): PollCategory[] {
 			return Object.values(state.categories).filter((category) =>
 				category.showInNavigation(),
 			)
@@ -244,7 +201,7 @@ export const usePollsStore = defineStore('polls', {
 		 * Sliced filtered and sorted polls for navigation
 		 */
 		navigationList:
-			(state: PollList) =>
+			(state: PollsStore) =>
 			(filterId: FilterType): Poll[] =>
 				orderBy(
 					state.polls.filter((poll: Poll) =>
@@ -254,7 +211,7 @@ export const usePollsStore = defineStore('polls', {
 					['desc'],
 				).slice(0, state.meta.maxPollsInNavigation),
 
-		currentCategory(state: PollList): PollCategory {
+		currentCategory(state: PollsStore): PollCategory {
 			const sessionStore = useSessionStore()
 
 			if (
@@ -269,7 +226,7 @@ export const usePollsStore = defineStore('polls', {
 		/*
 		 * polls list, filtered by current category and sorted
 		 */
-		pollsFilteredSorted(state: PollList): Poll[] {
+		pollsFilteredSorted(state: PollsStore): Poll[] {
 			const sessionStore = useSessionStore()
 			const pollGroupsStore = usePollGroupsStore()
 
@@ -294,7 +251,7 @@ export const usePollsStore = defineStore('polls', {
 			return this.pollsFilteredSorted.slice(0, this.loaded)
 		},
 
-		pollsCount(state: PollList): { [key: string]: number } {
+		pollsCount(state: PollsStore): { [key: string]: number } {
 			const count: Record<FilterType, number> = {} as Record<
 				FilterType,
 				number
@@ -312,7 +269,7 @@ export const usePollsStore = defineStore('polls', {
 		/*
 		 * Sliced filtered and sorted polls for dashboard
 		 */
-		dashboardList(state: PollList): Poll[] {
+		dashboardList(state: PollsStore): Poll[] {
 			return orderBy(
 				state.polls.filter((poll: Poll) =>
 					state.categories.relevant.filterCondition(poll),
@@ -322,11 +279,11 @@ export const usePollsStore = defineStore('polls', {
 			).slice(0, 7)
 		},
 
-		loaded(state: PollList): number {
+		loaded(state: PollsStore): number {
 			return state.meta.chunks.loaded * state.meta.chunks.size
 		},
 
-		datePolls(state: PollList): Poll[] {
+		datePolls(state: PollsStore): Poll[] {
 			return state.polls.filter(
 				(poll: Poll) => poll.type === 'datePoll' && !poll.status.isArchived,
 			)
@@ -336,7 +293,7 @@ export const usePollsStore = defineStore('polls', {
 			return state.meta.status === 'loading'
 		},
 
-		countByCategory: (state: PollList) => (filterId: FilterType) =>
+		countByCategory: (state: PollsStore) => (filterId: FilterType) =>
 			state.polls.filter((poll: Poll) =>
 				state.categories[filterId].filterCondition(poll),
 			).length,

@@ -14,8 +14,8 @@ import ComboTable from '../components/Combo/ComboTable.vue'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 import { ActionToggleSidebar } from '../components/Actions'
 import HeaderBar from '../components/Base/modules/HeaderBar.vue'
-import { PollsAppIcon } from '../components/AppIcons/index.ts'
-import { useComboStore } from '../stores/combo.ts'
+import { useComboStore } from '../stores/combo'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 
 const comboStore = useComboStore()
 const isLoading = ref(false)

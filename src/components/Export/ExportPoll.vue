@@ -7,6 +7,8 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { DateTime, Interval } from 'luxon'
+
 // eslint-disable-next-line import/named
 import { Sheet, WorkBook, utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
 import DOMPurify from 'dompurify'
@@ -23,12 +25,14 @@ import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
 import XmlIcon from 'vue-material-design-icons/Xml.vue'
 import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
 
-import { ApiEmailAdressList, PollsAPI } from '../../Api/index.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { Answer, useVotesStore } from '../../stores/votes.ts'
-import { Option, useOptionsStore } from '../../stores/options.ts'
-import { AxiosError } from '@nextcloud/axios'
-import { DateTime, Interval } from 'luxon'
+import { ApiEmailAdressList, PollsAPI } from '../../Api'
+import { usePollStore } from '../../stores/poll'
+import { useVotesStore } from '../../stores/votes'
+import { useOptionsStore } from '../../stores/options'
+
+import type { AxiosError } from '@nextcloud/axios'
+import type { Option } from '../../stores/options.types'
+import type { Answer } from '../../stores/votes.types'
 
 type ArrayStyle = 'symbols' | 'raw' | 'generic'
 type ExportFormat = 'html' | 'xlsx' | 'ods' | 'csv'

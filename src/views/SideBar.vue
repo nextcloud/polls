@@ -4,35 +4,54 @@
 -->
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, defineAsyncComponent, onMounted, onUnmounted } from 'vue'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
 import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
 import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
-import { Event } from '../Types/index.ts'
+import { Event } from '../Types'
 
-import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
-import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
-import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
-import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
-import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
-
-import {
-	SideBarTabConfiguration,
-	SideBarTabComments,
-	SideBarTabOptions,
-	SideBarTabShare,
-	SideBarTabActivity,
-} from '../components/SideBar/index.js'
-import { usePollStore } from '../stores/poll.ts'
-import { useSessionStore } from '../stores/session.ts'
+import { usePollStore } from '../stores/poll'
+import { useSessionStore } from '../stores/session'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 
 const showSidebar = ref(window.innerWidth > 920)
 const activeTab = ref(t('polls', 'Comments').toLowerCase())
+
+const SidebarConfigurationIcon = defineAsyncComponent(
+	() => import('vue-material-design-icons/Wrench.vue'),
+)
+const SidebarOptionsIcon = defineAsyncComponent(
+	() => import('vue-material-design-icons/FormatListChecks.vue'),
+)
+const SidebarShareIcon = defineAsyncComponent(
+	() => import('vue-material-design-icons/ShareVariant.vue'),
+)
+const SidebarCommentsIcon = defineAsyncComponent(
+	() => import('vue-material-design-icons/CommentProcessing.vue'),
+)
+const SidebarActivityIcon = defineAsyncComponent(
+	() => import('vue-material-design-icons/LightningBolt.vue'),
+)
+
+const SideBarTabConfiguration = defineAsyncComponent(
+	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
+)
+const SideBarTabComments = defineAsyncComponent(
+	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
+)
+const SideBarTabOptions = defineAsyncComponent(
+	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
+)
+const SideBarTabShare = defineAsyncComponent(
+	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
+)
+const SideBarTabActivity = defineAsyncComponent(
+	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
+)
 
 onMounted(() => {
 	subscribe(Event.SidebarToggle, (payload) => {

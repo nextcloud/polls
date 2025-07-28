@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-import { Spinner } from '../../AppIcons/index.ts'
+import Spinner from '../../AppIcons/Spinner.vue'
 import { onMounted, ref, watch } from 'vue'
 
 const description = ref(t('polls', 'Please wait…'))

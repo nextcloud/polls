@@ -4,8 +4,8 @@
 -->
 
 <script setup lang="ts">
-import { usePollsStore } from '../../stores/polls.ts'
-import { useComboStore } from '../../stores/combo.ts'
+import { usePollsStore } from '../../stores/polls'
+import { useComboStore } from '../../stores/combo'
 
 import UserItem from '../User/UserItem.vue'
 

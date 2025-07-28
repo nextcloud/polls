@@ -5,10 +5,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import CardDiv from '../../Base/modules/CardDiv.vue'
-import ActionRegister from '../../Actions/modules/ActionRegister.vue'
+import CardDiv from '../Base/modules/CardDiv.vue'
+import ActionRegister from '../Actions/modules/ActionRegister.vue'
 import { t } from '@nextcloud/l10n'
-import { useSessionStore } from '../../../stores/session.ts'
+import { useSessionStore } from '../../stores/session'
 
 const sessionStore = useSessionStore()
 const cardType = 'info'

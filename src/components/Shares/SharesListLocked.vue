@@ -8,7 +8,7 @@ import ConfigBox from '../Base/modules/ConfigBox.vue'
 import LockedIcon from 'vue-material-design-icons/Lock.vue'
 import ShareItem from './ShareItem.vue'
 import { t } from '@nextcloud/l10n'
-import { useSharesStore } from '../../stores/shares.ts'
+import { useSharesStore } from '../../stores/shares'
 
 const sharesStore = useSharesStore()
 

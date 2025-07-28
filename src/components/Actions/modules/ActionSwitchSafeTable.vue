@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../../stores/poll.ts'
+import { usePollStore } from '../../../stores/poll'
 
 import NcButton from '@nextcloud/vue/components/NcButton'
 

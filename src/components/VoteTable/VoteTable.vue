@@ -4,17 +4,15 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { NcButton } from '@nextcloud/vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 import { getCurrentUser } from '@nextcloud/auth'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { Option, useOptionsStore } from '../../stores/options.ts'
-import { useVotesStore } from '../../stores/votes.ts'
+import SortOptionIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
+import SortNameIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
 
 import StickyDiv from '../Base/modules/StickyDiv.vue'
-import CalendarPeek from '../Calendar/CalendarPeek.vue'
 import Counter from '../Options/Counter.vue'
 import OptionItem from '../Options/OptionItem.vue'
 import OptionMenu from '../Options/OptionMenu.vue'
@@ -22,19 +20,23 @@ import VoteButton from './VoteButton.vue'
 import VoteItem from './VoteItem.vue'
 import VoteParticipant from './VoteParticipant.vue'
 
-import { usePreferencesStore } from '../../stores/preferences.ts'
-import { useSessionStore } from '../../stores/session.ts'
+import { usePollStore } from '../../stores/poll'
+import { useOptionsStore } from '../../stores/options'
+import { useVotesStore } from '../../stores/votes'
+import { usePreferencesStore } from '../../stores/preferences'
+import { useSessionStore } from '../../stores/session'
 
-import { User } from '../../Types/index.ts'
-
-import SortOptionIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
-import SortNameIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
+import type { User } from '../../Types'
+import type { Option } from '../../stores/options.types'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
 const preferencesStore = usePreferencesStore()
 const sessionStore = useSessionStore()
+const CalendarPeek = defineAsyncComponent(
+	() => import('../Calendar/CalendarPeek.vue'),
+)
 
 const { downPage = false } = defineProps<{ downPage: boolean }>()
 

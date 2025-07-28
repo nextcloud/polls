@@ -7,7 +7,7 @@
 import { onMounted } from 'vue'
 import { onBeforeRouteUpdate } from 'vue-router'
 
-import { useSharesStore } from '../../stores/shares.ts'
+import { useSharesStore } from '../../stores/shares'
 
 import SharesList from '../Shares/SharesListPollGroup.vue'
 import { t } from '@nextcloud/l10n'

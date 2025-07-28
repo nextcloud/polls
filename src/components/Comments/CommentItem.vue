@@ -5,18 +5,22 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import moment from '@nextcloud/moment'
+
 import linkifyStr from 'linkify-string'
-import { showError } from '@nextcloud/dialogs'
-import ActionDelete from '../Actions/modules/ActionDelete.vue'
 import { t } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
+import { showError } from '@nextcloud/dialogs'
+
+import ActionDelete from '../Actions/modules/ActionDelete.vue'
 import UserItem from '../User/UserItem.vue'
-import { useSessionStore } from '../../stores/session.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { useCommentsStore } from '../../stores/comments.ts'
-import { Comment, CommentsGrouped } from '../../Types/index.ts'
-import { usePreferencesStore } from '../../stores/preferences.ts'
 import UserBubble from '../User/UserBubble.vue'
+
+import { useSessionStore } from '../../stores/session'
+import { usePollStore } from '../../stores/poll'
+import { useCommentsStore } from '../../stores/comments'
+import { usePreferencesStore } from '../../stores/preferences'
+
+import type { Comment, CommentsGrouped } from '../../stores/comments.types'
 
 const sessionStore = useSessionStore()
 const pollStore = usePollStore()

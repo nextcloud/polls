@@ -4,61 +4,21 @@
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI, OptionsAPI } from '../Api/index.ts'
-import { User } from '../Types/index.ts'
-import { Logger } from '../helpers/index.ts'
 import orderBy from 'lodash/orderBy'
-import { usePollStore } from './poll.ts'
-import { useSessionStore } from './session.ts'
-import { Answer, useVotesStore } from './votes.ts'
-import { DateTimeUnitType, TimeUnitsType } from '../constants/dateUnits.ts'
-import { AxiosError } from '@nextcloud/axios'
 
-export type RankedType = 'yes' | 'no'
+import { PublicAPI, OptionsAPI } from '../Api'
+import { Logger } from '../helpers'
 
-export type Sequence = {
-	unit: DateTimeUnitType
-	stepWidth: number
-	repetitions: number
-}
+import { usePollStore } from './poll'
+import { useSessionStore } from './session'
+import { useVotesStore } from './votes'
 
-export type OptionVotes = {
-	yes: number
-	maybe: number
-	no: number
-	count: number
-	currentUser?: Answer
-}
-
-export type SimpleOption = {
-	text?: string
-	timestamp?: number
-	duration?: number
-}
-
-export type Option = {
-	id: number
-	pollId: number
-	text: string
-	timestamp: number
-	deleted: number
-	order: number
-	confirmed: number
-	duration: number
-	locked: boolean
-	hash: string
-	isOwner: boolean
-	votes: OptionVotes
-	owner: User | undefined
-}
-
-export type Options = {
-	options: Option[]
-	ranked: RankedType
-}
+import type { AxiosError } from '@nextcloud/axios'
+import type { TimeUnitsType } from '../constants/dateUnits'
+import type { Sequence, SimpleOption, Option, OptionsStore } from './options.types'
 
 export const useOptionsStore = defineStore('options', {
-	state: (): Options => ({
+	state: (): OptionsStore => ({
 		options: [],
 		ranked: 'no',
 	}),

@@ -4,70 +4,35 @@
  */
 
 import { defineStore } from 'pinia'
+import { RouteLocationNormalized } from 'vue-router'
+
 import { getCurrentUser } from '@nextcloud/auth'
-import { PublicAPI, SessionAPI } from '../Api/index.ts'
-import { createDefault, User, AppPermissions } from '../Types/index.ts'
-import { AppSettings, UpdateType } from './appSettings.ts'
-import { usePreferencesStore, ViewMode } from './preferences.ts'
-import { FilterType, usePollsStore } from './polls.ts'
-import { Share } from './shares.ts'
-import { RouteLocationNormalized, RouteRecordNameGeneric } from 'vue-router'
-import { Logger } from '../helpers/index.ts'
-import { PollType, usePollStore } from './poll.ts'
-import { useSubscriptionStore } from './subscription.ts'
-import { AxiosError } from '@nextcloud/axios'
 import { t } from '@nextcloud/l10n'
-import { usePollGroupsStore } from './pollGroups.ts'
 
-interface RouteParams {
-	id: number
-	token: string
-	type: FilterType
-	slug: string
-}
+import { Logger } from '../helpers'
+import { PublicAPI, SessionAPI } from '../Api'
 
-export type Route = {
-	currentRoute: string
-	name: RouteRecordNameGeneric
-	path: string
-	params: RouteParams
-}
+import { useSubscriptionStore } from './subscription'
+import { usePollGroupsStore } from './pollGroups'
+import { usePreferencesStore } from './preferences'
+import { usePollStore } from './poll'
+import { usePollsStore } from './polls'
 
-export type UserStatus = {
-	isLoggedin: boolean
-	isAdmin: boolean
-}
+import { createDefault } from '../Types'
 
-export type SessionSettings = {
-	viewModeDatePoll: '' | ViewMode
-	viewModeTextPoll: '' | ViewMode
-}
+import type { AxiosError } from '@nextcloud/axios'
+import type { ViewMode } from './preferences.types'
+import type { Share } from './shares.types'
+import type { PollType } from './poll.types'
+import type { FilterType } from './polls.types'
+import type { User } from '../Types'
 
-export type Watcher = {
-	id: string
-	mode: UpdateType
-	status: 'running' | 'stopped' | 'error' | 'stopping' | 'idle'
-	interval?: number
-	lastUpdate: number
-	lastMessage?: string
-}
-
-export type Session = {
-	appPermissions: AppPermissions
-	appSettings: AppSettings
-	currentUser: User
-	route: Route
-	sessionSettings: SessionSettings
-	share: Share
-	token: string | null
-	userStatus: UserStatus
-	watcher: Watcher
-}
+import type { SessionStore } from './session.types'
 
 const MOBILE_BREAKPOINT = 480
 
 export const useSessionStore = defineStore('session', {
-	state: (): Session => ({
+	state: (): SessionStore => ({
 		appPermissions: {
 			addShares: false,
 			addSharesExternal: false,

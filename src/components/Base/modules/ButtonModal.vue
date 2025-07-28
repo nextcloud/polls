@@ -9,8 +9,10 @@ import { t } from '@nextcloud/l10n'
 import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import NcModal from '@nextcloud/vue/components/NcModal'
 
-import { NcActionButton, NcAppNavigationNew } from '@nextcloud/vue'
-import { ButtonMode } from '../../../Types'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcAppNavigationNew from '@nextcloud/vue/components/NcAppNavigationNew'
+
+import type { ButtonMode } from '../../../Types'
 
 interface Props {
 	buttonVariant?: ButtonVariant

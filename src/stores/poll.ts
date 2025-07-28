@@ -14,31 +14,31 @@ import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 
-import { Logger } from '../helpers/index.ts'
-import { PublicAPI, PollsAPI } from '../Api/index.ts'
-import {
-	Chunking,
-	createDefault,
-	Event,
-	StatusResults,
-	User,
-	UserType,
-	ViewMode,
-} from '../Types/index.ts'
+import { Logger } from '../helpers'
+import { PublicAPI, PollsAPI } from '../Api'
+import { createDefault, Event } from '../Types'
 
-import { useVotesStore } from './votes.ts'
-import { useOptionsStore } from './options.ts'
-import { usePollsStore } from './polls.ts'
-import { useSessionStore } from './session.ts'
-import { useSubscriptionStore } from './subscription.ts'
-import { useSharesStore } from './shares.ts'
-import { useCommentsStore } from './comments.ts'
-import { AxiosError } from '@nextcloud/axios'
+import { useVotesStore } from './votes'
+import { useOptionsStore } from './options'
+import { usePollsStore } from './polls'
+import { useSessionStore } from './session'
+import { useSubscriptionStore } from './subscription'
+import { useSharesStore } from './shares'
+import { useCommentsStore } from './comments'
 
-export type PollType = 'textPoll' | 'datePoll'
+import type { AxiosError } from '@nextcloud/axios'
+import type { User } from '../Types'
+import type {
+	Poll,
+	PollType,
+	AllowProposals,
+	PollStore,
+	PollTypesType,
+} from './poll.types'
+import type { ViewMode } from './preferences.types'
 
-type PollTypesType = {
-	name: string
+const markedPrefix = {
+	prefix: 'desc-',
 }
 
 export const pollTypes: Record<PollType, PollTypesType> = {
@@ -50,112 +50,8 @@ export const pollTypes: Record<PollType, PollTypesType> = {
 	},
 }
 
-export type VoteVariant = 'simple'
-export type AccessType = 'private' | 'open'
-export type ShowResults = 'always' | 'closed' | 'never'
-export type AllowProposals = 'allow' | 'disallow' | 'review'
-export type SortParticipants = 'alphabetical' | 'voteCount' | 'unordered'
-
-type Meta = {
-	chunking: Chunking
-	status: StatusResults
-}
-
-export type PollConfiguration = {
-	access: AccessType
-	allowComment: boolean
-	allowMaybe: boolean
-	allowProposals: AllowProposals
-	anonymous: boolean
-	autoReminder: boolean
-	collapseDescription: boolean
-	description: string
-	expire: number
-	forceConfidentialComments: boolean
-	hideBookedUp: boolean
-	maxVotesPerOption: number
-	maxVotesPerUser: number
-	proposalsExpire: number
-	showResults: ShowResults
-	title: string
-	useNo: boolean
-}
-
-export type PollStatus = {
-	anonymizeLevel: string
-	lastInteraction: number
-	created: number
-	isAnonymous: boolean
-	isArchived: boolean
-	isExpired: boolean
-	isRealAnonymous: boolean
-	relevantThreshold: number
-	deletionDate: number
-	archivedDate: number
-	countParticipants: number
-}
-
-export type PollPermissions = {
-	addOptions: boolean
-	addShares: boolean
-	addSharesExternal: boolean
-	archive: boolean
-	changeForeignVotes: boolean
-	changeOwner: boolean
-	clone: boolean
-	comment: boolean
-	confirmOptions: boolean
-	deanonymize: boolean
-	delete: boolean
-	edit: boolean
-	reorderOptions: boolean
-	seeResults: boolean
-	seeUsernames: boolean
-	subscribe: boolean
-	takeOver: boolean
-	view: boolean
-	vote: boolean
-}
-
-export type CurrentUserStatus = {
-	groupInvitations: string[]
-	isInvolved: boolean
-	isLocked: boolean
-	isLoggedIn: boolean
-	isNoUser: boolean
-	isOwner: boolean
-	orphanedVotes: number
-	shareToken: string
-	userId: string
-	userRole: UserType
-	countVotes: number
-	yesVotes: number
-	noVotes: number
-	maybeVotes: number
-}
-
-export type Poll = {
-	id: number
-	type: PollType
-	voteVariant: VoteVariant
-	descriptionSafe: string
-	configuration: PollConfiguration
-	owner: User
-	pollGroups: number[]
-	status: PollStatus
-	currentUserStatus: CurrentUserStatus
-	permissions: PollPermissions
-	revealParticipants: boolean
-	sortParticipants: SortParticipants
-	meta: Meta
-}
-
-const markedPrefix = {
-	prefix: 'desc-',
-}
-
 export const usePollStore = defineStore('poll', {
-	state: (): Poll => ({
+	state: (): PollStore => ({
 		id: 0,
 		type: 'datePoll',
 		voteVariant: 'simple',

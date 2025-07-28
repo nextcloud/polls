@@ -16,8 +16,9 @@ import { ButtonMode } from '../../../Types'
 import PollCreateDlg from '../../Create/PollCreateDlg.vue'
 
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import { NcDialog } from '@nextcloud/vue'
-import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
+
+import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 interface Props {
 	caption?: string

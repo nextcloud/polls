@@ -10,11 +10,11 @@ import { t } from '@nextcloud/l10n'
 
 import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
 import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
-import { Event } from '../Types/index.ts'
+import { Event } from '../Types'
 
 import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 
-import { SideBarTabPollGroupShare } from '../components/SideBar/index.js'
+import SideBarTabPollGroup from '../components/SideBar/SideBarTabSharePollGroup.vue'
 import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
 import SideBarTabConfigurationPollGroup from '../components/SideBar/SideBarTabConfigurationPollGroup.vue'
 
@@ -60,7 +60,7 @@ function closeSideBar() {
 			<template #icon>
 				<SidebarShareIcon />
 			</template>
-			<SideBarTabPollGroupShare />
+			<SideBarTabPollGroup />
 		</NcAppSidebarTab>
 	</NcAppSidebar>
 </template>

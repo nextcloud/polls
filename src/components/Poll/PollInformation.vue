@@ -26,15 +26,15 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import EmailIcon from 'vue-material-design-icons/Email.vue'
 
-import { MaybeIcon } from '../AppIcons/index.ts'
+import MaybeIcon from '../AppIcons/MaybeIcon.vue'
 
 import BadgeDiv from '../Base/modules/BadgeDiv.vue'
 import UserBubble from '../User/UserBubble.vue'
-import { useSessionStore } from '../../stores/session.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSubscriptionStore } from '../../stores/subscription.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-import { useVotesStore } from '../../stores/votes.ts'
+import { useSessionStore } from '../../stores/session'
+import { usePollStore } from '../../stores/poll'
+import { useSubscriptionStore } from '../../stores/subscription'
+import { useOptionsStore } from '../../stores/options'
+import { useVotesStore } from '../../stores/votes'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()

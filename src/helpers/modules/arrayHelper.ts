@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Option, Vote, Participant } from '../../Types'
+import { Participant } from '../../Types'
+
+import type { Vote } from '../../stores/votes.types'
+import type { Option } from '../../stores/options.types'
 
 const uniqueArrayOfObjects = (array: unknown[]) =>
 	[...new Set(array.map((obj) => JSON.stringify(obj)))].map((string) =>

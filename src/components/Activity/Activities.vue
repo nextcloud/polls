@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import ActivityItem from './ActivityItem.vue'
-import { useActivityStore } from '../../stores/activity.ts'
+import { useActivityStore } from '../../stores/activity'
 
 const activityStore = useActivityStore()
 </script>

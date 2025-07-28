@@ -11,9 +11,9 @@ import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
 
 import UserItem from '../User/UserItem.vue'
-
-import { Share } from '../../stores/shares.ts'
 import ShareMenu from './ShareMenu.vue'
+
+import type { Share } from '../../stores/shares.types'
 
 const emit = defineEmits(['showQrCode'])
 

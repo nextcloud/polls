@@ -2,9 +2,10 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { AxiosResponse } from '@nextcloud/axios'
-import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
-import { Session } from '../../stores/session.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi'
+
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { Session } from '../../stores/session.types'
 
 const session = {
 	getSession(): Promise<AxiosResponse<Session>> {

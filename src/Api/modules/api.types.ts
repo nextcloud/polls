@@ -3,7 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Comment, Option, Poll, Share, Vote } from '../../Types'
+import type { Option } from '../../stores/options.types'
+import type { Vote } from '../../stores/votes.types'
+import type { Poll } from '../../stores/poll.types'
+import type { Comment } from '../../stores/comments.types'
+import type { Share } from '../../stores/shares.types'
+
+export type ApiEmailAdressList = {
+	displayName: string
+	emailAddress: string
+	combined: string
+}
 
 export type FullPollResponse = {
 	poll: Poll

@@ -4,12 +4,12 @@
 -->
 
 <script setup>
-import { Logger } from '../../../helpers/index.ts'
+import { Logger } from '../../../helpers/modules/logger'
 import { t } from '@nextcloud/l10n'
 
 import NcButton from '@nextcloud/vue/components/NcButton'
 
-import { AdminAPI } from '../../../Api/index.ts'
+import { AdminAPI } from '../../../Api'
 
 const autoreminder = {
 	text: t('polls', 'Run autoreminder'),

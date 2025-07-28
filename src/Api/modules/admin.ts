@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi'
 
 const adminJobs = {
 	runAutoReminder() {

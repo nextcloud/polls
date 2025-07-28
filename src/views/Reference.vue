@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
-import { PollsAppIcon } from '../components/AppIcons'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
 import BadgeSmallDiv from '../components/Base/modules/BadgeSmallDiv.vue'
 import { t } from '@nextcloud/l10n'

@@ -4,21 +4,28 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue'
-import { debounce } from 'lodash'
+import {
+	ref,
+	computed,
+	defineAsyncComponent,
+	onMounted,
+	onUnmounted,
+	watchEffect,
+} from 'vue'
+import debounce from 'lodash/debounce'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 import NcContent from '@nextcloud/vue/components/NcContent'
 
-import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
+// import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 
 import { usePollWatcher } from './composables/usePollWatcher'
 
-import { useSessionStore } from './stores/session.ts'
-import { usePollStore } from './stores/poll.ts'
-import { usePollGroupsStore } from './stores/pollGroups.ts'
+import { useSessionStore } from './stores/session'
+import { usePollStore } from './stores/poll'
+import { usePollGroupsStore } from './stores/pollGroups'
 import { showSuccess } from '@nextcloud/dialogs'
-import { Event } from './Types/index.ts'
+import { Event } from './Types'
 
 import '@nextcloud/dialogs/style.css'
 import './assets/scss/vars.scss'
@@ -42,6 +49,10 @@ const appClass = computed(() => [
 		edit: pollStore.permissions.edit,
 	},
 ])
+
+const UserSettingsDlg = defineAsyncComponent(
+	() => import('./components/Settings/UserSettingsDlg.vue'),
+)
 
 const useNavigation = computed(() => sessionStore.userStatus.isLoggedin)
 const useSidebar = computed(

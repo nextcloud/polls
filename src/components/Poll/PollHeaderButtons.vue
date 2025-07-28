@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount } from 'vue'
+import { computed, defineAsyncComponent, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { t } from '@nextcloud/l10n'
 
@@ -16,14 +16,16 @@ import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vu
 import ActionToggleSidebar from '../Actions/modules/ActionToggleSidebar.vue'
 import PollInformation from '../Poll/PollInformation.vue'
 import UserMenu from '../User/UserMenu.vue'
-import ExportPoll from '../Export/ExportPoll.vue'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
+
+import { usePollStore } from '../../stores/poll'
+import { useSessionStore } from '../../stores/session'
 
 const route = useRoute()
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 const caption = t('polls', 'Poll information')
+
+const ExportPoll = defineAsyncComponent(() => import('../Export/ExportPoll.vue'))
 
 const showUserMenu = computed(
 	() =>

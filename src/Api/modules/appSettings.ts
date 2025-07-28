@@ -2,13 +2,14 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { AxiosResponse } from '@nextcloud/axios'
-import { AppSettings, Group } from '../../stores/appSettings.js'
-import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
-import { ISearchType, User } from '../../Types/index.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi'
+import { ISearchType, User } from '../../Types'
+
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { AppSettingsStore, Group } from '../../stores/appSettings.types'
 
 const appSettings = {
-	getAppSettings(): Promise<AxiosResponse<{ appSettings: AppSettings }>> {
+	getAppSettings(): Promise<AxiosResponse<{ appSettings: AppSettingsStore }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: 'settings/app',
@@ -21,8 +22,8 @@ const appSettings = {
 	},
 
 	writeAppSettings(
-		appSettings: AppSettings,
-	): Promise<AxiosResponse<{ appSettings: AppSettings }>> {
+		appSettings: AppSettingsStore,
+	): Promise<AxiosResponse<{ appSettings: AppSettingsStore }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'settings/app',

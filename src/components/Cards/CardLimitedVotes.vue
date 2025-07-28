@@ -5,11 +5,11 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import CardDiv from '../../Base/modules/CardDiv.vue'
-import ActionDeleteOrphanedVotes from '../../Actions/modules/ActionDeleteOrphanedVotes.vue'
+import CardDiv from '../Base/modules/CardDiv.vue'
+import ActionDeleteOrphanedVotes from '../Actions/modules/ActionDeleteOrphanedVotes.vue'
 import { t, n } from '@nextcloud/l10n'
-import { usePollStore } from '../../../stores/poll.ts'
-import { useOptionsStore } from '../../../stores/options.ts'
+import { usePollStore } from '../../stores/poll'
+import { useOptionsStore } from '../../stores/options'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()

@@ -4,9 +4,9 @@
  */
 
 import { RouteLocationNormalized } from 'vue-router'
-import { useSessionStore } from '../stores/session.ts'
-import { usePreferencesStore } from '../stores/preferences.ts'
-import { Logger } from '../helpers/index.ts'
+import { useSessionStore } from '../stores/session'
+import { usePreferencesStore } from '../stores/preferences'
+import { Logger } from '../helpers'
 import { Settings } from 'luxon'
 
 /**

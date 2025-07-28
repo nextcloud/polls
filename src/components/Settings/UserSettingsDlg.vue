@@ -10,13 +10,12 @@ import { t } from '@nextcloud/l10n'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 
-import {
-	CalendarSettings,
-	FeatureSettings,
-	StyleSettings,
-} from './UserSettings/index.ts'
-import { usePreferencesStore } from '../../stores/preferences.ts'
-import { Event } from '../../Types/index.ts'
+import CalendarSettings from './UserSettings/CalendarSettings.vue'
+import FeatureSettings from './UserSettings/FeatureSettings.vue'
+import StyleSettings from './UserSettings/StyleSettings.vue'
+
+import { usePreferencesStore } from '../../stores/preferences'
+import { Event } from '../../Types'
 
 const preferencesStore = usePreferencesStore()
 const show = ref(false)

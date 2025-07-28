@@ -15,7 +15,7 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 
 import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
 
-import { useOptionsStore } from '../../stores/options.ts'
+import { useOptionsStore } from '../../stores/options'
 
 interface Props {
 	placeholder?: string

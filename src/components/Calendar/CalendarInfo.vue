@@ -6,8 +6,9 @@
 <script setup lang="ts">
 import moment from '@nextcloud/moment'
 import { computed } from 'vue'
-import { Option } from '../../Types/index.ts'
 import { CalendarEvent } from '../../components/Calendar/CalendarPeek.vue'
+
+import type { Option } from '../../stores/options.types'
 
 interface Props {
 	calendarEvent: CalendarEvent

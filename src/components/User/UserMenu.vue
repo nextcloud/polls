@@ -6,13 +6,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActionButtonGroup from '@nextcloud/vue/components/NcActionButtonGroup'
 import NcActionCheckbox from '@nextcloud/vue/components/NcActionCheckbox'
 import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
@@ -31,18 +32,19 @@ import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBullete
 import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
 import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 
-import { PollsAPI, ValidatorAPI } from '../../Api/index.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { useSubscriptionStore } from '../../stores/subscription.ts'
-import { useVotesStore } from '../../stores/votes.ts'
+import { PollsAPI, ValidatorAPI } from '../../Api'
+import { useOptionsStore } from '../../stores/options'
+import { usePollStore } from '../../stores/poll'
+import { useSessionStore } from '../../stores/session'
+import { useSubscriptionStore } from '../../stores/subscription'
+import { useVotesStore } from '../../stores/votes'
 
-import { StatusResults, Event, ViewMode } from '../../Types/index.ts'
+import { deleteCookieByValue, findCookieByValue } from '../../helpers'
 
-import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
-import { NcActionButtonGroup } from '@nextcloud/vue'
-import { AxiosError } from '@nextcloud/axios'
+import { Event } from '../../Types'
+import type { StatusResults } from '../../Types'
+import type { ViewMode } from '../../stores/preferences.types'
+import type { AxiosError } from '@nextcloud/axios'
 
 type InputProps = {
 	success: boolean

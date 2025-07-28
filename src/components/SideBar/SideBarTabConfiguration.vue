@@ -30,8 +30,8 @@ import ConfigTitle from '../Configuration/ConfigTitle.vue'
 import ConfigUseNo from '../Configuration/ConfigUseNo.vue'
 import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useVotesStore } from '../../stores/votes.ts'
+import { usePollStore } from '../../stores/poll'
+import { useVotesStore } from '../../stores/votes'
 import ConfigDangerArea from '../Configuration/ConfigDangerArea.vue'
 import ConfigForceConfidentialComments from '../Configuration/ConfigForceConfidentialComments.vue'
 

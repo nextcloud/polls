@@ -22,7 +22,7 @@ import DeletedUserIcon from 'vue-material-design-icons/AccountOff.vue'
 import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
 import PollGroupIcon from 'vue-material-design-icons/CodeBraces.vue'
 
-import { User, UserType, VirtualUserItemType } from '../../Types/index.ts'
+import { User, UserType, VirtualUserItemType } from '../../Types'
 
 defineOptions({
 	inheritAttrs: true,

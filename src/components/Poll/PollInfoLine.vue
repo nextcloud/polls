@@ -8,8 +8,8 @@ import { computed } from 'vue'
 import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useSharesStore } from '../../stores/shares.ts'
+import { usePollStore } from '../../stores/poll'
+import { useSharesStore } from '../../stores/shares'
 
 import unpublishedIcon from 'vue-material-design-icons/PublishOff.vue'
 import archivedPollIcon from 'vue-material-design-icons/Archive.vue'

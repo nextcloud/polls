@@ -8,8 +8,8 @@ import { onMounted, onUnmounted } from 'vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
-import { useOptionsStore } from '../../stores/options.ts'
-import { usePollStore } from '../../stores/poll.ts'
+import { useOptionsStore } from '../../stores/options'
+import { usePollStore } from '../../stores/poll'
 
 import ConfigBox from '../Base/modules/ConfigBox.vue'
 import OptionsDate from '../Options/OptionsDate.vue'
@@ -22,7 +22,7 @@ import ShiftDateIcon from 'vue-material-design-icons/CalendarStart.vue'
 import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
 import ActionAddOption from '../Actions/modules/ActionAddOption.vue'
-import { Event } from '../../Types/index.ts'
+import { Event } from '../../Types'
 
 const optionsStore = useOptionsStore()
 const pollStore = usePollStore()

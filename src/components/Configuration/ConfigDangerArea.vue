@@ -5,12 +5,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { router } from '../../router.ts'
+import { router } from '../../router'
 import { t } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
-import { usePollStore } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll'
 
 import DeletePollDialog from '../Modals/DeletePollDialog.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'

@@ -3,16 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineStore } from 'pinia'
-import { PublicAPI, PollsAPI } from '../Api/index.ts'
-import { Logger } from '../helpers/index.ts'
-import { useSessionStore } from './session.ts'
 import { ref } from 'vue'
-import { AxiosError } from '@nextcloud/axios'
+import { defineStore } from 'pinia'
 
-export type Subscription = {
-	subscribed: boolean
-}
+import { PublicAPI, PollsAPI } from '../Api'
+import { Logger } from '../helpers'
+
+import { useSessionStore } from './session'
+
+import type { AxiosError } from '@nextcloud/axios'
 
 export const useSubscriptionStore = defineStore('subscription', () => {
 	const subscribed = ref(false)

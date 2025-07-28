@@ -2,9 +2,10 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { AxiosResponse } from '@nextcloud/axios'
-import { UserPreferences } from '../../stores/preferences.js'
-import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi'
+
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { UserPreferences } from '../../stores/preferences.types'
 
 const userSettings = {
 	getUserSettings(): Promise<AxiosResponse<{ preferences: UserPreferences }>> {

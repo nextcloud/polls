@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Comment } from '../../Types'
+import { Comment } from '../../stores/comments.types'
 
 function groupComments(inputArray: Comment[]) {
 	const idToElement: { [key: number]: Comment } = inputArray.reduce(

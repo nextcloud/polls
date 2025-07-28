@@ -5,19 +5,18 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import {
-	CardAddProposals,
-	CardClosedPoll,
-	CardLimitedVotes,
-	CardLocked,
-	CardRegister,
-	CardSendConfirmations,
-	CardUnpublishedPoll,
-} from './index.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-import { useSharesStore } from '../../stores/shares.ts'
-import { useSessionStore } from '../../stores/session.ts'
+import CardAddProposals from './CardAddProposals.vue'
+import CardClosedPoll from './CardClosedPoll.vue'
+import CardLimitedVotes from './CardLimitedVotes.vue'
+import CardLocked from './CardLocked.vue'
+import CardRegister from './CardRegister.vue'
+import CardSendConfirmations from './CardSendConfirmations.vue'
+import CardUnpublishedPoll from './CardUnpublishedPoll.vue'
+
+import { usePollStore } from '../../stores/poll'
+import { useOptionsStore } from '../../stores/options'
+import { useSharesStore } from '../../stores/shares'
+import { useSessionStore } from '../../stores/session'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()

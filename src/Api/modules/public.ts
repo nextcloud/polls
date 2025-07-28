@@ -2,20 +2,22 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { AxiosResponse } from '@nextcloud/axios'
-import { Option, Sequence, SimpleOption } from '../../stores/options.js'
-import { Session } from '../../stores/session.js'
-import { Answer, Vote } from '../../stores/votes.js'
-import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
-import { Comment } from '../../stores/comments.js'
-import { Share } from '../../stores/shares.js'
-import { SentResults } from './shares.js'
-import {
+import { httpInstance, createCancelTokenHandler } from './HttpApi'
+
+import type { SentResults } from './shares'
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { Session } from '../../stores/session.types'
+import type { Comment } from '../../stores/comments.types'
+import type { Share } from '../../stores/shares.types'
+import type { Option, Sequence, SimpleOption } from '../../stores/options.types'
+import type { Answer, Vote } from '../../stores/votes.types'
+
+import type {
 	AddOptionResponse,
 	FullPollResponse,
 	RemoveVotesResponse,
 	setVoteResponse,
-} from './api.types.js'
+} from './api.types'
 
 const publicPoll = {
 	getPoll(shareToken: string): Promise<AxiosResponse<FullPollResponse>> {

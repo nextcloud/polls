@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { ocsInstance, createCancelTokenHandler } from './HttpApi.js'
+import { ocsInstance, createCancelTokenHandler } from './HttpApi'
 
 const activity = {
 	getActivities(pollId: number) {

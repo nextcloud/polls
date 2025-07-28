@@ -6,11 +6,12 @@
 <script setup lang="ts">
 import linkifyStr from 'linkify-string'
 import DragIcon from 'vue-material-design-icons/DotsVertical.vue'
-import { Option } from '../../Types/index.ts'
 import DateBox from '../Base/modules/DateBox.vue'
-import { usePollStore } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll'
 import OptionItemOwner from './OptionItemOwner.vue'
 import { DateTime, Duration } from 'luxon'
+
+import type { Option } from '../../stores/options.types'
 
 interface Props {
 	option: Option

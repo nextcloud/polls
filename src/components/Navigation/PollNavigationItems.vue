@@ -16,8 +16,9 @@ import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 
-import { useSessionStore } from '../../stores/session.ts'
-import { Poll } from '../../Types/index.ts'
+import { useSessionStore } from '../../stores/session'
+
+import type { Poll } from '../../stores/poll.types'
 
 const emit = defineEmits(['clonePoll', 'toggleArchive', 'deletePoll'])
 const { poll } = defineProps<{ poll: Poll }>()

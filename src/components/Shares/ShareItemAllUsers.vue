@@ -10,8 +10,8 @@ import { t } from '@nextcloud/l10n'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 import UserItem from '../User/UserItem.vue'
-import { usePollStore } from '../../stores/poll.ts'
-import { VirtualUserItemType } from '../../Types/index.ts'
+import { usePollStore } from '../../stores/poll'
+import { VirtualUserItemType } from '../../Types'
 
 const pollStore = usePollStore()
 

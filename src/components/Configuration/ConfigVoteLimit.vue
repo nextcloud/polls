@@ -11,8 +11,8 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 
 import InputDiv from '../Base/modules/InputDiv.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll'
+import { useOptionsStore } from '../../stores/options'
 
 const emit = defineEmits(['change'])
 

@@ -8,9 +8,11 @@ import { computed } from 'vue'
 import ActionDelete from '../Actions/modules/ActionDelete.vue'
 import UserItem from '../User/UserItem.vue'
 import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { useOptionsStore, Option } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll'
+import { useSessionStore } from '../../stores/session'
+import { useOptionsStore } from '../../stores/options'
+
+import type { Option } from '../../stores/options.types'
 
 interface Props {
 	option: Option

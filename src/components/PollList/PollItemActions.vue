@@ -5,23 +5,17 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { router } from '../../router.ts'
+import { router } from '../../router'
+import { useRoute } from 'vue-router'
 
-import { NcActionInput, NcDialog } from '@nextcloud/vue'
-import { showError, showInfo } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
+import { showError, showInfo } from '@nextcloud/dialogs'
+
+import NcDialog from '@nextcloud/vue/components/NcDialog'
+import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
-
-import { usePollsStore } from '../../stores/polls.ts'
-import { usePollGroupsStore } from '../../stores/pollGroups.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { Poll } from '../../stores/poll.ts'
-
-import DeletePollDialog from '../Modals/DeletePollDialog.vue'
-import TransferPollDialog from '../Modals/TransferPollDialog.vue'
 
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
@@ -31,7 +25,16 @@ import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue'
-import { useRoute } from 'vue-router'
+
+import DeletePollDialog from '../Modals/DeletePollDialog.vue'
+import TransferPollDialog from '../Modals/TransferPollDialog.vue'
+
+import { usePollsStore } from '../../stores/polls'
+import { usePollGroupsStore } from '../../stores/pollGroups'
+import { useSessionStore } from '../../stores/session'
+
+import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import type { Poll } from '../../stores/poll.types'
 
 const { poll } = defineProps<{ poll: Poll }>()
 

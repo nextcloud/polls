@@ -12,11 +12,11 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import AlertIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
-import { Spinner } from '../../AppIcons/index.ts'
-import { Logger } from '../../../helpers/index.ts'
+import Spinner from '../../AppIcons/Spinner.vue'
+import { Logger } from '../../../helpers'
 
-import { SignalingType } from '../../../Types/index.ts'
-import { NcButton } from '@nextcloud/vue'
+import { SignalingType } from '../../../Types'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
 import { t } from '@nextcloud/l10n'
 

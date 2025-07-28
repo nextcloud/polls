@@ -6,6 +6,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { t } from '@nextcloud/l10n'
+import { showError } from '@nextcloud/dialogs'
 
 import NcModal from '@nextcloud/vue/components/NcModal'
 
@@ -19,11 +20,12 @@ import SharePublicAdd from './SharePublicAdd.vue'
 import ShareItemAllUsers from './ShareItemAllUsers.vue'
 import MarkDownDescription from '../Poll/MarkDownDescription.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useSharesStore, Share } from '../../stores/shares.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { showError } from '@nextcloud/dialogs'
-import { User } from '../../Types/index.ts'
+import { usePollStore } from '../../stores/poll'
+import { useSharesStore } from '../../stores/shares'
+import { useSessionStore } from '../../stores/session'
+
+import type { User } from '../../Types'
+import type { Share } from '../../stores/shares.types'
 
 const pollStore = usePollStore()
 const sharesStore = useSharesStore()

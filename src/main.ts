@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { createApp } from 'vue'
-import { pinia } from './stores/index.ts'
-import { router } from './router.ts'
+import { pinia } from './stores'
+import { router } from './router'
 
 import App from './App.vue'
 

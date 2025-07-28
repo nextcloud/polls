@@ -5,12 +5,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
 import InputDiv from '../Base/modules/InputDiv.vue'
-import { SimpleOption, useOptionsStore } from '../../stores/options.ts'
-import { AxiosError } from '@nextcloud/axios'
+
+import { useOptionsStore } from '../../stores/options'
+
+import type { SimpleOption } from '../../stores/options.types'
+import type { AxiosError } from '@nextcloud/axios'
 
 const optionsStore = useOptionsStore()
 

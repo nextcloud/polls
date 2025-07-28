@@ -4,20 +4,24 @@
 -->
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
-import UserItem from '../User/UserItem.vue'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { useVotesStore } from '../../stores/votes.ts'
-
-import { NcActionButton, NcActions, NcActionText } from '@nextcloud/vue'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActionText from '@nextcloud/vue/components/NcActionText'
 
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+
 import VoteMenu from './VoteMenu.vue'
-import { User } from '../../Types/index.ts'
-import { computed } from 'vue'
+import UserItem from '../User/UserItem.vue'
+
+import { usePollStore } from '../../stores/poll'
+import { useSessionStore } from '../../stores/session'
+import { useVotesStore } from '../../stores/votes'
+
+import type { User } from '../../Types'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()

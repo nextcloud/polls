@@ -5,8 +5,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import CardDiv from '../../Base/modules/CardDiv.vue'
-import ActionSendConfirmed from '../../Actions/modules/ActionSendConfirmed.vue'
+import CardDiv from '../Base/modules/CardDiv.vue'
+import ActionSendConfirmed from '../Actions/modules/ActionSendConfirmed.vue'
 import { t } from '@nextcloud/l10n'
 
 const emit = defineEmits(['sendConfirmationSuccess', 'sendConfirmationError'])
