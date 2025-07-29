@@ -263,6 +263,7 @@ OC.L10N.register(
     "minus" : "減",
     "plus" : "加",
     "Please wait…" : "請稍候…",
+    "Possibly affected calendar events" : "可能影響的日曆事件",
     "Add" : "新增",
     "You are asked to propose more options." : "請您提出更多選項。",
     "The proposal period ends {timeRelative}." : "提案期結束於 {timeRelative}。",
