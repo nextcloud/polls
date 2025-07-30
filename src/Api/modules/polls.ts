@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { Poll, PollConfiguration, PollType } from '../../stores/poll.ts'
+import { Poll, PollConfiguration, PollType, VotingVariant } from '../../stores/poll.ts'
 import { AxiosResponse } from '@nextcloud/axios'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 import { Option } from '../../stores/options.ts'
@@ -98,13 +98,14 @@ const polls = {
 		})
 	},
 
-	addPoll(type: PollType, title: string): Promise<AxiosResponse<{ poll: Poll }>> {
+	addPoll(type: PollType, title: string, votingVariant: VotingVariant): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'poll/add',
 			data: {
 				type,
 				title,
+				votingVariant,
 			},
 			cancelToken:
 				cancelTokenHandlerObject[

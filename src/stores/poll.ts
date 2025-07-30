@@ -47,10 +47,23 @@ export const pollTypes: Record<PollType, PollTypesType> = {
 	},
 	datePoll: {
 		name: t('polls', 'Date poll'),
-	},
+	}
 }
 
-export type VoteVariant = 'simple'
+export type VotingVariant = 'simple' | 'generic'
+
+type VotingVariantsType = {
+	name : string
+}
+
+export const votingVariants: Record<VotingVariant, VotingVariantsType> = {
+	simple: {
+		name: t('polls', 'Simple variant'),
+	},
+	generic: {
+		name: t('polls', 'Generic variant'),
+	}
+}
 export type AccessType = 'private' | 'open'
 export type ShowResults = 'always' | 'closed' | 'never'
 export type AllowProposals = 'allow' | 'disallow' | 'review'
@@ -65,6 +78,7 @@ export type PollConfiguration = {
 	access: AccessType
 	allowComment: boolean
 	allowMaybe: boolean
+	chosenRank: string
 	allowProposals: AllowProposals
 	anonymous: boolean
 	autoReminder: boolean
@@ -137,7 +151,7 @@ export type CurrentUserStatus = {
 export type Poll = {
 	id: number
 	type: PollType
-	voteVariant: VoteVariant
+	votingVariant: VotingVariant
 	descriptionSafe: string
 	configuration: PollConfiguration
 	owner: User
@@ -154,11 +168,13 @@ const markedPrefix = {
 	prefix: 'desc-',
 }
 
+const DEFAULT_CHOSEN_RANK = [] ;
+
 export const usePollStore = defineStore('poll', {
 	state: (): Poll => ({
 		id: 0,
 		type: 'datePoll',
-		voteVariant: 'simple',
+		votingVariant: 'simple',
 		descriptionSafe: '',
 		configuration: {
 			title: '',
@@ -166,6 +182,7 @@ export const usePollStore = defineStore('poll', {
 			access: 'private',
 			allowComment: false,
 			allowMaybe: false,
+			chosenRank: JSON.stringify(DEFAULT_CHOSEN_RANK),
 			allowProposals: 'disallow',
 			anonymous: false,
 			autoReminder: false,
@@ -243,6 +260,16 @@ export const usePollStore = defineStore('poll', {
 	}),
 
 	getters: {
+
+		getChosenRank(): string[] {
+			try {
+	 			const parsed = JSON.parse(this.configuration.chosenRank || '[]')
+	    		return Array.isArray(parsed) ? parsed : []
+	  		} catch {
+	      		return DEFAULT_CHOSEN_RANK;
+	    	}
+		},
+
 		viewMode(state): ViewMode {
 			const preferencesStore = usePreferencesStore()
 			if (state.type === 'textPoll') {
@@ -352,6 +379,15 @@ export const usePollStore = defineStore('poll', {
 	},
 
 	actions: {
+
+		setChosenRank(ranks: string[]) {
+			const validItems = Array.isArray(ranks) 
+			? ranks.map(item => String(item).trim()) // Correction ici
+			.filter(item => item !== '')       // Filtre les chaînes vides
+			: [];
+			this.configuration.chosenRank = JSON.stringify(validItems.sort());
+		},
+		
 		reset(): void {
 			this.$reset()
 		},
@@ -426,11 +462,11 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 
-		async add(payload: { type: PollType; title: string }): Promise<Poll | void> {
+		async add(payload: { type: PollType; title: string; votingVariant: VotingVariant }): Promise<Poll | void> {
 			const pollsStore = usePollsStore()
 
 			try {
-				const response = await PollsAPI.addPoll(payload.type, payload.title)
+				const response = await PollsAPI.addPoll(payload.type, payload.title, payload.votingVariant)
 				return response.data.poll
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {

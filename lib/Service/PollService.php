@@ -27,6 +27,7 @@ use OCA\Polls\Exceptions\InvalidAccessException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\InvalidShowResultsException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
+use OCA\Polls\Exceptions\InvalidVotingVariantException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\UserNotFoundException;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -198,10 +199,15 @@ class PollService {
 			throw new ForbiddenException('Poll creation is disabled');
 		}
 
-		// Validate valuess
+		// Validate values
 		if (!in_array($type, $this->getValidPollType())) {
 			throw new InvalidPollTypeException('Invalid poll type');
 		}
+
+		if (!in_array($votingVariant, $this->getValidVotingVariant())) {
+			throw new InvalidVotingVariantException('Invalid voting variant');
+		}
+
 
 		if (!$title) {
 			throw new EmptyTitleException('Title must not be empty');
@@ -226,6 +232,7 @@ class PollService {
 		$this->poll->setExpire(0);
 		$this->poll->setAnonymousSafe(0);
 		$this->poll->setAllowMaybe(0);
+		$this->poll->setChosenRank('');
 		$this->poll->setVoteLimit(0);
 		$this->poll->setShowResults(Poll::SHOW_RESULTS_ALWAYS);
 		$this->poll->setDeleted(0);
@@ -418,6 +425,7 @@ class PollService {
 		// deanonymize cloned polls by default, to avoid locked anonymous polls
 		$this->poll->setAnonymous(0);
 		$this->poll->setAllowMaybe($origin->getAllowMaybe());
+		$this->poll->setChosenRank($origin->getChosenRank());
 		$this->poll->setVoteLimit($origin->getVoteLimit());
 		$this->poll->setShowResults($origin->getShowResults());
 		$this->poll->setAdminAccess($origin->getAdminAccess());
@@ -472,6 +480,17 @@ class PollService {
 	 */
 	private function getValidPollType(): array {
 		return [Poll::TYPE_DATE, Poll::TYPE_TEXT];
+	}
+
+	/**
+	 * Get valid values for votingVariant
+	 *
+	 * @return string[]
+	 *
+	 * @psalm-return array{0: string, 1: string}
+	 */
+	private function getValidVotingVariant(): array {
+		return [Poll::VARIANT_SIMPLE, Poll::VARIANT_GENERIC];
 	}
 
 	/**

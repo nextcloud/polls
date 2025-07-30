@@ -139,7 +139,7 @@ export const useVotesStore = defineStore('votes', {
 
 			// sort participants by votes for the selected option if sortByOption is set
 			// TODO: Future usage: This is only valid for simple votes (not ranked)
-			if (state.sortByOption > 0 && pollStore.voteVariant === 'simple') {
+			if (state.sortByOption > 0 && pollStore.votingVariant === 'simple') {
 				participants.sort((aUser, bUser) => {
 					// find the votes for the selected option and the users to compare
 					const aAnswer =
