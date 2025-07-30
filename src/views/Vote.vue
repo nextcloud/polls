@@ -206,6 +206,7 @@ onUnmounted(() => {
 				v-bind="emptyContentProps">
 				<template #icon>
 					<TextPollIcon v-if="pollStore.type === 'textPoll'" />
+					<TextPollIcon v-else-if="pollStore.type === 'genericPoll'" />
 					<DatePollIcon v-else />
 				</template>
 

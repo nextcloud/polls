@@ -226,6 +226,7 @@ class PollService {
 		$this->poll->setExpire(0);
 		$this->poll->setAnonymousSafe(0);
 		$this->poll->setAllowMaybe(0);
+		$this->poll->setChosenRank('');
 		$this->poll->setVoteLimit(0);
 		$this->poll->setShowResults(Poll::SHOW_RESULTS_ALWAYS);
 		$this->poll->setDeleted(0);
@@ -418,6 +419,7 @@ class PollService {
 		// deanonymize cloned polls by default, to avoid locked anonymous polls
 		$this->poll->setAnonymous(0);
 		$this->poll->setAllowMaybe($origin->getAllowMaybe());
+		$this->poll->setChosenRank($origin->getChosenRank());
 		$this->poll->setVoteLimit($origin->getVoteLimit());
 		$this->poll->setShowResults($origin->getShowResults());
 		$this->poll->setAdminAccess($origin->getAdminAccess());
@@ -471,7 +473,7 @@ class PollService {
 	 * @psalm-return array{0: string, 1: string}
 	 */
 	private function getValidPollType(): array {
-		return [Poll::TYPE_DATE, Poll::TYPE_TEXT];
+		return [Poll::TYPE_DATE, Poll::TYPE_TEXT, poll::TYPE_GENERIC];
 	}
 
 	/**

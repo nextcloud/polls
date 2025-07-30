@@ -66,9 +66,26 @@ const nextAnswer = computed(() => {
 
 const isValidUser = computed(() => user.id !== '' && user.id !== null)
 
-/**
- *
- */
+async function handleRankSelected(rank){
+		 if (isVotable.value) {
+    			try {
+      		await votesStore.set({
+        		option,
+        		setTo: String(rank),
+      		});
+	      showSuccess(t('polls', 'Vote saved'), { timeout: 2000 });
+    } catch (error) {
+      if ((error as AxiosError).status === 409) {
+        showError(t('polls', 'Vote already booked out'));
+      } else {
+        showError(t('polls', 'Error saving vote'));
+      }
+    }
+  } else {
+    showError(t('polls', 'Error saving vote'));
+  }
+}
+
 async function setVote() {
 	if (isVotable.value) {
 		try {

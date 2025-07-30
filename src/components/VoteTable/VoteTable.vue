@@ -143,8 +143,10 @@ const showCalendarPeek = computed(
 	overflow: scroll;
 
 	.vote-cell {
-		padding: 0.4rem;
-		display: flex;
+		  display: grid;
+  		place-items: center;    /* Centre tout le contenu */
+  		grid-template-columns: 1fr;
+  		width: 100%;
 	}
 
 	.participant {
@@ -282,6 +284,39 @@ const showCalendarPeek = computed(
 			grid-column: 2;
 			flex-direction: column;
 		}
+		.vote-cell-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+}
+
+.vote-select {
+  width: 100%;
+  max-width: 120px;
+  min-width: 80px;
+  margin: 0 auto;
+  padding: 8px 12px;
+  text-align: center;
+  text-align-last: center; /* Centrage pour Firefox */
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-main-background);
+  cursor: pointer;
+  appearance: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-primary-light);
+  }
+}
 
 		.vote-cell {
 			grid-column: 3;

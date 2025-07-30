@@ -35,7 +35,7 @@ import { useSharesStore } from './shares.ts'
 import { useCommentsStore } from './comments.ts'
 import { AxiosError } from '@nextcloud/axios'
 
-export type PollType = 'textPoll' | 'datePoll'
+export type PollType = 'textPoll' | 'datePoll' | 'genericPoll'
 
 type PollTypesType = {
 	name: string
@@ -45,9 +45,12 @@ export const pollTypes: Record<PollType, PollTypesType> = {
 	textPoll: {
 		name: t('polls', 'Text poll'),
 	},
+	genericPoll: {
+		name: t('polls', 'Generic poll'),
+	},
 	datePoll: {
 		name: t('polls', 'Date poll'),
-	},
+	}
 }
 
 export type VoteVariant = 'simple'
@@ -65,6 +68,7 @@ export type PollConfiguration = {
 	access: AccessType
 	allowComment: boolean
 	allowMaybe: boolean
+	chosenRank: string
 	allowProposals: AllowProposals
 	anonymous: boolean
 	autoReminder: boolean
@@ -154,6 +158,8 @@ const markedPrefix = {
 	prefix: 'desc-',
 }
 
+const DEFAULT_CHOSEN_RANK = [] ;
+
 export const usePollStore = defineStore('poll', {
 	state: (): Poll => ({
 		id: 0,
@@ -166,6 +172,7 @@ export const usePollStore = defineStore('poll', {
 			access: 'private',
 			allowComment: false,
 			allowMaybe: false,
+			chosenRank: JSON.stringify(DEFAULT_CHOSEN_RANK),
 			allowProposals: 'disallow',
 			anonymous: false,
 			autoReminder: false,
@@ -243,9 +250,24 @@ export const usePollStore = defineStore('poll', {
 	}),
 
 	getters: {
+
+		getChosenRank(): string[] {
+			try {
+	 		  const parsed = JSON.parse(this.configuration.chosenRank || '[]')
+	    		  return Array.isArray(parsed) ? parsed : []
+	  		} catch {
+	      			return DEFAULT_CHOSEN_RANK;
+	    		}
+		},
+
+
 		viewMode(state): ViewMode {
 			const preferencesStore = usePreferencesStore()
 			if (state.type === 'textPoll') {
+				return preferencesStore.viewTextPoll
+			}
+
+			if (state.type === 'genericPoll') {
 				return preferencesStore.viewTextPoll
 			}
 
@@ -352,6 +374,15 @@ export const usePollStore = defineStore('poll', {
 	},
 
 	actions: {
+
+		setChosenRank(ranks: string[]) {
+			const validItems = Array.isArray(ranks) 
+			? ranks.map(item => String(item).trim()) // Correction ici
+			.filter(item => item !== '')       // Filtre les chaînes vides
+			: [];
+			this.configuration.chosenRank = JSON.stringify(validItems.sort());
+		},
+		
 		reset(): void {
 			this.$reset()
 		},
