@@ -5,6 +5,9 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+
+import { showError } from '@nextcloud/dialogs'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { n, t } from '@nextcloud/l10n'
 
@@ -14,29 +17,28 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
-import MarkDownDescription from '../components/Poll/MarkDownDescription.vue'
 import ActionAddOption from '../components/Actions/modules/ActionAddOption.vue'
+import ActionOpenOptionsSidebar from '../components/Actions/modules/ActionOpenOptionsSidebar.vue'
+import CardAnonymousPollHint from '../components/Cards/CardAnonymousPollHint.vue'
+import Collapsible from '../components/Base/modules/Collapsible.vue'
+import HeaderBar from '../components/Base/modules/HeaderBar.vue'
+import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
+import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
+import MarkDownDescription from '../components/Poll/MarkDownDescription.vue'
+import OptionsAddModal from '../components/Modals/OptionsAddModal.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
 import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
-import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
+import StickyDiv from '../components/Base/modules/StickyDiv.vue'
 import VoteTable from '../components/VoteTable/VoteTable.vue'
 import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
-import OptionsAddModal from '../components/Modals/OptionsAddModal.vue'
-import ActionOpenOptionsSidebar from '../components/Actions/modules/ActionOpenOptionsSidebar.vue'
-import HeaderBar from '../components/Base/modules/HeaderBar.vue'
-import CardAnonymousPollHint from '../components/Cards/CardAnonymousPollHint.vue'
 
 import { usePollStore } from '../stores/poll'
 import { useOptionsStore } from '../stores/options'
 import { usePreferencesStore } from '../stores/preferences'
-import { Event } from '../Types'
-import Collapsible from '../components/Base/modules/Collapsible.vue'
-import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
-import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
 import { useVotesStore } from '../stores/votes'
-import { showError } from '@nextcloud/dialogs'
-import StickyDiv from '../components/Base/modules/StickyDiv.vue'
+
+import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
+import { Event } from '../Types'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
