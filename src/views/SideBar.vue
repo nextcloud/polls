@@ -14,6 +14,11 @@ import { Event } from '../Types'
 
 import { usePollStore } from '../stores/poll'
 import { useSessionStore } from '../stores/session'
+import SideBarTabConfiguration from '../components/SideBar/SideBarTabConfiguration.vue'
+import SideBarTabComments from '../components/SideBar/SideBarTabComments.vue'
+import SideBarTabOptions from '../components/SideBar/SideBarTabOptions.vue'
+import SideBarTabShare from '../components/SideBar/SideBarTabShare.vue'
+import SideBarTabActivity from '../components/SideBar/SideBarTabActivity.vue'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
@@ -37,21 +42,21 @@ const SidebarActivityIcon = defineAsyncComponent(
 	() => import('vue-material-design-icons/LightningBolt.vue'),
 )
 
-const SideBarTabConfiguration = defineAsyncComponent(
-	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
-)
-const SideBarTabComments = defineAsyncComponent(
-	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
-)
-const SideBarTabOptions = defineAsyncComponent(
-	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
-)
-const SideBarTabShare = defineAsyncComponent(
-	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
-)
-const SideBarTabActivity = defineAsyncComponent(
-	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
-)
+// const SideBarTabConfiguration = defineAsyncComponent(
+// 	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
+// )
+// const SideBarTabComments = defineAsyncComponent(
+// 	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
+// )
+// const SideBarTabOptions = defineAsyncComponent(
+// 	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
+// )
+// const SideBarTabShare = defineAsyncComponent(
+// 	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
+// )
+// const SideBarTabActivity = defineAsyncComponent(
+// 	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
+// )
 
 onMounted(() => {
 	subscribe(Event.SidebarToggle, (payload) => {
