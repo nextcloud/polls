@@ -11,7 +11,7 @@ import { ViewMode } from './preferences.types'
 import type { Share } from './shares.types'
 import type { FilterType } from './polls.types'
 import type { User } from '../Types'
-import type { UpdateType } from './appSettings.types'
+import { WatcherMode, WatcherStatus } from '../composables/usePollWatcher.types'
 
 interface RouteParams {
 	id: number
@@ -39,8 +39,8 @@ export type SessionSettings = {
 
 export type Watcher = {
 	id: string
-	mode: UpdateType
-	status: 'running' | 'stopped' | 'error' | 'stopping' | 'idle'
+	mode: WatcherMode
+	status: WatcherStatus
 	interval?: number
 	lastUpdate: number
 	lastMessage?: string

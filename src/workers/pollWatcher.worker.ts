@@ -2,7 +2,13 @@
  * SPDX-FileCopyrightText: 2025 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import axios, { AxiosError, AxiosInstance } from 'axios'
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
+import {
+	WatcherMode,
+	WatcherData,
+	WorkerResponse,
+	WatcherProps,
+} from '../composables/usePollWatcher.types'
 
 const MAX_ERRORS = 5
 const SLEEP_TIMEOUT_DEFAULT = 30000
@@ -12,10 +18,12 @@ let http: AxiosInstance
 let consecutiveErrors = 0
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
-self.onmessage = async (props) => {
+const sendMessage = (message: WorkerResponse) => {
+	self.postMessage(message)
+}
+self.onmessage = async (props: MessageEvent<WatcherProps>) => {
 	const {
-		updateType,
+		mode,
 		pollId,
 		interval = SLEEP_TIMEOUT_DEFAULT,
 		baseUrl,
@@ -26,12 +34,13 @@ self.onmessage = async (props) => {
 
 	lastUpdated = lastUpdate
 
-	self.postMessage({
+	sendMessage({
 		type: 'status',
 		status: 'starting',
-		mode: updateType,
+		mode,
 		interval,
 		message: '[Worker] Recieved new parameters.',
+		params: props.data,
 	})
 
 	if (!http) {
@@ -46,11 +55,11 @@ self.onmessage = async (props) => {
 		})
 	}
 
-	if (updateType === 'noPolling') {
-		self.postMessage({
+	if (mode === 'noPolling') {
+		sendMessage({
 			type: 'info',
 			status: 'stopped',
-			mode: updateType,
+			mode,
 			interval,
 			message: '[Worker] noPolling: exiting.',
 		})
@@ -65,7 +74,10 @@ self.onmessage = async (props) => {
 				endPoint = `s/${token}/watch`
 			}
 
-			const response = await http.get(endPoint, {
+			const response: AxiosResponse<{
+				mode: WatcherMode
+				updates: WatcherData[]
+			}> = await http.get(endPoint, {
 				params: { offset: lastUpdated },
 			})
 
@@ -75,29 +87,29 @@ self.onmessage = async (props) => {
 				lastUpdated =
 					response.data.updates[response.data.updates.length - 1].updated
 
-				self.postMessage({
+				sendMessage({
 					type: 'update',
 					status: 'running',
-					mode: updateType,
+					mode: response.data.mode || mode,
 					interval,
 					message: '[Worker] 200 got updates',
 					updates: response.data.updates,
 					lastUpdate: lastUpdated,
 				})
 			} else if (response.status === 304) {
-				self.postMessage({
+				sendMessage({
 					type: 'info',
 					status: 'running',
-					mode: updateType,
+					mode,
 					interval,
 					message: '[Worker] 304 – no changes',
 					lastUpdate: lastUpdated,
 				})
 			} else {
-				self.postMessage({
+				sendMessage({
 					type: 'info',
 					status: 'running',
-					mode: updateType,
+					mode,
 					interval,
 					message: '[Worker] 200 but no updates',
 					lastUpdate: lastUpdated,
@@ -107,10 +119,10 @@ self.onmessage = async (props) => {
 			const err = error as AxiosError
 
 			if (err.code === 'ECONNABORTED' || err.code === 'ERR_CANCELED') {
-				self.postMessage({
+				sendMessage({
 					type: 'status',
 					status: 'stopping',
-					mode: updateType,
+					mode,
 					interval,
 					message: '[Worker] Request aborted by intention',
 					lastUpdate: lastUpdated,
@@ -120,19 +132,19 @@ self.onmessage = async (props) => {
 
 			consecutiveErrors = consecutiveErrors + 1
 
-			self.postMessage({
+			sendMessage({
 				type: 'error',
 				status: 'error',
-				mode: updateType,
+				mode,
 				interval,
 				message: `[Worker] Request failed (${consecutiveErrors}/${MAX_ERRORS})`,
 			})
 
 			if (consecutiveErrors >= MAX_ERRORS) {
-				self.postMessage({
+				sendMessage({
 					type: 'fatal',
 					status: 'error',
-					mode: updateType,
+					mode,
 					interval,
 					message: `[Worker] Stopping after ${MAX_ERRORS} consecutive errors`,
 				})
@@ -144,31 +156,32 @@ self.onmessage = async (props) => {
 		}
 	}
 
-	if (updateType === 'periodicPolling') {
-		self.postMessage({
+	if (mode === 'periodicPolling') {
+		sendMessage({
 			type: 'info',
 			status: 'starting',
-			mode: updateType,
+			mode,
 			interval,
 			message: '[Worker] Started periodic polling.',
 		})
 		while (true) {
 			await run()
-			self.postMessage({
+			sendMessage({
 				type: 'status',
 				status: 'idle',
-				mode: updateType,
+				mode,
 				interval,
+				message: `[Worker] Sleeping for .${Math.floor(interval / 1000)} s`,
 			})
 			await sleep(interval)
 		}
 	}
 
-	if (updateType === 'longPolling') {
-		self.postMessage({
+	if (mode === 'longPolling') {
+		sendMessage({
 			type: 'info',
 			status: 'starting',
-			mode: updateType,
+			mode,
 			interval,
 			message: '[Worker] Started long polling.',
 		})

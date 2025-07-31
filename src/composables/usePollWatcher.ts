@@ -16,7 +16,12 @@ import { usePollsStore } from '../stores/polls'
 import { useSessionStore } from '../stores/session'
 import { useVotesStore } from '../stores/votes'
 
-import type { WatcherResponse } from './usePollWatcher.types'
+import type {
+	WatcherMode,
+	WatcherProps,
+	WatcherData,
+	WorkerResponse,
+} from './usePollWatcher.types'
 import type { Watcher } from '../stores/session.types'
 
 /**
@@ -42,13 +47,17 @@ export const usePollWatcher = (interval = 30000) => {
 	 * Starts a new Web Worker that watches for updates
 	 *
 	 * @param pollId - ID of the currently active poll
-	 * @param updateType - polling mode (e.g. longPolling, periodicPolling, noPolling)
+	 * @param mode - polling mode (e.g. longPolling, periodicPolling, noPolling)
 	 */
-	const startWorker = (pollId: number | null | undefined, updateType: string) => {
+	const startWorker = (pollId: number | null | undefined, mode: WatcherMode) => {
 		// if a worker is already running, terminate it first
 		if (worker) {
 			worker.terminate()
 			worker = null
+		}
+
+		if (sessionStore.appSettings.updateType === 'noPolling') {
+			return
 		}
 
 		worker = new PollWatcherWorker()
@@ -56,30 +65,31 @@ export const usePollWatcher = (interval = 30000) => {
 		// Pass context to worker
 		worker.postMessage({
 			pollId,
-			updateType,
+			mode,
 			interval,
 			baseUrl,
 			token: sessionStore.token,
 			watcherId: sessionStore.watcher.id,
 			lastUpdate: sessionStore.watcher.lastUpdate,
-		})
+		} satisfies WatcherProps)
 
 		// Handle messages from worker
-		worker.onmessage = (e) => {
-			const { type, message, updates, status, mode, lastUpdated } = e.data
+		worker.onmessage = (e: MessageEvent<WorkerResponse>) => {
+			const { type, message, updates, status, mode, lastUpdate, params } =
+				e.data
 
 			sessionStore.watcher = <Watcher>{
 				...sessionStore.watcher,
 				mode,
 				status,
 				interval,
-				lastUpdate: lastUpdated ?? sessionStore.watcher.lastUpdate,
+				lastUpdate: lastUpdate ?? sessionStore.watcher.lastUpdate,
 				lastMessage: message ?? sessionStore.watcher.lastMessage,
 			}
 
 			switch (type) {
 				case 'info':
-					Logger.info(`[PollWatcher] ${message}`)
+					Logger.info(`[PollWatcher] ${message}`, { params })
 					break
 				case 'debug':
 					Logger.debug(`[PollWatcher] ${message}`)
@@ -95,7 +105,7 @@ export const usePollWatcher = (interval = 30000) => {
 					}
 					break
 				case 'status':
-					if (message) Logger.info(`[PollWatcher] ${message}`)
+					if (message) Logger.info(`[PollWatcher] ${message}`, { params })
 					break
 				default:
 					Logger.warn('[PollWatcher] Unknown message type:', { type })
@@ -128,7 +138,7 @@ export const usePollWatcher = (interval = 30000) => {
 	 * @return list of update types to apply
 	 */
 	const getTasksFromUpdates = (
-		updates: WatcherResponse[],
+		updates: WatcherData[],
 		currentPollId: number,
 	): string[] => {
 		// Use a Set to prevent duplicates
@@ -184,7 +194,7 @@ export const usePollWatcher = (interval = 30000) => {
 	 *
 	 * @param updates - update information from the worker
 	 */
-	const handleWatcherUpdates = (updates: WatcherResponse[]) => {
+	const handleWatcherUpdates = (updates: WatcherData[]) => {
 		const tasks = getTasksFromUpdates(updates, pollStore.id)
 		Logger.info('[PollWatcher] Updates received:', { updates })
 		handleWatcherTasks(tasks)
@@ -209,10 +219,6 @@ export const usePollWatcher = (interval = 30000) => {
 	 */
 	onMounted(() => {
 		document.addEventListener('visibilitychange', handleVisibilityChange)
-
-		if (document.visibilityState === 'visible') {
-			startWorker(pollStore.id, sessionStore.appSettings.updateType)
-		}
 	})
 
 	onBeforeUnmount(() => {
@@ -225,8 +231,10 @@ export const usePollWatcher = (interval = 30000) => {
 	 */
 	watch(
 		[() => pollStore.id, () => sessionStore.appSettings.updateType],
-		([pollId, updateType]) => {
-			startWorker(pollId, updateType)
+		([pollId, mode]) => {
+			if (sessionStore.appSettings.updateType !== 'noPolling') {
+				startWorker(pollId, mode)
+			}
 		},
 		{ immediate: true },
 	)
