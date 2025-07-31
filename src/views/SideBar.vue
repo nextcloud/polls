@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { ref, defineAsyncComponent, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
@@ -19,28 +19,17 @@ import SideBarTabComments from '../components/SideBar/SideBarTabComments.vue'
 import SideBarTabOptions from '../components/SideBar/SideBarTabOptions.vue'
 import SideBarTabShare from '../components/SideBar/SideBarTabShare.vue'
 import SideBarTabActivity from '../components/SideBar/SideBarTabActivity.vue'
+import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
+import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
+import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
+import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
+import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 
 const showSidebar = ref(window.innerWidth > 920)
 const activeTab = ref(t('polls', 'Comments').toLowerCase())
-
-const SidebarConfigurationIcon = defineAsyncComponent(
-	() => import('vue-material-design-icons/Wrench.vue'),
-)
-const SidebarOptionsIcon = defineAsyncComponent(
-	() => import('vue-material-design-icons/FormatListChecks.vue'),
-)
-const SidebarShareIcon = defineAsyncComponent(
-	() => import('vue-material-design-icons/ShareVariant.vue'),
-)
-const SidebarCommentsIcon = defineAsyncComponent(
-	() => import('vue-material-design-icons/CommentProcessing.vue'),
-)
-const SidebarActivityIcon = defineAsyncComponent(
-	() => import('vue-material-design-icons/LightningBolt.vue'),
-)
 
 onMounted(() => {
 	subscribe(Event.SidebarToggle, (payload) => {
