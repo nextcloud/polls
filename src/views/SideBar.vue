@@ -42,22 +42,6 @@ const SidebarActivityIcon = defineAsyncComponent(
 	() => import('vue-material-design-icons/LightningBolt.vue'),
 )
 
-// const SideBarTabConfiguration = defineAsyncComponent(
-// 	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
-// )
-// const SideBarTabComments = defineAsyncComponent(
-// 	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
-// )
-// const SideBarTabOptions = defineAsyncComponent(
-// 	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
-// )
-// const SideBarTabShare = defineAsyncComponent(
-// 	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
-// )
-// const SideBarTabActivity = defineAsyncComponent(
-// 	() => import('../components/SideBar/SideBarTabConfiguration.vue'),
-// )
-
 onMounted(() => {
 	subscribe(Event.SidebarToggle, (payload) => {
 		showSidebar.value = payload?.open ?? !showSidebar.value
