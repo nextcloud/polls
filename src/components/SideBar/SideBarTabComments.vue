@@ -4,8 +4,8 @@
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { computed, onMounted, watch } from 'vue'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { t } from '@nextcloud/l10n'
 
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -16,7 +16,6 @@ import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 
 import { usePollStore } from '../../stores/poll'
 import { useCommentsStore } from '../../stores/comments'
-import { Event } from '../../Types'
 
 const pollStore = usePollStore()
 const commentsStore = useCommentsStore()
@@ -29,12 +28,23 @@ const emptyContentProps = {
 const showEmptyContent = computed(() => commentsStore.comments.length === 0)
 
 onMounted(() => {
-	subscribe(Event.UpdateComments, () => commentsStore.load())
+	commentsStore.load()
 })
 
-onUnmounted(() => {
-	unsubscribe(Event.UpdateComments, () => commentsStore.load())
+onBeforeRouteUpdate(async () => {
+	commentsStore.load()
 })
+
+onBeforeRouteLeave(() => {
+	commentsStore.$reset()
+})
+
+watch(
+	[() => pollStore.permissions.comment, () => pollStore.configuration.anonymous],
+	() => {
+		commentsStore.load()
+	},
+)
 </script>
 
 <template>

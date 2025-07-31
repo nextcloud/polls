@@ -23,7 +23,6 @@ import { useOptionsStore } from './options'
 import { usePollsStore } from './polls'
 import { useSessionStore } from './session'
 import { useSubscriptionStore } from './subscription'
-import { useSharesStore } from './shares'
 import { useCommentsStore } from './comments'
 
 import type { AxiosError } from 'axios'
@@ -253,14 +252,14 @@ export const usePollStore = defineStore('poll', {
 		async resetPoll(): Promise<void> {
 			const votesStore = useVotesStore()
 			const optionsStore = useOptionsStore()
-			const sharesStore = useSharesStore()
-			const commentsStore = useCommentsStore()
+			// const sharesStore = useSharesStore()
+			// const commentsStore = useCommentsStore()
 			const subscriptionStore = useSubscriptionStore()
 			this.$reset()
 			votesStore.$reset()
 			optionsStore.$reset()
-			sharesStore.$reset()
-			commentsStore.$reset()
+			// sharesStore.$reset()
+			// commentsStore.$reset()
 			subscriptionStore.reset()
 		},
 
@@ -268,8 +267,8 @@ export const usePollStore = defineStore('poll', {
 			const votesStore = useVotesStore()
 			const sessionStore = useSessionStore()
 			const optionsStore = useOptionsStore()
-			const sharesStore = useSharesStore()
-			const commentsStore = useCommentsStore()
+			// const sharesStore = useSharesStore()
+			// const commentsStore = useCommentsStore()
 			const subscriptionStore = useSubscriptionStore()
 
 			this.meta.status = 'loading'
@@ -293,8 +292,8 @@ export const usePollStore = defineStore('poll', {
 					this.$patch(response.data.poll),
 					votesStore.load(),
 					optionsStore.load(),
-					sharesStore.load(),
-					commentsStore.load(),
+					// sharesStore.load(),
+					// commentsStore.load(),
 					subscriptionStore.load(),
 				])
 

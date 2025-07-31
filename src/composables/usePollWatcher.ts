@@ -6,6 +6,7 @@
 import { watch, onBeforeUnmount, onMounted } from 'vue'
 import { usePollStore } from '../stores/poll'
 import { generateUrl } from '@nextcloud/router'
+
 // eslint-disable-next-line import/default
 import PollWatcherWorker from '../workers/pollWatcher.worker?worker'
 import { Logger } from '../helpers'
@@ -15,6 +16,7 @@ import { useOptionsStore } from '../stores/options'
 import { usePollsStore } from '../stores/polls'
 import { useSessionStore } from '../stores/session'
 import { useVotesStore } from '../stores/votes'
+import { useSharesStore } from '../stores/shares'
 
 import type {
 	WatcherMode,
@@ -22,6 +24,7 @@ import type {
 	WatcherData,
 	WorkerResponse,
 } from './usePollWatcher.types'
+
 import type { Watcher } from '../stores/session.types'
 
 /**
@@ -38,6 +41,7 @@ export const usePollWatcher = (interval = 30000) => {
 	const votesStore = useVotesStore()
 	const optionsStore = useOptionsStore()
 	const commentsStore = useCommentsStore()
+	const sharesStore = useSharesStore()
 
 	const baseUrl = generateUrl('apps/polls/')
 
@@ -169,10 +173,11 @@ export const usePollWatcher = (interval = 30000) => {
 
 		tasks.forEach((task: string) => {
 			switch (task) {
-				case 'poll':
-					pollStore.load()
+				case 'shares':
+					sharesStore.load()
 					break
 				case 'polls':
+					pollStore.load()
 					pollsStore.load()
 					break
 				case 'votes':
