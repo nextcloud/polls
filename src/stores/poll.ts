@@ -26,7 +26,7 @@ import { useSubscriptionStore } from './subscription'
 import { useSharesStore } from './shares'
 import { useCommentsStore } from './comments'
 
-import type { AxiosError } from '@nextcloud/axios'
+import type { AxiosError } from 'axios'
 import type { User } from '../Types'
 import type {
 	Poll,
