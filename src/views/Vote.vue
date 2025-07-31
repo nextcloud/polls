@@ -4,11 +4,11 @@
 -->
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
 import { showError } from '@nextcloud/dialogs'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { emit } from '@nextcloud/event-bus'
 import { n, t } from '@nextcloud/l10n'
 
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
@@ -36,14 +36,18 @@ import { usePollStore } from '../stores/poll'
 import { useOptionsStore } from '../stores/options'
 import { usePreferencesStore } from '../stores/preferences'
 import { useVotesStore } from '../stores/votes'
+import { useSubscriptionStore } from '../stores/subscription'
 
 import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
 import { Event } from '../Types'
+import { Logger } from '../helpers'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const preferencesStore = usePreferencesStore()
 const votesStore = useVotesStore()
+const subscriptionStore = useSubscriptionStore()
+
 const voteMainId = 'vote-view'
 const topObserverVisible = ref(false)
 const tableObserverVisible = ref(false)
@@ -133,26 +137,75 @@ const showBottomObserver = computed(
 		votesStore.countHiddenParticipants > 0
 		&& pollStore.viewMode === 'table-view',
 )
+
+async function loadPoll(isChanging: boolean = false) {
+	try {
+		pollStore.load(isChanging)
+	} catch (error) {
+		showError(t('polls', 'Error loading poll'))
+	}
+
+	votesStore.load()
+	optionsStore.load()
+	subscriptionStore.load()
+}
+
+async function resetPoll() {
+	pollStore.$reset()
+	votesStore.$reset()
+	optionsStore.$reset()
+	subscriptionStore.$reset()
+}
+
 onBeforeRouteUpdate(async () => {
-	pollStore.load()
-	emit(Event.TransitionsOff, 500)
+	loadPoll(true)
 })
 
 onBeforeRouteLeave(() => {
-	pollStore.resetPoll()
+	resetPoll()
 })
 
 onMounted(() => {
-	pollStore.load()
-	subscribe(Event.LoadPoll, () => pollStore.load())
+	loadPoll(true)
 	emit(Event.TransitionsOff, 500)
 })
 
 onUnmounted(() => {
-	pollStore.reset()
-	unsubscribe(Event.LoadPoll, () => {})
+	resetPoll()
 })
 
+watch(
+	[
+		() => pollStore.configuration.anonymous,
+		() => pollStore.configuration.maxVotesPerOption,
+		() => pollStore.configuration.maxVotesPerUser,
+		() => pollStore.configuration.hideBookedUp,
+	],
+	([anonymousNew, maxVotesPerOptionNew, maxVotesPerUserNew, hideBookedUpNew]) => {
+		Logger.debug('Configuration affecting options changed', {
+			anonymousNew,
+			maxVotesPerOptionNew,
+			maxVotesPerUserNew,
+			hideBookedUpNew,
+		})
+		optionsStore.load()
+	},
+)
+
+watch(
+	[
+		() => pollStore.configuration.anonymous,
+		() => pollStore.configuration.showResults,
+	],
+	([anonymous, showResults]) => {
+		Logger.debug('Configuration affecting votes changed', {
+			anonymous,
+			showResults,
+		})
+		emit(Event.TransitionsOff, 500)
+		votesStore.load()
+	},
+)
 const appClass = computed(() => [
 	pollStore.type,
 	pollStore.viewMode,

@@ -18,12 +18,8 @@ import { Logger } from '../helpers'
 import { PublicAPI, PollsAPI } from '../Api'
 import { createDefault, Event } from '../Types'
 
-import { useVotesStore } from './votes'
-import { useOptionsStore } from './options'
 import { usePollsStore } from './polls'
 import { useSessionStore } from './session'
-import { useSubscriptionStore } from './subscription'
-import { useCommentsStore } from './comments'
 
 import type { AxiosError } from '@nextcloud/axios'
 import type { User } from '../Types'
@@ -249,29 +245,10 @@ export const usePollStore = defineStore('poll', {
 			this.write()
 		},
 
-		async resetPoll(): Promise<void> {
-			const votesStore = useVotesStore()
-			const optionsStore = useOptionsStore()
-			// const sharesStore = useSharesStore()
-			// const commentsStore = useCommentsStore()
-			const subscriptionStore = useSubscriptionStore()
-			this.$reset()
-			votesStore.$reset()
-			optionsStore.$reset()
-			// sharesStore.$reset()
-			// commentsStore.$reset()
-			subscriptionStore.reset()
-		},
-
-		async load(pollId: number | null = null): Promise<void> {
-			const votesStore = useVotesStore()
+		async load(isChanging: boolean = false): Promise<void> {
 			const sessionStore = useSessionStore()
-			const optionsStore = useOptionsStore()
-			// const sharesStore = useSharesStore()
-			// const commentsStore = useCommentsStore()
-			const subscriptionStore = useSubscriptionStore()
 
-			this.meta.status = 'loading'
+			this.meta.status = isChanging ? 'loading' : this.meta.status
 
 			try {
 				const response = await (() => {
@@ -279,7 +256,7 @@ export const usePollStore = defineStore('poll', {
 						return PublicAPI.getPoll(sessionStore.route.params.token)
 					}
 					if (sessionStore.route.name === 'vote') {
-						return PollsAPI.getPoll(pollId ?? sessionStore.currentPollId)
+						return PollsAPI.getPoll(sessionStore.currentPollId)
 					}
 				})()
 
@@ -288,14 +265,7 @@ export const usePollStore = defineStore('poll', {
 					return
 				}
 
-				await Promise.all([
-					this.$patch(response.data.poll),
-					votesStore.load(),
-					optionsStore.load(),
-					// sharesStore.load(),
-					// commentsStore.load(),
-					subscriptionStore.load(),
-				])
+				this.$patch(response.data.poll)
 
 				this.meta.status = 'loaded'
 			} catch (error) {
@@ -346,47 +316,6 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 
-		/* Load all necessary stores based on the configuration change.
-		 * Avoid loading all dependent stores, if not necessary and reduce
-		 * the amount of db access and expensive mutations.
-		 *
-		 * TODO: Currently this is based on the changes reported by the API.
-		 * For large polls this is still bad UX, since loading of the poll
-		 * can take a while. Until then depending updates of the UI are
-		 * also delayed.
-		 *
-		 * We keep it for the moment to avoid breaking changes.
-		 */
-		async loadConsistentPoll(changes: Partial<Poll>): Promise<void> {
-			const dispatches = new Set()
-
-			if (
-				changes.configuration?.maxVotesPerUser !== undefined
-				|| changes.configuration?.maxVotesPerOption !== undefined
-				|| changes.configuration?.hideBookedUp !== undefined
-			) {
-				const optionsStore = useOptionsStore()
-				dispatches.add(optionsStore.load())
-			}
-
-			if (
-				changes.configuration?.allowComment !== undefined
-				|| changes.configuration?.forceConfidentialComments !== undefined
-			) {
-				const commentsStore = useCommentsStore()
-				dispatches.add(commentsStore.load())
-			}
-
-			if (changes.configuration?.anonymous !== undefined) {
-				const votesStore = useVotesStore()
-				dispatches.add(votesStore.load())
-			}
-
-			const pollsStore = usePollsStore()
-			dispatches.add(pollsStore.load())
-			Promise.all(dispatches)
-		},
-
 		write(): void {
 			const debouncedLoad = this.$debounce(async () => {
 				if (this.configuration.title === '') {
@@ -404,7 +333,6 @@ export const usePollStore = defineStore('poll', {
 						store: 'poll',
 						message: t('polls', 'Poll updated'),
 					})
-					this.loadConsistentPoll(response.data.changes)
 				} catch (error) {
 					if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 						return

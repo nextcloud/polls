@@ -19,9 +19,7 @@ export const useSubscriptionStore = defineStore('subscription', () => {
 	const reset = () => {
 		subscribed.value = false
 	}
-	/**
-	 *
-	 */
+
 	async function load() {
 		const sessionStore = useSessionStore()
 		try {
@@ -50,9 +48,7 @@ export const useSubscriptionStore = defineStore('subscription', () => {
 			throw error
 		}
 	}
-	/**
-	 *
-	 */
+
 	async function write() {
 		const sessionStore = useSessionStore()
 		try {
