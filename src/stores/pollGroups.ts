@@ -16,7 +16,7 @@ import { PollGroupsAPI } from '../Api'
 
 import { Logger } from '../helpers'
 
-import type { AxiosError } from 'axios'
+import type { AxiosError } from '@nextcloud/axios'
 import type { Poll } from './poll.types'
 import type { PollGroup } from './pollGroups.types'
 

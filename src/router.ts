@@ -19,7 +19,7 @@ import Navigation from './views/Navigation.vue'
 import { usePollStore } from './stores/poll'
 import { useSessionStore } from './stores/session'
 
-import type { AxiosError } from 'axios'
+import type { AxiosError } from '@nextcloud/axios'
 
 async function validateToken(to: RouteLocationNormalized) {
 	const sessionStore = useSessionStore()

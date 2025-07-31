@@ -25,7 +25,7 @@ import { useSessionStore } from './session'
 import { useSubscriptionStore } from './subscription'
 import { useCommentsStore } from './comments'
 
-import type { AxiosError } from 'axios'
+import type { AxiosError } from '@nextcloud/axios'
 import type { User } from '../Types'
 import type {
 	Poll,

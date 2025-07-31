@@ -11,7 +11,7 @@ import { SharesAPI } from '../Api'
 import { usePollGroupsStore } from './pollGroups'
 import { useSessionStore } from './session'
 
-import type { AxiosError } from 'axios'
+import type { AxiosError } from '@nextcloud/axios'
 import type { SentResults } from '../Api/modules/shares'
 import type { User } from '../Types'
 import type {
