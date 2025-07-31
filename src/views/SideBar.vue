@@ -80,7 +80,7 @@ function closeSideBar() {
 <template>
 	<NcAppSidebar
 		v-show="showSidebar"
-		v-model="activeTab"
+		v-model:active="activeTab"
 		:name="t('polls', 'Details')"
 		@close="closeSideBar()">
 		<NcAppSidebarTab
