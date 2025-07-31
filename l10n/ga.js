@@ -263,6 +263,7 @@ OC.L10N.register(
     "minus" : "lúide",
     "plus" : "móide",
     "Please wait…" : "Fan le do thoil…",
+    "Possibly affected calendar events" : "Imeachtaí féilire a d'fhéadfadh a bheith buailte",
     "Add" : "Cuir",
     "You are asked to propose more options." : "Iarrtar ort roghanna breise a mholadh.",
     "The proposal period ends {timeRelative}." : "Tagann deireadh le tréimhse an togra {timeRelative}.",
