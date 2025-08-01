@@ -236,9 +236,13 @@ export const usePollWatcher = (interval = 30000) => {
 	 */
 	watch(
 		[() => pollStore.id, () => sessionStore.appSettings.updateType],
-		([pollId, mode]) => {
+		([pollIdNew, modeNew], [pollIdOld, modeOld]) => {
+			Logger.debug('[PollWatcher] PollWatcher worker restarted:', {
+				pollId: `${pollIdOld} → ${pollIdNew}`,
+				mode: `${modeOld} → ${modeNew}`,
+			})
 			if (sessionStore.appSettings.updateType !== 'noPolling') {
-				startWorker(pollId, mode)
+				startWorker(pollIdNew, modeNew)
 			}
 		},
 		{ immediate: true },

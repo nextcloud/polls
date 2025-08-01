@@ -181,12 +181,15 @@ watch(
 		() => pollStore.configuration.maxVotesPerUser,
 		() => pollStore.configuration.hideBookedUp,
 	],
-	([anonymousNew, maxVotesPerOptionNew, maxVotesPerUserNew, hideBookedUpNew]) => {
+	(
+		[anonymousNew, maxVotesPerOptionNew, maxVotesPerUserNew, hideBookedUpNew],
+		[anonymousOld, maxVotesPerOptionOld, maxVotesPerUserOld, hideBookedUpOld],
+	) => {
 		Logger.debug('Configuration affecting options changed', {
-			anonymousNew,
-			maxVotesPerOptionNew,
-			maxVotesPerUserNew,
-			hideBookedUpNew,
+			anonymous: `${anonymousNew} -> ${anonymousOld}`,
+			maxVotesPerOptionNew: `${maxVotesPerOptionNew} -> ${maxVotesPerOptionOld}`,
+			maxVotesPerUserNew: `${maxVotesPerUserNew} -> ${maxVotesPerUserOld}`,
+			hideBookedUpNew: `${hideBookedUpNew} -> ${hideBookedUpOld}`,
 		})
 		optionsStore.load()
 	},
@@ -197,10 +200,10 @@ watch(
 		() => pollStore.configuration.anonymous,
 		() => pollStore.configuration.showResults,
 	],
-	([anonymous, showResults]) => {
+	([anonymousNew, showResultsNew], [anonymousOld, showResultsOld]) => {
 		Logger.debug('Configuration affecting votes changed', {
-			anonymous,
-			showResults,
+			anonymous: `${anonymousOld} -> ${anonymousNew}`,
+			showResults: `${showResultsOld} -> ${showResultsNew}`,
 		})
 		emit(Event.TransitionsOff, 500)
 		votesStore.load()
