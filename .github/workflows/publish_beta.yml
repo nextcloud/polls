@@ -52,6 +52,8 @@ jobs:
       if: success()
       id: extract-release-notes
       uses: ffurrer2/extract-release-notes@v2
+      with:
+        prerelease: true
 
     - name: Publish pre-release ${{ steps.appinfo.outputs.app-version }}
       if: success()
