@@ -23,6 +23,8 @@ All notable changes to this project will be documented in this file.
  - Add CSP to allow worker
  - fix loading archived polls
  - broken access if a logged in user by public share enters a poll he already had access to
+ - Fixing several performance issues
+ - Fixed a bug, where the sidebar tabs were not usable anymore
 
 ## [8.1.4] - 2025-07-15
 ### Fixes
