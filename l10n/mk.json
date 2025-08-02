@@ -13,6 +13,7 @@
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Бришење за 1 секунда","Бришење за {countdown} секунди"],
     "Register" : "Регистрирај се",
     "Unknown error" : "Непозната грешка",
+    "Loading …" : "Се вчитува…",
     "Previous day" : "Предходен ден",
     "Next day" : "Следен ден",
     "Add" : "Додади",
