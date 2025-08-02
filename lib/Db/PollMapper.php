@@ -242,11 +242,14 @@ class PollMapper extends QBMapper {
 	): void {
 		$emptyString = $qb->expr()->literal('');
 
-		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, ' . $emptyString . ') AS user_role'));
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, ' . $emptyString . ') AS user_role'))
+			->addGroupBy($joinAlias . '.type');
 
-		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked');
+		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked')
+			->addGroupBy($joinAlias . '.locked');
 
-		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.token, ' . $emptyString . ') AS share_token'));
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.token, ' . $emptyString . ') AS share_token'))
+			->addGroupBy($joinAlias . '.token');
 
 		$qb->leftJoin(
 			$fromAlias,
