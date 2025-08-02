@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export type UpdateType = 'noPolling' | 'periodicPolling' | 'longPolling'
+import { WatcherMode } from '../composables/usePollWatcher.types'
+
 export type Group = {
 	id: string
 	userId: string
@@ -33,7 +34,7 @@ export type AppSettingsStore = {
 	showMailAddresses: boolean
 	showLogin: boolean
 	unrestrictedOwner: boolean
-	updateType: UpdateType
+	updateType: WatcherMode
 	useActivity: boolean
 	useCollaboration: boolean
 	useSiteLegalTerms: boolean

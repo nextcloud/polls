@@ -4,8 +4,11 @@
 -->
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+
+import { showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
 import { n, t } from '@nextcloud/l10n'
 
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
@@ -14,34 +17,37 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
-import MarkDownDescription from '../components/Poll/MarkDownDescription.vue'
 import ActionAddOption from '../components/Actions/modules/ActionAddOption.vue'
+import ActionOpenOptionsSidebar from '../components/Actions/modules/ActionOpenOptionsSidebar.vue'
+import CardAnonymousPollHint from '../components/Cards/CardAnonymousPollHint.vue'
+import Collapsible from '../components/Base/modules/Collapsible.vue'
+import HeaderBar from '../components/Base/modules/HeaderBar.vue'
+import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
+import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
+import MarkDownDescription from '../components/Poll/MarkDownDescription.vue'
+import OptionsAddModal from '../components/Modals/OptionsAddModal.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
 import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
-import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
+import StickyDiv from '../components/Base/modules/StickyDiv.vue'
 import VoteTable from '../components/VoteTable/VoteTable.vue'
 import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
-import OptionsAddModal from '../components/Modals/OptionsAddModal.vue'
-import ActionOpenOptionsSidebar from '../components/Actions/modules/ActionOpenOptionsSidebar.vue'
-import HeaderBar from '../components/Base/modules/HeaderBar.vue'
-import CardAnonymousPollHint from '../components/Cards/CardAnonymousPollHint.vue'
 
 import { usePollStore } from '../stores/poll'
 import { useOptionsStore } from '../stores/options'
 import { usePreferencesStore } from '../stores/preferences'
-import { Event } from '../Types'
-import Collapsible from '../components/Base/modules/Collapsible.vue'
-import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
-import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
 import { useVotesStore } from '../stores/votes'
-import { showError } from '@nextcloud/dialogs'
-import StickyDiv from '../components/Base/modules/StickyDiv.vue'
+import { useSubscriptionStore } from '../stores/subscription'
+
+import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
+import { Event } from '../Types'
+import { Logger } from '../helpers'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const preferencesStore = usePreferencesStore()
 const votesStore = useVotesStore()
+const subscriptionStore = useSubscriptionStore()
+
 const voteMainId = 'vote-view'
 const topObserverVisible = ref(false)
 const tableObserverVisible = ref(false)
@@ -131,26 +137,78 @@ const showBottomObserver = computed(
 		votesStore.countHiddenParticipants > 0
 		&& pollStore.viewMode === 'table-view',
 )
+
+async function loadPoll(isChanging: boolean = false) {
+	try {
+		pollStore.load(isChanging)
+	} catch (error) {
+		showError(t('polls', 'Error loading poll'))
+	}
+
+	votesStore.load()
+	optionsStore.load()
+	subscriptionStore.load()
+}
+
+async function resetPoll() {
+	pollStore.$reset()
+	votesStore.$reset()
+	optionsStore.$reset()
+	subscriptionStore.$reset()
+}
+
 onBeforeRouteUpdate(async () => {
-	pollStore.load()
-	emit(Event.TransitionsOff, 500)
+	loadPoll(true)
 })
 
 onBeforeRouteLeave(() => {
-	pollStore.resetPoll()
+	resetPoll()
 })
 
 onMounted(() => {
-	pollStore.load()
-	subscribe(Event.LoadPoll, () => pollStore.load())
+	loadPoll(true)
 	emit(Event.TransitionsOff, 500)
 })
 
 onUnmounted(() => {
-	pollStore.reset()
-	unsubscribe(Event.LoadPoll, () => {})
+	resetPoll()
 })
 
+watch(
+	[
+		() => pollStore.configuration.anonymous,
+		() => pollStore.configuration.maxVotesPerOption,
+		() => pollStore.configuration.maxVotesPerUser,
+		() => pollStore.configuration.hideBookedUp,
+	],
+	(
+		[anonymousNew, maxVotesPerOptionNew, maxVotesPerUserNew, hideBookedUpNew],
+		[anonymousOld, maxVotesPerOptionOld, maxVotesPerUserOld, hideBookedUpOld],
+	) => {
+		Logger.debug('Configuration affecting options changed', {
+			anonymous: `${anonymousNew} -> ${anonymousOld}`,
+			maxVotesPerOptionNew: `${maxVotesPerOptionNew} -> ${maxVotesPerOptionOld}`,
+			maxVotesPerUserNew: `${maxVotesPerUserNew} -> ${maxVotesPerUserOld}`,
+			hideBookedUpNew: `${hideBookedUpNew} -> ${hideBookedUpOld}`,
+		})
+		optionsStore.load()
+	},
+)
+
+watch(
+	[
+		() => pollStore.configuration.anonymous,
+		() => pollStore.configuration.showResults,
+	],
+	([anonymousNew, showResultsNew], [anonymousOld, showResultsOld]) => {
+		Logger.debug('Configuration affecting votes changed', {
+			anonymous: `${anonymousOld} -> ${anonymousNew}`,
+			showResults: `${showResultsOld} -> ${showResultsNew}`,
+		})
+		emit(Event.TransitionsOff, 500)
+		votesStore.load()
+	},
+)
 const appClass = computed(() => [
 	pollStore.type,
 	pollStore.viewMode,

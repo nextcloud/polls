@@ -16,10 +16,7 @@ import { loadContext } from './composables/context'
 
 import Navigation from './views/Navigation.vue'
 
-import { usePollStore } from './stores/poll'
 import { useSessionStore } from './stores/session'
-
-import type { AxiosError } from 'axios'
 
 async function validateToken(to: RouteLocationNormalized) {
 	const sessionStore = useSessionStore()
@@ -38,12 +35,8 @@ async function validateToken(to: RouteLocationNormalized) {
 		}
 	} catch (error) {
 		if (getCurrentUser()) {
-			if ((error as AxiosError).response?.status === 403) {
-				// User has no access
-				return { name: 'forbidden' }
-			}
-			// in case of other errors, reroute internal user to the not found page
-			return { name: 'notfound' }
+			// User has no access, always assume forbidden (403)
+			return { name: 'forbidden' }
 		}
 
 		// external users will get redirected to the login page
@@ -72,11 +65,6 @@ async function validateToken(to: RouteLocationNormalized) {
 			}
 		}
 	}
-
-	// finally load the poll
-	const pollStore = usePollStore()
-
-	pollStore.load()
 }
 
 const Combo = () => import('./views/Combo.vue')

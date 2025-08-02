@@ -54,6 +54,12 @@ class PollGroupMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
+	/**
+	 * Add a Poll to a PollGroup
+	 *
+	 * @param int $pollId id of poll
+	 * @param int $groupId id of group
+	 */
 	public function addPollToGroup(int $pollId, int $groupId): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->insert(PollGroup::RELATION_TABLE)
@@ -81,6 +87,12 @@ class PollGroupMapper extends QBMapper {
 		$qb->executeStatement();
 	}
 
+	/**
+	 * Add a PollGroup
+	 *
+	 * @param PollGroup $pollGroup
+	 * @return PollGroup
+	 */
 	public function add(PollGroup $pollGroup): PollGroup {
 		$pollGroup->setCreated(time());
 		$pollGroup->setOwner($this->userSession->getCurrentUserId());
@@ -88,29 +100,11 @@ class PollGroupMapper extends QBMapper {
 
 	}
 
+	/**
+	 * Remove all PollGroups without associated Polls
+	 */
 	public function tidyPollGroups(): void {
 		$qb = $this->db->getQueryBuilder();
-
-		// This is, what we wanna do
-		//
-		// DELETE FROM oc_polls_groups
-		//   WHERE `id` not IN (
-		//     SELECT `group_id`
-		//     FROM oc_polls_groups_polls)
-		//
-		// should result in
-		//
-		// $qb->delete(PollGroup::TABLE)
-		// 	->where($qb->expr()->notIn(
-		// 		'id',
-		// 		$qb->selectDistinct('group_id')
-		// 			->from(PollGroup::RELATION_TABLE)
-		// 			->getSQL(),
-		// 		IQueryBuilder::PARAM_INT_ARRAY
-		// 	)
-		// );
-		//
-		// But we have to use a subquery, otherwise, we get 'InvalidArgumentException Only strings, Literals and Parameters are allowed'
 
 		$subquery = $this->db->getQueryBuilder();
 		$subquery->selectDistinct('group_id')->from(PollGroup::RELATION_TABLE);
@@ -140,6 +134,12 @@ class PollGroupMapper extends QBMapper {
 		return $qb;
 	}
 
+	/**
+	 * Join the poll ids to the query builder
+	 *
+	 * @param IQueryBuilder $qb
+	 * @param string $joinAlias Alias for the joined polls table
+	 */
 	protected function joinPollIds(
 		IQueryBuilder $qb,
 		string $joinAlias = 'polls',

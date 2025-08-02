@@ -14,15 +14,14 @@ import ConfigBox from '../Base/modules/ConfigBox.vue'
 
 import { usePollGroupsStore } from '../../stores/pollGroups'
 import { showError, showInfo } from '@nextcloud/dialogs'
-import { useRoute } from 'vue-router'
-import { router } from '../../router'
+import { useRouter, useRoute } from 'vue-router'
 import ConfigTitlePollGroup from './ConfigNamePollGroup.vue'
 import ConfigTitleExtPollGroup from './ConfigTitleExtPollGroup.vue'
 import ConfigDescriptionPollGroup from './ConfigDescriptionPollGroup.vue'
 
-const pollGroupsStore = usePollGroupsStore()
-
+const router = useRouter()
 const route = useRoute()
+const pollGroupsStore = usePollGroupsStore()
 
 async function updatePollGroup() {
 	try {
