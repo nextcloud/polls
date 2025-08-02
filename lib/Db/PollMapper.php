@@ -10,6 +10,7 @@ namespace OCA\Polls\Db;
 
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\QueryBuilder\IParameter;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\Search\ISearchQuery;
@@ -49,13 +50,14 @@ class PollMapper extends QBMapper {
 		if ($withRoles) {
 			$pollGroupsAlias = 'poll_groups';
 			$currentUserId = $this->userSession->getCurrentUserId();
-			// $this->joinOptions($qb, self::TABLE);
-			$this->joinUserRole($qb, self::TABLE, $currentUserId);
+			$currentUserParam = $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR);
+
+			$this->subQueryMaxDate($qb, self::TABLE);
+
+			$this->joinUserRole($qb, self::TABLE, $currentUserParam);
 			$this->joinGroupShares($qb, self::TABLE);
 			$this->joinPollGroups($qb, self::TABLE, $pollGroupsAlias);
-			$this->joinPollGroupShares($qb, $pollGroupsAlias, $currentUserId, $pollGroupsAlias);
-			// $this->joinVotesCount($qb, self::TABLE, $currentUserId);
-			// $this->joinParticipantsCount($qb, self::TABLE);
+			$this->joinPollGroupShares($qb, $pollGroupsAlias, $currentUserParam, $pollGroupsAlias);
 		}
 		return $this->findEntity($qb);
 	}
@@ -93,7 +95,7 @@ class PollMapper extends QBMapper {
 	 * @return Poll[]
 	 */
 	public function findForMe(string $userId): array {
-		$qb = $this->buildQuery();
+		$qb = $this->buildQuery(detailed: false);
 		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)))
 			->orWhere($qb->expr()->eq(self::TABLE . '.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
@@ -104,7 +106,7 @@ class PollMapper extends QBMapper {
 	 * @return Poll[]
 	 */
 	public function listByOwner(string $userId): array {
-		$qb = $this->buildQuery();
+		$qb = $this->buildQuery(detailed: false);
 		$qb->where($qb->expr()->eq(self::TABLE . '.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
 	}
@@ -114,7 +116,7 @@ class PollMapper extends QBMapper {
 	 * @return Poll[]
 	 */
 	public function search(ISearchQuery $query): array {
-		$qb = $this->buildQuery();
+		$qb = $this->buildQuery(detailed: false);
 		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->orX(
 				...array_map(function (string $token) use ($qb) {
@@ -140,7 +142,7 @@ class PollMapper extends QBMapper {
 	 * @return Poll[]
 	 */
 	public function findForAdmin(string $userId): array {
-		$qb = $this->buildQuery();
+		$qb = $this->buildQuery(detailed: false);
 		$qb->where($qb->expr()->neq(self::TABLE . '.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 
 		return $this->findEntities($qb);
@@ -197,7 +199,7 @@ class PollMapper extends QBMapper {
 	/**
 	 * Build the enhanced query with joined tables
 	 */
-	protected function buildQuery(): IQueryBuilder {
+	protected function buildQuery($detailed = true): IQueryBuilder {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
@@ -205,14 +207,27 @@ class PollMapper extends QBMapper {
 			->groupBy(self::TABLE . '.id');
 
 		$currentUserId = $this->userSession->getCurrentUserId();
+		$currentUserParam = $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR);
 		$pollGroupsAlias = 'poll_groups';
-		$this->joinOptions($qb, self::TABLE);
-		$this->joinUserRole($qb, self::TABLE, $currentUserId);
+
+		$this->subQueryMaxDate($qb, self::TABLE);
+
+		$this->joinUserRole($qb, self::TABLE, $currentUserParam);
 		$this->joinGroupShares($qb, self::TABLE);
 		$this->joinPollGroups($qb, self::TABLE, $pollGroupsAlias);
-		$this->joinPollGroupShares($qb, $pollGroupsAlias, $currentUserId, $pollGroupsAlias);
-		$this->joinVotesCount($qb, self::TABLE, $currentUserId);
+		$this->joinPollGroupShares($qb, $pollGroupsAlias, $currentUserParam, $pollGroupsAlias);
 		$this->joinParticipantsCount($qb, self::TABLE);
+
+		$this->subQueryVotesCount($qb, self::TABLE, $currentUserParam);
+
+		if ($detailed) {
+			// Is not relevant for the polls collection
+			$this->subQueryVotesCount($qb, self::TABLE, $currentUserParam, Vote::VOTE_YES);
+			$this->subQueryVotesCount($qb, self::TABLE, $currentUserParam, Vote::VOTE_NO);
+			$this->subQueryVotesCount($qb, self::TABLE, $currentUserParam, Vote::VOTE_EVENTUALLY);
+			$this->subQueryOrphanedVotesCount($qb, self::TABLE, $currentUserParam);
+		}
+
 		return $qb;
 	}
 
@@ -222,20 +237,16 @@ class PollMapper extends QBMapper {
 	protected function joinUserRole(
 		IQueryBuilder &$qb,
 		string $fromAlias,
-		string $currentUserId,
+		IParameter $currentUserParam,
 		string $joinAlias = 'user_shares',
 	): void {
-
 		$emptyString = $qb->expr()->literal('');
 
-		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, ' . $emptyString . ') AS user_role'))
-			->addGroupBy($joinAlias . '.type');
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, ' . $emptyString . ') AS user_role'));
 
-		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked')
-			->addGroupBy($joinAlias . '.locked');
+		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked');
 
-		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.token, ' . $emptyString . ') AS share_token'))
-			->addGroupBy($joinAlias . '.token');
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.token, ' . $emptyString . ') AS share_token'));
 
 		$qb->leftJoin(
 			$fromAlias,
@@ -243,11 +254,10 @@ class PollMapper extends QBMapper {
 			$joinAlias,
 			$qb->expr()->andX(
 				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.id'),
-				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
+				$qb->expr()->eq($joinAlias . '.user_id', $currentUserParam),
 				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
 			)
 		);
-
 	}
 
 	/**
@@ -312,11 +322,17 @@ class PollMapper extends QBMapper {
 	 *
 	 * Supported share types are User and Admin
 	 * Groups, Teams will not work atm.
+	 *
+	 * @param IQueryBuilder $qb the query builder to add the join to
+	 * @param string $fromAlias the alias of the main poll table
+	 * @param IParameter $currentUserParam the current user parameter to filter shares by user
+	 * @param string $pollGroupsAlias the alias of the poll groups table
+	 * @param string $joinAlias the alias for the join, defaults to 'poll_group_shares'
 	 */
 	protected function joinPollGroupShares(
 		IQueryBuilder $qb,
 		string $fromAlias,
-		string $currentUserId,
+		IParameter $currentUserParam,
 		string $pollGroupsAlias,
 		string $joinAlias = 'poll_group_shares',
 	): void {
@@ -335,78 +351,109 @@ class PollMapper extends QBMapper {
 			$qb->expr()->andX(
 				$qb->expr()->eq($joinAlias . '.group_id', $pollGroupsAlias . '.group_id'),
 				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
-				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
+				$qb->expr()->eq($joinAlias . '.user_id', $currentUserParam),
 			)
 		);
 	}
 
 	/**
-	 * Joins options to evaluate min and max option date for date polls
-	 * if text poll or no options are set,
-	 * the min value is the current time,
+	 * SubQuery the max option date for date polls
 	 * the max value is null
 	 * and adds the number of available options
+	 *
+	 * @param IQueryBuilder $qb the query builder to add the subquery to
+	 * @param string $fromAlias the alias of the main poll table
 	 */
-	protected function joinOptions(
+	protected function subQueryMaxDate(
 		IQueryBuilder &$qb,
 		string $fromAlias,
-		string $joinAlias = 'options',
 	): void {
-		// add highest option date
-		$qb->addSelect($qb->createFunction('MAX(' . $joinAlias . '.timestamp) AS max_date'));
+		$subQuery = $this->db->getQueryBuilder();
 
-
-		$qb->leftJoin(
-			$fromAlias,
-			Option::TABLE,
-			$joinAlias,
-			$qb->expr()->andX(
-				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.id'),
-				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
-			),
-		);
+		$subQuery->select($subQuery->func()->max('options.timestamp'))
+			->from(Option::TABLE, 'options')
+			->where($subQuery->expr()->eq('options.poll_id', $fromAlias . '.id'))
+			->andWhere($subQuery->expr()->eq('options.deleted', $subQuery->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+		$qb->selectAlias($qb->createFunction('(' . $subQuery->getSQL() . ')'), 'max_date');
 	}
 
 	/**
-	 * Joins votes to count votes per option and answer
+	 * SubQuery the user vote stats
+	 * Adds the current user votes, yes, no, maybe and orphaned votes
+	 * The result will be added to the main query as a subquery
+	 *  - total count results in `current_user_votes`, if $answerFilter is null
+	 *  - {$answerFilter} count results in `current_user_votes_{$answerFilter}`
+	 *
+	 * @param IQueryBuilder $qb the query builder to add the subquery to
+	 * @param string $fromAlias the alias of the main poll table
+	 * @param IParameter $currentUserParam the current user parameter to filter votes by user
+	 * @param string|null $answerFilter the answer filter to apply, can be 'yes', 'no', 'maybe' or null for total votes
 	 */
-	protected function joinVotesCount(
+	protected function subQueryVotesCount(
 		IQueryBuilder &$qb,
 		string $fromAlias,
-		string $currentUserId,
-		string $joinAlias = 'votes',
-		string $subJoinAlias = 'vote_options_sub',
+		IParameter $currentUserParam,
+		?string $answerFilter = null,
 	): void {
+		$subAlias = 'votes';
+		$alias = 'current_user_votes';
 
-		$qb->leftJoin(
-			$fromAlias,
-			Vote::TABLE,
-			$joinAlias,
-			$qb->expr()->andX(
-				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.id'),
-				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
-			)
-		)
-			// Count number of votes for this option
-			->addSelect($qb->createFunction('COUNT(DISTINCT(' . $joinAlias . '.id)) AS current_user_votes'))
-			// Count number of yes votes for this option
-			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'yes\' THEN ' . $joinAlias . '.id END)) AS current_user_votes_yes'))
-			// Count number of no votes for this option
-			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'no\' THEN ' . $joinAlias . '.id END)) AS current_user_votes_no'))
-			// Count number of maybe votes for this option
-			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'maybe\' THEN ' . $joinAlias . '.id END)) AS current_user_votes_maybe'));
+		$subQuery = $this->db->getQueryBuilder();
+		$expr = $subQuery->expr();
 
-		// Join to count orphaned votes of current user (votes without option)
-		$qb->leftJoin(
-			$joinAlias,
-			Option::TABLE,
-			$subJoinAlias,
-			$qb->expr()->andX(
-				$qb->expr()->eq($subJoinAlias . '.poll_id', $joinAlias . '.poll_id'),
-				$qb->expr()->eq($subJoinAlias . '.poll_option_text', $joinAlias . '.vote_option_text'),
-				$qb->expr()->eq($subJoinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
+		$subQuery->select($subQuery->func()->count($subAlias . '.id'))
+			->from(Vote::TABLE, $subAlias)
+			->where($expr->eq($subAlias . '.poll_id', $fromAlias . '.id'))
+			->andWhere($expr->eq($subAlias . '.user_id', $currentUserParam));
+
+		// filter by answer
+		if ($answerFilter) {
+			$subQuery->andWhere($expr->eq($subAlias . '.vote_answer', $qb->createNamedParameter($answerFilter, IQueryBuilder::PARAM_STR)));
+			$alias = $alias . '_' . $answerFilter;
+		}
+
+		$qb->selectAlias($qb->createFunction('(' . $subQuery->getSQL() . ')'), $alias);
+	}
+
+	/**
+	 * SubQuery the count of orphaned votes
+	 * Orphaned votes are votes that do not have a matching option in the poll
+	 * This is used to detect if a user has voted for an option that has been deleted
+	 * and therefore the vote is orphaned.
+	 *
+	 * @param IQueryBuilder $qb the query builder to add the subquery to
+	 * @param string $fromAlias the alias of the main poll table
+	 * @param IParameter $currentUserParam the current user parameter to filter votes by user
+	 */
+	protected function subQueryOrphanedVotesCount(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		IParameter $currentUserParam,
+	): void {
+		$subAlias = 'v';
+		$optionAlias = 'o';
+		$alias = 'current_user_orphaned_votes';
+
+		$subQuery = $this->db->getQueryBuilder();
+		$expr = $subQuery->expr();
+
+		$subQuery->select($subQuery->func()->count($subAlias . '.id'))
+			->from(Vote::TABLE, $subAlias)
+			->leftJoin(
+				$subAlias,
+				Option::TABLE,
+				$optionAlias,
+				$expr->andX(
+					$expr->eq($optionAlias . '.poll_id', $subAlias . '.poll_id'),
+					$expr->eq($optionAlias . '.poll_option_text', $subAlias . '.vote_option_text'),
+					$expr->eq($optionAlias . '.deleted', $expr->literal(0, IQueryBuilder::PARAM_INT))
+				)
 			)
-		)->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $subJoinAlias . '.id is NULL THEN ' . $joinAlias . '.id END)) AS current_user_orphaned_votes'));
+			->where($expr->eq($subAlias . '.poll_id', $fromAlias . '.id'))
+			->andWhere($expr->eq($subAlias . '.user_id', $currentUserParam))
+			->andWhere($expr->isNull($optionAlias . '.id')); // orphaned!
+
+		$qb->selectAlias($qb->createFunction('(' . $subQuery->getSQL() . ')'), $alias);
 	}
 
 	/**
