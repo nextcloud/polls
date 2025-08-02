@@ -233,6 +233,11 @@ class PollMapper extends QBMapper {
 
 	/**
 	 * Joins shares to evaluate user role
+	 *
+	 * @param IQueryBuilder $qb the query builder to add the join to
+	 * @param string $fromAlias the alias of the main poll table
+	 * @param IParameter $currentUserParam the current user parameter to filter shares by user
+	 * @param string $joinAlias the alias for the join, defaults to 'user_shares'
 	 */
 	protected function joinUserRole(
 		IQueryBuilder &$qb,
@@ -265,6 +270,10 @@ class PollMapper extends QBMapper {
 
 	/**
 	 * Join group shares of this poll
+	 *
+	 * @param IQueryBuilder $qb the query builder to add the join to
+	 * @param string $fromAlias the alias of the main poll table
+	 * @param string $joinAlias the alias for the join, defaults to 'group_shares'
 	 */
 	protected function joinGroupShares(
 		IQueryBuilder &$qb,
@@ -293,6 +302,10 @@ class PollMapper extends QBMapper {
 
 	/**
 	 * Joins poll groups, the poll belongs to
+	 *
+	 * @param IQueryBuilder $qb the query builder to add the join to
+	 * @param string $fromAlias the alias of the main poll table
+	 * @param string $joinAlias the alias for the join, defaults to 'poll_groups'
 	 */
 	protected function joinPollGroups(
 		IQueryBuilder $qb,
@@ -377,6 +390,7 @@ class PollMapper extends QBMapper {
 			->from(Option::TABLE, 'options')
 			->where($subQuery->expr()->eq('options.poll_id', $fromAlias . '.id'))
 			->andWhere($subQuery->expr()->eq('options.deleted', $subQuery->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+
 		$qb->selectAlias($qb->createFunction('(' . $subQuery->getSQL() . ')'), 'max_date');
 	}
 
@@ -461,6 +475,10 @@ class PollMapper extends QBMapper {
 
 	/**
 	 * Join to count of participants in poll
+	 *
+	 * @param IQueryBuilder $qb the query builder to add the join to
+	 * @param string $fromAlias the alias of the main poll table
+	 * @param string $joinAlias the alias for the join, defaults to 'participants'
 	 */
 	protected function joinParticipantsCount(
 		IQueryBuilder &$qb,
@@ -475,6 +493,6 @@ class PollMapper extends QBMapper {
 				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.id'),
 			)
 		)
-			->addSelect($qb->createFunction('COUNT(DISTINCT(' . $joinAlias . '.user_id)) AS participants_count'));
+			->selectAlias($qb->createFunction('COUNT(DISTINCT(' . $joinAlias . '.user_id))'), 'participants_count');
 	}
 }
