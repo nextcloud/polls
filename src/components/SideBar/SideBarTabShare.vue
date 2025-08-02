@@ -4,8 +4,8 @@
 -->
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { onMounted } from 'vue'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
 import { useSharesStore } from '../../stores/shares'
 import { useSessionStore } from '../../stores/session'
@@ -13,17 +13,20 @@ import { useSessionStore } from '../../stores/session'
 import SharesList from '../Shares/SharesList.vue'
 import SharesListUnsent from '../Shares/SharesListUnsent.vue'
 import SharesListLocked from '../Shares/SharesListLocked.vue'
-import { Event } from '../../Types'
 
 const sharesStore = useSharesStore()
 const sessionStore = useSessionStore()
 
 onMounted(() => {
-	subscribe(Event.ChangeShares, () => sharesStore.load())
+	sharesStore.load()
 })
 
-onUnmounted(() => {
-	unsubscribe(Event.ChangeShares, () => sharesStore.load())
+onBeforeRouteUpdate(async () => {
+	sharesStore.load()
+})
+
+onBeforeRouteLeave(() => {
+	sharesStore.$reset()
 })
 </script>
 

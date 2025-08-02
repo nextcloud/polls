@@ -16,12 +16,10 @@ import type { AxiosError } from '@nextcloud/axios'
 export const useSubscriptionStore = defineStore('subscription', () => {
 	const subscribed = ref(false)
 
-	const reset = () => {
+	const $reset = () => {
 		subscribed.value = false
 	}
-	/**
-	 *
-	 */
+
 	async function load() {
 		const sessionStore = useSessionStore()
 		try {
@@ -50,9 +48,7 @@ export const useSubscriptionStore = defineStore('subscription', () => {
 			throw error
 		}
 	}
-	/**
-	 *
-	 */
+
 	async function write() {
 		const sessionStore = useSessionStore()
 		try {
@@ -89,7 +85,7 @@ export const useSubscriptionStore = defineStore('subscription', () => {
 	return {
 		subscribed,
 		load,
-		reset,
+		$reset,
 		write,
 	}
 })

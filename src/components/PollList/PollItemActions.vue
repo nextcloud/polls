@@ -5,8 +5,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { router } from '../../router'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 import { t } from '@nextcloud/l10n'
 import { showError, showInfo } from '@nextcloud/dialogs'
@@ -38,6 +37,7 @@ import type { Poll } from '../../stores/poll.types'
 
 const { poll } = defineProps<{ poll: Poll }>()
 
+const router = useRouter()
 const route = useRoute()
 
 const pollsStore = usePollsStore()
