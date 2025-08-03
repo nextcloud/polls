@@ -54,7 +54,7 @@ const showCalendarPeek = computed(
 			<OptionItem :option="option" />
 
 			<Counter
-				v-if="pollStore.permissions.seeResults"
+				v-if="pollStore.votingVariant === 'simple' && pollStore.permissions.seeResults"
 				:show-maybe="pollStore.configuration.allowMaybe"
 				:option="option" />
 
