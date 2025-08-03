@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## [8.2.0] - 2025-08-03
+## [8.2.2] - 2025-08-03
 ### Added
  - Add vote indicator for locked options
 ### Changed
