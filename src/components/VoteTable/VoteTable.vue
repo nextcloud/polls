@@ -149,7 +149,7 @@ function isVotable(participant: User, option: Option) {
 			</StickyDiv>
 
 			<Counter
-				v-if="pollStore.permissions.seeResults"
+				v-if="pollStore.votingVariant === 'simple' && pollStore.permissions.seeResults"
 				:id="`counter-${option.id}`"
 				:key="`counter-${option.id}`"
 				:class="{
