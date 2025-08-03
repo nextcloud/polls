@@ -29,6 +29,8 @@ import type {
 	AllowProposals,
 	PollStore,
 	PollTypesType,
+	VotingVariant,
+	VotingVariantsType
 } from './poll.types'
 import type { ViewMode } from './preferences.types'
 
@@ -45,7 +47,16 @@ export const pollTypes: Record<PollType, PollTypesType> = {
 	},
 }
 
-const DEFAULT_CHOSEN_RANK = [] ;
+export const votingVariants: Record<VotingVariant, VotingVariantsType> = {
+	simple: {
+		name: t('polls', 'Simple variant'),
+	},
+	generic: {
+		name: t('polls', 'Generic variant'),
+	}
+}
+
+const DEFAULT_CHOSEN_RANK : Array<string> = [] ;
 
 export const usePollStore = defineStore('poll', {
 	state: (): PollStore => ({
@@ -59,10 +70,10 @@ export const usePollStore = defineStore('poll', {
 			access: 'private',
 			allowComment: false,
 			allowMaybe: false,
-			chosenRank: JSON.stringify(DEFAULT_CHOSEN_RANK),
 			allowProposals: 'disallow',
 			anonymous: false,
 			autoReminder: false,
+			chosenRank: JSON.stringify(DEFAULT_CHOSEN_RANK),
 			collapseDescription: true,
 			expire: 0,
 			forceConfidentialComments: false,
@@ -305,11 +316,11 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 
-		async add(payload: { type: PollType; title: string }): Promise<Poll | void> {
+		async add(payload: { type: PollType; title: string; votingVariant: VotingVariant }): Promise<Poll | void> {
 			const pollsStore = usePollsStore()
 
 			try {
-				const response = await PollsAPI.addPoll(payload.type, payload.title)
+				const response = await PollsAPI.addPoll(payload.type, payload.title, payload.votingVariant)
 				return response.data.poll
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {

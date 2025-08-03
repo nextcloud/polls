@@ -11,7 +11,12 @@ export type PollTypesType = {
 	name: string
 }
 
-export type VoteVariant = 'simple'
+export type VotingVariant = 'simple' | 'generic'
+
+export type VotingVariantsType = {
+	name : string
+}
+
 export type AccessType = 'private' | 'open'
 export type ShowResults = 'always' | 'closed' | 'never'
 export type AllowProposals = 'allow' | 'disallow' | 'review'
@@ -30,6 +35,7 @@ export type PollConfiguration = {
 	anonymous: boolean
 	autoReminder: boolean
 	collapseDescription: boolean
+	chosenRank: string
 	description: string
 	expire: number
 	forceConfidentialComments: boolean
@@ -100,7 +106,7 @@ export type CurrentUserStatus = {
 export type Poll = {
 	id: number
 	type: PollType
-	voteVariant: VoteVariant
+	votingVariant: VotingVariant
 	descriptionSafe: string
 	configuration: PollConfiguration
 	owner: User

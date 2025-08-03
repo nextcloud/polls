@@ -10,6 +10,7 @@ import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CancelIcon from 'vue-material-design-icons/Cancel.vue'
 import MaybeIcon from '../AppIcons/MaybeIcon.vue'
 import { Answer } from '../../stores/votes.types'
+import { usePollStore } from '../../stores/poll.js'
 const pollStore = usePollStore()
 const chosenRank=JSON.parse(pollStore.configuration.chosenRank)
 
