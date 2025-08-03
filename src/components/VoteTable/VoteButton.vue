@@ -75,6 +75,22 @@ async function setVote() {
 		}
 	}
 }
+
+async function handleRankSelected(rank){
+	try {
+		await votesStore.set({
+			option,
+			setTo: String(rank),
+		});
+		showSuccess(t('polls', 'Vote saved'), { timeout: 2000 });
+	} catch (error) {
+		if ((error as AxiosError).status === 409) {
+			showError(t('polls', 'Vote already booked out'));
+		} else {
+			showError(t('polls', 'Error saving vote'));
+		}
+	}
+}
 </script>
 
 <template>
@@ -87,7 +103,8 @@ async function setVote() {
 				nextAnswer: nextAnswer.translated,
 			})
 		"
-		@click="setVote()">
+		@click="setVote()"
+		@select-change="handleRankSelected">
 		<VoteIndicator :answer="vote.answer" />
 	</button>
 </template>

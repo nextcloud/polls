@@ -79,6 +79,7 @@ namespace OCA\Polls;
  *  access: string,
  *  allowComment: boolean,
  *  allowMaybe: boolean,
+ *  chosenRank: String,
  *  allowProposals: string,
  *  anonymous: boolean,
  *  autoReminder: boolean,

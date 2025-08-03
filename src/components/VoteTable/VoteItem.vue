@@ -31,6 +31,28 @@ const vote = computed(() =>
 	}),
 )
 
+
+async function handleRankSelected(rank){
+	if (isVotable.value) {
+		try {
+			await votesStore.set({
+				option,
+				setTo: String(rank),
+		});
+		showSuccess(t('polls', 'Vote saved'), { timeout: 2000 });
+		} catch (error) {
+			if ((error as AxiosError).status === 409) {
+				showError(t('polls', 'Vote already booked out'));
+			} else {
+				showError(t('polls', 'Error saving vote'));
+			}
+		}
+	} else {
+		showError(t('polls', 'Error saving vote'));
+	}
+}
+
+
 const iconAnswer = computed(() => {
 	if (option.locked && currentUser && !pollStore.isClosed) {
 		return 'locked'
@@ -46,7 +68,7 @@ const iconAnswer = computed(() => {
 
 <template>
 	<div class="vote-item" :class="vote.answer">
-		<VoteIndicator :answer="iconAnswer" />
+		<VoteIndicator :answer="iconAnswer" @select-change="handleRankSelected" />
 	</div>
 </template>
 
