@@ -16,10 +16,10 @@ import InputDiv from '../Base/modules/InputDiv.vue'
 import RadioGroupDiv from '../Base/modules/RadioGroupDiv.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'
 
-import { pollTypes, usePollStore } from '../../stores/poll'
+import { pollTypes, usePollStore, votingVariants } from '../../stores/poll'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 
-import type { PollType } from '../../stores/poll.types'
+import type { PollType, VotingVariant } from '../../stores/poll.types'
 
 const pollStore = usePollStore()
 
@@ -36,10 +36,16 @@ const emit = defineEmits<{
 
 const pollTitle = ref('')
 const pollType = ref<PollType>('datePoll')
+const votingVariant = ref<VotingVariant>('simple')
 const pollId = ref<number | null>(null)
 const adding = ref(false)
 
 const pollTypeOptions = Object.entries(pollTypes).map(([key, value]) => ({
+	value: key,
+	label: value.name,
+}))
+
+const votingVariantOptions = Object.entries(votingVariants).map(([key, value]) => ({
 	value: key,
 	label: value.name,
 }))
@@ -55,6 +61,7 @@ async function addPoll() {
 		const poll = await pollStore.add({
 			type: pollType.value,
 			title: pollTitle.value,
+			votingVariant: votingVariant.value
 		})
 
 		if (poll) {
@@ -109,6 +116,13 @@ function resetPoll() {
 				<CheckIcon />
 			</template>
 			<RadioGroupDiv v-model="pollType" :options="pollTypeOptions" />
+		</ConfigBox>
+
+		<ConfigBox :name="t('polls', 'Vote variant')">
+			<template #icon>
+				<CheckIcon />
+			</template>
+			<RadioGroupDiv v-model="votingVariant" :options="votingVariantOptions" />
 		</ConfigBox>
 
 		<div class="create-buttons">

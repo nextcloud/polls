@@ -4,15 +4,27 @@
 -->
 
 <script setup lang="ts">
+import { ref,computed, watch } from 'vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CancelIcon from 'vue-material-design-icons/Cancel.vue'
 import MaybeIcon from '../AppIcons/MaybeIcon.vue'
 import { Answer } from '../../stores/votes.types'
+const pollStore = usePollStore()
+const chosenRank=JSON.parse(pollStore.configuration.chosenRank)
 
 const ICON_SIZE = 26
 
-const { answer } = defineProps<{ answer: Answer | 'locked' }>()
+interface Props {
+	answer: Answer | 'locked'
+	active?: boolean
+}
+
+const props = defineProps<Props>()
+
+const selectedRank = ref(props.answer)
+
+const emit = defineEmits(['click','selectChange'])
 
 const colorCodeNo = getComputedStyle(document.documentElement).getPropertyValue(
 	'--color-error',
@@ -23,10 +35,44 @@ const colorCodeYes = getComputedStyle(document.documentElement).getPropertyValue
 const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyValue(
 	'--color-warning',
 )
+
+// Watchers
+watch(() => props.answer, (newValue) => {
+  selectedRank.value = newValue
+})
+
+// Methods
+const handleRankSelected = (event) => {
+  const rank = event.target.value
+  emit('selectChange', rank)
+}
+
+
+function onClick() {
+	if (props.active) {
+		emit('click')
+	}
+}
 </script>
 
 <template>
-	<div class="vote-indicator">
+	<div class="vote-cell-container">
+	<div v-if="pollStore.votingVariant === 'generic'" class="generic-vote">
+		<span v-if="!props.active" class="selected-value">
+			{{ selectedRank }}
+		</span>
+		<select
+			v-else
+			:value="selectedRank"
+			class="vote-ranking"
+			@change="handleRankSelected">
+			<option disabled value=""></option>
+			<option v-for="rank in chosenRank" :key="rank" :value="rank">
+				{{ rank }}
+			</option>
+		</select>
+	</div>
+	<div v-else :class="['vote-indicator', props.active]" @click="onClick()">
 		<MaybeIcon
 			v-if="answer === 'maybe'"
 			:fill-color="colorCodeMaybe"
@@ -44,28 +90,10 @@ const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyVal
 			:fill-color="colorCodeNo"
 			:size="ICON_SIZE" />
 	</div>
+	</div>
 </template>
 
 <style lang="scss">
-.active .vote-indicator {
-	border: 2px solid;
-	border-radius: var(--border-radius);
-
-	&,
-	* {
-		cursor: pointer;
-	}
-
-	&:hover {
-		width: 35px;
-		height: 35px;
-		.material-design-icon {
-			width: 31px;
-			height: 31px;
-		}
-	}
-}
-
 .vote-indicator {
 	color: var(--color-polls-foreground-no);
 	min-width: 30px;
@@ -77,8 +105,20 @@ const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyVal
 	&,
 	* {
 		transition: all 0.4s ease-in-out;
+		margin: auto;
+		.active & {
+			cursor: pointer;
+		}
 	}
 
+	.active & {
+		border: 2px solid;
+		border-radius: var(--border-radius);
+		.material-design-icon {
+			width: 26px;
+			height: 26px;
+		}
+	}
 	.yes & {
 		color: var(--color-polls-foreground-yes);
 	}
@@ -86,5 +126,18 @@ const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyVal
 	.maybe & {
 		color: var(--color-polls-foreground-maybe);
 	}
+
+	.active:hover & {
+		width: 35px;
+		height: 35px;
+		.material-design-icon {
+			width: 31px;
+			height: 31px;
+		}
+	}
+}
+
+.error-message {
+  color: var(--color-error);
 }
 </style>
