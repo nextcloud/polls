@@ -7,7 +7,7 @@ import { httpInstance, createCancelTokenHandler } from './HttpApi'
 import type { AxiosResponse } from '@nextcloud/axios'
 import type { ApiEmailAdressList, FullPollResponse } from './api.types'
 import type { PollGroup } from '../../stores/pollGroups.types'
-import type { Poll, PollConfiguration, PollType } from '../../stores/poll.types'
+import type { Poll, PollConfiguration, PollType, VotingVariant } from '../../stores/poll.types'
 
 export type Confirmations = {
 	sentMails: { emailAddress: string; displayName: string }[]
@@ -87,13 +87,14 @@ const polls = {
 		})
 	},
 
-	addPoll(type: PollType, title: string): Promise<AxiosResponse<{ poll: Poll }>> {
+	addPoll(type: PollType, title: string, votingVariant: VotingVariant): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'poll/add',
 			data: {
 				type,
 				title,
+				votingVariant,
 			},
 			cancelToken:
 				cancelTokenHandlerObject[

@@ -29,6 +29,7 @@ import ConfigShowResults from '../Configuration/ConfigShowResults.vue'
 import ConfigTitle from '../Configuration/ConfigTitle.vue'
 import ConfigUseNo from '../Configuration/ConfigUseNo.vue'
 import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
+import ConfigRankOptions from '../Configuration/ConfigRankOptions.vue'
 
 import { usePollStore } from '../../stores/poll'
 import { useVotesStore } from '../../stores/votes'
@@ -71,12 +72,20 @@ const votesStore = useVotesStore()
 			<ConfigForceConfidentialComments
 				v-if="pollStore.configuration.allowComment"
 				@change="pollStore.write" />
+			<template v-if="pollStore.votingVariant === 'generic'">
 			<ConfigAllowMayBe @change="pollStore.write" />
 			<ConfigUseNo @change="pollStore.write" />
 			<ConfigAnonymous @change="pollStore.write" />
-
+			</template>
 			<ConfigVoteLimit @change="pollStore.write" />
 			<ConfigOptionLimit @change="pollStore.write" />
+		</ConfigBox>
+
+		<ConfigBox v-if="pollStore.votingVariant === 'generic'" :name="t('polls', 'Generic Options')">
+			<template #icon>
+				<PollConfigIcon />
+			</template>
+			<ConfigRankOptions />
 		</ConfigBox>
 
 		<ConfigBox :name="t('polls', 'Poll closing status')">

@@ -45,11 +45,13 @@ export const pollTypes: Record<PollType, PollTypesType> = {
 	},
 }
 
+const DEFAULT_CHOSEN_RANK = [] ;
+
 export const usePollStore = defineStore('poll', {
 	state: (): PollStore => ({
 		id: 0,
 		type: 'datePoll',
-		voteVariant: 'simple',
+		votingVariant: 'simple',
 		descriptionSafe: '',
 		configuration: {
 			title: '',
@@ -57,6 +59,7 @@ export const usePollStore = defineStore('poll', {
 			access: 'private',
 			allowComment: false,
 			allowMaybe: false,
+			chosenRank: JSON.stringify(DEFAULT_CHOSEN_RANK),
 			allowProposals: 'disallow',
 			anonymous: false,
 			autoReminder: false,
@@ -136,6 +139,15 @@ export const usePollStore = defineStore('poll', {
 	}),
 
 	getters: {
+
+		getChosenRank(): string[] {
+			try {
+	 			const parsed = JSON.parse(this.configuration.chosenRank || '[]')
+	    		return Array.isArray(parsed) ? parsed : []
+	  		} catch {
+	      		return DEFAULT_CHOSEN_RANK;
+	    	}
+		},
 		viewMode(state): ViewMode {
 			const sessionStore = useSessionStore()
 			if (state.type === 'textPoll') {
@@ -242,6 +254,15 @@ export const usePollStore = defineStore('poll', {
 	},
 
 	actions: {
+
+		setChosenRank(ranks: string[]) {
+			const validItems = Array.isArray(ranks) 
+			? ranks.map(item => String(item).trim())
+			.filter(item => item !== '')
+			: [];
+			this.configuration.chosenRank = JSON.stringify(validItems.sort());
+		},
+		
 		reset(): void {
 			this.$reset()
 		},
