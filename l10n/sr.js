@@ -722,6 +722,7 @@ OC.L10N.register(
     "No vote options available" : "Нема доступних опција гласања",
     "Maybe the owner did not provide some until now." : "Можда их власник још увек није понудио.",
     "Error loading more participants" : "Грешка приликом учитавања још учесника",
+    "Error loading poll" : "Грешка при учитавању гласања",
     "Add options" : "Додај опције",
     "Minute" : "Минут",
     "Hour" : "Сат",

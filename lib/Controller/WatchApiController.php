@@ -30,14 +30,15 @@ class WatchApiController extends BaseApiV2Controller {
 
 	/**
 	 * Watch poll for updates
-	 * @param int $pollId poll id of poll to wqtch
+	 * @param int $pollId poll id of poll to watch
+	 * @param string $mode the mode of watching, e.g. 'longPolling'
 	 * @param int|null $offset only watch changes after this timestamp
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/watch', requirements: ['apiVersion' => '(v2)'])]
-	public function watchPoll(int $pollId, ?int $offset): DataResponse {
-		return $this->response(fn () => ['updates' => $this->watchService->watchUpdates($pollId, $offset)]);
+	public function watchPoll(int $pollId, string $mode, ?int $offset): DataResponse {
+		return $this->response(fn () => ['updates' => $this->watchService->watchUpdates($pollId, $mode, $offset)]);
 	}
 }

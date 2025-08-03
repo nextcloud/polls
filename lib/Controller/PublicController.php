@@ -116,6 +116,7 @@ class PublicController extends BaseController {
 
 	/**
 	 * Watch poll for updates
+	 * @param string $mode the mode of watching, e.g. 'longPolling'
 	 * @param int|null $offset only watch changes after this timestamp
 	 */
 	#[PublicPage]
@@ -123,9 +124,9 @@ class PublicController extends BaseController {
 	#[ShareTokenRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/watch')]
-	public function watchPoll(?int $offset): JSONResponse {
+	public function watchPoll(string $mode, ?int $offset): JSONResponse {
 		return $this->response(fn () => [
-			'updates' => $this->watchService->watchUpdates($this->userSession->getShare()->getPollId(), $offset)
+			'updates' => $this->watchService->watchUpdates($this->userSession->getShare()->getPollId(), $mode, $offset)
 		]);
 	}
 

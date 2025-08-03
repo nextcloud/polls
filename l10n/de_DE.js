@@ -729,6 +729,7 @@ OC.L10N.register(
     "No vote options available" : "Keine Abstimmungsoptionen verfügbar",
     "Maybe the owner did not provide some until now." : "Vielleicht hat der Besitzer bis jetzt keine zur Verfügung gestellt.",
     "Error loading more participants" : "Fehler beim Laden weiterer Teilnehmer",
+    "Error loading poll" : "Fehler beim Laden der Umfrage",
     "Add options" : "Optionen hinzufügen",
     "Minute" : "Minute",
     "Hour" : "Stunde",

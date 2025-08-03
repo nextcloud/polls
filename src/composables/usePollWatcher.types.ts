@@ -3,7 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export type MessageType = 'status' | 'info' | 'error' | 'debug' | 'fatal' | 'update'
+export type MessageType =
+	| 'status'
+	| 'info'
+	| 'error'
+	| 'debug'
+	| 'warning'
+	| 'update'
 export type WatcherMode = 'noPolling' | 'periodicPolling' | 'longPolling'
 export type WatcherStatus =
 	| 'starting'
@@ -12,6 +18,7 @@ export type WatcherStatus =
 	| 'error'
 	| 'stopping'
 	| 'idle'
+	| 'modeChanged'
 
 export type WatcherData = {
 	id: number

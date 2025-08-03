@@ -302,6 +302,7 @@ OC.L10N.register(
     "Experimental styles" : "Kokeelliset tyylit",
     "No vote options available" : "Ei äänestysvaihtoehtoja saatavilla",
     "Maybe the owner did not provide some until now." : "Ehkei omistaja lisännyt vielä yhtään",
+    "Error loading poll" : "Virhe ladatessa kyselyä",
     "Minute" : "Minuutti",
     "Hour" : "Tunti",
     "Day" : "Päivä",

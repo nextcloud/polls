@@ -197,6 +197,7 @@ OC.L10N.register(
     "Experimental styles" : "Istiles isperimentales",
     "No vote options available" : "Perunu sèberu de votu disponìbile",
     "Maybe the owner did not provide some until now." : "Fortzis sa propiedade no nd'at ancora frunidu.",
+    "Error loading poll" : "Errore carrighende su sondàgiu",
     "Minute" : "Minutu",
     "Hour" : "Ora",
     "Day" : "Die",

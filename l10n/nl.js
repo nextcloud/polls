@@ -377,6 +377,7 @@ OC.L10N.register(
     "Experimental styles" : "Experimentele stijlen",
     "No vote options available" : "Geen stemopties beschikbaar",
     "Maybe the owner did not provide some until now." : "Misschien heeft de eigenaar nog geen opties toegevoegd.",
+    "Error loading poll" : "Fout bij laden peiling",
     "Minute" : "Minuut",
     "Hour" : "Uur",
     "Day" : "Dag",

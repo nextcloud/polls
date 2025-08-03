@@ -207,20 +207,30 @@ export const useSessionStore = defineStore('session', {
 		generateWatcherId() {
 			this.watcher.id = Math.random().toString(36).substring(2)
 		},
+
 		async load(
-			to: null | RouteLocationNormalized,
-			cheapLoading: boolean = false,
+			payload: {
+				to?: null | RouteLocationNormalized
+				cheapLoading?: boolean
+				reload?: boolean
+			} = {
+				to: null,
+				cheapLoading: false,
+				reload: false,
+			},
 		) {
 			Logger.debug('Loading session')
 			this.generateWatcherId()
 
-			if (to !== null) {
-				Logger.debug('Set requested route', { to })
-				await this.setRouter(to)
+			if (payload.to) {
+				Logger.debug('Set requested route', { to: payload.to })
+				await this.setRouter(payload.to)
 				Logger.debug('Route set', { route: this.route })
 			}
 
-			if (cheapLoading) {
+			if (payload.reload) {
+				Logger.debug('Reloading session')
+			} else if (payload.cheapLoading) {
 				Logger.debug('Same route, skipping session load')
 				return
 			}
@@ -257,14 +267,14 @@ export const useSessionStore = defineStore('session', {
 			this.sessionSettings.viewModeTextPoll = viewMode
 		},
 
-		async setRouter(payload: RouteLocationNormalized) {
-			this.route.currentRoute = payload.fullPath
-			this.route.name = payload.name
-			this.route.path = payload.path
-			this.route.params.id = payload.params.id as unknown as number
-			this.route.params.token = payload.params.token as string
-			this.route.params.type = payload.params.type as FilterType
-			this.route.params.slug = payload.params.slug as string
+		async setRouter(setRoute: RouteLocationNormalized) {
+			this.route.currentRoute = setRoute.fullPath
+			this.route.name = setRoute.name
+			this.route.path = setRoute.path
+			this.route.params.id = setRoute.params.id as unknown as number
+			this.route.params.token = setRoute.params.token as string
+			this.route.params.type = setRoute.params.type as FilterType
+			this.route.params.slug = setRoute.params.slug as string
 		},
 
 		// Share store
@@ -285,6 +295,8 @@ export const useSessionStore = defineStore('session', {
 				throw error
 			}
 		},
+
+		loadAppSettings(): void {},
 
 		async updateEmailAddress(payload: { emailAddress: string }): Promise<void> {
 			const pollStore = usePollStore()

@@ -451,6 +451,7 @@ OC.L10N.register(
     "Some visual styling options." : "Hainbat estilo bisual aukerak.",
     "No vote options available" : "Ez dago bozka aukerarik eskuragarri.",
     "Maybe the owner did not provide some until now." : "Agian jabeak ez du oraindik batere eskaini.",
+    "Error loading poll" : "Errorea galdeketa kargatzean",
     "Add options" : "Gehitu aukerak",
     "Minute" : "Minutua",
     "Hour" : "Ordua",

@@ -569,6 +569,7 @@ OC.L10N.register(
     "All options are booked up." : "Alle alternativer er booket opp.",
     "No vote options available" : "Ingen tilgjengelige stemmealternativer",
     "Maybe the owner did not provide some until now." : "Kanskje eieren ikke har gitt noen før nå.",
+    "Error loading poll" : "Feil ved lasting av avstemning",
     "Add options" : "Legg til alternativer",
     "Minute" : "Minutt",
     "Hour" : "Time",

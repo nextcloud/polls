@@ -729,6 +729,7 @@ OC.L10N.register(
     "No vote options available" : "Níl roghanna vótála ar fáil",
     "Maybe the owner did not provide some until now." : "B'fhéidir nár chuir an t-úinéir roinnt ar fáil go dtí seo.",
     "Error loading more participants" : "Earráid ag luchtú níos mó rannpháirtithe",
+    "Error loading poll" : "Earráid agus vótaíocht á lódáil",
     "Add options" : "Cuir roghanna leis",
     "Minute" : "Nóiméad",
     "Hour" : "Uair",

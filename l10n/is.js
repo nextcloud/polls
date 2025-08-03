@@ -114,6 +114,7 @@ OC.L10N.register(
     "Options" : "Valkostir",
     "Sharing" : "Deiling",
     "Activity" : "Virkni",
+    "Error loading poll" : "Villa við að hlaða inn könnun",
     "Minute" : "Mínúta",
     "Hour" : "Klukkustund",
     "Day" : "Dagur",

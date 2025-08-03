@@ -25,7 +25,7 @@ async function loadContext(
 	const sessionStore = useSessionStore()
 	const preferencesStore = usePreferencesStore()
 
-	await sessionStore.load(to, cheapLoading)
+	await sessionStore.load({ to, cheapLoading })
 
 	if (!cheapLoading) {
 		Settings.defaultLocale =

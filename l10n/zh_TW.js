@@ -729,6 +729,7 @@ OC.L10N.register(
     "No vote options available" : "無投票選項",
     "Maybe the owner did not provide some until now." : "也許擁有者到現在都沒有提供。",
     "Error loading more participants" : "載入更多參與者時發生錯誤",
+    "Error loading poll" : "載入投票時發生錯誤",
     "Add options" : "新增選項",
     "Minute" : "分鐘",
     "Hour" : "小時",

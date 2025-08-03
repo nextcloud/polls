@@ -682,6 +682,7 @@ OC.L10N.register(
     "All options are booked up." : "Tüm seçenekler tükenmiş.",
     "No vote options available" : "Kullanılabilecek bir oy seçeneği yok",
     "Maybe the owner did not provide some until now." : "Sahibi şu ana kadar bir seçenek belirtmemiş olabilir.",
+    "Error loading poll" : "Anket yüklenirken sorun çıktı",
     "Add options" : "Seçenek ekle",
     "Minute" : "Dakika",
     "Hour" : "Saat",

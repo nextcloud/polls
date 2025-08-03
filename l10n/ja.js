@@ -273,6 +273,7 @@ OC.L10N.register(
     "Options" : "オプション",
     "Sharing" : "共有",
     "Activity" : "アクティビティ",
+    "Error loading poll" : "投票の読み込みエラー",
     "Minute" : "分",
     "Hour" : "時",
     "Day" : "日",
