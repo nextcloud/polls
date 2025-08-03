@@ -48,6 +48,8 @@ const vote = computed(() =>
 	}),
 )
 
+const chosenRank=JSON.parse(pollStore.configuration.chosenRank)
+
 const nextAnswer = computed<richAnswer>(() => {
 	if (['no', ''].includes(vote.value.answer)) {
 		return richAnswers.yes
@@ -76,7 +78,10 @@ async function setVote() {
 	}
 }
 
-async function handleRankSelected(rank){
+async function handleRankSelected(event){
+	const selectElement = event.target
+	const rank = selectElement.value
+	console.log('rank',rank,'event',event)
 	try {
 		await votesStore.set({
 			option,
@@ -94,19 +99,31 @@ async function handleRankSelected(rank){
 </script>
 
 <template>
-	<button
-		class="vote-button active"
-		:class="[vote.answer]"
-		:aria-label="
-			t('polls', 'Click to vote with {nextAnswer} for option {option}', {
-				option: option.text,
-				nextAnswer: nextAnswer.translated,
-			})
-		"
-		@click="setVote()"
-		@select-change="handleRankSelected">
-		<VoteIndicator :answer="vote.answer" />
-	</button>
+	<div v-if="pollStore.votingVariant === 'generic'" class="generic-vote">
+		<select
+		:value="vote.answer"
+		class="vote-ranking"
+		@change="handleRankSelected">
+		<option disabled value=""></option>
+		<option v-for="rank in chosenRank" :key="rank" :value="rank">
+			{{ rank }}
+		</option>
+		</select>
+	</div>
+	<div v-else>
+		<button
+			class="vote-button active"
+			:class="[vote.answer]"
+			:aria-label="
+				t('polls', 'Click to vote with {nextAnswer} for option {option}', {
+					option: option.text,
+					nextAnswer: nextAnswer.translated,
+				})
+			"
+			@click="setVote()">
+			<VoteIndicator :answer="vote.answer" />
+		</button>
+	</div>
 </template>
 
 <style lang="scss" scoped>
