@@ -96,6 +96,7 @@ function isVotable(participant: User, option: Option) {
 		<StickyDiv
 			v-show="pollStore.viewMode === 'table-view'"
 			:id="`option-item-spacer`"
+			key="option-item-spacer"
 			class="option-item-spacer"
 			sticky-top
 			sticky-left
@@ -105,6 +106,7 @@ function isVotable(participant: User, option: Option) {
 		<StickyDiv
 			v-if="pollStore.permissions.seeResults"
 			v-show="pollStore.viewMode === 'table-view'"
+			key="counter-spacer"
 			sticky-left
 			class="counter-spacer" />
 
