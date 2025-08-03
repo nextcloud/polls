@@ -143,7 +143,7 @@ self.onmessage = async (props: MessageEvent<WatcherProps>) => {
 				})
 			} else {
 				sendMessage({
-					type: 'error',
+					type: 'warning',
 					status: 'error',
 					mode,
 					interval,
@@ -153,7 +153,7 @@ self.onmessage = async (props: MessageEvent<WatcherProps>) => {
 
 			if (consecutiveErrors >= MAX_ERRORS) {
 				sendMessage({
-					type: 'fatal',
+					type: 'error',
 					status: 'error',
 					mode,
 					interval,
