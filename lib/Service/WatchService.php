@@ -13,6 +13,7 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Exceptions\NoUpdatesException;
+use OCA\Polls\Exceptions\WatchModeChanged;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -33,7 +34,7 @@ class WatchService {
 	/**
 	 * Watch poll for updates
 	 */
-	public function watchUpdates(int $pollId, ?int $offset = null): array {
+	public function watchUpdates(int $pollId, string $mode, ?int $offset = null): array {
 		if ($pollId) {
 			$this->pollMapper->get($pollId, true, withRoles: true)
 				->request(Poll::PERMISSION_POLL_VIEW);
@@ -42,8 +43,13 @@ class WatchService {
 		$start = time();
 		$timeout = 30;
 		$offset = $offset ?? $start;
+		$updateType = $this->appSettings->getUpdateType();
 
-		if ($this->appSettings->getUpdateType() === AppSettings::SETTING_UPDATE_TYPE_LONG_POLLING) {
+		if ($updateType !== $mode) {
+			throw new WatchModeChanged('Update type mismatch: expected ' . $updateType . ', got ' . $mode);
+		}
+
+		if ($updateType === AppSettings::SETTING_UPDATE_TYPE_LONG_POLLING) {
 			while (empty($updates) && time() <= $start + $timeout) {
 				sleep(1);
 				$updates = $this->getUpdates($pollId, $offset);

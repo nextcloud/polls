@@ -44,8 +44,8 @@ watch(
 	[() => pollStore.permissions.comment, () => pollStore.configuration.anonymous],
 	([commentNew, commentOld], [anonymousNew, anonymousOld]) => {
 		Logger.debug('Configuration affecting comments changed', {
-			comment: `${commentOld} -> ${commentNew}`,
-			anonymous: `${anonymousOld} -> ${anonymousNew}`,
+			comment: `${commentOld} → ${commentNew}`,
+			anonymous: `${anonymousOld} → ${anonymousNew}`,
 		})
 		commentsStore.load()
 	},

@@ -98,8 +98,10 @@ export const usePollWatcher = (interval = 30000) => {
 				case 'debug':
 					Logger.debug(`[PollWatcher] ${message}`)
 					break
+				case 'warning':
+					Logger.warn(`[PollWatcher] ${message}`)
+					break
 				case 'error':
-				case 'fatal':
 					Logger.error(`[PollWatcher] ${message}`)
 					break
 				case 'update':
@@ -107,9 +109,15 @@ export const usePollWatcher = (interval = 30000) => {
 					if (Array.isArray(updates)) {
 						handleWatcherUpdates(updates)
 					}
+
 					break
 				case 'status':
 					if (message) Logger.info(`[PollWatcher] ${message}`, { params })
+
+					if (status === 'modeChanged') {
+						sessionStore.load()
+					}
+
 					break
 				default:
 					Logger.warn('[PollWatcher] Unknown message type:', { type })
