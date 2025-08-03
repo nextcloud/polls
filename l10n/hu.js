@@ -469,6 +469,7 @@ OC.L10N.register(
     "Some visual styling options." : "Egyes vizuális stílusok lehetőségei.",
     "No vote options available" : "Nincsenek szavazási lehetőségek megadva",
     "Maybe the owner did not provide some until now." : "Lehet, hogy a tulajdonos eddig nem adott meg semmit.",
+    "Error loading poll" : "Hiba a szavazás betöltése során",
     "Add options" : "Lehetőségek hozzáadása",
     "Minute" : "Perc",
     "Hour" : "Óra",

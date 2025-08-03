@@ -729,6 +729,7 @@ OC.L10N.register(
     "No vote options available" : "Nejsou k dispozici žádné možnosti volby",
     "Maybe the owner did not provide some until now." : "Vlastník nejspíš doposud žádné neposkytl.",
     "Error loading more participants" : "Chyba při načítání dalších účastníků",
+    "Error loading poll" : "Chyba při načítání ankety",
     "Add options" : "Přidat volby",
     "Minute" : "Minuta",
     "Hour" : "Hodina",

@@ -346,6 +346,7 @@ OC.L10N.register(
     "Some visual styling options." : "Izbrane možnosti oblikovanja.",
     "No vote options available" : "Ni razpoložljive možnosti za glasovanje ali odziv",
     "Maybe the owner did not provide some until now." : "Morda jih lastnik še ni uspel dodati.",
+    "Error loading poll" : "Napaka nalaganja ankete",
     "Add options" : "Dodaj možnost",
     "Minute" : "Minuta",
     "Hour" : "Ura",

@@ -93,6 +93,7 @@ OC.L10N.register(
     "Options" : "אפשרויות",
     "Sharing" : "שיתוף",
     "Activity" : "פעילות",
+    "Error loading poll" : "שגיאה בטעינת הסקר",
     "Minute" : "דקה",
     "Hour" : "שעה",
     "Day" : "יום",

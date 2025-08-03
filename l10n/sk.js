@@ -504,6 +504,7 @@ OC.L10N.register(
     "Some visual styling options." : "Niektoré možnosti vizuálneho štýlu.",
     "No vote options available" : "Žiadne možnosti hlasovania neboli nájdené",
     "Maybe the owner did not provide some until now." : "Možno niektoré majiteľ doteraz neposkytol.",
+    "Error loading poll" : "Pri načítavaní ankety sa vyskytla chyba",
     "Add options" : "Pridať možnosti",
     "Minute" : "Minúta",
     "Hour" : "Hodina",

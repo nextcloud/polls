@@ -729,6 +729,7 @@ OC.L10N.register(
     "No vote options available" : "Немає варіантів голосування",
     "Maybe the owner did not provide some until now." : "Можливо, власник не надав деякі з них до цього часу.",
     "Error loading more participants" : "Помилка завантаження більшої кількості учасників",
+    "Error loading poll" : "Помилка під час завантаження опитування",
     "Add options" : "Додати варіанти",
     "Minute" : "Хвилин",
     "Hour" : "Годин",

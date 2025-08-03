@@ -419,6 +419,7 @@ OC.L10N.register(
     "Some visual styling options." : "Algunas opciones de estilo visual.",
     "No vote options available" : "No hay opciones de voto disponibles",
     "Maybe the owner did not provide some until now." : "Tal vez el propietario aún no las haya proporcionado.",
+    "Error loading poll" : "Error al cargar la encuesta",
     "Minute" : "Minuto",
     "Hour" : "Hora",
     "Day" : "Día",

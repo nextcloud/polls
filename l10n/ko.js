@@ -245,6 +245,7 @@ OC.L10N.register(
     "Options" : "옵션들",
     "Sharing" : "공유",
     "Activity" : "활동",
+    "Error loading poll" : "투표 로딩 오류",
     "Minute" : "분",
     "Hour" : "시간",
     "Day" : "일",

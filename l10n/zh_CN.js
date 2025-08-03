@@ -362,6 +362,7 @@ OC.L10N.register(
     "Experimental styles" : "实验性样式",
     "No vote options available" : "无可用的投票选项",
     "Maybe the owner did not provide some until now." : "也许所有者直到现在才提供了一些。",
+    "Error loading poll" : "加载投票时出错",
     "Add options" : "添加选项",
     "Minute" : "分钟",
     "Hour" : "小时",

@@ -424,6 +424,7 @@ OC.L10N.register(
     "Some visual styling options." : "Niektóre opcje stylizacji wizualnej.",
     "No vote options available" : "Brak dostępnych opcji głosowania",
     "Maybe the owner did not provide some until now." : "Może właściciel do tej pory ich nie umożliwił.",
+    "Error loading poll" : "Błąd wczytywania sondy",
     "Add options" : "Dodaj opcje",
     "Minute" : "Minuta",
     "Hour" : "Godzina",

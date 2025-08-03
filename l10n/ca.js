@@ -566,6 +566,7 @@ OC.L10N.register(
     "All options are booked up." : "Totes les opcions estan reservades.",
     "No vote options available" : "No hi ha opcions de vot disponibles",
     "Maybe the owner did not provide some until now." : "Potser el propietari no n'ha proporcionat fins ara.",
+    "Error loading poll" : "Error carregant l’enquesta",
     "Minute" : "Minut",
     "Hour" : "Hora",
     "Day" : "Dia",

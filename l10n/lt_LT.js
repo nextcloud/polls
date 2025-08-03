@@ -240,6 +240,7 @@ OC.L10N.register(
     "Experimental styles" : "Eksperimentiniai stiliai",
     "No vote options available" : "Nėra prieinamų balsavimo variantų",
     "Maybe the owner did not provide some until now." : "Galbūt, savininkas iki šiol jų nepateikė.",
+    "Error loading poll" : "Klaida įkeliant apklausą",
     "Minute" : "Minutė",
     "Hour" : "Valanda",
     "Day" : "Diena",

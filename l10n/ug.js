@@ -559,6 +559,7 @@ OC.L10N.register(
     "All options are booked up." : "بارلىق تاللاشلار زاكاس قىلىنغان.",
     "No vote options available" : "بېلەت تاشلاش ھوقۇقى يوق",
     "Maybe the owner did not provide some until now." : "بەلكىم ئىگىسى ھازىرغىچە بىر قىسىم تەمىنلىمىگەن بولۇشى مۇمكىن.",
+    "Error loading poll" : "راي سىناشتا خاتالىق كۆرۈلدى",
     "Add options" : "تاللاش قوشۇڭ",
     "Minute" : "مىنۇت",
     "Hour" : "سائەت",

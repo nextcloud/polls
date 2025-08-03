@@ -426,6 +426,7 @@ OC.L10N.register(
     "Some visual styling options." : "Vissa visuella stylingalternativ.",
     "No vote options available" : "Inga röstalternativ tillgängliga",
     "Maybe the owner did not provide some until now." : "Kanske har ägaren inte gett några förrän nu.",
+    "Error loading poll" : "Det gick inte att läsa in omröstningen",
     "Add options" : "Lägg till alternativ",
     "Minute" : "Minut",
     "Hour" : "Timme",

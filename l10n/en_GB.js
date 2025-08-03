@@ -729,6 +729,7 @@ OC.L10N.register(
     "No vote options available" : "No vote options available",
     "Maybe the owner did not provide some until now." : "Maybe the owner did not provide some until now.",
     "Error loading more participants" : "Error loading more participants",
+    "Error loading poll" : "Error loading poll",
     "Add options" : "Add options",
     "Minute" : "Minute",
     "Hour" : "Hour",
