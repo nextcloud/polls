@@ -107,8 +107,12 @@ export const usePollWatcher = (interval = 30000) => {
 					if (Array.isArray(updates)) {
 						handleWatcherUpdates(updates)
 					}
+
 					break
 				case 'status':
+					if (status === 'modeChanged') {
+						sessionStore.load()
+					}
 					if (message) Logger.info(`[PollWatcher] ${message}`, { params })
 					break
 				default:

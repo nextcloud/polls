@@ -12,6 +12,7 @@ export type WatcherStatus =
 	| 'error'
 	| 'stopping'
 	| 'idle'
+	| 'modeChanged'
 
 export type WatcherData = {
 	id: number

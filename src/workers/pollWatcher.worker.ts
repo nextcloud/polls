@@ -78,7 +78,7 @@ self.onmessage = async (props: MessageEvent<WatcherProps>) => {
 				mode: WatcherMode
 				updates: WatcherData[]
 			}> = await http.get(endPoint, {
-				params: { offset: lastUpdated },
+				params: { offset: lastUpdated, mode },
 			})
 
 			consecutiveErrors = 0
@@ -132,13 +132,24 @@ self.onmessage = async (props: MessageEvent<WatcherProps>) => {
 
 			consecutiveErrors = consecutiveErrors + 1
 
-			sendMessage({
-				type: 'error',
-				status: 'error',
-				mode,
-				interval,
-				message: `[Worker] Request failed (${consecutiveErrors}/${MAX_ERRORS})`,
-			})
+			if (err.status === 409) {
+				sendMessage({
+					type: 'status',
+					status: 'modeChanged',
+					mode,
+					interval,
+					message: '[Worker] 409 server changed mode - reload session',
+					lastUpdate: lastUpdated,
+				})
+			} else {
+				sendMessage({
+					type: 'error',
+					status: 'error',
+					mode,
+					interval,
+					message: `[Worker] Request failed (${consecutiveErrors}/${MAX_ERRORS})`,
+				})
+			}
 
 			if (consecutiveErrors >= MAX_ERRORS) {
 				sendMessage({
