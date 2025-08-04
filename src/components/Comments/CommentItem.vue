@@ -7,8 +7,8 @@
 import { computed } from 'vue'
 
 import linkifyStr from 'linkify-string'
+import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
 
 import ActionDelete from '../Actions/modules/ActionDelete.vue'
@@ -30,7 +30,7 @@ const preferencesStore = usePreferencesStore()
 const { comment } = defineProps<{ comment: CommentsGrouped }>()
 
 const dateCommentedRelative = computed(() =>
-	moment.unix(comment.timestamp).fromNow(),
+	DateTime.fromSeconds(comment.timestamp).toRelative(),
 )
 
 const isCurrentUser = computed(

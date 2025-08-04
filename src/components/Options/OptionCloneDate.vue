@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import moment from '@nextcloud/moment'
+import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
 
 import NcSelect from '@nextcloud/vue/components/NcSelect'
@@ -36,7 +36,7 @@ const sequence = ref<Sequence>({
 })
 
 const dateBaseOptionString = computed(() =>
-	moment.unix(option.timestamp).format('LLLL'),
+	DateTime.fromSeconds(option.timestamp).toLocaleString(DateTime.DATETIME_FULL),
 )
 
 /**

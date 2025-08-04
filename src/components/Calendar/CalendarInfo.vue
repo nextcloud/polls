@@ -4,8 +4,8 @@
 -->
 
 <script setup lang="ts">
-import moment from '@nextcloud/moment'
 import { computed } from 'vue'
+import { DateTime } from 'luxon'
 import { CalendarEvent } from '../../components/Calendar/CalendarPeek.vue'
 
 import type { Option } from '../../stores/options.types'
@@ -37,31 +37,29 @@ const fontColor = computed(() => {
 	return l > 0.5 ? '#222' : '#ddd'
 })
 
-const dayStart = computed(() => moment.unix(calendarEvent.start).format('ddd'))
-
-const dayEnd = computed(() => moment.unix(calendarEvent.end - 1).format('ddd'))
+const eventStart = computed(() => DateTime.fromSeconds(calendarEvent.start))
+const eventEnd = computed(() => DateTime.fromSeconds(calendarEvent.end))
 
 const dayDisplay = computed(() => {
-	if (dayEnd.value === dayStart.value) {
-		return dayStart.value
+	if (eventEnd.value.hasSame(eventStart.value.minus({ second: 1 }), 'day')) {
+		return eventStart.value.toLocaleString({ weekday: 'short' })
 	}
 
-	return `${dayStart.value} - ${dayEnd.value}`
+	return `${eventStart.value.toLocaleString({ weekday: 'short' })} - ${eventEnd.value.toLocaleString({ weekday: 'short' })}`
 })
 
-const timeStart = computed(() => moment.unix(calendarEvent.start).format('LT'))
-
-const timeEnd = computed(() => moment.unix(calendarEvent.end).format('LT'))
-
 const timeDisplay = computed(() => {
-	if (timeEnd.value === timeStart.value) {
-		return timeStart.value
+	if (eventStart.value.hasSame(eventEnd.value, 'minute')) {
+		return eventStart.value.toLocaleString(DateTime.TIME_SIMPLE)
 	}
-	return `${timeStart.value} - ${timeEnd.value}`
+
+	return `${eventStart.value.toLocaleString(DateTime.TIME_SIMPLE)} - ${eventEnd.value.toLocaleString(DateTime.TIME_SIMPLE)}`
 })
 
 const showJustDays = computed(
-	() => dayStart.value !== dayEnd.value || calendarEvent.allDay,
+	() =>
+		!eventEnd.value.hasSame(eventStart.value.minus({ second: 1 }), 'day')
+		|| calendarEvent.allDay,
 )
 
 const statusClass = computed(() => calendarEvent.status.toLowerCase())

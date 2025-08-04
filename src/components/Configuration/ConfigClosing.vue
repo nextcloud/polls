@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import moment from '@nextcloud/moment'
+import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
 
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -20,9 +20,9 @@ import { usePollStore } from '../../stores/poll'
 const pollStore = usePollStore()
 
 const expire = computed({
-	get: () => moment.unix(pollStore.configuration.expire)._d,
+	get: () => pollStore.getExpirationDateTime.toJSDate(),
 	set: (value) => {
-		pollStore.configuration.expire = moment(value).unix()
+		pollStore.configuration.expire = DateTime.fromJSDate(value).toSeconds()
 		pollStore.write()
 	},
 })
@@ -31,7 +31,9 @@ const useExpire = computed({
 	get: () => !!pollStore.configuration.expire,
 	set: (value) => {
 		if (value) {
-			pollStore.configuration.expire = moment().add(1, 'week').unix()
+			pollStore.configuration.expire = DateTime.now()
+				.plus({ week: 1 })
+				.toSeconds()
 		} else {
 			pollStore.configuration.expire = 0
 		}
@@ -39,9 +41,6 @@ const useExpire = computed({
 	},
 })
 
-/**
- *
- */
 function clickToggleClosed() {
 	if (pollStore.isClosed) {
 		pollStore.reopen()

@@ -5,7 +5,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
 
 import { usePollStore } from '../../stores/poll'
@@ -129,19 +128,19 @@ const subTexts = computed(() => {
 })
 
 const dateCreatedRelative = computed(() =>
-	moment.unix(pollStore.status.created).fromNow(),
+	pollStore.getExpirationDateTime.toRelative(),
 )
 
 const closeToClosing = computed(
 	() =>
 		!pollStore.isClosed
 		&& pollStore.configuration.expire
-		&& moment.unix(pollStore.configuration.expire).diff() < 86400000,
+		&& pollStore.getExpirationDateTime.diffNow().as('days') < 1,
 )
 
 const timeExpirationRelative = computed(() => {
 	if (pollStore.configuration.expire) {
-		return moment.unix(pollStore.configuration.expire).fromNow()
+		return pollStore.getExpirationDateTime.toRelative() as string
 	}
 	return t('polls', 'never')
 })

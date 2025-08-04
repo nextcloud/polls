@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import moment from '@nextcloud/moment'
+import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
@@ -24,9 +24,10 @@ const allowProposals = computed({
 })
 
 const pollExpire = computed({
-	get: () => moment.unix(pollStore.configuration.proposalsExpire)._d,
+	get: () => pollStore.getProposalExpirationDateTime.toJSDate(),
 	set: (value) => {
-		pollStore.configuration.proposalsExpire = moment(value).unix()
+		pollStore.configuration.proposalsExpire =
+			DateTime.fromJSDate(value).toSeconds()
 		pollStore.write()
 	},
 })
@@ -35,7 +36,9 @@ const proposalExpiration = computed({
 	get: () => !!pollStore.configuration.proposalsExpire,
 	set: (value) => {
 		if (value) {
-			pollStore.configuration.proposalsExpire = moment().add(1, 'week').unix()
+			pollStore.configuration.proposalsExpire = DateTime.now()
+				.plus({ week: 1 })
+				.toSeconds()
 		} else {
 			pollStore.configuration.proposalsExpire = 0
 		}
