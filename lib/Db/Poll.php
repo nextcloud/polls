@@ -325,15 +325,15 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setAllowComment($pollConfiguration['allowComment'] ?? $this->getAllowComment());
 		$this->setAllowMaybe($pollConfiguration['allowMaybe'] ?? $this->getAllowMaybe());
 		$chosenRank = $pollConfiguration['chosenRank'] ?? $this->getChosenRank();
-			if (is_array($chosenRank)) {
-				 $chosenRank = json_encode($chosenRank); // explicit serialisation
-			} elseif (is_string($chosenRank)) {
-				if (!json_decode($chosenRank)) {
-					$chosenRank = '[]';
-				}
-			} else {
+		if (is_array($chosenRank)) {
+				$chosenRank = json_encode($chosenRank); // explicit serialisation
+		} elseif (is_string($chosenRank)) {
+			if (!json_decode($chosenRank)) {
 				$chosenRank = '[]';
 			}
+		} else {
+			$chosenRank = '[]';
+		}
 		$this->setChosenRank($chosenRank);
 		$this->setAllowProposals($pollConfiguration['allowProposals'] ?? $this->getAllowProposals());
 		$this->setAnonymousSafe($pollConfiguration['anonymous'] ?? $this->getAnonymous());

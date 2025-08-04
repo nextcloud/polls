@@ -81,7 +81,6 @@ async function setVote() {
 async function handleRankSelected(event){
 	const selectElement = event.target
 	const rank = selectElement.value
-	console.log('rank',rank,'event',event)
 	try {
 		await votesStore.set({
 			option,
