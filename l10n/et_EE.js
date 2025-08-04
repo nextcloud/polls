@@ -695,6 +695,7 @@ OC.L10N.register(
     "No vote options available" : "Hääletusvalikuid pole saadaval",
     "Maybe the owner did not provide some until now." : "Võib-olla omanik kuni praeguseni ei pakkunud ühtegi.",
     "Error loading more participants" : "Viga täiendavate osalejate laadimisel",
+    "Error loading poll" : "Viga küsitluse laadimisel",
     "Add options" : "Lisa valikuid",
     "Minute" : "Minut",
     "Hour" : "Tund",

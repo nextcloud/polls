@@ -5,6 +5,7 @@ OC.L10N.register(
     "Group" : "Grupa",
     "Privacy Policy" : "Privātuma politika",
     "Polls App - New Activity" : "Aptauju lietotne - jauna darbība",
+    "%s has left a comment." : "%s pievienoja piebildi.",
     "Contact" : "Kontakts",
     "User" : "Lietotājs",
     "You have reopened this poll" : "Tu atkārtoti atvēri šo aptauju",
