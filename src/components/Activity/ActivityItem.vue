@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import moment from '@nextcloud/moment'
+import { DateTime } from 'luxon'
 
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
@@ -20,7 +20,7 @@ const props = defineProps({
 })
 
 const dateActivityRelative = computed(() =>
-	moment(props.activity.datetime).fromNow(),
+	DateTime.fromISO(props.activity.datetime).toRelative(),
 )
 
 const message = computed(() => {
@@ -32,7 +32,9 @@ const message = computed(() => {
 		&& parameters.after.id.startsWith('dt:')
 	) {
 		const dateTime = parameters.after.id.slice(3)
-		parameters.after.name = moment(dateTime).format('L LTS')
+		parameters.after.name = DateTime.fromISO(dateTime).toLocaleString(
+			DateTime.DATETIME_SHORT,
+		)
 	}
 
 	Object.keys(parameters).forEach(function (key) {
