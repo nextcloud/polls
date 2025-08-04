@@ -5,7 +5,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import moment from '@nextcloud/moment'
 import { t, n } from '@nextcloud/l10n'
 
 import OwnerIcon from 'vue-material-design-icons/Crown.vue'
@@ -77,11 +76,11 @@ const accessCaption = computed(() =>
 		? t('polls', 'Private poll')
 		: t('polls', 'Openly accessible poll'),
 )
-const dateCreatedRelative = computed(() =>
-	moment.unix(pollStore.status.created).fromNow(),
+const dateCreatedRelative = computed(
+	() => pollStore.getCreationDateTime.toRelative() as string,
 )
-const dateExpiryRelative = computed(() =>
-	moment.unix(pollStore.configuration.expire).fromNow(),
+const dateExpiryRelative = computed(
+	() => pollStore.getCreationDateTime.toRelative() as string,
 )
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 const countAllYesVotes = computed(() => votesStore.countAllVotesByAnswer('yes'))

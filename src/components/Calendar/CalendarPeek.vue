@@ -7,7 +7,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 import orderBy from 'lodash/orderBy'
-import moment from '@nextcloud/moment'
+import { DateTime } from 'luxon'
 
 import NcPopover from '@nextcloud/vue/components/NcPopover'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -48,12 +48,13 @@ const events = ref<CalendarEvent[]>([])
 const pollStore = usePollStore()
 
 const detectAllDay = computed(() => {
-	const from = moment.unix(option.timestamp)
-	const to = moment.unix(option.timestamp + Math.max(0, option.duration))
+	const from = DateTime.fromSeconds(option.timestamp)
+
 	const dayLongEvent =
-		from.unix() === moment(from).startOf('day').unix()
-		&& to.unix() === moment(to).startOf('day').unix()
-		&& from.unix() !== to.unix()
+		from.startOf('day')
+		&& from.plus({ seconds: option.duration }).startOf('day')
+		&& option.duration > 0
+
 	return {
 		allDay: dayLongEvent,
 		type: dayLongEvent ? 'date' : 'dateTime',
