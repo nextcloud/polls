@@ -424,6 +424,7 @@ OC.L10N.register(
     "Some visual styling options." : "Някои опции за визуалено стилизиране.",
     "No vote options available" : "Няма налични опции за гласуване",
     "Maybe the owner did not provide some until now." : "Може би собственикът не е предоставил някои досега.",
+    "Error loading poll" : "Грешка при зареждане на анкета",
     "Minute" : "Минута",
     "Hour" : "Час",
     "Day" : "Ден",
