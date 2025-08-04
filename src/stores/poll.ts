@@ -8,9 +8,9 @@ import { defineStore } from 'pinia'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
+import { DateTime } from 'luxon'
 
 import { t } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 
@@ -171,7 +171,12 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		isProposalOpen(): boolean {
-			return this.isProposalAllowed && !this.isProposalExpired
+			return (
+				(this.isProposalExpirySet
+					&& this.getProposalExpirationDateTime.diffNow().as('seconds')
+						> 0)
+				|| (!this.isProposalExpirySet && this.isProposalAllowed)
+			)
 		},
 
 		isProposalAllowed(state): boolean {
@@ -179,6 +184,14 @@ export const usePollStore = defineStore('poll', {
 				state.configuration.allowProposals === 'allow'
 				|| state.configuration.allowProposals === 'review'
 			)
+		},
+
+		getExpirationDateTime(state): DateTime {
+			return DateTime.fromSeconds(state.configuration.expire)
+		},
+
+		getCreationDateTime(state): DateTime {
+			return DateTime.fromSeconds(state.status.created)
 		},
 
 		isConfirmationAllowed(state): boolean {
@@ -189,12 +202,15 @@ export const usePollStore = defineStore('poll', {
 			return !this.isClosed && state.permissions.edit
 		},
 
-		isProposalExpired(state): boolean {
+		isProposalExpired(): boolean {
 			return (
-				this.isProposalAllowed
-				&& state.configuration.proposalsExpire > 0
-				&& moment.unix(state.configuration.proposalsExpire).diff() < 0
+				this.isProposalExpirySet
+				&& this.getProposalExpirationDateTime.diffNow().as('seconds') < 0
 			)
+		},
+
+		getProposalExpirationDateTime(state): DateTime {
+			return DateTime.fromSeconds(state.configuration.proposalsExpire)
 		},
 
 		isProposalExpirySet(state): boolean {
@@ -202,18 +218,16 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		proposalsExpireRelative(state): string {
-			return moment.unix(state.configuration.proposalsExpire).fromNow()
-		},
-
-		proposalsExpire_d(state): Date {
-			return moment.unix(state.configuration.proposalsExpire)._d
+			return DateTime.fromSeconds(
+				state.configuration.proposalsExpire,
+			).toRelative()
 		},
 
 		isClosed(state): boolean {
 			return (
 				state.status.isExpired
 				|| (state.configuration.expire > 0
-					&& moment.unix(state.configuration.expire).diff() < 1000)
+					&& this.getExpirationDateTime.diffNow().as('seconds') < 0)
 			)
 		},
 
@@ -233,16 +247,6 @@ export const usePollStore = defineStore('poll', {
 		setViewMode(viewMode: ViewMode): void {
 			const sessionStore = useSessionStore()
 			sessionStore.setViewMode(this.type, viewMode)
-		},
-
-		setProposalExpiration(payload: { expire: number }): void {
-			this.configuration.proposalsExpire = moment(payload.expire).unix()
-			this.write()
-		},
-
-		setExpiration(payload: { expire: number }): void {
-			this.configuration.proposalsExpire = moment(payload.expire).unix()
-			this.write()
 		},
 
 		async load(isChanging: boolean = false): Promise<void> {
