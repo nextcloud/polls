@@ -32,7 +32,7 @@ import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import { showError } from '@nextcloud/dialogs'
 
-const store = usePollStore()
+const pollStore = usePollStore()
 
 // Parse chosenRank string from store into array
 const internalChosenRank = ref([])
@@ -41,7 +41,7 @@ const newOption = ref('')
 
 onMounted(() => {
 	try {
-		const initialValue = JSON.parse(store.configuration.chosenRank || '[]');
+		const initialValue = JSON.parse(pollStore.configuration.chosenRank || '[]');
 		if ( Array.isArray(initialValue) ) {
 			internalChosenRank.value = initialValue;
 		} else {
@@ -59,8 +59,8 @@ onMounted(() => {
 // update in store + API
 async function updateChosenRank(newValue) {
 	try {
-		await store.setChosenRank(newValue)
-		await store.write()
+		await pollStore.setChosenRank(newValue)
+		await pollStore.write()
 	} catch (err) {
 		console.error('Update failed:', err)
 		showError(t('polls', 'Failed to update options'))
