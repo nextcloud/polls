@@ -1,10 +1,11 @@
 { "translations": {
     "Polls" : "Aptaujas",
+    "Contact group" : "Kontaktpersonu kopa",
     "Group" : "Grupa",
     "Privacy Policy" : "Privātuma politika",
     "Polls App - New Activity" : "Aptauju lietotne - jauna darbība",
     "%s has left a comment." : "%s pievienoja piebildi.",
-    "Contact" : "Kontakts",
+    "Contact" : "Kontaktpersona",
     "User" : "Lietotājs",
     "You have reopened this poll" : "Tu atkārtoti atvēri šo aptauju",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Aptauju lietotne, līdzīga Doodle/DUD-Poll, ar iespēju ierobežot piekļuvi.",
