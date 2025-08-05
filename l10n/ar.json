@@ -612,6 +612,7 @@
     "All options are booked up." : "كل الخيارات تمّ حجزها.",
     "No vote options available" : "لا توجد خيارات تصويت متاحة",
     "Maybe the owner did not provide some until now." : "ربما لم يقدم المالك جزء منه حتى الآن.",
+    "Error loading poll" : "حدث خطأ أثناء تحميل الاستبيان",
     "Add options" : "إضافة خيارات",
     "Minute" : "دقيقة",
     "Hour" : "الساعة",

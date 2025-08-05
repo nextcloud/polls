@@ -240,6 +240,7 @@ OC.L10N.register(
     "Sharing" : "Comparticiñon",
     "Activity" : "Actividá",
     "Experimental styles" : "Estilos esperimentales",
+    "Error loading poll" : "Hebo un error al cargar la encuesta",
     "Minute" : "Minutu",
     "Hour" : "Hora",
     "Day" : "Día",
