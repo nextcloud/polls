@@ -238,12 +238,14 @@ const appClass = computed(() => [
 
 		<div class="vote-main">
 			<IntersectionObserver id="top-observer" v-model="topObserverVisible" />
-			<Collapsible
-				v-if="pollStore.configuration.description"
-				class="sticky-left area__top"
-				v-bind="collapsibleProps">
-				<MarkDownDescription />
-			</Collapsible>
+			<StickyDiv sticky-left>
+				<Collapsible
+					v-if="pollStore.configuration.description"
+					class="area__top"
+					v-bind="collapsibleProps">
+					<MarkDownDescription />
+				</Collapsible>
+			</StickyDiv>
 
 			<VoteInfoCards class="sticky-left area__top" />
 
