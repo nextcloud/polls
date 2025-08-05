@@ -6,6 +6,12 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Fixed
+ - Made description sticky again on horizontal scrolling
+ - Activities in sidebar did not get loaded
+ - Avoid Warnings in console because of missing keyes
+### Changed
+ - Replaced momentjs by Luxon
 
 ## [8.2.2] - 2025-08-03
 ### Added
