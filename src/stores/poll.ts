@@ -49,7 +49,7 @@ export const pollTypes: Record<PollType, PollTypesType> = {
 
 export const votingVariants: Record<VotingVariant, VotingVariantsType> = {
 	simple: {
-		name: t('polls', 'Simple variant'),
+		name: t('polls', 'Opted variant'),
 	},
 	generic: {
 		name: t('polls', 'Generic variant'),
