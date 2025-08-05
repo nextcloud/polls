@@ -326,7 +326,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setAllowMaybe($pollConfiguration['allowMaybe'] ?? $this->getAllowMaybe());
 		$chosenRank = $pollConfiguration['chosenRank'] ?? $this->getChosenRank();
 		if (is_array($chosenRank)) {
-				$chosenRank = json_encode($chosenRank); // explicit serialisation
+			$chosenRank = json_encode($chosenRank); // explicit serialisation
 		} elseif (is_string($chosenRank)) {
 			if (!json_decode($chosenRank)) {
 				$chosenRank = '[]';

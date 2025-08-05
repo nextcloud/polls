@@ -61,7 +61,7 @@ async function addPoll() {
 		const poll = await pollStore.add({
 			type: pollType.value,
 			title: pollTitle.value,
-			votingVariant: votingVariant.value
+			votingVariant: votingVariant.value,
 		})
 
 		if (poll) {

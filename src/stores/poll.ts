@@ -30,7 +30,7 @@ import type {
 	PollStore,
 	PollTypesType,
 	VotingVariant,
-	VotingVariantsType
+	VotingVariantsType,
 } from './poll.types'
 import type { ViewMode } from './preferences.types'
 
@@ -53,10 +53,10 @@ export const votingVariants: Record<VotingVariant, VotingVariantsType> = {
 	},
 	generic: {
 		name: t('polls', 'Generic variant'),
-	}
+	},
 }
 
-const DEFAULT_CHOSEN_RANK : Array<string> = [] ;
+const DEFAULT_CHOSEN_RANK: Array<string> = []
 
 export const usePollStore = defineStore('poll', {
 	state: (): PollStore => ({
@@ -150,14 +150,13 @@ export const usePollStore = defineStore('poll', {
 	}),
 
 	getters: {
-
 		getChosenRank(): string[] {
 			try {
-	 			const parsed = JSON.parse(this.configuration.chosenRank || '[]')
-	    		return Array.isArray(parsed) ? parsed : []
-	  		} catch {
-	      		return DEFAULT_CHOSEN_RANK;
-	    	}
+				const parsed = JSON.parse(this.configuration.chosenRank || '[]')
+				return Array.isArray(parsed) ? parsed : []
+			} catch {
+				return DEFAULT_CHOSEN_RANK
+			}
 		},
 		viewMode(state): ViewMode {
 			const sessionStore = useSessionStore()
@@ -265,15 +264,15 @@ export const usePollStore = defineStore('poll', {
 	},
 
 	actions: {
-
 		setChosenRank(ranks: string[]) {
-			const validItems = Array.isArray(ranks) 
-			? ranks.map(item => String(item).trim())
-			.filter(item => item !== '')
-			: [];
-			this.configuration.chosenRank = JSON.stringify(validItems.sort());
+			const validItems = Array.isArray(ranks)
+				? ranks
+						.map((item) => String(item).trim())
+						.filter((item) => item !== '')
+				: []
+			this.configuration.chosenRank = JSON.stringify(validItems.sort())
 		},
-		
+
 		reset(): void {
 			this.$reset()
 		},
@@ -316,11 +315,19 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 
-		async add(payload: { type: PollType; title: string; votingVariant: VotingVariant }): Promise<Poll | void> {
+		async add(payload: {
+			type: PollType
+			title: string
+			votingVariant: VotingVariant
+		}): Promise<Poll | void> {
 			const pollsStore = usePollsStore()
 
 			try {
-				const response = await PollsAPI.addPoll(payload.type, payload.title, payload.votingVariant)
+				const response = await PollsAPI.addPoll(
+					payload.type,
+					payload.title,
+					payload.votingVariant,
+				)
 				return response.data.poll
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {

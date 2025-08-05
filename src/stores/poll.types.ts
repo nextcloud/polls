@@ -14,7 +14,7 @@ export type PollTypesType = {
 export type VotingVariant = 'simple' | 'generic'
 
 export type VotingVariantsType = {
-	name : string
+	name: string
 }
 
 export type AccessType = 'private' | 'open'

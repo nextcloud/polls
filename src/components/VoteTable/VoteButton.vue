@@ -48,7 +48,7 @@ const vote = computed(() =>
 	}),
 )
 
-const chosenRank=JSON.parse(pollStore.configuration.chosenRank)
+const chosenRank = JSON.parse(pollStore.configuration.chosenRank)
 
 const nextAnswer = computed<richAnswer>(() => {
 	if (['no', ''].includes(vote.value.answer)) {
@@ -78,20 +78,20 @@ async function setVote() {
 	}
 }
 
-async function handleRankSelected(event){
+async function handleRankSelected(event) {
 	const selectElement = event.target
 	const rank = selectElement.value
 	try {
 		await votesStore.set({
 			option,
 			setTo: String(rank),
-		});
-		showSuccess(t('polls', 'Vote saved'), { timeout: 2000 });
+		})
+		showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
 	} catch (error) {
 		if ((error as AxiosError).status === 409) {
-			showError(t('polls', 'Vote already booked out'));
+			showError(t('polls', 'Vote already booked out'))
 		} else {
-			showError(t('polls', 'Error saving vote'));
+			showError(t('polls', 'Error saving vote'))
 		}
 	}
 }
@@ -100,13 +100,13 @@ async function handleRankSelected(event){
 <template>
 	<div v-if="pollStore.votingVariant === 'generic'" class="generic-vote">
 		<select
-		:value="vote.answer"
-		class="vote-ranking"
-		@change="handleRankSelected">
-		<option disabled value=""></option>
-		<option v-for="rank in chosenRank" :key="rank" :value="rank">
-			{{ rank }}
-		</option>
+			:value="vote.answer"
+			class="vote-ranking"
+			@change="handleRankSelected">
+			<option disabled value=""></option>
+			<option v-for="rank in chosenRank" :key="rank" :value="rank">
+				{{ rank }}
+			</option>
 		</select>
 	</div>
 	<div v-else>
