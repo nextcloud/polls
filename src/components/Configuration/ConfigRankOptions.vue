@@ -2,8 +2,11 @@
 	<div class="option-container">
 		<!-- Menu to choose the rank for this poll -->
 		<select v-model="selectedOption">
-			<option v-for="(option, index) in internalChosenRank" :key="index" :value="option">
-			{{ option }}
+			<option
+				v-for="(option, index) in internalChosenRank"
+				:key="index"
+				:value="option">
+				{{ option }}
 			</option>
 		</select>
 		<!-- text field to add a new value to the rank -->
@@ -11,8 +14,7 @@
 			v-model="newOption"
 			:placeholder="t('polls', 'Enter a new option')"
 			:label="t('polls', 'New option')"
-			class="nc-text-field"
-		/>
+			class="nc-text-field" />
 		<NcButton icon @click="addOption">
 			<PlusIcon />
 		</NcButton>
@@ -24,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref,onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { usePollStore } from '../../stores/poll.js'
 import { t } from '@nextcloud/l10n'
 import { NcButton, NcTextField } from '@nextcloud/vue'
@@ -41,11 +43,11 @@ const newOption = ref('')
 
 onMounted(() => {
 	try {
-		const initialValue = JSON.parse(pollStore.configuration.chosenRank || '[]');
-		if ( Array.isArray(initialValue) ) {
-			internalChosenRank.value = initialValue;
+		const initialValue = JSON.parse(pollStore.configuration.chosenRank || '[]')
+		if (Array.isArray(initialValue)) {
+			internalChosenRank.value = initialValue
 		} else {
-			internalChosenRank.value = [initialValue];
+			internalChosenRank.value = [initialValue]
 		}
 		if (internalChosenRank.value.length > 0) {
 			selectedOption.value = internalChosenRank.value[0]
@@ -79,33 +81,33 @@ async function addOption() {
 }
 
 async function removeOption() {
-	const updated = internalChosenRank.value.filter(o => o !== selectedOption.value)
+	const updated = internalChosenRank.value.filter(
+		(o) => o !== selectedOption.value,
+	)
 	internalChosenRank.value = updated
 	selectedOption.value = updated[0] || null
 	await updateChosenRank(updated)
 }
-
 </script>
 
 <style scoped>
 .option-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
 }
 
 .nc-text-field {
-  flex-grow: 1;
-  margin-right: 8px;
-  margin-bottom: 8px;
-  width: 100px;
+	flex-grow: 1;
+	margin-right: 8px;
+	margin-bottom: 8px;
+	width: 100px;
 }
 
 .option-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+	display: flex;
+	align-items: center;
+	gap: 4px;
 }
 </style>
-

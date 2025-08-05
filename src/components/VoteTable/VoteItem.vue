@@ -45,8 +45,8 @@ const iconAnswer = computed(() => {
 </script>
 
 <template>
-	<div v-if="pollStore.votingVariant==='generic'" class="generic-vote">
-		{{vote.answer}}
+	<div v-if="pollStore.votingVariant === 'generic'" class="generic-vote">
+		{{ vote.answer }}
 	</div>
 	<div v-else class="vote-item" :class="vote.answer">
 		<VoteIndicator :answer="iconAnswer" />
