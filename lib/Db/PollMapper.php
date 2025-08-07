@@ -37,28 +37,13 @@ class PollMapper extends QBMapper {
 	 * @return Poll
 	 */
 	public function get(int $id, bool $getDeleted = false, bool $withRoles = false): Poll {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select(self::TABLE . '.*')
-			->from($this->getTableName(), self::TABLE)
-			->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
-			->groupBy(self::TABLE . '.id');
+		$qb = $this->buildQuery(false);
+		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		if (!$getDeleted) {
 			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
 
-		if ($withRoles) {
-			$pollGroupsAlias = 'poll_groups';
-			$currentUserId = $this->userSession->getCurrentUserId();
-			$currentUserParam = $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR);
-
-			$this->subQueryMaxDate($qb, self::TABLE);
-
-			$this->joinUserRole($qb, self::TABLE, $currentUserParam);
-			$this->joinGroupShares($qb, self::TABLE);
-			$this->joinPollGroups($qb, self::TABLE, $pollGroupsAlias);
-			$this->joinPollGroupShares($qb, $pollGroupsAlias, $currentUserParam, $pollGroupsAlias);
-		}
 		return $this->findEntity($qb);
 	}
 
