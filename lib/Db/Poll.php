@@ -65,7 +65,7 @@ use OCP\IURLGenerator;
  * @method void setVotingVariant(string $value)
  *
  * Magic functions for joined columns
- * @method int getShareToken()
+ * @method string getShareToken()
  * @method int getCurrentUserVotes()
  * @method int getCurrentUserVotesYes()
  * @method int getCurrentUserVotesNo()
