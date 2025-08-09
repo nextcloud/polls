@@ -349,8 +349,6 @@ class TableManager {
 	}
 
 	private function deleteDuplicates(string $table, array $columns):int {
-		$this->watchMapper->deleteOldEntries(time());
-
 		$qb = $this->connection->getQueryBuilder();
 
 		if ($this->schema->hasTable($this->dbPrefix . $table)) {
