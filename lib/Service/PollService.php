@@ -60,7 +60,7 @@ class PollService {
 		}
 
 		return array_values(array_filter($pollList, function (Poll $poll): bool {
-			return $poll->getIsAllowed(Poll::PERMISSION_POLL_VIEW);
+			return $poll->getIsAllowed(Poll::PERMISSION_POLL_ACCESS);
 		}));
 	}
 
@@ -74,7 +74,7 @@ class PollService {
 
 			foreach ($polls as $poll) {
 				try {
-					$poll->request(Poll::PERMISSION_POLL_VIEW);
+					$poll->request(Poll::PERMISSION_POLL_ACCESS);
 					$pollList[] = $poll;
 				} catch (ForbiddenException $e) {
 					continue;
@@ -175,7 +175,7 @@ class PollService {
 			} else {
 				$this->poll = $this->pollMapper->find($pollId);
 			}
-			$this->poll->request(Poll::PERMISSION_POLL_VIEW);
+			$this->poll->request(Poll::PERMISSION_POLL_ACCESS);
 			return $this->poll;
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Poll not found');
@@ -415,7 +415,7 @@ class PollService {
 	 */
 	public function clone(int $pollId): Poll {
 		$origin = $this->pollMapper->get($pollId, withRoles: true)
-			->request(Poll::PERMISSION_POLL_VIEW);
+			->request(Poll::PERMISSION_POLL_ACCESS);
 		$this->appSettings->getPollCreationAllowed();
 
 		$this->poll = new Poll();

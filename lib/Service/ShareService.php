@@ -170,7 +170,7 @@ class ShareService {
 			return $this->share;
 		}
 
-		if (!$poll->getIsAllowed(Poll::PERMISSION_POLL_VIEW)) {
+		if (!$poll->getIsAllowed(Poll::PERMISSION_POLL_ACCESS)) {
 			throw new ForbiddenException('User is not allowed to access this poll');
 		}
 

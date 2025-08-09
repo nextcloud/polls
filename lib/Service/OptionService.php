@@ -59,7 +59,7 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function list(int $pollId): array {
-		$this->getPoll($pollId, Poll::PERMISSION_POLL_VIEW);
+		$this->getPoll($pollId, Poll::PERMISSION_POLL_ACCESS);
 
 		try {
 			$this->options = $this->optionMapper->findByPoll($pollId, !$this->poll->getIsAllowed(Poll::PERMISSION_POLL_RESULTS_VIEW));
@@ -332,7 +332,7 @@ class OptionService {
 	 */
 	public function clone(int $fromPollId, int $toPollId): void {
 		$this->pollMapper->get($fromPollId, withRoles: true)
-			->request(Poll::PERMISSION_POLL_VIEW)
+			->request(Poll::PERMISSION_POLL_ACCESS)
 			->request(Poll::PERMISSION_OPTION_ADD);
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
@@ -442,7 +442,7 @@ class OptionService {
 	 *
 	 * @return void
 	 */
-	private function getPoll(int $pollId, string $permission = Poll::PERMISSION_POLL_VIEW): void {
+	private function getPoll(int $pollId, string $permission = Poll::PERMISSION_POLL_ACCESS): void {
 		if ($this->poll->getId() !== $pollId) {
 			$this->poll = $this->pollMapper->get($pollId, true, withRoles: true);
 		}

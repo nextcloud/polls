@@ -81,7 +81,9 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const TYPE_DATE = 'datePoll';
 	public const TYPE_TEXT = 'textPoll';
 	public const VARIANT_SIMPLE = 'simple';
+	/** @deprecated use ACCESS_PRIVATE instead  */
 	public const ACCESS_HIDDEN = 'hidden';
+	/** @deprecated use ACCESS_OPEN instead  */
 	public const ACCESS_PUBLIC = 'public';
 	public const ACCESS_PRIVATE = 'private';
 	public const ACCESS_OPEN = 'open';
@@ -107,15 +109,15 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const ROLE_NONE = 'none';
 
 	public const PERMISSION_OVERRIDE = 'override_permission';
-	public const PERMISSION_POLL_VIEW = 'view';
-	public const PERMISSION_POLL_EDIT = 'edit';
-	public const PERMISSION_POLL_CHANGE_OWNER = 'changeOwner';
-	public const PERMISSION_POLL_DELETE = 'delete';
-	public const PERMISSION_POLL_ARCHIVE = 'archive';
-	public const PERMISSION_POLL_RESULTS_VIEW = 'seeResults';
+	public const PERMISSION_POLL_ACCESS = 'accessPoll';
+	public const PERMISSION_POLL_EDIT = 'editPoll';
+	public const PERMISSION_POLL_CHANGE_OWNER = 'changePollOwner';
+	public const PERMISSION_POLL_DELETE = 'deletePoll';
+	public const PERMISSION_POLL_ARCHIVE = 'archivePoll';
+	public const PERMISSION_POLL_RESULTS_VIEW = 'seePollResults';
 	public const PERMISSION_POLL_USERNAMES_VIEW = 'seeUserNames';
-	public const PERMISSION_POLL_TAKEOVER = 'takeOver';
-	public const PERMISSION_POLL_SUBSCRIBE = 'subscribe';
+	public const PERMISSION_POLL_TAKEOVER = 'takeOverPoll';
+	public const PERMISSION_POLL_SUBSCRIBE = 'subscribePoll';
 	public const PERMISSION_COMMENT_ADD = 'addComment';
 	public const PERMISSION_COMMENT_DELETE = 'deleteComment';
 	public const PERMISSION_OPTION_ADD = 'addOptions';
@@ -301,7 +303,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'seeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
 			'subscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
 			'takeOver' => $this->getIsAllowed(self::PERMISSION_POLL_TAKEOVER),
-			'view' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
+			'view' => $this->getIsAllowed(self::PERMISSION_POLL_ACCESS),
 			'vote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
 		];
 	}
@@ -583,7 +585,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			self::PERMISSION_OPTION_DELETE => $this->getAllowDeleteOption(),
 			self::PERMISSION_OPTIONS_REORDER => $this->getAllowReorderOptions(),
 			self::PERMISSION_OVERRIDE => true,
-			self::PERMISSION_POLL_VIEW => $this->getAllowAccessPoll(),
+			self::PERMISSION_POLL_ACCESS => $this->getAllowAccessPoll(),
 			self::PERMISSION_POLL_EDIT => $this->getAllowEditPoll(),
 			self::PERMISSION_POLL_DELETE => $this->getAllowDeletePoll(),
 			self::PERMISSION_POLL_ARCHIVE => $this->getAllowEditPoll(),

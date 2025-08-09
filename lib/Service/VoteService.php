@@ -41,7 +41,7 @@ class VoteService {
 	 */
 	public function list(int $pollId): array {
 		$poll = $this->pollMapper->get($pollId, true, withRoles: true)
-			->request(Poll::PERMISSION_POLL_VIEW);
+			->request(Poll::PERMISSION_POLL_ACCESS);
 
 		try {
 			$poll->request(Poll::PERMISSION_POLL_RESULTS_VIEW);
