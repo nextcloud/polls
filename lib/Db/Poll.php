@@ -342,6 +342,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
+	public function getPollOwnerId() {
+		return $this->getOwner();
+	}
+
 	public function getUserRole(): string {
 		if ($this->getCurrentUserIsEntityUser()) {
 			return self::ROLE_OWNER;
