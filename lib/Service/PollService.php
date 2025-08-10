@@ -214,7 +214,7 @@ class PollService {
 
 		// create new poll before resetting all values to
 		// ensure that the poll has all required values and an id
-		// latter checks mai fail if the poll has no id
+		// later checks may fail if the poll has no id
 		$this->poll = $this->pollMapper->insert($this->poll);
 
 		$this->poll->setDescription('');
