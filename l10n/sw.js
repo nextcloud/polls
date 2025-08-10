@@ -40,6 +40,7 @@ OC.L10N.register(
     "Private poll" : "Kura ya maoni ya kibinafsi",
     "Name" : "Jina",
     "Description" : "Maelezo",
+    "No description provided" : "No description provided",
     "Archived {relativeTime}" : "Imewekwa katika kumbukumbu {relativeTime}",
     "Back" : "Rudi",
     "Direction" : "Direction",

@@ -372,6 +372,7 @@ OC.L10N.register(
     "Back" : "Tilbake",
     "Take over" : "Ta over",
     "Sort by title" : "Sorter etter tittel",
+    "Direction" : "Retning",
     "Descending" : "Synkende",
     "Ascending" : "Stigende",
     "Checking name …" : "Sjekker navn...",
