@@ -36,26 +36,13 @@ class PollMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Poll
 	 */
-	public function get(int $id, bool $getDeleted = false, bool $withRoles = false): Poll {
+	public function get(int $id, bool $getDeleted = false): Poll {
 		$qb = $this->buildQuery(false);
 		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		if (!$getDeleted) {
 			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
-
-		return $this->findEntity($qb);
-	}
-
-	/**
-	 * Get poll with joins for operations with permissions and user informations
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Poll
-	 */
-	public function find(int $id): Poll {
-		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		return $this->findEntity($qb);
 	}

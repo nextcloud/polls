@@ -88,7 +88,7 @@ class ShareService {
 	public function list(int $pollOrPollGroupId, string $purpose = 'poll'): array {
 		try {
 			if ($purpose === 'poll') {
-				$poll = $this->pollMapper->get($pollOrPollGroupId, withRoles: true)
+				$poll = $this->pollMapper->get($pollOrPollGroupId)
 					->request(Poll::PERMISSION_POLL_EDIT);
 				$this->shares = $this->shareMapper->findByPoll($pollOrPollGroupId, $poll->getPollGroups());
 			} else {
@@ -113,7 +113,7 @@ class ShareService {
 	 */
 	public function listNotInvited(int $pollId): array {
 		try {
-			$this->pollMapper->get($pollId, withRoles: true)
+			$this->pollMapper->get($pollId)
 				->request(Poll::PERMISSION_POLL_EDIT);
 			$this->shares = $this->shareMapper->findByPollNotInvited($pollId);
 		} catch (ForbiddenException $e) {
@@ -157,7 +157,7 @@ class ShareService {
 
 		$this->validateShareType();
 
-		$poll = $this->pollMapper->get($this->share->getPollId(), withRoles: true);
+		$poll = $this->pollMapper->get($this->share->getPollId());
 
 		// deletes the displayname, to avoid displayname preset in case of public polls
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
@@ -207,7 +207,7 @@ class ShareService {
 	 */
 	public function setType(string $token, string $type): Share {
 		$this->share = $this->shareMapper->findByToken($token);
-		$this->pollMapper->get($this->share->getPollId(), withRoles: true)
+		$this->pollMapper->get($this->share->getPollId())
 			->request(Poll::PERMISSION_POLL_EDIT);
 
 		// ATM only type user can transform to type admin and vice versa
@@ -227,7 +227,7 @@ class ShareService {
 	public function setPublicPollEmail(string $token, string $value): Share {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
-			$this->pollMapper->get($this->share->getPollId(), withRoles: true)
+			$this->pollMapper->get($this->share->getPollId())
 				->request(Poll::PERMISSION_POLL_EDIT);
 			$this->share->setPublicPollEmail($value);
 			$this->share = $this->shareMapper->update($this->share);
@@ -291,7 +291,7 @@ class ShareService {
 		$this->share = $this->shareMapper->findByToken($token);
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			$this->pollMapper->get($this->share->getPollId(), withRoles: true)
+			$this->pollMapper->get($this->share->getPollId())
 				->request(Poll::PERMISSION_POLL_EDIT);
 			$this->share->setLabel($label);
 
@@ -460,7 +460,7 @@ class ShareService {
 			$this->pollGroupMapper->find($share->getGroupId())
 				->request(PollGroup::PERMISSION_POLL_GROUP_EDIT);
 		} else {
-			$this->pollMapper->get($share->getPollId(), withRoles: true)
+			$this->pollMapper->get($share->getPollId())
 				->request(Poll::PERMISSION_POLL_EDIT);
 		}
 
@@ -490,7 +490,7 @@ class ShareService {
 	 * @param bool $unlock Set true, if share is to be unlocked
 	 */
 	private function lock(Share $share, bool $unlock = false): Share {
-		$this->pollMapper->get($share->getPollId(), withRoles: true)
+		$this->pollMapper->get($share->getPollId())
 			->request(Poll::PERMISSION_POLL_EDIT);
 
 		$share->setLocked($unlock ? 0 : time());
@@ -613,7 +613,7 @@ class ShareService {
 		string $purpose = 'poll',
 	): Share {
 		if ($purpose === 'poll') {
-			$poll = $this->pollMapper->get($pollOrPollGroupId, withRoles: true)
+			$poll = $this->pollMapper->get($pollOrPollGroupId)
 				->request(Poll::PERMISSION_POLL_EDIT)
 				->request(Poll::PERMISSION_SHARE_ADD);
 

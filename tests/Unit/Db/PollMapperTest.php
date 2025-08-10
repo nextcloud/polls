@@ -57,7 +57,7 @@ class PollMapperTest extends UnitTestCase {
 	 */
 	public function testFind() {
 		foreach ($this->polls as $poll) {
-			$this->assertInstanceOf(Poll::class, $this->pollMapper->find($poll->getId()));
+			$this->assertInstanceOf(Poll::class, $this->pollMapper->get($poll->getId()));
 		}
 	}
 

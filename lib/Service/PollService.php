@@ -139,7 +139,7 @@ class PollService {
 	 */
 	public function transferPoll(int|Poll $poll, string|UserBase $targetUser): Poll {
 		if (!($poll instanceof Poll)) {
-			$poll = $this->pollMapper->get($poll, withRoles: true);
+			$poll = $this->pollMapper->get($poll);
 		}
 
 		$poll->request(Poll::PERMISSION_POLL_CHANGE_OWNER);
@@ -168,13 +168,9 @@ class PollService {
 	 * get poll configuration
 	 * @return Poll
 	 */
-	public function get(int $pollId, $lightweight = false) {
+	public function get(int $pollId) {
 		try {
-			if ($lightweight) {
-				$this->poll = $this->pollMapper->get($pollId, withRoles: true);
-			} else {
-				$this->poll = $this->pollMapper->find($pollId);
-			}
+			$this->poll = $this->pollMapper->get($pollId);
 			$this->poll->request(Poll::PERMISSION_POLL_ACCESS);
 			return $this->poll;
 		} catch (DoesNotExistException $e) {
@@ -184,7 +180,7 @@ class PollService {
 
 	public function getPollOwnerFromDB(int $pollId): UserBase {
 		try {
-			$poll = $this->pollMapper->get($pollId, withRoles: true);
+			$poll = $this->pollMapper->get($pollId);
 			return $poll->getUser();
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Poll not found');
@@ -248,7 +244,7 @@ class PollService {
 	 * @psalm-return array{poll: Poll, diff: array, changes: array}
 	 */
 	public function update(int $pollId, array $pollConfiguration): array {
-		$this->poll = $this->pollMapper->get($pollId, withRoles: true)
+		$this->poll = $this->pollMapper->get($pollId)
 			->request(Poll::PERMISSION_POLL_EDIT);
 
 		// Validate valuess
@@ -303,7 +299,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function lockAnonymous(int $pollId): Poll {
-		$this->poll = $this->pollMapper->find($pollId);
+		$this->poll = $this->pollMapper->get($pollId);
 
 		// Only possible, if poll is already anonymized
 		if ($this->poll->getAnonymous() < 1) {
@@ -336,7 +332,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function toggleArchive(int $pollId): Poll {
-		$this->poll = $this->pollMapper->find($pollId)
+		$this->poll = $this->pollMapper->get($pollId)
 			->request(Poll::PERMISSION_POLL_DELETE);
 
 		$this->poll->setDeleted($this->poll->getDeleted() ? 0 : time());
@@ -357,7 +353,7 @@ class PollService {
 	 */
 	public function delete(int $pollId): Poll {
 		try {
-			$this->poll = $this->pollMapper->get($pollId, withRoles: true)
+			$this->poll = $this->pollMapper->get($pollId)
 				->request(Poll::PERMISSION_POLL_DELETE);
 		} catch (DoesNotExistException $e) {
 			throw new AlreadyDeletedException('Poll not found, assume already deleted');
@@ -374,7 +370,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function close(int $pollId): Poll {
-		$this->pollMapper->get($pollId, withRoles: true)
+		$this->pollMapper->get($pollId)
 			->request(Poll::PERMISSION_POLL_EDIT);
 		return $this->toggleClose($pollId, time() - 5);
 	}
@@ -384,7 +380,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function reopen(int $pollId): Poll {
-		$this->pollMapper->get($pollId, withRoles: true)
+		$this->pollMapper->get($pollId)
 			->request(Poll::PERMISSION_POLL_EDIT);
 		return $this->toggleClose($pollId, 0);
 	}
@@ -394,7 +390,7 @@ class PollService {
 	 * @return Poll
 	 */
 	private function toggleClose(int $pollId, int $expiry): Poll {
-		$this->poll = $this->pollMapper->find($pollId)
+		$this->poll = $this->pollMapper->get($pollId)
 			->request(Poll::PERMISSION_POLL_EDIT);
 
 		$this->poll->setExpire($expiry);
@@ -414,7 +410,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function clone(int $pollId): Poll {
-		$origin = $this->pollMapper->get($pollId, withRoles: true)
+		$origin = $this->pollMapper->get($pollId)
 			->request(Poll::PERMISSION_POLL_ACCESS);
 		$this->appSettings->getPollCreationAllowed();
 
@@ -446,7 +442,7 @@ class PollService {
 	 *
 	 */
 	public function getParticipantsEmailAddresses(int $pollId): array {
-		$this->poll = $this->pollMapper->get($pollId, withRoles: true)
+		$this->poll = $this->pollMapper->get($pollId)
 			->request(Poll::PERMISSION_POLL_EDIT);
 
 		$votes = $this->voteMapper->findParticipantsByPoll($this->poll->getId());
