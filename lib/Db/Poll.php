@@ -611,7 +611,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * getIsInvolved - Is current user involved in current poll?
 	 * @return bool Returns true, if the current user is involved in the poll via share, as a participant or as the poll owner.
 	 */
-	private function getIsInvolved(): bool {
+	public function getIsInvolved(): bool {
 		return (
 			$this->getIsPollOwner()
 			|| $this->getIsParticipant()

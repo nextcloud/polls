@@ -48,11 +48,12 @@ class ShareApiController extends BaseApiV2Controller {
 	 * Get share by token
 	 */
 	#[CORS]
+	#[PublicPage]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/share/{token}', requirements: ['apiVersion' => '(v2)'])]
 	public function get(string $token): DataResponse {
-		return $this->response(fn () => ['share' => $this->shareService->get($token)]);
+		return $this->response(fn () => ['share' => $this->shareService->request($token)]);
 	}
 
 	/**
