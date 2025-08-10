@@ -42,8 +42,10 @@ class IndexManager {
 	public function createIndices(): array {
 		$messages = [];
 
-		foreach (TableSchema::UNIQUE_INDICES as $tableName => $values) {
-			$messages[] = $this->createIndex($tableName, $values['name'], $values['columns'], $values['unique']);
+		foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
+			foreach ($uniqueIndices as $values) {
+				$messages[] = $this->createIndex($tableName, $values['name'], $values['columns'], $values['unique']);
+			}
 		}
 
 		foreach (TableSchema::COMMON_INDICES as $index) {

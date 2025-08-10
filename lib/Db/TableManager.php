@@ -33,7 +33,6 @@ class TableManager {
 		private OptionMapper $optionMapper,
 		private VoteMapper $voteMapper,
 		private Schema $schema,
-		private WatchMapper $watchMapper,
 	) {
 		$this->setUp();
 	}
@@ -332,16 +331,19 @@ class TableManager {
 	 */
 	public function deleteAllDuplicates(?IOutput $output = null): array {
 		$messages = [];
-		foreach (TableSchema::UNIQUE_INDICES as $tableName => $index) {
-			$count = $this->deleteDuplicates($tableName, $index['columns']);
+		foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
+			foreach ($uniqueIndices as $index) {
 
-			if ($count) {
-				$messages[] = 'Removed ' . $count . ' duplicate records from ' . $this->dbPrefix . $tableName;
-				$this->logger->info(end($messages));
-			}
+				$count = $this->deleteDuplicates($tableName, $index['columns']);
 
-			if ($output && $count) {
-				$output->info(end($messages));
+				if ($count) {
+					$messages[] = 'Removed ' . $count . ' duplicate records from ' . $this->dbPrefix . $tableName;
+					$this->logger->info(end($messages));
+				}
+
+				if ($output && $count) {
+					$output->info(end($messages));
+				}
 			}
 		}
 		return $messages;

@@ -64,20 +64,34 @@ abstract class TableSchema {
 
 	/**
 	 * define unique indices, which are not primary keys
-	 * table => ['name' => 'indexName', 'unique' => true, 'columns' => ['column1', 'column2']]
+	 * table => [['name' => 'indexName', 'unique' => true, 'columns' => ['column1', 'column2']], ...]
 	 */
 	public const UNIQUE_INDICES = [
-		Option::TABLE => ['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
-		Log::TABLE => ['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
-		Subscription::TABLE => ['name' => 'UNIQ_subscription', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
-		Share::TABLE => [
-			'name' => 'UNIQ_shares', 'unique' => true, 'columns' => ['poll_id', 'group_id', 'user_id'],
-			'name' => 'UNIQ_token', 'unique' => true, 'columns' => ['token']
+		Option::TABLE => [
+			['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
 		],
-		Vote::TABLE => ['name' => 'UNIQ_votes', 'unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_hash']],
-		Preferences::TABLE => ['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
-		Watch::TABLE => ['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table', 'session_id']],
-		PollGroup::RELATION_TABLE => ['name' => 'UNIQ_poll_group_relation', 'unique' => true, 'columns' => ['poll_id', 'group_id']],
+		Log::TABLE => [
+			['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
+		],
+		Subscription::TABLE => [
+			['name' => 'UNIQ_subscription', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
+		],
+		Share::TABLE => [
+			['name' => 'UNIQ_shares', 'unique' => true, 'columns' => ['poll_id', 'group_id', 'user_id']],
+			['name' => 'UNIQ_token', 'unique' => true, 'columns' => ['token']],
+		],
+		Vote::TABLE => [
+			['name' => 'UNIQ_votes', 'unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_hash']],
+		],
+		Preferences::TABLE => [
+			['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
+		],
+		Watch::TABLE => [
+			['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table', 'session_id']],
+		],
+		PollGroup::RELATION_TABLE => [
+			['name' => 'UNIQ_poll_group_relation', 'unique' => true, 'columns' => ['poll_id', 'group_id']],
+		],
 	];
 
 	/**
