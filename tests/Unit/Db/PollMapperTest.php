@@ -31,12 +31,17 @@ class PollMapperTest extends UnitTestCase {
 			$this->fm->instance('OCA\Polls\Db\Poll'),
 			$this->fm->instance('OCA\Polls\Db\Poll')
 		];
-		foreach ($this->polls as &$poll) {
-			$poll = $this->pollMapper->insert($poll);
-		}
-		unset($poll);
+		// foreach ($this->polls as &$poll) {
+		// 	$poll = $this->pollMapper->insert($poll);
+		// }
+		// unset($poll);
 	}
 
+	public function testAdd() {
+		foreach ($this->polls as $poll) {
+			$poll = $this->pollMapper->insert($poll);
+		}
+	}
 	/**
 	 * testUpdate
 	 */
