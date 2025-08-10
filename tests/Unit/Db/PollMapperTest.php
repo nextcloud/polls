@@ -40,6 +40,7 @@ class PollMapperTest extends UnitTestCase {
 	public function testAdd() {
 		foreach ($this->polls as $poll) {
 			$poll = $this->pollMapper->insert($poll);
+			$this->assertInstanceOf(Poll::class, $this->pollMapper->get($poll->getId()));
 		}
 	}
 	/**
