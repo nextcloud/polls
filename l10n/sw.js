@@ -42,6 +42,7 @@ OC.L10N.register(
     "Description" : "Maelezo",
     "No description provided" : "No description provided",
     "Archived {relativeTime}" : "Imewekwa katika kumbukumbu {relativeTime}",
+    "{count} participants" : "{count} participants",
     "Back" : "Rudi",
     "Direction" : "Direction",
     "Descending" : "Descending",
@@ -73,6 +74,7 @@ OC.L10N.register(
     "Created" : "Imetengenezwa",
     "Access" : "Ufikiaji",
     "Owner" : "Mmiliki",
-    "Archive" : "Weka kumbukumbu"
+    "Archive" : "Weka kumbukumbu",
+    "Administration" : "Administration"
 },
 "nplurals=2; plural=(n != 1);");
