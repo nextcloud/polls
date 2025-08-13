@@ -171,7 +171,7 @@ class PollMapper extends QBMapper {
 	/**
 	 * Build the enhanced query with joined tables
 	 */
-	protected function buildQuery($detailed = true): IQueryBuilder {
+	protected function buildQuery(bool $detailed = true): IQueryBuilder {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
@@ -434,7 +434,7 @@ class PollMapper extends QBMapper {
 				$optionAlias,
 				$expr->andX(
 					$expr->eq($optionAlias . '.poll_id', $subAlias . '.poll_id'),
-					$expr->eq($optionAlias . '.poll_option_text', $subAlias . '.vote_option_text'),
+					$expr->eq($optionAlias . '.poll_option_hash_bin', $subAlias . '.vote_option_hash_bin'),
 					$expr->eq($optionAlias . '.deleted', $expr->literal(0, IQueryBuilder::PARAM_INT))
 				)
 			)

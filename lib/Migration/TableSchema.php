@@ -57,9 +57,36 @@ abstract class TableSchema {
 	/**
 	 * define useful common indices, which are not unique
 	 * table => ['name' => 'indexName', 'unique' => false, 'columns' => ['column1', 'column2']]
+	 * @deprecated since 8.3.0, use OPTIONAL_INDICES instead
 	 */
 	public const COMMON_INDICES = [
 		'polls_polls_owners_non_deleted' => ['table' => Poll::TABLE, 'name' => 'polls_polls_owners_non_deleted', 'unique' => false, 'columns' => ['owner', 'deleted']],
+	];
+
+	public const OPTIONAL_INDICES = [
+		Poll::TABLE => [
+			'polls_polls_owners_non_deleted' => ['unique' => false, 'columns' => ['owner', 'deleted']],
+			'polls_polls_deleted' => ['unique' => false, 'columns' => ['deleted']],
+			'polls_polls_owners' => ['unique' => false, 'columns' => ['owner']],
+		],
+		PollGroup::RELATION_TABLE => [
+			'polls_groups_polls' => ['unique' => false, 'columns' => ['poll_id', 'group_id']],
+		],
+		Option::TABLE => [
+			'polls_options' => ['unique' => false, 'columns' => ['poll_id', 'deleted']],
+			'polls_options_hash' => ['unique' => false, 'columns' => ['poll_id', 'poll_option_hash_bin', 'deleted']],
+			'polls_options_owner' => ['unique' => false, 'columns' => ['poll_id', 'owner']],
+		],
+		Share::TABLE => [
+			'polls_shares_user' => ['unique' => false, 'columns' => ['poll_id', 'user_id', 'deleted']],
+			'polls_shares_types' => ['unique' => false, 'columns' => ['poll_id', 'type', 'deleted']],
+			'polls_group_shares_user' => ['unique' => false, 'columns' => ['group_id', 'user_id', 'deleted']],
+		],
+		Vote::TABLE => [
+			'polls_votes_answers' => ['unique' => false, 'columns' => ['poll_id', 'user_id']],
+			'polls_votes_user' => ['unique' => false, 'columns' => ['poll_id', 'vote_answer', 'user_id']],
+			'polls_votes_hash' => ['unique' => false, 'columns' => ['poll_id', 'vote_option_hash_bin', 'deleted']],
+		],
 	];
 
 	/**
@@ -68,29 +95,31 @@ abstract class TableSchema {
 	 */
 	public const UNIQUE_INDICES = [
 		Option::TABLE => [
-			['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
+			'UNIQ_options' => ['unique' => true, 'columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
+			'UNIQ_options_bin' => ['unique' => true, 'columns' => ['poll_id', 'poll_option_hash_bin', 'timestamp']],
 		],
 		Log::TABLE => [
-			['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
+			'UNIQ_unprocessed' => ['unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
 		],
 		Subscription::TABLE => [
-			['name' => 'UNIQ_subscription', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
+			'UNIQ_subscription' => ['unique' => true, 'columns' => ['poll_id', 'user_id']],
 		],
 		Share::TABLE => [
-			['name' => 'UNIQ_shares', 'unique' => true, 'columns' => ['poll_id', 'group_id', 'user_id']],
-			['name' => 'UNIQ_token', 'unique' => true, 'columns' => ['token']],
+			'UNIQ_shares' => ['unique' => true, 'columns' => ['poll_id', 'group_id', 'user_id']],
+			'UNIQ_token' => ['unique' => true, 'columns' => ['token']],
 		],
 		Vote::TABLE => [
-			['name' => 'UNIQ_votes', 'unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_hash']],
+			'UNIQ_votes' => ['unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_hash']],
+			'UNIQ_votes_bin' => ['unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_hash_bin']],
 		],
 		Preferences::TABLE => [
-			['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
+			'UNIQ_preferences' => ['unique' => true, 'columns' => ['user_id']],
 		],
 		Watch::TABLE => [
-			['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table', 'session_id']],
+			'UNIQ_watch' => ['unique' => true, 'columns' => ['poll_id', 'table', 'session_id']],
 		],
 		PollGroup::RELATION_TABLE => [
-			['name' => 'UNIQ_poll_group_relation', 'unique' => true, 'columns' => ['poll_id', 'group_id']],
+			'UNIQ_poll_group_relation' => ['unique' => true, 'columns' => ['poll_id', 'group_id']],
 		],
 	];
 
@@ -229,7 +258,8 @@ abstract class TableSchema {
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
 			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'poll_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 1024]],
-			'poll_option_hash' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
+			'poll_option_hash' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 32]],
+			'poll_option_hash_bin' => ['type' => Types::BINARY, 'options' => ['notnull' => false, 'default' => '', 'length' => 16]],
 			'timestamp' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'duration' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'order' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
@@ -244,7 +274,8 @@ abstract class TableSchema {
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 256]],
 			'vote_option_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'vote_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 1024]],
-			'vote_option_hash' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
+			'vote_option_hash' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 32]],
+			'vote_option_hash_bin' => ['type' => Types::BINARY, 'options' => ['notnull' => false, 'default' => '', 'length' => 16]],
 			'vote_answer' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 64]],
 			'deleted' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 		],

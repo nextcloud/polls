@@ -38,8 +38,6 @@ class ResetWatch extends Command {
 
 	protected function runCommands(): int {
 		$tableName = Watch::TABLE;
-		$uniqueIndices = TableSchema::UNIQUE_INDICES[$tableName];
-		$columns = TableSchema::TABLES[$tableName];
 
 		$messages = $this->tableManager->removeWatch();
 		$this->printInfo($messages, ' - ');
@@ -48,10 +46,10 @@ class ResetWatch extends Command {
 		$this->indexManager->setSchema($this->schema);
 		$this->tableManager->setSchema($this->schema);
 
-		$messages = $this->tableManager->createTable($tableName, $columns);
+		$messages = $this->tableManager->createTable($tableName);
 
-		foreach ($uniqueIndices as $index) {
-			$messages[] = $this->indexManager->createIndex($tableName, $index['name'], $index['columns'], $index['unique']);
+		foreach (TableSchema::UNIQUE_INDICES[$tableName] as $name => $definition) {
+			$messages[] = $this->indexManager->createIndex($tableName, $name, $definition['columns'], $definition['unique']);
 		}
 
 		$this->connection->migrateToSchema($this->schema);

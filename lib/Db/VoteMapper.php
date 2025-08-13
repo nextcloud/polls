@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use OCA\Polls\Helper\Hash;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
@@ -32,13 +33,15 @@ class VoteMapper extends QBMapperWithUser {
 	}
 
 	public function update(Entity $entity): Vote {
-		$entity->setVoteOptionHash(hash('md5', $entity->getPollId() . $entity->getUserId() . $entity->getVoteOptionText()));
+		$entity->setVoteOptionHash(Hash::getOptionHash($entity->getPollId(), $entity->getVoteOptionText()));
+		$entity->setVoteOptionHashBin(Hash::getOptionHashBin($entity->getPollId(), $entity->getVoteOptionText()));
 		$entity = parent::update($entity);
 		return $this->find($entity->getId());
 	}
 
 	public function insert(Entity $entity): Vote {
-		$entity->setVoteOptionHash(hash('md5', $entity->getPollId() . $entity->getUserId() . $entity->getVoteOptionText()));
+		$entity->setVoteOptionHash(Hash::getOptionHash($entity->getPollId(), $entity->getVoteOptionText()));
+		$entity->setVoteOptionHashBin(Hash::getOptionHashBin($entity->getPollId(), $entity->getVoteOptionText()));
 		$entity = parent::insert($entity);
 		return $this->find($entity->getId());
 	}
@@ -170,7 +173,7 @@ class VoteMapper extends QBMapperWithUser {
 			'votes',
 			Option::TABLE,
 			'options',
-			'votes.poll_id = options.poll_id AND votes.vote_option_text = options.poll_option_text'
+			'votes.poll_id = options.poll_id AND votes.vote_option_hash_bin = options.poll_option_hash_bin'
 		);
 		$qb->where('options.poll_id IS NULL');
 
@@ -256,7 +259,7 @@ class VoteMapper extends QBMapperWithUser {
 			$joinAlias,
 			$qb->expr()->andX(
 				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.poll_id'),
-				$qb->expr()->eq($joinAlias . '.poll_option_text', $fromAlias . '.vote_option_text'),
+				$qb->expr()->eq($joinAlias . '.poll_option_hash_bin', $fromAlias . '.vote_option_hash_bin'),
 				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
 			)
 		);

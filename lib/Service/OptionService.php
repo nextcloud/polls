@@ -123,6 +123,7 @@ class OptionService {
 
 		try {
 			// Insert the new option
+			/** @var Option $newOption */
 			$newOption = $this->optionMapper->insert($newOption);
 		} catch (Exception $e) {
 			// TODO: Change exception catch to actual exception
@@ -133,7 +134,7 @@ class OptionService {
 
 				// Option already exists, so we need to update the existing one
 				// and remove deleted setting
-				$option = $this->optionMapper->findByPollAndText($pollId, $newOption->getPollOptionText(), true);
+				$option = $this->optionMapper->findByPollAndText($pollId, $newOption->getPollOptionHashBin(), true);
 				$option->setDeleted(0);
 
 				$newOption = $this->optionMapper->update($option);

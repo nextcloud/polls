@@ -18,10 +18,11 @@ use OCP\IDBConnection;
  */
 class RemoveIndices extends Command {
 	protected string $name = parent::NAME_PREFIX . 'index:remove';
-	protected string $description = 'Remove all indices and foreign key constraints';
+	protected string $description = 'Remove all optional indices';
 	protected array $operationHints = [
-		'Removes all indices and foreign key constraints.',
-		'NO data migration will be executed, so make sure you have a backup of your database.',
+		'Removes all optional indices. Removing them may decrease your database query performance.',
+		'To recreate optional indices, run the command \'occ db:add-missing-indices\'',
+		'Note: NO data migration will be executed, so make sure you have a backup of your database.',
 	];
 
 	public function __construct(
@@ -36,45 +37,16 @@ class RemoveIndices extends Command {
 		// remove constraints and indices
 		$this->schema = $this->connection->createSchema();
 		$this->indexManager->setSchema($this->schema);
-		$this->deleteForeignKeyConstraints();
-		$this->deleteGenericIndices();
-		$this->deleteUniqueIndices();
 		$this->deleteNamedIndices();
 		$this->connection->migrateToSchema($this->schema);
 		return 0;
 	}
 
 	/**
-	 * remove on delete fk contraint from all tables referencing the main polls table
-	 */
-	private function deleteForeignKeyConstraints(): void {
-		$this->printComment('Remove foreign key constraints and generic indices');
-		$messages = $this->indexManager->removeAllForeignKeyConstraints();
-		$this->printInfo($messages, ' - ');
-	}
-
-	/**
-	 * remove all generic indices
-	 */
-	private function deleteGenericIndices(): void {
-		$this->printComment('Remove generic indices');
-		$messages = $this->indexManager->removeAllGenericIndices();
-		$this->printInfo($messages, ' - ');
-	}
-
-	/**
-	 * remove all unique indices
-	 */
-	private function deleteUniqueIndices(): void {
-		$this->printComment('Remove unique indices');
-		$messages = $this->indexManager->removeAllUniqueIndices();
-		$this->printInfo($messages, ' - ');
-	}
-	/**
 	 * remove all named indices
 	 */
 	private function deleteNamedIndices(): void {
-		$this->printComment('Remove common indices');
+		$this->printComment('Remove optional indices');
 		$messages = $this->indexManager->removeNamedIndices();
 		$this->printInfo($messages, ' - ');
 	}

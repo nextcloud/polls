@@ -24,6 +24,8 @@ use JsonSerializable;
  * @method void setVoteOptionText(string $value)
  * @method string getVoteOptionHash()
  * @method void setVoteOptionHash(string $value)
+ * @method string getVoteOptionHashBin()
+ * @method void setVoteOptionHashBin(string $value)
  * @method string getVoteAnswer()
  * @method void setVoteAnswer(string $value)
  * @method int getDeleted()
@@ -45,6 +47,7 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	protected int $voteOptionId = 0;
 	protected string $voteOptionText = '';
 	protected string $voteOptionHash = '';
+	protected string $voteOptionHashBin = '';
 	protected string $voteAnswer = '';
 	protected int $deleted = 0;
 

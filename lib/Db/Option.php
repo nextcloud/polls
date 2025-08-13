@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use JsonSerializable;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
+use OCA\Polls\Helper\Hash;
 use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Model\UserBase;
 use OCP\IL10N;
@@ -36,6 +37,8 @@ use OCP\IL10N;
  * @method void setPollOptionText(string $value)
  * @method string getPollOptionHash()
  * @method void setPollOptionHash(string $value)
+ * @method string getPollOptionHashBin()
+ * @method void setPollOptionHashBin(string $value)
  * @method int getReleased()
  * @method void setReleased(int $value)
  * @method int getTimestamp()
@@ -62,6 +65,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected int $pollId = 0;
 	protected string $pollOptionText = '';
 	protected string $pollOptionHash = '';
+	protected string $pollOptionHashBin = '';
 	protected int $timestamp = 0;
 	protected int $duration = 0;
 	protected int $order = 0;
@@ -220,7 +224,14 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 
 	private function updateHash(): void {
-		$this->setPollOptionHash(hash('md5', $this->getPollId() . $this->getPollOptionText() . $this->getTimestamp()));
+		$this->setPollOptionHash(Hash::getOptionHash(
+			$this->getPollId(),
+			$this->getPollOptionText()
+		));
+		$this->setPollOptionHashBin((Hash::getOptionHashBin(
+			$this->getPollId(),
+			$this->getPollOptionText()
+		)));
 	}
 
 	public function getPollOptionText(): string {

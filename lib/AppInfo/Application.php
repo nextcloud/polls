@@ -44,6 +44,7 @@ use OCA\Polls\Event\ShareRegistrationEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
 use OCA\Polls\Event\VoteEvent;
 use OCA\Polls\Event\VoteSetEvent;
+use OCA\Polls\Listener\AddMissingIndicesListener;
 use OCA\Polls\Listener\CommentListener;
 use OCA\Polls\Listener\GroupDeletedListener;
 use OCA\Polls\Listener\OptionListener;
@@ -64,6 +65,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
+use OCP\DB\Events\AddMissingIndicesEvent;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IAppConfig;
 use OCP\IDBConnection;
@@ -91,6 +93,7 @@ class Application extends App implements IBootstrap {
 		include_once __DIR__ . '/../../vendor/autoload.php';
 		$this->registerServices($context);
 
+		$context->registerEventListener(AddMissingIndicesEvent::class, AddMissingIndicesListener::class);
 		$context->registerEventListener(RenderReferenceEvent::class, PollsReferenceListener::class);
 		$context->registerMiddleWare(RequestAttributesMiddleware::class);
 		$context->registerNotifierService(Notifier::class);

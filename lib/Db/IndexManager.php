@@ -35,21 +35,37 @@ class IndexManager {
 	}
 
 	/**
-	 * Create all indices
+	 * Create unique indices
 	 *
 	 * @return string[] logged messages
 	 */
-	public function createIndices(): array {
+	public function createUniqueIndices(): array {
 		$messages = [];
 
 		foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
-			foreach ($uniqueIndices as $values) {
-				$messages[] = $this->createIndex($tableName, $values['name'], $values['columns'], $values['unique']);
+			foreach ($uniqueIndices as $name => $definition) {
+				$messages[] = $this->createIndex($tableName, $name, $definition['columns'], $definition['unique']);
 			}
 		}
+		return $messages;
+	}
 
-		foreach (TableSchema::COMMON_INDICES as $index) {
-			$messages[] = $this->createIndex($index['table'], $index['name'], $index['columns'], $index['unique']);
+	/**
+	 * Create optional indices
+	 * Usually they should be created by the AddMissingIndicesListener
+	 *
+	 * @return string[] logged messages
+	 */
+	public function createOptionalIndices(): array {
+		$messages = [];
+
+		// Only install optional indices if this is the first installation of polls
+		// Leave the index creation for existing installations to AddMissingIndicesListener,
+		// because initializing and rebuild of an index can take a long time
+		foreach (TableSchema::OPTIONAL_INDICES as $table => $indices) {
+			foreach ($indices as $name => $definition) {
+				$messages[] = $this->createIndex($table, $name, $definition['columns'], $definition['unique'] ?? false);
+			}
 		}
 
 		return $messages;
@@ -144,11 +160,8 @@ class IndexManager {
 	public function removeAllGenericIndices(): array {
 		$messages = [];
 
-		foreach (TableSchema::FK_INDICES as $child) {
-			foreach (array_keys($child) as $table) {
-				$messages = array_merge($messages, $this->removeForeignKeysFromTable($table));
-				$messages = array_merge($messages, $this->removeGenericIndicesFromTable($table));
-			}
+		foreach (array_keys(TableSchema::TABLES) as $table) {
+			$messages = array_merge($messages, $this->removeGenericIndicesFromTable($table));
 		}
 
 		return $messages;
@@ -161,10 +174,12 @@ class IndexManager {
 	public function removeNamedIndices(): array {
 		$messages = [];
 
-		foreach (TableSchema::COMMON_INDICES as $index) {
-			$message = $this->removeNamedIndexFromTable($index['table'], $index['name']);
-			if ($message !== null && $message !== '') {
-				$messages[] = $message;
+		foreach (TableSchema::OPTIONAL_INDICES as $table => $indices) {
+			foreach (array_keys($indices) as $name) {
+				$message = $this->removeNamedIndexFromTable($table, $name);
+				if ($message !== null && $message !== '') {
+					$messages[] = $message;
+				}
 			}
 		}
 

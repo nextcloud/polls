@@ -18,10 +18,11 @@ use OCP\IDBConnection;
  */
 class CreateIndices extends Command {
 	protected string $name = parent::NAME_PREFIX . 'index:create';
-	protected string $description = 'Add all indices and foreign key constraints';
+	protected string $description = 'Add unique indices and foreign key constraints';
 	protected array $operationHints = [
-		'Adds indices and foreing key constraints.',
-		'NO data migration will be executed, so make sure you have a backup of your database.',
+		'Adds unique indices and foreign key constraints.',
+		'To create the optional indices, run the command \'occ db:add-missing-indices\'',
+		'Note: NO data migration will be executed, so make sure you have a backup of your database.',
 	];
 
 	public function __construct(
@@ -38,7 +39,7 @@ class CreateIndices extends Command {
 		$this->schema = $this->connection->createSchema();
 		$this->indexManager->setSchema($this->schema);
 		$this->addForeignKeyConstraints();
-		$this->addIndices();
+		$this->addUniqueIndices();
 		$this->connection->migrateToSchema($this->schema);
 
 		return 0;
@@ -56,9 +57,9 @@ class CreateIndices extends Command {
 	/**
 	 * Create index for $table
 	 */
-	private function addIndices(): void {
+	private function addUniqueIndices(): void {
 		$this->printComment('Add indices');
-		$messages = $this->indexManager->createIndices();
+		$messages = $this->indexManager->createUniqueIndices();
 		$this->printInfo($messages, ' - ');
 	}
 }
