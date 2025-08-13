@@ -25,17 +25,48 @@ namespace OCA\Polls\Helper;
  * @param string $optionText
  */
 abstract class Hash {
+	/**
+	 * Generate a hash for an option based on the poll ID and option text.
+	 * This is used to create a unique identifier for options.
+	 *
+	 * @param int $pollId
+	 * @param string $optionText
+	 * @return string
+	 */
 	public static function getOptionHash(int $pollId, string $optionText): string {
 		return hash('md5', $pollId . $optionText);
 	}
 
+	/**
+	 * Generate a binary hash for an option based on the poll ID and option text.
+	 * This is used to create a unique identifier for options in binary format.
+	 *
+	 * @param int $pollId
+	 * @param string $optionText
+	 * @return string binary 16-byte MD5 hash
+	 */
 	public static function getOptionHashBin(int $pollId, string $optionText): string {
 		return hash('md5', $pollId . $optionText, true);
 	}
 
+	/**
+	 * Generate a hash for a client ID.
+	 * This is used to create a unique identifier for clients.
+	 *
+	 * @param string $clientId
+	 * @return string
+	 */
 	public static function getClientIdHash(string $clientId): string {
 		return hash('md5', $clientId);
 	}
+
+	/**
+	 * Generate a hash for a user ID.
+	 * This is used to create a unique identifier for users.
+	 *
+	 * @param string $userId
+	 * @return string
+	 */
 	public static function getUserIdHash(string $userId): string {
 		// TODO: add a session salt
 		return hash('md5', $userId);

@@ -47,6 +47,7 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	protected int $voteOptionId = 0;
 	protected string $voteOptionText = '';
 	protected string $voteOptionHash = '';
+	/** @var string $voteOptionHashBin binary 16-byte MD5 hash */
 	protected string $voteOptionHashBin = '';
 	protected string $voteAnswer = '';
 	protected int $deleted = 0;
