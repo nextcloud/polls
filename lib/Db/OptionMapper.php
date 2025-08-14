@@ -66,13 +66,13 @@ class OptionMapper extends QBMapperWithUser {
 	/**
 	 * @return Option
 	 * @param int $pollId
-	 * @param string $pollOptionText option text
+	 * @param string $pollOptionHash option text as hashed value (pollId and PollOptionText)
 	 * @param bool $getDeleted also search for deleted options
 	 */
-	public function findByPollAndText(int $pollId, string $pollOptionText, bool $getDeleted = false): Option {
+	public function findByPollAndText(int $pollId, string $pollOptionHash, bool $getDeleted = false): Option {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq(self::TABLE . '.poll_option_text', $qb->createNamedParameter($pollOptionText, IQueryBuilder::PARAM_STR)));
+			->andWhere($qb->expr()->eq(self::TABLE . '.poll_option_hash', $qb->createNamedParameter($pollOptionHash, IQueryBuilder::PARAM_STR)));
 		if (!$getDeleted) {
 			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
@@ -235,7 +235,7 @@ class OptionMapper extends QBMapperWithUser {
 			$joinAlias,
 			$qb->expr()->andX(
 				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.poll_id'),
-				$qb->expr()->eq($joinAlias . '.vote_option_text', $fromAlias . '.poll_option_text'),
+				$qb->expr()->eq($joinAlias . '.vote_option_hash', $fromAlias . '.poll_option_hash'),
 			)
 		)
 			// Count number of votes for this option
@@ -290,7 +290,7 @@ class OptionMapper extends QBMapperWithUser {
 			$qb->expr()->andX(
 				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.poll_id'),
 				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
-				$qb->expr()->eq($joinAlias . '.vote_option_text', $fromAlias . '.poll_option_text'),
+				$qb->expr()->eq($joinAlias . '.vote_option_hash', $fromAlias . '.poll_option_hash'),
 			)
 		);
 	}

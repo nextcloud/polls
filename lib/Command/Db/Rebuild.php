@@ -21,14 +21,15 @@ class Rebuild extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:rebuild';
 	protected string $description = 'Rebuilds poll\'s table structure';
 	protected array $operationHints = [
-		'All polls tables will get checked against the current schema.',
-		'NO data migration will be executed, so make sure you have a backup of your database.',
-		'',
+		'All polls tables will get checked and eventually updated against the current schema.',
 		'*****************************',
 		'**    Please understand    **',
 		'*****************************',
-		'The process will also recreate all indices and foreign key constraints.',
+		'The process will also remove all optional indices.',
 		'This can lead to a database performance impact on the app after the recreation is done.',
+		'',
+		'To recreate the optional indices, run the command \'occ db:add-missing-indices\'',
+		'Note: NO data migration will be executed, so make sure you have a backup of your database.',
 	];
 
 	public function __construct(
@@ -69,9 +70,11 @@ class Rebuild extends Command {
 		$this->printComment('Step 5. Remove invalid records (orphaned and duplicates)');
 		$this->cleanTables();
 
-		$this->printComment('Step 6. Recreate indices and foreign key constraints');
+		$this->printComment('Step 6. Recreate unique indices and foreign key constraints');
 		$this->addForeignKeyConstraints();
-		$this->addIndices();
+		$this->addUniqueIndices();
+
+		$this->printComment('Execute \'occ db:add-missing-indices\' to add missing optional indices');
 
 		$this->connection->migrateToSchema($this->schema);
 
@@ -90,9 +93,9 @@ class Rebuild extends Command {
 	/**
 	 * Create index for $table
 	 */
-	private function addIndices(): void {
-		$this->printComment(' - Add indices');
-		$messages = $this->indexManager->createIndices();
+	private function addUniqueIndices(): void {
+		$this->printComment(' - Add unique indices');
+		$messages = $this->indexManager->createUniqueIndices();
 		$this->printInfo($messages, '   ');
 	}
 

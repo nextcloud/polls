@@ -251,22 +251,4 @@ class ShareController extends BaseController {
 			'shares' => $this->shareService->resolveGroupByToken($token)
 		]);
 	}
-
-	/**
-	 * Set email address
-	 * @param string $token Share token
-	 * @param string $emailAddress Email address
-	 * @deprecated 8.0.0 Use PUT /s/{token}/email/{emailAddress}
-	 */
-	#[NoAdminRequired]
-	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
-	#[FrontpageRoute(verb: 'PUT', url: '/share/{token}/email')]
-	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
-		return $this->response(fn () => [
-			'share' => $this->shareService->setEmailAddress(
-				$this->shareService->get($token),
-				$emailAddress
-			)
-		]);
-	}
 }

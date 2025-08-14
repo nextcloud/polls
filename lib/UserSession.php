@@ -12,6 +12,7 @@ use Exception;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
+use OCA\Polls\Helper\Hash;
 use OCA\Polls\Model\User\Cron;
 use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\UserBase;
@@ -173,7 +174,7 @@ class UserSession {
 	}
 
 	public function getClientIdHashed(): string {
-		return hash('md5', $this->getClientId());
+		return Hash::getClientIdHash($this->getClientId());
 	}
 
 	public function setClientId(string $clientId): void {

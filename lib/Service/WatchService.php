@@ -36,8 +36,8 @@ class WatchService {
 	 */
 	public function watchUpdates(int $pollId, string $mode, ?int $offset = null): array {
 		if ($pollId) {
-			$this->pollMapper->get($pollId, true, withRoles: true)
-				->request(Poll::PERMISSION_POLL_VIEW);
+			$this->pollMapper->get($pollId, true)
+				->request(Poll::PERMISSION_POLL_ACCESS);
 		}
 
 		$start = time();

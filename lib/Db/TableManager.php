@@ -13,6 +13,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use Exception;
 use OCA\Polls\AppConstants;
+use OCA\Polls\Helper\Hash;
 use OCA\Polls\Migration\TableSchema;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
@@ -33,7 +34,6 @@ class TableManager {
 		private OptionMapper $optionMapper,
 		private VoteMapper $voteMapper,
 		private Schema $schema,
-		private WatchMapper $watchMapper,
 	) {
 		$this->setUp();
 	}
@@ -60,8 +60,6 @@ class TableManager {
 	 */
 	public function purgeTables(): array {
 		$messages = [];
-
-		// drop all child tables
 		$droppedTables = [];
 
 		// First drop all tables that have foreign key constraints
@@ -91,7 +89,7 @@ class TableManager {
 			}
 		}
 
-		if (!$droppedTables) {
+		if ($droppedTables) {
 			$this->logger->info('Dropped tables', $droppedTables);
 		}
 
@@ -143,17 +141,17 @@ class TableManager {
 	 *
 	 * @psalm-return non-empty-list<string>
 	 */
-	public function createTable(string $tableName, array $columns): array {
+	public function createTable(string $tableName): array {
 		$messages = [];
+		$columns = TableSchema::TABLES[$tableName];
+		$ocTable = $this->dbPrefix . $tableName;
 
-		$tableName = $this->dbPrefix . $tableName;
-
-		if ($this->schema->hasTable($tableName)) {
-			$table = $this->schema->getTable($tableName);
+		if ($this->schema->hasTable($ocTable)) {
+			$table = $this->schema->getTable($ocTable);
 			$messages[] = 'Validating table ' . $table->getName();
 			$tableCreated = false;
 		} else {
-			$table = $this->schema->createTable($tableName);
+			$table = $this->schema->createTable($ocTable);
 			$tableCreated = true;
 			$messages[] = 'Creating table ' . $table->getName();
 		}
@@ -189,8 +187,8 @@ class TableManager {
 	public function createTables(): array {
 		$messages = [];
 
-		foreach (TableSchema::TABLES as $tableName => $columns) {
-			$messages = array_merge($messages, $this->createTable($tableName, $columns));
+		foreach (array_keys(TableSchema::TABLES) as $tableName) {
+			$messages = array_merge($messages, $this->createTable($tableName));
 		}
 		return $messages;
 	}
@@ -332,16 +330,19 @@ class TableManager {
 	 */
 	public function deleteAllDuplicates(?IOutput $output = null): array {
 		$messages = [];
-		foreach (TableSchema::UNIQUE_INDICES as $tableName => $index) {
-			$count = $this->deleteDuplicates($tableName, $index['columns']);
+		foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
+			foreach ($uniqueIndices as $definition) {
 
-			if ($count) {
-				$messages[] = 'Removed ' . $count . ' duplicate records from ' . $this->dbPrefix . $tableName;
-				$this->logger->info(end($messages));
-			}
+				$count = $this->deleteDuplicates($tableName, $definition['columns']);
 
-			if ($output && $count) {
-				$output->info(end($messages));
+				if ($count) {
+					$messages[] = 'Removed ' . $count . ' duplicate records from ' . $this->dbPrefix . $tableName;
+					$this->logger->info(end($messages));
+				}
+
+				if ($output && $count) {
+					$output->info(end($messages));
+				}
 			}
 		}
 		return $messages;
@@ -349,8 +350,6 @@ class TableManager {
 	}
 
 	private function deleteDuplicates(string $table, array $columns):int {
-		$this->watchMapper->deleteOldEntries(time());
-
 		$qb = $this->connection->getQueryBuilder();
 
 		if ($this->schema->hasTable($this->dbPrefix . $table)) {
@@ -448,8 +447,6 @@ class TableManager {
 				foreach ($this->optionMapper->getAll(includeNull: true) as $option) {
 					try {
 						$option->syncOption();
-						// $option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
-
 						$this->optionMapper->update($option);
 						$count++;
 					} catch (Exception $e) {
@@ -474,7 +471,7 @@ class TableManager {
 			if ($table->hasColumn('vote_option_hash')) {
 				foreach ($this->voteMapper->getAll(includeNull: true) as $vote) {
 					try {
-						$vote->setVoteOptionHash(hash('md5', $vote->getPollId() . $vote->getUserId() . $vote->getVoteOptionText()));
+						$vote->setVoteOptionHash(Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()));
 						$this->voteMapper->update($vote);
 						$count++;
 					} catch (Exception $e) {

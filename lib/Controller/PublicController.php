@@ -431,7 +431,7 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'PUT', url: '/s/{token}/email/{emailAddress}')]
 	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->setEmailAddress($this->shareService->get($token), $emailAddress)
+			'share' => $this->shareService->setEmailAddress($this->shareService->request($token), $emailAddress)
 		]);
 	}
 
@@ -445,7 +445,7 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'DELETE', url: '/s/{token}/email')]
 	public function deleteEmailAddress(string $token): JSONResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->deleteEmailAddress($this->shareService->get($token))
+			'share' => $this->shareService->deleteEmailAddress($this->shareService->request($token))
 		]);
 	}
 
@@ -477,7 +477,7 @@ class PublicController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/resend')]
 	public function resendInvitation(string $token): JSONResponse {
-		$share = $this->shareService->get($token);
+		$share = $this->shareService->request($token);
 		return $this->response(fn () => [
 			'share' => $share,
 			'sentResult' => $this->mailService->sendInvitation($share, new SentResult()),

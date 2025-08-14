@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Attributes\ShareTokenRequired;
 use OCA\Polls\Model\SentResult;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\ShareService;
@@ -16,6 +17,7 @@ use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
@@ -48,11 +50,59 @@ class ShareApiController extends BaseApiV2Controller {
 	 * Get share by token
 	 */
 	#[CORS]
+	#[PublicPage]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/share/{token}', requirements: ['apiVersion' => '(v2)'])]
 	public function get(string $token): DataResponse {
-		return $this->response(fn () => ['share' => $this->shareService->get($token)]);
+		return $this->response(fn () => ['share' => $this->shareService->request($token)]);
+	}
+
+
+	#[CORS]
+	#[PublicPage]
+	#[ShareTokenRequired]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'POST', url: 'api/v1.0/s/{token}/register')]
+	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): DataResponse {
+		return $this->response(fn () => [
+			'share' => $this->shareService->register($token, $displayName, $emailAddress, $timeZone),
+		], Http::STATUS_CREATED);
+	}
+
+	/**
+	 * Set EmailAddress
+	 * @param string $token Share token
+	 * @param string $emailAddress New email address
+	 */
+	#[CORS]
+	#[PublicPage]
+	#[ShareTokenRequired]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'PUT', url: 'api/v1.0/s/{token}/email/{emailAddress}')]
+	public function setEmailAddress(string $token, string $emailAddress = ''): DataResponse {
+		return $this->response(fn () => [
+			'share' => $this->shareService->setEmailAddress($this->shareService->request($token), $emailAddress)
+		]);
+	}
+
+	/**
+	 * Delete email address from share
+	 * @param string $token Share token
+	 * @return DataResponse
+	 */
+	#[CORS]
+	#[PublicPage]
+	#[ShareTokenRequired]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'DELETE', url: 'api/v1.0/s/{token}/email')]
+	public function deleteEmailAddress(string $token): DataResponse {
+		return $this->response(fn () => [
+			'share' => $this->shareService->deleteEmailAddress($this->shareService->request($token))
+		]);
 	}
 
 	/**

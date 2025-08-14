@@ -36,7 +36,7 @@ class Install implements IRepairStep {
 		$this->indexManager->setSchema($this->schema);
 
 		$messages = array_merge($messages, $this->indexManager->createForeignKeyConstraints());
-		$messages = array_merge($messages, $this->indexManager->createIndices());
+		$messages = array_merge($messages, $this->indexManager->createUniqueIndices());
 
 		$this->connection->migrateToSchema($this->schema);
 

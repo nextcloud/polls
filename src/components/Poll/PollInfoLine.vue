@@ -128,7 +128,7 @@ const subTexts = computed(() => {
 })
 
 const dateCreatedRelative = computed(() =>
-	pollStore.getExpirationDateTime.toRelative(),
+	pollStore.getCreationDateTime.toRelative(),
 )
 
 const closeToClosing = computed(

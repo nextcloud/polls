@@ -40,8 +40,8 @@ class VoteService {
 	 * @return Vote[]
 	 */
 	public function list(int $pollId): array {
-		$poll = $this->pollMapper->get($pollId, true, withRoles: true)
-			->request(Poll::PERMISSION_POLL_VIEW);
+		$poll = $this->pollMapper->get($pollId, true)
+			->request(Poll::PERMISSION_POLL_ACCESS);
 
 		try {
 			$poll->request(Poll::PERMISSION_POLL_RESULTS_VIEW);
@@ -87,7 +87,7 @@ class VoteService {
 		} else {
 			$option = $this->optionMapper->find($optionOrOptionIdoptionId);
 		}
-		$poll = $this->pollMapper->get($option->getPollId(), withRoles: true)
+		$poll = $this->pollMapper->get($option->getPollId())
 			->request(Poll::PERMISSION_VOTE_EDIT);
 
 		if ($option->getIsLocked()) {
@@ -152,7 +152,7 @@ class VoteService {
 			$checkRight = Poll::PERMISSION_VOTE_EDIT;
 		}
 
-		$this->pollMapper->get($pollId, withRoles: true)->request($checkRight);
+		$this->pollMapper->get($pollId)->request($checkRight);
 
 		return $this->delete($pollId, $userId, $deleteOnlyOrphaned);
 	}

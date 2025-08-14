@@ -25,6 +25,7 @@ class Purge extends Command {
 		' - delete Polls\'s app config records from oc_appconfig.',
 		' ',
 		'after running this command call \'occ app:remove polls \'',
+		'Note: Make sure you have a backup of your database.',
 	];
 
 	public function __construct(
@@ -38,6 +39,9 @@ class Purge extends Command {
 		$this->tableManager->setConnection($this->connection);
 		$messages = $this->tableManager->purgeTables();
 		$this->printInfo($messages, ' - ');
+		$this->printInfo($messages, 'Polls has been completely wiped off the database.');
+		$this->printInfo($messages, '');
+		$this->printInfo($messages, '!!! Now call \'occ app:remove polls \' to remove the app completely.');
 		return 0;
 	}
 }

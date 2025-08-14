@@ -11,6 +11,7 @@ namespace OCA\Polls\Model;
 use DateTimeZone;
 use JsonSerializable;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Helper\Hash;
 use OCA\Polls\Model\Group\Circle;
 use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\Group\Group;
@@ -108,8 +109,7 @@ class UserBase implements JsonSerializable {
 	 * hash the real userId to obfuscate the real userId
 	 */
 	public function getHashedUserId(): string {
-		// TODO: add a session salt
-		return hash('md5', $this->id);
+		return Hash::getUserIdHash($this->id);
 	}
 
 	/**

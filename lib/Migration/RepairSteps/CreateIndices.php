@@ -11,6 +11,7 @@ namespace OCA\Polls\Migration\RepairSteps;
 
 use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\IndexManager;
+use OCA\Polls\Db\Share;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
@@ -27,7 +28,7 @@ class CreateIndices implements IRepairStep {
 	}
 
 	public function getName() {
-		return 'Polls - Create indices and foreign key constraints';
+		return 'Polls - Create all unique and optional indices and foreign key constraints';
 	}
 
 	public function run(IOutput $output): void {
@@ -36,8 +37,13 @@ class CreateIndices implements IRepairStep {
 		$this->schema = $this->connection->createSchema();
 		$this->indexManager->setSchema($this->schema);
 
+		// remove foreign keys from the share table
+		// cannot be used anymore since v8.0.0
+		$messages = array_merge($messages, $this->indexManager->removeForeignKeysFromTable(Share::TABLE));
+
 		$messages = array_merge($messages, $this->indexManager->createForeignKeyConstraints());
-		$messages = array_merge($messages, $this->indexManager->createIndices());
+		$messages = array_merge($messages, $this->indexManager->createUniqueIndices());
+		$messages = array_merge($messages, $this->indexManager->createOptionalIndices());
 		$this->connection->migrateToSchema($this->schema);
 
 		foreach ($messages as $message) {

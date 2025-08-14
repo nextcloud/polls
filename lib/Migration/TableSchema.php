@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Migration;
 
-use Doctrine\DBAL\Types\Type;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Option;
@@ -19,7 +18,6 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\Watch;
-use OCP\DB\ISchemaWrapper;
 use OCP\DB\Types;
 
 /**
@@ -29,12 +27,6 @@ use OCP\DB\Types;
  */
 
 abstract class TableSchema {
-	// deprecated since 8.1.0, but keeb these constants to prevent broken updates
-	// from a version prior to 8.1.0; Fix was implemented with v8.1.2
-	public const FK_PARENT_TABLE = Poll::TABLE;
-	public const FK_CHILD_TABLES = [];
-	public const FK_OTHER_TABLES = [];
-
 	/**
 	 * define all foreign key indices
 	 * Parentable => [Childable => ['constraintColumn' => 'columnName']]
@@ -57,24 +49,78 @@ abstract class TableSchema {
 	/**
 	 * define useful common indices, which are not unique
 	 * table => ['name' => 'indexName', 'unique' => false, 'columns' => ['column1', 'column2']]
+	 * @deprecated since 8.3.0, use OPTIONAL_INDICES instead
 	 */
 	public const COMMON_INDICES = [
 		'polls_polls_owners_non_deleted' => ['table' => Poll::TABLE, 'name' => 'polls_polls_owners_non_deleted', 'unique' => false, 'columns' => ['owner', 'deleted']],
 	];
 
 	/**
+	 * define useful optional indices, which are not unique
+	 * tableName => [
+	 * 	indexName => ['columns' => [column1, column2, ...]],
+	 * ...]
+	 */
+	public const OPTIONAL_INDICES = [
+		Poll::TABLE => [
+			'polls_polls_owners_non_deleted' => ['columns' => ['owner', 'deleted']],
+			'polls_polls_deleted' => ['columns' => ['deleted']],
+			'polls_polls_owners' => ['columns' => ['owner']],
+		],
+		PollGroup::RELATION_TABLE => [
+			'polls_groups_polls' => ['columns' => ['poll_id', 'group_id']],
+		],
+		Option::TABLE => [
+			'polls_options' => ['columns' => ['poll_id', 'deleted']],
+			'polls_options_hash' => ['columns' => ['poll_id', 'poll_option_hash', 'deleted']],
+			'polls_options_owner' => ['columns' => ['poll_id', 'owner']],
+		],
+		Share::TABLE => [
+			'polls_shares_user' => ['columns' => ['poll_id', 'user_id', 'deleted']],
+			'polls_shares_types' => ['columns' => ['poll_id', 'type', 'deleted']],
+			'polls_group_shares_user' => ['columns' => ['group_id', 'user_id', 'deleted']],
+		],
+		Vote::TABLE => [
+			'polls_votes_answers' => ['columns' => ['poll_id', 'user_id']],
+			'polls_votes_user' => ['columns' => ['poll_id', 'vote_answer', 'user_id']],
+			'polls_votes_hash' => ['columns' => ['poll_id', 'vote_option_hash', 'deleted']],
+		],
+	];
+
+	/**
 	 * define unique indices, which are not primary keys
-	 * table => ['name' => 'indexName', 'unique' => true, 'columns' => ['column1', 'column2']]
+	 * tableName => [
+	 * 	indexName => ['columns' => [column1, column2, ...]],
+	 * ...]
 	 */
 	public const UNIQUE_INDICES = [
-		Option::TABLE => ['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
-		Log::TABLE => ['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
-		Subscription::TABLE => ['name' => 'UNIQ_subscription', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
-		Share::TABLE => ['name' => 'UNIQ_shares', 'unique' => true, 'columns' => ['poll_id', 'group_id', 'user_id']],
-		Vote::TABLE => ['name' => 'UNIQ_votes', 'unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_hash']],
-		Preferences::TABLE => ['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
-		Watch::TABLE => ['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table', 'session_id']],
-		PollGroup::RELATION_TABLE => ['name' => 'UNIQ_poll_group_relation', 'unique' => true, 'columns' => ['poll_id', 'group_id']],
+		Option::TABLE => [
+			'UNIQ_options' => ['columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
+			'UNIQ_options_bin' => ['columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
+		],
+		Log::TABLE => [
+			'UNIQ_unprocessed' => ['columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
+		],
+		Subscription::TABLE => [
+			'UNIQ_subscription' => ['columns' => ['poll_id', 'user_id']],
+		],
+		Share::TABLE => [
+			'UNIQ_shares' => ['columns' => ['poll_id', 'group_id', 'user_id']],
+			'UNIQ_token' => ['columns' => ['token']],
+		],
+		Vote::TABLE => [
+			'UNIQ_votes' => ['columns' => ['poll_id', 'user_id', 'vote_option_hash']],
+			'UNIQ_votes_bin' => ['columns' => ['poll_id', 'user_id', 'vote_option_hash']],
+		],
+		Preferences::TABLE => [
+			'UNIQ_preferences' => ['columns' => ['user_id']],
+		],
+		Watch::TABLE => [
+			'UNIQ_watch' => ['columns' => ['poll_id', 'table', 'session_id']],
+		],
+		PollGroup::RELATION_TABLE => [
+			'UNIQ_poll_group_relation' => ['columns' => ['poll_id', 'group_id']],
+		],
 	];
 
 	/**
@@ -161,6 +207,12 @@ abstract class TableSchema {
 			'message', // dropped in 1.07, orphaned
 			// 'processed', // dropped in 8.1, orphaned
 		],
+		Option::TABLE => [
+			'poll_option_hash_bin',
+		],
+		Vote::TABLE => [
+			'vote_option_hash_bin',
+		],
 	];
 
 	/**
@@ -212,7 +264,7 @@ abstract class TableSchema {
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
 			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'poll_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 1024]],
-			'poll_option_hash' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
+			'poll_option_hash' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 32]],
 			'timestamp' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'duration' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'order' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
@@ -227,7 +279,7 @@ abstract class TableSchema {
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 256]],
 			'vote_option_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'vote_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 1024]],
-			'vote_option_hash' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
+			'vote_option_hash' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 32]],
 			'vote_answer' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 64]],
 			'deleted' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 		],
@@ -243,8 +295,8 @@ abstract class TableSchema {
 		],
 		Share::TABLE => [
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
-			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => false, 'default' => null, 'length' => 20]],
-			'group_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => false, 'default' => null, 'length' => 20]],
+			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => null, 'length' => 20]],
+			'group_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => null, 'length' => 20]],
 			'token' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 64]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 64]],
 			'label' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
@@ -285,46 +337,4 @@ abstract class TableSchema {
 			'preferences' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => null, 'length' => 65535]],
 		],
 	];
-
-	/**
-	 * Iterate over tables and make sure, they are created or updated
-	 * according to the currently valid schema
-	 * @psalm-api
-	 */
-	public static function createOrUpdateSchema(ISchemaWrapper &$schema): array {
-		$messages = [];
-		foreach (self::TABLES as $tableName => $columns) {
-			$tableCreated = false;
-
-			if ($schema->hasTable($tableName)) {
-				$messages[] = 'Validating table ' . $tableName;
-				$table = $schema->getTable($tableName);
-			} else {
-				$messages[] = 'Creating table ' . $tableName;
-				$table = $schema->createTable($tableName);
-				$tableCreated = true;
-			}
-
-			foreach ($columns as $columnName => $columnDefinition) {
-				if ($table->hasColumn($columnName)) {
-					$column = $table->getColumn($columnName);
-					$column->setOptions($columnDefinition['options']);
-					if (Type::lookupName($column->getType()) !== $columnDefinition['type']) {
-						$messages[] = 'Migrating type of ' . $tableName . ', ' . $columnName . ' to ' . $columnDefinition['type'];
-						$column->setType(Type::getType($columnDefinition['type']));
-					}
-
-					// force change to current options definition
-					$table->modifyColumn($columnName, $columnDefinition['options']);
-				} else {
-					$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
-				}
-			}
-
-			if ($tableCreated) {
-				$table->setPrimaryKey(['id']);
-			}
-		}
-		return $messages;
-	}
 }

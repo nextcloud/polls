@@ -36,7 +36,7 @@ class CommentService {
 	 */
 	public function list(int $pollId): array {
 		try {
-			$this->pollMapper->get($pollId, true, withRoles: true)
+			$this->pollMapper->get($pollId, true)
 				->request(Poll::PERMISSION_COMMENT_ADD);
 		} catch (Exception $e) {
 			return [];
@@ -66,7 +66,7 @@ class CommentService {
 	 * Add comment
 	 */
 	public function add(string $message, int $pollId, ?bool $confidential = false): Comment {
-		$poll = $this->pollMapper->get($pollId, withRoles: true)
+		$poll = $this->pollMapper->get($pollId)
 			->request(Poll::PERMISSION_COMMENT_ADD);
 
 		if ($poll->getForceConfidentialComments()) {
@@ -104,7 +104,7 @@ class CommentService {
 		$this->comment = $this->commentMapper->find($commentId);
 
 		if (!$this->comment->getCurrentUserIsEntityUser()) {
-			$this->pollMapper->get($this->comment->getPollId(), withRoles: true)
+			$this->pollMapper->get($this->comment->getPollId())
 				->request(Poll::PERMISSION_COMMENT_DELETE);
 		}
 

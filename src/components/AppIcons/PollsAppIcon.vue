@@ -27,9 +27,9 @@ const {
 			:height="size"
 			viewBox="0 0 32 32">
 			<g :fill="fillColor">
-				<rect y="2" x="3" height="26" width="7" />
-				<rect y="12" x="12" height="16" width="7" />
-				<rect y="8" x="21" height="20" width="7" />
+				<rect y="2" x="3" height="26" width="7" ry="2.4879117" />
+				<rect y="12" x="12" height="16" width="7" ry="2.2582498" />
+				<rect y="8" x="21" height="20" width="7" ry="2.0725906" />
 				<title v-if="title">{{ title }}</title>
 			</g>
 		</svg>

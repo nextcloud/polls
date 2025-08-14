@@ -35,19 +35,37 @@ class IndexManager {
 	}
 
 	/**
-	 * Create all indices
+	 * Create unique indices
+	 * Unique indices are crucial for the correct operation of the polls app.
+	 * This for they have to be updated on every update.
 	 *
 	 * @return string[] logged messages
 	 */
-	public function createIndices(): array {
+	public function createUniqueIndices(): array {
 		$messages = [];
 
-		foreach (TableSchema::UNIQUE_INDICES as $tableName => $values) {
-			$messages[] = $this->createIndex($tableName, $values['name'], $values['columns'], $values['unique']);
+		foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
+			foreach ($uniqueIndices as $name => $definition) {
+				$messages[] = $this->createIndex($tableName, $name, $definition['columns'], true);
+			}
 		}
+		return $messages;
+	}
 
-		foreach (TableSchema::COMMON_INDICES as $index) {
-			$messages[] = $this->createIndex($index['table'], $index['name'], $index['columns'], $index['unique']);
+	/**
+	 * Create optional indices
+	 * Usually they should be created by the AddMissingIndicesListener
+	 * or on first time installation of polls.
+	 *
+	 * @return string[] logged messages
+	 */
+	public function createOptionalIndices(): array {
+		$messages = [];
+
+		foreach (TableSchema::OPTIONAL_INDICES as $table => $indices) {
+			foreach ($indices as $name => $definition) {
+				$messages[] = $this->createIndex($table, $name, $definition['columns']);
+			}
 		}
 
 		return $messages;
@@ -55,6 +73,8 @@ class IndexManager {
 
 	/**
 	 * add on delete fk contraints to all tables referencing the main polls table
+	 * Foreign key constraints are crucial for the correct operation of the polls app.
+	 * This for they have to be updated on every update.
 	 *
 	 * @return string[] logged messages
 	 */
@@ -71,7 +91,7 @@ class IndexManager {
 	}
 
 	/**
-	 * add an on delete fk contraint
+	 * add one on delete fk contraint
 	 *
 	 * @param string $parentTableName name of referred table
 	 * @param string $childTableName name of referring table
@@ -88,7 +108,7 @@ class IndexManager {
 	}
 
 	/**
-	 * Create named index for table
+	 * Create one named index for table
 	 *
 	 * @param string $tableName name of table to add the index to
 	 * @param string $indexName index name
@@ -142,11 +162,8 @@ class IndexManager {
 	public function removeAllGenericIndices(): array {
 		$messages = [];
 
-		foreach (TableSchema::FK_INDICES as $child) {
-			foreach (array_keys($child) as $table) {
-				$messages = array_merge($messages, $this->removeForeignKeysFromTable($table));
-				$messages = array_merge($messages, $this->removeGenericIndicesFromTable($table));
-			}
+		foreach (array_keys(TableSchema::TABLES) as $table) {
+			$messages = array_merge($messages, $this->removeGenericIndicesFromTable($table));
 		}
 
 		return $messages;
@@ -159,10 +176,12 @@ class IndexManager {
 	public function removeNamedIndices(): array {
 		$messages = [];
 
-		foreach (TableSchema::COMMON_INDICES as $index) {
-			$message = $this->removeNamedIndexFromTable($index['table'], $index['name']);
-			if ($message !== null && $message !== '') {
-				$messages[] = $message;
+		foreach (TableSchema::OPTIONAL_INDICES as $table => $indices) {
+			foreach (array_keys($indices) as $name) {
+				$message = $this->removeNamedIndexFromTable($table, $name);
+				if ($message !== null && $message !== '') {
+					$messages[] = $message;
+				}
 			}
 		}
 

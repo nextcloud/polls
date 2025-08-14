@@ -36,41 +36,13 @@ class PollMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Poll
 	 */
-	public function get(int $id, bool $getDeleted = false, bool $withRoles = false): Poll {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select(self::TABLE . '.*')
-			->from($this->getTableName(), self::TABLE)
-			->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
-			->groupBy(self::TABLE . '.id');
+	public function get(int $id, bool $getDeleted = false): Poll {
+		$qb = $this->buildQuery(false);
+		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		if (!$getDeleted) {
 			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
-
-		if ($withRoles) {
-			$pollGroupsAlias = 'poll_groups';
-			$currentUserId = $this->userSession->getCurrentUserId();
-			$currentUserParam = $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR);
-
-			$this->subQueryMaxDate($qb, self::TABLE);
-
-			$this->joinUserRole($qb, self::TABLE, $currentUserParam);
-			$this->joinGroupShares($qb, self::TABLE);
-			$this->joinPollGroups($qb, self::TABLE, $pollGroupsAlias);
-			$this->joinPollGroupShares($qb, $pollGroupsAlias, $currentUserParam, $pollGroupsAlias);
-		}
-		return $this->findEntity($qb);
-	}
-
-	/**
-	 * Get poll with joins for operations with permissions and user informations
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Poll
-	 */
-	public function find(int $id): Poll {
-		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		return $this->findEntity($qb);
 	}
@@ -199,7 +171,7 @@ class PollMapper extends QBMapper {
 	/**
 	 * Build the enhanced query with joined tables
 	 */
-	protected function buildQuery($detailed = true): IQueryBuilder {
+	protected function buildQuery(bool $detailed = true): IQueryBuilder {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
@@ -462,7 +434,7 @@ class PollMapper extends QBMapper {
 				$optionAlias,
 				$expr->andX(
 					$expr->eq($optionAlias . '.poll_id', $subAlias . '.poll_id'),
-					$expr->eq($optionAlias . '.poll_option_text', $subAlias . '.vote_option_text'),
+					$expr->eq($optionAlias . '.poll_option_hash', $subAlias . '.vote_option_hash'),
 					$expr->eq($optionAlias . '.deleted', $expr->literal(0, IQueryBuilder::PARAM_INT))
 				)
 			)

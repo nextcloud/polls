@@ -19,9 +19,9 @@
   <discussion>https://help.nextcloud.com/tag/polls-app</discussion>
   <bugs>https://github.com/nextcloud/polls/issues</bugs>
   <repository type="git">https://github.com/nextcloud/polls.git</repository>
-  <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/overview.png</screenshot>
-  <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/vote.png</screenshot>
-  <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/edit-poll.png</screenshot>
+  <screenshot>https://raw.githubusercontent.com/nextcloud/polls/main/screenshots/overview.png</screenshot>
+  <screenshot>https://raw.githubusercontent.com/nextcloud/polls/main/screenshots/vote.png</screenshot>
+  <screenshot>https://raw.githubusercontent.com/nextcloud/polls/main/screenshots/edit-poll.png</screenshot>
   <dependencies>
     <php min-version="8.1"/>
     <nextcloud min-version="30" max-version="31"/>
@@ -47,15 +47,17 @@
     </install>
   </repair-steps>
   <commands>
-    <command>OCA\Polls\Command\Share\Add</command>
-    <command>OCA\Polls\Command\Share\Remove</command>
-    <command>OCA\Polls\Command\Db\Purge</command>
-    <command>OCA\Polls\Command\Db\RemoveIndices</command>
-    <command>OCA\Polls\Command\Db\Rebuild</command>
-    <command>OCA\Polls\Command\Db\CreateIndices</command>
     <command>OCA\Polls\Command\Db\CleanMigrations</command>
+    <command>OCA\Polls\Command\Db\CreateIndices</command>
+    <command>OCA\Polls\Command\Db\Purge</command>
+    <command>OCA\Polls\Command\Db\Rebuild</command>
+    <command>OCA\Polls\Command\Db\RemoveFKConstraints</command>
+    <command>OCA\Polls\Command\Db\RemoveOptionalIndices</command>
+    <command>OCA\Polls\Command\Db\RemoveUniqueIndices</command>
     <command>OCA\Polls\Command\Db\ResetWatch</command>
     <command>OCA\Polls\Command\Poll\TransferOwnership</command>
+    <command>OCA\Polls\Command\Share\Add</command>
+    <command>OCA\Polls\Command\Share\Remove</command>
   </commands>
   <settings>
     <admin>OCA\Polls\Settings\AdminSettings</admin>
