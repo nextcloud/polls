@@ -12,6 +12,14 @@ All notable changes to this project will be documented in this file.
  - Avoid Warnings in console because of missing keyes
 ### Changed
  - Replaced momentjs by Luxon
+ - Fixed db types and defaults to match unique share index
+ - Removed FK constraint for share table
+ - Added unique index for share tokens
+ - Reworked poll access via shares
+ - Added some indices to help complex joins and optimized the index
+ - removed creation of optional indices from all migration and repair steps and support AddMissingIndicesEvent
+ - Separated the commands in more granular index and database commands
+ - Adjust icon style
 
 ## [8.2.2] - 2025-08-03
 ### Added
