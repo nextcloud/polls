@@ -67,7 +67,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected string $pollOptionText = '';
 	protected string $pollOptionHash = '';
 	/** @var string $pollOptionHashBin binary 16-byte MD5 hash */
-	protected string $pollOptionHashBin;
+	protected string $pollOptionHashBin = '';
 	protected int $timestamp = 0;
 	protected int $duration = 0;
 	protected int $order = 0;
