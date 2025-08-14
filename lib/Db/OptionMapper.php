@@ -72,7 +72,7 @@ class OptionMapper extends QBMapperWithUser {
 	public function findByPollAndText(int $pollId, string $pollOptionHashBin, bool $getDeleted = false): Option {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq(self::TABLE . '.poll_option_hash_bin', $qb->createNamedParameter($pollOptionHashBin, IQueryBuilder::PARAM_STR)));
+			->andWhere($qb->expr()->eq(self::TABLE . '.poll_option_hash_bin', $qb->createNamedParameter($pollOptionHashBin, IQueryBuilder::PARAM_LOB)));
 		if (!$getDeleted) {
 			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}

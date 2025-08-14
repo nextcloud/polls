@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use Doctrine\DBAL\Types\Types;
 use JsonSerializable;
 
 /**
@@ -61,6 +62,7 @@ class Vote extends EntityWithUser implements JsonSerializable {
 		$this->addType('pollId', 'integer');
 		$this->addType('voteOptionId', 'integer');
 		$this->addType('deleted', 'integer');
+		$this->addType('voteOptionHashBin', Types::BINARY);
 	}
 
 	private function getAnswerSymbol(): string {
