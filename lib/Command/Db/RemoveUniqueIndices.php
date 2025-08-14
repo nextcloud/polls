@@ -12,7 +12,6 @@ use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Command\Command;
 use OCA\Polls\Db\IndexManager;
 use OCP\IDBConnection;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * @psalm-api

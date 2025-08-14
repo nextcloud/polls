@@ -24,12 +24,12 @@ class AddMissingIndicesListener implements IEventListener {
 
 		foreach (TableSchema::OPTIONAL_INDICES as $table => $indices) {
 			foreach ($indices as $name => $definition) {
-                $event->addMissingIndex(
-                    $table,
-                    $name,
-                    $definition['columns'],
-                );
-            }
-        }
+				$event->addMissingIndex(
+					$table,
+					$name,
+					$definition['columns'],
+				);
+			}
+		}
 	}
 }

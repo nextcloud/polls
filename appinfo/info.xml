@@ -52,7 +52,7 @@
     <command>OCA\Polls\Command\Db\Purge</command>
     <command>OCA\Polls\Command\Db\Rebuild</command>
     <command>OCA\Polls\Command\Db\RemoveFKConstraints</command>
-    <command>OCA\Polls\Command\Db\RemoveIndices</command>
+    <command>OCA\Polls\Command\Db\RemoveOptionalIndices</command>
     <command>OCA\Polls\Command\Db\RemoveUniqueIndices</command>
     <command>OCA\Polls\Command\Db\ResetWatch</command>
     <command>OCA\Polls\Command\Poll\TransferOwnership</command>

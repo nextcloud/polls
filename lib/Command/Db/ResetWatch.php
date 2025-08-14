@@ -23,8 +23,7 @@ class ResetWatch extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:reset-watch';
 	protected string $description = 'Resets the Watch table';
 	protected array $operationHints = [
-		'All polls tables will get checked against the current schema.',
-		'NO data migration will be executed, so make sure you have a backup of your database.',
+		'Removes and recreates the watch table to set ids to zero',
 	];
 
 	public function __construct(
@@ -49,7 +48,7 @@ class ResetWatch extends Command {
 		$messages = $this->tableManager->createTable($tableName);
 
 		foreach (TableSchema::UNIQUE_INDICES[$tableName] as $name => $definition) {
-			$messages[] = $this->indexManager->createIndex($tableName, $name, $definition['columns'], $definition['unique']);
+			$messages[] = $this->indexManager->createIndex($tableName, $name, $definition['columns'], true);
 		}
 
 		$this->connection->migrateToSchema($this->schema);

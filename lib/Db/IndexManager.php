@@ -36,6 +36,8 @@ class IndexManager {
 
 	/**
 	 * Create unique indices
+	 * Unique indices are crucial for the correct operation of the polls app.
+	 * This for they have to be updated on every update.
 	 *
 	 * @return string[] logged messages
 	 */
@@ -44,7 +46,7 @@ class IndexManager {
 
 		foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
 			foreach ($uniqueIndices as $name => $definition) {
-				$messages[] = $this->createIndex($tableName, $name, $definition['columns'], $definition['unique']);
+				$messages[] = $this->createIndex($tableName, $name, $definition['columns'], true);
 			}
 		}
 		return $messages;
@@ -53,18 +55,16 @@ class IndexManager {
 	/**
 	 * Create optional indices
 	 * Usually they should be created by the AddMissingIndicesListener
+	 * or on first time installation of polls.
 	 *
 	 * @return string[] logged messages
 	 */
 	public function createOptionalIndices(): array {
 		$messages = [];
 
-		// Only install optional indices if this is the first installation of polls
-		// Leave the index creation for existing installations to AddMissingIndicesListener,
-		// because initializing and rebuild of an index can take a long time
 		foreach (TableSchema::OPTIONAL_INDICES as $table => $indices) {
 			foreach ($indices as $name => $definition) {
-				$messages[] = $this->createIndex($table, $name, $definition['columns'], $definition['unique'] ?? false);
+				$messages[] = $this->createIndex($table, $name, $definition['columns']);
 			}
 		}
 
@@ -73,6 +73,8 @@ class IndexManager {
 
 	/**
 	 * add on delete fk contraints to all tables referencing the main polls table
+	 * Foreign key constraints are crucial for the correct operation of the polls app.
+	 * This for they have to be updated on every update.
 	 *
 	 * @return string[] logged messages
 	 */
@@ -89,7 +91,7 @@ class IndexManager {
 	}
 
 	/**
-	 * add an on delete fk contraint
+	 * add one on delete fk contraint
 	 *
 	 * @param string $parentTableName name of referred table
 	 * @param string $childTableName name of referring table
@@ -106,7 +108,7 @@ class IndexManager {
 	}
 
 	/**
-	 * Create named index for table
+	 * Create one named index for table
 	 *
 	 * @param string $tableName name of table to add the index to
 	 * @param string $indexName index name
