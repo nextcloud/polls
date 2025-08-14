@@ -16,7 +16,7 @@ use OCP\IDBConnection;
 /**
  * @psalm-api
  */
-class RemoveIndices extends Command {
+class RemoveOptionalIndices extends Command {
 	protected string $name = parent::NAME_PREFIX . 'index:remove:optional';
 	protected string $description = 'Remove all optional indices';
 	protected array $operationHints = [
