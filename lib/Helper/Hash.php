@@ -44,6 +44,7 @@ abstract class Hash {
 	 * @param int $pollId
 	 * @param string $optionText
 	 * @return string binary 16-byte MD5 hash
+	 * @psalm-api
 	 */
 	public static function getOptionHashBin(int $pollId, string $optionText): string {
 		return hash('md5', $pollId . $optionText, true);

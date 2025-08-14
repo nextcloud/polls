@@ -34,14 +34,12 @@ class VoteMapper extends QBMapperWithUser {
 
 	public function update(Entity $entity): Vote {
 		$entity->setVoteOptionHash(Hash::getOptionHash($entity->getPollId(), $entity->getVoteOptionText()));
-		$entity->setVoteOptionHashBin(Hash::getOptionHashBin($entity->getPollId(), $entity->getVoteOptionText()));
 		$entity = parent::update($entity);
 		return $this->find($entity->getId());
 	}
 
 	public function insert(Entity $entity): Vote {
 		$entity->setVoteOptionHash(Hash::getOptionHash($entity->getPollId(), $entity->getVoteOptionText()));
-		$entity->setVoteOptionHashBin(Hash::getOptionHashBin($entity->getPollId(), $entity->getVoteOptionText()));
 		$entity = parent::insert($entity);
 		return $this->find($entity->getId());
 	}
@@ -173,7 +171,7 @@ class VoteMapper extends QBMapperWithUser {
 			'votes',
 			Option::TABLE,
 			'options',
-			'votes.poll_id = options.poll_id AND votes.vote_option_hash_bin = options.poll_option_hash_bin'
+			'votes.poll_id = options.poll_id AND votes.vote_option_hash = options.poll_option_hash'
 		);
 		$qb->where('options.poll_id IS NULL');
 
@@ -259,7 +257,7 @@ class VoteMapper extends QBMapperWithUser {
 			$joinAlias,
 			$qb->expr()->andX(
 				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.poll_id'),
-				$qb->expr()->eq($joinAlias . '.poll_option_hash_bin', $fromAlias . '.vote_option_hash_bin'),
+				$qb->expr()->eq($joinAlias . '.poll_option_hash', $fromAlias . '.vote_option_hash'),
 				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
 			)
 		);

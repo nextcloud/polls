@@ -434,7 +434,7 @@ class PollMapper extends QBMapper {
 				$optionAlias,
 				$expr->andX(
 					$expr->eq($optionAlias . '.poll_id', $subAlias . '.poll_id'),
-					$expr->eq($optionAlias . '.poll_option_hash_bin', $subAlias . '.vote_option_hash_bin'),
+					$expr->eq($optionAlias . '.poll_option_hash', $subAlias . '.vote_option_hash'),
 					$expr->eq($optionAlias . '.deleted', $expr->literal(0, IQueryBuilder::PARAM_INT))
 				)
 			)

@@ -72,7 +72,7 @@ abstract class TableSchema {
 		],
 		Option::TABLE => [
 			'polls_options' => ['columns' => ['poll_id', 'deleted']],
-			'polls_options_hash' => ['columns' => ['poll_id', 'poll_option_hash_bin', 'deleted']],
+			'polls_options_hash' => ['columns' => ['poll_id', 'poll_option_hash', 'deleted']],
 			'polls_options_owner' => ['columns' => ['poll_id', 'owner']],
 		],
 		Share::TABLE => [
@@ -83,7 +83,7 @@ abstract class TableSchema {
 		Vote::TABLE => [
 			'polls_votes_answers' => ['columns' => ['poll_id', 'user_id']],
 			'polls_votes_user' => ['columns' => ['poll_id', 'vote_answer', 'user_id']],
-			'polls_votes_hash' => ['columns' => ['poll_id', 'vote_option_hash_bin', 'deleted']],
+			'polls_votes_hash' => ['columns' => ['poll_id', 'vote_option_hash', 'deleted']],
 		],
 	];
 
@@ -96,7 +96,7 @@ abstract class TableSchema {
 	public const UNIQUE_INDICES = [
 		Option::TABLE => [
 			'UNIQ_options' => ['columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
-			'UNIQ_options_bin' => ['columns' => ['poll_id', 'poll_option_hash_bin', 'timestamp']],
+			'UNIQ_options_bin' => ['columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
 		],
 		Log::TABLE => [
 			'UNIQ_unprocessed' => ['columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
@@ -110,7 +110,7 @@ abstract class TableSchema {
 		],
 		Vote::TABLE => [
 			'UNIQ_votes' => ['columns' => ['poll_id', 'user_id', 'vote_option_hash']],
-			'UNIQ_votes_bin' => ['columns' => ['poll_id', 'user_id', 'vote_option_hash_bin']],
+			'UNIQ_votes_bin' => ['columns' => ['poll_id', 'user_id', 'vote_option_hash']],
 		],
 		Preferences::TABLE => [
 			'UNIQ_preferences' => ['columns' => ['user_id']],
@@ -207,6 +207,12 @@ abstract class TableSchema {
 			'message', // dropped in 1.07, orphaned
 			// 'processed', // dropped in 8.1, orphaned
 		],
+		Option::TABLE => [
+			'poll_option_hash_bin',
+		],
+		Vote::TABLE => [
+			'vote_option_hash_bin',
+		],
 	];
 
 	/**
@@ -259,7 +265,6 @@ abstract class TableSchema {
 			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'poll_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 1024]],
 			'poll_option_hash' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 32]],
-			'poll_option_hash_bin' => ['type' => Types::BINARY, 'options' => ['notnull' => false, 'default' => '', 'length' => 16]],
 			'timestamp' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'duration' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'order' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
@@ -275,7 +280,6 @@ abstract class TableSchema {
 			'vote_option_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'vote_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 1024]],
 			'vote_option_hash' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 32]],
-			'vote_option_hash_bin' => ['type' => Types::BINARY, 'options' => ['notnull' => false, 'default' => '', 'length' => 16]],
 			'vote_answer' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 64]],
 			'deleted' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 		],

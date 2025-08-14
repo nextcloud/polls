@@ -472,7 +472,6 @@ class TableManager {
 				foreach ($this->voteMapper->getAll(includeNull: true) as $vote) {
 					try {
 						$vote->setVoteOptionHash(Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()));
-						$vote->setVoteOptionHashBin(Hash::getOptionHashBin($vote->getPollId(), $vote->getVoteOptionText()));
 						$this->voteMapper->update($vote);
 						$count++;
 					} catch (Exception $e) {

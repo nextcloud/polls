@@ -66,8 +66,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected int $pollId = 0;
 	protected string $pollOptionText = '';
 	protected string $pollOptionHash = '';
-	/** @var string $pollOptionHashBin binary 16-byte MD5 hash */
-	protected string $pollOptionHashBin = '';
 	protected int $timestamp = 0;
 	protected int $duration = 0;
 	protected int $order = 0;
@@ -105,7 +103,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 		$this->addType('votesNo', 'integer');
 		$this->addType('votesMaybe', 'integer');
 		$this->addType('showResults', 'integer');
-		$this->addType('pollOptionHashBin', Types::BINARY);
 	}
 
 	/**
@@ -231,10 +228,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 			$this->getPollId(),
 			$this->getPollOptionText()
 		));
-		$this->setPollOptionHashBin((Hash::getOptionHashBin(
-			$this->getPollId(),
-			$this->getPollOptionText()
-		)));
 	}
 
 	public function getPollOptionText(): string {
