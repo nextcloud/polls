@@ -12,6 +12,7 @@ use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use Doctrine\DBAL\Types\Types;
 use JsonSerializable;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Helper\Hash;
@@ -66,7 +67,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected string $pollOptionText = '';
 	protected string $pollOptionHash = '';
 	/** @var string $pollOptionHashBin binary 16-byte MD5 hash */
-	protected string $pollOptionHashBin = '';
+	protected string $pollOptionHashBin;
 	protected int $timestamp = 0;
 	protected int $duration = 0;
 	protected int $order = 0;
@@ -104,6 +105,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 		$this->addType('votesNo', 'integer');
 		$this->addType('votesMaybe', 'integer');
 		$this->addType('showResults', 'integer');
+		$this->addType('pollOptionHashBin', Types::BINARY);
 	}
 
 	/**
