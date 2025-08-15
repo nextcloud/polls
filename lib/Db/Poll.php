@@ -84,6 +84,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const TYPE_TEXT = 'textPoll';
 	public const VARIANT_SIMPLE = 'simple';
 	public const VARIANT_GENERIC = 'generic';
+	/** @deprecated use ACCESS_PRIVATE instead  */
 	public const ACCESS_HIDDEN = 'hidden';
 	/** @deprecated use ACCESS_OPEN instead  */
 	public const ACCESS_PUBLIC = 'public';
