@@ -24,7 +24,7 @@ final class VerifyClassAlias implements IRepairStep {
 	}
 
 	public function run(IOutput $output): void {
-		$results = AliasUtil::applyAliases($this->logger); // idempotent
+		$results = AliasUtil::applyAliases($this->logger);
 
 		$allOk = true;
 		foreach ($results as $r) {
@@ -39,7 +39,6 @@ final class VerifyClassAlias implements IRepairStep {
 			return;
 		}
 
-		// Nur Probleme ausgeben (kompakt)
 		foreach ($results as $old => $r) {
 			if ($r['ok']) {
 				continue;
