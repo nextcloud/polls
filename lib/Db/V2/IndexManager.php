@@ -10,9 +10,10 @@ namespace OCA\Polls\Db\V2;
 
 use Doctrine\DBAL\Schema\Exception\IndexDoesNotExist;
 use Doctrine\DBAL\Schema\Schema;
-use OCA\Polls\Migration\TableSchema;
+use OCA\Polls\Migration\V2\TableSchema;
 use OCP\IConfig;
 
+/** @psalm-suppress UnusedClass */
 class IndexManager {
 
 	private string $dbPrefix;
