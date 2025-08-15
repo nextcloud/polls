@@ -11,7 +11,7 @@
 [![Dependabot status](https://img.shields.io/badge/Dependabot-enabled-brightgreen.svg?longCache=true&style=flat-square&logo=dependabot)](https://dependabot.com)
 [![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/polls)](https://api.reuse.software/info/github.com/nextcloud/polls)
 [![Software License](https://img.shields.io/badge/license-AGPL-brightgreen.svg?style=flat-square)](COPYING)
-[![Nextcloud31+](https://img.shields.io/badge/Nextcloud%20Version-31%2B-0082C9?logo=nextcloud)](https://nextcloud.com)
+[![Nextcloud30+](https://img.shields.io/badge/Nextcloud%20Version-30%2B-0082C9?logo=nextcloud)](https://nextcloud.com)
 
 # Free meeting schedule tool
 - :next_track_button: Easy poll creation
