@@ -13,7 +13,6 @@ use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 use Psr\Log\LoggerInterface;
 
-/** @psalm-suppress UnusedClass */
 final class VerifyClassAlias implements IRepairStep {
 	public function __construct(
 		private LoggerInterface $logger,

@@ -21,8 +21,6 @@ use OCP\Migration\IRepairStep;
 /**
  * Preparation before migration
  * Remove all invalid records to avoid erros while adding indices ans constraints
- *
- * @psalm-suppress UnusedClass
  */
 class DeleteInvalidRecords implements IRepairStep {
 	public function __construct(

@@ -16,9 +16,6 @@ use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
-/**
- * @psalm-suppress UnusedClass
- */
 class CreateIndices implements IRepairStep {
 	public function __construct(
 		private IndexManager $indexManager,

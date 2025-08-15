@@ -28,6 +28,18 @@
         <file name="stubs/circles-stubs.php"/>
     </stubs>
 	<issueHandlers>
+        <PossiblyUnusedMethod>
+            <errorLevel type="suppress">
+                <directory name="lib/Db/V2" />
+            </errorLevel>
+        </PossiblyUnusedMethod>
+        <UnusedClass>
+            <errorLevel type="suppress">
+                <directory name="lib/Db/V2" />
+                <directory name="lib/Migration/V2" />
+                <directory name="lib/Migration/RepairSteps" />
+            </errorLevel>
+        </UnusedClass>
         <LessSpecificReturnStatement errorLevel="error"/>
         <LessSpecificReturnType errorLevel="error"/>
         <LessSpecificImplementedReturnType errorLevel="error"/>

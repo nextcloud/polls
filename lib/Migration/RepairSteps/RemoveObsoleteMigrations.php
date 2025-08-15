@@ -19,7 +19,6 @@ use OCP\Migration\IRepairStep;
  * including migration versions from test releases
  * theoretically, only this migration should be existent. If not, no matter
  *
- * @psalm-suppress UnusedClass
  */
 class RemoveObsoleteMigrations implements IRepairStep {
 	public function __construct(

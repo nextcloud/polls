@@ -14,9 +14,6 @@ use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
-/**
- * @psalm-suppress UnusedClass
- */
 class UpdateHashes implements IRepairStep {
 	public function __construct(
 		private TableManager $tableManager,
