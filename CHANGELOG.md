@@ -6,6 +6,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+If you experience update problems, please refer to [this article](https://github.com/nextcloud/polls/wiki/Installation-help#update-issues)
+
 ### Fixed
  - Made description sticky again on horizontal scrolling
  - Activities in sidebar did not get loaded
