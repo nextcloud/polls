@@ -36,6 +36,7 @@
       <step>OCA\Polls\Migration\RepairSteps\RemoveObsoleteMigrations</step>
     </pre-migration>
     <post-migration>
+      <step>OCA\Polls\Migration\RepairSteps\VerifyClassAlias</step>
       <step>OCA\Polls\Migration\RepairSteps\DropOrphanedTables</step>
       <step>OCA\Polls\Migration\RepairSteps\DropOrphanedColumns</step>
       <step>OCA\Polls\Migration\RepairSteps\DeleteInvalidRecords</step>
