@@ -25,13 +25,27 @@ final class VerifyClassAlias implements IRepairStep {
 
 	public function run(IOutput $output): void {
 		$results = AliasUtil::applyAliases($this->logger); // idempotent
+
+		$allOk = true;
+		foreach ($results as $r) {
+			if (!$r['ok']) {
+				$allOk = false;
+				break;
+			}
+		}
+
+		if ($allOk) {
+			$output->info('OK');
+			return;
+		}
+
+		// Nur Probleme ausgeben (kompakt)
 		foreach ($results as $old => $r) {
-			$symbol = $r['ok'] ? '✅' : '❌';
-			$output->info(sprintf(
-				'%s %s | loaded:%s | file:%s%s',
-				$symbol, $old, $r['loaded'] ? 'yes' : 'no', $r['file'] ?? 'n/a',
-				$r['note'] ? ' | ' . $r['note'] : ''
-			));
+			if ($r['ok']) {
+				continue;
+			}
+			$note = $r['note'] ? ' | ' . $r['note'] : '';
+			$output->info(sprintf('❌ %s | file:%s%s', $old, $r['file'] ?? 'n/a', $note));
 		}
 	}
 }

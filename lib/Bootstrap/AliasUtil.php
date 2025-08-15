@@ -32,19 +32,19 @@ final class AliasUtil {
 				$loadedNew = class_exists($new, true);
 				$fileNew = $loadedNew ? (new \ReflectionClass($new))->getFileName() : null;
 
-				$alreadyOk = $loadedNew && $fileOld && $fileNew
+				$alreadyOk = is_string($fileOld) && is_string($fileNew)
 					&& realpath($fileOld) === realpath($fileNew);
 
+				$oldShort = self::short($fileOld);
+				$newShort = self::short($fileNew);
+
 				if ($alreadyOk) {
-					$msg = "Alias ALREADY SET: $old -> $new | file=$fileOld";
-					$logger?->info($msg, ['app' => 'polls']);
-					$results[$old] = ['ok' => true, 'loaded' => true, 'file' => $fileOld, 'note' => 'already set'];
+					$logger?->debug("Alias ALREADY SET: $old -> $new | file=$oldShort", ['app' => 'polls']);
+					$results[$old] = ['ok' => true, 'loaded' => true, 'file' => $oldShort, 'note' => 'already set'];
 				} else {
-					$msg = "Alias SKIPPED: $old already loaded from $fileOld (differs from $fileNew)";
-					$logger?->warning($msg, ['app' => 'polls']);
-					$results[$old] = ['ok' => false, 'loaded' => true, 'file' => $fileOld, 'note' => 'alias too late'];
-				}
-				continue;
+					$logger?->warning("Alias SKIPPED: $old already loaded from $oldShort (differs from $newShort)", ['app' => 'polls']);
+					$results[$old] = ['ok' => false, 'loaded' => true, 'file' => $oldShort, 'note' => 'alias too late'];
+				}				continue;
 			}
 
 			// Case 2: old class is NOT defined yet - we can set the alias now
@@ -61,22 +61,22 @@ final class AliasUtil {
 				$fileOld = $loadedOld ? (new \ReflectionClass($old))->getFileName() : null;
 				$fileNew = $loadedNew ? (new \ReflectionClass($new))->getFileName() : null;
 
-				$ok = $loadedOld && $loadedNew && $fileOld && $fileNew
+				$ok = is_string($fileOld) && is_string($fileNew)
 					&& realpath($fileOld) === realpath($fileNew);
 
-				$logger?->{ $ok ? 'info' : 'warning' }(
-					sprintf('Alias %s: %s -> %s | oldFile=%s | newFile=%s',
-						$ok ? 'OK' : 'WARN', $old, $new, $fileOld ?? 'n/a', $fileNew ?? 'n/a'
-					),
-					['app' => 'polls']
-				);
+				$oldShort = self::short($fileOld);
+				$newShort = self::short($fileNew);
+
+				$msg = sprintf('Alias %s: %s -> %s | oldFile=%s | newFile=%s', $ok ? 'OK' : 'WARN', $old, $new, $oldShort, $newShort);
+				$ok ? $logger?->debug($msg, ['app' => 'polls']) : $logger?->warning($msg, ['app' => 'polls']);
 
 				$results[$old] = [
 					'ok' => $ok,
 					'loaded' => $loadedOld,
-					'file' => $fileOld,
+					'file' => $oldShort,
 					'note' => $ok ? '' : 'old/new files differ',
 				];
+
 			} catch (\Throwable $e) {
 				$logger?->error("Alias ERROR: $old -> $new | " . $e->getMessage(), ['app' => 'polls']);
 				$results[$old] = ['ok' => false, 'loaded' => false, 'file' => null, 'note' => 'exception'];
@@ -84,5 +84,14 @@ final class AliasUtil {
 		}
 
 		return $results;
+	}
+
+	private static function short(null|string|false $path): string {
+		if (!is_string($path) || $path === '') {
+			return 'n/a';
+		}
+		$norm = str_replace('\\', '/', $path);
+		$pos = strpos($norm, '/lib/');
+		return $pos === false ? basename($norm) : substr($norm, $pos + 1); // ab "lib/..."
 	}
 }

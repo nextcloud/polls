@@ -48,6 +48,7 @@
     </install>
   </repair-steps>
   <commands>
+    <command>OCA\Polls\Command\AliasVerify</command>
     <command>OCA\Polls\Command\Db\CleanMigrations</command>
     <command>OCA\Polls\Command\Db\CreateIndices</command>
     <command>OCA\Polls\Command\Db\Purge</command>
