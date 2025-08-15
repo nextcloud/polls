@@ -20,6 +20,14 @@ class CleanMigrations extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:clean-migrations';
 	protected string $description = 'Remove old migrations entries from Nextcloud\'s migration table';
 	protected array $operationHints = [
+		'This command will remove all entries from the Nextcloud migration table that are related to the Polls app.',
+		'*****************************',
+		'**    Please understand    **',
+		'*****************************',
+		'Although old migrations entries are not used anymore, they can still remain in the installation, based on the way polls got installed.',
+		'This could result in executing invalid migrations in the future, which then could result in a unpredictable database state.',
+		'Therefore this command is highly NOT RECOMMENDED and should only be executed if you know what you are doing.',
+		'',
 		'Note: NO data migration will be executed, so make sure you have a backup of your database.',
 	];
 

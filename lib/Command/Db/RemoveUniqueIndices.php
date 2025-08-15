@@ -25,7 +25,7 @@ class RemoveUniqueIndices extends Command {
 		'**    Please understand    **',
 		'*****************************',
 		'This can lead to inconsitent database states, because the uniqueness of data is not guaranteed anymore.',
-		'Therefore, this is highly NOT RECOMMENDED and should only be used if you know what you are doing.',
+		'Therefore this command is highly NOT RECOMMENDED and should only be executed if you know what you are doing.',
 		'',
 		'To recreate the unique indices, run the command \'occ ' . parent::NAME_PREFIX . 'index:create\'',
 		'Note: NO data migration will be executed, so make sure you have a backup of your database.',

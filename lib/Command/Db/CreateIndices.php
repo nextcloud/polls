@@ -22,7 +22,6 @@ class CreateIndices extends Command {
 	protected array $operationHints = [
 		'Adds unique indices and foreign key constraints.',
 		'To create the optional indices, run the command \'occ db:add-missing-indices\'',
-		'Note: NO data migration will be executed, so make sure you have a backup of your database.',
 	];
 
 	public function __construct(
