@@ -24,6 +24,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
 	protected string $description = '';
 	protected array $operationHints = [];
 	protected bool $defaultContinueAnswer = false;
+	protected bool $skipQuestion = false;
 	protected mixed $helper;
 	protected InputInterface $input;
 	protected OutputInterface $output;
@@ -56,6 +57,10 @@ class Command extends \Symfony\Component\Console\Command\Command {
 	}
 
 	protected function requestConfirmation(InputInterface $input, OutputInterface $output): int {
+		if ($this->skipQuestion) {
+			return 0;
+		}
+
 		if ($input->isInteractive()) {
 			/** @var QuestionHelper */
 			$this->helper = $this->getHelper('question');

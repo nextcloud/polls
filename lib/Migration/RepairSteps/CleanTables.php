@@ -12,8 +12,7 @@ namespace OCA\Polls\Migration\RepairSteps;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\TableManager;
-use OCA\Polls\Db\WatchMapper;
+use OCA\Polls\Db\V2\TableManager;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
@@ -21,13 +20,10 @@ use OCP\Migration\IRepairStep;
 /**
  * Preparation before migration
  * Remove all invalid records to avoid erros while adding indices ans constraints
- *
- * @psalm-suppress UnusedClass
  */
-class DeleteInvalidRecords implements IRepairStep {
+class CleanTables implements IRepairStep {
 	public function __construct(
 		private IDBConnection $connection,
-		private WatchMapper $watchMapper,
 		private TableManager $tableManager,
 		private Schema $schema,
 	) {
@@ -40,17 +36,12 @@ class DeleteInvalidRecords implements IRepairStep {
 	public function run(IOutput $output):void {
 		if ($this->connection->tableExists(Poll::TABLE)) {
 			try {
-				$this->schema = $this->connection->createSchema();
-				$this->tableManager->setSchema($this->schema);
-
 				$this->tableManager->removeOrphaned();
 				$this->tableManager->deleteAllDuplicates();
-
-				$this->watchMapper->deleteOldEntries(time());
+				$this->tableManager->tidyWatchTable(time());
 			} catch (Exception $e) {
 				// Simply skip repair, if it breaks and rely on the next run
 			}
-			$this->connection->migrateToSchema($this->schema);
 		}
 	}
 }

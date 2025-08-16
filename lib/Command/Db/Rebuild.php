@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace OCA\Polls\Command\Db;
 
 use Doctrine\DBAL\Schema\Schema;
-use OCA\Polls\Db\TableManager;
-use OCA\Polls\Db\IndexManager;
+use OCA\Polls\Db\V2\TableManager;
+use OCA\Polls\Db\V2\IndexManager;
 use OCA\Polls\Command\Command;
 use OCP\IDBConnection;
 
@@ -52,31 +52,32 @@ class Rebuild extends Command {
 		$this->deleteGenericIndices();
 		$this->deleteUniqueIndices();
 		$this->deleteNamedIndices();
-
-		$this->printComment('Step 2. Remove all orphaned tables and columns');
-		$this->removeObsoleteTables();
-		$this->removeObsoleteColumns();
-
 		$this->connection->migrateToSchema($this->schema);
+
+		$this->printComment('Step 2. Tidy records before rebuilding the schema');
+		$this->fixNullish();
+		$this->cleanTables();
 
 		$this->printComment('Step 3. Create or update tables to current shema');
 		$this->createOrUpdateSchema();
-
 		$this->connection->migrateToSchema($this->schema);
 
-		$this->printComment('Step 4. set hashes for votes and options');
-		$this->migrateOptionsToHash();
+		$this->printComment('Step 4. Remove orphaned tables and columns');
+		$this->dropObsoleteTables();
+		$this->dropObsoleteColumns();
+		$this->connection->migrateToSchema($this->schema);
 
-		$this->printComment('Step 5. Remove invalid records (orphaned and duplicates)');
-		$this->cleanTables();
+		$this->printComment('Step 5. Validate and fix records');
+		$this->migrateOptionsToHash();
+		$this->setLastInteraction();
 
 		$this->printComment('Step 6. Recreate unique indices and foreign key constraints');
 		$this->addForeignKeyConstraints();
 		$this->addUniqueIndices();
-
-		$this->printComment('Execute \'occ db:add-missing-indices\' to add missing optional indices');
-
 		$this->connection->migrateToSchema($this->schema);
+
+		$this->printComment('Rebuild finished. The database structure is now up to date.');
+		$this->printComment('Execute \'occ db:add-missing-indices\' to add missing optional indices');
 
 		return 0;
 	}
@@ -90,6 +91,14 @@ class Rebuild extends Command {
 		$this->printInfo($messages, '   ');
 	}
 
+	private function fixNullish(): void {
+		$this->printComment(' - Fix nullish values');
+		$messages = $this->tableManager->fixNullishShares();
+		$this->printInfo($messages, '   ');
+
+		$messages = $this->tableManager->fixNullishPollGroupRelations();
+		$this->printInfo($messages, '   ');
+	}
 	/**
 	 * Create index for $table
 	 */
@@ -118,7 +127,7 @@ class Rebuild extends Command {
 		$this->printInfo($messages, '   ');
 	}
 
-	private function removeObsoleteColumns(): void {
+	private function dropObsoleteColumns(): void {
 		$this->printComment(' - Drop orphaned columns');
 		$messages = $this->tableManager->removeObsoleteColumns();
 		$this->printInfo($messages, '   ');
@@ -127,7 +136,7 @@ class Rebuild extends Command {
 	/**
 	 * Remove obsolete tables if they still exist
 	 */
-	private function removeObsoleteTables(): void {
+	private function dropObsoleteTables(): void {
 		$this->printComment(' - Drop orphaned tables');
 		$messages = $this->tableManager->removeObsoleteTables();
 		$this->printInfo($messages, '   ');
@@ -136,8 +145,8 @@ class Rebuild extends Command {
 	/**
 	 * Initialize last poll interactions timestamps
 	 */
-	public function resetLastInteraction(): void {
-		$messages = $this->tableManager->resetLastInteraction();
+	public function setLastInteraction(): void {
+		$messages = $this->tableManager->setLastInteraction();
 		$this->printInfo($messages, '   ');
 	}
 
@@ -146,9 +155,9 @@ class Rebuild extends Command {
 	 */
 	private function cleanTables(): void {
 		$this->printComment(' - Remove orphaned records');
-		$orphaned = $this->tableManager->removeOrphaned();
-		foreach ($orphaned as $table => $count) {
-			$this->printInfo("    Removed $count orphaned records from $table");
+		$messages = $this->tableManager->removeOrphaned();
+		foreach ($messages as $message) {
+			$this->printInfo("    $message");
 		}
 
 		$this->printComment(' - Remove duplicates');
@@ -187,7 +196,7 @@ class Rebuild extends Command {
 	 * remove all named indices
 	 */
 	private function deleteNamedIndices(): void {
-		$this->printComment(' - Remove common indices');
+		$this->printComment(' - Remove optional indices');
 		$messages = $this->indexManager->removeNamedIndices();
 		$this->printInfo($messages, ' - ');
 	}

@@ -69,17 +69,4 @@ class WatchMapper extends QBMapper {
 
 		return $this->findEntity($qb);
 	}
-
-	/**
-	 * Delete entries per timestamp
-	 * @return void
-	 */
-	public function deleteOldEntries(int $offset): void {
-		$query = $this->db->getQueryBuilder();
-		$query->delete($this->getTableName())
-			->where(
-				$query->expr()->lt('updated', $query->createNamedParameter($offset))
-			);
-		$query->executeStatement();
-	}
 }

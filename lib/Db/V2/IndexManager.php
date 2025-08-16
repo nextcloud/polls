@@ -2,36 +2,31 @@
 
 declare(strict_types=1);
 /**
- * SPDX-FileCopyrightText: 2021 Nextcloud contributors
+ * SPDX-FileCopyrightText: 2025 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
-namespace OCA\Polls\Db;
+namespace OCA\Polls\Db\V2;
 
 use Doctrine\DBAL\Schema\Exception\IndexDoesNotExist;
 use Doctrine\DBAL\Schema\Schema;
-use OCA\Polls\Migration\TableSchema;
+use Exception;
+use OCA\Polls\Migration\V2\TableSchema;
+use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
+use OCP\IDBConnection;
 
-class IndexManager {
+/** @psalm-suppress UnusedClass */
+class IndexManager extends DbManager {
 
-	private string $dbPrefix;
+	// private Schema|ISchemaWrapper $schema;
 
 	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
-		private IConfig $config,
-		private Schema $schema,
+		protected IConfig $config,
+		protected IDBConnection $connection,
 	) {
-		$this->setUp();
-	}
-
-	private function setUp(): void {
-		$this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
-	}
-
-	public function setSchema(Schema &$schema): void {
-		$this->schema = $schema;
+		parent::__construct($config, $connection);
 	}
 
 	/**
@@ -98,8 +93,10 @@ class IndexManager {
 	 * @return string log message
 	 */
 	public function createForeignKeyConstraint(string $parentTableName, string $childTableName, string $constraintColumn): string {
-		$parentTableName = $this->dbPrefix . $parentTableName;
-		$childTableName = $this->dbPrefix . $childTableName;
+		$this->needsSchema();
+		$parentTableName = $this->getTableName($parentTableName);
+		$childTableName = $this->getTableName($childTableName);
+
 		$parentTable = $this->schema->getTable($parentTableName);
 		$childTable = $this->schema->getTable($childTableName);
 
@@ -117,7 +114,8 @@ class IndexManager {
 	 * @return string log message
 	 */
 	public function createIndex(string $tableName, string $indexName, array $columns, bool $unique = false): string {
-		$tableName = $this->dbPrefix . $tableName;
+		$this->needsSchema();
+		$tableName = $this->getTableName($tableName);
 
 		if ($this->schema->hasTable($tableName)) {
 
@@ -210,8 +208,9 @@ class IndexManager {
 	 * @return string[] logged messages
 	 */
 	public function removeForeignKeysFromTable(string $tableName): array {
+		$this->needsSchema();
+		$tableName = $this->getTableName($tableName);
 		$messages = [];
-		$tableName = $this->dbPrefix . $tableName;
 
 		if ($this->schema->hasTable($tableName)) {
 
@@ -233,8 +232,9 @@ class IndexManager {
 	 * @return string[] logged messages
 	 */
 	public function removeUniqueIndicesFromTable(string $tableName): array {
+		$this->needsSchema();
+		$tableName = $this->getTableName($tableName);
 		$messages = [];
-		$tableName = $this->dbPrefix . $tableName;
 
 		if ($this->schema->hasTable($tableName)) {
 
@@ -257,8 +257,9 @@ class IndexManager {
 	 * @return string[] logged messages
 	 */
 	public function removeGenericIndicesFromTable(string $tableName): array {
+		$this->needsSchema();
+		$tableName = $this->getTableName($tableName);
 		$messages = [];
-		$tableName = $this->dbPrefix . $tableName;
 
 		if ($this->schema->hasTable($tableName)) {
 
@@ -266,8 +267,19 @@ class IndexManager {
 
 			foreach ($table->getIndexes() as $index) {
 				if (strpos($index->getName(), 'IDX_') === 0) {
-					$table->dropIndex($index->getName());
-					$messages[] = 'Removes ' . $index->getName() . ' from ' . $tableName;
+					try {
+						$messages[] = 'Removes ' . $index->getName() . ' from ' . $tableName;
+						$table->dropIndex($index->getName());
+					} catch (Exception $e) {
+						/**
+						 * If this fails, it is not a generic index, skip it
+						 *
+						 * This can happen if the index is already removed
+						 * For some strange reason, an index name is
+						 * reported, although it does not exist anymore
+						 */
+						continue;
+					}
 				}
 			}
 		}
@@ -282,8 +294,10 @@ class IndexManager {
 	 * @return null|string
 	 */
 	public function removeNamedIndexFromTable(string $tableName, string $indexName): ?string {
-		$tableName = $this->dbPrefix . $tableName;
+		$this->needsSchema();
+		$tableName = $this->getTableName($tableName);
 		$message = null;
+
 		try {
 			if ($this->schema->hasTable($tableName)) {
 				$table = $this->schema->getTable($tableName);

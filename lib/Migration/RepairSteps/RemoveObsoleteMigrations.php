@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Migration\RepairSteps;
 
 use Doctrine\DBAL\Schema\Schema;
-use OCA\Polls\Db\TableManager;
+use OCA\Polls\Db\V2\TableManager;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
@@ -19,7 +19,6 @@ use OCP\Migration\IRepairStep;
  * including migration versions from test releases
  * theoretically, only this migration should be existent. If not, no matter
  *
- * @psalm-suppress UnusedClass
  */
 class RemoveObsoleteMigrations implements IRepairStep {
 	public function __construct(

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 /**
- * SPDX-FileCopyrightText: 2017 Nextcloud contributors
+ * SPDX-FileCopyrightText: 2025 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\Polls\Migration;
+namespace OCA\Polls\Migration\V2;
 
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\Log;
@@ -208,10 +208,10 @@ abstract class TableSchema {
 			// 'processed', // dropped in 8.1, orphaned
 		],
 		Option::TABLE => [
-			'poll_option_hash_bin',
+			'poll_option_hash_bin', // used and dropped in dev branch (8.3.x), leave here for security
 		],
 		Vote::TABLE => [
-			'vote_option_hash_bin',
+			'vote_option_hash_bin', // used and dropped in dev branch (8.3.x), leave here for security
 		],
 	];
 
@@ -232,8 +232,8 @@ abstract class TableSchema {
 		],
 		PollGroup::RELATION_TABLE => [
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
-			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => null, 'length' => 20]],
-			'group_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => null, 'length' => 20]],
+			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'group_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 		],
 		Poll::TABLE => [
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
@@ -295,8 +295,8 @@ abstract class TableSchema {
 		],
 		Share::TABLE => [
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
-			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => null, 'length' => 20]],
-			'group_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => null, 'length' => 20]],
+			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'group_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'token' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 64]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 64]],
 			'label' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],

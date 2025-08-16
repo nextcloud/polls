@@ -10,26 +10,25 @@ declare(strict_types=1);
 namespace OCA\Polls\Migration\RepairSteps;
 
 use OCA\Polls\Db\V2\TableManager;
+use OCA\Polls\Db\WatchMapper;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
-class UpdateInteraction implements IRepairStep {
+class SetLastInteraction implements IRepairStep {
 	public function __construct(
 		private TableManager $tableManager,
 		private IDBConnection $connection,
+		private WatchMapper $watchMapper,
 	) {
 	}
 
 	public function getName() {
-		return 'Polls - Validate and set last poll interaction';
+		return 'Polls - Fix last interaction of poll';
 	}
 
 	public function run(IOutput $output): void {
-		$this->tableManager->setConnection($this->connection);
-
 		$message = $this->tableManager->setLastInteraction();
-
 		$output->info($message);
 	}
 }

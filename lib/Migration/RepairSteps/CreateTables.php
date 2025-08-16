@@ -10,14 +10,11 @@ declare(strict_types=1);
 namespace OCA\Polls\Migration\RepairSteps;
 
 use Doctrine\DBAL\Schema\Schema;
-use OCA\Polls\Db\TableManager;
+use OCA\Polls\Db\V2\TableManager;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
-/**
- * @psalm-suppress UnusedClass
- */
 class CreateTables implements IRepairStep {
 	public function __construct(
 		private TableManager $tableManager,

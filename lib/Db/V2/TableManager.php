@@ -2,19 +2,24 @@
 
 declare(strict_types=1);
 /**
- * SPDX-FileCopyrightText: 2021 Nextcloud contributors
+ * SPDX-FileCopyrightText: 2025 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+namespace OCA\Polls\Db\V2;
 
-namespace OCA\Polls\Db;
-
-use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use Exception;
 use OCA\Polls\AppConstants;
+use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollGroup;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\Watch;
 use OCA\Polls\Helper\Hash;
-use OCA\Polls\Migration\TableSchema;
+use OCA\Polls\Migration\V2\TableSchema;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -22,36 +27,40 @@ use OCP\Migration\IOutput;
 use PDO;
 use Psr\Log\LoggerInterface;
 
-class TableManager {
+class TableManager extends DbManager {
 
-	private string $dbPrefix;
+	// private string $dbPrefix;
+	// private Schema|ISchemaWrapper $schema;
 
 	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
-		private IConfig $config,
-		private IDBConnection $connection,
+		protected IConfig $config,
+		protected IDBConnection $connection,
 		private LoggerInterface $logger,
 		private OptionMapper $optionMapper,
 		private VoteMapper $voteMapper,
-		private Schema $schema,
 	) {
-		$this->setUp();
+		parent::__construct($config, $connection);
+		// $this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 	}
 
-	/**
-	 * setUp
-	 */
-	private function setUp(): void {
-		$this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
-	}
+	// public function setSchema(Schema|ISchemaWrapper &$schema): void {
+	// 	$this->schema = $schema;
+	// }
 
-	public function setSchema(Schema &$schema): void {
-		$this->schema = $schema;
-	}
+	// public function createSchema(): Schema {
+	// 	$this->schema = $this->connection->createSchema();
+	// 	return $this->schema;
+	// }
+	// public function migrateToSchema() : void {
+	// 	// Schema must be of class Schema
+	// 	$this->needsSchema(iSchemWrapperClass: false);
+	// 	$this->connection->migrateToSchema($this->schema);
+	// }
 
-	public function setConnection(IDBConnection &$connection): void {
-		$this->connection = $connection;
-	}
+	// public function setConnection(IDBConnection &$connection): void {
+	// 	$this->connection = $connection;
+	// }
 
 	/**
 	 * @return string[]
@@ -142,16 +151,20 @@ class TableManager {
 	 * @psalm-return non-empty-list<string>
 	 */
 	public function createTable(string $tableName): array {
+		$this->needsSchema();
+
 		$messages = [];
 		$columns = TableSchema::TABLES[$tableName];
-		$ocTable = $this->dbPrefix . $tableName;
 
-		if ($this->schema->hasTable($ocTable)) {
-			$table = $this->schema->getTable($ocTable);
+		// Ensure the table name is prefixed correctly
+		$tableName = $this->getTableName($tableName);
+
+		if ($this->schema->hasTable($tableName)) {
+			$table = $this->schema->getTable($tableName);
 			$messages[] = 'Validating table ' . $table->getName();
 			$tableCreated = false;
 		} else {
-			$table = $this->schema->createTable($ocTable);
+			$table = $this->schema->createTable($tableName);
 			$tableCreated = true;
 			$messages[] = 'Creating table ' . $table->getName();
 		}
@@ -185,6 +198,7 @@ class TableManager {
 	 * @psalm-return non-empty-list<string>
 	 */
 	public function createTables(): array {
+		$this->needsSchema();
 		$messages = [];
 
 		foreach (array_keys(TableSchema::TABLES) as $tableName) {
@@ -319,8 +333,17 @@ class TableManager {
 		$query->delete(Poll::TABLE)
 			->where($query->expr()->isNull('id'));
 		$orphaned[Poll::TABLE] = $query->executeStatement();
+		$messages = [];
+		foreach ($orphaned as $type => $count) {
+			if ($count > 0) {
+				$this->logger->info(
+					'Purged ' . $count . ' orphaned record(s) from ' . $type,
+					['count' => $count, 'type' => $type]
+				);
+			}
+		}
 
-		return $orphaned;
+		return $messages;
 	}
 
 	/**
@@ -346,10 +369,30 @@ class TableManager {
 			}
 		}
 		return $messages;
+	}
 
+	/**
+	 * Delete entries per timestamp
+	 */
+	public function tidyWatchTable(int $offset): string {
+		$query = $this->connection->getQueryBuilder();
+		$query->delete(Watch::TABLE)
+			->where(
+				$query->expr()->lt('updated', $query->createNamedParameter($offset))
+			);
+		$count = $query->executeStatement();
+
+		if ($count > 0) {
+			$this->logger->info('Removed {number} old watch records', ['number' => $count, 'db' => $this->dbPrefix . Watch::TABLE]);
+			return 'Removed ' . $count . ' old watch records';
+		}
+
+		$this->logger->info('Watch table is clean');
+		return 'Watch table is clean';
 	}
 
 	private function deleteDuplicates(string $table, array $columns):int {
+		$this->needsSchema();
 		$qb = $this->connection->getQueryBuilder();
 
 		if ($this->schema->hasTable($this->dbPrefix . $table)) {
@@ -416,8 +459,75 @@ class TableManager {
 		}
 	}
 
-	public function resetLastInteraction(?int $timestamp = null): array {
+	public function fixNullishShares(): array {
 		$messages = [];
+		$query = $this->connection->getQueryBuilder();
+
+		// replace all nullish group_ids with 0 in share table
+		$query->update(Share::TABLE)
+			->set('group_id', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT))
+			->where($query->expr()->isNull('group_id'));
+
+		$count = $query->executeStatement();
+
+		if ($count > 0) {
+			$messages[] = 'Updated ' . $count . ' shares and set group_id to 0 for nullish values';
+		}
+
+		// replace all nullish poll_id with 0 in share table
+		$query = $this->connection->getQueryBuilder();
+		$query->update(Share::TABLE)
+			->set('poll_id', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT))
+			->where($query->expr()->isNull('poll_id'));
+
+		$count = $query->executeStatement();
+
+		if ($count > 0) {
+			$messages[] = 'Updated ' . $count . ' shares and set poll_id to 0 for nullish values';
+		}
+
+		if (empty($messages)) {
+			return ['All shares are valid'];
+		}
+
+		return $messages;
+	}
+
+	public function fixNullishPollGroupRelations(): array {
+		$messages = [];
+		$query = $this->connection->getQueryBuilder();
+
+		// replace all nullish group_ids with 0 in share table
+		$query->update(PollGroup::RELATION_TABLE)
+			->set('group_id', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT))
+			->where($query->expr()->isNull('group_id'));
+
+		$count = $query->executeStatement();
+
+		if ($count > 0) {
+			$messages[] = 'Updated ' . $count . ' pollgroup relations and set group_id to 0 for nullish values';
+		}
+
+		// replace all nullish poll_id with 0 in share table
+		$query = $this->connection->getQueryBuilder();
+		$query->update(PollGroup::RELATION_TABLE)
+			->set('poll_id', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT))
+			->where($query->expr()->isNull('poll_id'));
+
+		$count = $query->executeStatement();
+
+		if ($count > 0) {
+			$messages[] = 'Updated ' . $count . ' poll group relations and set poll_id to 0 for nullish values';
+		}
+
+		if (empty($messages)) {
+			return ['All poll group relations are valid'];
+		}
+
+		return $messages;
+	}
+
+	public function setLastInteraction(?int $timestamp = null): string {
 		$timestamp = $timestamp ?? time();
 		$query = $this->connection->getQueryBuilder();
 
@@ -428,16 +538,16 @@ class TableManager {
 
 		if ($count > 0) {
 			$this->logger->info('Updated {number} polls in {db} and set last_interaction to current timestamp {timestamp}', ['number' => $count, 'db' => $this->dbPrefix . PollMapper::TABLE, 'timestamp' => $timestamp]);
-			$messages[] = 'Updated ' . $count . ' polls';
-		} else {
-			$this->logger->info('No polls needed to get updated with last interaction info');
-			$messages[] = 'No polls needed to get updated with last interaction info';
+			return 'Updated last interaction in ' . $count . ' polls';
 		}
 
-		return $messages;
+		$this->logger->info('No polls needed to get updated with last interaction info');
+		return 'Last interaction all set';
+
 	}
 
 	public function migrateOptionsToHash(): array {
+		$this->needsSchema();
 		$messages = [];
 
 		if ($this->schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
@@ -492,31 +602,36 @@ class TableManager {
 		return $messages;
 	}
 
-	/**
-	 * Get a concatenated array of values from a column in the query builder.
-	 *
-	 * @param IQueryBuilder $qb The query builder instance per reference
-	 * @param string $concatColumn The column to concatenate
-	 * @param string $asColumn The alias for the concatenated column
-	 * @param string $dbProvider The database provider (default: IDBConnection::PLATFORM_MYSQL)
-	 * @param string $separator The separator for concatenation (default: ',')
-	 *
-	 * @psalm-param IDBConnection::PLATFORM_* $dbProvider
-	 *
-	 */
-	public static function getConcatenatedArray(
-		IQueryBuilder &$qb,
-		string $concatColumn,
-		string $asColumn,
-		string $dbProvider,
-		string $separator = ',',
-	): void {
-		$qb->addSelect(match ($dbProvider) {
-			IDBConnection::PLATFORM_POSTGRES => $qb->createFunction('string_agg(distinct ' . $concatColumn . '::varchar, \'' . $separator . '\') AS ' . $asColumn),
-			IDBConnection::PLATFORM_ORACLE => $qb->createFunction('listagg(distinct ' . $concatColumn . ', \'' . $separator . '\') WITHIN GROUP (ORDER BY ' . $concatColumn . ') AS ' . $asColumn),
-			IDBConnection::PLATFORM_SQLITE => $qb->createFunction('group_concat(replace(distinct ' . $concatColumn . ' ,\'\',\'\'), \'' . $separator . '\') AS ' . $asColumn),
-			default => $qb->createFunction('group_concat(distinct ' . $concatColumn . ' SEPARATOR "' . $separator . '") AS ' . $asColumn),
-		});
-	}
+	// protected function getTableName(string $tableName): ?string {
+	// 	if ($this->schema instanceof Schema) {
+	// 		// If the schema is an instance of Schema, we need to prefix the table name
+	// 		return $this->config->getSystemValue('dbtableprefix', 'oc_') . $tableName;
+	// 	}
+	// 	return $tableName;
+	// }
+
+	// protected function needsSchema(bool $schemaClass = true, bool $iSchemWrapperClass = true): void {
+	// 	if (($this->schema instanceof Schema) && $schemaClass) {
+	// 		return;
+	// 	}
+
+	// 	if (($this->schema instanceof ISchemaWrapper) && $iSchemWrapperClass) {
+	// 		return;
+	// 	}
+
+	// 	if ($schemaClass && $iSchemWrapperClass) {
+	// 		// If the schema is not set or not an instance of Schema or ISchemaWrapper, throw an exception
+	// 		throw new Exception('Schema is not set or not an instance of Schema or ISchemaWrapper');
+	// 	}
+	// 	if ($schemaClass) {
+	// 		// If the schema is not set or not an instance of Schema, throw an exception
+	// 		throw new Exception('Schema is not set or not an instance of Schema');
+	// 	}
+	// 	if ($iSchemWrapperClass) {
+	// 		// If the schema is not set or not an instance of ISchemaWrapper, throw an exception
+	// 		throw new Exception('Schema is not set or not an instance of ISchemaWrapper');
+	// 	}
+	// 	throw new Exception('Unexpected. Schema is an instance of ' . get_class($this->schema));
+	// }
 
 }

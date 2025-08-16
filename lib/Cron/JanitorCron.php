@@ -15,9 +15,8 @@ use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\TableManager;
+use OCA\Polls\Db\V2\TableManager;
 use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -41,7 +40,6 @@ class JanitorCron extends TimedJob {
 		private PollMapper $pollMapper,
 		private ShareMapper $shareMapper,
 		private VoteMapper $voteMapper,
-		private WatchMapper $watchMapper,
 		private TableManager $tableManager,
 	) {
 		parent::__construct($time);
@@ -65,7 +63,7 @@ class JanitorCron extends TimedJob {
 			$this->logMapper->deleteOldEntries(time() - (86400 * 7));
 
 			// delete entries older than 1 day
-			$this->watchMapper->deleteOldEntries(time() - 86400);
+			$this->tableManager->tidyWatchTable(time() - 86400);
 
 			// purge entries virtually deleted more than 12 hours ago
 			$deleted['comments'] = $this->commentMapper->purgeDeletedComments(time() - 4320);
@@ -93,14 +91,9 @@ class JanitorCron extends TimedJob {
 			}
 
 			// delete orphaned entries (poll_id = null)
-			$orphaned = $this->tableManager->removeOrphaned();
-			foreach ($orphaned as $type => $count) {
-				if ($count > 0) {
-					$this->logger->info(
-						'JanitorCron: Purged {count} orphaned record(s) from {type}.',
-						['count' => $count, 'type' => $type]
-					);
-				}
+			$messages = $this->tableManager->removeOrphaned();
+			foreach ($messages as $message) {
+				$this->logger->info('JanitorCron: ' . $message);
 			}
 
 

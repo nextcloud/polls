@@ -14,22 +14,29 @@ use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
-class UpdateInteraction implements IRepairStep {
+class FixNullish implements IRepairStep {
 	public function __construct(
-		private TableManager $tableManager,
 		private IDBConnection $connection,
+		private TableManager $tableManager,
 	) {
 	}
 
 	public function getName() {
-		return 'Polls - Validate and set last poll interaction';
+		return 'Polls - Fix nullish values where not allowed';
 	}
 
 	public function run(IOutput $output): void {
 		$this->tableManager->setConnection($this->connection);
 
-		$message = $this->tableManager->setLastInteraction();
+		$messages = $this->tableManager->fixNullishShares();
+		foreach ($messages as $message) {
+			$output->info('Polls - ' . $message);
+		}
 
-		$output->info($message);
+		$messages = $this->tableManager->fixNullishPollGroupRelations();
+		foreach ($messages as $message) {
+			$output->info('Polls - ' . $message);
+		}
+
 	}
 }

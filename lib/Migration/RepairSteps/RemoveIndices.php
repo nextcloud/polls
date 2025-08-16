@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Migration\RepairSteps;
 
 use Doctrine\DBAL\Schema\Schema;
-use OCA\Polls\Db\IndexManager;
+use OCA\Polls\Db\V2\IndexManager;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
@@ -19,7 +19,6 @@ use OCP\Migration\IRepairStep;
  * Remove all indices and foreign key constraints to avoid errors
  * while changing the schema
  *
- * @psalm-suppress UnusedClass
  */
 class RemoveIndices implements IRepairStep {
 	public function __construct(
