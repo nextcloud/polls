@@ -263,6 +263,7 @@ OC.L10N.register(
     "minus" : "menos",
     "plus" : "mas",
     "Please wait…" : "Por favor, espere…",
+    "Possibly affected calendar events" : "Eventos de calendario posiblemente afectados",
     "Add" : "Añadir",
     "You are asked to propose more options." : "Se le pide que proponga más opciones.",
     "The proposal period ends {timeRelative}." : "El período para las propuestas termina en {timeRelative}.",
