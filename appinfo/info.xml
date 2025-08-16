@@ -31,27 +31,11 @@
     <job>OCA\Polls\Cron\JanitorCron</job>
     <job>OCA\Polls\Cron\AutoReminderCron</job>
   </background-jobs>
-  <repair-steps>
-    <pre-migration>
-      <step>OCA\Polls\Migration\RepairSteps\RemoveObsoleteMigrations</step>
-    </pre-migration>
-    <post-migration>
-      <step>OCA\Polls\Migration\RepairSteps\VerifyClassAlias</step>
-      <step>OCA\Polls\Migration\RepairSteps\DropOrphanedTables</step>
-      <step>OCA\Polls\Migration\RepairSteps\DropOrphanedColumns</step>
-      <step>OCA\Polls\Migration\RepairSteps\DeleteInvalidRecords</step>
-      <step>OCA\Polls\Migration\RepairSteps\UpdateHashes</step>
-      <step>OCA\Polls\Migration\RepairSteps\CreateIndices</step>
-    </post-migration>
-    <install>
-      <step>OCA\Polls\Migration\RepairSteps\Install</step>
-    </install>
-  </repair-steps>
   <commands>
-    <command>OCA\Polls\Command\AliasVerify</command>
     <command>OCA\Polls\Command\Db\CleanMigrations</command>
     <command>OCA\Polls\Command\Db\CreateIndices</command>
     <command>OCA\Polls\Command\Db\Purge</command>
+    <command>OCA\Polls\Command\Db\FixDB</command>
     <command>OCA\Polls\Command\Db\Rebuild</command>
     <command>OCA\Polls\Command\Db\RemoveFKConstraints</command>
     <command>OCA\Polls\Command\Db\RemoveOptionalIndices</command>

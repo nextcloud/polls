@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace OCA\Polls\AppInfo;
 
 use OCA\Polls\AppConstants;
-use OCA\Polls\Bootstrap\AliasUtil;
 use OCA\Polls\Dashboard\PollWidget;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\LogMapper;
@@ -83,9 +82,6 @@ class Application extends App implements IBootstrap {
 	public const APP_ID = AppConstants::APP_ID;
 
 	public function __construct(array $urlParams = []) {
-		// 1) Set aliases and verify them
-		AliasUtil::applyAliases();
-
 		parent::__construct(AppConstants::APP_ID, $urlParams);
 	}
 

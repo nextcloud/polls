@@ -29,14 +29,9 @@
     </stubs>
 	<issueHandlers>
         <PossiblyUnusedMethod>
-            <errorLevel type="suppress">
-                <directory name="lib/Db/V2" />
-            </errorLevel>
         </PossiblyUnusedMethod>
         <UnusedClass>
             <errorLevel type="suppress">
-                <directory name="lib/Db/V2" />
-                <directory name="lib/Migration/V2" />
                 <directory name="lib/Migration/RepairSteps" />
             </errorLevel>
         </UnusedClass>

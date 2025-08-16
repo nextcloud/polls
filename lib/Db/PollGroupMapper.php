@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use Exception;
+use OCA\Polls\Helper\SqlHelper;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -144,7 +145,7 @@ class PollGroupMapper extends QBMapper {
 		IQueryBuilder $qb,
 		string $joinAlias = 'polls',
 	): void {
-		TableManager::getConcatenatedArray(
+		SqlHelper::getConcatenatedArray(
 			qb: $qb,
 			concatColumn: $joinAlias . '.poll_id',
 			asColumn: 'poll_ids',

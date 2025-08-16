@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use OCA\Polls\Helper\SqlHelper;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IParameter;
@@ -253,7 +254,7 @@ class PollMapper extends QBMapper {
 		string $joinAlias = 'group_shares',
 	): void {
 
-		TableManager::getConcatenatedArray(
+		SqlHelper::getConcatenatedArray(
 			qb: $qb,
 			concatColumn: $joinAlias . '.user_id',
 			asColumn: 'group_shares',
@@ -285,7 +286,7 @@ class PollMapper extends QBMapper {
 		string $joinAlias = 'poll_groups',
 	): void {
 
-		TableManager::getConcatenatedArray(
+		SqlHelper::getConcatenatedArray(
 			qb: $qb,
 			concatColumn: $joinAlias . '.group_id',
 			asColumn: 'poll_groups',
@@ -325,7 +326,7 @@ class PollMapper extends QBMapper {
 		string $joinAlias = 'poll_group_shares',
 	): void {
 
-		TableManager::getConcatenatedArray(
+		SqlHelper::getConcatenatedArray(
 			qb: $qb,
 			concatColumn: $joinAlias . '.type',
 			asColumn: 'poll_group_user_shares',
