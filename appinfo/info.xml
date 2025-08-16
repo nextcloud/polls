@@ -36,6 +36,7 @@
       <step>OCA\Polls\Migration\RepairSteps\RemoveObsoleteMigrations</step>
     </pre-migration>
     <post-migration>
+      <step>OCA\Polls\Migration\RepairSteps\VerifyClassAlias</step>
       <step>OCA\Polls\Migration\RepairSteps\DropOrphanedTables</step>
       <step>OCA\Polls\Migration\RepairSteps\DropOrphanedColumns</step>
       <step>OCA\Polls\Migration\RepairSteps\DeleteInvalidRecords</step>
@@ -47,6 +48,7 @@
     </install>
   </repair-steps>
   <commands>
+    <command>OCA\Polls\Command\AliasVerify</command>
     <command>OCA\Polls\Command\Db\CleanMigrations</command>
     <command>OCA\Polls\Command\Db\CreateIndices</command>
     <command>OCA\Polls\Command\Db\Purge</command>
