@@ -123,21 +123,21 @@ abstract class DbManager {
 
 	private static function formatCaller(int $skip = 1): string {
 		$bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, $skip + 2);
-		$f  = $bt[$skip + 0] ?? null; // Frame of this method (0)
-		$c  = $bt[$skip + 1] ?? null; // Frame of the caller (1)
+		$f = $bt[$skip + 0] ?? null; // Frame of this method (0)
+		$c = $bt[$skip + 1] ?? null; // Frame of the caller (1)
 
-		$cls = $c['class']   ?? '';
-		$typ = $c['type']    ?? '';
-		$fn  = $c['function']?? '??';
-		$fil = $c['file']    ?? ($f['file'] ?? '??');
-		$ln  = $c['line']    ?? ($f['line'] ?? 0);
+		$cls = $c['class'] ?? '';
+		$typ = $c['type'] ?? '';
+		$fn = $c['function'] ?? '??';
+		$fil = $c['file'] ?? ($f['file'] ?? '??');
+		$ln = $c['line'] ?? ($f['line'] ?? 0);
 
-		return sprintf('%s%s%s@%s:%d', $cls, $typ, $fn, self::short($fil), (int)$ln);
+		return sprintf('%s%s%s@%s:%d', $cls, $typ, $fn, self::short($fil), $ln);
 	}
 
 	private static function short(string $path): string {
 		$norm = str_replace('\\', '/', $path);
-		$pos  = strpos($norm, '/lib/');
+		$pos = strpos($norm, '/lib/');
 		return $pos === false ? basename($norm) : substr($norm, $pos + 1); // "lib/…"
 	}
 }
