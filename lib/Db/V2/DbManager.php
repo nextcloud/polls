@@ -108,16 +108,36 @@ abstract class DbManager {
 
 		if ($allowSchemaClass && $allowISchemWrapperClass) {
 			// If the schema is not set or not an instance of Schema or ISchemaWrapper, throw an exception
-			throw new InvalidClassException('Schema is not set or not an instance of Schema or ISchemaWrapper');
+			throw new InvalidClassException('Schema is not set or not an instance of Schema or ISchemaWrapper (caller: ' . self::formatCaller() . ')');
 		}
 		if ($allowSchemaClass) {
 			// If the schema is not set or not an instance of Schema, throw an exception
-			throw new InvalidClassException('Schema is not set or not an instance of Schema');
+			throw new InvalidClassException('Schema is not set or not an instance of Schema (caller: ' . self::formatCaller() . ')');
 		}
 		if ($allowISchemWrapperClass) {
 			// If the schema is not set or not an instance of ISchemaWrapper, throw an exception
-			throw new InvalidClassException('Schema is not set or not an instance of ISchemaWrapper');
+			throw new InvalidClassException('Schema is not set or not an instance of ISchemaWrapper(caller: ' . self::formatCaller() . ')');
 		}
-		throw new InvalidClassException('Unexpected. Schema is an instance of ' . get_class($this->schema));
+		throw new InvalidClassException('Unexpected. Schema is an instance of ' . get_class($this->schema) . '(caller: ' . self::formatCaller() . ')');
+	}
+
+	private static function formatCaller(int $skip = 1): string {
+		$bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, $skip + 2);
+		$f  = $bt[$skip + 0] ?? null; // Frame of this method (0)
+		$c  = $bt[$skip + 1] ?? null; // Frame of the caller (1)
+
+		$cls = $c['class']   ?? '';
+		$typ = $c['type']    ?? '';
+		$fn  = $c['function']?? '??';
+		$fil = $c['file']    ?? ($f['file'] ?? '??');
+		$ln  = $c['line']    ?? ($f['line'] ?? 0);
+
+		return sprintf('%s%s%s@%s:%d', $cls, $typ, $fn, self::short($fil), (int)$ln);
+	}
+
+	private static function short(string $path): string {
+		$norm = str_replace('\\', '/', $path);
+		$pos  = strpos($norm, '/lib/');
+		return $pos === false ? basename($norm) : substr($norm, $pos + 1); // "lib/…"
 	}
 }

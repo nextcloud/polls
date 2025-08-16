@@ -150,7 +150,7 @@ class Version080300Date20250816201201 extends SimpleMigrationStep {
 		$this->logInfo($message, 'postMigration: ');
 
 
-		$this->indexManager->setSchema($this->schema);
+		$this->indexManager->createSchema($this->schema);
 
 		$message = $this->indexManager->createForeignKeyConstraints();
 		$this->logInfo($message, 'postMigration:  ');
