@@ -20,7 +20,6 @@ export type UserPreferences = {
 	useAlternativeStyling: boolean
 	verbosePollsList: boolean
 	variantsCreation: boolean
-
 }
 
 export type Calendar = {

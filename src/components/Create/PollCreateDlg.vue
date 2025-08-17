@@ -120,7 +120,9 @@ function resetPoll() {
 			<RadioGroupDiv v-model="pollType" :options="pollTypeOptions" />
 		</ConfigBox>
 
-		<ConfigBox v-if="preferencesStore.user.variantsCreation" :name="t('polls', 'Vote variant')">
+		<ConfigBox
+			v-if="preferencesStore.user.variantsCreation"
+			:name="t('polls', 'Vote variant')">
 			<template #icon>
 				<CheckIcon />
 			</template>

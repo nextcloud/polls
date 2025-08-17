@@ -35,7 +35,6 @@ const defaultViewDatePoll = computed({
 			: 'table-view'
 	},
 })
-
 </script>
 
 <template>
@@ -114,15 +113,8 @@ const defaultViewDatePoll = computed({
 				{{ t('polls', 'Variant creation') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
-				{{
-					t(
-						'polls',
-						'Check this to allow variants polls creation.',
-					)
-				}}
+				{{ t('polls', 'Check this to allow variants polls creation.') }}
 			</div>
 		</div>
-
-
 	</div>
 </template>
