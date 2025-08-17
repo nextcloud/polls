@@ -27,6 +27,7 @@ export const usePreferencesStore = defineStore('preferences', {
 			useCommentsAlternativeStyling: false,
 			useAlternativeStyling: false,
 			verbosePollsList: false,
+			variantCreation: false,
 		},
 		availableCalendars: [],
 	}),

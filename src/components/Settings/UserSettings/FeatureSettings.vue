@@ -35,6 +35,7 @@ const defaultViewDatePoll = computed({
 			: 'table-view'
 	},
 })
+
 </script>
 
 <template>
@@ -104,5 +105,24 @@ const defaultViewDatePoll = computed({
 				"
 				@change="preferencesStore.write()" />
 		</div>
+
+		<div class="user_settings">
+			<NcCheckboxRadioSwitch
+				v-model="preferencesStore.user.variantsCreation"
+				type="switch"
+				@update:model-value="preferencesStore.write()">
+				{{ t('polls', 'Variant creation') }}
+			</NcCheckboxRadioSwitch>
+			<div class="settings_details">
+				{{
+					t(
+						'polls',
+						'Check this to allow variants polls creation.',
+					)
+				}}
+			</div>
+		</div>
+
+
 	</div>
 </template>

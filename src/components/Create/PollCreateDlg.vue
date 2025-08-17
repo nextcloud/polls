@@ -17,11 +17,13 @@ import RadioGroupDiv from '../Base/modules/RadioGroupDiv.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'
 
 import { pollTypes, usePollStore, votingVariants } from '../../stores/poll'
+import { usePreferencesStore } from '../../stores/preferences'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 
 import type { PollType, VotingVariant } from '../../stores/poll.types'
 
 const pollStore = usePollStore()
+const preferencesStore = usePreferencesStore()
 
 const emit = defineEmits<{
 	(e: 'close'): void
@@ -118,7 +120,7 @@ function resetPoll() {
 			<RadioGroupDiv v-model="pollType" :options="pollTypeOptions" />
 		</ConfigBox>
 
-		<ConfigBox :name="t('polls', 'Vote variant')">
+		<ConfigBox v-if="preferencesStore.user.variantsCreation" :name="t('polls', 'Vote variant')">
 			<template #icon>
 				<CheckIcon />
 			</template>

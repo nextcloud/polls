@@ -19,6 +19,8 @@ export type UserPreferences = {
 	useCommentsAlternativeStyling: boolean
 	useAlternativeStyling: boolean
 	verbosePollsList: boolean
+	variantsCreation: boolean
+
 }
 
 export type Calendar = {
