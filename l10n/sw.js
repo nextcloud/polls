@@ -19,6 +19,7 @@ OC.L10N.register(
     "deleted" : "deleted",
     "Cancel" : "Cancel",
     "Ok" : "Sawa",
+    "Anonymous poll" : "Anonymous poll",
     "Title" : "Kichwa cha habari",
     "Close" : "Funga",
     "Yes" : "Ndiyo",
