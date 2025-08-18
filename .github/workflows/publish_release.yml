@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Release
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Validate app version of info.xml against tag name
       id: appinfo
       uses: ./.github/actions/get-polls-version
