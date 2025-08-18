@@ -40,7 +40,6 @@ import { useSubscriptionStore } from '../stores/subscription'
 
 import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
 import { Event } from '../Types'
-import { Logger } from '../helpers'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -176,39 +175,26 @@ onUnmounted(() => {
 
 watch(
 	[
-		() => pollStore.configuration.anonymous,
-		() => pollStore.configuration.maxVotesPerOption,
-		() => pollStore.configuration.maxVotesPerUser,
-		() => pollStore.configuration.hideBookedUp,
+		() => pollStore.permissions.seeUsernames,
+		() => pollStore.permissions.seeResults,
 	],
-	(
-		[anonymousNew, maxVotesPerOptionNew, maxVotesPerUserNew, hideBookedUpNew],
-		[anonymousOld, maxVotesPerOptionOld, maxVotesPerUserOld, hideBookedUpOld],
-	) => {
-		Logger.debug('Configuration affecting options changed', {
-			anonymous: `${anonymousNew} → ${anonymousOld}`,
-			maxVotesPerOptionNew: `${maxVotesPerOptionNew} → ${maxVotesPerOptionOld}`,
-			maxVotesPerUserNew: `${maxVotesPerUserNew} → ${maxVotesPerUserOld}`,
-			hideBookedUpNew: `${hideBookedUpNew} → ${hideBookedUpOld}`,
-		})
-		optionsStore.load()
+	([seeUsernamesNew, seeResultsNew], [seeUsernamesOld, seeResultsOld]) => {
+		if (seeResultsNew !== seeResultsOld || seeUsernamesNew !== seeUsernamesOld) {
+			optionsStore.load()
+			votesStore.load()
+		}
 	},
 )
 
 watch(
-	[
-		() => pollStore.configuration.anonymous,
-		() => pollStore.configuration.showResults,
-	],
-	([anonymousNew, showResultsNew], [anonymousOld, showResultsOld]) => {
-		Logger.debug('Configuration affecting votes changed', {
-			anonymous: `${anonymousOld} → ${anonymousNew}`,
-			showResults: `${showResultsOld} → ${showResultsNew}`,
-		})
-		emit(Event.TransitionsOff, 500)
-		votesStore.load()
+	[() => pollStore.status.maxOptionVotes, () => pollStore.status.maxVotes],
+	([maxOptionVotesNew, maxVotesNew], [maxOptionVotesOld, maxVotesOld]) => {
+		if (maxOptionVotesNew !== maxOptionVotesOld || maxVotesNew !== maxVotesOld) {
+			optionsStore.load()
+		}
 	},
 )
+
 const appClass = computed(() => [
 	pollStore.type,
 	pollStore.viewMode,

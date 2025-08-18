@@ -84,6 +84,8 @@ export const usePollStore = defineStore('poll', {
 			deletionDate: 0,
 			archivedDate: 0,
 			countParticipants: 0,
+			maxVotes: 0,
+			maxOptionVotes: 0,
 		},
 		currentUserStatus: {
 			groupInvitations: [],

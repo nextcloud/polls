@@ -54,6 +54,8 @@ export type PollStatus = {
 	deletionDate: number
 	archivedDate: number
 	countParticipants: number
+	maxVotes: number
+	maxOptionVotes: number
 }
 
 export type PollPermissions = {

@@ -16,7 +16,6 @@ import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 
 import { usePollStore } from '../../stores/poll'
 import { useCommentsStore } from '../../stores/comments'
-import { Logger } from '../../helpers'
 
 const pollStore = usePollStore()
 const commentsStore = useCommentsStore()
@@ -41,12 +40,8 @@ onBeforeRouteLeave(() => {
 })
 
 watch(
-	[() => pollStore.permissions.comment, () => pollStore.configuration.anonymous],
-	([commentNew, commentOld], [anonymousNew, anonymousOld]) => {
-		Logger.debug('Configuration affecting comments changed', {
-			comment: `${commentOld} → ${commentNew}`,
-			anonymous: `${anonymousOld} → ${anonymousNew}`,
-		})
+	[() => pollStore.permissions.comment, () => pollStore.permissions.seeUsernames],
+	() => {
 		commentsStore.load()
 	},
 )
