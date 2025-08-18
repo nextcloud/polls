@@ -187,7 +187,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('anonymous', 'integer');
 		$this->addType('allowComment', 'integer');
 		$this->addType('allowMaybe', 'integer');
-		$this->addType('chosenRank', 'string');
 		$this->addType('proposalsExpire', 'integer');
 		$this->addType('voteLimit', 'integer');
 		$this->addType('optionLimit', 'integer');
