@@ -241,6 +241,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'deletionDate' => $this->getDeletionDate(),
 			'archivedDate' => $this->getDeleted(),
 			'countParticipants' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW) ? $this->getParticipantsCount() : 0,
+			'maxVotes' => $this->getVoteLimit(),
+			'maxOptionVotes' => $this->getOptionLimit(),
 		];
 	}
 	public function getConfigurationArray(): array {
