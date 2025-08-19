@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Kura",
     "Team" : "Timu",
     "Group" : "Kundi",
     "Contact" : "Mawasiliano",
