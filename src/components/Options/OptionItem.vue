@@ -72,9 +72,8 @@ const pollStore = usePollStore()
 		border: 2px solid var(--color-success-text);
 	}
 	.list-view .confirmed & {
-		padding-left: 0.5rem;
-		left: -0.5rem;
-		padding-right: 0.5rem;
+		padding-inline: 0.5rem;
+		inset-inline-start: -0.5rem;
 	}
 }
 

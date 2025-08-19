@@ -217,11 +217,10 @@ const deletable = computed(
 		// margin-right: 44px;
 		&.current-user {
 			flex-direction: row-reverse;
-			margin-right: 0;
-			margin-left: 88px;
+			margin-inline: 88px 0;
 		}
 		&:not(.current-user) .comment-item__sub-comment {
-			margin-left: 1.5rem;
+			margin-inline-start: 1.5rem;
 		}
 	}
 
