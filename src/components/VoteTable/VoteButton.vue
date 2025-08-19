@@ -48,7 +48,8 @@ const vote = computed(() =>
 	}),
 )
 
-const chosenRank = JSON.parse(pollStore.configuration.chosenRank)
+const chosenRank =
+	pollStore.votingVariant === 'generic' ? pollStore.getChosenRank : null
 
 const nextAnswer = computed<richAnswer>(() => {
 	if (['no', ''].includes(vote.value.answer)) {

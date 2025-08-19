@@ -247,7 +247,7 @@ abstract class TableSchema {
 			'access' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'private', 'length' => 1024]],
 			'anonymous' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'allow_maybe' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 1, 'length' => 20]],
-			'chosen_rank' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => '', 'length' => 200]],
+			'chosen_rank' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => null, 'length' => 200]],
 			'allow_proposals' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'disallow', 'length' => 64]],
 			'proposals_expire' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'vote_limit' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],

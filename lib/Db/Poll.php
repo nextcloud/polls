@@ -151,7 +151,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected string $access = '';
 	protected int $anonymous = 0;
 	protected int $allowMaybe = 0;
-	protected string $chosenRank = '';
+	protected string $chosenRank = '[]';
 	protected string $allowProposals = '';
 	protected int $proposalsExpire = 0;
 	protected int $voteLimit = 0;
