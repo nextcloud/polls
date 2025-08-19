@@ -21,7 +21,7 @@ const { tag = 'span' } = defineProps<{ tag?: string }>()
 	display: flex;
 	align-items: center;
 	gap: 5px;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius-small);
 	padding: 5px;
 	text-align: center;
 	line-height: 1.1em;

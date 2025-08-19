@@ -23,7 +23,7 @@ const { tag = 'span' } = defineProps<{ tag?: string }>()
 	align-items: center;
 	gap: 5px;
 	border: 2px solid;
-	border-radius: var(--border-radius-pill) !important;
+	border-radius: 0.8rem !important;
 	text-align: center;
 	font-size: 0.9em;
 	overflow: hidden;

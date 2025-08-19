@@ -235,7 +235,7 @@ const deletable = computed(
 		.comment-item__content {
 			display: grid;
 			border: solid 1px var(--color-primary-element-light);
-			border-radius: var(--border-radius-large);
+			border-radius: var(--border-radius-element);
 			background-color: var(--color-primary-element-light);
 			box-shadow: 2px 2px 6px var(--color-box-shadow);
 			padding-inline-start: 8px;
@@ -252,7 +252,7 @@ const deletable = computed(
 			&.deletable:hover {
 				margin-inline-start: -4px;
 				padding-inline-start: 4px;
-				border-radius: var(--border-radius-large);
+				border-radius: var(--border-radius-element);
 			}
 		}
 	}

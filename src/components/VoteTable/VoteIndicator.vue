@@ -49,7 +49,7 @@ const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyVal
 <style lang="scss">
 .active .vote-indicator {
 	border: 2px solid;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius-small);
 
 	&,
 	* {
