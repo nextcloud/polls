@@ -37,8 +37,6 @@ use OCP\IL10N;
  * @method void setPollOptionText(string $value)
  * @method string getPollOptionHash()
  * @method void setPollOptionHash(string $value)
- * @method string getPollOptionHashBin()
- * @method void setPollOptionHashBin(string $value)
  * @method int getReleased()
  * @method void setReleased(int $value)
  * @method int getTimestamp()

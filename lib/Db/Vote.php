@@ -24,8 +24,6 @@ use JsonSerializable;
  * @method void setVoteOptionText(string $value)
  * @method string getVoteOptionHash()
  * @method void setVoteOptionHash(string $value)
- * @method string getVoteOptionHashBin()
- * @method void setVoteOptionHashBin(string $value)
  * @method string getVoteAnswer()
  * @method void setVoteAnswer(string $value)
  * @method int getDeleted()

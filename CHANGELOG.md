@@ -20,7 +20,7 @@ If you experience update problems, please refer to [this article](https://github
  - Added unique index for share tokens
  - Reworked poll access via shares
  - Added some indices to help complex joins and optimized the index
- - removed creation of optional indices from all migration and repair steps and support AddMissingIndicesEvent
+ - Removed creation of optional indices from all migration and repair steps and support AddMissingIndicesEvent
  - Separated the commands in more granular index and database commands
  - Adjust icon style
  - Adjust CSS Vars
