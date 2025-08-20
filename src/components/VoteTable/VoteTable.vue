@@ -43,7 +43,7 @@ const { downPage = false } = defineProps<{ downPage: boolean }>()
 const chunksLoading = ref(false)
 
 const tableStyle = computed(() => ({
-	'--participants-count': `${votesStore.getChunkedParticipants.length}`,
+	'--participants-count': `${votesStore.chunkedParticipants.length}`,
 	'--options-count': `${optionsStore.options.length}`,
 }))
 
@@ -111,7 +111,7 @@ function isVotable(participant: User, option: Option) {
 			class="counter-spacer" />
 
 		<StickyDiv
-			v-for="participant in votesStore.getChunkedParticipants"
+			v-for="participant in votesStore.chunkedParticipants"
 			:key="participant.id"
 			class="participant"
 			sticky-left>
@@ -159,7 +159,7 @@ function isVotable(participant: User, option: Option) {
 				:option="option" />
 
 			<div
-				v-for="participant in votesStore.getChunkedParticipants"
+				v-for="participant in votesStore.chunkedParticipants"
 				:key="participant.id"
 				class="vote-cell"
 				:class="{ 'current-user': isCurrentUser(participant) }">
