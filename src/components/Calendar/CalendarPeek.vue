@@ -133,6 +133,6 @@ onMounted(async () => {
 .calendar-peek__grid {
 	padding: 8px;
 	background-color: var(--color-main-background);
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius-small);
 }
 </style>

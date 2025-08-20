@@ -36,7 +36,7 @@ const comboStore = useComboStore()
 		background-color: var(--color-polls-background-yes);
 		margin: 8px 0;
 		border-bottom: 1px solid var(--color-border);
-		border-radius: var(--border-radius-large);
+		border-radius: var(--border-radius-element);
 		box-shadow: 2px 2px 6px var(--color-box-shadow);
 	}
 	.poll-title-box {

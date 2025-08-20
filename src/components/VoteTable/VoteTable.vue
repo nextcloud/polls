@@ -210,8 +210,8 @@ function isVotable(participant: User, option: Option) {
 		}
 
 		&.sticky-left {
-			left: -8px;
-			padding-left: 8px;
+			inset-inline-start: -8px;
+			padding-inline-start: 8px;
 		}
 
 		&:hover {

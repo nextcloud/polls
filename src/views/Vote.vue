@@ -295,7 +295,7 @@ const appClass = computed(() => [
 	display: flex;
 	justify-content: center;
 	position: sticky;
-	left: 70px;
+	inset-inline-start: 70px;
 }
 
 .vote-main {

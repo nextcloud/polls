@@ -340,12 +340,12 @@ const inputClass = computed(() => [
 		&.add {
 			inset-inline-end: 0;
 			border-inline-start: solid 2px var(--color-border-maxcontrast);
-			border-radius: 0 var(--border-radius) var(--border-radius) 0;
+			border-radius: 0 var(--border-radius-small) var(--border-radius-small) 0;
 		}
 
 		&.subtract {
 			border-inline-end: solid 2px var(--color-border-maxcontrast);
-			border-radius: var(--border-radius) 0 0 var(--border-radius);
+			border-radius: var(--border-radius-small) 0 0 var(--border-radius-small);
 		}
 	}
 }

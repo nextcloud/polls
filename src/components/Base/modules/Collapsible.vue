@@ -224,7 +224,7 @@ const containerClass = computed(() => ({
 		overflow: auto;
 		width: 100%;
 		transition: height 0.3s ease;
-		padding-right: 8px;
+		padding-inline-end: 8px;
 
 		&.no-transition {
 			transition: none !important;
@@ -239,8 +239,7 @@ const containerClass = computed(() => ({
 		&::after {
 			content: '';
 			position: absolute;
-			left: 0;
-			right: 8px;
+			inset-inline: 0 8px;
 			height: 2.5rem;
 			pointer-events: none;
 			z-index: 1;
@@ -281,8 +280,7 @@ const containerClass = computed(() => ({
 
 .resize-handle {
 	position: absolute;
-	left: 0;
-	right: 0;
+	inset-inline: 0;
 	height: 12px;
 	cursor: ns-resize;
 	background: transparent;
@@ -292,8 +290,7 @@ const containerClass = computed(() => ({
 		content: '';
 		position: absolute;
 		top: 50%;
-		left: 0;
-		right: 0;
+		inset-inline: 0;
 		height: 1px;
 		background: var(--color-border);
 		transform: translateY(-0.5px);
@@ -303,7 +300,7 @@ const containerClass = computed(() => ({
 		content: '• • •';
 		position: absolute;
 		top: 50%;
-		left: 50%;
+		inset-inline-start: 50%;
 		transform: translate(-50%, -50%);
 		padding: 0.15rem 0.5rem;
 		font-size: 1rem;

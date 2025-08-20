@@ -217,11 +217,10 @@ const deletable = computed(
 		// margin-right: 44px;
 		&.current-user {
 			flex-direction: row-reverse;
-			margin-right: 0;
-			margin-left: 88px;
+			margin-inline: 88px 0;
 		}
 		&:not(.current-user) .comment-item__sub-comment {
-			margin-left: 1.5rem;
+			margin-inline-start: 1.5rem;
 		}
 	}
 
@@ -235,7 +234,7 @@ const deletable = computed(
 		.comment-item__content {
 			display: grid;
 			border: solid 1px var(--color-primary-element-light);
-			border-radius: var(--border-radius-large);
+			border-radius: var(--border-radius-element);
 			background-color: var(--color-primary-element-light);
 			box-shadow: 2px 2px 6px var(--color-box-shadow);
 			padding-inline-start: 8px;
@@ -252,7 +251,7 @@ const deletable = computed(
 			&.deletable:hover {
 				margin-inline-start: -4px;
 				padding-inline-start: 4px;
-				border-radius: var(--border-radius-large);
+				border-radius: var(--border-radius-element);
 			}
 		}
 	}

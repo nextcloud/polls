@@ -106,7 +106,7 @@ const conflictLevel = computed(() => {
 .calendar-info {
 	display: flex;
 	align-items: center;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius-small);
 	margin: 4px 0;
 	padding: 0 4px;
 

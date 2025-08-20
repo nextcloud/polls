@@ -62,9 +62,10 @@ onBeforeUnmount(() => {
 	top: 0;
 	height: 100%;
 }
+
 .horizontal-fixed {
 	position: sticky;
-	left: 0;
+	inset-inline-start: 0;
 	width: 100%;
 }
 </style>
