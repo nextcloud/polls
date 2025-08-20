@@ -29,7 +29,7 @@ const pollStore = usePollStore()
 			@update:model-value="emit('change')">
 			{{ t('polls', 'Use Autoreminder') }}
 		</NcCheckboxRadioSwitch>
-		<NcPopover :focus-trap="false">
+		<NcPopover no-focus-trap close-on-click-outside>
 			<template #trigger>
 				<NcActions>
 					<NcActionButton

@@ -125,7 +125,7 @@ function isVotable(participant: User, option: Option) {
 				<CalendarPeek
 					v-if="showCalendarPeek"
 					:id="`peek-${option.id}`"
-					:focus-trap="false"
+					no-focus-trap
 					:option="option" />
 
 				<OptionMenu :option="option" use-sort />
