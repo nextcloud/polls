@@ -38,7 +38,7 @@ class PollMapper extends QBMapper {
 	 * @return Poll
 	 */
 	public function get(int $id, bool $getDeleted = false): Poll {
-		$qb = $this->buildQuery(false);
+		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		if (!$getDeleted) {
