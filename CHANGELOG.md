@@ -24,6 +24,9 @@ If you experience update problems, please refer to [this article](https://github
  - Separated the commands in more granular index and database commands
  - Adjust icon style
  - Adjust CSS Vars
+ - Moved comment config to comment tab
+   - Make comments available to owner and delegated poll administration if commenting is disabled
+   - Add hint, if commenting is disabled
 
 ## [8.2.2] - 2025-08-03
 ### Added
