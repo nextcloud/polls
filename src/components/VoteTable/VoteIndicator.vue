@@ -13,36 +13,14 @@ import { Answer } from '../../stores/votes.types'
 const ICON_SIZE = 26
 
 const { answer } = defineProps<{ answer: Answer | 'locked' }>()
-
-const colorCodeNo = getComputedStyle(document.documentElement).getPropertyValue(
-	'--color-error',
-)
-const colorCodeYes = getComputedStyle(document.documentElement).getPropertyValue(
-	'--color-success',
-)
-const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyValue(
-	'--color-warning',
-)
 </script>
 
 <template>
 	<div class="vote-indicator">
-		<MaybeIcon
-			v-if="answer === 'maybe'"
-			:fill-color="colorCodeMaybe"
-			:size="ICON_SIZE" />
-		<CheckIcon
-			v-if="answer === 'yes'"
-			:fill-color="colorCodeYes"
-			:size="ICON_SIZE" />
-		<CloseIcon
-			v-if="answer === 'no'"
-			:fill-color="colorCodeNo"
-			:size="ICON_SIZE" />
-		<CancelIcon
-			v-if="answer === 'locked'"
-			:fill-color="colorCodeNo"
-			:size="ICON_SIZE" />
+		<MaybeIcon v-if="answer === 'maybe'" :size="ICON_SIZE" />
+		<CheckIcon v-if="answer === 'yes'" :size="ICON_SIZE" />
+		<CloseIcon v-if="answer === 'no'" :size="ICON_SIZE" />
+		<CancelIcon v-if="answer === 'locked'" :size="ICON_SIZE" />
 	</div>
 </template>
 
