@@ -11,7 +11,8 @@ If you experience update problems, please refer to [this article](https://github
 ### Fixed
  - Made description sticky again on horizontal scrolling
  - Activities in sidebar did not get loaded
- - Avoid Warnings in console because of missing keyes
+ - Avoid Warnings in console because of missing keys
+
 ### Changed
  - Replaced momentjs by Luxon
  - Fixed db types and defaults to match unique share index
