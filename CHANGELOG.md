@@ -13,7 +13,6 @@ If you experience update problems, please refer to [this article](https://github
  - Activities in sidebar did not get loaded
  - Avoid Warnings in console because of missing keys
 ### Changed
- - Compatibility to Nextcloud 32
  - Replaced momentjs by Luxon
  - Fixed db types and defaults to match unique share index
  - Removed FK constraint for share table
