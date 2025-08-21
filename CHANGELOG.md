@@ -5,7 +5,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.3.0] - 2025-08-21
 If you experience update problems, please refer to [this article](https://github.com/nextcloud/polls/wiki/Installation-help#update-issues)
 
 ### Fixed
