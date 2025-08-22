@@ -24,7 +24,7 @@ use OCP\Migration\SimpleMigrationStep;
  *
  * @psalm-suppress UnusedClass
  */
-class Version080300Date20250816201201 extends SimpleMigrationStep {
+class Version080301Date20250822153002 extends SimpleMigrationStep {
 	private ISchemaWrapper $schema;
 	private ?IOutput $output = null;
 
