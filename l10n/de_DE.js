@@ -607,6 +607,7 @@ OC.L10N.register(
     "Configuration" : "Konfiguration",
     "You have been granted administrative rights." : "Ihnen wurden Administrationsrechte gewährt.",
     "Changes may affect existing votes." : "Änderungen können sich auf vorhandene Stimmabgaben auswirken.",
+    "Poll configuration" : "Umfragekonfiguration",
     "Poll closing status" : "Status zum Schließen der Umfrage",
     "Result display" : "Ergebnisanzeige",
     "Deletion and owner" : "Löschung und Besitzer",
