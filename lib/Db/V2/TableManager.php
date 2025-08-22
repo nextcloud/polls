@@ -463,15 +463,24 @@ class TableManager extends DbManager {
 		$messages = [];
 		$query = $this->connection->getQueryBuilder();
 
-		// replace all nullish group_ids with 0 in share table
-		$query->update(Share::TABLE)
-			->set('group_id', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT))
-			->where($query->expr()->isNull('group_id'));
+		if (!$this->schema->hasTable(Share::TABLE)) {
+			$messages[] = 'Table ' . Share::TABLE . ' does not exist';
+			return $messages;
+		}
 
-		$count = $query->executeStatement();
+		$table = $this->schema->getTable(Share::TABLE);
 
-		if ($count > 0) {
-			$messages[] = 'Updated ' . $count . ' shares and set group_id to 0 for nullish values';
+		if ($table->hasColumn('group_id')) {
+			// replace all nullish group_ids with 0 in share table
+			$query->update(Share::TABLE)
+				->set('group_id', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT))
+				->where($query->expr()->isNull('group_id'));
+
+			$count = $query->executeStatement();
+
+			if ($count > 0) {
+				$messages[] = 'Updated ' . $count . ' shares and set group_id to 0 for nullish values';
+			}
 		}
 
 		// replace all nullish poll_id with 0 in share table
