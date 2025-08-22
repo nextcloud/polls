@@ -24,7 +24,7 @@ use OCP\Migration\SimpleMigrationStep;
  *
  * @psalm-suppress UnusedClass
  */
-class Version080301Date20250822153002 extends SimpleMigrationStep {
+class Version080301Date20250822182903 extends SimpleMigrationStep {
 	private ISchemaWrapper $schema;
 	private ?IOutput $output = null;
 
@@ -80,9 +80,11 @@ class Version080301Date20250822153002 extends SimpleMigrationStep {
 		$this->logInfo($message, 'preMigration:  ');
 		$this->indexManager->migrateToSchema();
 
+		$this->tableManager->createSchema();
 		// fix nullish values in poll_id and group_id and set 0 in case of null
 		$message = $this->tableManager->fixNullishShares();
 		$this->logInfo($message, 'preMigration:  ');
+		$this->tableManager->migrateToSchema();
 
 		// remove all orphaned records
 		$message = $this->tableManager->removeOrphaned();
