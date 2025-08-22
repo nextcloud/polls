@@ -11,6 +11,21 @@
 
 :root,
 [data-theme-light] {
+	// deprecared error codes simulating NC 32 color codes
+	--color-error: #ffe7e7;
+	--color-error-hover: #ffc3c3;
+	--color-error-text: #8a0000;
+	--color-warning: #ffeec5;
+	--color-warning-hover: #ffe4a1;
+	--color-warning-text: #664700;
+	--color-success: #d8f3da;
+	--color-success-hover: #bdebc0;
+	--color-success-text: #005416;
+	--color-info: #d5f1fa;
+	--color-info-hover: #b5e6f6;
+	--color-info-text: #0066ac;
+	// deprecated until here
+
 	--color-polls-foreground-yes: #2d7b41;
 	--color-polls-foreground-no: #db0606;
 	--color-polls-foreground-maybe: #a37200;
@@ -22,6 +37,21 @@
 
 @media (prefers-color-scheme: dark) {
 	:root {
+		// deprecared error codes simulating NC 32 color codes
+		--color-error: #552121;
+		--color-error-hover: #7a2f2f;
+		--color-error-text: #ffcccc;
+		--color-warning: #3d3010;
+		--color-warning-hover: #65501b;
+		--color-warning-text: #ffeec5;
+		--color-success: #11321a;
+		--color-success-hover: #1e582e;
+		--color-success-text: #d5f2dc;
+		--color-info: #003553;
+		--color-info-hover: #005686;
+		--color-info-text: #00aeff;
+		// deprecated until here
+
 		--color-polls-foreground-yes: #3b973b;
 		--color-polls-foreground-no: #e72f2f;
 		--color-polls-foreground-maybe: #ffcc00;
@@ -33,6 +63,21 @@
 }
 
 [data-theme-dark] {
+	// deprecared error codes simulating NC 32 color codes
+	--color-error: #552121;
+	--color-error-hover: #7a2f2f;
+	--color-error-text: #ffcccc;
+	--color-warning: #3d3010;
+	--color-warning-hover: #65501b;
+	--color-warning-text: #ffeec5;
+	--color-success: #11321a;
+	--color-success-hover: #1e582e;
+	--color-success-text: #d5f2dc;
+	--color-info: #003553;
+	--color-info-hover: #005686;
+	--color-info-text: #00aeff;
+	// deprecated until here
+
 	--color-polls-foreground-yes: #3b973b;
 	--color-polls-foreground-no: #e72f2f;
 	--color-polls-foreground-maybe: #ffcc00;
