@@ -9,7 +9,7 @@ import { IconProps } from './types'
 
 const {
 	title = t('polls', 'Maybe'),
-	fillColor = 'var(--color-warning)',
+	fillColor = 'currentcolor',
 	size = 24,
 } = defineProps<IconProps>()
 </script>

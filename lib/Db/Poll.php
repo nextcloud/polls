@@ -857,6 +857,11 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * Checks, if user is allowed to see and write comments
 	 **/
 	private function getAllowCommenting(): bool {
+		if ($this->getAllowEditPoll()) {
+			// users with edit rights are allowed to comment
+			return true;
+		}
+
 		// user has no access right to this poll
 		if (!$this->getAllowAccessPoll()) {
 			return false;

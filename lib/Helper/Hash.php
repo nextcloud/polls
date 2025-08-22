@@ -38,19 +38,6 @@ abstract class Hash {
 	}
 
 	/**
-	 * Generate a binary hash for an option based on the poll ID and option text.
-	 * This is used to create a unique identifier for options in binary format.
-	 *
-	 * @param int $pollId
-	 * @param string $optionText
-	 * @return string binary 16-byte MD5 hash
-	 * @psalm-api
-	 */
-	public static function getOptionHashBin(int $pollId, string $optionText): string {
-		return hash('md5', $pollId . $optionText, true);
-	}
-
-	/**
 	 * Generate a hash for a client ID.
 	 * This is used to create a unique identifier for clients.
 	 *

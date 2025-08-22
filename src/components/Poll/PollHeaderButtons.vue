@@ -67,7 +67,7 @@ onBeforeUnmount(() => {
 	flex: 0;
 	justify-content: flex-end;
 	align-self: flex-end;
-	border-radius: var(--border-radius-pill);
+	border-radius: var(--border-radius-element);
 }
 
 .icon.icon-settings.active {

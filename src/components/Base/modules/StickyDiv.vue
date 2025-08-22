@@ -144,7 +144,7 @@ const stickyClass = computed(() => ({
 
 .sticky-left {
 	position: sticky;
-	left: 0;
+	inset-inline-start: 0;
 }
 
 .sticky-top {

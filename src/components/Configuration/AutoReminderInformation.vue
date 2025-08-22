@@ -14,7 +14,7 @@ import { t } from '@nextcloud/l10n'
 				t('polls', 'The automatic reminder is sent to all shares via email:')
 			}}
 		</h1>
-		<h2>{{ t('polls', 'For polls with expiration:') }}</h2>
+		<h2>{{ t('polls', 'For polls with expiration') }}</h2>
 		<ul>
 			<li>
 				{{
@@ -33,7 +33,7 @@ import { t } from '@nextcloud/l10n'
 				}}
 			</li>
 		</ul>
-		<h2>{{ t('polls', 'For date polls without expiration:') }}</h2>
+		<h2>{{ t('polls', 'For date polls without expiration') }}</h2>
 		<ul>
 			<li>
 				{{
@@ -52,7 +52,7 @@ import { t } from '@nextcloud/l10n'
 				}}
 			</li>
 		</ul>
-		<h2>{{ t('polls', 'No reminder is sent:') }}</h2>
+		<h2>{{ t('polls', 'No reminder is sent') }}</h2>
 		<ul>
 			<li>{{ t('polls', 'For text polls without expiration.') }}</li>
 			<li>

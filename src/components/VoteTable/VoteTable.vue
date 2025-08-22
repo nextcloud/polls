@@ -43,7 +43,7 @@ const { downPage = false } = defineProps<{ downPage: boolean }>()
 const chunksLoading = ref(false)
 
 const tableStyle = computed(() => ({
-	'--participants-count': `${votesStore.getChunkedParticipants.length}`,
+	'--participants-count': `${votesStore.chunkedParticipants.length}`,
 	'--options-count': `${optionsStore.options.length}`,
 }))
 
@@ -111,7 +111,7 @@ function isVotable(participant: User, option: Option) {
 			class="counter-spacer" />
 
 		<StickyDiv
-			v-for="participant in votesStore.getChunkedParticipants"
+			v-for="participant in votesStore.chunkedParticipants"
 			:key="participant.id"
 			class="participant"
 			sticky-left>
@@ -125,7 +125,7 @@ function isVotable(participant: User, option: Option) {
 				<CalendarPeek
 					v-if="showCalendarPeek"
 					:id="`peek-${option.id}`"
-					:focus-trap="false"
+					no-focus-trap
 					:option="option" />
 
 				<OptionMenu :option="option" use-sort />
@@ -162,7 +162,7 @@ function isVotable(participant: User, option: Option) {
 				:option="option" />
 
 			<div
-				v-for="participant in votesStore.getChunkedParticipants"
+				v-for="participant in votesStore.chunkedParticipants"
 				:key="participant.id"
 				class="vote-cell"
 				:class="{ 'current-user': isCurrentUser(participant) }">
@@ -213,8 +213,8 @@ function isVotable(participant: User, option: Option) {
 		}
 
 		&.sticky-left {
-			left: -8px;
-			padding-left: 8px;
+			inset-inline-start: -8px;
+			padding-inline-start: 8px;
 		}
 
 		&:hover {

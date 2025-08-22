@@ -65,7 +65,7 @@ export const useVotesStore = defineStore('votes', {
 		},
 
 		countHiddenParticipants(): number {
-			return this.participants.length - this.getChunkedParticipants.length
+			return this.participants.length - this.chunkedParticipants.length
 		},
 
 		/**
@@ -74,7 +74,7 @@ export const useVotesStore = defineStore('votes', {
 		 * @param state
 		 * @return
 		 */
-		getChunkedParticipants(state): User[] {
+		chunkedParticipants(state): User[] {
 			const sessionStore = useSessionStore()
 			const pollStore = usePollStore()
 			if (pollStore.viewMode === 'list-view') {
@@ -302,6 +302,14 @@ export const useVotesStore = defineStore('votes', {
 					}
 					return VotesAPI.setVote(payload.option.id, payload.setTo)
 				})()
+
+				// in case of limited votes, reload the poll for current user status
+				if (
+					pollStore.configuration.maxVotesPerOption
+					|| pollStore.configuration.maxVotesPerUser
+				) {
+					pollStore.load()
+				}
 
 				this.setItem({
 					option: payload.option,

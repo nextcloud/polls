@@ -18,7 +18,6 @@ import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
 
 import CardDiv from '../Base/modules/CardDiv.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'
-import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
 import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe.vue'
 import ConfigAnonymous from '../Configuration/ConfigAnonymous.vue'
 import ConfigAutoReminder from '../Configuration/ConfigAutoReminder.vue'
@@ -34,7 +33,6 @@ import ConfigRankOptions from '../Configuration/ConfigRankOptions.vue'
 import { usePollStore } from '../../stores/poll'
 import { useVotesStore } from '../../stores/votes'
 import ConfigDangerArea from '../Configuration/ConfigDangerArea.vue'
-import ConfigForceConfidentialComments from '../Configuration/ConfigForceConfidentialComments.vue'
 
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
@@ -64,19 +62,13 @@ const votesStore = useVotesStore()
 			<ConfigDescription @change="pollStore.write" />
 		</ConfigBox>
 
-		<ConfigBox :name="t('polls', 'Poll configurations')">
+		<ConfigBox :name="t('polls', 'Poll configuration')">
 			<template #icon>
 				<PollConfigIcon />
 			</template>
-			<ConfigAllowComment @change="pollStore.write" />
-			<ConfigForceConfidentialComments
-				v-if="pollStore.configuration.allowComment"
-				@change="pollStore.write" />
-			<template v-if="pollStore.votingVariant === 'generic'">
-				<ConfigAllowMayBe @change="pollStore.write" />
-				<ConfigUseNo @change="pollStore.write" />
-				<ConfigAnonymous @change="pollStore.write" />
-			</template>
+			<ConfigAllowMayBe @change="pollStore.write" />
+			<ConfigUseNo @change="pollStore.write" />
+			<ConfigAnonymous @change="pollStore.write" />
 			<ConfigVoteLimit @change="pollStore.write" />
 			<ConfigOptionLimit @change="pollStore.write" />
 		</ConfigBox>
