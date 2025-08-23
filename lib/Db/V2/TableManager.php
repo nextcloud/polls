@@ -462,13 +462,14 @@ class TableManager extends DbManager {
 	public function fixNullishShares(): array {
 		$messages = [];
 		$query = $this->connection->getQueryBuilder();
+		$schema = $this->connection->createSchema();
 
-		if (!$this->schema->hasTable(Share::TABLE)) {
+		if (!$schema->hasTable(Share::TABLE)) {
 			$messages[] = 'Table ' . Share::TABLE . ' does not exist';
 			return $messages;
 		}
 
-		$table = $this->schema->getTable(Share::TABLE);
+		$table = $schema->getTable(Share::TABLE);
 
 		if ($table->hasColumn('group_id')) {
 			// replace all nullish group_ids with 0 in share table

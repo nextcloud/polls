@@ -276,6 +276,7 @@ OC.L10N.register(
     "Back" : "Назад",
     "Take over" : "Взять на себя управление",
     "Sort by title" : "По названию",
+    "Direction" : "Направление",
     "Descending" : "По убыванию",
     "Ascending" : "По возрастанию",
     "Checking name …" : "Проверка имени…",
