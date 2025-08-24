@@ -5,6 +5,10 @@
 # Changelog
 ##
 
+## [7.4.6] - 2025-08-24
+### changes
+ - dependcy updates
+
 ## [7.4.4] - 2025-06-14
 ### Fix
  - Bring back user feedback after sent invitations
