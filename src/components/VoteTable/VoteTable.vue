@@ -149,7 +149,10 @@ function isVotable(participant: User, option: Option) {
 			</StickyDiv>
 
 			<Counter
-				v-if="pollStore.permissions.seeResults"
+				v-if="
+					pollStore.votingVariant === 'simple'
+					&& pollStore.permissions.seeResults
+				"
 				:id="`counter-${option.id}`"
 				:key="`counter-${option.id}`"
 				:class="{
@@ -245,6 +248,7 @@ function isVotable(participant: User, option: Option) {
 		overflow: visible;
 		min-width: min-content;
 		max-width: max-content;
+		margin: auto;
 		.grid-info {
 			grid-row: 1;
 			grid-column: 1;
@@ -252,10 +256,11 @@ function isVotable(participant: User, option: Option) {
 			background-color: var(--color-main-background);
 		}
 
-		.option-item-spacer {
+		.option-spacer {
 			grid-row: 2;
 			grid-column: 1;
 			inset-inline-start: 0;
+			background-color: var(--color-main-background);
 		}
 
 		.counter-spacer {
@@ -277,6 +282,7 @@ function isVotable(participant: User, option: Option) {
 
 		.option-item {
 			grid-row: 2;
+			background-color: var(--color-main-background);
 			border-inline-start: 1px solid var(--color-border);
 
 			// .option-item-container {
@@ -298,6 +304,11 @@ function isVotable(participant: User, option: Option) {
 			margin-bottom: 1.5rem;
 		}
 
+		.option-element {
+			grid-row: 1;
+		}
+
+		.option-element,
 		.vote-column {
 			display: flex;
 			flex-direction: column;

@@ -45,7 +45,10 @@ const iconAnswer = computed(() => {
 </script>
 
 <template>
-	<div class="vote-item" :class="vote.answer">
+	<div v-if="pollStore.votingVariant === 'generic'" class="generic-vote">
+		{{ vote.answer }}
+	</div>
+	<div v-else class="vote-item" :class="vote.answer">
 		<VoteIndicator :answer="iconAnswer" />
 	</div>
 </template>
@@ -87,6 +90,17 @@ const iconAnswer = computed(() => {
 			background-color: var(--color-polls-background-maybe);
 		}
 	}
+}
+
+.generic-vote {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.4s ease-in-out;
+	background-clip: content-box;
+	border-radius: 12px;
+	background-color: var(--color-polls-background-maybe);
 }
 
 .list-view .locked .vote-item.current-user {
