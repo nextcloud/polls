@@ -441,7 +441,6 @@ class TableManager extends DbManager {
 		$messages = [];
 		$query = $this->connection->getQueryBuilder();
 		$schema = $this->connection->createSchema();
-		$prefixedTable = $this->dbPrefix . Share::TABLE;
 
 		if (!$schema->hasTable($this->dbPrefix . Share::TABLE)) {
 			$messages[] = 'Table ' . $this->dbPrefix . Share::TABLE . ' does not exist';
@@ -485,10 +484,9 @@ class TableManager extends DbManager {
 		$messages = [];
 		$query = $this->connection->getQueryBuilder();
 		$schema = $this->connection->createSchema();
-		$prefixedTable = $this->dbPrefix . PollGroup::RELATION_TABLE;
 
-		if (!$schema->hasTable($prefixedTable)) {
-			$messages[] = 'Table ' . $prefixedTable . ' does not exist';
+		if (!$schema->hasTable($this->dbPrefix . PollGroup::RELATION_TABLE)) {
+			$messages[] = 'Table ' . $this->dbPrefix . PollGroup::RELATION_TABLE . ' does not exist';
 			return $messages;
 		}
 
