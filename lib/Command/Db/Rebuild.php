@@ -99,6 +99,7 @@ class Rebuild extends Command {
 		$messages = $this->tableManager->fixNullishPollGroupRelations();
 		$this->printInfo($messages, '   ');
 	}
+
 	/**
 	 * Create index for $table
 	 */

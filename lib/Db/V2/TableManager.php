@@ -29,9 +29,6 @@ use Psr\Log\LoggerInterface;
 
 class TableManager extends DbManager {
 
-	// private string $dbPrefix;
-	// private Schema|ISchemaWrapper $schema;
-
 	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		protected IConfig $config,
@@ -41,26 +38,7 @@ class TableManager extends DbManager {
 		private VoteMapper $voteMapper,
 	) {
 		parent::__construct($config, $connection);
-		// $this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 	}
-
-	// public function setSchema(Schema|ISchemaWrapper &$schema): void {
-	// 	$this->schema = $schema;
-	// }
-
-	// public function createSchema(): Schema {
-	// 	$this->schema = $this->connection->createSchema();
-	// 	return $this->schema;
-	// }
-	// public function migrateToSchema() : void {
-	// 	// Schema must be of class Schema
-	// 	$this->needsSchema(iSchemWrapperClass: false);
-	// 	$this->connection->migrateToSchema($this->schema);
-	// }
-
-	// public function setConnection(IDBConnection &$connection): void {
-	// 	$this->connection = $connection;
-	// }
 
 	/**
 	 * @return string[]
@@ -464,23 +442,22 @@ class TableManager extends DbManager {
 		$query = $this->connection->getQueryBuilder();
 		$schema = $this->connection->createSchema();
 
-		if (!$schema->hasTable(Share::TABLE)) {
-			$messages[] = 'Table ' . Share::TABLE . ' does not exist';
+		if (!$schema->hasTable($this->dbPrefix . Share::TABLE)) {
+			$messages[] = 'Table ' . $this->dbPrefix . Share::TABLE . ' does not exist';
 			return $messages;
 		}
 
-		$table = $schema->getTable(Share::TABLE);
+		$table = $schema->getTable($this->dbPrefix . Share::TABLE);
 
 		if ($table->hasColumn('group_id')) {
 			// replace all nullish group_ids with 0 in share table
 			$query->update(Share::TABLE)
 				->set('group_id', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT))
 				->where($query->expr()->isNull('group_id'));
-
 			$count = $query->executeStatement();
 
 			if ($count > 0) {
-				$messages[] = 'Updated ' . $count . ' shares and set group_id to 0 for nullish values';
+				$messages[] = 'Updated ' . $count . ' shares with nullish group_id and set group_id to 0';
 			}
 		}
 
@@ -506,6 +483,12 @@ class TableManager extends DbManager {
 	public function fixNullishPollGroupRelations(): array {
 		$messages = [];
 		$query = $this->connection->getQueryBuilder();
+		$schema = $this->connection->createSchema();
+
+		if (!$schema->hasTable($this->dbPrefix . PollGroup::RELATION_TABLE)) {
+			$messages[] = 'Table ' . $this->dbPrefix . PollGroup::RELATION_TABLE . ' does not exist';
+			return $messages;
+		}
 
 		// replace all nullish group_ids with 0 in share table
 		$query->update(PollGroup::RELATION_TABLE)
@@ -611,37 +594,4 @@ class TableManager extends DbManager {
 		}
 		return $messages;
 	}
-
-	// protected function getTableName(string $tableName): ?string {
-	// 	if ($this->schema instanceof Schema) {
-	// 		// If the schema is an instance of Schema, we need to prefix the table name
-	// 		return $this->config->getSystemValue('dbtableprefix', 'oc_') . $tableName;
-	// 	}
-	// 	return $tableName;
-	// }
-
-	// protected function needsSchema(bool $schemaClass = true, bool $iSchemWrapperClass = true): void {
-	// 	if (($this->schema instanceof Schema) && $schemaClass) {
-	// 		return;
-	// 	}
-
-	// 	if (($this->schema instanceof ISchemaWrapper) && $iSchemWrapperClass) {
-	// 		return;
-	// 	}
-
-	// 	if ($schemaClass && $iSchemWrapperClass) {
-	// 		// If the schema is not set or not an instance of Schema or ISchemaWrapper, throw an exception
-	// 		throw new Exception('Schema is not set or not an instance of Schema or ISchemaWrapper');
-	// 	}
-	// 	if ($schemaClass) {
-	// 		// If the schema is not set or not an instance of Schema, throw an exception
-	// 		throw new Exception('Schema is not set or not an instance of Schema');
-	// 	}
-	// 	if ($iSchemWrapperClass) {
-	// 		// If the schema is not set or not an instance of ISchemaWrapper, throw an exception
-	// 		throw new Exception('Schema is not set or not an instance of ISchemaWrapper');
-	// 	}
-	// 	throw new Exception('Unexpected. Schema is an instance of ' . get_class($this->schema));
-	// }
-
 }

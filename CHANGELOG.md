@@ -5,8 +5,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [8.3.1] - 2025-08-22
- - Fix migration from 7.x to 8.x
+## [8.3.3] - 2025-08-24
+ - Fix migration
 
 ### Fixed (v8.3.0)
  - Made description sticky again on horizontal scrolling
@@ -26,6 +26,9 @@ All notable changes to this project will be documented in this file.
  - Moved comment config to comment tab
    - Make comments available to owner and delegated poll administration if commenting is disabled
    - Add hint, if commenting is disabled
+
+## [8.3.2] - 2025-08-22
+ - Fix migration from 7.x to 8.x
 
 ## [8.3.0] - 2025-08-21
 If you experience update problems, please refer to [this article](https://github.com/nextcloud/polls/wiki/Installation-help#update-issues)
