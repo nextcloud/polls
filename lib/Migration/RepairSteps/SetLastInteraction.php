@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Migration\RepairSteps;
 
-use OCA\Polls\Db\V2\TableManager;
+use OCA\Polls\Db\V3\TableManager;
 use OCA\Polls\Db\WatchMapper;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;

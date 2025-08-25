@@ -11,7 +11,7 @@ namespace OCA\Polls\Db\V2;
 use Doctrine\DBAL\Schema\Exception\IndexDoesNotExist;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
-use OCA\Polls\Migration\V2\TableSchema;
+use OCA\Polls\Migration\V3\TableSchema;
 use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
 use OCP\IDBConnection;
