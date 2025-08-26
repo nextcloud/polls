@@ -270,6 +270,7 @@ OC.L10N.register(
     "Name" : "Имя",
     "Description" : "Описание",
     "No description provided" : "Описание отсуствует",
+    "Archived {relativeTime}" : "Архивировано {relativeTime}",
     "Expiration" : "Срок действия",
     "Error archiving/restoring poll." : "Не удалось переместить опрос в архив или восстановить из архива.",
     "Error cloning poll." : "Не удалось скопировать опрос.",

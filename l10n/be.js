@@ -7,6 +7,7 @@ OC.L10N.register(
     "Group" : "Група",
     "Contact" : "Кантакт",
     "User" : "Карыстальнік",
+    "Poll" : "Апытанне",
     "Delete" : "Выдаліць",
     "Unknown error" : "Невядомая памылка",
     "Loading …" : "Загрузка …",
@@ -43,6 +44,7 @@ OC.L10N.register(
     "Comments" : "Каментарыі",
     "Sharing" : "Абагульванне",
     "Activity" : "Актыўнасць",
+    "Year" : "Год",
     "Access" : "Доступ",
     "Owner" : "Уладальнік"
 },
