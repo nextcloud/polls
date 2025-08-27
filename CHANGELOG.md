@@ -5,6 +5,10 @@
 # Changelog
 ##
 
+## [7.5.0] - 2025-08-26
+### new
+ - show participants displayname on hovering over avatar
+
 ## [7.4.6] - 2025-08-24
 ### changes
  - dependcy updates
