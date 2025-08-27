@@ -37,6 +37,15 @@
 
 Find Polls in the [Nextcloud app store](https://apps.nextcloud.com/apps/polls).
 
+## Commercial break and thank you
+Thank you guys, who support this app over the years by reporting issues, ideas and even helping analyzing difficult situations. This app can only be maintained with your help and with your proven patience. This is the biggest value the app could get over the last years since I took over the maintenance of Polls.
+
+Out of reasons, I am adding another way to support me directly by [spending me a :coffee:](https://buymeacoffee.com/dartcafe). But please, only do that if you can really afford it and have an advantage by using this app.
+
+:notes: Commercial jingle fading off :musical_note:
+
+For clarification: Polls is not maintained by Nextcloud, although it resides unter the Nextcloud organisation here on Github.
+
 ## Installation / Update
 See [wiki](https://github.com/nextcloud/polls/wiki/Installation-help).
 
