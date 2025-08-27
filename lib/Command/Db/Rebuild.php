@@ -56,7 +56,6 @@ class Rebuild extends Command {
 
 		$this->printComment('Step 2. Tidy records before rebuilding the schema');
 		$this->fixNullish();
-		$this->cleanTables();
 
 		$this->printComment('Step 3. Create or update tables to current shema');
 		$this->createOrUpdateSchema();
@@ -68,7 +67,9 @@ class Rebuild extends Command {
 		$this->connection->migrateToSchema($this->schema);
 
 		$this->printComment('Step 5. Validate and fix records');
+		$this->removeOrphaned();
 		$this->migrateOptionsToHash();
+		$this->deleteAllDuplicates();
 		$this->setLastInteraction();
 
 		$this->printComment('Step 6. Recreate unique indices and foreign key constraints');
@@ -154,16 +155,21 @@ class Rebuild extends Command {
 	/**
 	 * Remove obsolete tables if they still exist
 	 */
-	private function cleanTables(): void {
+	private function deleteAllDuplicates(): void {
+		$this->printComment(' - Remove duplicates');
+		$messages = $this->tableManager->deleteAllDuplicates();
+		$this->printInfo($messages, '   ');
+	}
+
+	/**
+	 * Remove obsolete tables if they still exist
+	 */
+	private function removeOrphaned(): void {
 		$this->printComment(' - Remove orphaned records');
 		$messages = $this->tableManager->removeOrphaned();
 		foreach ($messages as $message) {
 			$this->printInfo("    $message");
 		}
-
-		$this->printComment(' - Remove duplicates');
-		$messages = $this->tableManager->deleteAllDuplicates();
-		$this->printInfo($messages, '   ');
 	}
 
 	/**
