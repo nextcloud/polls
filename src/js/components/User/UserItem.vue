@@ -28,7 +28,7 @@
 		<slot name="status" />
 
 		<div v-if="!hideNames" class="user-item__name">
-			<div class="name">
+			<div class="name" :title="labelComputed">
 				{{ labelComputed }}
 			</div>
 			<div class="description">
