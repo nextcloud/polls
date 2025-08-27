@@ -5,8 +5,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [8.3.4] - 2025-08-25
- - Force migration into reloading classes
+## [8.3.7] - 2025-08-25
+ - Clean table records in postMigration instead of preMigration
 
 ### Fixed (v8.3.0)
  - Made description sticky again on horizontal scrolling
@@ -26,6 +26,9 @@ All notable changes to this project will be documented in this file.
  - Moved comment config to comment tab
    - Make comments available to owner and delegated poll administration if commenting is disabled
    - Add hint, if commenting is disabled
+
+## [8.3.4] - 2025-08-25
+ - Force migration into reloading classes
 
 ## [8.3.3] - 2025-08-24
  - Fix migration

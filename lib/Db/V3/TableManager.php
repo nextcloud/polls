@@ -334,6 +334,7 @@ class TableManager extends DbManager {
 		foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
 			foreach ($uniqueIndices as $definition) {
 
+				// delete all duplicates based on the unique index definition
 				$count = $this->deleteDuplicates($tableName, $definition['columns']);
 
 				if ($count) {
@@ -540,11 +541,11 @@ class TableManager extends DbManager {
 	}
 
 	public function migrateOptionsToHash(): array {
-		$this->needsSchema();
+		$schema = $this->connection->createSchema();
 		$messages = [];
 
-		if ($this->schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
-			$table = $this->schema->getTable($this->dbPrefix . OptionMapper::TABLE);
+		if ($schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
+			$table = $schema->getTable($this->dbPrefix . OptionMapper::TABLE);
 			$count = 0;
 			if ($table->hasColumn('poll_option_hash')) {
 				foreach ($this->optionMapper->getAll(includeNull: true) as $option) {
@@ -568,8 +569,8 @@ class TableManager extends DbManager {
 			$this->logger->error('{db} is missing - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
 		}
 
-		if ($this->schema->hasTable($this->dbPrefix . VoteMapper::TABLE)) {
-			$table = $this->schema->getTable($this->dbPrefix . VoteMapper::TABLE);
+		if ($schema->hasTable($this->dbPrefix . VoteMapper::TABLE)) {
+			$table = $schema->getTable($this->dbPrefix . VoteMapper::TABLE);
 			$count = 0;
 			if ($table->hasColumn('vote_option_hash')) {
 				foreach ($this->voteMapper->getAll(includeNull: true) as $vote) {
