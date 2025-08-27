@@ -69,6 +69,10 @@ class Version080307Date20250826231102 extends SimpleMigrationStep {
 		$this->logInfo($message, 'preMigration:  ');
 		$this->indexManager->migrateToSchema();
 
+		// fix nullish values in poll_id and group_id and set 0 in case of null
+		$message = $this->tableManager->fixNullishShares();
+		$this->logInfo($message, 'postMigration:  ');
+
 		$message = $this->tableManager->tidyWatchTable(time());
 		$this->logInfo($message, 'preMigration:  ');
 	}
@@ -113,10 +117,6 @@ class Version080307Date20250826231102 extends SimpleMigrationStep {
 		$this->logInfo('Post migration steps');
 
 		// Clean up tables before creating indices and foreign keys
-
-		// fix nullish values in poll_id and group_id and set 0 in case of null
-		$message = $this->tableManager->fixNullishShares();
-		$this->logInfo($message, 'postMigration:  ');
 
 		// remove all orphaned records
 		$message = $this->tableManager->removeOrphaned();
