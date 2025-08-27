@@ -24,7 +24,7 @@ use OCP\Migration\SimpleMigrationStep;
  *
  * @psalm-suppress UnusedClass
  */
-class Version080303Date20250824090101 extends SimpleMigrationStep {
+class Version080307Date20250826231102 extends SimpleMigrationStep {
 	private ISchemaWrapper $schema;
 	private ?IOutput $output = null;
 
@@ -35,23 +35,12 @@ class Version080303Date20250824090101 extends SimpleMigrationStep {
 	) {
 	}
 
-	/**
-	 * Logs the given message to the output.
-	 *
-	 * @param string|array $message The message to log, can be a string or an array of strings.
-	 * @param string $prefix Optional prefix for the message, defaults to an empty string.
-	 * @return void
-	 */
-	private function logInfo(string|array $message, string $prefix = ''): void {
-		if ($this->output) {
-			if (is_array($message)) {
-				foreach ($message as $msg) {
-					$this->output->info($prefix . 'Polls - ' . $msg);
-				}
-			} else {
-				$this->output->info($prefix . 'Polls - ' . $message);
-			}
-		}
+	public function name(): string {
+		return 'Polls migration to version 8.3.7';
+	}
+
+	public function description(): string {
+		return 'Migrates Polls\' tables to the current schema';
 	}
 
 	/**
@@ -79,20 +68,6 @@ class Version080303Date20250824090101 extends SimpleMigrationStep {
 		$message = $this->indexManager->removeForeignKeysFromTable(Share::TABLE);
 		$this->logInfo($message, 'preMigration:  ');
 		$this->indexManager->migrateToSchema();
-
-		// fix nullish values in poll_id and group_id and set 0 in case of null
-		$message = $this->tableManager->fixNullishShares();
-		$this->logInfo($message, 'preMigration:  ');
-
-		// remove all orphaned records
-		$message = $this->tableManager->removeOrphaned();
-		$this->logInfo($message, 'preMigration:  ');
-
-		// remove all duplicates
-		$this->tableManager->createSchema();
-		$message = $this->tableManager->deleteAllDuplicates();
-		$this->logInfo($message, 'preMigration:  ');
-		$this->tableManager->migrateToSchema();
 
 		$message = $this->tableManager->tidyWatchTable(time());
 		$this->logInfo($message, 'preMigration:  ');
@@ -137,21 +112,35 @@ class Version080303Date20250824090101 extends SimpleMigrationStep {
 		$this->output = $output;
 		$this->logInfo('Post migration steps');
 
-		$this->tableManager->createSchema();
+		// Clean up tables before creating indices and foreign keys
+
+		// fix nullish values in poll_id and group_id and set 0 in case of null
+		$message = $this->tableManager->fixNullishShares();
+		$this->logInfo($message, 'postMigration:  ');
+
+		// remove all orphaned records
+		$message = $this->tableManager->removeOrphaned();
+		$this->logInfo($message, 'postMigration:  ');
+
+		// ensure correct option hashes in options and votes
 		$message = $this->tableManager->migrateOptionsToHash();
 		$this->logInfo($message, 'postMigration: ');
 
+		// remove all duplicate records which have to be unique
+		$message = $this->tableManager->deleteAllDuplicates();
+		$this->logInfo($message, 'postMigration:  ');
+
+		// remove obsolete tables and columns
 		$message = $this->tableManager->removeObsoleteTables();
 		$this->logInfo($message, 'postMigration: ');
 
 		$this->tableManager->createSchema();
 		$message = $this->tableManager->removeObsoleteColumns();
-		$this->tableManager->migrateToSchema();
 		$this->logInfo($message, 'postMigration: ');
+		$this->tableManager->migrateToSchema();
 
-
+		// now we can create the foreign keys and unique indices for the share table again
 		$this->indexManager->createSchema();
-
 		$message = $this->indexManager->createForeignKeyConstraints();
 		$this->logInfo($message, 'postMigration:  ');
 
@@ -161,4 +150,24 @@ class Version080303Date20250824090101 extends SimpleMigrationStep {
 		// skip creating optional indices and leave it to 'occ db:add-missing-indices'
 		$this->indexManager->migrateToSchema();
 	}
+
+	/**
+	 * Logs the given message to the output.
+	 *
+	 * @param string|array $message The message to log, can be a string or an array of strings.
+	 * @param string $prefix Optional prefix for the message, defaults to an empty string.
+	 * @return void
+	 */
+	private function logInfo(string|array $message, string $prefix = ''): void {
+		if ($this->output) {
+			if (is_array($message)) {
+				foreach ($message as $msg) {
+					$this->output->info($prefix . 'Polls - ' . $msg);
+				}
+			} else {
+				$this->output->info($prefix . 'Polls - ' . $message);
+			}
+		}
+	}
+
 }
