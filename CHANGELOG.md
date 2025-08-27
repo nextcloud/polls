@@ -5,8 +5,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [8.3.7] - 2025-08-25
+## [8.3.8] - 2025-08-27
  - Clean table records in postMigration instead of preMigration
+ - adjust order in repair command
 
 ### Fixed (v8.3.0)
  - Made description sticky again on horizontal scrolling
