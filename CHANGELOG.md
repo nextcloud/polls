@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [unpublished]
+### new
+ - show participants displayname on hovering over avatar
+
 ## [8.3.8] - 2025-08-27
  - Clean table records in postMigration instead of preMigration
  - adjust order in repair command
