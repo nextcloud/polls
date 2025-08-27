@@ -96,7 +96,6 @@ abstract class TableSchema {
 	public const UNIQUE_INDICES = [
 		Option::TABLE => [
 			'UNIQ_options' => ['columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
-			'UNIQ_options_bin' => ['columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
 		],
 		Log::TABLE => [
 			'UNIQ_unprocessed' => ['columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
@@ -110,7 +109,6 @@ abstract class TableSchema {
 		],
 		Vote::TABLE => [
 			'UNIQ_votes' => ['columns' => ['poll_id', 'user_id', 'vote_option_hash']],
-			'UNIQ_votes_bin' => ['columns' => ['poll_id', 'user_id', 'vote_option_hash']],
 		],
 		Preferences::TABLE => [
 			'UNIQ_preferences' => ['columns' => ['user_id']],
