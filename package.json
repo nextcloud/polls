@@ -43,7 +43,7 @@
     "@vueuse/core": "^13.4.0",
     "@vueuse/integrations": "^13.4.0",
     "axios": "^1.11.0",
-    "core-js": "^3.43.0",
+    "core-js": "^3.45.1",
     "dompurify": "^3.2.6",
     "file-saver": "^2.0.5",
     "linkify-string": "^4.3.1",
