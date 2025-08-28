@@ -67,7 +67,7 @@
     "@nextcloud/vite-config": "^2.3.5",
     "@types/file-saver": "^2.0.7",
     "@types/lodash": "^4.17.19",
-    "@types/luxon": "^3.6.2",
+    "@types/luxon": "^3.7.1",
     "@types/qrcode": "^1.5.5",
     "@vue/tsconfig": "^0.8.1",
     "eslint-config-prettier": "^10.1.5",
