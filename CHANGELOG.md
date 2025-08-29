@@ -5,9 +5,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [8.3.8] - 2025-08-27
- - Clean table records in postMigration instead of preMigration
- - adjust order in repair command
+## [8.3.9] - 2025-08-29
+ - fix creation of duplicated index
 
 ### Fixed (v8.3.0)
  - Made description sticky again on horizontal scrolling
@@ -27,6 +26,10 @@ All notable changes to this project will be documented in this file.
  - Moved comment config to comment tab
    - Make comments available to owner and delegated poll administration if commenting is disabled
    - Add hint, if commenting is disabled
+
+## [8.3.8] - 2025-08-27
+ - Clean table records in postMigration instead of preMigration
+ - adjust order in repair command
 
 ## [8.3.4] - 2025-08-25
  - Force migration into reloading classes
