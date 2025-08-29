@@ -31,6 +31,8 @@ OC.L10N.register(
     "Description" : "Tavsif",
     "Expiration" : "Muddati",
     "Back" : "Orqaga",
+    "Descending" : "Kamaytirish",
+    "Ascending" : "Ko'tarilish",
     "Login" : "Login",
     "No activity yet" : "Afsuski, faollik mavjud emas",
     "Other settings" : "Boshqa sozlamalar",
