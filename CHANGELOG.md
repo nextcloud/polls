@@ -5,13 +5,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [8.4.0] - 2025-08-29
+## [8.4.1] - 2025-08-29
 ### new
  - Compatible to Nextcloud 31 and 32
  - show participants displayname on hovering over avatar
  - Design changes from Nextcloud's vue library
 
-## [8.3.9] - 2025-08-29
+## [8.3.10] - 2025-08-29
  - fix creation of duplicated index
 
 ## [8.3.8] - 2025-08-27
