@@ -25,7 +25,7 @@
   <donation>https://buymeacoffee.com/dartcafe</donation>
   <dependencies>
     <php min-version="8.1"/>
-    <nextcloud min-version="30" max-version="31"/>
+    <nextcloud min-version="31" max-version="32"/>
   </dependencies>
   <background-jobs>
     <job>OCA\Polls\Cron\NotificationCron</job>
