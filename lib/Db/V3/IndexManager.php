@@ -104,6 +104,24 @@ class IndexManager extends DbManager {
 		return 'Added ' . $parentTableName . '[' . $constraintColumn . '] <- ' . $childTableName . '[id]';
 	}
 
+	public function listExistingIndices() {
+		$this->needsSchema();
+		$messages = [];
+
+		foreach (array_keys(TableSchema::TABLES) as $tableName) {
+			$tableName = $this->getTableName($tableName);
+
+			if ($this->schema->hasTable($tableName)) {
+				$table = $this->schema->getTable($tableName);
+
+				foreach ($table->getIndexes() as $index) {
+					$messages[] = $tableName . ' - ' . $index->getName() . ' (' . implode(',', $index->getColumns()) . ')';
+				}
+			}
+		}
+		return $messages;
+	}
+
 	/**
 	 * Create one named index for table
 	 *
