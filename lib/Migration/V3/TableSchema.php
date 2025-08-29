@@ -68,9 +68,7 @@ abstract class TableSchema {
 			'polls_polls_owners' => ['columns' => ['owner']],
 		],
 		Option::TABLE => [
-			// TODO: Temporarily remove this index, since pgsql has a problem with this index
-			//       Further inspection is necessary.
-			// 'polls_options' => ['columns' => ['poll_id', 'deleted']],
+			'polls_options_non_deleted' => ['columns' => ['poll_id', 'deleted']],
 			'polls_options_hash' => ['columns' => ['poll_id', 'poll_option_hash', 'deleted']],
 			'polls_options_owner' => ['columns' => ['poll_id', 'owner']],
 		],

@@ -5,7 +5,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [8.3.9] - 2025-08-29
+## [8.3.10] - 2025-08-29
  - fix creation of duplicated index
 
 ### Fixed (v8.3.0)
