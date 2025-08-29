@@ -67,9 +67,6 @@ abstract class TableSchema {
 			'polls_polls_deleted' => ['columns' => ['deleted']],
 			'polls_polls_owners' => ['columns' => ['owner']],
 		],
-		PollGroup::RELATION_TABLE => [
-			'polls_groups_polls' => ['columns' => ['poll_id', 'group_id']],
-		],
 		Option::TABLE => [
 			'polls_options' => ['columns' => ['poll_id', 'deleted']],
 			'polls_options_hash' => ['columns' => ['poll_id', 'poll_option_hash', 'deleted']],

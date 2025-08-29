@@ -40,10 +40,16 @@ class CreateIndices extends Command {
 		$this->addForeignKeyConstraints();
 		$this->addUniqueIndices();
 		$this->connection->migrateToSchema($this->schema);
+		$this->listExistingIndices();
 
 		return 0;
 	}
 
+	private function listExistingIndices(): void {
+		$this->printComment('Existing indices:');
+		$messages = $this->indexManager->listExistingIndices();
+		$this->printInfo($messages, ' - ');
+	}
 	/**
 	 * add an on delete fk contraint to all tables referencing the main polls table
 	 */
