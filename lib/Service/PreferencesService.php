@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace OCA\Polls\Service;
 
 use Exception;
-use OCP\Calendar\IManager as CalendarManager;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\UserSession;
+use OCP\Calendar\IManager as CalendarManager;
 
 class PreferencesService {
 
@@ -30,14 +30,13 @@ class PreferencesService {
 
 	public function load(): void {
 		try {
-			$migration = false;
 			$this->preferences = $this->preferencesMapper->find($this->userSession->getCurrentUserId());
 
 			if (!$this->preferences->getUserSettings()) {
 				$this->preferences->setUserSettings(Preferences::DEFAULT_SETTINGS);
 				throw new NotFoundException('load: No preferences array found');
 			}
-			$migration = $this->convertCalendars() || $migration;
+			$migration = $this->convertCalendars();
 			$migration = $this->adjustTimeToleranceProperties() || $migration;
 			$migration = $this->removeDeprecatedProperties() || $migration;
 
