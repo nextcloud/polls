@@ -13,6 +13,7 @@ use OCA\Polls\Event\CommentEvent;
 use OCA\Polls\Event\OptionEvent;
 use OCA\Polls\Event\PollEvent;
 use OCA\Polls\Event\ShareEvent;
+use OCA\Polls\Event\VoteEvent;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 
@@ -49,6 +50,7 @@ class ActivityFilter implements \OCP\Activity\IFilter {
 		OptionEvent::UNCONFIRM,
 		OptionEvent::DELETE,
 		CommentEvent::DELETE,
+		VoteEvent::SET,
 	];
 
 	public function __construct(
