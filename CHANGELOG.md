@@ -5,20 +5,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
-### Fix
- - Better handlin of subscribed calendars for calendar check
+## [8.4.2] - 2025-08-31
+### Fixed
+ - Better handling of subscribed calendars for calendar check
 
 ## [8.4.1] - 2025-08-29
-### new
+### Changed
  - Compatible to Nextcloud 31 and 32
- - show participants displayname on hovering over avatar
  - Design changes from Nextcloud's vue library
 
 ## [8.3.10] - 2025-08-29
+### Fixed
  - fix creation of duplicated index
+ - show participants displayname on hovering over avatar
 
 ## [8.3.8] - 2025-08-27
+### Changed
  - Clean table records in postMigration instead of preMigration
  - adjust order in repair command
 
