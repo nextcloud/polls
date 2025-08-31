@@ -72,7 +72,7 @@ class ActivityProvider implements IProvider {
 		try {
 			$actor = $this->userMapper->getParticipant($event->getAuthor(), $event->getObjectId());
 			$parameters['actor'] = [
-				'type' => $actor->getSimpleType(),
+				'type' => $actor->getSimpleType(true),
 				'id' => $actor->getId(),
 				'name' => $actor->getDisplayName(),
 			];
