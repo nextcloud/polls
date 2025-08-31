@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Fix
+ - Better handlin of subscribed calendars for calendar check
+
 ## [8.4.1] - 2025-08-29
 ### new
  - Compatible to Nextcloud 31 and 32
