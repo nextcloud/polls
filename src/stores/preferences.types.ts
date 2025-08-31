@@ -7,7 +7,7 @@ export type ViewMode = 'table-view' | 'list-view'
 
 export type UserPreferences = {
 	calendarPeek: boolean
-	checkCalendars: string[]
+	checkCalendarsUris: string[]
 	checkCalendarsHoursBefore: number
 	checkCalendarsHoursAfter: number
 	defaultViewTextPoll: ViewMode

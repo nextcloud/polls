@@ -15,7 +15,7 @@ export const usePreferencesStore = defineStore('preferences', {
 	state: (): PreferencesStore => ({
 		user: {
 			calendarPeek: false,
-			checkCalendars: [],
+			checkCalendarsUris: [],
 			checkCalendarsHoursBefore: 0,
 			checkCalendarsHoursAfter: 0,
 			defaultViewTextPoll: 'table-view',
@@ -53,14 +53,14 @@ export const usePreferencesStore = defineStore('preferences', {
 		},
 
 		addCheckCalendar(calendar: Calendar) {
-			this.user.checkCalendars.push(calendar.key)
+			this.user.checkCalendarsUris.push(calendar.calendarUri)
 			this.write()
 		},
 
 		removeCheckCalendar(calendar: Calendar) {
-			const index = this.user.checkCalendars.indexOf(calendar.key)
+			const index = this.user.checkCalendarsUris.indexOf(calendar.calendarUri)
 			if (index !== -1) {
-				this.user.checkCalendars.splice(index, 1)
+				this.user.checkCalendarsUris.splice(index, 1)
 			}
 			this.write()
 		},

@@ -96,7 +96,7 @@ class CalendarService {
 		$query->setTimerangeEnd($to);
 
 		foreach ($this->calendars as $calendar) {
-			if (in_array($calendar->getKey(), json_decode($this->preferences->getPreferences())->checkCalendars)) {
+			if (in_array($calendar->getUri(), $this->preferences->getUserSettings()['checkCalendarsUris'])) {
 				$query->addSearchCalendar($calendar->getUri());
 			}
 		}
