@@ -15,17 +15,17 @@ const preferencesStore = usePreferencesStore()
 
 const calendarChoices = computed(() =>
 	preferencesStore.availableCalendars.map((calendar) => ({
-		key: calendar.key.toString(),
+		calendarUri: calendar.calendarUri,
 		name: calendar.name,
 		displayColor: calendar.displayColor,
-		selected: preferencesStore.user.checkCalendars.includes(
-			calendar.key.toString(),
+		selected: preferencesStore.user.checkCalendarsUris.includes(
+			calendar.calendarUri,
 		),
 	})),
 )
 
 const clickedCalendar = (calendar) => {
-	if (preferencesStore.user.checkCalendars.includes(calendar.key)) {
+	if (preferencesStore.user.checkCalendarsUris.includes(calendar.calendarUri)) {
 		preferencesStore.removeCheckCalendar(calendar)
 	} else {
 		preferencesStore.addCheckCalendar(calendar)
@@ -52,7 +52,7 @@ const clickedCalendar = (calendar) => {
 
 				<div
 					v-for="calendar in calendarChoices"
-					:key="calendar.key"
+					:key="calendar.calendarUri"
 					class="calendar-item">
 					<NcCheckboxRadioSwitch
 						:model-value="calendar.selected"

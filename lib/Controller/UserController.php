@@ -39,7 +39,7 @@ class UserController extends BaseController {
 	#[NoAdminRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/preferences')]
-	public function getPreferences(): JSONResponse {
+	public function getUserSettings(): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->get());
 	}
 

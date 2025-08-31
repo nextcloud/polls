@@ -19,16 +19,25 @@ use OCP\AppFramework\Db\Entity;
  * @method void setUserId(string $value)
  * @method string getTimestamp()
  * @method void setTimestamp(int $value)
+ * @method string getPreferences()
  * @method void setPreferences(string $value)
  */
 class Preferences extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_preferences';
 
-	public const DEFAULT = [
+	public const DEPRECATED_SETTINGS = [
+		'checkCalendars',
+		'checkCalendarUris',
+		'checkCalendarsFullUris',
+		'checkCalendarsBefore',
+		'checkCalendarsAfter',
+	];
+
+	public const DEFAULT_SETTINGS = [
 		'useCommentsAlternativeStyling' => false,
 		'useAlternativeStyling' => false,
 		'calendarPeek' => false,
-		'checkCalendars' => [],
+		'checkCalendarsUris' => [],
 		'checkCalendarsHoursBefore' => 0,
 		'checkCalendarsHoursAfter' => 0,
 		'defaultViewTextPoll' => 'table-view',
@@ -47,37 +56,37 @@ class Preferences extends Entity implements JsonSerializable {
 		$this->addType('timestamp', 'integer');
 
 		// initialize with default values
-		$this->setPreferences(json_encode(self::DEFAULT));
+		$this->setUserSettings(self::DEFAULT_SETTINGS);
 	}
 
-	public function getPreferences(): string {
-		return $this->preferences ?? '';
+	public function setUserSettings(array $settings): void {
+		$this->setPreferences(json_encode($settings));
 	}
 
-	public function getPreferences_decoded(): mixed {
-		return json_decode($this->getPreferences());
+	public function getUserSettings(): array {
+		return json_decode($this->getPreferences() ?? '', true);
 	}
 
 	public function getCheckCalendarsHoursBefore(): int {
-		if (isset($this->getPreferences_decoded()->checkCalendarsHoursBefore)) {
-			return intval($this->getPreferences_decoded()->checkCalendarsHoursBefore);
+		if (isset($this->getUserSettings()['checkCalendarsHoursBefore'])) {
+			return intval($this->getUserSettings()['checkCalendarsHoursBefore']);
 		}
 
 		// in case old property name is used, return the value
-		if (isset($this->getPreferences_decoded()->checkCalendarsBefore)) {
-			return intval($this->getPreferences_decoded()->checkCalendarsBefore);
+		if (isset($this->getUserSettings()['checkCalendarsBefore'])) {
+			return intval($this->getUserSettings()['checkCalendarsBefore']);
 		}
 		return 0;
 	}
 
 	public function getCheckCalendarsHoursAfter(): int {
-		if (isset($this->getPreferences_decoded()->checkCalendarsHoursAfter)) {
-			return intval($this->getPreferences_decoded()->checkCalendarsHoursAfter);
+		if (isset($this->getUserSettings()['checkCalendarsHoursAfter'])) {
+			return intval($this->getUserSettings()['checkCalendarsHoursAfter']);
 		}
 
 		// in case old property name is used, return the value
-		if (isset($this->getPreferences_decoded()->checkCalendarsAfter)) {
-			return intval($this->getPreferences_decoded()->checkCalendarsAfter);
+		if (isset($this->getUserSettings()['checkCalendarsAfter'])) {
+			return intval($this->getUserSettings()['checkCalendarsAfter']);
 		}
 		return 0;
 	}
@@ -89,7 +98,7 @@ class Preferences extends Entity implements JsonSerializable {
 	 */
 	public function jsonSerialize(): array {
 		return [
-			'preferences' => json_decode((string)$this->preferences),
+			'preferences' => $this->getUserSettings(),
 		];
 	}
 }

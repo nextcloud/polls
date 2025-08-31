@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Service;
 
 use Exception;
+use OCP\Calendar\IManager as CalendarManager;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Exceptions\NotAuthorizedException;
@@ -22,18 +23,35 @@ class PreferencesService {
 		private PreferencesMapper $preferencesMapper,
 		private Preferences $preferences,
 		private UserSession $userSession,
+		private CalendarManager $calendarManager,
 	) {
 		$this->load();
 	}
 
 	public function load(): void {
 		try {
+			$migration = false;
 			$this->preferences = $this->preferencesMapper->find($this->userSession->getCurrentUserId());
-			if (!$this->preferences->getPreferences()) {
-				throw new NotFoundException('No preferences found');
+
+			if (!$this->preferences->getUserSettings()) {
+				$this->preferences->setUserSettings(Preferences::DEFAULT_SETTINGS);
+				throw new NotFoundException('load: No preferences array found');
 			}
+			$migration = $this->convertCalendars() || $migration;
+			$migration = $this->adjustTimeToleranceProperties() || $migration;
+			$migration = $this->removeDeprecatedProperties() || $migration;
+
+			if ($migration) {
+				// remove deprecated properties after migrating them
+				$this->preferences->setTimestamp(time());
+				$this->preferences = $this->preferencesMapper->update($this->preferences);
+			}
+
 		} catch (Exception $e) {
 			$this->preferences = new Preferences;
+			$this->preferences->setUserId($this->userSession->getCurrentUserId());
+			$this->preferences->setTimestamp(time());
+			$this->preferences = $this->preferencesMapper->insert($this->preferences);
 		}
 	}
 
@@ -44,50 +62,88 @@ class PreferencesService {
 	/**
 	 * Write references
 	 */
-	public function write(array $preferences): Preferences {
+	public function write(array $settings): Preferences {
 		if (!$this->userSession->getCurrentUserId()) {
 			throw new NotAuthorizedException();
 		}
 
-		$preferences = $this->tidyPreferences($preferences);
-		$this->preferences->setPreferences(json_encode($preferences));
+		$this->preferences->setUserSettings($settings);
 		$this->preferences->setTimestamp(time());
-		$this->preferences->setUserId($this->userSession->getCurrentUserId());
 
 		if ($this->preferences->getId() > 0) {
-			return $this->preferencesMapper->update($this->preferences);
+			$this->preferences = $this->preferencesMapper->update($this->preferences);
+			return $this->preferences;
 		} else {
-			return $this->preferencesMapper->insert($this->preferences);
-
+			$this->preferences->setUserId($this->userSession->getCurrentUserId());
+			$this->preferences = $this->preferencesMapper->insert($this->preferences);
+			return $this->preferences;
 		}
 	}
 
+	private function removeDeprecatedProperties(): bool {
+		$migration = false;
+		$settings = $this->preferences->getUserSettings();
+
+		foreach (Preferences::DEPRECATED_SETTINGS as $property) {
+			if (isset($settings[$property])) {
+				unset($settings[$property]);
+				$migration = true;
+			}
+		}
+		$this->preferences->setUserSettings($settings);
+		return $migration;
+	}
 
 	/**
-	 * Tidy preferences
-	 * @param array $preferences
+	 * Convert calendar keys to uris
 	 */
-	private function tidyPreferences(array $preferences): array {
+	private function convertCalendars(): bool {
+		$settings = $this->preferences->getUserSettings();
 
-		// remove old properties (checkCalendarsBefore)
-		if (isset($preferences['checkCalendarsBefore'])) {
-			if (isset($preferences['checkCalendarsHoursBefore'])) {
-				unset($preferences['checkCalendarsBefore']);
-			} else {
-				$preferences['checkCalendarsHoursBefore'] = $preferences['checkCalendarsBefore'];
-				unset($preferences['checkCalendarsBefore']);
+		// only convert, if checkCalendars is set
+		if (!isset($settings['checkCalendars'])) {
+			return false;
+		}
+
+		$principalUri = $this->userSession->getCurrentUser()->getPrincipalUri();
+
+		if (empty($principalUri)) {
+			return false;
+		}
+
+		$calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
+
+		$settings['checkCalendarsUris'] = [];
+
+		foreach ($settings['checkCalendars'] as $calendarKey) {
+			foreach ($calendars as $calendar) {
+				if ($calendar->getKey() === $calendarKey) {
+					$settings['checkCalendarsUris'][] = $calendar->getUri();
+				}
 			}
+		}
+		$this->preferences->setUserSettings($settings);
+		return true;
+	}
+
+	/**
+	 * Adjust time tolerance properties
+	 */
+	private function adjustTimeToleranceProperties(): bool {
+		$migration = false;
+		$settings = $this->preferences->getUserSettings();
+		// migrate checkCalendarsBefore
+		if (isset($settings['checkCalendarsBefore'])
+			&& !isset($settings['checkCalendarsHoursBefore'])) {
+			$settings['checkCalendarsHoursBefore'] = $settings['checkCalendarsBefore'];
+			$migration = true;
 		}
 		// remove old properties (checkCalendarsAfter)
-		if (isset($preferences['checkCalendarsAfter'])) {
-			if (isset($preferences['checkCalendarsHoursAfter'])) {
-				unset($preferences['checkCalendarsAfter']);
-			} else {
-				$preferences['checkCalendarsHoursAfter'] = $preferences['checkCalendarsAfter'];
-				unset($preferences['checkCalendarsAfter']);
-			}
+		if (isset($settings['checkCalendarsAfter']) && !isset($settings['checkCalendarsHoursAfter'])) {
+			$settings['checkCalendarsHoursAfter'] = $settings['checkCalendarsAfter'];
+			$migration = true;
 		}
-
-		return $preferences;
+		$this->preferences->setUserSettings($settings);
+		return $migration;
 	}
 }
