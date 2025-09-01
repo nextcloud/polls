@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ## [unpublished]
 ### Fixed
+ - Fixed some activity bugs
  - Fixed nullish user settings
 
 ## [8.4.2] - 2025-08-31

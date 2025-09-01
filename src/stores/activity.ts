@@ -41,7 +41,7 @@ export const useActivityStore = defineStore('activity', {
 			return state.activities.filter(
 				(activity: Activity) =>
 					activity.object_type === 'poll'
-					&& activity.object_id - sessionStore.currentPollId === 0,
+					&& activity.object_id === Number(sessionStore.currentPollId),
 			)
 		},
 	},

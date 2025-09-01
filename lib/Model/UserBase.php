@@ -160,8 +160,6 @@ class UserBase implements JsonSerializable {
 	public function getSimpleType(): string {
 		if (in_array($this->type, [User::TYPE, Admin::TYPE])) {
 			return self::TYPE_USER;
-		} elseif ($this->type === Ghost::TYPE) {
-			return self::TYPE_GHOST;
 		}
 
 		return self::TYPE_GUEST;
