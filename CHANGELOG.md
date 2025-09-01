@@ -5,9 +5,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [unpublished]
+## [8.4.3] - 2025-09-01
 ### Fixed
- - Fixed some activity bugs
  - Fixed nullish user settings
  - Fixed some activity bugs
  - Limit subquery results to respect oracle limit (affected orphaned votes deletion in janitor cron)
