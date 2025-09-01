@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [unpublished]
+### Fixed
+ - Fixed nullish user settings
+
 ## [8.4.2] - 2025-08-31
 ### Fixed
  - Better handling of subscribed calendars for calendar check
