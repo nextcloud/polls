@@ -91,6 +91,7 @@ class CommentMapper extends QBMapperWithUser {
 			->andWhere(
 				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
 			);
+		$query->setMaxResults(999);
 
 		return $query->executeStatement();
 

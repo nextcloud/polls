@@ -38,11 +38,13 @@ class LogMapper extends QBMapper {
 	}
 
 	public function deleteByUserId(string $userId): void {
-		$query = $this->db->getQueryBuilder();
-		$query->delete($this->getTableName())
+		$delete = $this->db->getQueryBuilder();
+		$delete->delete($this->getTableName())
 			->where('user_id = :userId')
 			->setParameter('userId', $userId);
-		$query->executeStatement();
+		$delete->setMaxResults(999);
+
+		$delete->executeStatement();
 	}
 
 	/**
