@@ -174,6 +174,7 @@ class VoteMapper extends QBMapperWithUser {
 			'votes.poll_id = options.poll_id AND votes.vote_option_hash = options.poll_option_hash'
 		);
 		$qb->where('options.poll_id IS NULL');
+		$qb->setMaxResults(900);
 
 		// get the ids as array
 		$idsToDelete = $qb->executeQuery()->fetchAll(PDO::FETCH_COLUMN);
