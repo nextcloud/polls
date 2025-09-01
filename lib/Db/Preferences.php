@@ -64,7 +64,7 @@ class Preferences extends Entity implements JsonSerializable {
 	}
 
 	public function getUserSettings(): array {
-		return json_decode($this->getPreferences() ?? '', true);
+		return json_decode($this->getPreferences() ?? '', true) ?? self::DEFAULT_SETTINGS;
 	}
 
 	public function getCheckCalendarsHoursBefore(): int {
