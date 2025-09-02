@@ -46,6 +46,7 @@ OC.L10N.register(
     "Archived {relativeTime}" : "Imewekwa katika kumbukumbu {relativeTime}",
     "{count} participants" : "{count} participants",
     "Back" : "Rudi",
+    "Sort by title" : "Sort by title",
     "Direction" : "Direction",
     "Descending" : "Descending",
     "Ascending" : "Ascending",

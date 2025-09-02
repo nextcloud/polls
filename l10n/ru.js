@@ -191,6 +191,7 @@ OC.L10N.register(
     "36 hours before the expiration date, if the poll is created more than 2 and less than 5 days before the expiration." : "За 36 часов до истечения срока действия, если опрос создан более чем за 2 и менее чем за 5 дней до истечения срока действия.",
     "48 hours before the first date option, if the poll is created more than 5 days before the first date option." : "Опционально, за 48 часов до первой даты, если опрос создается более чем за 5 дней до первой даты.",
     "36 hours before the first date option, if the poll is created more than 2 and less than 5 days before the first date option." : "Опционально, за 36 часов до первой даты, если опрос создается более чем за 2 и менее чем за 5 дней до первой даты.",
+    "No reminder is sent" : "Напоминание не отправлено",
     "For text polls without expiration." : "Для текстовых опросов без срока действия.",
     "For polls created less than 2 days before the expiration." : "Для опросов, созданных менее чем за 2 дня до истечения срока действия.",
     "If a share already got a reminder (no matter, if the expiration date got changed)." : "Если те, у кого есть доступ, уже получили напоминание (неважно, изменилась ли дата истечения срока действия).",
