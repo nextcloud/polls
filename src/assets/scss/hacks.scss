@@ -11,8 +11,8 @@
 }
 // FIXME: remove this hack after the issue is fixed
 .avatardiv .material-design-icon {
-	width: var(--size);
-	height: var(--size);
+	width: var(--avatar-size);
+	height: var(--avatar-size);
 }
 
 // h2 in notecard gets a margin-top of -6px instead of 24px for better alignment
