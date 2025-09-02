@@ -67,6 +67,8 @@ OC.L10N.register(
     "Options" : "Опции",
     "Sharing" : "Споделување",
     "Activity" : "Активност",
+    "Minute" : "Минута",
+    "Hour" : "Час",
     "Day" : "Ден",
     "Week" : "Недела",
     "Month" : "Месец",
