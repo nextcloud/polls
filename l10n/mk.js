@@ -48,6 +48,8 @@ OC.L10N.register(
     "Description" : "Опис",
     "Expiration" : "Истекување",
     "Back" : "Назад",
+    "Descending" : "Опаѓачки",
+    "Ascending" : "Растечки",
     "Privacy policy" : "Политика за приватност",
     "Login" : "Најава",
     "Share label" : "Ознака на споделувањето",
