@@ -39,7 +39,7 @@
     "@nextcloud/l10n": "^3.3.0",
     "@nextcloud/logger": "^3.0.2",
     "@nextcloud/router": "^3.0.1",
-    "@nextcloud/vue": "^9.0.0-rc.7",
+    "@nextcloud/vue": "^9.0.0-rc.8",
     "@vueuse/core": "^13.9.0",
     "@vueuse/integrations": "^13.8.0",
     "axios": "^1.11.0",
