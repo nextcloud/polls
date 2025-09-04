@@ -18,7 +18,7 @@ import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue'
 import AlphabeticalIcon from 'vue-material-design-icons/Alphabetical.vue'
 import GestureDoubleTapIcon from 'vue-material-design-icons/GestureDoubleTap.vue'
 import CreationIcon from 'vue-material-design-icons/ClockPlusOutline.vue'
-import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
+import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
 import AccountCircleOutlineIcon from 'vue-material-design-icons/AccountCircleOutline.vue'
 
 import { sortTitlesMapping, usePollsStore } from '../../stores/polls'

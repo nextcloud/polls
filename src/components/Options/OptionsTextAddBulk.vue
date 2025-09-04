@@ -13,7 +13,7 @@ import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
-import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
+import PasteIcon from 'vue-material-design-icons/ClipboardTextMultipleOutline.vue'
 
 import { useOptionsStore } from '../../stores/options'
 

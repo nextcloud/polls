@@ -9,7 +9,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcButton from '@nextcloud/vue/components/NcButton'
 
-import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
+import EmailAlertIcon from 'vue-material-design-icons/EmailAlertOutline.vue'
 import ShareItem from './ShareItem.vue'
 import BulkMailIcon from 'vue-material-design-icons/EmailMultipleOutline.vue'
 
@@ -26,7 +26,7 @@ const sharesStore = useSharesStore()
  */
 async function sendAllInvitations() {
 	const response = await sharesStore.inviteAll({ pollId: pollStore.id })
-	if (response.data.sentResult?.sentMails) {
+	if (response?.data.sentResult?.sentMails) {
 		response.data.sentResult.sentMails.forEach((item) => {
 			showSuccess(
 				t('polls', 'Invitation sent to {displayName} ({emailAddress})', {
@@ -36,7 +36,7 @@ async function sendAllInvitations() {
 			)
 		})
 	}
-	if (response.data.sentResult?.abortedMails) {
+	if (response?.data.sentResult?.abortedMails) {
 		response.data.sentResult.abortedMails.forEach((item) => {
 			Logger.error('Mail could not be sent!', { recipient: item })
 			showError(

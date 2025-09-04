@@ -9,12 +9,12 @@ import { t } from '@nextcloud/l10n'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
 
-import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
+import DeletePollIcon from 'vue-material-design-icons/DeleteOutline.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
-import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
+import ArchivePollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 
 import { useSessionStore } from '../../stores/session'
 
@@ -30,7 +30,9 @@ const sessionStore = useSessionStore()
 	<NcAppNavigationItem
 		:name="poll.configuration.title"
 		:to="
-			poll.permissions.view ? { name: 'vote', params: { id: poll.id } } : null
+			poll.permissions.view
+				? { name: 'vote', params: { id: poll.id } }
+				: undefined
 		"
 		:class="{ closed: poll.status.isExpired }">
 		<template #icon>

@@ -14,8 +14,8 @@ import { usePollStore } from '../../stores/poll'
 
 import DeletePollDialog from '../Modals/DeletePollDialog.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
-import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
-import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
+import ArchivePollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
+import DeletePollIcon from 'vue-material-design-icons/DeleteOutline.vue'
 import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue'
 import TransferPollDialog from '../Modals/TransferPollDialog.vue'
 

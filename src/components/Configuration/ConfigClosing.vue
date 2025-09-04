@@ -12,8 +12,8 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import DateTimePicker from '../../components/Base/modules/DateTimePicker.vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
-import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
-import ClosePollIcon from 'vue-material-design-icons/Lock.vue'
+import OpenPollIcon from 'vue-material-design-icons/LockOpenVariantOutline.vue'
+import ClosePollIcon from 'vue-material-design-icons/LockOutline.vue'
 
 import { usePollStore } from '../../stores/poll'
 
