@@ -564,7 +564,7 @@ OC.L10N.register(
     "Calendar check" : "Провера календара",
     "Personal preferences" : "Лична подешавања",
     "Styles" : "Стилови",
-    "Share label" : "Подели ознаки",
+    "Share label" : "Ознака дељења",
     "Has voted" : "Гласао је",
     "Has not voted" : "Није гласао",
     "Internal access" : "Интерни приступ",

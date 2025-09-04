@@ -161,6 +161,7 @@ OC.L10N.register(
     "Add some!" : "添加一些！",
     "Register" : "注册",
     "Unknown error" : "未知错误",
+    "Maybe" : "可能",
     "Loading …" : "正在加载…",
     "Previous day" : "前一天",
     "Next day" : "后一天",
