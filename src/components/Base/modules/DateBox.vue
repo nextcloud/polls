@@ -24,11 +24,19 @@ const allDay = computed(
 // 'to' is 'from' plus the duration
 // subtract a day if allDay is true and luxonDuration is greater than 0 to match the
 // end of the day after the duration instead of the beginning of the next day
-const to = computed(() =>
-	dateTime
+const to = computed(() => {
+	// this is a quick fix which intercepts dayspans crossing daylight saving time changes
+	// Adding duration as seconds divided by a normal dayspan in seconds (86400) multiplied
+	// by 86400 ensures that we always land at the same time of day, even if the actual
+	// dayspan is 23 or 25 hours due to DST changes
+	// FIXME: this should be replaced by a more stable solution
+	if (allDay.value) {
+		return dateTime.plus((duration.as('seconds') / 86400) * 86400)
+	}
+	return dateTime
 		.plus(duration)
-		.minus({ day: allDay.value && duration.as('seconds') > 0 ? 1 : 0 }),
-)
+		.minus({ day: allDay.value && duration.as('seconds') > 0 ? 1 : 0 })
+})
 
 // to and from dates have the same month (and year)
 // suppress the 'to' month if they are the same
