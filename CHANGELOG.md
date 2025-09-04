@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
  - Replaced the "Maybe" Icon from a checkmark in braces to a tilde
- - Chnged Icons according to new Nextcloud style guide
+ - Changed Icons according to new Nextcloud style guide
 
 ## [8.4.3] - 2025-09-01
 ### Fixed
