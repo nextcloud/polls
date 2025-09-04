@@ -5,7 +5,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [8.4.5] 2025-09-04
 ### KNOWN BUGS
  - Reorderung of options of a textpoll is broken
 
