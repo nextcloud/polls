@@ -17,7 +17,7 @@ import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 
 import SettingsIcon from 'vue-material-design-icons/CogOutline.vue'
-import SendLinkPerEmailIcon from 'vue-material-design-icons/LinkVariant.vue'
+import SendLinkPerEmailIcon from 'vue-material-design-icons/Link.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
 import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'

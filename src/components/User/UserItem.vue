@@ -11,7 +11,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import AdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
-import LinkIcon from 'vue-material-design-icons/LinkVariant.vue'
+import LinkIcon from 'vue-material-design-icons/Link.vue'
 import ContactIcon from 'vue-material-design-icons/CardAccountDetailsOutline.vue'
 import EmailIcon from 'vue-material-design-icons/EmailOutline.vue'
 import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
