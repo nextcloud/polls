@@ -23,7 +23,7 @@ import QrIcon from 'vue-material-design-icons/Qrcode.vue'
 import LockIcon from 'vue-material-design-icons/LockOutline.vue'
 import UnlockIcon from 'vue-material-design-icons/LockOpenVariantOutline.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+import RestoreIcon from 'vue-material-design-icons/RecycleVariant.vue'
 
 import { useSharesStore } from '../../stores/shares'
 import { usePollGroupsStore } from '../../stores/pollGroups'

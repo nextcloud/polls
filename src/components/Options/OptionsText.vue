@@ -13,7 +13,7 @@ import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+import RestoreIcon from 'vue-material-design-icons/RecycleVariant.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'

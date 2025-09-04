@@ -22,7 +22,7 @@ import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import IconArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+import RestorePollIcon from 'vue-material-design-icons/RecycleVariant.vue'
 import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue'
 
 import DeletePollDialog from '../Modals/DeletePollDialog.vue'

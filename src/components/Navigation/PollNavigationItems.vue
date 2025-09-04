@@ -12,7 +12,7 @@ import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
 import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import ArchivePollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+import RestorePollIcon from 'vue-material-design-icons/RecycleVariant.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 
