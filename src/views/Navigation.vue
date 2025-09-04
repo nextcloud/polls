@@ -23,7 +23,7 @@ import AdministrationIcon from 'vue-material-design-icons/ShieldCrownOutline.vue
 import SettingsIcon from 'vue-material-design-icons/CogOutline.vue'
 import RelevantIcon from 'vue-material-design-icons/ExclamationThick.vue'
 import MyPollsIcon from 'vue-material-design-icons/AccountOutline.vue'
-import PrivatePollsIcon from 'vue-material-design-icons/KeyOutline.vue'
+import PrivatePollsIcon from 'vue-material-design-icons/Key.vue'
 import ParticipatedIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
 import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
 import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
