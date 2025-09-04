@@ -18,7 +18,7 @@ import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 
 import ArchivePollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
-import DeletePollIcon from 'vue-material-design-icons/DeleteOutline.vue'
+import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import IconArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'

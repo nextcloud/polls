@@ -7,7 +7,7 @@
 import { t } from '@nextcloud/l10n'
 
 import SpeakerIcon from 'vue-material-design-icons/BullhornOutline.vue'
-import DeletePollIcon from 'vue-material-design-icons/DeleteOutline.vue'
+import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import DescriptionIcon from 'vue-material-design-icons/TextBoxOutline.vue'
 import PollConfigIcon from 'vue-material-design-icons/WrenchOutline.vue'
 import LockedIcon from 'vue-material-design-icons/LockOutline.vue'
