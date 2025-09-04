@@ -13,7 +13,7 @@ import NcModal from '@nextcloud/vue/components/NcModal'
 
 import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+import RestoreIcon from 'vue-material-design-icons/RecycleVariant.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import OptionSortIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'

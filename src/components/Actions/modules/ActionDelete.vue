@@ -10,7 +10,7 @@ import { t, n } from '@nextcloud/l10n'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+import RestoreIcon from 'vue-material-design-icons/RecycleVariant.vue'
 import LockIcon from 'vue-material-design-icons/LockOutline.vue'
 import UndoIcon from 'vue-material-design-icons/ArrowULeftTop.vue'
 
