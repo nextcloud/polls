@@ -5,6 +5,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+### KNOWN BUGS
+ - Reorderung of options of a textpoll is broken
+
+### Fixed
+ - Fixed display of one day event on days with a daylight saving change
+
+### Changed
+ - Replaced the "Maybe" Icon from a checkmark in braces to a tilde
+ - Chnged Icons according to new Nextcloud style guide
+
 ## [8.4.3] - 2025-09-01
 ### Fixed
  - Fixed nullish user settings
