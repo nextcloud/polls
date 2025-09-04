@@ -24,8 +24,7 @@ import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import EmailIcon from 'vue-material-design-icons/EmailOutline.vue'
-
-import MaybeIcon from '../AppIcons/MaybeIcon.vue'
+import MaybeIcon from 'vue-material-design-icons/Tilde.vue'
 
 import BadgeDiv from '../Base/modules/BadgeDiv.vue'
 import UserBubble from '../User/UserBubble.vue'
@@ -84,8 +83,12 @@ const dateExpiryRelative = computed(
 )
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 const countAllYesVotes = computed(() => votesStore.countAllVotesByAnswer('yes'))
-const countAllNoVotes = computed(() => votesStore.countAllVotesByAnswer('no'))
 const countAllMaybeVotes = computed(() => votesStore.countAllVotesByAnswer('maybe'))
+const countAllNoVotes = computed(
+	() =>
+		optionsStore.options.length * pollStore.status.countParticipants
+		- (countAllYesVotes.value + countAllMaybeVotes.value),
+)
 const countUsedVotes = computed(
 	() =>
 		pollStore.configuration.maxVotesPerUser
@@ -174,19 +177,26 @@ const countUsedVotes = computed(
 		</BadgeDiv>
 		<BadgeDiv v-if="countAllYesVotes">
 			<template #icon>
-				<CheckIcon fill-color="#49bc49" />
+				<CheckIcon fill-color="var(--color-polls-foreground-yes)" />
 			</template>
 			{{ n('polls', '%n "Yes" vote', '%n "Yes" votes', countAllYesVotes) }}
 		</BadgeDiv>
 		<BadgeDiv v-if="countAllNoVotes">
 			<template #icon>
-				<CloseIcon fill-color="#f45573" />
+				<CloseIcon fill-color="var(--color-polls-foreground-no)" />
 			</template>
-			{{ n('polls', '%n No vote', '%n "No" votes', countAllNoVotes) }}
+			{{
+				n(
+					'polls',
+					'%n No vote/not voted',
+					'%n "No" votes/not voted',
+					countAllNoVotes,
+				)
+			}}
 		</BadgeDiv>
 		<BadgeDiv v-if="countAllMaybeVotes">
 			<template #icon>
-				<MaybeIcon />
+				<MaybeIcon fill-color="var(--color-polls-foreground-maybe)" />
 			</template>
 			{{
 				n('polls', '%n "Maybe" vote', '%n "Maybe" votes', countAllMaybeVotes)

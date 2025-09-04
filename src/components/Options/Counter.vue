@@ -4,8 +4,8 @@
 -->
 
 <script setup lang="ts">
-import YesCounterIcon from 'vue-material-design-icons/AccountCheck.vue'
-import MaybeCounterIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
+import YesCounterIcon from 'vue-material-design-icons/Check.vue'
+import MaybeCounterIcon from 'vue-material-design-icons/Tilde.vue'
 import CheckboxMarkedOutlinedIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 
 import { usePollStore } from '../../stores/poll'
