@@ -8,7 +8,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 
 import OptionItem from './OptionItem.vue'
 import OptionMenu from './OptionMenu.vue'

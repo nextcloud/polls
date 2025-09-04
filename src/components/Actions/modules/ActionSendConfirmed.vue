@@ -11,7 +11,7 @@ import { t, n } from '@nextcloud/l10n'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
-import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
+import EmailCheckIcon from 'vue-material-design-icons/EmailCheckOutline.vue' // view-comfy-outline
 
 import { PollsAPI } from '../../../Api'
 import { Logger } from '../../../helpers'

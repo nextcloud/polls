@@ -12,10 +12,10 @@ import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
 import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
 import { Event } from '../Types'
 
-import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
+import SidebarShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
+import SidebarConfigurationIcon from 'vue-material-design-icons/WrenchOutline.vue'
 
 import SideBarTabPollGroup from '../components/SideBar/SideBarTabSharePollGroup.vue'
-import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
 import SideBarTabConfigurationPollGroup from '../components/SideBar/SideBarTabConfigurationPollGroup.vue'
 
 const showSidebar = ref(window.innerWidth > 920)

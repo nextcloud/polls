@@ -21,7 +21,7 @@ import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 
 import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
 import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
-import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
+import CsvIcon from 'vue-material-design-icons/FileDelimitedOutline.vue'
 import XmlIcon from 'vue-material-design-icons/Xml.vue'
 import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
 

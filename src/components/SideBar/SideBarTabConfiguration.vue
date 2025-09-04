@@ -6,12 +6,12 @@
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
 
-import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
-import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
-import DescriptionIcon from 'vue-material-design-icons/TextBox.vue'
-import PollConfigIcon from 'vue-material-design-icons/Wrench.vue'
-import LockedIcon from 'vue-material-design-icons/Lock.vue'
-import UnlockedIcon from 'vue-material-design-icons/LockOpenVariant.vue'
+import SpeakerIcon from 'vue-material-design-icons/BullhornOutline.vue'
+import DeletePollIcon from 'vue-material-design-icons/DeleteOutline.vue'
+import DescriptionIcon from 'vue-material-design-icons/TextBoxOutline.vue'
+import PollConfigIcon from 'vue-material-design-icons/WrenchOutline.vue'
+import LockedIcon from 'vue-material-design-icons/LockOutline.vue'
+import UnlockedIcon from 'vue-material-design-icons/LockOpenVariantOutline.vue'
 import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
 import HideResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
 import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'

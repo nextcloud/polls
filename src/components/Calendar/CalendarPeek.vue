@@ -12,7 +12,7 @@ import { DateTime } from 'luxon'
 import NcPopover from '@nextcloud/vue/components/NcPopover'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
-import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
+import CalendarIcon from 'vue-material-design-icons/CalendarOutline.vue'
 
 import CalendarInfo from './CalendarInfo.vue'
 import { CalendarAPI } from '../../Api'
