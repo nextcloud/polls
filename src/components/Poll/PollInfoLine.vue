@@ -14,7 +14,7 @@ import unpublishedIcon from 'vue-material-design-icons/PublishOff.vue'
 import archivedPollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import closedPollIcon from 'vue-material-design-icons/LockOutline.vue'
 import creationIcon from 'vue-material-design-icons/ClockOutline.vue'
-import ProposalsIcon from 'vue-material-design-icons/Offer.vue'
+import ProposalsIcon from 'vue-material-design-icons/HandExtendedOutline.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
 
 const pollStore = usePollStore()

@@ -9,7 +9,7 @@ import { t, n } from '@nextcloud/l10n'
 
 import OwnerIcon from 'vue-material-design-icons/CrownOutline.vue'
 import SubscribedIcon from 'vue-material-design-icons/BellOutline.vue'
-import ProposalsAllowedIcon from 'vue-material-design-icons/Offer.vue'
+import ProposalsAllowedIcon from 'vue-material-design-icons/HandExtendedOutline.vue'
 import TimezoneIcon from 'vue-material-design-icons/MapClockOutline.vue'
 import OptionsIcon from 'vue-material-design-icons/FormatListCheckbox.vue'
 import ParticipantsIcon from 'vue-material-design-icons/AccountGroupOutline.vue'
