@@ -14,7 +14,7 @@ import { n, t } from '@nextcloud/l10n'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
 import ActionAddOption from '../components/Actions/modules/ActionAddOption.vue'

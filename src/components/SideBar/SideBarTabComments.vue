@@ -12,14 +12,14 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
 import CommentAdd from '../Comments/CommentAdd.vue'
 import Comments from '../Comments/Comments.vue'
-import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
+import CommentsIcon from 'vue-material-design-icons/CommentProcessingOutline.vue'
 
 import { usePollStore } from '../../stores/poll'
 import { useCommentsStore } from '../../stores/comments'
 import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
 import ConfigForceConfidentialComments from '../Configuration/ConfigForceConfidentialComments.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'
-import PollConfigIcon from 'vue-material-design-icons/Wrench.vue'
+import PollConfigIcon from 'vue-material-design-icons/WrenchOutline.vue'
 import CardDiv from '../Base/modules/CardDiv.vue'
 
 const pollStore = usePollStore()

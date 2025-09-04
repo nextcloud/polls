@@ -10,7 +10,7 @@ import { showError } from '@nextcloud/dialogs'
 
 import NcModal from '@nextcloud/vue/components/NcModal'
 
-import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
+import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 
 import QrModal from '../Base/modules/QrModal.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'

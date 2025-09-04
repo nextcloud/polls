@@ -12,7 +12,7 @@ import { t } from '@nextcloud/l10n'
 import NcDashboardWidget from '@nextcloud/vue/components/NcDashboardWidget'
 
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 import { Logger } from '../helpers'

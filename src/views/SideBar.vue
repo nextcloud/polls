@@ -19,11 +19,11 @@ import SideBarTabComments from '../components/SideBar/SideBarTabComments.vue'
 import SideBarTabOptions from '../components/SideBar/SideBarTabOptions.vue'
 import SideBarTabShare from '../components/SideBar/SideBarTabShare.vue'
 import SideBarTabActivity from '../components/SideBar/SideBarTabActivity.vue'
-import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
+import SidebarConfigurationIcon from 'vue-material-design-icons/WrenchOutline.vue'
 import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
-import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
-import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
-import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+import SidebarShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
+import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessingOutline.vue'
+import SidebarActivityIcon from 'vue-material-design-icons/LightningBoltOutline.vue'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()

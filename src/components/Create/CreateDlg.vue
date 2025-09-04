@@ -11,7 +11,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcButton from '@nextcloud/vue/components/NcButton'
 
-import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
+import SpeakerIcon from 'vue-material-design-icons/BullhornOutline.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 import InputDiv from '../Base/modules/InputDiv.vue'

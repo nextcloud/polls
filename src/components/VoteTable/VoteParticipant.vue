@@ -12,7 +12,7 @@ import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionText from '@nextcloud/vue/components/NcActionText'
 
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 
 import VoteMenu from './VoteMenu.vue'
 import UserItem from '../User/UserItem.vue'

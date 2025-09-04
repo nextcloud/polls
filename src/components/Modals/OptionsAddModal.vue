@@ -10,7 +10,7 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 
 import OptionsDateAddDialog from '../Options/OptionsDateAddDialog.vue'
 import OptionsDate from '../Options/OptionsDate.vue'

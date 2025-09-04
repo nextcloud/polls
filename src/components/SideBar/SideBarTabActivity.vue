@@ -9,7 +9,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
-import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+import ActivityIcon from 'vue-material-design-icons/LightningBoltOutline.vue'
 
 import Activities from '../Activity/Activities.vue'
 import { useActivityStore } from '../../stores/activity'

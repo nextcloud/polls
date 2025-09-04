@@ -6,9 +6,9 @@
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
 
-import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
-import SpeakerBigIcon from 'vue-material-design-icons/BullhornVariant.vue'
-import DescriptionIcon from 'vue-material-design-icons/TextBox.vue'
+import SpeakerIcon from 'vue-material-design-icons/BullhornOutline.vue'
+import SpeakerBigIcon from 'vue-material-design-icons/BullhornVariantOutline.vue'
+import DescriptionIcon from 'vue-material-design-icons/TextBoxOutline.vue'
 
 import ConfigBox from '../Base/modules/ConfigBox.vue'
 

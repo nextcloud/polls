@@ -15,16 +15,15 @@ import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 
 import ResolveGroupIcon from 'vue-material-design-icons/CallSplit.vue'
-import SendEmailIcon from 'vue-material-design-icons/EmailArrowRight.vue'
-import GrantAdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
-import EditIcon from 'vue-material-design-icons/Pencil.vue'
-import WithdrawAdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
+import SendEmailIcon from 'vue-material-design-icons/EmailArrowRightOutline.vue'
+import EditIcon from 'vue-material-design-icons/PencilOutline.vue'
+import AdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
 import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
 import QrIcon from 'vue-material-design-icons/Qrcode.vue'
-import LockIcon from 'vue-material-design-icons/Lock.vue'
-import UnlockIcon from 'vue-material-design-icons/LockOpenVariant.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+import LockIcon from 'vue-material-design-icons/LockOutline.vue'
+import UnlockIcon from 'vue-material-design-icons/LockOpenVariantOutline.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import RestoreIcon from 'vue-material-design-icons/RecycleVariant.vue'
 
 import { useSharesStore } from '../../stores/shares'
 import { usePollGroupsStore } from '../../stores/pollGroups'
@@ -301,8 +300,7 @@ async function submitLabel() {
 			:aria-label="switchAdmin.name"
 			@click="switchAdmin.action">
 			<template #icon>
-				<GrantAdminIcon v-if="share.type === 'user'" />
-				<WithdrawAdminIcon v-else />
+				<AdminIcon />
 			</template>
 		</NcActionButton>
 
