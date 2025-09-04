@@ -9,7 +9,7 @@ import { t } from '@nextcloud/l10n'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
 
-import DeletePollIcon from 'vue-material-design-icons/DeleteOutline.vue'
+import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import ArchivePollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
