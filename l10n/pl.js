@@ -278,7 +278,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "Zapisałeś się do tej sondy",
     "_%n option_::_%n options_" : ["%n opcja","%n opcje","%n opcji","%n opcji"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n głos \"Tak\"","%n głosy \"Tak\"","%n głosów \"Tak\"","%n głosów \"Tak\""],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n głos \"Nie\"","%n głosy \"Nie\"","%n głosów \"Nie\"","%n głosów \"Nie\""],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n głos \"Może\"","%n głosy \"Może\"","%n głosów \"Może\"","%n głosów \"Może\""],
     "Name" : "Nazwa",
     "Description" : "Opis",

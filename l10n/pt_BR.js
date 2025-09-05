@@ -436,7 +436,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "Você se inscreveu nesta enquete",
     "_%n option_::_%n options_" : ["%n opção","%n opções","%n opções"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n voto \"Sim\" ","%n votos \"Sim\" ","%n votos \"Sim\" "],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n voto \"Não\"","%n votos \"Não\"","%n votos \"Não\""],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n voto \"Talvez\"","%n votos \"Talvez\"","%n votos \"Talvez\""],
     "Enter a description" : "Digite uma descrição",
     "Choose a description for the overview page" : "Escolha uma descrição para a página de visão geral",

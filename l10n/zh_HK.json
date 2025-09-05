@@ -434,7 +434,6 @@
     "You subscribed to this poll" : "您訂閱了此民意調查",
     "_%n option_::_%n options_" : ["%n 選項"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n「贊成」票"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n 「反對」票"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n 「也許」票"],
     "Enter a description" : "輸入描述",
     "Choose a description for the overview page" : "為概覽頁面選擇描述",

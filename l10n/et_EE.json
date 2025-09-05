@@ -422,7 +422,6 @@
     "You subscribed to this poll" : "Sa oled sellele küsitlusele lisanud tellimuse",
     "_%n option_::_%n options_" : ["%n valikut","%n valik"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n „Jah“ hääl","%n „Jah“ häält"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n „Ei“ hääl","%n „Ei“ häält"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n „Võib-olla“ hääl","%n „Võib-olla“ häält"],
     "Enter a description" : "Sisesta kirjeldus",
     "Choose a description for the overview page" : "Kirjeldus kasutamiseks ülevaatelehel",

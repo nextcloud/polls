@@ -435,7 +435,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "Jste přihlášeni k odběru upozornění z této ankety",
     "_%n option_::_%n options_" : ["%n možnost","%n možnosti","%n možností","%n možnosti"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n hlas „Ano“","%n hlasy „Ano“","%n hlasů „Ano“","%n hlasy „Ano“"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n hlas Ne","%n hlasy „Ne“","%n hlasů „Ne“","%n hlasy „Ne“"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n hlas „Možná“","%n hlasy „Možná“","%n hlasů „Možná“","%n hlasy „Možná“"],
     "Enter a description" : "Zadejte popis",
     "Choose a description for the overview page" : "Zvolte popis pro stránku přehledu",

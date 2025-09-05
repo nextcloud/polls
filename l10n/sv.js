@@ -280,7 +280,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "Du prenumererar på den här omröstningen",
     "_%n option_::_%n options_" : ["%n option","%n alternativ"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n\"Ja\" röst","%n\"Ja\" röster"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n Nej röst","%n \"Nej\" röster"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n \"Kanske\" röst","%n \"Kanske\" röster"],
     "Name" : "Namn",
     "Description" : "Beskrivning",

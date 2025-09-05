@@ -261,7 +261,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "Je bent geabonneerd op deze peiling",
     "_%n option_::_%n options_" : ["%n optie","%n opties"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n \"Ja\" stem","%n \"Ja\" stemmen"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n Nee stem","%n \"Nee\" stemmen"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n \"Misschien\" stem","%n \"Misschien\" stemmen"],
     "Name" : "Naam",
     "Description" : "Beschrijving",

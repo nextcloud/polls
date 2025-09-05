@@ -434,7 +434,6 @@
     "You subscribed to this poll" : "Sei iscritto a questo sondaggio",
     "_%n option_::_%n options_" : [" %n opzione","%n opzioni","%n opzioni"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n Voto \"Sì\"","%n Voti \"Sì\"","%n Voti \"Sì\""],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n Nessun voto","%n Voti \"no\".","%nVoti \"no\"."],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n Voto \"Forse\"","%n Voti \"Forse\"","%n Voti \"Forse\""],
     "Enter a description" : "Inserisci una descrizione",
     "Choose a description for the overview page" : "Scegli una descrizione per la pagina di anteprima",

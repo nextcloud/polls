@@ -214,7 +214,6 @@
     "You subscribed to this poll" : "この投票に登録しました",
     "_%n option_::_%n options_" : ["%nオプション"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%nが「はい」を投票"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%nが「いいえ」を投票"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%nが「たぶん」を投票"],
     "Name" : "名前",
     "Description" : "説明",
