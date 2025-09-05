@@ -355,7 +355,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "T'has subscrit a aquesta enquesta",
     "_%n option_::_%n options_" : ["%n opció","%n opcions"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n vot \"Sí\"","%n vots “Sí”"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n vot No","%n vots \"No\""],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n vot \"Potser\"","%n vots “Potser”"],
     "Name" : "Nom",
     "Description" : "Descripció",

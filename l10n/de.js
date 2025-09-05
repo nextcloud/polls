@@ -436,7 +436,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "Du hast diese Umfrage abonniert",
     "_%n option_::_%n options_" : ["%n Option","%n Optionen"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n Ja-Stimme","%n Ja-Stimmen"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n Nein-Stimme","%n Nein-Stimmen"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n Vielleicht-Stimme","%n Vielleicht-Stimmen"],
     "Enter a description" : "Eine Beschreibung eingeben",
     "Choose a description for the overview page" : "Eine Beschreibung für die Übersichtsseite wählen",

@@ -293,7 +293,6 @@
     "You subscribed to this poll" : "Galdeketa honetara harpidetu zara",
     "_%n option_::_%n options_" : ["%n aukerak","%n aukera"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["\"Bai\" boto %n","%n \"Bai\" boto"],
-    "_%n No vote_::_%n \"No\" votes_" : ["\"Ez\" boto %n","%n \"Ez\" boto"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["\"Agian\" boto %n","%n \"Agian\" boto"],
     "Name" : "Izena",
     "Description" : "Deskripzioa",

@@ -436,7 +436,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "Пријавили сте се на ово гласање",
     "_%n option_::_%n options_" : ["%n опција","%n опције","%n опција"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n „Да” глас","%n „Да” гласа","%n „Да” гласова"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n „Не” глас","%n „Не” гласа","%n „Не” гласова"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n „Можда” гласа","%n „Можда” гласа","%n „Можда” гласова"],
     "Enter a description" : "Унесите опис",
     "Choose a description for the overview page" : "Изаберите опис за страницу прегледа",

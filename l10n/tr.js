@@ -436,7 +436,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "Bu ankete abone oldunuz",
     "_%n option_::_%n options_" : ["%n seçenek","%n seçenek"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n \"Evet\" oyu","%n \"Evet\" oyu"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n Hayır oyu","%n \"Hayır\" oyu"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n \"Belki\" oyu","%n \"Belki\" oyu"],
     "Enter a description" : "Bir açıklama yazın",
     "Choose a description for the overview page" : "Özet sayfası için bir açıklama seçin",

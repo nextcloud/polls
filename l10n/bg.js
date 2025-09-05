@@ -285,7 +285,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "Вие се абонирахте за тази анкета",
     "_%n option_::_%n options_" : ["%n опции ","%n опции"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n гласа „Да“. ","%n  гласа „Да“."],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n  гласа „Не“","%n гласа „Не“"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%nгласа „Може би“. ","%n  гласа „Може би“."],
     "Name" : "Име",
     "Description" : "Описание",

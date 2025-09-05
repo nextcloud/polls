@@ -358,7 +358,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "Du abonnerte på denne avstemningen",
     "_%n option_::_%n options_" : ["%n alternativ","%n alternativer"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n \"Ja\"-stemme","%n \"Ja\"-stemmer"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n \"Nei\"-stemme","%n \"Nei\"-stemmer"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n \"Kanskje\"-stemme","%n \"Kanskje\"-stemmer"],
     "Name" : "Navn",
     "Description" : "Beskrivelse",

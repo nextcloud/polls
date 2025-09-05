@@ -306,7 +306,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "Feliratkozott erre a szavazásra",
     "_%n option_::_%n options_" : ["%n lehetőség","%n lehetőség"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n „Igen” szavazat","%n „Igen” szavazat"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n „Nem” szavazat","%n „Nem” szavazat"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n „Talán” szavazat","%n „Talán” szavazat"],
     "Name" : "Név",
     "Description" : "Leírás",

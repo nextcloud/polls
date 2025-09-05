@@ -436,7 +436,6 @@ OC.L10N.register(
     "You subscribed to this poll" : "Liostáil tú leis an vótaíocht seo",
     "_%n option_::_%n options_" : ["rogha %n","%n roghanna","%n roghanna","%n roghanna","%n roghanna"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n vóta \"Tá\".","%n vótaí \"Tá\".","%n vótaí \"Tá\".","%n vótaí \"Tá\".","%n vótaí \"Tá\"."],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n vóta \"Níl\".","%n vótaí \"Níl\".","%n vótaí \"Níl\".","%n vótaí \"Níl\".","%n vótaí \"Níl\"."],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n vóta \"B'fhéidir\".","%n vótaí \"B'fhéidir\".","%n vótaí \"B'fhéidir\".","%n vótaí \"B'fhéidir\".","%n vótaí \"B'fhéidir\"."],
     "Enter a description" : "Cuir isteach cur síos",
     "Choose a description for the overview page" : "Roghnaigh cur síos don leathanach forbhreathnaithe",

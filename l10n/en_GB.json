@@ -434,7 +434,6 @@
     "You subscribed to this poll" : "You subscribed to this poll",
     "_%n option_::_%n options_" : ["%n option","%n options"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n \"Yes\" vote","%n \"Yes\" votes"],
-    "_%n No vote_::_%n \"No\" votes_" : ["%n No vote","%n \"No\" votes"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n \"Maybe\" vote","%n \"Maybe\" votes"],
     "Enter a description" : "Enter a description",
     "Choose a description for the overview page" : "Choose a description for the overview page",
