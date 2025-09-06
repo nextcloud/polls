@@ -23,6 +23,8 @@ import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.
 import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
 import ActionAddOption from '../Actions/modules/ActionAddOption.vue'
 import { Event } from '../../Types'
+import OptionsTextAdd from '../Options/OptionsTextAdd.vue'
+import { NcEmptyContent } from '@nextcloud/vue'
 
 const optionsStore = useOptionsStore()
 const pollStore = usePollStore()
@@ -100,7 +102,18 @@ onUnmounted(() => {
 				<TextOptionsIcon />
 			</template>
 
-			<OptionsText />
+			<OptionsTextAdd v-if="!pollStore.isClosed" />
+
+			<OptionsText v-if="optionsStore.options.length" />
+
+			<NcEmptyContent
+				v-else
+				:name="t('polls', 'No vote options')"
+				:description="t('polls', 'Add some!')">
+				<template #icon>
+					<TextOptionsIcon />
+				</template>
+			</NcEmptyContent>
 
 			<template #actions>
 				<OptionsTextAddBulk v-if="!pollStore.isClosed" />
