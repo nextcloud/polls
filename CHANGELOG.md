@@ -5,10 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [8.4.5] 2025-09-04
-### KNOWN BUGS
- - Reorderung of options of a textpoll is broken
+## [8.4.6] - tbd
+### Fixed
+ - Ordering options in text polls was broken
+ - Menu showed invalid actions in text poll
 
+## [8.4.5] - 2025-09-04
 ### Fixed
  - Fixed display of one day event on days with a daylight saving change
 
