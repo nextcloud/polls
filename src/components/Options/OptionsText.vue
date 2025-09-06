@@ -8,17 +8,11 @@ import { nextTick, useTemplateRef } from 'vue'
 import { useSortable } from '@vueuse/integrations/useSortable'
 
 import { t } from '@nextcloud/l10n'
-import NcActions from '@nextcloud/vue/components/NcActions'
-import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-
-import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import RestoreIcon from 'vue-material-design-icons/RecycleVariant.vue'
-import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
-import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 
 import OptionItem from './OptionItem.vue'
 import { usePollStore } from '../../stores/poll'
 import { useOptionsStore } from '../../stores/options'
+import OptionMenu from './OptionMenu.vue'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -67,46 +61,10 @@ function onSort(event: { oldIndex: number; newIndex: number }) {
 				:option="option"
 				:draggable="true"
 				show-owner>
-				<template v-if="pollStore.permissions.edit" #actions>
-					<NcActions v-if="!pollStore.isClosed" class="action">
-						<NcActionButton
-							v-if="!option.deleted"
-							:name="t('polls', 'Delete option')"
-							:aria-label="t('polls', 'Delete option')"
-							@click="optionsStore.delete({ option })">
-							<template #icon>
-								<DeleteIcon />
-							</template>
-						</NcActionButton>
-						<NcActionButton
-							v-if="option.deleted"
-							:name="t('polls', 'Restore option')"
-							:aria-label="t('polls', 'Restore option')"
-							@click="optionsStore.restore({ option })">
-							<template #icon>
-								<RestoreIcon />
-							</template>
-						</NcActionButton>
-						<NcActionButton
-							v-if="!option.deleted && !pollStore.isClosed"
-							:name="
-								option.confirmed
-									? t('polls', 'Unconfirm option')
-									: t('polls', 'Confirm option')
-							"
-							:aria-label="
-								option.confirmed
-									? t('polls', 'Unconfirm option')
-									: t('polls', 'Confirm option')
-							"
-							type="tertiary"
-							@click="optionsStore.confirm({ option })">
-							<template #icon>
-								<UnconfirmIcon v-if="option.confirmed" />
-								<ConfirmIcon v-else />
-							</template>
-						</NcActionButton>
-					</NcActions>
+				<template #actions>
+					<OptionMenu
+						v-if="pollStore.permissions.edit || option.isOwner"
+						:option="option" />
 				</template>
 			</OptionItem>
 		</div>
