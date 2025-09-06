@@ -49,7 +49,11 @@ const confirmAllowed = computed(
 	() => !option.deleted && pollStore.isClosed && pollStore.permissions.edit,
 )
 const cloneAllowed = computed(
-	() => !option.deleted && !pollStore.isClosed && pollStore.permissions.edit,
+	() =>
+		pollStore.type === 'datePoll'
+		&& !option.deleted
+		&& !pollStore.isClosed
+		&& pollStore.permissions.edit,
 )
 
 /**
@@ -124,7 +128,7 @@ function confirmOption() {
 		<NcActionButton
 			v-if="useSort && pollStore.permissions.edit"
 			close-after-click
-			:name="t('polls', 'Sort')"
+			:name="t('polls', 'Sort by answers of this option')"
 			@click="votesStore.setSort({ optionId: option.id })">
 			<template #icon>
 				<OptionSortIcon />
