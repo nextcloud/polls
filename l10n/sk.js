@@ -306,7 +306,6 @@ OC.L10N.register(
     "Clone option" : "Zdvojiť voľbu",
     "Unconfirm option" : "Nepotvrdená možnosť",
     "Confirm option" : "Potvrdená možnosť",
-    "Sort" : "Triedenie",
     "No vote options" : "Žiadne možnosti hlasovania",
     "All day" : "Celý deň",
     "Duration" : "Trvanie",

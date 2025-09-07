@@ -157,7 +157,6 @@ OC.L10N.register(
     "Clone option" : "Kloonaa valinta",
     "Unconfirm option" : "Peru vaihtoehdon vahvistaminen",
     "Confirm option" : "Vahvista vaihtoehto",
-    "Sort" : "Lajittele",
     "No vote options" : "Ei äänestysvaihtoehtoja",
     "All day" : "Koko päivä",
     "Duration" : "Kesto",

@@ -22,7 +22,6 @@ OC.L10N.register(
     "No" : "Tidak",
     "Email address" : "Alamat email",
     "OK" : "OK",
-    "Sort" : "Urutkan",
     "All day" : "Sepanjang hari",
     "Preview" : "Pratinjau",
     "never" : "tidak pernah.",

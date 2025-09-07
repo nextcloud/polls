@@ -178,7 +178,6 @@ OC.L10N.register(
     "To" : "To",
     "Email address" : "Email address",
     "OK" : "OK",
-    "Sort" : "Sort",
     "All day" : "All day",
     "Duration" : "Duration",
     "Preview" : "Preview",

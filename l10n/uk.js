@@ -388,7 +388,6 @@ OC.L10N.register(
     "Clone option" : "Копіювати параметр",
     "Unconfirm option" : "Непідтверджений варіант",
     "Confirm option" : "Підтвердити вибір",
-    "Sort" : "Впорядкувати",
     "No vote options" : "Без варіантів голосування",
     "Option already exists" : "Опція вже існує",
     "Error adding Option" : "Помилка додавання опції",

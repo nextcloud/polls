@@ -230,7 +230,6 @@ OC.L10N.register(
     "Clone option" : "Κλωνοποίηση επιλογής",
     "Unconfirm option" : "Επιλογή αναίρεσης επιβεβαίωσης",
     "Confirm option" : "Επιλογή επιβεβαίωσης",
-    "Sort" : "Ταξινόμηση",
     "No vote options" : "Δεν υπάρχουν επιλογές ψήφου",
     "All day" : "Ολοήμερο",
     "Duration" : "Διάρκεια",

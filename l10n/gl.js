@@ -317,7 +317,6 @@ OC.L10N.register(
     "Clone option" : "Clonar a opción",
     "Unconfirm option" : "Opción sen confirmar",
     "Confirm option" : "Confirmar a opción",
-    "Sort" : "Ordenar",
     "No vote options" : "Non hai opcións de voto",
     "All day" : "Todo o día",
     "Preview" : "Vista previa",

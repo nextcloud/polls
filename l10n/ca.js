@@ -316,7 +316,6 @@ OC.L10N.register(
     "Clone option" : "Clona opció",
     "Unconfirm option" : "Desconfirma l'opció",
     "Confirm option" : "Confirma l'opció",
-    "Sort" : "Ordena",
     "No vote options" : "Sense opcions de vot",
     "All day" : "Tot el dia",
     "Preview" : "Previsualitza",

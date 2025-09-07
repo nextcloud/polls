@@ -225,7 +225,6 @@ OC.L10N.register(
     "Clone option" : "复制选项",
     "Unconfirm option" : "取消确认选项",
     "Confirm option" : "确认选项",
-    "Sort" : "排序",
     "No vote options" : "无投票选项",
     "All day" : "全天",
     "Duration" : "持续时间",

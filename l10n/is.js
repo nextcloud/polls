@@ -55,7 +55,6 @@ OC.L10N.register(
     "Delete option" : "Eyða valkosti",
     "Clone option" : "Klóna valkost",
     "Confirm option" : "Staðfesta valkost",
-    "Sort" : "Flokka",
     "No vote options" : "Engir valkostir í kosningu",
     "All day" : "Heilsdagsviðburður",
     "Duration" : "Tímalengd",

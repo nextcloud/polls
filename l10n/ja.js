@@ -183,7 +183,6 @@ OC.L10N.register(
     "Clone option" : "選択肢をクローン",
     "Unconfirm option" : "選択肢を未確認",
     "Confirm option" : "選択肢を確認",
-    "Sort" : "並び替え",
     "No vote options" : "投票オプションはありません",
     "All day" : "終日",
     "Preview" : "プレビュー",

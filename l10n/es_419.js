@@ -21,7 +21,6 @@ OC.L10N.register(
     "No" : "No",
     "Participants" : "Participantes",
     "OK" : "OK",
-    "Sort" : "Ordenar",
     "All day" : "Todo el día",
     "Preview" : "Previsualizar",
     "Submit" : "Enviar",

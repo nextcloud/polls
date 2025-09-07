@@ -17,7 +17,6 @@ OC.L10N.register(
     "No" : "Nei",
     "Participants" : "Deltakarar",
     "OK" : "OK",
-    "Sort" : "Sorter",
     "never" : "aldri",
     "Name" : "Namn",
     "Description" : "Skildring",

@@ -17,7 +17,6 @@ OC.L10N.register(
     "No" : "Nan",
     "Participants" : "Tud",
     "OK" : "OK",
-    "Sort" : "Urzhiañ",
     "Preview" : "Ragwell",
     "Submit" : "Kinnig",
     "never" : "james",

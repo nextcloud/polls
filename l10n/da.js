@@ -41,7 +41,6 @@ OC.L10N.register(
     "OK" : "OK",
     "Clone poll" : "Klon afstemning",
     "Delete option" : "Slet valg",
-    "Sort" : "Sortér",
     "All day" : "Hele dagen",
     "Duration" : "Varighed",
     "Preview" : "Forhåndsvisning",

@@ -17,7 +17,6 @@ OC.L10N.register(
     "No" : "ไม่ใช่",
     "Email address" : "ที่อยู่อีเมล",
     "OK" : "ตกลง",
-    "Sort" : "จัดเรียง",
     "Preview" : "ตัวอย่าง",
     "Submit" : "ส่ง",
     "never" : "ไม่ต้องเลย",

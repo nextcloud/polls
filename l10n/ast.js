@@ -150,7 +150,6 @@ OC.L10N.register(
     "Delete option" : "Desaniciar la opción",
     "Clone option" : "Colar la opción",
     "Confirm option" : "Confirmar la opción",
-    "Sort" : "Ordenar",
     "All day" : "Tol día",
     "Duration" : "Duración",
     "Preview" : "Previsualizar",

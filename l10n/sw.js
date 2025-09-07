@@ -32,7 +32,6 @@ OC.L10N.register(
     "Email address" : "Anwani ya barua pepe",
     "OK" : "OK",
     "Delete option" : "Futa mbadala",
-    "Sort" : "Panga",
     "All day" : "Siku yote",
     "Duration" : "Muda",
     "Preview" : "Mwonekano wa awali",

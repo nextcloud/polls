@@ -241,7 +241,6 @@ OC.L10N.register(
     "Clone option" : "Clone option",
     "Unconfirm option" : "Unconfirm option",
     "Confirm option" : "Confirm option",
-    "Sort" : "مرتب‌سازی",
     "No vote options" : "No vote options",
     "All day" : "تمام روز",
     "Duration" : "مدت زمان",

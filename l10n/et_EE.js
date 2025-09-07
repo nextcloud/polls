@@ -377,7 +377,6 @@ OC.L10N.register(
     "Clone option" : "Tee valikust koopia",
     "Unconfirm option" : "Eemalda valiku kinnitus",
     "Confirm option" : "Kinnita valik",
-    "Sort" : "Järjesta",
     "No vote options" : "Hääletamisvalikuid pole",
     "Option already exists" : "Valik on juba olemas",
     "Error adding Option" : "Viga valiku lisamisel",

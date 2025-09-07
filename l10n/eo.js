@@ -32,7 +32,6 @@ OC.L10N.register(
     "Email address" : "Retpoŝtadreso",
     "OK" : "Bone",
     "Clone poll" : "Duobligi la enketon",
-    "Sort" : "Ordigi",
     "All day" : "Tuttage",
     "Preview" : "Antaŭvidi",
     "Submit" : "Sendi",

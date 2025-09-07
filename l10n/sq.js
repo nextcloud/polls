@@ -21,7 +21,6 @@ OC.L10N.register(
     "Yes" : "Yes",
     "No" : "Jo",
     "OK" : "OK",
-    "Sort" : "Renditni",
     "All day" : "Gjithë ditën",
     "Duration" : "Kohëzgjatja",
     "Preview" : "Parapamje ",

@@ -31,7 +31,6 @@ OC.L10N.register(
     "Download CSV file" : "Transferir ficheiro CSV",
     "Download HTML file" : "ransferir ficheiro HTML",
     "OK" : "OK",
-    "Sort" : "Ordenar",
     "All day" : "Todo o dia",
     "Duration" : "Duração",
     "Preview" : "Pré-visualizar",
