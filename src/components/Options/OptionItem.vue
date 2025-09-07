@@ -176,32 +176,4 @@ const pollStore = usePollStore()
 .option-item__handle {
 	margin-inline-end: 0.5em;
 }
-
-.sortable {
-	* {
-		cursor: grab;
-		&:active {
-			cursor: grabbing;
-		}
-	}
-
-	&:active {
-		cursor: -moz-grabbing;
-		cursor: -webkit-grabbing;
-	}
-
-	// 	.material-design-icon.draggable {
-	// 		width: 0;
-	// 		padding-inline-end: 0;
-	// 		transition: all 0.3s ease-in-out;
-	// 	}
-
-	// 	&:active,
-	// 	&:hover {
-	// 		.material-design-icon.draggable {
-	// 			width: initial;
-	// 			padding-inline-end: 0.5px;
-	// 		}
-	// 	}
-}
 </style>
