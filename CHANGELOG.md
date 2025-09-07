@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
  - Ordering options in text polls was broken
  - Menu showed invalid actions in text poll
+ - Restore max width of elements in poll
 
 ## [8.4.5] - 2025-09-04
 ### Fixed
