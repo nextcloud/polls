@@ -9,7 +9,10 @@ All notable changes to this project will be documented in this file.
 ### Fixed
  - Ordering options in text polls was broken
  - Menu showed invalid actions in text poll
- - Restore max width of elements in poll
+ - Restore lost max width of elements on vote page
+ - Limit height of large text options
+ - Expand large text options on hover and allow scrolling them
+ - Optimized ordering textpolls with large text options
 
 ## [8.4.5] - 2025-09-04
 ### Fixed
