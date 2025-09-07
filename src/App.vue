@@ -140,58 +140,5 @@ onUnmounted(() => {
 .app-content {
 	display: flex;
 	flex-direction: column;
-
-	.clamped {
-		display: -webkit-box !important;
-		-webkit-line-clamp: 2;
-		line-clamp: 2;
-		-webkit-box-orient: vertical;
-		text-wrap: wrap;
-		overflow: clip !important;
-		text-overflow: ellipsis !important;
-		padding: 0 !important;
-	}
-}
-
-// global modal settings
-.modal__content {
-	padding: 14px;
-	display: flex;
-	flex-direction: column;
-	color: var(--color-main-text);
-}
-
-.modal__buttons__spacer {
-	flex: 1;
-}
-
-.modal__buttons {
-	display: flex;
-	gap: 8px;
-	justify-content: flex-end;
-	flex-wrap: wrap-reverse;
-	align-items: center;
-	margin-top: 36px;
-
-	.left {
-		display: flex;
-		flex: 1;
-		gap: 8px;
-	}
-
-	.right {
-		display: flex;
-		flex: 0;
-		justify-content: flex-end;
-		gap: 8px;
-	}
-
-	.button {
-		margin-inline: 10px 0;
-	}
-}
-
-.modal__buttons__link {
-	text-decoration: underline;
 }
 </style>

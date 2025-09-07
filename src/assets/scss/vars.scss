@@ -2,35 +2,10 @@
  * SPDX-FileCopyrightText: 2020 René Gieling <github@dartcafe.de>
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-// :root {
-// 	// dark: #3b973b
-// 	// light: #2d7b41
-// 	--color-polls-foreground-yes: var(--color-success);
-// 	// dark: #ff3333
-// 	// light: #db0606
-// 	--color-polls-foreground-no: var(--color-error);
-// 	// dark: #ffcc00
-// 	// light: #a37200
-// 	--color-polls-foreground-maybe: var(--color-warning);
-// 	// dark: (59,151,59,0.2) #1e301e
-// 	// light: (45,123,65,0.2) #d5e5d9
-// 	--color-polls-background-yes: rgba(var(--color-success-rgb), 0.2);
-// 	// dark: (255,51,51,0.2) #451c1c
-// 	// light: (219,6,6,0.2) #f8cdcd
-// 	--color-polls-background-no: rgba(var(--color-error-rgb), 0.2);
-// 	// dark: (255,204,0,0.1) #2e2914
-// 	// light: (163,114,0,0.1) #f6f1e5
-// 	--color-polls-background-maybe: rgba(var(--color-warning-rgb), 0.1);
-// 	// dark: (0,174,255,0.1) #14262e
-// 	// light: (0,113,173,0.1) #e5f1f7
-// 	--container-background-light: rgba(var(--color-info-rgb), 0.1);
-// 	--cap-width: 49rem;
-// 	--shadow-height: 0.7rem;
-// 	--shadow-height-inverted: -0.7rem;
-// }
 
 :root,
 [data-theme-light] {
+	--cap-width: 49rem;
 	--color-polls-foreground-yes: #2d7b41;
 	--color-polls-foreground-no: #db0606;
 	--color-polls-foreground-maybe: #a37200;
