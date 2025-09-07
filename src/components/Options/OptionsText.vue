@@ -16,13 +16,12 @@ import OptionMenu from './OptionMenu.vue'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
-const element = useTemplateRef<HTMLElement>('list')
+// const element = useTemplateRef<HTMLElement>('list')
 
-const dragOptions = {
+useSortable(useTemplateRef<HTMLElement>('list'), optionsStore.options, {
 	animation: 200,
-	group: 'description',
+	group: 'options',
 	disabled: false,
-	ghostClass: 'ghost',
 	onUpdate: (e: { oldIndex: number; newIndex: number }) => {
 		onSort({ oldIndex: e.oldIndex, newIndex: e.newIndex })
 		// nextTick required here as moveArrayElement is executed in a microtask
@@ -31,9 +30,7 @@ const dragOptions = {
 			/* do nothing, wait for nextTick() */
 		})
 	},
-}
-
-useSortable(element, optionsStore.options, dragOptions)
+})
 
 const cssVar = {
 	'--content-deleted': `" (${t('polls', 'deleted')})"`,

@@ -278,10 +278,6 @@ function isVotable(participant: User, option: Option) {
 		.option-item {
 			grid-row: 2;
 			border-inline-start: 1px solid var(--color-border);
-
-			// .option-item-container {
-			// 	background-color: var(--color-main-background);
-			// }
 		}
 
 		.counter {
@@ -303,15 +299,6 @@ function isVotable(participant: User, option: Option) {
 			flex-direction: column;
 			flex: 1 0 11rem;
 			border-inline-start: 1px solid var(--color-border-dark);
-		}
-
-		.option-item .option-item__option--text {
-			text-align: center;
-			/* Notice: https://caniuse.com/css-text-wrap-balance */
-			text-wrap: balance;
-			hyphens: auto;
-			padding: 0 0.6em;
-			margin: auto;
 		}
 	}
 

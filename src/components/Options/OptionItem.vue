@@ -22,7 +22,7 @@ interface Props {
 const { option, draggable = false, showOwner = false } = defineProps<Props>()
 
 const containerClass = {
-	'option-item-container': true,
+	'option-item': true,
 	deleted: option.deleted !== 0,
 	draggable,
 }
@@ -59,21 +59,33 @@ const pollStore = usePollStore()
 </template>
 
 <style lang="scss">
-.option-item-container {
+.option-item {
 	display: grid;
 	grid-template-columns: auto 1fr auto auto;
 	grid-template-areas: 'drag option owner actions';
 	position: relative;
 	padding: 8px 0;
 	background-color: var(--color-main-background);
+
 	.confirmed & {
 		background-color: var(--color-polls-background-yes);
 		border-radius: var(--border-radius-container);
 		border: 2px solid var(--color-success-text);
 	}
+
 	.list-view .confirmed & {
 		padding-inline: 0.5rem;
 		inset-inline-start: -0.5rem;
+	}
+
+	.side-bar-tab-options & {
+		border-bottom: 1px solid var(--color-border);
+
+		&:active,
+		&:hover {
+			transition: var(--background-dark) 0.3s ease;
+			background-color: var(--color-background-dark);
+		}
 	}
 }
 
@@ -116,17 +128,43 @@ const pollStore = usePollStore()
 }
 
 .option-item__option--text {
-	overflow: hidden;
+	overflow: clip;
 	text-overflow: ellipsis;
 	align-self: center;
 	text-wrap: balance;
 	hyphens: auto;
+	display: -webkit-box !important;
+	line-clamp: 2;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	max-height: 4em;
+	transition: all 0.3s ease-in-out;
 
-	.table-view .option-item & {
+	.table-view & {
 		text-align: center;
-		/* Notice: https://caniuse.com/css-text-wrap-balance */
-		padding: 0 0.6em;
 		margin: auto;
+		-webkit-line-clamp: 6;
+		line-clamp: 6;
+		max-height: 12em;
+		padding: 0 0.6em;
+	}
+
+	/* Unclamp on hover or active, unless dragging */
+	:not(.sortable-chosen) & {
+		&:hover,
+		&:active {
+			-webkit-line-clamp: initial;
+			line-clamp: initial;
+			max-height: 30vh;
+			overflow-y: scroll;
+		}
+	}
+	.sortable-chosen & {
+		&:active {
+			-webkit-line-clamp: 2;
+			line-clamp: 2;
+			max-height: 6rem;
+		}
 	}
 
 	a {
@@ -139,7 +177,7 @@ const pollStore = usePollStore()
 	margin-inline-end: 0.5em;
 }
 
-.draggable {
+.sortable {
 	* {
 		cursor: grab;
 		&:active {
@@ -152,18 +190,18 @@ const pollStore = usePollStore()
 		cursor: -webkit-grabbing;
 	}
 
-	.material-design-icon.draggable {
-		width: 0;
-		padding-inline-end: 0;
-		transition: all 0.3s ease-in-out;
-	}
+	// 	.material-design-icon.draggable {
+	// 		width: 0;
+	// 		padding-inline-end: 0;
+	// 		transition: all 0.3s ease-in-out;
+	// 	}
 
-	&:active,
-	&:hover {
-		.material-design-icon.draggable {
-			width: initial;
-			padding-inline-end: 0.5px;
-		}
-	}
+	// 	&:active,
+	// 	&:hover {
+	// 		.material-design-icon.draggable {
+	// 			width: initial;
+	// 			padding-inline-end: 0.5px;
+	// 		}
+	// 	}
 }
 </style>
