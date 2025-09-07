@@ -315,7 +315,6 @@ OC.L10N.register(
     "Clone option" : "كلون تاللىشى",
     "Unconfirm option" : "جەزملەشتۈرۈلمىگەن تاللاش",
     "Confirm option" : "تاللاشنى جەزملەشتۈرۈڭ",
-    "Sort" : "تەرتىپلەش",
     "No vote options" : "بېلەت تاشلاش ھوقۇقى يوق",
     "All day" : "پۈتۈن كۈن",
     "Duration" : "Duration",

@@ -125,7 +125,6 @@ OC.L10N.register(
     "Clone option" : "Dubliuoti variantą",
     "Unconfirm option" : "Panaikinti varianto patvirtinimą",
     "Confirm option" : "Patvirtinti variantą",
-    "Sort" : "Rikiuoti",
     "No vote options" : "Nėra balsavimo variantų",
     "All day" : "Visą dieną",
     "Duration" : "Trukmė",

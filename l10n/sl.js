@@ -170,7 +170,6 @@ OC.L10N.register(
     "Clone option" : "Kloniraj možnost",
     "Unconfirm option" : "Odstrani potrditev",
     "Confirm option" : "Potrdi možnost",
-    "Sort" : "Razvrsti",
     "No vote options" : "Ni možnosti za glasovanje ali izbiro.",
     "All day" : "Ves dan",
     "Duration" : "Trajanje",

@@ -80,7 +80,6 @@ OC.L10N.register(
     "Clone option" : "Clona sèberu",
     "Unconfirm option" : "Boga sa cunfirma de su sèberu",
     "Confirm option" : "Cunfirma su sèberu",
-    "Sort" : "Assenta",
     "No vote options" : "Perunu sèberu de votu",
     "All day" : "Totu sa die",
     "Duration" : "Durata",

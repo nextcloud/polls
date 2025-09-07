@@ -387,7 +387,6 @@ OC.L10N.register(
     "Clone option" : "Klonovat volbu",
     "Unconfirm option" : "Zrušit potvrzení volby",
     "Confirm option" : "Potvrdit volbu",
-    "Sort" : "Seřadit",
     "No vote options" : "Žádné možnosti volby",
     "Option already exists" : "Volba už existuje",
     "Error adding Option" : "Chyba při přidávání volby",

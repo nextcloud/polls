@@ -388,7 +388,6 @@ OC.L10N.register(
     "Clone option" : "Seçeneği kopyala",
     "Unconfirm option" : "Seçeneğin onayını kaldır",
     "Confirm option" : "Seçeneği onayla",
-    "Sort" : "Sırala",
     "No vote options" : "Herhangi bir oy seçeneği yok",
     "Option already exists" : "Seçenek zaten var",
     "Error adding Option" : "Seçenek eklenirken sorun çıktı",

@@ -318,7 +318,6 @@ OC.L10N.register(
     "Clone option" : "Klon alternativ",
     "Unconfirm option" : "Avbekreft alternativ",
     "Confirm option" : "Bekreft alternativ",
-    "Sort" : "Sorter",
     "No vote options" : "Ingen stemme alternativer",
     "All day" : "Hele dagen",
     "Duration" : "Varighet",

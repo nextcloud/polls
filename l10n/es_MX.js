@@ -31,7 +31,6 @@ OC.L10N.register(
     "To" : "Para",
     "Email address" : "Dirección de correo electrónico",
     "OK" : "OK",
-    "Sort" : "Ordenar",
     "All day" : "Todo el día",
     "Duration" : "Duración",
     "Preview" : "Previsualizar",

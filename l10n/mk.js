@@ -36,7 +36,6 @@ OC.L10N.register(
     "To" : "До",
     "Email address" : "Е-пошта адреса",
     "OK" : "Добро",
-    "Sort" : "Сортирај",
     "All day" : "Цели денови",
     "Preview" : "Преглед",
     "Added" : "Додадено",

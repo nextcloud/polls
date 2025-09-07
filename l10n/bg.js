@@ -246,7 +246,6 @@ OC.L10N.register(
     "Clone option" : "Клониране на опция",
     "Unconfirm option" : "Отказ от потвърждение",
     "Confirm option" : "Потвърждение на опция",
-    "Sort" : "Сортирай",
     "No vote options" : "Няма опции за гласуване",
     "All day" : "Цял ден",
     "Duration" : "Продължителност",

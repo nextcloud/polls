@@ -35,7 +35,6 @@ OC.L10N.register(
     "To" : "Līdz",
     "Email address" : "E-pasta adrese",
     "OK" : "Labi",
-    "Sort" : "Kārtot",
     "All day" : "Visas dienas",
     "Duration" : "Ilgums",
     "Preview" : "Priekšskatīt",

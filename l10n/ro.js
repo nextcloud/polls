@@ -29,7 +29,6 @@ OC.L10N.register(
     "To" : "Către",
     "Email address" : "Email",
     "OK" : "OK",
-    "Sort" : "Sortează",
     "All day" : "Toată ziua",
     "Duration" : "Durată",
     "Preview" : "Previzualizare",

@@ -22,7 +22,6 @@ OC.L10N.register(
     "Email address" : "E-pochta manzili",
     "OK" : "Yaxshi",
     "Delete option" : "O'chirish opsiyasi",
-    "Sort" : "Saralash",
     "All day" : "Butun kun",
     "Duration" : "Davomiyligi",
     "Preview" : "Ko‘rib chiqish",

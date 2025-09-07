@@ -232,7 +232,6 @@ OC.L10N.register(
     "Clone option" : "Klonen optie",
     "Unconfirm option" : "Keuze ongedaan maken",
     "Confirm option" : "Keuze bevestigen",
-    "Sort" : "Sorteren",
     "No vote options" : "Geen stemopties",
     "All day" : "Alle dagen",
     "Duration" : "Duur",

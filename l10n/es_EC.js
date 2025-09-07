@@ -240,7 +240,6 @@ OC.L10N.register(
     "Clone option" : "Clonar opción",
     "Unconfirm option" : "Desconfirmar opción",
     "Confirm option" : "Confirmar opción",
-    "Sort" : "Ordenar",
     "No vote options" : "No hay opciones de voto",
     "All day" : "Todo el día",
     "Duration" : "Duración",

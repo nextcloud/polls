@@ -105,7 +105,6 @@ OC.L10N.register(
     "Clone option" : "Mogućnost kloniranja",
     "Unconfirm option" : "Otkaži mogućnost",
     "Confirm option" : "Potvrdi mogućnost",
-    "Sort" : "Razvrstaj",
     "No vote options" : "Nema mogućnosti glasanja",
     "All day" : "Cijeli dan",
     "Duration" : "Trajanje",
