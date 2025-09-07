@@ -5,7 +5,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [8.4.6] - tbd
+## [8.4.6] - 2025-09-07
 ### Fixed
  - Ordering options in text polls was broken
  - Menu showed invalid actions in text poll
