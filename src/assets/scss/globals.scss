@@ -7,6 +7,7 @@
 	inset-inline-start: 0;
 	z-index: 5;
 }
+
 .app-polls .clamped {
 	display: -webkit-box !important;
 	-webkit-line-clamp: 2;
@@ -58,4 +59,18 @@
 
 .modal__buttons__link {
 	text-decoration: underline;
+}
+
+.sortable {
+	* {
+		cursor: grab;
+		&:active {
+			cursor: grabbing;
+		}
+	}
+
+	&:active {
+		cursor: -moz-grabbing;
+		cursor: -webkit-grabbing;
+	}
 }
