@@ -388,6 +388,7 @@ OC.L10N.register(
     "Clone option" : "Option kopieren",
     "Unconfirm option" : "Option nicht bestätigen",
     "Confirm option" : "Option bestätigen",
+    "Sort by answers of this option" : "Nach Antworten dieser Option sortieren",
     "No vote options" : "Keine Abstimmungsmöglichkeiten",
     "Option already exists" : "Option ist bereits vorhanden",
     "Error adding Option" : "Fehler beim Hinzufügen der Option",
