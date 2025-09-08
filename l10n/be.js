@@ -49,6 +49,7 @@ OC.L10N.register(
     "Configuration" : "Канфігурацыя",
     "Public link: {token}" : "Публічная спасылка: {token}",
     "Public link" : "Публічная спасылка",
+    "Switch to list view" : "Пераключыцца ў выгляд спісу",
     "No answer" : "Няма адказу",
     "Add links to legal terms, if they exist and add an optional disclaimer to emails." : "Дадайце спасылкі на юрыдычныя тэрміны, калі яны ёсць, і дадайце ў электронныя лісты неабавязковую адмову ад адказнасці.",
     "Comments" : "Каментарыі",
