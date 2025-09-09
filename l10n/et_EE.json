@@ -375,6 +375,7 @@
     "Clone option" : "Tee valikust koopia",
     "Unconfirm option" : "Eemalda valiku kinnitus",
     "Confirm option" : "Kinnita valik",
+    "Sort by answers of this option" : "Järjesta selle valiku vastuste alusel",
     "No vote options" : "Hääletamisvalikuid pole",
     "Option already exists" : "Valik on juba olemas",
     "Error adding Option" : "Viga valiku lisamisel",

@@ -388,6 +388,7 @@ OC.L10N.register(
     "Clone option" : "Опције клонирања",
     "Unconfirm option" : "Склони опцију гласања",
     "Confirm option" : "Потврди опцију гласања",
+    "Sort by answers of this option" : "Поређај по одговорима о овој опцији",
     "No vote options" : "Нема опција за гласање",
     "Option already exists" : "Опција већ постоји",
     "Error adding Option" : "Грешка приликом додавања опције",

@@ -56,7 +56,7 @@ OC.L10N.register(
     "Sort by title" : "Sortér efter titel",
     "Direction" : "Retning",
     "Descending" : "Faldende",
-    "Ascending" : "stigende",
+    "Ascending" : "Stigende",
     "You will receive your personal link after clicking \"OK\"." : "Du modtager dit personlige link efter at have klikket på \"OK\".",
     "Privacy policy" : "Fortrolighedspolitik",
     "Login" : "Login",
