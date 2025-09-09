@@ -6,7 +6,7 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\Polls\Db\V3;
+namespace OCA\Polls\Db\V4;
 
 use Doctrine\DBAL\Types\Type;
 use Exception;
@@ -19,7 +19,7 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Helper\Hash;
-use OCA\Polls\Migration\V3\TableSchema;
+use OCA\Polls\Migration\V4\TableSchema;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
 use OCP\IDBConnection;

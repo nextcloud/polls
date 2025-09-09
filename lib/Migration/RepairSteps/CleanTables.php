@@ -12,7 +12,7 @@ namespace OCA\Polls\Migration\RepairSteps;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\V3\TableManager;
+use OCA\Polls\Db\V4\TableManager;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;

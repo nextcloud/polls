@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Listener;
 
-use OCA\Polls\Migration\V3\TableSchema;
+use OCA\Polls\Migration\V4\TableSchema;
 use OCP\DB\Events\AddMissingIndicesEvent;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
