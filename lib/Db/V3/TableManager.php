@@ -555,11 +555,9 @@ class TableManager extends DbManager {
 						// calculate the actual hash based on pollId and optionText
 						$actualHash = Hash::getOptionHash($option->getPollId(), $option->getPollOptionText());
 
-						// ensure the option is in sync
-						$option->syncOption();
-
-						// if the hash, set in syncOptions() differs from $actualHash update the option
+						// if the option's hash differs from $actualHash update the option
 						if ($option->getPollOptionHash() !== $actualHash) {
+							$option->setPollOptionHash($actualHash);
 							$option = $this->optionMapper->update($option);
 							$updated++;
 						}
@@ -633,7 +631,7 @@ class TableManager extends DbManager {
 					$messages[] = 'No vote hashes to update';
 
 				} else {
-					$this->logger->info('Updated {count} hashes of {updated} votes in {db}', [
+					$this->logger->info('Updated {updated} hashes of {count} votes in {db}', [
 						'updated' => $updated,
 						'count' => $count,
 						'db' => $this->dbPrefix . VoteMapper::TABLE
