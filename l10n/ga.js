@@ -388,6 +388,7 @@ OC.L10N.register(
     "Clone option" : "Rogha Clón",
     "Unconfirm option" : "Rogha neamhdhearbhaigh",
     "Confirm option" : "Deimhnigh an rogha",
+    "Sort by answers of this option" : "Sórtáil de réir freagraí an rogha seo",
     "No vote options" : "Gan roghanna vótála",
     "Option already exists" : "Tá rogha ann cheana féin",
     "Error adding Option" : "Earráid agus Rogha á cur leis",
