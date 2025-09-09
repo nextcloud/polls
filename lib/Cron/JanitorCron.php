@@ -65,6 +65,9 @@ class JanitorCron extends TimedJob {
 			// delete entries older than 1 day
 			$this->tableManager->tidyWatchTable(time() - 86400);
 
+			// first make sure all options and votes have a correct hash
+			$this->tableManager->migrateOptionsToHash();
+
 			// purge entries virtually deleted more than 12 hours ago
 			$deleted['comments'] = $this->commentMapper->purgeDeletedComments(time() - 4320);
 			$deleted['options'] = $this->optionMapper->purgeDeletedOptions(time() - 4320);
