@@ -36,7 +36,7 @@ class CleanTables implements IRepairStep {
 	public function run(IOutput $output):void {
 		if ($this->connection->tableExists(Poll::TABLE)) {
 			try {
-				$this->tableManager->migrateOptionsToHash();
+				$this->tableManager->updateHashes();
 				$this->tableManager->removeOrphaned();
 				$this->tableManager->deleteAllDuplicates();
 				$this->tableManager->tidyWatchTable(time());

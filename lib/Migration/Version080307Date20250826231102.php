@@ -123,7 +123,7 @@ class Version080307Date20250826231102 extends SimpleMigrationStep {
 		$this->logInfo($message, 'postMigration:  ');
 
 		// ensure correct option hashes in options and votes
-		$message = $this->tableManager->migrateOptionsToHash();
+		$message = $this->tableManager->updateHashes();
 		$this->logInfo($message, 'postMigration: ');
 
 		// remove all duplicate records which have to be unique

@@ -22,13 +22,13 @@ class UpdateHashes implements IRepairStep {
 	}
 
 	public function getName() {
-		return 'Polls - Create hashes for votes and options';
+		return 'Polls - Update or create hashes for votes and options';
 	}
 
 	public function run(IOutput $output): void {
 		$this->tableManager->setConnection($this->connection);
 
-		$messages = $this->tableManager->migrateOptionsToHash();
+		$messages = $this->tableManager->updateHashes();
 		foreach ($messages as $message) {
 			$output->info($message);
 		}

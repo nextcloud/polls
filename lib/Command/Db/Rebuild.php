@@ -68,7 +68,7 @@ class Rebuild extends Command {
 
 		$this->printComment('Step 5. Validate and fix records');
 		$this->removeOrphaned();
-		$this->migrateOptionsToHash();
+		$this->updateHashes();
 		$this->deleteAllDuplicates();
 		$this->setLastInteraction();
 
@@ -123,9 +123,9 @@ class Rebuild extends Command {
 	/**
 	 * Add or update hash for votes and options
 	 */
-	private function migrateOptionsToHash(): void {
+	private function updateHashes(): void {
 		$this->printComment(' - Add or update hashes');
-		$messages = $this->tableManager->migrateOptionsToHash();
+		$messages = $this->tableManager->updateHashes();
 		$this->printInfo($messages, '   ');
 	}
 
