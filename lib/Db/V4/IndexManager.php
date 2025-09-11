@@ -104,7 +104,12 @@ class IndexManager extends DbManager {
 		return 'Added ' . $parentTableName . '[' . $constraintColumn . '] <- ' . $childTableName . '[id]';
 	}
 
-	public function listExistingIndices() {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{0?: string,...}
+	 */
+	public function listExistingIndices(): array {
 		$this->needsSchema();
 		$messages = [];
 
