@@ -32,6 +32,11 @@
     <job>OCA\Polls\Cron\JanitorCron</job>
     <job>OCA\Polls\Cron\AutoReminderCron</job>
   </background-jobs>
+  <repair-steps>
+      <post-migration>
+          <step>OCA\Polls\Migration\RepairSteps\UpdateHashes</step>
+      </post-migration>
+  </repair-steps>
   <commands>
     <command>OCA\Polls\Command\Db\CleanMigrations</command>
     <command>OCA\Polls\Command\Db\CreateIndices</command>
@@ -46,11 +51,6 @@
     <command>OCA\Polls\Command\Share\Add</command>
     <command>OCA\Polls\Command\Share\Remove</command>
   </commands>
-  <repair-steps>
-      <post-migration>
-          <step>OCA\Polls\Migration\RepairSteps\UpdateHashes</step>
-      </post-migration>
-  </repair-steps>
   <settings>
     <admin>OCA\Polls\Settings\AdminSettings</admin>
     <admin-section>OCA\Polls\Settings\AdminSection</admin-section>
