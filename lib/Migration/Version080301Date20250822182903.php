@@ -26,7 +26,7 @@ class Version080301Date20250822182903 extends SimpleMigrationStep {
 	}
 
 	public function name(): string {
-		return 'Replaceces Polls migration to version 8.3.0';
+		return 'Replaces Polls migration to version 8.3.0';
 	}
 
 	public function description(): string {
