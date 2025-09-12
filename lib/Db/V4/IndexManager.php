@@ -6,12 +6,12 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\Polls\Db\V3;
+namespace OCA\Polls\Db\V4;
 
 use Doctrine\DBAL\Schema\Exception\IndexDoesNotExist;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
-use OCA\Polls\Migration\V3\TableSchema;
+use OCA\Polls\Migration\V4\TableSchema;
 use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -104,7 +104,12 @@ class IndexManager extends DbManager {
 		return 'Added ' . $parentTableName . '[' . $constraintColumn . '] <- ' . $childTableName . '[id]';
 	}
 
-	public function listExistingIndices() {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{0?: string,...}
+	 */
+	public function listExistingIndices(): array {
 		$this->needsSchema();
 		$messages = [];
 

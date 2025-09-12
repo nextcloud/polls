@@ -12,7 +12,7 @@ namespace OCA\Polls\Migration\RepairSteps;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\V3\TableManager;
+use OCA\Polls\Db\V4\TableManager;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
@@ -36,7 +36,7 @@ class CleanTables implements IRepairStep {
 	public function run(IOutput $output):void {
 		if ($this->connection->tableExists(Poll::TABLE)) {
 			try {
-				$this->tableManager->migrateOptionsToHash();
+				$this->tableManager->updateHashes();
 				$this->tableManager->removeOrphaned();
 				$this->tableManager->deleteAllDuplicates();
 				$this->tableManager->tidyWatchTable(time());

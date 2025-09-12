@@ -6,8 +6,9 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\Polls\Db\V3;
+namespace OCA\Polls\Db\V4;
 
+use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use Exception;
 use OCA\Polls\AppConstants;
@@ -19,7 +20,7 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Helper\Hash;
-use OCA\Polls\Migration\V3\TableSchema;
+use OCA\Polls\Migration\V4\TableSchema;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -540,59 +541,130 @@ class TableManager extends DbManager {
 
 	}
 
-	public function migrateOptionsToHash(): array {
-		$schema = $this->connection->createSchema();
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{0?: string,...}
+	 */
+	private function updateVoteHashes(Schema &$schema): array {
+		$messages = [];
+		if ($schema->hasTable($this->dbPrefix . VoteMapper::TABLE)) {
+			$table = $schema->getTable($this->dbPrefix . VoteMapper::TABLE);
+			$count = 0;
+			$updated = 0;
+			if ($table->hasColumn('vote_option_hash')) {
+				foreach ($this->voteMapper->getAll(includeNull: true) as $vote) {
+					try {
+						// if the hash of the vote differs from calculated hash update the vote hash
+						if ($vote->getVoteOptionHash() !== Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText())) {
+							$vote->setVoteOptionHash(Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()));
+							$vote = $this->voteMapper->update($vote);
+							$updated++;
+						}
+
+						$count++;
+
+					} catch (Exception $e) {
+						$messages[] = 'Skip hash update - Error updating option hash for voteId ' . $vote->getId();
+						$this->logger->error('Error updating option hash for voteId {id}', [
+							'id' => $vote->getId(),
+							'message' => $e->getMessage()
+						]);
+					}
+				}
+
+				if ($updated === 0) {
+					$this->logger->info('Verified {count} vote hashes in {db}', [
+						'count' => $count,
+						'db' => $this->dbPrefix . VoteMapper::TABLE
+					]);
+					$messages[] = 'No vote hashes to update';
+
+				} else {
+					$this->logger->info('Updated {updated} hashes of {count} votes in {db}', [
+						'updated' => $updated,
+						'count' => $count,
+						'db' => $this->dbPrefix . VoteMapper::TABLE
+					]);
+					$messages[] = 'Updated ' . $updated . ' vote hashes';
+
+				}
+
+			} else {
+				$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', [
+					'db' => $this->dbPrefix . VoteMapper::TABLE
+				]);
+			}
+		} else {
+			$this->logger->error('{db} is missing- aborted recalculating hashes', [
+				'db' => $this->dbPrefix . VoteMapper::TABLE
+			]);
+		}
+		return $messages;
+	}
+
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{0?: string,...}
+	 */
+	private function updateOptionHashes(Schema &$schema): array {
 		$messages = [];
 
 		if ($schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
 			$table = $schema->getTable($this->dbPrefix . OptionMapper::TABLE);
 			$count = 0;
+			$updated = 0;
+
 			if ($table->hasColumn('poll_option_hash')) {
 				foreach ($this->optionMapper->getAll(includeNull: true) as $option) {
 					try {
-						$option->syncOption();
-						$this->optionMapper->update($option);
+						// if the option's hash differs from $actualHash update the option
+						if ($option->getPollOptionHash() !== Hash::getOptionHash($option->getPollId(), $option->getPollOptionText())) {
+							$option->setPollOptionHash(Hash::getOptionHash($option->getPollId(), $option->getPollOptionText()));
+							$option = $this->optionMapper->update($option);
+							$updated++;
+						}
+
 						$count++;
+
 					} catch (Exception $e) {
 						$messages[] = 'Skip hash update - Error updating option hash for optionId ' . $option->getId();
 						$this->logger->error('Error updating option hash for optionId {id}', ['id' => $option->getId(), 'message' => $e->getMessage()]);
 					}
 				}
 
-				$this->logger->info('Updated {number} hashes in {db}', ['number' => $count,'db' => $this->dbPrefix . OptionMapper::TABLE]);
-				$messages[] = 'Updated ' . $count . ' option hashes';
+				if ($updated === 0) {
+					$this->logger->info('Verified {count} option hashes in {db}', [
+						'count' => $count,
+						'db' => $this->dbPrefix . OptionMapper::TABLE
+					]);
+					$messages[] = 'No option hashes to update';
+
+				} else {
+					$this->logger->info('Updated {updated} hashes of {count} options in {db}', [
+						'updated' => $updated,
+						'count' => $count,
+						'db' => $this->dbPrefix . OptionMapper::TABLE
+					]);
+					$messages[] = 'Updated ' . $updated . ' option hashes';
+
+				}
 
 			} else {
 				$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
 			}
+
 		} else {
 			$this->logger->error('{db} is missing - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
 		}
+		return $messages;
+	}
 
-		if ($schema->hasTable($this->dbPrefix . VoteMapper::TABLE)) {
-			$table = $schema->getTable($this->dbPrefix . VoteMapper::TABLE);
-			$count = 0;
-			if ($table->hasColumn('vote_option_hash')) {
-				foreach ($this->voteMapper->getAll(includeNull: true) as $vote) {
-					try {
-						$vote->setVoteOptionHash(Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()));
-						$this->voteMapper->update($vote);
-						$count++;
-					} catch (Exception $e) {
-						$messages[] = 'Skip hash update - Error updating option hash for voteId ' . $vote->getId();
-						$this->logger->error('Error updating option hash for voteId {id}', ['id' => $vote->getId(), 'message' => $e->getMessage()]);
-					}
-				}
-
-				$this->logger->info('Updated {number} hashes in {db}', ['number' => $count, 'db' => $this->dbPrefix . VoteMapper::TABLE]);
-				$messages[] = 'Updated ' . $count . ' vote hashes';
-
-			} else {
-				$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', ['db' => $this->dbPrefix . VoteMapper::TABLE]);
-			}
-		} else {
-			$this->logger->error('{db} is missing- aborted recalculating hashes', ['db' => $this->dbPrefix . VoteMapper::TABLE]);
-		}
+	public function updateHashes(): array {
+		$schema = $this->connection->createSchema();
+		$messages = $this->updateOptionHashes($schema);
+		$messages = array_merge($messages, $this->updateVoteHashes($schema));
 		return $messages;
 	}
 }

@@ -15,7 +15,7 @@ use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\V3\TableManager;
+use OCA\Polls\Db\V4\TableManager;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -64,6 +64,9 @@ class JanitorCron extends TimedJob {
 
 			// delete entries older than 1 day
 			$this->tableManager->tidyWatchTable(time() - 86400);
+
+			// first make sure all options and votes have a correct hash
+			$this->tableManager->updateHashes();
 
 			// purge entries virtually deleted more than 12 hours ago
 			$deleted['comments'] = $this->commentMapper->purgeDeletedComments(time() - 4320);

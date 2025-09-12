@@ -200,8 +200,8 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 
 	/**
-	 * Syncs pollOptionText and order according to timestamp and duration if timestamp > 0
-	 * Updates hash
+	 * Syncs pollOptionText and order according to timestamp and duration if timestamp > 0 and
+	 * updates hash based on synced pollId and pollOptionText
 	 */
 	public function syncOption(): void {
 		// make sure, pollOptionText matches timestamp and duration

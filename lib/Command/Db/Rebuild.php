@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace OCA\Polls\Command\Db;
 
 use Doctrine\DBAL\Schema\Schema;
-use OCA\Polls\Db\V3\TableManager;
-use OCA\Polls\Db\V3\IndexManager;
+use OCA\Polls\Db\V4\TableManager;
+use OCA\Polls\Db\V4\IndexManager;
 use OCA\Polls\Command\Command;
 use OCP\IDBConnection;
 
@@ -68,7 +68,7 @@ class Rebuild extends Command {
 
 		$this->printComment('Step 5. Validate and fix records');
 		$this->removeOrphaned();
-		$this->migrateOptionsToHash();
+		$this->updateHashes();
 		$this->deleteAllDuplicates();
 		$this->setLastInteraction();
 
@@ -123,9 +123,9 @@ class Rebuild extends Command {
 	/**
 	 * Add or update hash for votes and options
 	 */
-	private function migrateOptionsToHash(): void {
+	private function updateHashes(): void {
 		$this->printComment(' - Add or update hashes');
-		$messages = $this->tableManager->migrateOptionsToHash();
+		$messages = $this->tableManager->updateHashes();
 		$this->printInfo($messages, '   ');
 	}
 
