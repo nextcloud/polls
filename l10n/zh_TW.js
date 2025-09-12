@@ -388,6 +388,7 @@ OC.L10N.register(
     "Clone option" : "再製選項",
     "Unconfirm option" : "取消確認選項",
     "Confirm option" : "確認選項",
+    "Sort by answers of this option" : "按此選項的答案排序",
     "No vote options" : "無投票選項",
     "Option already exists" : "選項已存在",
     "Error adding Option" : "新增選項時發生錯誤",
