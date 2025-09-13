@@ -166,7 +166,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<NcAppNavigation>
+	<NcAppNavigation :aria-label="t('polls', 'Navigation')">
 		<ActionAddPoll
 			v-if="
 				preferencesStore.useActionAddPollInNavigation

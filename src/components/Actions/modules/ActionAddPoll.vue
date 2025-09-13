@@ -104,7 +104,7 @@ function addAnotherPoll() {
 		:button-mode="buttonMode"
 		:button-variant="'primary'">
 		<template #icon>
-			<PlusIcon size="20" decorative />
+			<PlusIcon :size="20" decorative />
 		</template>
 		<template #modal-content>
 			<PollCreateDlg @added="addedPoll" @close="showModal = false" />
