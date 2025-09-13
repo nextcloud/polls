@@ -53,7 +53,7 @@ async function updatePollGroup() {
 
 <template>
 	<div class="edit-poll-group">
-		<ConfigBox :name="t('polls', 'Name')">
+		<ConfigBox :name="t('polls', 'Title')">
 			<template #icon>
 				<SpeakerIcon />
 			</template>
