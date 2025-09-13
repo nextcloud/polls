@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import QRCode from 'qrcode'
-import { Logger } from '../../../helpers'
+import { Logger } from '../../../helpers/modules/logger'
 import { onMounted, ref } from 'vue'
 
 import type { AxiosError } from '@nextcloud/axios'

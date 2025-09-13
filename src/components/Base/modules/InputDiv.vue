@@ -13,7 +13,7 @@ import AlertIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import Spinner from '../../AppIcons/Spinner.vue'
-import { Logger } from '../../../helpers'
+import { Logger } from '../../../helpers/modules/logger'
 
 import { SignalingType } from '../../../Types'
 import NcButton from '@nextcloud/vue/components/NcButton'

@@ -39,7 +39,10 @@ import { useSessionStore } from '../../stores/session'
 import { useSubscriptionStore } from '../../stores/subscription'
 import { useVotesStore } from '../../stores/votes'
 
-import { deleteCookieByValue, findCookieByValue } from '../../helpers'
+import {
+	deleteCookieByValue,
+	findCookieByValue,
+} from '../../helpers/modules/cookieHelper'
 
 import { Event } from '../../Types'
 import type { StatusResults } from '../../Types'

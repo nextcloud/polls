@@ -5,7 +5,7 @@
 
 import { defineStore } from 'pinia'
 
-import { Logger } from '../helpers'
+import { Logger } from '../helpers/modules/logger'
 import { SharesAPI } from '../Api'
 
 import { usePollGroupsStore } from './pollGroups'

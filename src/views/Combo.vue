@@ -12,7 +12,7 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
 import ComboTable from '../components/Combo/ComboTable.vue'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
-import { ActionToggleSidebar } from '../components/Actions'
+import ActionToggleSidebar from '../components/Actions/modules/ActionToggleSidebar.vue'
 import HeaderBar from '../components/Base/modules/HeaderBar.vue'
 import { useComboStore } from '../stores/combo'
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'

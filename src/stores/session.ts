@@ -9,7 +9,7 @@ import { RouteLocationNormalized } from 'vue-router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 
-import { Logger } from '../helpers'
+import { Logger } from '../helpers/modules/logger'
 import { PublicAPI, SessionAPI } from '../Api'
 
 import { useSubscriptionStore } from './subscription'

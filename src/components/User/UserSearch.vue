@@ -11,7 +11,7 @@ import { t } from '@nextcloud/l10n'
 import NcSelectUsers from '@nextcloud/vue/components/NcSelectUsers'
 
 import { AppSettingsAPI } from '../../Api'
-import { Logger } from '../../helpers'
+import { Logger } from '../../helpers/modules/logger'
 import { ISearchType, User } from '../../Types'
 import type { AxiosError } from '@nextcloud/axios'
 

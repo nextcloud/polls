@@ -7,7 +7,7 @@ import { defineStore } from 'pinia'
 import orderBy from 'lodash/orderBy'
 
 import { PublicAPI, OptionsAPI } from '../Api'
-import { Logger } from '../helpers'
+import { Logger } from '../helpers/modules/logger'
 
 import { usePollStore } from './poll'
 import { useSessionStore } from './session'

@@ -15,7 +15,7 @@ import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue
 import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
-import { Logger } from '../helpers'
+import { Logger } from '../helpers/modules/logger'
 import { usePollsStore } from '../stores/polls'
 
 const dashboardWidgetProperties = {

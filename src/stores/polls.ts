@@ -8,7 +8,7 @@ import orderBy from 'lodash/orderBy'
 import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
 
-import { Logger } from '../helpers'
+import { Logger } from '../helpers/modules/logger'
 import { PollsAPI } from '../Api'
 
 import { useSessionStore } from './session'

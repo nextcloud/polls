@@ -6,7 +6,7 @@
 import { defineStore } from 'pinia'
 
 import { AppSettingsAPI } from '../Api'
-import { Logger } from '../helpers'
+import { Logger } from '../helpers/modules/logger'
 
 import type { AxiosError } from '@nextcloud/axios'
 import type { AppSettingsStore } from './appSettings.types'
