@@ -70,24 +70,28 @@ async function addShare(user: User) {
 			:placeholder="t('polls', 'Type to add an individual share')"
 			@user-selected="(user: User) => addShare(user)" />
 
-		<ShareItemAllUsers v-if="sessionStore.appPermissions.allAccess" />
+		<!-- <template v-if="sharesStore.active.length"> -->
+		<TransitionGroup tag="ul" name="list">
+			<ShareItemAllUsers
+				v-if="sessionStore.appPermissions.allAccess"
+				tag="li" />
 
-		<SharePublicAdd
-			v-if="
-				sessionStore.appPermissions.publicShares
-				&& sessionStore.appPermissions.addShares
-				&& sessionStore.appPermissions.addSharesExternal
-			" />
+			<SharePublicAdd
+				v-if="
+					sessionStore.appPermissions.publicShares
+					&& sessionStore.appPermissions.addShares
+					&& sessionStore.appPermissions.addSharesExternal
+				"
+				tag="li" />
 
-		<div v-if="sharesStore.active.length" class="shares-list shared">
-			<TransitionGroup tag="div" name="list" :css="false">
-				<ShareItem
-					v-for="share in sharesStore.active"
-					:key="share.id"
-					:share="share"
-					@show-qr-code="openQrModal(share)" />
-			</TransitionGroup>
-		</div>
+			<ShareItem
+				v-for="share in sharesStore.active"
+				:key="share.id"
+				:share="share"
+				tag="li"
+				@show-qr-code="openQrModal(share)" />
+		</TransitionGroup>
+		<!-- </template> -->
 
 		<NcModal v-if="qrModal" size="small" @close="qrModal = false">
 			<QrModal
@@ -102,11 +106,3 @@ async function addShare(user: User) {
 		</NcModal>
 	</ConfigBox>
 </template>
-
-<style lang="scss">
-.shares-list.shared {
-	border-top: 1px solid var(--color-border);
-	padding-top: 24px;
-	margin-top: 16px;
-}
-</style>

@@ -72,10 +72,11 @@ async function sendAllInvitations() {
 				</template>
 			</NcButton>
 		</template>
-		<TransitionGroup tag="div" name="list" :css="false" class="shares-list">
+		<TransitionGroup tag="ul" name="list">
 			<ShareItem
 				v-for="share in sharesStore.unsentInvitations"
 				:key="share.id"
+				tag="li"
 				:share="share" />
 		</TransitionGroup>
 	</ConfigBox>

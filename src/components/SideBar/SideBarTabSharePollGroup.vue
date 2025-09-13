@@ -31,37 +31,5 @@ onBeforeRouteUpdate(async () => {
 	<div>
 		{{ infoText }}
 	</div>
-	<SharesList class="shares effective" :info="infoText" />
+	<SharesList :info="infoText" />
 </template>
-
-<style lang="scss">
-.shares-list {
-	display: flex;
-	flex-flow: column;
-	justify-content: flex-start;
-	padding-top: 8px;
-
-	> li {
-		display: flex;
-		align-items: stretch;
-		margin: 4px 0;
-	}
-}
-
-.share-item {
-	display: flex;
-	flex: 1;
-	align-items: center;
-	max-width: 100%;
-}
-
-.share-item__description {
-	flex: 1;
-	min-width: 50px;
-	color: var(--color-text-maxcontrast);
-	padding-inline-start: 8px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-</style>

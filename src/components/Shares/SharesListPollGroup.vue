@@ -49,14 +49,15 @@ async function addShare(user: User) {
 			:search-types="[0]"
 			@user-selected="(user: User) => addShare(user)" />
 
-		<div v-if="sharesStore.shares" class="shares-list shared">
-			<TransitionGroup tag="div" name="list" :css="false">
+		<template v-if="sharesStore.shares">
+			<TransitionGroup tag="ul" name="list">
 				<ShareItem
 					v-for="share in sharesStore.active"
 					:key="share.id"
+					tag="li"
 					:share="share" />
 			</TransitionGroup>
-		</div>
+		</template>
 	</ConfigBox>
 </template>
 

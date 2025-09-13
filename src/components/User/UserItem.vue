@@ -40,6 +40,7 @@ interface Props {
 	description?: string
 	label?: string
 	type?: UserType | VirtualUserItemType
+	tag?: string
 	user?: User
 	showTypeIcon?: boolean
 	iconSize?: number
@@ -61,6 +62,7 @@ const {
 	resolveInfo = false,
 	description,
 	label = '',
+	tag = 'div',
 	type = '',
 	user = {
 		id: '',
@@ -212,7 +214,7 @@ function showMenu() {
 }
 const componentClass = computed(() => [
 	'user-item',
-	typeComputed,
+	typeComputed.value,
 	{
 		disabled,
 		condensed,
@@ -221,7 +223,7 @@ const componentClass = computed(() => [
 </script>
 
 <template>
-	<div :class="componentClass">
+	<component :is="tag" :class="componentClass">
 		<div class="avatar-wrapper">
 			<NcAvatar
 				v-bind="avatarProps"
@@ -289,7 +291,7 @@ const componentClass = computed(() => [
 		</div>
 
 		<slot />
-	</div>
+	</component>
 </template>
 
 <style lang="scss">

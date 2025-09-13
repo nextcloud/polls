@@ -13,6 +13,8 @@ import UserItem from '../User/UserItem.vue'
 import { usePollStore } from '../../stores/poll'
 import { VirtualUserItemType } from '../../Types'
 
+const { tag = 'div' } = defineProps<{ tag?: string }>()
+
 const pollStore = usePollStore()
 
 const userItemProps = computed<{
@@ -42,7 +44,7 @@ const pollAccess = computed({
 </script>
 
 <template>
-	<UserItem v-bind="userItemProps">
+	<UserItem :tag="tag" v-bind="userItemProps">
 		<template #status>
 			<div class="vote-status" />
 		</template>
