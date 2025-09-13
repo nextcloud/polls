@@ -28,25 +28,13 @@ onBeforeRouteUpdate(async () => {
 </script>
 
 <template>
-	<div class="sidebar-share">
-		<div>
-			{{
-				t(
-					'polls',
-					'Shares for a poll group grant voting access to the polls contained in the poll group.',
-				)
-			}}
-		</div>
-		<SharesList class="shares effective" :info="infoText" />
+	<div>
+		{{ infoText }}
 	</div>
+	<SharesList class="shares effective" :info="infoText" />
 </template>
 
 <style lang="scss">
-.sidebar-share {
-	display: flex;
-	flex-direction: column;
-}
-
 .shares-list {
 	display: flex;
 	flex-flow: column;

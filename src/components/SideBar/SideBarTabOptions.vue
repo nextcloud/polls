@@ -57,67 +57,65 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="side-bar-tab-options">
-		<ConfigBox
-			v-if="!pollStore.currentUserStatus.isOwner"
-			v-bind="configBoxProps.delegatedAdminHint" />
-		<ConfigBox v-bind="configBoxProps.allowProposals">
-			<template #icon>
-				<AddDateIcon />
-			</template>
-			<ConfigProposals />
-		</ConfigBox>
+	<ConfigBox
+		v-if="!pollStore.currentUserStatus.isOwner"
+		v-bind="configBoxProps.delegatedAdminHint" />
+	<ConfigBox v-bind="configBoxProps.allowProposals">
+		<template #icon>
+			<AddDateIcon />
+		</template>
+		<ConfigProposals />
+	</ConfigBox>
 
-		<ConfigBox
-			v-if="
-				pollStore.type === 'datePoll'
-				&& optionsStore.options.length
-				&& !pollStore.isClosed
-			"
-			v-bind="configBoxProps.shiftDate">
-			<template #icon>
-				<ShiftDateIcon />
-			</template>
-			<OptionsDateShift />
-		</ConfigBox>
+	<ConfigBox
+		v-if="
+			pollStore.type === 'datePoll'
+			&& optionsStore.options.length
+			&& !pollStore.isClosed
+		"
+		v-bind="configBoxProps.shiftDate">
+		<template #icon>
+			<ShiftDateIcon />
+		</template>
+		<OptionsDateShift />
+	</ConfigBox>
 
-		<ConfigBox
-			v-if="pollStore.type === 'datePoll'"
-			v-bind="configBoxProps.dateOptions">
-			<template #icon>
-				<DateOptionsIcon />
-			</template>
+	<ConfigBox
+		v-if="pollStore.type === 'datePoll'"
+		v-bind="configBoxProps.dateOptions">
+		<template #icon>
+			<DateOptionsIcon />
+		</template>
 
-			<OptionsDate />
+		<OptionsDate />
 
-			<template v-if="!pollStore.isClosed" #actions>
-				<ActionAddOption :caption="t('polls', 'Add a date')" />
-			</template>
-		</ConfigBox>
+		<template v-if="!pollStore.isClosed" #actions>
+			<ActionAddOption :caption="t('polls', 'Add a date')" />
+		</template>
+	</ConfigBox>
 
-		<ConfigBox
-			v-if="pollStore.type === 'textPoll'"
-			v-bind="configBoxProps.textOptions">
+	<ConfigBox
+		v-if="pollStore.type === 'textPoll'"
+		v-bind="configBoxProps.textOptions">
+		<template #icon>
+			<TextOptionsIcon />
+		</template>
+
+		<OptionsTextAdd v-if="!pollStore.isClosed" />
+
+		<OptionsText v-if="optionsStore.options.length" />
+
+		<NcEmptyContent
+			v-else
+			:name="t('polls', 'No vote options')"
+			:description="t('polls', 'Add some!')">
 			<template #icon>
 				<TextOptionsIcon />
 			</template>
+		</NcEmptyContent>
 
-			<OptionsTextAdd v-if="!pollStore.isClosed" />
-
-			<OptionsText v-if="optionsStore.options.length" />
-
-			<NcEmptyContent
-				v-else
-				:name="t('polls', 'No vote options')"
-				:description="t('polls', 'Add some!')">
-				<template #icon>
-					<TextOptionsIcon />
-				</template>
-			</NcEmptyContent>
-
-			<template #actions>
-				<OptionsTextAddBulk v-if="!pollStore.isClosed" />
-			</template>
-		</ConfigBox>
-	</div>
+		<template #actions>
+			<OptionsTextAddBulk v-if="!pollStore.isClosed" />
+		</template>
+	</ConfigBox>
 </template>

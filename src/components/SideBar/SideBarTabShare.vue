@@ -31,23 +31,14 @@ onBeforeRouteLeave(() => {
 </script>
 
 <template>
-	<div class="sidebar-share">
-		<SharesListUnsent
-			v-if="sessionStore.appPermissions.addShares"
-			class="shares unsent" />
-		<SharesList class="shares effective" />
-		<SharesListLocked
-			v-if="sessionStore.appPermissions.addShares"
-			class="shares" />
-	</div>
+	<SharesListUnsent
+		v-if="sessionStore.appPermissions.addShares"
+		class="shares unsent" />
+	<SharesList class="shares effective" />
+	<SharesListLocked v-if="sessionStore.appPermissions.addShares" class="shares" />
 </template>
 
 <style lang="scss">
-.sidebar-share {
-	display: flex;
-	flex-direction: column;
-}
-
 .shares-list {
 	display: flex;
 	flex-flow: column;

@@ -53,31 +53,27 @@ watch(
 </script>
 
 <template>
-	<div class="comments">
-		<ConfigBox
-			v-if="pollStore.permissions.edit"
-			:name="t('polls', 'Configuration')">
-			<template #icon>
-				<PollConfigIcon />
-			</template>
-			<ConfigAllowComment @change="pollStore.write" />
-			<ConfigForceConfidentialComments @change="pollStore.write" />
-			<CardDiv v-if="!pollStore.configuration.allowComment" type="warning">
-				{{
-					t(
-						'polls',
-						'Comments are disabled, except for owner and delegated poll administration.',
-					)
-				}}
-			</CardDiv>
-		</ConfigBox>
+	<ConfigBox v-if="pollStore.permissions.edit" :name="t('polls', 'Configuration')">
+		<template #icon>
+			<PollConfigIcon />
+		</template>
+		<ConfigAllowComment @change="pollStore.write" />
+		<ConfigForceConfidentialComments @change="pollStore.write" />
+		<CardDiv v-if="!pollStore.configuration.allowComment" type="warning">
+			{{
+				t(
+					'polls',
+					'Comments are disabled, except for owner and delegated poll administration.',
+				)
+			}}
+		</CardDiv>
+	</ConfigBox>
 
-		<CommentAdd v-if="pollStore.permissions.comment" />
-		<Comments v-if="!showEmptyContent" />
-		<NcEmptyContent v-else v-bind="emptyContentProps">
-			<template #icon>
-				<CommentsIcon />
-			</template>
-		</NcEmptyContent>
-	</div>
+	<CommentAdd v-if="pollStore.permissions.comment" />
+	<Comments v-if="!showEmptyContent" />
+	<NcEmptyContent v-else v-bind="emptyContentProps">
+		<template #icon>
+			<CommentsIcon />
+		</template>
+	</NcEmptyContent>
 </template>
