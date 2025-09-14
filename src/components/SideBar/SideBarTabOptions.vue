@@ -20,6 +20,7 @@ import AddDateIcon from 'vue-material-design-icons/CalendarPlusOutline.vue'
 import DateOptionsIcon from 'vue-material-design-icons/CalendarMonthOutline.vue'
 import ShiftDateIcon from 'vue-material-design-icons/CalendarStartOutline.vue'
 import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
 import ActionAddOption from '../Actions/modules/ActionAddOption.vue'
 import { Event } from '../../Types'
@@ -87,7 +88,16 @@ onUnmounted(() => {
 			<DateOptionsIcon />
 		</template>
 
-		<OptionsDate />
+		<OptionsDate v-if="optionsStore.options.length" />
+
+		<NcEmptyContent
+			v-else
+			:name="t('polls', 'No vote options')"
+			:description="t('polls', 'Add some!')">
+			<template #icon>
+				<DatePollIcon />
+			</template>
+		</NcEmptyContent>
 
 		<template v-if="!pollStore.isClosed" #actions>
 			<ActionAddOption :caption="t('polls', 'Add a date')" />

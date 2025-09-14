@@ -6,10 +6,6 @@
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
 
-import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-
-import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
-
 import OptionItem from './OptionItem.vue'
 import OptionMenu from './OptionMenu.vue'
 
@@ -19,37 +15,24 @@ import { useOptionsStore } from '../../stores/options'
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 
-const cssVar = {
+const componentStyle = {
 	'--content-deleted': `" (${t('polls', 'deleted')})"`,
 }
 </script>
 
 <template>
-	<div
-		v-if="optionsStore.options.length"
-		:style="cssVar"
-		class="options-list date">
-		<TransitionGroup name="list">
-			<OptionItem
-				v-for="option in optionsStore.sortedOptions"
-				:key="option.id"
-				:option="option"
-				show-owner>
-				<template #actions>
-					<OptionMenu
-						v-if="pollStore.permissions.edit || option.isOwner"
-						:option="option" />
-				</template>
-			</OptionItem>
-		</TransitionGroup>
-	</div>
-
-	<NcEmptyContent
-		v-else
-		:name="t('polls', 'No vote options')"
-		:description="t('polls', 'Add some!')">
-		<template #icon>
-			<DatePollIcon />
-		</template>
-	</NcEmptyContent>
+	<TransitionGroup tag="ul" name="list" :style="componentStyle">
+		<OptionItem
+			v-for="option in optionsStore.sortedOptions"
+			:key="option.id"
+			:option="option"
+			tag="li"
+			show-owner>
+			<template #actions>
+				<OptionMenu
+					v-if="pollStore.permissions.edit || option.isOwner"
+					:option="option" />
+			</template>
+		</OptionItem>
+	</TransitionGroup>
 </template>
