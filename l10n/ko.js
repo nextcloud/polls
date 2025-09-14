@@ -231,6 +231,7 @@ OC.L10N.register(
     "Other settings" : "다른 설정",
     "Email options" : "이메일 옵션",
     "No polls selected" : "투표가 선택되지 않음",
+    "Navigation" : "탐색",
     "Show all" : "모두 보기",
     "Combine polls" : "투표 통합",
     "Polls settings" : "투표 설정",

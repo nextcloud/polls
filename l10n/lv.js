@@ -59,6 +59,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Saņemiet paziņojuma e-pastu par darbību",
     "Public link" : "Publiskā saite",
     "Other settings" : "Citi iestatījumi",
+    "Navigation" : "Navigācija",
     "Comments" : "Piebildes",
     "Details" : "Informācija",
     "Sharing" : "Koplietošana",

@@ -345,6 +345,7 @@ OC.L10N.register(
     "Email options" : "电子邮件选项",
     "No polls found for this category" : "没有发现此类别的投票",
     "Relevant polls" : "相关投票",
+    "Navigation" : "导航",
     "Show all" : "显示全部",
     "404 - poll not found" : "404 - 投票未找到",
     "Enter a poll or start a new one." : "输入投票或开始一个新的投票。",

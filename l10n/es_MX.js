@@ -56,6 +56,7 @@ OC.L10N.register(
     "Public link" : "Liga pública",
     "Switch to list view" : "Cambiar a vista de lista",
     "Email options" : "Opciones de correo electrónico",
+    "Navigation" : "Navegación",
     "Show all" : "Mostrar todo",
     "participated" : "participó",
     "Comments" : "Comentarios",

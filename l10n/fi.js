@@ -281,6 +281,7 @@ OC.L10N.register(
     "No polls selected" : "Kyselyitä ei ole valittu",
     "No polls found for this category" : "Tästä kategoriasta ei löytynyt äänestyksiä",
     "Relevant polls" : "Oleelliset äänestykset",
+    "Navigation" : "Navigointi",
     "Show all" : "Näytä kaikki",
     "Combine polls" : "Yhdistä kyselyt",
     "Polls settings" : "Kyselyjen asetukset",

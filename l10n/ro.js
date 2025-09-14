@@ -47,6 +47,7 @@ OC.L10N.register(
     "Change name" : "Schimbă numele",
     "Public link" : "Link public",
     "Switch to list view" : "Comuta la vizualizarea tip listă",
+    "Navigation" : "Navigare",
     "Comments" : "Comentarii",
     "Details" : "Detalii",
     "Options" : "Opțiuni",

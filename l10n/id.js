@@ -36,6 +36,7 @@ OC.L10N.register(
     "No activity yet" : "Belum ada aktivitas",
     "Configuration" : "Konfigurasi",
     "Public link" : "Tautan publik",
+    "Navigation" : "Navigasi",
     "Show all" : "Lihat semua",
     "Comments" : "Komentar",
     "Details" : "Detil",

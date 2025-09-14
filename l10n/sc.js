@@ -183,6 +183,7 @@ OC.L10N.register(
     "Email options" : "Optziones de posta eletrònica",
     "No polls found for this category" : "Perunu sondàgiu agatadu pro custa categoria",
     "Relevant polls" : "Sondàgios importantes",
+    "Navigation" : "Navigatzione",
     "Show all" : "Mustra totu",
     "404 - poll not found" : "404 - sondàgiu no agatadu",
     "Enter a poll or start a new one." : "Inserta•nche unu sondàgiu o cumintza•nde unu nou.",

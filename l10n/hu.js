@@ -442,6 +442,7 @@ OC.L10N.register(
     "Select polls by clicking on them in the right sidebar!" : "Válassza ki a szavazásokat úgy, hogy rájuk kattint a jobb oldali eszköztáron.",
     "No polls found for this category" : "Nem található szavazás ebben a kategóriában",
     "Relevant polls" : "Releváns szavazások",
+    "Navigation" : "Navigáció",
     "Show all" : "Összes megjelenítése",
     "Combine polls" : "Szavazások összevonása",
     "Polls settings" : "Szavazások beállításai",

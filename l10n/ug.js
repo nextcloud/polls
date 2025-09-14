@@ -533,6 +533,7 @@ OC.L10N.register(
     "Select polls by clicking on them in the right sidebar!" : "ئوڭ تەرەپتىكى بالداقنى چېكىپ راي سىناشنى تاللاڭ!",
     "No polls found for this category" : "بۇ تۈرگە قارىتا راي سىناش نەتىجىسى تېپىلمىدى",
     "Relevant polls" : "مۇناسىۋەتلىك راي سىناش",
+    "Navigation" : "يول باشلاش",
     "Show all" : "ھەممىنى كۆرسەت",
     "Combine polls" : "راي سىناشنى بىرلەشتۈرۈڭ",
     "404 - poll not found" : "404 - راي سىناش تېپىلمىدى",

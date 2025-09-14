@@ -401,6 +401,7 @@ OC.L10N.register(
     "Select polls by clicking on them in the right sidebar!" : "Välj omröstningar genom att klicka på dem i det högra sidofältet!",
     "No polls found for this category" : "Inga omröstningar hittades för denna kategori",
     "Relevant polls" : "Relevanta omröstningar",
+    "Navigation" : "Navigering",
     "Show all" : "Visa alla",
     "Combine polls" : "Kombinera omröstningar",
     "Polls settings" : "Omröstningsinställningar",

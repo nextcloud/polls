@@ -692,6 +692,7 @@ OC.L10N.register(
     "Error setting dashboard list" : "Error al establecer la lista del tablero",
     "403 - You are not allowed to access this poll" : "403 - No tiene permitido acceder a esta encuesta",
     "Contact the owner, if you think that this is wrong." : "Contacte al propietario, si piensa que no está bien.",
+    "Navigation" : "Navegación",
     "Show all" : "Mostrar todo",
     "Combine polls" : "Combinar encuestas",
     "Polls settings" : "Configuración de las encuestas",

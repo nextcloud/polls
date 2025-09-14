@@ -692,6 +692,7 @@ OC.L10N.register(
     "Error setting dashboard list" : "Earráid ag socrú liosta an phainéil",
     "403 - You are not allowed to access this poll" : "403 - Níl cead agat rochtain a fháil ar an vótaíocht seo",
     "Contact the owner, if you think that this is wrong." : "Téigh i dteagmháil leis an úinéir, má cheapann tú go bhfuil sé seo mícheart.",
+    "Navigation" : "Loingseoireacht",
     "Show all" : "Taispeáin gach rud",
     "Combine polls" : "Comhcheangail pobalbhreith",
     "Polls settings" : "Socruithe pobalbhreitheanna",

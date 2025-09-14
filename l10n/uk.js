@@ -691,6 +691,7 @@ OC.L10N.register(
     "Error setting dashboard list" : "Список панелей налаштування помилок",
     "403 - You are not allowed to access this poll" : "403 - Ви не маєте права доступу до цього опитування",
     "Contact the owner, if you think that this is wrong." : "Зверніться до власника, якщо ви вважаєте, що це неправильно.",
+    "Navigation" : "Навігація",
     "Show all" : "Показати все",
     "Combine polls" : "Об'єднати опитування",
     "Polls settings" : "Налаштування опитувань",

@@ -63,6 +63,7 @@ OC.L10N.register(
     "Public link" : "Јавен линк",
     "Switch to list view" : "Прикажи поглед во листа",
     "Email options" : "Е-пошта параметри",
+    "Navigation" : "Навигација",
     "Show all" : "Прикажи ги сите",
     "Comments" : "Коментари",
     "Details" : "Детали",

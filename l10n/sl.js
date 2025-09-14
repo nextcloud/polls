@@ -325,6 +325,7 @@ OC.L10N.register(
     "Select polls by clicking on them in the right sidebar!" : "Anketo je mogoče izbrati s klikom na naslov ankete v bočnem oknu!",
     "No polls found for this category" : "Za to kategorijo ni najdene nobene ankete",
     "Relevant polls" : "Pomembne ankete",
+    "Navigation" : "Krmarjenje",
     "Show all" : "Pokaži vse",
     "Combine polls" : "Združi ankete",
     "Polls settings" : "Nastavitve ankete",

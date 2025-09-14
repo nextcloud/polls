@@ -426,6 +426,7 @@ OC.L10N.register(
     "Select polls by clicking on them in the right sidebar!" : "Hautatu galdeketak eskuineko alboko barran klik eginez!",
     "No polls found for this category" : "Ez da galdeketarik aurkitu kategoria honentzat.",
     "Relevant polls" : "Galdeketa",
+    "Navigation" : "Nabigazioa",
     "Show all" : "Erakutsi denak",
     "Combine polls" : "Batu galdeketak",
     "Polls settings" : "Galdeketa ezarpenak",

@@ -48,6 +48,7 @@ OC.L10N.register(
     "Change name" : "Đổi tên",
     "Switch to list view" : "Chuyển sang chế độ xem danh sách",
     "Email options" : "Tùy chọn email",
+    "Navigation" : "Điều hướng",
     "Comments" : "Các bình luận",
     "Details" : "Thông tin",
     "Sharing" : "Đang chia sẽ",
