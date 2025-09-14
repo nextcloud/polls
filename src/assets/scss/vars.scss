@@ -6,6 +6,8 @@
 :root,
 [data-theme-light] {
 	--cap-width: 49rem;
+	--shadow-height: 0.7rem;
+	--shadow-height-inverted: -0.7rem;
 	--color-polls-foreground-yes: #2d7b41;
 	--color-polls-foreground-no: #db0606;
 	--color-polls-foreground-maybe: #a37200;

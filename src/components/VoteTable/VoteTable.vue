@@ -139,7 +139,6 @@ function isVotable(participant: User, option: Option) {
 			</div>
 			<StickyDiv
 				:id="`option-item-${option.id}`"
-				class="option-item"
 				:class="{
 					confirmed: option.confirmed && pollStore.status.isExpired,
 				}"
@@ -192,7 +191,9 @@ function isVotable(participant: User, option: Option) {
 	grid-auto-flow: column;
 	overflow: scroll;
 	margin: auto;
-
+	& > div {
+		border-inline-start: 1px solid var(--color-border);
+	}
 	.vote-cell {
 		padding: 0.4rem;
 		display: flex;
@@ -201,17 +202,12 @@ function isVotable(participant: User, option: Option) {
 
 	.participant {
 		grid-column: 1;
-		padding: 0.8rem 0.1rem 0.1rem 0.1rem;
+		place-self: center;
 		inset-inline-start: 0;
 		background-color: var(--color-main-background);
 
 		.user-actions {
 			visibility: hidden;
-		}
-
-		&.sticky-left {
-			inset-inline-start: -8px;
-			padding-inline-start: 8px;
 		}
 
 		&:hover {
@@ -267,7 +263,6 @@ function isVotable(participant: User, option: Option) {
 
 		.option-menu-grid {
 			grid-row: 1;
-			border-inline-start: 1px solid var(--color-border);
 			background-color: var(--color-main-background);
 
 			.calendar-peek {
@@ -277,28 +272,21 @@ function isVotable(participant: User, option: Option) {
 
 		.option-item {
 			grid-row: 2;
-			border-inline-start: 1px solid var(--color-border);
 		}
 
 		.counter {
 			grid-row: 3;
-			border-inline-start: 1px solid var(--color-border);
-		}
-
-		.vote-cell {
-			border-inline-start: 1px solid var(--color-border);
 		}
 
 		> .current-user {
-			margin-top: 1.5rem;
-			margin-bottom: 1.5rem;
+			padding-top: 1.5rem;
+			padding-bottom: 1.5rem;
 		}
 
 		.vote-column {
 			display: flex;
 			flex-direction: column;
 			flex: 1 0 11rem;
-			border-inline-start: 1px solid var(--color-border-dark);
 		}
 	}
 

@@ -285,11 +285,11 @@ const inputClass = computed(() => [
 		}
 
 		&.error {
-			border-color: var(--color-error);
+			border-color: var(--color-border-error);
 		}
 
 		&.success {
-			border-color: var(--color-success);
+			border-color: var(--color-border-success);
 		}
 	}
 

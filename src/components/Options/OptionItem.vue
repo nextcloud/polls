@@ -76,7 +76,7 @@ const pollStore = usePollStore()
 	.confirmed & {
 		background-color: var(--color-polls-background-yes);
 		border-radius: var(--border-radius-container);
-		border: 2px solid var(--color-success-text);
+		border: 2px solid var(--color-border-success);
 	}
 
 	.list-view .confirmed & {
