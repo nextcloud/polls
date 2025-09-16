@@ -692,7 +692,7 @@ OC.L10N.register(
     "Error setting dashboard list" : "設定儀表板清單時發生錯誤",
     "403 - You are not allowed to access this poll" : "403 - 您無法存取此投票",
     "Contact the owner, if you think that this is wrong." : "如果您認為這是錯誤的，請聯繫所有者。",
-    "Navigation" : "導覽列",
+    "Navigation" : "導航",
     "Show all" : "全部顯示",
     "Combine polls" : "聯合民意調查",
     "Polls settings" : "投票設定",

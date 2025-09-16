@@ -46,7 +46,7 @@ OC.L10N.register(
     "Private poll" : "Приватна анкета",
     "Name" : "Име",
     "Description" : "Опис",
-    "Expiration" : "Истекување",
+    "Expiration" : "Рок на траење",
     "Back" : "Назад",
     "Descending" : "Опаѓачки",
     "Ascending" : "Растечки",
