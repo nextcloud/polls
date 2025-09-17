@@ -28,7 +28,7 @@ onBeforeRouteUpdate(async () => {
 </script>
 
 <template>
-	<div class="sidebar-share">
+	<div class="polls-sidebar-share">
 		<div>
 			{{
 				t(
@@ -42,7 +42,7 @@ onBeforeRouteUpdate(async () => {
 </template>
 
 <style lang="scss">
-.sidebar-share {
+.polls-sidebar-share {
 	display: flex;
 	flex-direction: column;
 }

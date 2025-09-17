@@ -31,7 +31,7 @@ onBeforeRouteLeave(() => {
 </script>
 
 <template>
-	<div class="sidebar-share">
+	<div class="polls-sidebar-share">
 		<SharesListUnsent
 			v-if="sessionStore.appPermissions.addShares"
 			class="shares unsent" />
@@ -43,7 +43,7 @@ onBeforeRouteLeave(() => {
 </template>
 
 <style lang="scss">
-.sidebar-share {
+.polls-sidebar-share {
 	display: flex;
 	flex-direction: column;
 }
