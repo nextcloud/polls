@@ -365,6 +365,7 @@ OC.L10N.register(
     "Back" : "Atrás",
     "Take over" : "Tomar o control",
     "Sort by title" : "Ordenar pola título",
+    "Direction" : "Dirección",
     "Descending" : "Descendente",
     "Ascending" : "Ascendente",
     "Checking name …" : "Comprobando o nome…",
