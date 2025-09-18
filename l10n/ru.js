@@ -382,6 +382,7 @@ OC.L10N.register(
     "No polls selected" : "Не выбрано ни одного опроса",
     "No polls found for this category" : "Для этой категории не найдено ни одного опроса",
     "Relevant polls" : "Актуальные опросы",
+    "Navigation" : "Навигация",
     "Show all" : "Смотреть всё",
     "Combine polls" : "Объеденить опросы",
     "Polls settings" : "Параметры опросов",

@@ -398,6 +398,7 @@ OC.L10N.register(
     "Select polls by clicking on them in the right sidebar!" : "Select polls by clicking on them in the right sidebar!",
     "No polls found for this category" : "No polls found for this category",
     "Relevant polls" : "Relevant polls",
+    "Navigation" : "جهت یابی",
     "Show all" : "نمایش همه",
     "Combine polls" : "Combine polls",
     "Polls settings" : "Polls settings",

@@ -356,6 +356,7 @@ OC.L10N.register(
     "Select polls by clicking on them in the right sidebar!" : "Selecteer peilingen door erop te klikken in de rechter zijbalk!",
     "No polls found for this category" : "Geen peilingen gevonden in deze categorie",
     "Relevant polls" : "Relevante peilingen",
+    "Navigation" : "Navigatie",
     "Show all" : "Toon alles",
     "Combine polls" : "Combineer peilingen",
     "404 - poll not found" : "404 - peiling niet gevonden",

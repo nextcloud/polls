@@ -692,6 +692,7 @@ OC.L10N.register(
     "Error setting dashboard list" : "Error setting dashboard list",
     "403 - You are not allowed to access this poll" : "403 - You are not allowed to access this poll",
     "Contact the owner, if you think that this is wrong." : "Contact the owner, if you think that this is wrong.",
+    "Navigation" : "Navigation",
     "Show all" : "Show all",
     "Combine polls" : "Combine polls",
     "Polls settings" : "Polls settings",

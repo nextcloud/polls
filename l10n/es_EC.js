@@ -394,6 +394,7 @@ OC.L10N.register(
     "Select polls by clicking on them in the right sidebar!" : "¡Selecciona encuestas haciendo clic en ellas en la barra lateral derecha!",
     "No polls found for this category" : "No se encontraron encuestas para esta categoría",
     "Relevant polls" : "Encuestas relevantes",
+    "Navigation" : "Navegación",
     "Show all" : "Mostrar todo",
     "Combine polls" : "Combinar encuestas",
     "Polls settings" : "Configuraciones de encuestas",

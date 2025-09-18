@@ -400,6 +400,7 @@ OC.L10N.register(
     "Select polls by clicking on them in the right sidebar!" : "Изберете анкети, като щракнете върху тях в дясната странична лента!",
     "No polls found for this category" : "Няма намерени анкети за тази категория",
     "Relevant polls" : "Съответни анкети",
+    "Navigation" : "Навигация",
     "Show all" : "Показване на всички",
     "Combine polls" : "Комбиниране на анкети",
     "Polls settings" : "Настройки на анкети",

@@ -50,6 +50,7 @@ OC.L10N.register(
     "Other settings" : "Autres paramètres",
     "Performance settings" : "Paramètres de performança",
     "Email options" : "Opcions d’email",
+    "Navigation" : "Navegacion",
     "Show all" : "O veire tot",
     "Comments" : "Comentaris",
     "Details" : "Detalhs",

@@ -83,6 +83,7 @@ OC.L10N.register(
     "Change name" : "החלפת שם",
     "Public link" : "קישור ציבורי",
     "Relevant polls" : "סקרים אפשריים",
+    "Navigation" : "ניווט",
     "Show all" : "להציג הכול",
     "Enter a poll or start a new one." : "כניסה לסקר או הקמת אחד חדש.",
     "participated" : "השתתפת",

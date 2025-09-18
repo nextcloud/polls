@@ -79,6 +79,7 @@ OC.L10N.register(
     "Switch to list view" : "Skift til listevisning",
     "Other settings" : "Andre indstillinger",
     "Email options" : "E-mail muligheder",
+    "Navigation" : "Navigation",
     "Show all" : "Vis alle",
     "participated" : "deltog",
     "Comments" : "Kommentarer",

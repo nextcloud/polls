@@ -692,6 +692,7 @@ OC.L10N.register(
     "Error setting dashboard list" : "Erro na configuração da lista do painel",
     "403 - You are not allowed to access this poll" : "403 - Você não tem permissão para acessar esta enquete",
     "Contact the owner, if you think that this is wrong." : "Entre em contato com o proprietário se achar que isso está errado.",
+    "Navigation" : "Navegação",
     "Show all" : "Exibir todas",
     "Combine polls" : "Combinar enquetes",
     "Polls settings" : "Configurações de enquetes",

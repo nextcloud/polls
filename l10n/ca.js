@@ -536,6 +536,7 @@ OC.L10N.register(
     "Select polls by clicking on them in the right sidebar!" : "Seleccioneu les enquestes fent-hi clic a la barra lateral dreta!",
     "No polls found for this category" : "No s'han trobat enquestes per a aquesta categoria",
     "Relevant polls" : "Enquestes rellevants",
+    "Navigation" : "Navegació",
     "Show all" : "Mostra-ho tot",
     "Combine polls" : "Combinar enquestes",
     "Polls settings" : "Paràmetres d'Enquestes",

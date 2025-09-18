@@ -54,6 +54,7 @@ OC.L10N.register(
     "Switch to list view" : "Пераключыцца ў выгляд спісу",
     "No answer" : "Няма адказу",
     "Add links to legal terms, if they exist and add an optional disclaimer to emails." : "Дадайце спасылкі на юрыдычныя тэрміны, калі яны ёсць, і дадайце ў электронныя лісты неабавязковую адмову ад адказнасці.",
+    "Navigation" : "Навігацыя",
     "Comments" : "Каментарыі",
     "Details" : "Падрабязнасці",
     "Options" : "Варыянты",
@@ -62,6 +63,7 @@ OC.L10N.register(
     "Year" : "Год",
     "Access" : "Доступ",
     "Owner" : "Уладальнік",
-    "Archive" : "Архіў"
+    "Archive" : "Архіў",
+    "Administration" : "Адміністратар"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

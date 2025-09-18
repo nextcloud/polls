@@ -692,6 +692,7 @@ OC.L10N.register(
     "Error setting dashboard list" : "Fehler beim Setzen der Dashboard-Liste",
     "403 - You are not allowed to access this poll" : "403 – Sie dürfen nicht auf diese Umfrage zugreifen",
     "Contact the owner, if you think that this is wrong." : "Wenn Sie meinen, dass dies falsch ist, wenden Sie sich an den Eigentümer.",
+    "Navigation" : "Navigation",
     "Show all" : "Alle anzeigen",
     "Combine polls" : "Umfragen kombinieren",
     "Polls settings" : "Umfragen-Einstellungen",

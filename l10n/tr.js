@@ -692,6 +692,7 @@ OC.L10N.register(
     "Error setting dashboard list" : "Pano listesi ayarlanırken sorun çıktı",
     "403 - You are not allowed to access this poll" : "403 - Bu ankete erişme izniniz yok",
     "Contact the owner, if you think that this is wrong." : "Bir yanlışlık olduğunu düşünüyorsanız anket sahibi ile görüşün.",
+    "Navigation" : "Gezinme",
     "Show all" : "Tümünü görüntüle",
     "Combine polls" : "Anketleri birleştir",
     "Polls settings" : "Anketler ayarları",

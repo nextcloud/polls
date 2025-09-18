@@ -52,6 +52,7 @@ OC.L10N.register(
     "Change name" : "Alterar nome",
     "Public link" : "Hiperligação Pública",
     "Email options" : "Opções de e-mail",
+    "Navigation" : "Navegação",
     "Show all" : "Mostrar tudo",
     "Comments" : "Comentários",
     "Details" : "Detalhes",

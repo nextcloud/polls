@@ -540,6 +540,7 @@ OC.L10N.register(
     "Select polls by clicking on them in the right sidebar!" : "Velg avstemninger ved å klikke på dem i høyre sidefelt!",
     "No polls found for this category" : "Fant ingen avstemninger for denne kategorien",
     "Relevant polls" : "Relevante avstemninger",
+    "Navigation" : "Navigasjon",
     "Show all" : "Vis alt",
     "Combine polls" : "Kombiner avstemninger",
     "Polls settings" : "Innstillinger for avstemninger",
