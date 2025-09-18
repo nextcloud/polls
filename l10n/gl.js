@@ -441,7 +441,7 @@ OC.L10N.register(
     "Calendar check" : "Comprobación do calendario",
     "Personal preferences" : "Preferencias persoais",
     "Styles" : "Estilos",
-    "Share label" : "Compartir a etiqueta",
+    "Share label" : "Etiqueta de compartición",
     "Has voted" : "Votou",
     "Has not voted" : "Non votou",
     "Internal access" : "Acceso interno",
