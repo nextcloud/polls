@@ -122,7 +122,7 @@ const conflictLevel = computed(() => {
 	}
 
 	&.conflict-no {
-		border-inline-start: 4px solid var(--color-success);
+		border-inline-start: 4px solid var(--color-border-success);
 	}
 
 	&.cancelled {

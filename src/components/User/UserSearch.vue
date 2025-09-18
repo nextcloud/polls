@@ -11,7 +11,7 @@ import { t } from '@nextcloud/l10n'
 import NcSelectUsers from '@nextcloud/vue/components/NcSelectUsers'
 
 import { AppSettingsAPI } from '../../Api'
-import { Logger } from '../../helpers'
+import { Logger } from '../../helpers/modules/logger'
 import { ISearchType, User } from '../../Types'
 import type { AxiosError } from '@nextcloud/axios'
 
@@ -23,8 +23,6 @@ interface Props {
 }
 
 const emit = defineEmits(['userSelected'])
-
-const model = defineModel<User | undefined>()
 
 const {
 	placeholder = t('polls', 'Type to start searching …'),
@@ -79,7 +77,6 @@ const selectProps = {
 <template>
 	<NcSelectUsers
 		id="ajax"
-		v-model="model"
 		v-bind="selectProps"
 		:options="users"
 		@option:selected="optionSelected"

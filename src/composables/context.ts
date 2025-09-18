@@ -6,7 +6,7 @@
 import { RouteLocationNormalized } from 'vue-router'
 import { useSessionStore } from '../stores/session'
 import { usePreferencesStore } from '../stores/preferences'
-import { Logger } from '../helpers'
+import { Logger } from '../helpers/modules/logger'
 import { Settings } from 'luxon'
 
 /**

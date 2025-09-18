@@ -243,7 +243,7 @@ const descriptionLine = computed(() => {
 				<template #icon>
 					<ParticipatedIcon
 						:size="16"
-						style="color: var(--color-success-text)" />
+						style="color: var(--color-element-success)" />
 				</template>
 			</BadgeSmallDiv>
 

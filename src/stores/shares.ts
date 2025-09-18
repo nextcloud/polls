@@ -5,7 +5,7 @@
 
 import { defineStore } from 'pinia'
 
-import { Logger } from '../helpers'
+import { Logger } from '../helpers/modules/logger'
 import { SharesAPI } from '../Api'
 
 import { usePollGroupsStore } from './pollGroups'
@@ -120,7 +120,7 @@ export const useSharesStore = defineStore('shares', {
 					user,
 					purpose,
 				)
-				this.shares.push(response.data.share)
+				this.pushOrUpdate(response.data)
 			} catch (error) {
 				this.handleError(error, 'Error adding user share', {
 					purpose,
@@ -136,7 +136,7 @@ export const useSharesStore = defineStore('shares', {
 				const response = await SharesAPI.addPublicShare(
 					sessionStore.currentPollId,
 				)
-				this.shares.push(response.data.share)
+				this.pushOrUpdate(response.data)
 			} catch (error) {
 				this.handleError(error, 'Error adding public share', {
 					pollId: sessionStore.currentPollId,
@@ -144,10 +144,14 @@ export const useSharesStore = defineStore('shares', {
 			}
 		},
 
-		update(payload: { share: Share }): void {
+		pushOrUpdate(payload: { share: Share }): void {
 			const foundIndex = this.shares.findIndex(
 				(share: Share) => share.id === payload.share.id,
 			)
+			if (foundIndex === -1) {
+				this.shares.push(payload.share)
+				return
+			}
 			Object.assign(this.shares[foundIndex], payload.share)
 		},
 
@@ -159,7 +163,7 @@ export const useSharesStore = defineStore('shares', {
 					payload.share.token,
 					setTo,
 				)
-				this.update(response.data)
+				this.pushOrUpdate(response.data)
 			} catch (error) {
 				this.handleError(error, `Error switching type to ${setTo}`, payload)
 			}
@@ -174,7 +178,7 @@ export const useSharesStore = defineStore('shares', {
 					payload.share.token,
 					payload.value,
 				)
-				this.update(response.data)
+				this.pushOrUpdate(response.data)
 			} catch (error) {
 				this.handleError(
 					error,
@@ -190,7 +194,7 @@ export const useSharesStore = defineStore('shares', {
 					payload.token,
 					payload.label,
 				)
-				this.update(response.data)
+				this.pushOrUpdate(response.data)
 			} catch (error) {
 				this.handleError(error, 'Error writing label', payload)
 			}
@@ -230,7 +234,7 @@ export const useSharesStore = defineStore('shares', {
 		async lock(payload: { share: Share }): Promise<void> {
 			try {
 				const response = await SharesAPI.lockShare(payload.share.token)
-				this.update(response.data)
+				this.pushOrUpdate(response.data)
 			} catch (error) {
 				this.handleError(error, 'Error locking share', payload)
 			}
@@ -239,7 +243,7 @@ export const useSharesStore = defineStore('shares', {
 		async unlock(payload: { share: Share }): Promise<void> {
 			try {
 				const response = await SharesAPI.unlockShare(payload.share.token)
-				this.update(response.data)
+				this.pushOrUpdate(response.data)
 			} catch (error) {
 				this.handleError(error, 'Error unlocking share', payload)
 			}
@@ -248,7 +252,7 @@ export const useSharesStore = defineStore('shares', {
 		async delete(payload: { share: Share }): Promise<void> {
 			try {
 				const response = await SharesAPI.deleteShare(payload.share.token)
-				this.update(response.data)
+				this.pushOrUpdate(response.data)
 			} catch (error) {
 				this.handleError(error, 'Error deleting share', payload)
 			}
@@ -256,7 +260,7 @@ export const useSharesStore = defineStore('shares', {
 		async restore(payload: { share: Share }): Promise<void> {
 			try {
 				const response = await SharesAPI.restoreShare(payload.share.token)
-				this.update(response.data)
+				this.pushOrUpdate(response.data)
 			} catch (error) {
 				this.handleError(error, 'Error restoring share', payload)
 			}

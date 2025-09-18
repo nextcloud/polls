@@ -7,7 +7,8 @@ import { defineStore } from 'pinia'
 import sortBy from 'lodash/sortBy'
 
 import { VotesAPI, OptionsAPI, PollsAPI } from '../Api'
-import { Logger, uniqueOptions, uniqueParticipants } from '../helpers'
+import { Logger } from '../helpers/modules/logger'
+import { uniqueOptions, uniqueParticipants } from '../helpers/modules/arrayHelper'
 
 import { usePreferencesStore } from './preferences'
 import { usePollsStore } from './polls'

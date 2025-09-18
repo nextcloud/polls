@@ -14,7 +14,7 @@ import { t } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 
-import { Logger } from '../helpers'
+import { Logger } from '../helpers/modules/logger'
 import { PublicAPI, PollsAPI } from '../Api'
 import { createDefault, Event } from '../Types'
 
@@ -222,7 +222,7 @@ export const usePollStore = defineStore('poll', {
 		proposalsExpireRelative(state): string {
 			return DateTime.fromSeconds(
 				state.configuration.proposalsExpire,
-			).toRelative()
+			).toRelative() as string
 		},
 
 		isClosed(state): boolean {

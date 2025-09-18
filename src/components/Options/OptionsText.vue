@@ -32,7 +32,7 @@ useSortable(useTemplateRef<HTMLElement>('list'), optionsStore.options, {
 	},
 })
 
-const cssVar = {
+const componentStyle = {
 	'--content-deleted': `" (${t('polls', 'deleted')})"`,
 }
 
@@ -48,24 +48,22 @@ function onSort(event: { oldIndex: number; newIndex: number }) {
 </script>
 
 <template>
-	<div ref="list" :style="cssVar">
-		<div
+	<TransitionGroup ref="list" tag="ul" :style="componentStyle">
+		<OptionItem
 			v-for="option in optionsStore.options"
 			:key="option.id"
-			class="sortable">
-			<OptionItem
-				:key="option.id"
-				:option="option"
-				:draggable="true"
-				show-owner>
-				<template #actions>
-					<OptionMenu
-						v-if="pollStore.permissions.edit || option.isOwner"
-						:option="option" />
-				</template>
-			</OptionItem>
-		</div>
-	</div>
+			class="sortable"
+			:option="option"
+			:draggable="true"
+			tag="li"
+			show-owner>
+			<template #actions>
+				<OptionMenu
+					v-if="pollStore.permissions.edit || option.isOwner"
+					:option="option" />
+			</template>
+		</OptionItem>
+	</TransitionGroup>
 </template>
 
 <style lang="scss">

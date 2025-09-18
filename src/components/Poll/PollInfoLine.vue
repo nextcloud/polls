@@ -181,7 +181,7 @@ const timeExpirationRelative = computed(() => {
 	.closed,
 	.archived {
 		.sub-text {
-			color: var(--color-error);
+			color: var(--color-error-text);
 			font-weight: 700;
 		}
 	}

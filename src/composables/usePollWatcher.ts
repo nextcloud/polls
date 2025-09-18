@@ -9,7 +9,7 @@ import { generateUrl } from '@nextcloud/router'
 
 // eslint-disable-next-line import/default
 import PollWatcherWorker from '../workers/pollWatcher.worker?worker'
-import { Logger } from '../helpers'
+import { Logger } from '../helpers/modules/logger'
 
 import { useCommentsStore } from '../stores/comments'
 import { useOptionsStore } from '../stores/options'

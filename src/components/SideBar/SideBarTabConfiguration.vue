@@ -38,71 +38,67 @@ const votesStore = useVotesStore()
 </script>
 
 <template>
-	<div>
-		<CardDiv v-if="!pollStore.currentUserStatus.isOwner" type="success">
-			{{ t('polls', 'You have been granted administrative rights.') }}
-		</CardDiv>
+	<CardDiv v-if="!pollStore.currentUserStatus.isOwner" type="success">
+		{{ t('polls', 'You have been granted administrative rights.') }}
+	</CardDiv>
 
-		<CardDiv v-if="votesStore.hasVotes" type="warning">
-			{{ t('polls', 'Changes may affect existing votes.') }}
-		</CardDiv>
+	<CardDiv v-if="votesStore.hasVotes" type="warning">
+		{{ t('polls', 'Changes may affect existing votes.') }}
+	</CardDiv>
 
-		<ConfigBox :name="t('polls', 'Title')">
-			<template #icon>
-				<SpeakerIcon />
-			</template>
-			<ConfigTitle @change="pollStore.write" />
-		</ConfigBox>
+	<ConfigBox :name="t('polls', 'Title')">
+		<template #icon>
+			<SpeakerIcon />
+		</template>
+		<ConfigTitle @change="pollStore.write" />
+	</ConfigBox>
 
-		<ConfigBox :name="t('polls', 'Description')">
-			<template #icon>
-				<DescriptionIcon />
-			</template>
-			<ConfigDescription @change="pollStore.write" />
-		</ConfigBox>
+	<ConfigBox :name="t('polls', 'Description')">
+		<template #icon>
+			<DescriptionIcon />
+		</template>
+		<ConfigDescription @change="pollStore.write" />
+	</ConfigBox>
 
-		<ConfigBox :name="t('polls', 'Poll configuration')">
-			<template #icon>
-				<PollConfigIcon />
-			</template>
-			<ConfigAllowMayBe @change="pollStore.write" />
-			<ConfigUseNo @change="pollStore.write" />
-			<ConfigAnonymous @change="pollStore.write" />
+	<ConfigBox :name="t('polls', 'Poll configuration')">
+		<template #icon>
+			<PollConfigIcon />
+		</template>
+		<ConfigAllowMayBe @change="pollStore.write" />
+		<ConfigUseNo @change="pollStore.write" />
+		<ConfigAnonymous @change="pollStore.write" />
 
-			<ConfigVoteLimit @change="pollStore.write" />
-			<ConfigOptionLimit @change="pollStore.write" />
-		</ConfigBox>
+		<ConfigVoteLimit @change="pollStore.write" />
+		<ConfigOptionLimit @change="pollStore.write" />
+	</ConfigBox>
 
-		<ConfigBox :name="t('polls', 'Poll closing status')">
-			<template #icon>
-				<LockedIcon v-if="pollStore.isClosed" />
-				<UnlockedIcon v-else />
-			</template>
-			<ConfigClosing @change="pollStore.write" />
-			<ConfigAutoReminder
-				v-if="
-					pollStore.type === 'datePoll' || pollStore.configuration.expire
-				"
-				@change="pollStore.write" />
-		</ConfigBox>
+	<ConfigBox :name="t('polls', 'Poll closing status')">
+		<template #icon>
+			<LockedIcon v-if="pollStore.isClosed" />
+			<UnlockedIcon v-else />
+		</template>
+		<ConfigClosing @change="pollStore.write" />
+		<ConfigAutoReminder
+			v-if="pollStore.type === 'datePoll' || pollStore.configuration.expire"
+			@change="pollStore.write" />
+	</ConfigBox>
 
-		<ConfigBox :name="t('polls', 'Result display')">
-			<template #icon>
-				<ShowResultsIcon
-					v-if="pollStore.configuration.showResults === 'always'" />
-				<HideResultsUntilClosedIcon
-					v-if="pollStore.configuration.showResults === 'closed'" />
-				<ShowResultsNeverIcon
-					v-if="pollStore.configuration.showResults === 'never'" />
-			</template>
-			<ConfigShowResults @change="pollStore.write" />
-		</ConfigBox>
+	<ConfigBox :name="t('polls', 'Result display')">
+		<template #icon>
+			<ShowResultsIcon
+				v-if="pollStore.configuration.showResults === 'always'" />
+			<HideResultsUntilClosedIcon
+				v-if="pollStore.configuration.showResults === 'closed'" />
+			<ShowResultsNeverIcon
+				v-if="pollStore.configuration.showResults === 'never'" />
+		</template>
+		<ConfigShowResults @change="pollStore.write" />
+	</ConfigBox>
 
-		<ConfigBox :name="t('polls', 'Deletion and owner')">
-			<template #icon>
-				<DeletePollIcon />
-			</template>
-			<ConfigDangerArea />
-		</ConfigBox>
-	</div>
+	<ConfigBox :name="t('polls', 'Deletion and owner')">
+		<template #icon>
+			<DeletePollIcon />
+		</template>
+		<ConfigDangerArea />
+	</ConfigBox>
 </template>

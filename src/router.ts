@@ -11,7 +11,8 @@ import {
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
-import { getCookieValue, Logger, setCookie } from './helpers'
+import { getCookieValue, setCookie } from './helpers/modules/cookieHelper'
+import { Logger } from './helpers/modules/logger'
 import { loadContext } from './composables/context'
 
 import Navigation from './views/Navigation.vue'

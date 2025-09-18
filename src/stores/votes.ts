@@ -5,7 +5,8 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, VotesAPI } from '../Api'
-import { Logger, StoreHelper } from '../helpers'
+import { Logger } from '../helpers/modules/logger'
+import { StoreHelper } from '../helpers/modules/StoreHelper'
 
 import { usePollStore } from './poll'
 import { useSessionStore } from './session'

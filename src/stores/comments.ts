@@ -6,7 +6,8 @@
 import { defineStore } from 'pinia'
 
 import { CommentsAPI, PublicAPI } from '../Api'
-import { groupComments, Logger } from '../helpers'
+import { groupComments } from '../helpers/modules/comments'
+import { Logger } from '../helpers/modules/logger'
 
 import { useSessionStore } from './session'
 

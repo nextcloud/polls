@@ -640,13 +640,17 @@ class ShareService {
 			$preventInvitation = true;
 		}
 
-		$share = $this->createNewShare(
-			pollOrPollGroupId: $pollOrPollGroupId,
-			userGroup: $shareUser,
-			preventInvitation: $preventInvitation,
-			timeZone: '',
-			purpose: $purpose
-		);
+		try {
+			$share = $this->createNewShare(
+				pollOrPollGroupId: $pollOrPollGroupId,
+				userGroup: $shareUser,
+				preventInvitation: $preventInvitation,
+				timeZone: '',
+				purpose: $purpose
+			);
+		} catch (ShareAlreadyExistsException $e) {
+			$share = $e->getShare();
+		}
 
 		// TODO: extend event for pollGroups
 		if ($share->getPollId()) {

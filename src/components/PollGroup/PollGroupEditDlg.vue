@@ -52,29 +52,27 @@ async function updatePollGroup() {
 </script>
 
 <template>
-	<div class="edit-poll-group">
-		<ConfigBox :name="t('polls', 'Name')">
-			<template #icon>
-				<SpeakerIcon />
-			</template>
+	<ConfigBox :name="t('polls', 'Title')">
+		<template #icon>
+			<SpeakerIcon />
+		</template>
 
-			<ConfigTitlePollGroup @change="updatePollGroup" />
-		</ConfigBox>
+		<ConfigTitlePollGroup @change="updatePollGroup" />
+	</ConfigBox>
 
-		<ConfigBox :name="t('polls', 'Extended title')">
-			<template #icon>
-				<SpeakerBigIcon />
-			</template>
-			<ConfigTitleExtPollGroup @change="updatePollGroup" />
-		</ConfigBox>
+	<ConfigBox :name="t('polls', 'Extended title')">
+		<template #icon>
+			<SpeakerBigIcon />
+		</template>
+		<ConfigTitleExtPollGroup @change="updatePollGroup" />
+	</ConfigBox>
 
-		<ConfigBox :name="t('polls', 'Description')">
-			<template #icon>
-				<DescriptionIcon />
-			</template>
-			<ConfigDescriptionPollGroup @change="updatePollGroup" />
-		</ConfigBox>
-	</div>
+	<ConfigBox :name="t('polls', 'Description')">
+		<template #icon>
+			<DescriptionIcon />
+		</template>
+		<ConfigDescriptionPollGroup @change="updatePollGroup" />
+	</ConfigBox>
 </template>
 
 <style lang="scss">

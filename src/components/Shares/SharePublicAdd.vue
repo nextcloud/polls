@@ -17,6 +17,7 @@ import { useSharesStore } from '../../stores/shares'
 
 import type { VirtualUserItemType } from '../../Types'
 
+const { tag = 'div' } = defineProps<{ tag?: string }>()
 const sharesStore = useSharesStore()
 
 const userItemProps: {
@@ -40,7 +41,7 @@ async function addPublicShare() {
 </script>
 
 <template>
-	<UserItem v-bind="userItemProps" class="add-public">
+	<UserItem :tag="tag" v-bind="userItemProps" class="add-public">
 		<template #status>
 			<div class="vote-status" />
 		</template>

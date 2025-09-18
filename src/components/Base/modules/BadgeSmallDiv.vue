@@ -42,18 +42,18 @@ const { tag = 'span' } = defineProps<{ tag?: string }>()
 	}
 
 	&.error {
-		background-color: rgba(var(--color-error-rgb), 0.2);
-		border-color: var(--color-error);
+		background-color: var(--color-error);
+		border-color: var(--color-border-error);
 	}
 
 	&.success {
-		background-color: rgba(var(--color-success-rgb), 0.2);
-		border-color: var(--color-success);
+		background-color: var(--color-success);
+		border-color: var(--color-border-success);
 	}
 
 	&.warning {
-		background-color: rgba(var(--color-warning-rgb), 0.2) !important;
-		border-color: var(--color-warning);
+		background-color: var(--color-warning);
+		border-color: var(--color-element-warning);
 	}
 }
 </style>

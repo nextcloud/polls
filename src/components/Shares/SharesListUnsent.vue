@@ -14,7 +14,7 @@ import ShareItem from './ShareItem.vue'
 import BulkMailIcon from 'vue-material-design-icons/EmailMultipleOutline.vue'
 
 import ConfigBox from '../Base/modules/ConfigBox.vue'
-import { Logger } from '../../helpers'
+import { Logger } from '../../helpers/modules/logger'
 import { usePollStore } from '../../stores/poll'
 import { useSharesStore } from '../../stores/shares'
 
@@ -72,10 +72,11 @@ async function sendAllInvitations() {
 				</template>
 			</NcButton>
 		</template>
-		<TransitionGroup tag="div" name="list" :css="false" class="shares-list">
+		<TransitionGroup tag="ul" name="list">
 			<ShareItem
 				v-for="share in sharesStore.unsentInvitations"
 				:key="share.id"
+				tag="li"
 				:share="share" />
 		</TransitionGroup>
 	</ConfigBox>

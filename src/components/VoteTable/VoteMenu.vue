@@ -31,7 +31,10 @@ import { useSessionStore } from '../../stores/session'
 import { useSubscriptionStore } from '../../stores/subscription'
 import { useVotesStore } from '../../stores/votes'
 import { StatusResults } from '../../Types'
-import { deleteCookieByValue, findCookieByValue } from '../../helpers'
+import {
+	deleteCookieByValue,
+	findCookieByValue,
+} from '../../helpers/modules/cookieHelper'
 
 interface Props {
 	noMenuIcon: boolean

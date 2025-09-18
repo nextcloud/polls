@@ -16,7 +16,7 @@ import CalendarIcon from 'vue-material-design-icons/CalendarOutline.vue'
 
 import CalendarInfo from './CalendarInfo.vue'
 import { CalendarAPI } from '../../Api'
-import { Logger } from '../../helpers'
+import { Logger } from '../../helpers/modules/logger'
 
 import { usePollStore } from '../../stores/poll'
 

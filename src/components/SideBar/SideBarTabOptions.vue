@@ -20,6 +20,7 @@ import AddDateIcon from 'vue-material-design-icons/CalendarPlusOutline.vue'
 import DateOptionsIcon from 'vue-material-design-icons/CalendarMonthOutline.vue'
 import ShiftDateIcon from 'vue-material-design-icons/CalendarStartOutline.vue'
 import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
 import ActionAddOption from '../Actions/modules/ActionAddOption.vue'
 import { Event } from '../../Types'
@@ -57,67 +58,74 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="side-bar-tab-options">
-		<ConfigBox
-			v-if="!pollStore.currentUserStatus.isOwner"
-			v-bind="configBoxProps.delegatedAdminHint" />
-		<ConfigBox v-bind="configBoxProps.allowProposals">
+	<ConfigBox
+		v-if="!pollStore.currentUserStatus.isOwner"
+		v-bind="configBoxProps.delegatedAdminHint" />
+	<ConfigBox v-bind="configBoxProps.allowProposals">
+		<template #icon>
+			<AddDateIcon />
+		</template>
+		<ConfigProposals />
+	</ConfigBox>
+
+	<ConfigBox
+		v-if="
+			pollStore.type === 'datePoll'
+			&& optionsStore.options.length
+			&& !pollStore.isClosed
+		"
+		v-bind="configBoxProps.shiftDate">
+		<template #icon>
+			<ShiftDateIcon />
+		</template>
+		<OptionsDateShift />
+	</ConfigBox>
+
+	<ConfigBox
+		v-if="pollStore.type === 'datePoll'"
+		v-bind="configBoxProps.dateOptions">
+		<template #icon>
+			<DateOptionsIcon />
+		</template>
+
+		<OptionsDate v-if="optionsStore.options.length" />
+
+		<NcEmptyContent
+			v-else
+			:name="t('polls', 'No vote options')"
+			:description="t('polls', 'Add some!')">
 			<template #icon>
-				<AddDateIcon />
+				<DatePollIcon />
 			</template>
-			<ConfigProposals />
-		</ConfigBox>
+		</NcEmptyContent>
 
-		<ConfigBox
-			v-if="
-				pollStore.type === 'datePoll'
-				&& optionsStore.options.length
-				&& !pollStore.isClosed
-			"
-			v-bind="configBoxProps.shiftDate">
-			<template #icon>
-				<ShiftDateIcon />
-			</template>
-			<OptionsDateShift />
-		</ConfigBox>
+		<template v-if="!pollStore.isClosed" #actions>
+			<ActionAddOption :caption="t('polls', 'Add a date')" />
+		</template>
+	</ConfigBox>
 
-		<ConfigBox
-			v-if="pollStore.type === 'datePoll'"
-			v-bind="configBoxProps.dateOptions">
-			<template #icon>
-				<DateOptionsIcon />
-			</template>
+	<ConfigBox
+		v-if="pollStore.type === 'textPoll'"
+		v-bind="configBoxProps.textOptions">
+		<template #icon>
+			<TextOptionsIcon />
+		</template>
 
-			<OptionsDate />
+		<OptionsTextAdd v-if="!pollStore.isClosed" />
 
-			<template v-if="!pollStore.isClosed" #actions>
-				<ActionAddOption :caption="t('polls', 'Add a date')" />
-			</template>
-		</ConfigBox>
+		<OptionsText v-if="optionsStore.options.length" />
 
-		<ConfigBox
-			v-if="pollStore.type === 'textPoll'"
-			v-bind="configBoxProps.textOptions">
+		<NcEmptyContent
+			v-else
+			:name="t('polls', 'No vote options')"
+			:description="t('polls', 'Add some!')">
 			<template #icon>
 				<TextOptionsIcon />
 			</template>
+		</NcEmptyContent>
 
-			<OptionsTextAdd v-if="!pollStore.isClosed" />
-
-			<OptionsText v-if="optionsStore.options.length" />
-
-			<NcEmptyContent
-				v-else
-				:name="t('polls', 'No vote options')"
-				:description="t('polls', 'Add some!')">
-				<template #icon>
-					<TextOptionsIcon />
-				</template>
-			</NcEmptyContent>
-
-			<template #actions>
-				<OptionsTextAddBulk v-if="!pollStore.isClosed" />
-			</template>
-		</ConfigBox>
-	</div>
+		<template #actions>
+			<OptionsTextAddBulk v-if="!pollStore.isClosed" />
+		</template>
+	</ConfigBox>
 </template>

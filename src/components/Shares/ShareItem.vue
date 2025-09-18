@@ -17,7 +17,7 @@ import type { Share } from '../../stores/shares.types'
 
 const emit = defineEmits(['showQrCode'])
 
-const { share } = defineProps<{ share: Share }>()
+const { share, tag = 'div' } = defineProps<{ share: Share; tag?: string }>()
 
 const label = ref({
 	inputValue: '',
@@ -46,34 +46,34 @@ onMounted(() => {
 </script>
 
 <template>
-	<div :class="{ deleted: share.deleted }">
-		<UserItem
-			v-bind="userItemProps"
-			:delegated-from-group="!share.pollId"
-			:deleted-state="share.deleted"
-			:locked-state="share.locked">
-			<template #status>
-				<div v-if="share.voted">
-					<VotedIcon
-						class="vote-status voted"
-						:name="t('polls', 'Has voted')" />
-				</div>
-				<div
-					v-else-if="
-						share.groupId || ['public', 'group'].includes(share.type)
-					">
-					<div class="vote-status empty" />
-				</div>
-				<div v-else>
-					<UnvotedIcon
-						class="vote-status unvoted"
-						:name="t('polls', 'Has not voted')" />
-				</div>
-			</template>
+	<UserItem
+		v-bind="userItemProps"
+		:class="{ deleted: share.deleted }"
+		:tag="tag"
+		:delegated-from-group="!share.pollId"
+		:deleted-state="share.deleted"
+		:locked-state="share.locked">
+		<template #status>
+			<div v-if="share.voted">
+				<VotedIcon
+					class="vote-status voted"
+					:name="t('polls', 'Has voted')" />
+			</div>
+			<div
+				v-else-if="
+					share.groupId || ['public', 'group'].includes(share.type)
+				">
+				<div class="vote-status empty" />
+			</div>
+			<div v-else>
+				<UnvotedIcon
+					class="vote-status unvoted"
+					:name="t('polls', 'Has not voted')" />
+			</div>
+		</template>
 
-			<ShareMenu :share="share" @show-qr-code="emit('showQrCode')" />
-		</UserItem>
-	</div>
+		<ShareMenu :share="share" @show-qr-code="emit('showQrCode')" />
+	</UserItem>
 </template>
 
 <style lang="scss">

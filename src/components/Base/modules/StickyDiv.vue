@@ -63,19 +63,17 @@ const stickyClass = computed(() => ({
 		<div class="top"></div>
 		<div class="top-right-corner"></div>
 
+		<div class="left"></div>
+		<div class="stage" :style="style">
+			<slot name="default">
+				<div class="inner"></div>
+			</slot>
+		</div>
 		<div class="right"></div>
 
 		<div class="bottom-right-corner"></div>
 		<div class="bottom"></div>
 		<div class="bottom-left-corner"></div>
-
-		<div class="left"></div>
-
-		<div class="stage outer" :style="style">
-			<slot name="default">
-				<div class="inner"></div>
-			</slot>
-		</div>
 	</div>
 </template>
 

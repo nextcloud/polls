@@ -17,9 +17,15 @@ interface Props {
 	option: Option
 	draggable?: boolean
 	showOwner?: boolean
+	tag?: string
 }
 
-const { option, draggable = false, showOwner = false } = defineProps<Props>()
+const {
+	option,
+	draggable = false,
+	showOwner = false,
+	tag = 'div',
+} = defineProps<Props>()
 
 const containerClass = {
 	'option-item': true,
@@ -31,7 +37,7 @@ const pollStore = usePollStore()
 </script>
 
 <template>
-	<div :class="containerClass">
+	<component :is="tag" :class="containerClass">
 		<DragIcon v-if="draggable" class="grid-area-drag-icon" />
 
 		<OptionItemOwner
@@ -55,7 +61,7 @@ const pollStore = usePollStore()
 			:duration="Duration.fromMillis(option.duration * 1000)" />
 
 		<slot name="actions" />
-	</div>
+	</component>
 </template>
 
 <style lang="scss">
@@ -70,7 +76,7 @@ const pollStore = usePollStore()
 	.confirmed & {
 		background-color: var(--color-polls-background-yes);
 		border-radius: var(--border-radius-container);
-		border: 2px solid var(--color-success-text);
+		border: 2px solid var(--color-border-success);
 	}
 
 	.list-view .confirmed & {
