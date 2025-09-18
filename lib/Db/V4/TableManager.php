@@ -684,4 +684,53 @@ class TableManager extends DbManager {
 		$messages = array_merge($messages, $this->updateVoteHashes($schema));
 		return $messages;
 	}
+
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{0?: string,...}
+	 */
+	public function migrateShareLabels(): array {
+		$schema = $this->connection->createSchema();
+		$messages = [];
+
+		if (!$schema->hasTable($this->dbPrefix . Share::TABLE)) {
+			$this->logger->error('{db} is missing - aborted migrating labels', [ 'db' => $this->dbPrefix . Share::TABLE]);
+			$messages[] = 'Table ' . $this->dbPrefix . Share::TABLE . ' does not exist';
+			return $messages;
+		}
+		$table = $schema->getTable($this->dbPrefix . Share::TABLE);
+
+		if (!$table->hasColumn('label')) {
+			$this->logger->error('{db} is missing column \'label\' - aborted migrating labels', [ 'db' => $this->dbPrefix . Share::TABLE]);
+			$messages[] = 'Column \'label\' does not exist in ' . $this->dbPrefix . Share::TABLE;
+			return $messages;
+		}
+
+		$updated = 0;
+		$qb = $this->connection->getQueryBuilder();
+
+		$qb->update(Share::TABLE)
+			->set('display_name', 'label') // safe: assigns column B's value into A
+			->andWhere($qb->expr()->isNotNull(Share::TABLE . '.label'))
+			->andWhere($qb->expr()->eq(Share::TABLE .'.label' ,$qb->expr()->literal('')));
+		$updated = $qb->executeStatement();
+
+		if ($updated === 0) {
+			$this->logger->info('Verified all share labels in {db}', [
+				'db' => $this->dbPrefix . Share::TABLE
+			]);
+			$messages[] = 'No share labels to update';
+
+		} else {
+			$this->logger->info('Updated {updated} labels in {db}', [
+				'updated' => $updated,
+				'db' => $this->dbPrefix . Share::TABLE
+			]);
+			$messages[] = 'Updated ' . $updated . ' option hashes';
+
+		}
+
+		return $messages;
+	}
 }

@@ -56,6 +56,7 @@ class Rebuild extends Command {
 
 		$this->printComment('Step 2. Tidy records before rebuilding the schema');
 		$this->fixNullish();
+		$this->migrateShareLabels();
 
 		$this->printComment('Step 3. Create or update tables to current shema');
 		$this->createOrUpdateSchema();
@@ -98,6 +99,12 @@ class Rebuild extends Command {
 		$this->printInfo($messages, '   ');
 
 		$messages = $this->tableManager->fixNullishPollGroupRelations();
+		$this->printInfo($messages, '   ');
+	}
+
+	private function migrateShareLabels(): void {
+		$this->printComment(' - migrate share labels to displayname for public shares');
+		$messages = $this->tableManager->migrateShareLabels();
 		$this->printInfo($messages, '   ');
 	}
 

@@ -295,10 +295,6 @@ class ShareService {
 				->request(Poll::PERMISSION_POLL_EDIT);
 			$this->share->setLabel($label);
 
-			// overwrite any possible displayName
-			// TODO: Remove afte rmigratiuon to label
-			$this->share->setDisplayName('');
-
 			$dispatchEvent = new ShareChangedLabelEvent($this->share);
 		} else {
 			throw new InvalidShareTypeException('Label can only be set for public shares.');

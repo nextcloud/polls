@@ -42,8 +42,6 @@ use OCP\IURLGenerator;
  * @method ?int getAnonymizedVotes()
  * @method int getDeleted()
  * @method void setDeleted(int $value)
- * @method ?string getLabel()
- * @method void setLabel(?string $value)
  */
 class Share extends EntityWithUser implements JsonSerializable {
 	/** @var string */
@@ -204,25 +202,32 @@ class Share extends EntityWithUser implements JsonSerializable {
 	}
 
 	/**
-	 * Share label for public shares, falls back to username until migrated
-	 * TODO: remove fallback after migration was introduced
+	 * Share label for public shares, now stored as displayName
+	 * TODO: remove after migration was introduced
+	 */
+	public function setLabel(string $label): void {
+		$this->setDisplayName($label);
+		$this->label = $label;
+	}
+
+	/**
+	 * Share label for public shares
+	 * TODO: remove after migrating labels to displayName
 	 */
 	public function getLabel(): string {
-		if ($this->getType() === self::TYPE_PUBLIC && $this->label) {
-			return $this->label;
-		}
-		return $this->displayName ?? '';
+		// In case of public poll use label as fallback for displayName
+		return $this->displayName ?? $this->label ?? '';
 	}
 
 	/**
 	 * Sharee's displayName. In case of public poll label is used instead
-	 * TODO: remove public poll chaeck after migration to label
+	 * TODO: remove public poll check after migration labels to displayName
 	 */
 	public function getDisplayName(): string {
 		if ($this->getType() === self::TYPE_PUBLIC) {
-			return '';
+			return $this->getLabel();
 		}
-		return (string)$this->displayName;
+		return $this->displayName ?? '';
 	}
 
 	public function getTimeZoneName(): string {
