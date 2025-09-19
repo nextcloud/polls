@@ -26,7 +26,6 @@ OC.L10N.register(
     "Preview" : "Parapamje ",
     "Submit" : "Dërgo",
     "never" : "asnjëherë",
-    "Name" : "Emër",
     "Description" : "Përshkrim",
     "Expiration" : "Skadim",
     "Back" : "Mbrapsht",

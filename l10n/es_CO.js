@@ -35,7 +35,6 @@ OC.L10N.register(
     "Preview" : "Previsualizar",
     "Submit" : "Enviar",
     "never" : "nunca",
-    "Name" : "Nombre",
     "Description" : "Descripción",
     "No description provided" : "No se agregó ninguna descripción",
     "Expiration" : "Expiración",

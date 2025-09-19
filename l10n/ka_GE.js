@@ -29,7 +29,6 @@ OC.L10N.register(
     "Preview" : "წინასწარი ჩვენება",
     "Submit" : "გაგზავნა",
     "never" : "არასდროს",
-    "Name" : "სახელი",
     "Description" : "აღწერილობა",
     "Expiration" : "ვადის გასვლა",
     "Login" : "ავტორიზაცია",

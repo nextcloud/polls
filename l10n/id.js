@@ -25,7 +25,6 @@ OC.L10N.register(
     "All day" : "Sepanjang hari",
     "Preview" : "Pratinjau",
     "never" : "tidak pernah.",
-    "Name" : "Nama",
     "Description" : "Deskrisi",
     "Expiration" : "Kedaluwarsa",
     "Descending" : "Menurun",

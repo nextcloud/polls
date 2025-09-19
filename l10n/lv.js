@@ -40,7 +40,6 @@ OC.L10N.register(
     "Preview" : "Priekšskatīt",
     "Submit" : "Iesniegt",
     "never" : "nekad",
-    "Name" : "Nosaukums",
     "Description" : "Apraksts",
     "No description provided" : "Apraksts nav sniegts",
     "Expiration" : "Termiņš",

@@ -32,7 +32,6 @@ OC.L10N.register(
     "Preview" : "Xem trước",
     "Submit" : "Gửi đi",
     "never" : "không thay đổi",
-    "Name" : "Tên",
     "Description" : "Mô tả",
     "Expiration" : "Hết hạn",
     "Back" : "Trở lại",

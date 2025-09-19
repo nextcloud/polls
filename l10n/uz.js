@@ -30,7 +30,6 @@ OC.L10N.register(
     "Submit" : "Submit",
     "Archived" : "Arxivlangan",
     "never" : "never",
-    "Name" : "Nomi",
     "Description" : "Tavsif",
     "Expiration" : "Muddati",
     "Back" : "Orqaga",

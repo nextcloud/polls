@@ -184,7 +184,6 @@ OC.L10N.register(
     "Submit" : "Submit",
     "never" : "never",
     "Private poll" : "Private poll",
-    "Name" : "სახელი",
     "Description" : "Description",
     "Back" : "უკან",
     "Privacy policy" : "Privacy policy",

@@ -20,7 +20,6 @@ OC.L10N.register(
     "Preview" : "ตัวอย่าง",
     "Submit" : "ส่ง",
     "never" : "ไม่ต้องเลย",
-    "Name" : "ชื่อ",
     "Description" : "รายละเอียด",
     "Expiration" : "การหมดอายุ",
     "Login" : "เข้าสู่ระบบ",

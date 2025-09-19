@@ -59,7 +59,6 @@ OC.L10N.register(
     "Preview" : "תצוגה מקדימה",
     "Submit" : "שליחה",
     "never" : "מעולם לא",
-    "Name" : "שם",
     "Description" : "תיאור",
     "No description provided" : "לא סופק תיאור",
     "Expiration" : "תפוגה",

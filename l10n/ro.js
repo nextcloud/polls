@@ -34,7 +34,6 @@ OC.L10N.register(
     "Preview" : "Previzualizare",
     "Submit" : "Trimite",
     "never" : "niciodată",
-    "Name" : "Nume",
     "Description" : "Descriere",
     "Expiration" : "Expiră",
     "Back" : "Înapoi",

@@ -37,7 +37,6 @@ OC.L10N.register(
     "Submit" : "Transmetre",
     "never" : "pas jamai",
     "Private poll" : "Sondatge privat",
-    "Name" : "Nom",
     "Description" : "Descripcion",
     "Expiration" : "Expiracion",
     "Login" : "Login",
