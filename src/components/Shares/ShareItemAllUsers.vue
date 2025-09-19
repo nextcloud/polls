@@ -19,12 +19,12 @@ const pollStore = usePollStore()
 
 const userItemProps = computed<{
 	label: string
-	type: VirtualUserItemType
+	virtualUserType: VirtualUserItemType
 	disabled?: boolean
 	description?: string
 }>(() => ({
 	label: t('polls', 'Internal access'),
-	type: 'internalAccess',
+	virtualUserType: 'internalAccess',
 	disabled: pollStore.configuration.access === 'private',
 	description:
 		pollStore.configuration.access === 'private'

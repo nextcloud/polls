@@ -213,15 +213,17 @@ class TableManager extends DbManager {
 
 		foreach (TableSchema::GONE_COLUMNS as $tableName => $columns) {
 			$tableName = $this->dbPrefix . $tableName;
-			if ($this->schema->hasTable($tableName)) {
-				$table = $this->schema->getTable($tableName);
+			if (!$this->schema->hasTable($tableName)) {
+				continue;
+			}
 
-				foreach ($columns as $columnName) {
-					if ($table->hasColumn($columnName)) {
-						$dropped = true;
-						$table->dropColumn($columnName);
-						$messages[] = 'Dropped ' . $columnName . ' from ' . $tableName;
-					}
+			$table = $this->schema->getTable($tableName);
+
+			foreach ($columns as $columnName) {
+				if ($table->hasColumn($columnName)) {
+					$dropped = true;
+					$table->dropColumn($columnName);
+					$messages[] = 'Dropped ' . $columnName . ' from ' . $tableName;
 				}
 			}
 		}
@@ -375,33 +377,34 @@ class TableManager extends DbManager {
 		$this->needsSchema();
 		$qb = $this->connection->getQueryBuilder();
 
-		if ($this->schema->hasTable($this->dbPrefix . $table)) {
-			// identify duplicates
-			$selection = $qb->selectDistinct('t1.id')
-				->from($table, 't1')
-				->innerJoin('t1', $table, 't2', $qb->expr()->lt('t1.id', 't2.id'));
-
-			$i = 0;
-
-			foreach ($columns as $column) {
-				if ($i > 0) {
-					$selection->andWhere($qb->expr()->eq('t1.' . $column, 't2.' . $column));
-				} else {
-					$selection->where($qb->expr()->eq('t1.' . $column, 't2.' . $column));
-				}
-				$i++;
-			}
-
-			$duplicates = $qb->executeQuery()->fetchAll(PDO::FETCH_COLUMN);
-
-			$this->connection->getQueryBuilder()
-				->delete($table)
-				->where('id in (:ids)')
-				->setParameter('ids', $duplicates, IQueryBuilder::PARAM_INT_ARRAY)
-				->executeStatement();
-			return count($duplicates);
+		if (!$this->schema->hasTable($this->dbPrefix . $table)) {
+			return 0;
 		}
-		return 0;
+
+		// identify duplicates
+		$selection = $qb->selectDistinct('t1.id')
+			->from($table, 't1')
+			->innerJoin('t1', $table, 't2', $qb->expr()->lt('t1.id', 't2.id'));
+
+		$i = 0;
+
+		foreach ($columns as $column) {
+			if ($i > 0) {
+				$selection->andWhere($qb->expr()->eq('t1.' . $column, 't2.' . $column));
+			} else {
+				$selection->where($qb->expr()->eq('t1.' . $column, 't2.' . $column));
+			}
+			$i++;
+		}
+
+		$duplicates = $qb->executeQuery()->fetchAll(PDO::FETCH_COLUMN);
+
+		$this->connection->getQueryBuilder()
+			->delete($table)
+			->where('id in (:ids)')
+			->setParameter('ids', $duplicates, IQueryBuilder::PARAM_INT_ARRAY)
+			->executeStatement();
+		return count($duplicates);
 	}
 
 	/**
@@ -423,19 +426,24 @@ class TableManager extends DbManager {
 	}
 
 	public function fixVotes(): void {
-		if ($this->schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
-			$table = $this->schema->getTable($this->dbPrefix . OptionMapper::TABLE);
-			if ($table->hasColumn('duration')) {
-				$foundOptions = $this->optionMapper->findOptionsWithDuration();
-				foreach ($foundOptions as $option) {
-					$this->voteMapper->fixVoteOptionText(
-						$option->getPollId(),
-						$option->getId(),
-						$option->getPollOptionTextStart(),
-						$option->getPollOptionText(),
-					);
-				}
-			}
+		if (!$this->schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
+			return;
+		}
+
+		$table = $this->schema->getTable($this->dbPrefix . OptionMapper::TABLE);
+
+		if (!$table->hasColumn('duration')) {
+			return;
+		}
+
+		$foundOptions = $this->optionMapper->findOptionsWithDuration();
+		foreach ($foundOptions as $option) {
+			$this->voteMapper->fixVoteOptionText(
+				$option->getPollId(),
+				$option->getId(),
+				$option->getPollOptionTextStart(),
+				$option->getPollOptionText(),
+			);
 		}
 	}
 
@@ -548,58 +556,64 @@ class TableManager extends DbManager {
 	 */
 	private function updateVoteHashes(Schema &$schema): array {
 		$messages = [];
-		if ($schema->hasTable($this->dbPrefix . VoteMapper::TABLE)) {
-			$table = $schema->getTable($this->dbPrefix . VoteMapper::TABLE);
-			$count = 0;
-			$updated = 0;
-			if ($table->hasColumn('vote_option_hash')) {
-				foreach ($this->voteMapper->getAll(includeNull: true) as $vote) {
-					try {
-						// if the hash of the vote differs from calculated hash update the vote hash
-						if ($vote->getVoteOptionHash() !== Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText())) {
-							$vote->setVoteOptionHash(Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()));
-							$vote = $this->voteMapper->update($vote);
-							$updated++;
-						}
-
-						$count++;
-
-					} catch (Exception $e) {
-						$messages[] = 'Skip hash update - Error updating option hash for voteId ' . $vote->getId();
-						$this->logger->error('Error updating option hash for voteId {id}', [
-							'id' => $vote->getId(),
-							'message' => $e->getMessage()
-						]);
-					}
-				}
-
-				if ($updated === 0) {
-					$this->logger->info('Verified {count} vote hashes in {db}', [
-						'count' => $count,
-						'db' => $this->dbPrefix . VoteMapper::TABLE
-					]);
-					$messages[] = 'No vote hashes to update';
-
-				} else {
-					$this->logger->info('Updated {updated} hashes of {count} votes in {db}', [
-						'updated' => $updated,
-						'count' => $count,
-						'db' => $this->dbPrefix . VoteMapper::TABLE
-					]);
-					$messages[] = 'Updated ' . $updated . ' vote hashes';
-
-				}
-
-			} else {
-				$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', [
-					'db' => $this->dbPrefix . VoteMapper::TABLE
-				]);
-			}
-		} else {
+		if (!$schema->hasTable($this->dbPrefix . VoteMapper::TABLE)) {
 			$this->logger->error('{db} is missing- aborted recalculating hashes', [
 				'db' => $this->dbPrefix . VoteMapper::TABLE
 			]);
+			$messages[] = 'Table ' . $this->dbPrefix . VoteMapper::TABLE . ' does not exist';
+			return $messages;
 		}
+
+		$table = $schema->getTable($this->dbPrefix . VoteMapper::TABLE);
+
+		if (!$table->hasColumn('vote_option_hash')) {
+			$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', [
+				'db' => $this->dbPrefix . VoteMapper::TABLE
+			]);
+			$messages[] = 'Column \'vote_option_hash\' does not exist in ' . $this->dbPrefix . VoteMapper::TABLE;
+			return $messages;
+		}
+
+		$count = 0;
+		$updated = 0;
+
+		foreach ($this->voteMapper->getAll(includeNull: true) as $vote) {
+			try {
+				// if the hash of the vote differs from calculated hash update the vote hash
+				if ($vote->getVoteOptionHash() !== Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText())) {
+					$vote->setVoteOptionHash(Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()));
+					$vote = $this->voteMapper->update($vote);
+					$updated++;
+				}
+
+				$count++;
+
+			} catch (Exception $e) {
+				$messages[] = 'Skip hash update - Error updating option hash for voteId ' . $vote->getId();
+				$this->logger->error('Error updating option hash for voteId {id}', [
+					'id' => $vote->getId(),
+					'message' => $e->getMessage()
+				]);
+			}
+		}
+
+		if ($updated === 0) {
+			$this->logger->info('Verified {count} vote hashes in {db}', [
+				'count' => $count,
+				'db' => $this->dbPrefix . VoteMapper::TABLE
+			]);
+			$messages[] = 'No vote hashes to update';
+
+		} else {
+			$this->logger->info('Updated {updated} hashes of {count} votes in {db}', [
+				'updated' => $updated,
+				'count' => $count,
+				'db' => $this->dbPrefix . VoteMapper::TABLE
+			]);
+			$messages[] = 'Updated ' . $updated . ' vote hashes';
+
+		}
+
 		return $messages;
 	}
 
@@ -611,53 +625,56 @@ class TableManager extends DbManager {
 	private function updateOptionHashes(Schema &$schema): array {
 		$messages = [];
 
-		if ($schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
-			$table = $schema->getTable($this->dbPrefix . OptionMapper::TABLE);
-			$count = 0;
-			$updated = 0;
+		if (!$schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
+			$this->logger->error('{db} is missing - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
+			$messages[] = 'Table ' . $this->dbPrefix . OptionMapper::TABLE . ' does not exist';
+			return $messages;
+		}
+		$table = $schema->getTable($this->dbPrefix . OptionMapper::TABLE);
 
-			if ($table->hasColumn('poll_option_hash')) {
-				foreach ($this->optionMapper->getAll(includeNull: true) as $option) {
-					try {
-						// if the option's hash differs from $actualHash update the option
-						if ($option->getPollOptionHash() !== Hash::getOptionHash($option->getPollId(), $option->getPollOptionText())) {
-							$option->setPollOptionHash(Hash::getOptionHash($option->getPollId(), $option->getPollOptionText()));
-							$option = $this->optionMapper->update($option);
-							$updated++;
-						}
+		if (!$table->hasColumn('poll_option_hash')) {
+			$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
+			$messages[] = 'Column \'poll_option_hash\' does not exist in ' . $this->dbPrefix . OptionMapper::TABLE;
+			return $messages;
+		}
 
-						$count++;
+		$count = 0;
+		$updated = 0;
 
-					} catch (Exception $e) {
-						$messages[] = 'Skip hash update - Error updating option hash for optionId ' . $option->getId();
-						$this->logger->error('Error updating option hash for optionId {id}', ['id' => $option->getId(), 'message' => $e->getMessage()]);
-					}
+		foreach ($this->optionMapper->getAll(includeNull: true) as $option) {
+			try {
+				// if the option's hash differs from $actualHash update the option
+				if ($option->getPollOptionHash() !== Hash::getOptionHash($option->getPollId(), $option->getPollOptionText())) {
+					$option->setPollOptionHash(Hash::getOptionHash($option->getPollId(), $option->getPollOptionText()));
+					$option = $this->optionMapper->update($option);
+					$updated++;
 				}
 
-				if ($updated === 0) {
-					$this->logger->info('Verified {count} option hashes in {db}', [
-						'count' => $count,
-						'db' => $this->dbPrefix . OptionMapper::TABLE
-					]);
-					$messages[] = 'No option hashes to update';
+				$count++;
 
-				} else {
-					$this->logger->info('Updated {updated} hashes of {count} options in {db}', [
-						'updated' => $updated,
-						'count' => $count,
-						'db' => $this->dbPrefix . OptionMapper::TABLE
-					]);
-					$messages[] = 'Updated ' . $updated . ' option hashes';
-
-				}
-
-			} else {
-				$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
+			} catch (Exception $e) {
+				$messages[] = 'Skip hash update - Error updating option hash for optionId ' . $option->getId();
+				$this->logger->error('Error updating option hash for optionId {id}', ['id' => $option->getId(), 'message' => $e->getMessage()]);
 			}
+		}
+
+		if ($updated === 0) {
+			$this->logger->info('Verified {count} option hashes in {db}', [
+				'count' => $count,
+				'db' => $this->dbPrefix . OptionMapper::TABLE
+			]);
+			$messages[] = 'No option hashes to update';
 
 		} else {
-			$this->logger->error('{db} is missing - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
+			$this->logger->info('Updated {updated} hashes of {count} options in {db}', [
+				'updated' => $updated,
+				'count' => $count,
+				'db' => $this->dbPrefix . OptionMapper::TABLE
+			]);
+			$messages[] = 'Updated ' . $updated . ' option hashes';
+
 		}
+
 		return $messages;
 	}
 
@@ -665,6 +682,54 @@ class TableManager extends DbManager {
 		$schema = $this->connection->createSchema();
 		$messages = $this->updateOptionHashes($schema);
 		$messages = array_merge($messages, $this->updateVoteHashes($schema));
+		return $messages;
+	}
+
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list{0?: string,...}
+	 */
+	public function migrateShareLabels(): array {
+		$schema = $this->connection->createSchema();
+		$messages = [];
+
+		if (!$schema->hasTable($this->dbPrefix . Share::TABLE)) {
+			$this->logger->error('{db} is missing - aborted migrating labels', [ 'db' => $this->dbPrefix . Share::TABLE]);
+			$messages[] = 'Table ' . $this->dbPrefix . Share::TABLE . ' does not exist';
+			return $messages;
+		}
+		$table = $schema->getTable($this->dbPrefix . Share::TABLE);
+
+		if (!$table->hasColumn('label')) {
+			$this->logger->error('{db} is missing column \'label\' - aborted migrating labels', [ 'db' => $this->dbPrefix . Share::TABLE]);
+			$messages[] = 'Column \'label\' does not exist in ' . $this->dbPrefix . Share::TABLE;
+			return $messages;
+		}
+
+		$qb = $this->connection->getQueryBuilder();
+
+		$qb->update(Share::TABLE)
+			->set('display_name', 'label') // safe: assigns column B's value into A
+			->andWhere($qb->expr()->isNotNull(Share::TABLE . '.label'))
+			->andWhere($qb->expr()->eq(Share::TABLE . '.label', $qb->expr()->literal('')));
+		$updated = $qb->executeStatement();
+
+		if ($updated === 0) {
+			$this->logger->info('Verified all share labels in {db}', [
+				'db' => $this->dbPrefix . Share::TABLE
+			]);
+			$messages[] = 'No share labels to update';
+
+		} else {
+			$this->logger->info('Updated {updated} labels in {db}', [
+				'updated' => $updated,
+				'db' => $this->dbPrefix . Share::TABLE
+			]);
+			$messages[] = 'Updated ' . $updated . ' option hashes';
+
+		}
+
 		return $messages;
 	}
 }
