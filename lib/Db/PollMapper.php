@@ -37,13 +37,9 @@ class PollMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Poll
 	 */
-	public function get(int $id, bool $getDeleted = false): Poll {
+	public function get(int $id): Poll {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
-
-		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
-		}
 
 		return $this->findEntity($qb);
 	}

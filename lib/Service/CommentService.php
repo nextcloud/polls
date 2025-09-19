@@ -36,7 +36,7 @@ class CommentService {
 	 */
 	public function list(int $pollId): array {
 		try {
-			$this->pollMapper->get($pollId, true)
+			$this->pollMapper->get($pollId)
 				->request(Poll::PERMISSION_COMMENT_ADD);
 		} catch (Exception $e) {
 			return [];
