@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { t } from '@nextcloud/l10n'
 
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
@@ -14,10 +14,51 @@ import UserItem from '../User/UserItem.vue'
 import ShareMenu from './ShareMenu.vue'
 
 import type { Share } from '../../stores/shares.types'
+import { AvatarTypeIcon } from '../User/UserAvatar.types'
 
 const emit = defineEmits(['showQrCode'])
 
 const { share, tag = 'div' } = defineProps<{ share: Share; tag?: string }>()
+
+const publicShareDescription = computed(() => {
+	if (share.displayName === '') {
+		return t('polls', 'Token: {token}', { token: share.user.id })
+	}
+	return t('polls', 'Public link: {token}', { token: share.user.id })
+})
+
+const userDescription = computed(() => {
+	if (share.groupId && !share.pollId) {
+		return t('polls', 'Poll group access')
+	}
+	if (share.deleted) {
+		return t('polls', '(deleted)')
+	}
+	if (share.locked) {
+		return t('polls', '(locked)')
+	}
+	if (share.type === 'public') {
+		return publicShareDescription.value
+	}
+	if (share.type === 'group') {
+		return t('polls', 'Group share')
+	}
+	if (share.type === 'contactGroup') {
+		return t('polls', 'Resolve contact group first!')
+	}
+	if (share.type === 'circle') {
+		return t('polls', 'Resolve this team first!')
+	}
+
+	return ''
+})
+
+const computedTypeIcon = computed<AvatarTypeIcon>(() => {
+	if (share.groupId && !share.pollId) {
+		return 'pollGroupIcon'
+	}
+	return true
+})
 
 const label = ref({
 	inputValue: '',
@@ -30,16 +71,6 @@ const label = ref({
 	},
 })
 
-const userItemProps = computed(() => ({
-	user: share.user,
-	label: share.label,
-	showEmail: true,
-	resolveInfo: true,
-	forcedDescription: share.deleted ? `(${t('polls', 'deleted')})` : null,
-	showTypeIcon: true,
-	icon: true,
-}))
-
 onMounted(() => {
 	label.value.inputValue = share.label
 })
@@ -47,23 +78,21 @@ onMounted(() => {
 
 <template>
 	<UserItem
-		v-bind="userItemProps"
-		:class="{ deleted: share.deleted }"
 		:tag="tag"
-		:delegated-from-group="!share.pollId"
-		:deleted-state="share.deleted"
-		:locked-state="share.locked">
+		:class="{ deleted: share.deleted }"
+		:user="share.user"
+		show-email
+		:type-icon="computedTypeIcon"
+		:description="userDescription"
+		:label="share.label">
 		<template #status>
-			<div v-if="share.voted">
+			<div v-if="share.groupId || ['public', 'group'].includes(share.type)">
+				<div class="vote-status empty" />
+			</div>
+			<div v-else-if="share.voted">
 				<VotedIcon
 					class="vote-status voted"
 					:name="t('polls', 'Has voted')" />
-			</div>
-			<div
-				v-else-if="
-					share.groupId || ['public', 'group'].includes(share.type)
-				">
-				<div class="vote-status empty" />
 			</div>
 			<div v-else>
 				<UnvotedIcon

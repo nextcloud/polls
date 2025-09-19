@@ -28,7 +28,7 @@ const comboStore = useComboStore()
 					v-for="participant in comboStore.participantsInPoll(poll.id)"
 					:key="`${participant.user.id}_${participant.pollId}`"
 					class="participant">
-					<UserItem v-bind="participant" condensed />
+					<UserItem :user="participant.user" condensed />
 				</div>
 			</div>
 		</div>

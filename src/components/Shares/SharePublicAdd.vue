@@ -22,10 +22,10 @@ const sharesStore = useSharesStore()
 
 const userItemProps: {
 	label: string
-	type: VirtualUserItemType
+	virtualUserType: VirtualUserItemType
 } = {
 	label: t('polls', 'Add a new public link'),
-	type: 'addPublicLink',
+	virtualUserType: 'addPublicLink',
 }
 
 /**

@@ -51,7 +51,6 @@ const showDelete = computed(
 			:user="option.owner"
 			:icon-size="avatarSize"
 			hide-names
-			hide-status
 			:tooltip-message="
 				t('polls', '{displayName}\'s proposal', {
 					displayName: option.owner?.displayName ?? '',
