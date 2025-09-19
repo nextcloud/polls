@@ -33,8 +33,8 @@ abstract class Container {
 		return Server::get(LoggerInterface::class);
 	}
 
-	public static function getPoll(int $pollId, bool $getDeleted = false): Poll {
-		return Server::get(PollMapper::class)->get($pollId, $getDeleted);
+	public static function getPoll(int $pollId): Poll {
+		return Server::get(PollMapper::class)->get($pollId);
 	}
 
 	public static function queryPoll(int $pollId): Poll {
