@@ -707,13 +707,12 @@ class TableManager extends DbManager {
 			return $messages;
 		}
 
-		$updated = 0;
 		$qb = $this->connection->getQueryBuilder();
 
 		$qb->update(Share::TABLE)
 			->set('display_name', 'label') // safe: assigns column B's value into A
 			->andWhere($qb->expr()->isNotNull(Share::TABLE . '.label'))
-			->andWhere($qb->expr()->eq(Share::TABLE .'.label' ,$qb->expr()->literal('')));
+			->andWhere($qb->expr()->eq(Share::TABLE . '.label', $qb->expr()->literal('')));
 		$updated = $qb->executeStatement();
 
 		if ($updated === 0) {
