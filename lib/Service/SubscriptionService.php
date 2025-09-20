@@ -27,7 +27,7 @@ class SubscriptionService {
 	}
 
 	public function get(int $pollId): bool {
-		$this->pollMapper->get($pollId, true)->request(Poll::PERMISSION_POLL_ACCESS);
+		$this->pollMapper->get($pollId)->request(Poll::PERMISSION_POLL_ACCESS);
 
 		try {
 			$this->subscriptionMapper->findByPollAndUser($pollId, $this->userSession->getCurrentUserId());
