@@ -52,6 +52,7 @@ OC.L10N.register(
     "Ascending" : "Ascending",
     "Privacy policy" : "Sheria ya faragha",
     "Login" : "Ingia",
+    "Group share" : "Shiriki ya kundi",
     "Share label" : "Share label",
     "Copy link to clipboard" : "Copy link to clipboard",
     "Link copied to clipboard" : "Kiungo kimenakiliwa kwenye ubao wakunakilia",

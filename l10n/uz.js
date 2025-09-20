@@ -37,6 +37,7 @@ OC.L10N.register(
     "Descending" : "Kamaytirish",
     "Ascending" : "Ko'tarilish",
     "Login" : "Login",
+    "Group share" : "Guruh ulushi",
     "Share label" : "Yorliq almashish",
     "No activity yet" : "Afsuski, faollik mavjud emas",
     "Other settings" : "Boshqa sozlamalar",
