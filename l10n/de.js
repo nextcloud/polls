@@ -567,6 +567,8 @@ OC.L10N.register(
     "(deleted)" : "(gelöscht)",
     "(locked)" : "(gesperrt)",
     "Group share" : "Gruppen-Freigabe",
+    "Resolve contact group first!" : "Kontaktgruppe zuerst auflösen!",
+    "Resolve this team first!" : "Zuerst dieses Team auflösen!",
     "Share label" : "Freigabe-Label",
     "Has voted" : "Hat teilgenommen",
     "Has not voted" : "Hat nicht teilgenommen",

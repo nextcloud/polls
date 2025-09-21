@@ -504,6 +504,8 @@ OC.L10N.register(
     "(deleted)" : "(eliminado)",
     "(locked)" : "(bloqueado)",
     "Group share" : "Compartición de grupo",
+    "Resolve contact group first!" : "Resolver primeiro o grupo de contacto!",
+    "Resolve this team first!" : "Resolver primeiro este equipo!",
     "Share label" : "Etiqueta de compartición",
     "Has voted" : "Votou",
     "Has not voted" : "Non votou",
@@ -669,6 +671,7 @@ OC.L10N.register(
     "Archive" : "Arquivar",
     "My archived polls" : "As miñas enquisas arquivadas",
     "Your archived polls are only accessible to you." : "Só Vde. pode acceder ás súas enquisas arquivadas.",
-    "Administration" : "Administración"
+    "Administration" : "Administración",
+    "You can delete, archive and take over polls in this list, but access is still not possible." : "Pode eliminar, arquivar e facerse cargo das enquisas desta lista, mais aínda non é posíbel acceder a elas."
 },
 "nplurals=2; plural=(n != 1);");

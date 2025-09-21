@@ -567,6 +567,8 @@ OC.L10N.register(
     "(deleted)" : "(smazáno)",
     "(locked)" : "(uzamčeno)",
     "Group share" : "Skupinové sdílení",
+    "Resolve contact group first!" : "Vyřešit skupinu kontaktů jako první!",
+    "Resolve this team first!" : "Vyřešit tento tým první!",
     "Share label" : "Štítek sdílení",
     "Has voted" : "Hlasoval/a",
     "Has not voted" : "Nehlasoval/a",
