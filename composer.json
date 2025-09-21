@@ -23,7 +23,7 @@
 		"allow-plugins": {
 			"bamarni/composer-bin-plugin": true
 		}
-    },
+	},
 	"autoload": {
 		"psr-4": {
 			"OCA\\Polls\\": "lib/"
@@ -31,7 +31,8 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"OCA\\Polls\\Tests\\": "tests/"
+			"OCA\\Polls\\Tests\\": "tests/",
+			"OCP\\": "vendor/nextcloud/ocp/OCP/"
 		}
 	},
 	"require-dev": {
