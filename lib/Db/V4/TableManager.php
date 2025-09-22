@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db\V4;
 
-use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use Exception;
 use OCA\Polls\AppConstants;
@@ -19,6 +18,7 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Watch;
+use OCA\Polls\Exceptions\PreconditionException;
 use OCA\Polls\Helper\Hash;
 use OCA\Polls\Migration\V4\TableSchema;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -34,17 +34,17 @@ class TableManager extends DbManager {
 	public function __construct(
 		protected IConfig $config,
 		protected IDBConnection $connection,
-		private LoggerInterface $logger,
+		protected LoggerInterface $logger,
 		private OptionMapper $optionMapper,
 		private VoteMapper $voteMapper,
 	) {
-		parent::__construct($config, $connection);
+		parent::__construct($config, $connection, $logger);
 	}
 
 	/**
-	 * @return string[]
+	 * Purge all tables and all data
 	 *
-	 * @psalm-return non-empty-list<string>
+	 * @return string[] Messages as array
 	 */
 	public function purgeTables(): array {
 		$messages = [];
@@ -111,7 +111,10 @@ class TableManager extends DbManager {
 	}
 
 	/**
-	 * @return string[]
+	 * Remove the watch table if it exists
+	 * Used as shorthand to reset the primary key autoincrement value
+	 *
+	 * @return string[] Messages as array
 	 */
 	public function removeWatch(): array {
 		$messages = [];
@@ -125,9 +128,9 @@ class TableManager extends DbManager {
 	}
 
 	/**
-	 * @return string[]
+	 * Create or update a table defined in TableSchema::TABLES
 	 *
-	 * @psalm-return non-empty-list<string>
+	 * @return string[] Messages as array
 	 */
 	public function createTable(string $tableName): array {
 		$this->needsSchema();
@@ -172,9 +175,9 @@ class TableManager extends DbManager {
 	}
 
 	/**
-	 * @return string[]
+	 * Create all tables defined in TableSchema::TABLES
 	 *
-	 * @psalm-return non-empty-list<string>
+	 * @return string[] Messages as array
 	 */
 	public function createTables(): array {
 		$this->needsSchema();
@@ -188,6 +191,8 @@ class TableManager extends DbManager {
 
 	/**
 	 * Remove obsolete tables if they still exist
+	 *
+	 * @return string[] Messages as array
 	 */
 	public function removeObsoleteTables(): array {
 		$dropped = false;
@@ -207,23 +212,28 @@ class TableManager extends DbManager {
 		return $messages;
 	}
 
+	/**
+	 * Remove obsolete columns if they still exist
+	 *
+	 * @return string[] Messages as array
+	 */
 	public function removeObsoleteColumns(): array {
 		$messages = [];
 		$dropped = false;
 
 		foreach (TableSchema::GONE_COLUMNS as $tableName => $columns) {
-			$tableName = $this->dbPrefix . $tableName;
-			if (!$this->schema->hasTable($tableName)) {
+			$prefixedTableName = $this->dbPrefix . $tableName;
+			if (!$this->schema->hasTable($prefixedTableName)) {
 				continue;
 			}
 
-			$table = $this->schema->getTable($tableName);
+			$table = $this->schema->getTable($prefixedTableName);
 
 			foreach ($columns as $columnName) {
 				if ($table->hasColumn($columnName)) {
 					$dropped = true;
 					$table->dropColumn($columnName);
-					$messages[] = 'Dropped ' . $columnName . ' from ' . $tableName;
+					$messages[] = 'Dropped ' . $columnName . ' from ' . $prefixedTableName;
 				}
 			}
 		}
@@ -244,8 +254,11 @@ class TableManager extends DbManager {
 	 *
 	 * This method is used to clean up orphaned entries in the database and
 	 * is used by the occ command `occ polls:db:rebuild and while updating
+	 *
+	 * @return string[] Messages as array
 	 */
 	public function removeOrphaned(): array {
+		$orphanedCount = [];
 		// collects all pollIds
 		$subqueryPolls = $this->connection->getQueryBuilder();
 		$subqueryPolls->selectDistinct('id')->from(Poll::TABLE);
@@ -266,10 +279,10 @@ class TableManager extends DbManager {
 						)
 					);
 				$executed = $query->executeStatement();
-				if (isset($orphaned[$tableName])) {
-					$orphaned[$tableName] += $executed;
+				if (isset($orphanedCount[$tableName])) {
+					$orphanedCount[$tableName] += $executed;
 				} else {
-					$orphaned[$tableName] = $executed;
+					$orphanedCount[$tableName] = $executed;
 				}
 			}
 		}
@@ -289,7 +302,7 @@ class TableManager extends DbManager {
 				$query->expr()->isNull('group_id')
 			)
 		);
-		$orphaned[Share::TABLE] = $query->executeStatement();
+		$orphanedCount[Share::TABLE] = $query->executeStatement();
 
 		// delete all orphaned entries from the poll-group-relation (group_id or poll_id are NULL or not in the polls or poll groups table)
 		$query = $this->connection->getQueryBuilder();
@@ -306,20 +319,19 @@ class TableManager extends DbManager {
 				$query->expr()->isNull('group_id')
 			)
 		);
-		$orphaned[PollGroup::RELATION_TABLE] = $query->executeStatement();
-
+		$orphanedCount[PollGroup::RELATION_TABLE] = $query->executeStatement();
 
 		// finally delete all polls with id === null
 		$query = $this->connection->getQueryBuilder();
 		$query->delete(Poll::TABLE)
 			->where($query->expr()->isNull('id'));
-		$orphaned[Poll::TABLE] = $query->executeStatement();
+		$orphanedCount[Poll::TABLE] = $query->executeStatement();
 		$messages = [];
-		foreach ($orphaned as $type => $count) {
+		foreach ($orphanedCount as $tableName => $count) {
 			if ($count > 0) {
 				$this->logger->info(
-					'Purged ' . $count . ' orphaned record(s) from ' . $type,
-					['count' => $count, 'type' => $type]
+					'Purged {count} orphaned record(s) from {tableName}',
+					['count' => $count, 'tableName' => $tableName]
 				);
 			}
 		}
@@ -328,9 +340,9 @@ class TableManager extends DbManager {
 	}
 
 	/**
-	 * @return string[]
+	 * Delete all duplicate entries in all tables based on the unique indices defined in TableSchema::UNIQUE_INDICES
 	 *
-	 * @psalm-return list<string>
+	 * @return string[] Messages as array
 	 */
 	public function deleteAllDuplicates(?IOutput $output = null): array {
 		$messages = [];
@@ -355,6 +367,8 @@ class TableManager extends DbManager {
 
 	/**
 	 * Delete entries per timestamp
+	 *
+	 * @return string Message
 	 */
 	public function tidyWatchTable(int $offset): string {
 		$query = $this->connection->getQueryBuilder();
@@ -373,13 +387,21 @@ class TableManager extends DbManager {
 		return 'Watch table is clean';
 	}
 
+	/**
+	 * Delete duplicate entries in $table based on $columns
+	 * Keep the entry with the lowest id
+	 *
+	 * @param string $table
+	 * @param array $columns
+	 * @return int number of deleted entries
+	 */
 	private function deleteDuplicates(string $table, array $columns):int {
 		$this->needsSchema();
-		$qb = $this->connection->getQueryBuilder();
-
 		if (!$this->schema->hasTable($this->dbPrefix . $table)) {
 			return 0;
 		}
+
+		$qb = $this->connection->getQueryBuilder();
 
 		// identify duplicates
 		$selection = $qb->selectDistinct('t1.id')
@@ -409,6 +431,8 @@ class TableManager extends DbManager {
 
 	/**
 	 * Tidy migrations table and remove obsolete migration entries.
+	 *
+	 * @return string[] Messages as array
 	 */
 	public function removeObsoleteMigrations(): array {
 		$messages = [];
@@ -425,6 +449,14 @@ class TableManager extends DbManager {
 		return $messages;
 	}
 
+	/**
+	 * Fix all votes with option text not matching the option text in the options table
+	 * Precondition: The options table has to have a duration column
+	 * This method is used to fix votes which were cast while the option text was changing
+	 * because of a duration change.
+	 *
+	 * This method is used by the occ command `occ polls:db:rebuild` and while updating
+	 */
 	public function fixVotes(): void {
 		if (!$this->schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
 			return;
@@ -447,89 +479,103 @@ class TableManager extends DbManager {
 		}
 	}
 
+	/**
+	 * Fix all shares with nullish group_id or poll_id
+	 * Precondition have to be checked before
+	 *
+	 * @return string[] Messages as array
+	 */
 	public function fixNullishShares(): array {
 		$messages = [];
-		$query = $this->connection->getQueryBuilder();
-		$schema = $this->connection->createSchema();
 
-		if (!$schema->hasTable($this->dbPrefix . Share::TABLE)) {
-			$messages[] = 'Table ' . $this->dbPrefix . Share::TABLE . ' does not exist';
+		try {
+			$tableName = Share::TABLE;
+			$affectedColumns = ['group_id', 'poll_id'];
+			$this->checkPrecondition($tableName, $affectedColumns);
+
+			// set all nullish group_id and poll_id to 0
+			foreach ($affectedColumns as $affectedColumn) {
+				$count = $this->migrateNullishColumnToZero($tableName, $affectedColumn);
+
+				if ($count > 0) {
+					$messages[] = 'Updated ' . $count . ' shares with nullish ' . $affectedColumn . ' to 0';
+				}
+			}
+
+		} catch (PreconditionException $e) {
+			$messages[] = $e->getMessage() . ' - aborted fix nullish shares';
 			return $messages;
 		}
 
-		$table = $schema->getTable($this->dbPrefix . Share::TABLE);
-
-		if ($table->hasColumn('group_id')) {
-			// replace all nullish group_ids with 0 in share table
-			$query->update(Share::TABLE)
-				->set('group_id', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT))
-				->where($query->expr()->isNull('group_id'));
-			$count = $query->executeStatement();
-
-			if ($count > 0) {
-				$messages[] = 'Updated ' . $count . ' shares with nullish group_id and set group_id to 0';
-			}
-		}
-
-		// replace all nullish poll_id with 0 in share table
-		$query = $this->connection->getQueryBuilder();
-		$query->update(Share::TABLE)
-			->set('poll_id', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT))
-			->where($query->expr()->isNull('poll_id'));
-
-		$count = $query->executeStatement();
-
-		if ($count > 0) {
-			$messages[] = 'Updated ' . $count . ' shares and set poll_id to 0 for nullish values';
-		}
-
 		if (empty($messages)) {
-			return ['All shares are valid'];
+			$messages[] = 'All shares are valid';
 		}
 
 		return $messages;
 	}
 
+	/**
+	 * Fix all poll group relations with nullish group_id or poll_id
+	 * Precondition have to be checked before
+	 *
+	 * @return string[] Messages as array
+	 */
 	public function fixNullishPollGroupRelations(): array {
 		$messages = [];
-		$query = $this->connection->getQueryBuilder();
-		$schema = $this->connection->createSchema();
 
-		if (!$schema->hasTable($this->dbPrefix . PollGroup::RELATION_TABLE)) {
-			$messages[] = 'Table ' . $this->dbPrefix . PollGroup::RELATION_TABLE . ' does not exist';
+		try {
+			$tableName = PollGroup::RELATION_TABLE;
+			$affectedColumns = ['group_id', 'poll_id'];
+			$this->checkPrecondition($tableName, $affectedColumns);
+
+			$countAll = 0;
+			// set all nullish group_id and poll_id to 0
+			foreach ($affectedColumns as $affectedColumn) {
+				$updateCount = $this->migrateNullishColumnToZero($tableName, $affectedColumn);
+
+				if ($updateCount > 0) {
+					$countAll += $updateCount;
+					$messages[] = 'Updated ' . $updateCount . ' pollgroup relations and set ' . $affectedColumn . ' to 0 for nullish values';
+				}
+			}
+
+		} catch (PreconditionException $e) {
+			$messages[] = $e->getMessage() . ' - aborted fix nullish poll group relations';
 			return $messages;
 		}
 
-		// replace all nullish group_ids with 0 in share table
-		$query->update(PollGroup::RELATION_TABLE)
-			->set('group_id', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT))
-			->where($query->expr()->isNull('group_id'));
-
-		$count = $query->executeStatement();
-
-		if ($count > 0) {
-			$messages[] = 'Updated ' . $count . ' pollgroup relations and set group_id to 0 for nullish values';
-		}
-
-		// replace all nullish poll_id with 0 in share table
-		$query = $this->connection->getQueryBuilder();
-		$query->update(PollGroup::RELATION_TABLE)
-			->set('poll_id', $query->createNamedParameter(0, IQueryBuilder::PARAM_INT))
-			->where($query->expr()->isNull('poll_id'));
-
-		$count = $query->executeStatement();
-
-		if ($count > 0) {
-			$messages[] = 'Updated ' . $count . ' poll group relations and set poll_id to 0 for nullish values';
-		}
-
-		if (empty($messages)) {
-			return ['All poll group relations are valid'];
+		if ($countAll === 0) {
+			$messages[] = 'All poll group relations are valid';
 		}
 
 		return $messages;
 	}
 
+	/**
+	 * Migrate all nullish values in $columnName of $tableName to 0
+	 *
+	 * @param string $tableName Unprefixed tablename
+	 * @param string $columnName Column name to update
+	 *
+	 * @return int number of updated entries
+	 */
+	private function migrateNullishColumnToZero(string $tableName, string $columnName): int {
+		$query = $this->connection->getQueryBuilder();
+		$query->update($tableName)
+			->set($columnName, $query->createNamedParameter(0, IQueryBuilder::PARAM_INT))
+			->where($query->expr()->isNull($columnName));
+
+		$count = $query->executeStatement();
+		return $count;
+	}
+
+	/**
+	 * Set last interaction to current timestamp for all polls
+	 * where last interaction is 0
+	 *
+	 * @param int|null $timestamp
+	 * @return string
+	 */
 	public function setLastInteraction(?int $timestamp = null): string {
 		$timestamp = $timestamp ?? time();
 		$query = $this->connection->getQueryBuilder();
@@ -550,29 +596,33 @@ class TableManager extends DbManager {
 	}
 
 	/**
-	 * @return string[]
+	 * Update all option and vote hashes
+	 * Ensures the preconditions are met
 	 *
-	 * @psalm-return list{0?: string,...}
+	 * @return string[] Messages as array
 	 */
-	private function updateVoteHashes(Schema &$schema): array {
+	public function updateHashes(): array {
+		// Do not catch any exceptions but let any operation break to ensure hash updates can be performed
+		// Otherwise data loss of votes can occur
+		$this->checkPrecondition(OptionMapper::TABLE, ['poll_id', 'poll_option_text', 'poll_option_hash']);
+		$this->checkPrecondition(VoteMapper::TABLE, ['poll_id', 'vote_option_text', 'vote_option_hash']);
+
+		$messages = $this->updateOptionHashes();
+		$messages = array_merge($messages, $this->updateVoteHashes());
+		return $messages;
+	}
+
+	/**
+	 * Update all vote hashes
+	 * Precondition have to be checked before
+	 *
+	 * @return string[] Messages as array
+	 */
+	private function updateVoteHashes(): array {
 		$messages = [];
-		if (!$schema->hasTable($this->dbPrefix . VoteMapper::TABLE)) {
-			$this->logger->error('{db} is missing- aborted recalculating hashes', [
-				'db' => $this->dbPrefix . VoteMapper::TABLE
-			]);
-			$messages[] = 'Table ' . $this->dbPrefix . VoteMapper::TABLE . ' does not exist';
-			return $messages;
-		}
 
-		$table = $schema->getTable($this->dbPrefix . VoteMapper::TABLE);
-
-		if (!$table->hasColumn('vote_option_hash')) {
-			$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', [
-				'db' => $this->dbPrefix . VoteMapper::TABLE
-			]);
-			$messages[] = 'Column \'vote_option_hash\' does not exist in ' . $this->dbPrefix . VoteMapper::TABLE;
-			return $messages;
-		}
+		$tableName = VoteMapper::TABLE;
+		$prefixedTableName = $this->dbPrefix . $tableName;
 
 		$count = 0;
 		$updated = 0;
@@ -600,7 +650,7 @@ class TableManager extends DbManager {
 		if ($updated === 0) {
 			$this->logger->info('Verified {count} vote hashes in {db}', [
 				'count' => $count,
-				'db' => $this->dbPrefix . VoteMapper::TABLE
+				'db' => $prefixedTableName
 			]);
 			$messages[] = 'No vote hashes to update';
 
@@ -608,7 +658,7 @@ class TableManager extends DbManager {
 			$this->logger->info('Updated {updated} hashes of {count} votes in {db}', [
 				'updated' => $updated,
 				'count' => $count,
-				'db' => $this->dbPrefix . VoteMapper::TABLE
+				'db' => $prefixedTableName
 			]);
 			$messages[] = 'Updated ' . $updated . ' vote hashes';
 
@@ -618,25 +668,16 @@ class TableManager extends DbManager {
 	}
 
 	/**
-	 * @return string[]
+	 * Update all option hashes
+	 * Precondition have to be checked before
 	 *
-	 * @psalm-return list{0?: string,...}
+	 * @return string[] Messages as array
 	 */
-	private function updateOptionHashes(Schema &$schema): array {
+	private function updateOptionHashes(): array {
 		$messages = [];
 
-		if (!$schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
-			$this->logger->error('{db} is missing - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
-			$messages[] = 'Table ' . $this->dbPrefix . OptionMapper::TABLE . ' does not exist';
-			return $messages;
-		}
-		$table = $schema->getTable($this->dbPrefix . OptionMapper::TABLE);
-
-		if (!$table->hasColumn('poll_option_hash')) {
-			$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
-			$messages[] = 'Column \'poll_option_hash\' does not exist in ' . $this->dbPrefix . OptionMapper::TABLE;
-			return $messages;
-		}
+		$tableName = OptionMapper::TABLE;
+		$prefixedTableName = $this->dbPrefix . $tableName;
 
 		$count = 0;
 		$updated = 0;
@@ -661,7 +702,7 @@ class TableManager extends DbManager {
 		if ($updated === 0) {
 			$this->logger->info('Verified {count} option hashes in {db}', [
 				'count' => $count,
-				'db' => $this->dbPrefix . OptionMapper::TABLE
+				'db' => $prefixedTableName
 			]);
 			$messages[] = 'No option hashes to update';
 
@@ -669,7 +710,7 @@ class TableManager extends DbManager {
 			$this->logger->info('Updated {updated} hashes of {count} options in {db}', [
 				'updated' => $updated,
 				'count' => $count,
-				'db' => $this->dbPrefix . OptionMapper::TABLE
+				'db' => $prefixedTableName
 			]);
 			$messages[] = 'Updated ' . $updated . ' option hashes';
 
@@ -678,55 +719,90 @@ class TableManager extends DbManager {
 		return $messages;
 	}
 
-	public function updateHashes(): array {
-		$schema = $this->connection->createSchema();
-		$messages = $this->updateOptionHashes($schema);
-		$messages = array_merge($messages, $this->updateVoteHashes($schema));
+	/**
+	 * Migrate all share labels to display_name
+	 *
+	 * @return string[] Messages as array
+	 *
+	 */
+	public function migrateShareLabels(): array {
+		$messages = [];
+
+		$tableName = Share::TABLE;
+		$affectedColumn = 'label';
+
+		try {
+			$this->checkPrecondition($tableName, $affectedColumn);
+		} catch (PreconditionException $e) {
+			$messages[] = $e->getMessage() . ' - aborted migrating labels';
+			return $messages;
+		}
+
+		$prefixedTableName = $this->dbPrefix . $tableName;
+		$qb = $this->connection->getQueryBuilder();
+
+		$qb->update($tableName)
+			->set('display_name', $affectedColumn)
+			->andWhere($qb->expr()->isNotNull($tableName . '.' . $affectedColumn))
+			->andWhere($qb->expr()->eq($tableName . '.' . $affectedColumn, $qb->expr()->literal('')));
+		$updated = $qb->executeStatement();
+
+		if ($updated === 0) {
+			$this->logger->info('Verified all share labels in {db}', [
+				'db' => $prefixedTableName
+			]);
+			$messages[] = 'No share labels to update';
+
+		} else {
+			$this->logger->info('Updated {updated} share labels in {db}', [
+				'updated' => $updated,
+				'db' => $prefixedTableName
+			]);
+			$messages[] = 'Updated ' . $updated . ' labels';
+		}
+
 		return $messages;
 	}
 
 	/**
-	 * @return string[]
+	 * Migrate all polls with access 'public' to access 'open'
 	 *
-	 * @psalm-return list{0?: string,...}
+	 * @return string[] Messages as array
+	 *
 	 */
-	public function migrateShareLabels(): array {
-		$schema = $this->connection->createSchema();
+	public function migratePublicToOpen(): array {
 		$messages = [];
 
-		if (!$schema->hasTable($this->dbPrefix . Share::TABLE)) {
-			$this->logger->error('{db} is missing - aborted migrating labels', [ 'db' => $this->dbPrefix . Share::TABLE]);
-			$messages[] = 'Table ' . $this->dbPrefix . Share::TABLE . ' does not exist';
-			return $messages;
-		}
-		$table = $schema->getTable($this->dbPrefix . Share::TABLE);
+		$tableName = Poll::TABLE;
+		$affectedColumn = 'access';
+		$prefixedTableName = $this->dbPrefix . $tableName;
 
-		if (!$table->hasColumn('label')) {
-			$this->logger->error('{db} is missing column \'label\' - aborted migrating labels', [ 'db' => $this->dbPrefix . Share::TABLE]);
-			$messages[] = 'Column \'label\' does not exist in ' . $this->dbPrefix . Share::TABLE;
+		try {
+			$this->checkPrecondition($tableName, $affectedColumn);
+		} catch (PreconditionException $e) {
+			$messages[] = $e->getMessage() . ' - aborted migrating public to open';
 			return $messages;
 		}
 
 		$qb = $this->connection->getQueryBuilder();
 
-		$qb->update(Share::TABLE)
-			->set('display_name', 'label') // safe: assigns column B's value into A
-			->andWhere($qb->expr()->isNotNull(Share::TABLE . '.label'))
-			->andWhere($qb->expr()->eq(Share::TABLE . '.label', $qb->expr()->literal('')));
+		$qb->update($tableName)
+			->set('access', $qb->expr()->literal(Poll::ACCESS_OPEN))
+			->where($qb->expr()->eq($tableName . '.' . $affectedColumn, $qb->expr()->literal(Poll::ACCESS_PUBLIC)));
 		$updated = $qb->executeStatement();
 
 		if ($updated === 0) {
-			$this->logger->info('Verified all share labels in {db}', [
-				'db' => $this->dbPrefix . Share::TABLE
+			$this->logger->info('Verified poll access to be \'open\' instead of \'public\' in {db}', [
+				'db' => $prefixedTableName
 			]);
-			$messages[] = 'No share labels to update';
+			$messages[] = 'No poll access to update';
 
 		} else {
-			$this->logger->info('Updated {updated} labels in {db}', [
+			$this->logger->info('Updated {updated} access in {db}', [
 				'updated' => $updated,
-				'db' => $this->dbPrefix . Share::TABLE
+				'db' => $prefixedTableName
 			]);
-			$messages[] = 'Updated ' . $updated . ' option hashes';
+			$messages[] = 'Updated ' . $updated . ' poll accesses';
 
 		}
 

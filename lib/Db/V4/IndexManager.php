@@ -9,24 +9,22 @@ declare(strict_types=1);
 namespace OCA\Polls\Db\V4;
 
 use Doctrine\DBAL\Schema\Exception\IndexDoesNotExist;
-use Doctrine\DBAL\Schema\Schema;
 use Exception;
 use OCA\Polls\Migration\V4\TableSchema;
-use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use Psr\Log\LoggerInterface;
 
 /** @psalm-suppress UnusedClass */
 class IndexManager extends DbManager {
-
-	// private Schema|ISchemaWrapper $schema;
 
 	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		protected IConfig $config,
 		protected IDBConnection $connection,
+		protected LoggerInterface $logger,
 	) {
-		parent::__construct($config, $connection);
+		parent::__construct($config, $connection, $logger);
 	}
 
 	/**

@@ -35,6 +35,7 @@
   <repair-steps>
       <post-migration>
           <step>OCA\Polls\Migration\RepairSteps\UpdateHashes</step>
+          <step>OCA\Polls\Migration\RepairSteps\MigratePublicToOpen</step>
       </post-migration>
   </repair-steps>
   <commands>
