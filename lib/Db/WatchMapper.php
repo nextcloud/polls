@@ -13,6 +13,8 @@ use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\IDBConnection;
 
+use function OCP\Log\logger;
+
 /**
  * @template-extends QBMapper<Watch>
  */
@@ -31,7 +33,7 @@ class WatchMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Watch[]
 	 */
-	public function findUpdatesForPollId(int $pollId, int $offset): array {
+	public function findUpdatesForPollId(int $pollId, int $offset, bool $skipShares): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -42,8 +44,14 @@ class WatchMapper extends QBMapper {
 			)
 			->andWhere($qb->expr()->orX(
 				$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId)),
-				$qb->expr()->eq('table', $qb->createNamedParameter(AppConstants::APP_ID))
+				$qb->expr()->eq('table', $qb->createNamedParameter(Watch::OBJECT_POLLS))
 			));
+
+		if ($skipShares) {
+			$qb->andWhere(
+				$qb->expr()->neq('table', $qb->createNamedParameter(Watch::OBJECT_SHARES))
+			);
+		}
 
 		return $this->findEntities($qb);
 	}

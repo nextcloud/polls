@@ -312,7 +312,13 @@ export const usePollsStore = defineStore('polls', {
 		 * @return {Promise<void>}
 		 */
 		async load(forced: boolean = true): Promise<void> {
-			const pollGroupsStore = usePollGroupsStore()
+			const sessionStore = useSessionStore()
+
+			if (!sessionStore.userStatus.isLoggedin) {
+				this.polls = []
+				this.meta.status = ''
+				return
+			}
 
 			if (
 				this.meta.status === 'loading'
@@ -326,6 +332,8 @@ export const usePollsStore = defineStore('polls', {
 			}
 
 			this.meta.status = 'loading'
+
+			const pollGroupsStore = usePollGroupsStore()
 
 			try {
 				const response = await PollsAPI.getPolls()
