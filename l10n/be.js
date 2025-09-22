@@ -50,6 +50,7 @@ OC.L10N.register(
     "Add a new public link" : "Дадаць новую публічную спасылку",
     "No activity yet" : "Пакуль няма актыўнасці",
     "Configuration" : "Канфігурацыя",
+    "Add public link" : "Дадаць публічную спасылку",
     "Public link" : "Публічная спасылка",
     "Switch to list view" : "Пераключыцца ў выгляд спісу",
     "No answer" : "Няма адказу",

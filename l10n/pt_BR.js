@@ -567,6 +567,8 @@ OC.L10N.register(
     "(deleted)" : "(excluído)",
     "(locked)" : "(bloqueado)",
     "Group share" : "Compartilhamento de grupo",
+    "Resolve contact group first!" : "Resolva primeiro o grupo de contatos!",
+    "Resolve this team first!" : "Resolva primeiro esta equipe!",
     "Share label" : "Rótulo do compartilhamento",
     "Has voted" : "Votou",
     "Has not voted" : "Não votou",

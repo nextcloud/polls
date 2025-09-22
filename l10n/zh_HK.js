@@ -567,6 +567,8 @@ OC.L10N.register(
     "(deleted)" : "（已刪除）",
     "(locked)" : "（已被上鎖）",
     "Group share" : "群組共享",
+    "Resolve contact group first!" : "先解決聯絡人群組！",
+    "Resolve this team first!" : "先解決這個團隊！",
     "Share label" : "分享標籤",
     "Has voted" : "已投票",
     "Has not voted" : "未投票",
