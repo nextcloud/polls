@@ -23,6 +23,7 @@ import type {
 	FilterType,
 	SortType,
 } from './polls.types'
+import { NotAllowed } from '../Exceptions/Exceptions'
 
 export const sortColumnsMapping: { [key in SortType]: string } = {
 	created: 'status.created',
@@ -317,7 +318,7 @@ export const usePollsStore = defineStore('polls', {
 			if (!sessionStore.userStatus.isLoggedin) {
 				this.polls = []
 				this.meta.status = ''
-				return
+				throw new NotAllowed('Not allowed to load polls; not logged in')
 			}
 
 			if (

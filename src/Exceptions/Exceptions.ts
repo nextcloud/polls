@@ -16,6 +16,13 @@ class NotReady extends Error {
 	}
 }
 
+class NotAllowed extends Error {
+	constructor(message: string | undefined) {
+		super(message)
+		this.name = 'NotAllowed'
+	}
+}
+
 class InvalidJSON extends Error {
 	constructor(message: string | undefined) {
 		super(message)
@@ -23,4 +30,4 @@ class InvalidJSON extends Error {
 	}
 }
 
-export { Exception, InvalidJSON, NotReady }
+export { Exception, InvalidJSON, NotReady, NotAllowed }
