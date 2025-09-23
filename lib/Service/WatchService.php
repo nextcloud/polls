@@ -35,12 +35,9 @@ class WatchService {
 	 * Watch poll for updates
 	 */
 	public function watchUpdates(int $pollId, string $mode, ?int $offset = null): array {
-		$skipShares = true;
-
 		if ($pollId) {
-			$poll = $this->pollMapper->get($pollId, true)
+			$this->pollMapper->get($pollId, true)
 				->request(Poll::PERMISSION_POLL_ACCESS);
-			$skipShares = !$poll->getIsAllowed(Poll::PERMISSION_POLL_EDIT);
 		}
 
 		$start = time();
@@ -55,10 +52,10 @@ class WatchService {
 		if ($updateType === AppSettings::SETTING_UPDATE_TYPE_LONG_POLLING) {
 			while (empty($updates) && time() <= $start + $timeout) {
 				sleep(1);
-				$updates = $this->getUpdates($pollId, $offset, $skipShares);
+				$updates = $this->getUpdates($pollId, $offset);
 			}
 		} else {
-			$updates = $this->getUpdates($pollId, $offset, $skipShares);
+			$updates = $this->getUpdates($pollId, $offset);
 		}
 
 		if (empty($updates)) {
@@ -71,9 +68,9 @@ class WatchService {
 	/**
 	 * @return Watch[]
 	 */
-	private function getUpdates(int $pollId, int $offset, bool $skipShares): array {
+	private function getUpdates(int $pollId, int $offset): array {
 		try {
-			return $this->watchMapper->findUpdatesForPollId($pollId, $offset, $skipShares);
+			return $this->watchMapper->findUpdatesForPollId($pollId, $offset);
 		} catch (DoesNotExistException $e) {
 			return [];
 		}
