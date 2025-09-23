@@ -115,7 +115,11 @@ export const useVotesStore = defineStore('votes', {
 				(user) => user.id === sessionStore.currentUser?.id,
 			)
 
-			if (currentUserIndex < 0 && !pollStore.status.isExpired) {
+			if (
+				currentUserIndex < 0
+				&& !pollStore.status.isExpired
+				&& sessionStore.currentUser.type !== 'public'
+			) {
 				// add current user to the begining of the list if not already present
 				// and if the poll is not expired
 				participants.unshift(sessionStore.currentUser)

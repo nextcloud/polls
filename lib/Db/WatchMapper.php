@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
-use OCA\Polls\AppConstants;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\IDBConnection;
@@ -42,7 +41,7 @@ class WatchMapper extends QBMapper {
 			)
 			->andWhere($qb->expr()->orX(
 				$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId)),
-				$qb->expr()->eq('table', $qb->createNamedParameter(AppConstants::APP_ID))
+				$qb->expr()->eq('table', $qb->createNamedParameter(Watch::OBJECT_POLLS))
 			));
 
 		return $this->findEntities($qb);

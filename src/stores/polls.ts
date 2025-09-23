@@ -23,6 +23,7 @@ import type {
 	FilterType,
 	SortType,
 } from './polls.types'
+import { NotAllowed } from '../Exceptions/Exceptions'
 
 export const sortColumnsMapping: { [key in SortType]: string } = {
 	created: 'status.created',
@@ -312,7 +313,13 @@ export const usePollsStore = defineStore('polls', {
 		 * @return {Promise<void>}
 		 */
 		async load(forced: boolean = true): Promise<void> {
-			const pollGroupsStore = usePollGroupsStore()
+			const sessionStore = useSessionStore()
+
+			if (!sessionStore.userStatus.isLoggedin) {
+				this.polls = []
+				this.meta.status = ''
+				throw new NotAllowed('Not allowed to load polls; not logged in')
+			}
 
 			if (
 				this.meta.status === 'loading'
@@ -326,6 +333,8 @@ export const usePollsStore = defineStore('polls', {
 			}
 
 			this.meta.status = 'loading'
+
+			const pollGroupsStore = usePollGroupsStore()
 
 			try {
 				const response = await PollsAPI.getPolls()

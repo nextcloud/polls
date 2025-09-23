@@ -20,6 +20,8 @@ import type {
 	SharePurpose,
 	PublicPollEmailConditions,
 } from './shares.types'
+import { usePollStore } from './poll'
+import { NotAllowed } from '../Exceptions/Exceptions'
 
 export const useSharesStore = defineStore('shares', {
 	state: (): SharesStore => ({
@@ -69,6 +71,14 @@ export const useSharesStore = defineStore('shares', {
 
 			if (purpose === 'pollGroup') {
 				const pollGroupsStore = usePollGroupsStore()
+				if (
+					pollGroupsStore.currentPollGroup?.owner.id
+					!== useSessionStore().currentUser.id
+				) {
+					this.shares = []
+					throw new NotAllowed('Not allowed to load shares for this group')
+				}
+
 				Logger.info('Loading group shares')
 				// For group shares, we need to use the current poll group ID
 
@@ -77,6 +87,11 @@ export const useSharesStore = defineStore('shares', {
 				}
 				pollOrPollGroupId = pollGroupsStore.currentPollGroup.id
 			} else {
+				const pollStore = usePollStore()
+				if (!pollStore.permissions.edit) {
+					this.shares = []
+					throw new NotAllowed('Not allowed to load shares for this poll')
+				}
 				Logger.info('Loading poll shares')
 				// For regular poll shares, we use the current poll ID
 				const sessionStore = useSessionStore()

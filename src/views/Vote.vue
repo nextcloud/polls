@@ -40,6 +40,7 @@ import { useSubscriptionStore } from '../stores/subscription'
 
 import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
 import { Event } from '../Types'
+import { loadContext } from '../composables/context'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -156,7 +157,11 @@ async function resetPoll() {
 	subscriptionStore.$reset()
 }
 
-onBeforeRouteUpdate(async () => {
+onBeforeRouteUpdate(async (to, from) => {
+	if (to.name === 'publicVote' && to.params.token !== from.params.token) {
+		loadContext(to)
+		// Same poll, no need to reload
+	}
 	loadPoll(true)
 })
 
