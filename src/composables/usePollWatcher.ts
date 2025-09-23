@@ -26,6 +26,7 @@ import type {
 } from './usePollWatcher.types'
 
 import type { Watcher } from '../stores/session.types'
+import { NotAllowed } from '../Exceptions/Exceptions'
 
 /**
  * poll watcher to keep polls collection and the current poll
@@ -179,14 +180,31 @@ export const usePollWatcher = (interval = 30000) => {
 	const handleWatcherTasks = (tasks: string[]) => {
 		Logger.info('[PollWatcher] Tasks to handle:', { tasks })
 
-		tasks.forEach((task: string) => {
+		tasks.forEach(async (task: string) => {
 			switch (task) {
 				case 'shares':
-					sharesStore.load()
+					try {
+						await sharesStore.load()
+					} catch (error) {
+						if ((error as NotAllowed).name === 'NotAllowed') {
+							// User is not allowed to load shares.
+							// instead assume a changed share affecting the user.
+							// Reload the session context to update the share
+							sessionStore.load()
+							return
+						}
+						Logger.error('Error loading poll shares', { error })
+					}
 					break
 				case 'polls':
-					pollStore.load()
-					pollsStore.load()
+					try {
+						await pollsStore.load()
+					} catch (error) {
+						if ((error as NotAllowed).name === 'NotAllowed') {
+							return
+						}
+						Logger.error('Error loading polls list', { error })
+					}
 					break
 				case 'votes':
 					votesStore.load()

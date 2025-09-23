@@ -182,7 +182,7 @@ self.onmessage = async (props: MessageEvent<WatcherProps>) => {
 				status: 'idle',
 				mode,
 				interval,
-				message: `[Worker] Sleeping for .${Math.floor(interval / 1000)} s`,
+				message: `[Worker] Sleeping for ${Math.floor(interval / 1000)} s`,
 			})
 			await sleep(interval)
 		}
