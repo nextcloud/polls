@@ -40,7 +40,7 @@ class VoteService {
 	 * @return Vote[]
 	 */
 	public function list(int $pollId): array {
-		$poll = $this->pollMapper->get($pollId, true)
+		$poll = $this->pollMapper->get($pollId)
 			->request(Poll::PERMISSION_POLL_ACCESS);
 
 		try {
