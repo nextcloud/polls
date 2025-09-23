@@ -45,6 +45,7 @@ OC.L10N.register(
     "Privacy policy" : "Палітыка прыватнасці",
     "Login" : "Лагін",
     "Additional email disclaimer" : "Дадатковая адмова ад адказнасці па электроннай пошце",
+    "Token: {token}" : "Токен: {token}",
     "Public link: {token}" : "Публічная спасылка: {token}",
     "Link copied to clipboard" : "Спасылка скапіявана ў буфер абмену",
     "Add a new public link" : "Дадаць новую публічную спасылку",

@@ -165,6 +165,7 @@ OC.L10N.register(
     "Add some!" : "Προσθέστε μερικές!",
     "Register" : "Εγγραφή",
     "Unknown error" : "Άγνωστο σφάλμα",
+    "Maybe" : "Ίσως",
     "Loading …" : "Φόρτωση…",
     "Previous day" : "Προηγούμενη ημέρα",
     "Next day" : "Επόμενη ημέρα",
