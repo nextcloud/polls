@@ -370,6 +370,7 @@ OC.L10N.register(
     "Edit Email Address" : "Редактиране на имейл адрес",
     "Email address {emailAddress} saved." : "Имейл адресът {emailAddress} е запазен.",
     "Error saving email address {emailAddress}" : "Грешка при запазването на имейл адреса {emailAddress}",
+    "Add public link" : "Добавяне на публична връзка",
     "Public link" : "Публична връзка",
     "Email address deleted." : "Имейл адресът е изтрит.",
     "Error deleting email address {emailAddress}" : "Грешка при изтриването на имейл адреса {emailAddress}",
