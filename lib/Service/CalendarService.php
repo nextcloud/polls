@@ -53,6 +53,9 @@ class CalendarService {
 
 		if (!empty($principalUri)) {
 			$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
+			$this->calendars = array_filter($this->calendars, function ($item) {
+				return !$item->isDeleted();
+			});
 		} else {
 			$this->calendars = [];
 		}
