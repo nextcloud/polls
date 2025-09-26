@@ -48,6 +48,7 @@
     "%s archived your poll" : "Ο %s αρχειοθέτησε την δημοσκόπηση σας",
     "{actor} archived your poll \"%s\"." : "{actor} αρχειοθέτησε την δημοσκόπηση σας \"%s\"",
     "Access denied" : "Δεν επιτρέπεται η πρόσβαση",
+    "Poll" : "Δημοσκόπηση",
     "You have commented on poll {pollTitle}" : "Σχολιάσατε στην δημοσκόπηση {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} έχει σχολιάσει στην δημοσκόπηση {pollTitle}",
     "You have commented" : "Έχετε σχολιάσει",
