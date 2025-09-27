@@ -233,6 +233,7 @@ OC.L10N.register(
     "Remember me for 30 days" : "30日間記憶",
     "Privacy policy" : "個人情報保護方針",
     "Login" : "ログイン",
+    "Group share" : "グループ共有",
     "Share label" : "共有ラベル",
     "Resend invitation mail" : "招待メールを再送",
     "Send invitation mail" : "招待メールを送信",
