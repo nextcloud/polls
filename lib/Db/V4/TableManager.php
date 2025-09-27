@@ -259,6 +259,7 @@ class TableManager extends DbManager {
 	 */
 	public function removeOrphaned(): array {
 		$orphanedCount = [];
+
 		// collects all pollIds
 		$subqueryPolls = $this->connection->getQueryBuilder();
 		$subqueryPolls->selectDistinct('id')->from(Poll::TABLE);
@@ -326,13 +327,17 @@ class TableManager extends DbManager {
 		$query->delete(Poll::TABLE)
 			->where($query->expr()->isNull('id'));
 		$orphanedCount[Poll::TABLE] = $query->executeStatement();
+
 		$messages = [];
 		foreach ($orphanedCount as $tableName => $count) {
 			if ($count > 0) {
 				$this->logger->info(
-					'Purged {count} orphaned record(s) from {tableName}',
-					['count' => $count, 'tableName' => $tableName]
+					'Removed {count} orphaned record(s) from {tableName}',
+					['count' => $count, 'tableName' => $this->dbPrefix . $tableName]
 				);
+				$messages[] = 'Removed ' . $count . ' orphaned record(s) from ' . $this->dbPrefix . $tableName;
+			} else {
+				$messages[] = 'No orphaned records found in ' . $this->dbPrefix . $tableName;
 			}
 		}
 
@@ -743,8 +748,8 @@ class TableManager extends DbManager {
 
 		$qb->update($tableName)
 			->set('display_name', $affectedColumn)
-			->andWhere($qb->expr()->isNotNull($tableName . '.' . $affectedColumn))
-			->andWhere($qb->expr()->eq($tableName . '.' . $affectedColumn, $qb->expr()->literal('')));
+			->andWhere($qb->expr()->isNotNull($prefixedTableName . '.' . $affectedColumn))
+			->andWhere($qb->expr()->eq($prefixedTableName . '.' . $affectedColumn, $qb->expr()->literal('')));
 		$updated = $qb->executeStatement();
 
 		if ($updated === 0) {
@@ -788,21 +793,21 @@ class TableManager extends DbManager {
 
 		$qb->update($tableName)
 			->set('access', $qb->expr()->literal(Poll::ACCESS_OPEN))
-			->where($qb->expr()->eq($tableName . '.' . $affectedColumn, $qb->expr()->literal(Poll::ACCESS_PUBLIC)));
+			->where($qb->expr()->eq($prefixedTableName . '.' . $affectedColumn, $qb->expr()->literal(Poll::ACCESS_PUBLIC)));
 		$updated = $qb->executeStatement();
 
 		if ($updated === 0) {
 			$this->logger->info('Verified poll access to be \'open\' instead of \'public\' in {db}', [
 				'db' => $prefixedTableName
 			]);
-			$messages[] = 'No poll access to update';
+			$messages[] = 'No poll access values to update';
 
 		} else {
-			$this->logger->info('Updated {updated} access in {db}', [
+			$this->logger->info('Updated {updated} access values in {db}', [
 				'updated' => $updated,
 				'db' => $prefixedTableName
 			]);
-			$messages[] = 'Updated ' . $updated . ' poll accesses';
+			$messages[] = 'Updated ' . $updated . ' poll access value';
 
 		}
 
