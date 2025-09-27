@@ -5,6 +5,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [8.5.0] - tbd
+### Fixed
+ - Archived polls could not get entered anymore
+ - Public users were not displayed correctly right after registration
+ - Avoid unnecessary backend requests in public polls
+ - Fixed hash calculation resulting in possible vote losses if updating from a version prior to 8.2
+
+### Changed
+ - Reduce depth of HTML DOM
+ - stabilized migrations
+
+### Misc
+ - Ignore deleted calendars for calendar check
+ - Changed internal usage of share label
+ - internal change of
+
 ## [8.4.6] - 2025-09-07
 ### Fixed
  - Ordering options in text polls was broken
