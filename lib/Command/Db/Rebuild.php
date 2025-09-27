@@ -68,10 +68,11 @@ class Rebuild extends Command {
 		$this->connection->migrateToSchema($this->schema);
 
 		$this->printComment('Step 5. Validate and fix records');
-		$this->removeOrphaned();
 		$this->updateHashes();
+		$this->removeOrphaned();
 		$this->deleteAllDuplicates();
 		$this->setLastInteraction();
+		$this->migrateAccess();
 
 		$this->printComment('Step 6. Recreate unique indices and foreign key constraints');
 		$this->addForeignKeyConstraints();
@@ -155,7 +156,17 @@ class Rebuild extends Command {
 	 * Initialize last poll interactions timestamps
 	 */
 	public function setLastInteraction(): void {
+		$this->printComment(' - Set last interaction');
 		$messages = $this->tableManager->setLastInteraction();
+		$this->printInfo($messages, '   ');
+	}
+
+	/**
+	 * Initialize last poll interactions timestamps
+	 */
+	public function migrateAccess(): void {
+		$this->printComment(' - Migrate access');
+		$messages = $this->tableManager->migratePublicToOpen();
 		$this->printInfo($messages, '   ');
 	}
 

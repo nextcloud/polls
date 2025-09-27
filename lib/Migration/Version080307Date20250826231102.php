@@ -118,16 +118,16 @@ class Version080307Date20250826231102 extends SimpleMigrationStep {
 
 		// Clean up tables before creating indices and foreign keys
 
-		// remove all orphaned records
-		$message = $this->tableManager->removeOrphaned();
-		$this->logInfo($message, 'postMigration:  ');
-
 		// ensure correct option hashes in options and votes
 		$message = $this->tableManager->updateHashes();
 		$this->logInfo($message, 'postMigration: ');
 
 		// remove all duplicate records which have to be unique
 		$message = $this->tableManager->deleteAllDuplicates();
+		$this->logInfo($message, 'postMigration:  ');
+
+		// remove all orphaned records
+		$message = $this->tableManager->removeOrphaned();
 		$this->logInfo($message, 'postMigration:  ');
 
 		// remove obsolete tables and columns

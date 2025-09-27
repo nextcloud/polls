@@ -22,7 +22,7 @@ class MigratePublicToOpen implements IRepairStep {
 	}
 
 	public function getName() {
-		return 'Polls - Update or create hashes for votes and options';
+		return 'Polls - Migrate access values from public to open';
 	}
 
 	public function run(IOutput $output): void {
