@@ -16,6 +16,8 @@ OC.L10N.register(
     "Unknown error" : "Невядомая памылка",
     "Loading …" : "Загрузка …",
     "Add" : "Дадаць",
+    "Messages sent." : "Паведамленні адпраўлены.",
+    "New comment …" : "Новы каментарый …",
     "Delete comment" : "Выдаліць каментарый",
     "Cancel" : "Скасаваць",
     "Ok" : "ОК",

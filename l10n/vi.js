@@ -1,7 +1,10 @@
 OC.L10N.register(
     "polls",
     {
+    "Team" : "Đội",
+    "Contact group" : "Liên hệ nhóm",
     "Group" : "N",
+    "_Confirmed option:_::_Confirmed options:_" : ["Tùy chọn đã xác nhận:"],
     "Legal Notice" : "Thông cáo pháp lý",
     "Contact" : "Liên hệ",
     "User" : "Người dùng",

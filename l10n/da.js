@@ -87,6 +87,7 @@ OC.L10N.register(
     "Options" : "Valgmuligheder",
     "Sharing" : "Deling",
     "Activity" : "Aktivitet",
+    "Loading poll…" : "Indlæser afstemning ...",
     "Add options" : "Tilføj muligheder",
     "Hour" : "Time",
     "Day" : "Dag",
