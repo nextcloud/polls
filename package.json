@@ -64,7 +64,7 @@
     "@nextcloud/eslint-config": "^8.3.0",
     "@nextcloud/prettier-config": "^1.2.0",
     "@nextcloud/stylelint-config": "^3.1.0",
-    "@nextcloud/vite-config": "^2.5.0",
+    "@nextcloud/vite-config": "^2.5.1",
     "@types/file-saver": "^2.0.7",
     "@types/lodash": "^4.17.19",
     "@types/luxon": "^3.7.1",
