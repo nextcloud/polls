@@ -57,6 +57,7 @@ OC.L10N.register(
     "%s archived your poll" : "%s arkiverte avstemningen din",
     "{actor} archived your poll \"%s\"." : "{actor} arkiverte avstemningen din \"%s\".",
     "Access denied" : "Tilgang nektet",
+    "No description available." : "Ingen beskrivelse tilgjengelig.",
     "Poll" : "Avstemning",
     "You have commented on poll {pollTitle}" : "Du har kommentert avstemningen {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} har kommentert avstemningen {pollTitle}",
