@@ -5,7 +5,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [8.5.0] - tbd
+## [8.5.0] - 2025-10-03
 ### Fixed
  - Archived polls could not get entered anymore
  - Public users were not displayed correctly right after registration
