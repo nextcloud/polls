@@ -1,6 +1,6 @@
 {
   "name": "polls",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "private": true,
   "description": "Polls app for nextcloud",
   "homepage": "https://github.com/nextcloud/polls#readme",
