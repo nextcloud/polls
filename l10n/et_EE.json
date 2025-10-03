@@ -55,7 +55,7 @@
     "{actor} archived your poll \"%s\"." : "{actor} arhiveeris sinu „%s“ küsitluse.",
     "Poll: %s" : "Küsitlus: %s",
     "404 - Poll not found" : "404 - küsitlust ei leidu",
-    "This poll does not exist (anymore)." : "Neid küsitlust pole (enam) olemas.",
+    "This poll does not exist (anymore)." : "Seda küsitlust pole (enam) olemas.",
     "No one." : "Mitte ükski.",
     "Access denied" : "Ligipääs keelatud",
     "You have no access to this poll. Contact %s if you think this is a mistake." : "Sul puudub ligipääs sellele küsitlusele. Kui sa arvad, et tegemist on veaga, siis küsi abi kasutajalt %s.",
