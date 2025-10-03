@@ -15,7 +15,7 @@ use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\V4\TableManager;
+use OCA\Polls\Db\V5\TableManager;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
