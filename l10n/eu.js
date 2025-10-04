@@ -433,6 +433,7 @@ OC.L10N.register(
     "Enter a poll or start a new one." : "Sartu galdeketa bat edo hasi berri bat.",
     "Add one or change category!" : "Gehitu bat edo aldatu kategoria!",
     "participated" : "parte-hartzailea",
+    "closed" : "itxita",
     "Comments" : "Iruzkinak",
     "Details" : "Xehetasunak",
     "Options" : "Aukerak",
