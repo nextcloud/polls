@@ -16,6 +16,7 @@ import closedPollIcon from 'vue-material-design-icons/LockOutline.vue'
 import creationIcon from 'vue-material-design-icons/ClockOutline.vue'
 import ProposalsIcon from 'vue-material-design-icons/HandExtendedOutline.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
+import { DateTime } from 'luxon'
 
 const pollStore = usePollStore()
 const sharesStore = useSharesStore()
@@ -36,6 +37,7 @@ const subTexts = computed(() => {
 			text: t('polls', 'Archived'),
 			class: 'archived',
 			iconComponent: archivedPollIcon,
+			title: '',
 		})
 		return subTexts
 	}
@@ -46,6 +48,7 @@ const subTexts = computed(() => {
 			text: [t('polls', 'Unpublished')].join('. '),
 			class: 'unpublished',
 			iconComponent: unpublishedIcon,
+			title: '',
 		})
 		return subTexts
 	}
@@ -58,6 +61,7 @@ const subTexts = computed(() => {
 			}),
 			class: '',
 			iconComponent: null,
+			title: '',
 		})
 	} else {
 		subTexts.push({
@@ -67,15 +71,19 @@ const subTexts = computed(() => {
 			}),
 			class: '',
 			iconComponent: null,
+			title: '',
 		})
 	}
 
 	if (pollStore.isClosed) {
 		subTexts.push({
 			id: 'closed',
-			text: timeExpirationRelative.value,
+			text: pollStore.getExpirationDateTime.toRelative() as string,
 			class: 'closed',
 			iconComponent: closedPollIcon,
+			title: pollStore.getExpirationDateTime.toLocaleString(
+				DateTime.DATETIME_SHORT,
+			) as string,
 		})
 		return subTexts
 	}
@@ -84,10 +92,14 @@ const subTexts = computed(() => {
 		subTexts.push({
 			id: 'expiring',
 			text: t('polls', 'Closing {relativeExpirationTime}', {
-				relativeExpirationTime: timeExpirationRelative.value,
+				relativeExpirationTime:
+					pollStore.getExpirationDateTime.toRelative() as string,
 			}),
 			class: closeToClosing.value ? 'closing' : 'open',
 			iconComponent: ExpirationIcon,
+			title: pollStore.getExpirationDateTime.toLocaleString(
+				DateTime.DATETIME_SHORT,
+			) as string,
 		})
 		return subTexts
 	}
@@ -96,10 +108,14 @@ const subTexts = computed(() => {
 		subTexts.push({
 			id: 'expired',
 			text: t('polls', 'Proposal period ended {timeRelative}', {
-				timeRelative: pollStore.proposalsExpireRelative,
+				timeRelative:
+					pollStore.getProposalExpirationDateTime.toRelative() as string,
 			}),
 			class: 'proposal',
 			iconComponent: ProposalsIcon,
+			title: pollStore.getProposalExpirationDateTime.toLocaleString(
+				DateTime.DATETIME_SHORT,
+			) as string,
 		})
 		return subTexts
 	}
@@ -108,10 +124,14 @@ const subTexts = computed(() => {
 		subTexts.push({
 			id: 'proposal-open',
 			text: t('polls', 'Proposal period ends {timeRelative}', {
-				timeRelative: pollStore.proposalsExpireRelative,
+				timeRelative:
+					pollStore.getProposalExpirationDateTime.toRelative() as string,
 			}),
 			class: 'proposal',
 			iconComponent: ProposalsIcon,
+			title: pollStore.getProposalExpirationDateTime.toLocaleString(
+				DateTime.DATETIME_SHORT,
+			) as string,
 		})
 		return subTexts
 	}
@@ -119,17 +139,16 @@ const subTexts = computed(() => {
 	if (subTexts.length < 2) {
 		subTexts.push({
 			id: 'created',
-			text: dateCreatedRelative.value,
+			text: pollStore.getCreationDateTime.toRelative(),
 			class: 'created',
 			iconComponent: creationIcon,
+			title: pollStore.getCreationDateTime.toLocaleString(
+				DateTime.DATETIME_SHORT,
+			) as string,
 		})
 	}
 	return subTexts
 })
-
-const dateCreatedRelative = computed(() =>
-	pollStore.getCreationDateTime.toRelative(),
-)
 
 const closeToClosing = computed(
 	() =>
@@ -137,13 +156,6 @@ const closeToClosing = computed(
 		&& pollStore.configuration.expire
 		&& pollStore.getExpirationDateTime.diffNow().as('days') < 1,
 )
-
-const timeExpirationRelative = computed(() => {
-	if (pollStore.configuration.expire) {
-		return pollStore.getExpirationDateTime.toRelative() as string
-	}
-	return t('polls', 'never')
-})
 </script>
 
 <template>
@@ -151,6 +163,7 @@ const timeExpirationRelative = computed(() => {
 		<span
 			v-for="subText in subTexts"
 			:key="subText.id"
+			:title="subText.title"
 			:class="['sub-text', subText.class]">
 			<Component :is="subText.iconComponent" :size="16" />
 			<span class="sub-text">{{ subText.text }}</span>

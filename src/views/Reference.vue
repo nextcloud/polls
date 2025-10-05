@@ -32,6 +32,10 @@ interface Props {
 
 const { richObject } = defineProps<Props>()
 
+const expiryDateTime = richObject?.poll.expiry
+	? DateTime.fromMillis(richObject.poll.expiry * 1000)
+	: null
+
 const expiryClass = richObject?.poll?.expiry
 	? DateTime.fromMillis(richObject.poll.expiry * 1000).diffNow('hours').hours < 36
 		? 'warning'
@@ -54,11 +58,16 @@ const expiryClass = richObject?.poll?.expiry
 			</BadgeSmallDiv>
 			<BadgeSmallDiv
 				v-else-if="richObject.poll.expiry > 0"
+				:title="
+					expiryDateTime
+						? expiryDateTime.toLocaleString(DateTime.DATETIME_SHORT)
+						: ''
+				"
 				:class="expiryClass">
 				<template #icon>
 					<ExpirationIcon :size="16" />
 				</template>
-				{{ DateTime.fromMillis(richObject.poll.expiry * 1000).toRelative() }}
+				{{ expiryDateTime ? expiryDateTime.toRelative() : '' }}
 			</BadgeSmallDiv>
 		</div>
 		<div class="description">

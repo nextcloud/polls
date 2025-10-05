@@ -29,9 +29,7 @@ const preferencesStore = usePreferencesStore()
 
 const { comment } = defineProps<{ comment: CommentsGrouped }>()
 
-const dateCommentedRelative = computed(() =>
-	DateTime.fromSeconds(comment.timestamp).toRelative(),
-)
+const commentedDateTime = computed(() => DateTime.fromSeconds(comment.timestamp))
 
 const isCurrentUser = computed(
 	() => sessionStore.currentUser?.id === comment.user.id,
@@ -103,7 +101,11 @@ const deletable = computed(
 
 			<UserBubble v-else-if="!isCurrentUser" :user="comment.user" />
 
-			<span class="comment-item__date">{{ dateCommentedRelative }}</span>
+			<span
+				class="comment-item__date"
+				:title="commentedDateTime.toLocaleString(DateTime.DATETIME_SHORT)">
+				{{ commentedDateTime.toRelative() }}
+			</span>
 
 			<span v-if="isConfidential" class="comment-item__confidential">
 				{{ confidentialRecipient }}
