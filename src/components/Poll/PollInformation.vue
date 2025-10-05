@@ -33,6 +33,7 @@ import { usePollStore } from '../../stores/poll'
 import { useSubscriptionStore } from '../../stores/subscription'
 import { useOptionsStore } from '../../stores/options'
 import { useVotesStore } from '../../stores/votes'
+import { DateTime } from 'luxon'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
@@ -46,12 +47,14 @@ const proposalsStatus = computed(() => {
 	}
 	if (pollStore.isProposalExpirySet && !pollStore.isProposalExpired) {
 		return t('polls', 'Proposal period ends {timeRelative}', {
-			timeRelative: pollStore.proposalsExpireRelative,
+			timeRelative:
+				pollStore.getProposalExpirationDateTime.toRelative() as string,
 		})
 	}
 	if (pollStore.isProposalExpirySet && pollStore.isProposalExpired) {
 		return t('polls', 'Proposal period ended {timeRelative}', {
-			timeRelative: pollStore.proposalsExpireRelative,
+			timeRelative:
+				pollStore.getProposalExpirationDateTime.toRelative() as string,
 		})
 	}
 	return t('polls', 'No proposals are allowed')
@@ -75,12 +78,7 @@ const accessCaption = computed(() =>
 		? t('polls', 'Private poll')
 		: t('polls', 'Openly accessible poll'),
 )
-const dateCreatedRelative = computed(
-	() => pollStore.getCreationDateTime.toRelative() as string,
-)
-const dateExpiryRelative = computed(
-	() => pollStore.getCreationDateTime.toRelative() as string,
-)
+
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 const countAllYesVotes = computed(() => votesStore.countAllVotesByAnswer('yes'))
 const countAllMaybeVotes = computed(() => votesStore.countAllVotesByAnswer('maybe'))
@@ -113,23 +111,40 @@ const countUsedVotes = computed(
 			</template>
 			{{ accessCaption }}
 		</BadgeDiv>
-		<BadgeDiv>
+		<BadgeDiv
+			:title="
+				t('polls', 'Created {dateTime}', {
+					dateTime: pollStore.getCreationDateTime.toLocaleString(
+						DateTime.DATETIME_SHORT,
+					) as string,
+				})
+			">
 			<template #icon>
 				<CreationIcon />
 			</template>
 			{{
 				t('polls', 'Created {dateRelative}', {
-					dateRelative: dateCreatedRelative,
+					dateRelative:
+						pollStore.getCreationDateTime.toRelative() as string,
 				})
 			}}
 		</BadgeDiv>
-		<BadgeDiv v-if="pollStore.configuration.expire">
+		<BadgeDiv
+			v-if="pollStore.configuration.expire"
+			:title="
+				t('polls', 'Closing: {dateTime}', {
+					dateTime: pollStore.getCreationDateTime.toLocaleString(
+						DateTime.DATETIME_SHORT,
+					) as string,
+				})
+			">
 			<template #icon>
 				<ClosedIcon />
 			</template>
 			{{
 				t('polls', 'Closing: {dateRelative}', {
-					dateRelative: dateExpiryRelative,
+					dateRelative:
+						pollStore.getCreationDateTime.toRelative() as string,
 				})
 			}}
 		</BadgeDiv>

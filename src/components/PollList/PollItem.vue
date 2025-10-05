@@ -39,20 +39,25 @@ const { poll, noLink = false } = defineProps<Props>()
 
 const pollStore = usePollStore()
 const preferencesStore = usePreferencesStore()
+
+const expirationDateTime = computed(() =>
+	DateTime.fromMillis(poll.configuration.expire * 1000),
+)
+
+const createdDateTime = computed(() =>
+	DateTime.fromMillis(poll.status.created * 1000),
+)
+
+const archiveDateTime = computed(() =>
+	DateTime.fromMillis(poll.status.archivedDate * 1000),
+)
+
 const closeToClosing = computed(
 	() =>
 		!poll.status.isExpired
 		&& poll.configuration.expire
-		&& DateTime.fromMillis(poll.configuration.expire * 1000).diffNow('hours')
-			.hours < 36,
+		&& expirationDateTime.value.diffNow('hours').hours < 36,
 )
-
-const timeExpirationRelative = computed(() => {
-	if (poll.configuration.expire) {
-		return DateTime.fromMillis(poll.configuration.expire * 1000).toRelative()
-	}
-	return t('polls', 'never')
-})
 
 const expiryClass = computed(() => {
 	if (poll.status.isExpired) {
@@ -70,10 +75,6 @@ const expiryClass = computed(() => {
 	return 'success'
 })
 
-const timeCreatedRelative = computed(
-	() => DateTime.fromMillis(poll.status.created * 1000).toRelative() as string,
-)
-
 const descriptionLine = computed(() => {
 	if (preferencesStore.user.verbosePollsList) {
 		if (poll.configuration.description) {
@@ -84,15 +85,13 @@ const descriptionLine = computed(() => {
 
 	if (poll.status.isArchived) {
 		return t('polls', 'Archived {relativeTime}', {
-			relativeTime: DateTime.fromMillis(
-				poll.status.archivedDate * 1000,
-			).toRelative() as string,
+			relativeTime: archiveDateTime.value.toRelative() as string,
 		})
 	}
 
 	return t('polls', 'Started {relativeTime} from {ownerName}', {
 		ownerName: poll.owner.displayName,
-		relativeTime: timeCreatedRelative.value,
+		relativeTime: createdDateTime.value.toRelative() as string,
 	})
 })
 </script>
@@ -259,13 +258,29 @@ const descriptionLine = computed(() => {
 			<BadgeSmallDiv
 				v-if="poll.configuration.expire"
 				:class="expiryClass"
-				:title="t('polls', 'Expiration')">
+				:title="
+					t(
+						'polls',
+						poll.status.isExpired
+							? 'Expired {dateTime}'
+							: 'Expires {dateTime}',
+						{
+							dateTime: expirationDateTime.toLocaleString(
+								DateTime.DATETIME_SHORT,
+							) as string,
+						},
+					)
+				">
 				>
 				<template #icon>
 					<ClosedPollsIcon v-if="poll.status.isExpired" :size="16" />
 					<ExpirationIcon v-else :size="16" />
 				</template>
-				{{ timeExpirationRelative }}
+				{{
+					expirationDateTime
+						? expirationDateTime.toRelative()
+						: t('polls', 'never')
+				}}
 			</BadgeSmallDiv>
 		</div>
 

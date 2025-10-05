@@ -192,6 +192,10 @@ export const usePollStore = defineStore('poll', {
 			return DateTime.fromSeconds(state.configuration.expire)
 		},
 
+		getProposalExpirationDateTime(state): DateTime {
+			return DateTime.fromSeconds(state.configuration.proposalsExpire)
+		},
+
 		getCreationDateTime(state): DateTime {
 			return DateTime.fromSeconds(state.status.created)
 		},
@@ -211,18 +215,8 @@ export const usePollStore = defineStore('poll', {
 			)
 		},
 
-		getProposalExpirationDateTime(state): DateTime {
-			return DateTime.fromSeconds(state.configuration.proposalsExpire)
-		},
-
 		isProposalExpirySet(state): boolean {
 			return this.isProposalAllowed && state.configuration.proposalsExpire > 0
-		},
-
-		proposalsExpireRelative(state): string {
-			return DateTime.fromSeconds(
-				state.configuration.proposalsExpire,
-			).toRelative() as string
 		},
 
 		isClosed(state): boolean {

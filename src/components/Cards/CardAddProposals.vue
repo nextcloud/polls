@@ -26,7 +26,8 @@ const optionAddDatesModalProps = {
 		<p v-if="pollStore.isProposalExpirySet && !pollStore.isProposalExpired">
 			{{
 				t('polls', 'The proposal period ends {timeRelative}.', {
-					timeRelative: pollStore.proposalsExpireRelative,
+					timeRelative:
+						pollStore.getProposalExpirationDateTime.toRelative() as string,
 				})
 			}}
 		</p>

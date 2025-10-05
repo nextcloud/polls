@@ -20,9 +20,7 @@ const props = defineProps({
 	},
 })
 
-const dateActivityRelative = computed(() =>
-	DateTime.fromISO(props.activity.datetime).toRelative(),
-)
+const dateActivity = computed(() => DateTime.fromISO(props.activity.datetime))
 
 const message = computed(() => {
 	const subject = props.activity.subject_rich[0]
@@ -97,7 +95,11 @@ const message = computed(() => {
 <template>
 	<div class="activity-item">
 		<div class="activity-item__content">
-			<span class="activity-item__date">{{ dateActivityRelative }}</span>
+			<span
+				:title="dateActivity.toLocaleString(DateTime.DATETIME_SHORT)"
+				class="activity-item__date"
+				>{{ dateActivity.toRelative() }}</span
+			>
 			<NcRichText :text="message.subject" :arguments="message.parameters" />
 		</div>
 	</div>
