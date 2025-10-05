@@ -214,6 +214,32 @@ export const useVotesStore = defineStore('votes', {
 			return this.votes.filter((vote) => vote.answer === answer).length
 		},
 
+		getVotersByOptionAndAnswer(payload: {
+			optionText: string
+			answer: Answer | null
+		}): User[] {
+			const matchingAnswer = payload.answer
+				? [payload.answer]
+				: ['yes', 'maybe', 'no']
+
+			return this.votes
+				.filter(
+					(vote) =>
+						vote.optionText === payload.optionText
+						&& matchingAnswer.includes(vote.answer),
+				)
+				.map((vote) => vote.user)
+				.sort((aUser, bUser) => {
+					if (aUser.displayName < bUser.displayName) {
+						return -1
+					}
+					if (aUser.displayName > bUser.displayName) {
+						return 1
+					}
+					return 0
+				})
+		},
+
 		getVote(payload: { user: User; option: Option }): Vote {
 			const found = this.sortedVotes.find(
 				(vote: Vote) =>

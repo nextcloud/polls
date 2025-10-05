@@ -11,6 +11,8 @@ import CheckboxMarkedOutlinedIcon from 'vue-material-design-icons/CheckboxMarked
 import { usePollStore } from '../../stores/poll'
 
 import type { Option } from '../../stores/options.types'
+import VotersList from '../VoteTable/VotersList.vue'
+import { NcPopover } from '@nextcloud/vue'
 
 const pollStore = usePollStore()
 interface Props {
@@ -26,18 +28,24 @@ const { option, showMaybe = false } = defineProps<Props>()
 		<CheckboxMarkedOutlinedIcon :size="20" />
 	</div>
 	<div v-else class="counter">
-		<div class="yes">
-			<YesCounterIcon
-				fill-color="var(--color-polls-foreground-yes)"
-				:size="20" />
-			<span>{{ option.votes.yes }}</span>
-		</div>
-		<div v-show="showMaybe" class="maybe">
-			<MaybeCounterIcon
-				fill-color="var(--color-polls-foreground-maybe)"
-				:size="20" />
-			<span>{{ option.votes.maybe }}</span>
-		</div>
+		<NcPopover no-focus-trap class="yes">
+			<template #trigger>
+				<YesCounterIcon
+					fill-color="var(--color-polls-foreground-yes)"
+					:size="20" />
+				<span>{{ option.votes.yes }}</span>
+			</template>
+			<VotersList :option="option" answer-filter="yes" />
+		</NcPopover>
+		<NcPopover v-show="showMaybe" no-focus-trap class="maybe">
+			<template #trigger>
+				<MaybeCounterIcon
+					fill-color="var(--color-polls-foreground-maybe)"
+					:size="20" />
+				<span>{{ option.votes.maybe }}</span>
+			</template>
+			<VotersList :option="option" answer-filter="maybe" />
+		</NcPopover>
 	</div>
 </template>
 
