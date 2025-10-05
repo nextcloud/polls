@@ -21,6 +21,8 @@ interface Props {
 }
 
 const { option, showMaybe = false } = defineProps<Props>()
+const showList =
+	pollStore.permissions.seeResults && pollStore.permissions.seeUsernames
 </script>
 
 <template>
@@ -35,7 +37,7 @@ const { option, showMaybe = false } = defineProps<Props>()
 					:size="20" />
 				<span>{{ option.votes.yes }}</span>
 			</template>
-			<VotersList :option="option" answer-filter="yes" />
+			<VotersList v-if="showList" :option="option" answer-filter="yes" />
 		</NcPopover>
 		<NcPopover v-show="showMaybe" no-focus-trap class="maybe">
 			<template #trigger>
@@ -44,7 +46,7 @@ const { option, showMaybe = false } = defineProps<Props>()
 					:size="20" />
 				<span>{{ option.votes.maybe }}</span>
 			</template>
-			<VotersList :option="option" answer-filter="maybe" />
+			<VotersList v-if="showList" :option="option" answer-filter="maybe" />
 		</NcPopover>
 	</div>
 </template>
