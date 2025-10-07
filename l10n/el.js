@@ -301,6 +301,7 @@ OC.L10N.register(
     "The style settings are still experimental!" : "Οι ρυθμίσεις στυλ είναι πειραματικές!",
     "Styles" : "Στυλ",
     "Token: {token}" : "Token: {token}",
+    "Group share" : "Μερίδιο ομάδας",
     "Share label" : "Ετικέτα διαμοιρασμού",
     "Has voted" : "Έχει ψηφίσει",
     "Has not voted" : "Δεν έχει ψηφίσει",

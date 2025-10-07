@@ -158,6 +158,7 @@ OC.L10N.register(
     "Error cloning poll." : "Klaida dubliuojant apklausą.",
     "Back" : "Atgal",
     "Take over" : "Perimti",
+    "Create new group" : "Sukurti naują grupę",
     "Sort by title" : "Rikiuoti pagal pavadinimą",
     "Sort by last interaction" : "Rikiuoti pagal paskutinę sąveiką",
     "Sort by creation date" : "Rikiuoti pagal sukūrimo datą",
