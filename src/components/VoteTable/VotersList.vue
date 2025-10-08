@@ -48,14 +48,14 @@ const voters = computed(() =>
 
 <style lang="scss">
 .voters-grid {
+	--step: 16px;
 	display: grid;
 	grid-template-columns: repeat(4, auto);
-	gap: 0.5rem 1rem;
+	padding-inline-end: calc(2 * var(--step));
 
 	.user-item {
 		grid-column: 1/2;
 		grid-row: 1/2;
-		--step: 16px;
 		translate: calc(var(--i, 0) * var(--step)) 0;
 
 		&:nth-child(n + 5) {
@@ -68,6 +68,7 @@ const voters = computed(() =>
 	}
 
 	&:hover {
+		padding-inline-end: 0;
 		.user-item {
 			grid-column: auto;
 			grid-row: auto;
