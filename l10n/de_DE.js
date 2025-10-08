@@ -428,7 +428,7 @@ OC.L10N.register(
     "Private poll" : "Private Umfrage",
     "Openly accessible poll" : "Öffentlich zugängliche Umfrage",
     "Poll owner:" : "Umfrage-Besitzer:",
-    "Created {dateTime}" : "Erstellt am {dateTime}.",
+    "Created {dateTime}" : "Erstellt am {dateTime}",
     "Created {dateRelative}" : "Erstellt am {dateRelative}.",
     "Closing: {dateTime}" : "Geschlossen: {dateTime}",
     "Closing: {dateRelative}" : "Geschlossen: {dateRelative}",
