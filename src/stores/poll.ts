@@ -63,6 +63,7 @@ export const usePollStore = defineStore('poll', {
 			collapseDescription: true,
 			expire: 0,
 			forceConfidentialComments: false,
+			forcedDisplayMode: 'user-pref',
 			hideBookedUp: false,
 			proposalsExpire: 0,
 			showResults: 'always',

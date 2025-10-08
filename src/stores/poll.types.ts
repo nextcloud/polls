@@ -33,6 +33,7 @@ export type PollConfiguration = {
 	description: string
 	expire: number
 	forceConfidentialComments: boolean
+	forcedDisplayMode: string
 	hideBookedUp: boolean
 	maxVotesPerOption: number
 	maxVotesPerUser: number
