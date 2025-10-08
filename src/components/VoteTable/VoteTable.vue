@@ -143,7 +143,9 @@ function isVotable(participant: User, option: Option) {
 					confirmed: option.confirmed && pollStore.status.isExpired,
 				}"
 				:sticky-top="pollStore.viewMode === 'table-view'"
-				:activate-bottom-shadow="!downPage">
+				:activate-bottom-shadow="
+					pollStore.viewMode === 'table-view' && !downPage
+				">
 				<OptionItem :option="option" />
 			</StickyDiv>
 
@@ -156,7 +158,6 @@ function isVotable(participant: User, option: Option) {
 				}"
 				:show-maybe="pollStore.configuration.allowMaybe"
 				:option="option" />
-
 			<div
 				v-for="participant in votesStore.chunkedParticipants"
 				:key="participant.id"
@@ -193,6 +194,9 @@ function isVotable(participant: User, option: Option) {
 	margin: auto;
 	& > div {
 		border-inline-start: 1px solid var(--color-border);
+		&.participant {
+			border-inline-start: none;
+		}
 	}
 	.vote-cell {
 		padding: 0.4rem;

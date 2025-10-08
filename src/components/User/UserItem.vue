@@ -21,6 +21,7 @@ interface Props {
 	tag?: string
 	virtualUserType?: VirtualUserItemType
 	user?: User
+	itemStyle?: Record<string, string | number>
 }
 
 const {
@@ -32,6 +33,7 @@ const {
 	tag = 'div',
 	virtualUserType,
 	user = createDefault<User>(),
+	itemStyle = {},
 } = defineProps<Props>()
 
 const computedRoleType = computed<UserType | VirtualUserItemType>(
@@ -105,7 +107,7 @@ const componentClass = computed(() => [
 </script>
 
 <template>
-	<component :is="tag" :class="componentClass">
+	<component :is="tag" :class="componentClass" :style="itemStyle">
 		<div class="avatar-wrapper">
 			<UserAvatar
 				v-bind="$attrs"
