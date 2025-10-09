@@ -4,6 +4,7 @@
  */
 
 import { Chunking, StatusResults, User, UserType } from '../Types'
+import { ViewMode } from './preferences.types'
 
 export type PollType = 'textPoll' | 'datePoll'
 
@@ -33,7 +34,7 @@ export type PollConfiguration = {
 	description: string
 	expire: number
 	forceConfidentialComments: boolean
-	forcedDisplayMode: string
+	forcedDisplayMode: ViewMode | 'user-pref'
 	hideBookedUp: boolean
 	maxVotesPerOption: number
 	maxVotesPerUser: number
@@ -57,6 +58,7 @@ export type PollStatus = {
 	countParticipants: number
 	maxVotes: number
 	maxOptionVotes: number
+	forcedViewMode: ViewMode | null
 }
 
 export type PollPermissions = {
@@ -101,14 +103,14 @@ export type CurrentUserStatus = {
 export type Poll = {
 	id: number
 	type: PollType
-	voteVariant: VoteVariant
-	descriptionSafe: string
+	votingVariant: VoteVariant
 	configuration: PollConfiguration
+	descriptionSafe: string
 	owner: User
-	pollGroups: number[]
 	status: PollStatus
 	currentUserStatus: CurrentUserStatus
 	permissions: PollPermissions
+	pollGroups: number[]
 	revealParticipants: boolean
 	sortParticipants: SortParticipants
 	meta: Meta

@@ -243,6 +243,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'countParticipants' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW) ? $this->getParticipantsCount() : 0,
 			'maxVotes' => $this->getVoteLimit(),
 			'maxOptionVotes' => $this->getOptionLimit(),
+			'forcedViewMode' => $this->getForcedDisplayMode() === 'user-pref' ? null : $this->getForcedDisplayMode(),
 		];
 	}
 	public function getConfigurationArray(): array {

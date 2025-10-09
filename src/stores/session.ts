@@ -49,6 +49,7 @@ export const useSessionStore = defineStore('session', {
 		sessionSettings: {
 			viewModeDatePoll: '',
 			viewModeTextPoll: '',
+			viewModeForced: null,
 		},
 		appSettings: {
 			allAccessGroups: [],
@@ -195,11 +196,26 @@ export const useSessionStore = defineStore('session', {
 			return 'list-view'
 		},
 
-		setViewMode(pollType: PollType, viewMode: ViewMode): void {
+		setViewMode(
+			viewMode: ViewMode | 'user-pref',
+			pollType: PollType | null = null,
+		): void {
+			if (viewMode === 'user-pref') {
+				this.sessionSettings.viewModeForced = null
+				return
+			}
+			if (pollType === null) {
+				this.sessionSettings.viewModeForced = viewMode
+				return
+			}
+
 			if (pollType === 'datePoll') {
+				this.sessionSettings.viewModeForced = null
 				this.sessionSettings.viewModeDatePoll = viewMode
+				return
 			}
 			if (pollType === 'textPoll') {
+				this.sessionSettings.viewModeForced = null
 				this.sessionSettings.viewModeTextPoll = viewMode
 			}
 		},

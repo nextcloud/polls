@@ -35,6 +35,7 @@ export type UserStatus = {
 export type SessionSettings = {
 	viewModeDatePoll: '' | ViewMode
 	viewModeTextPoll: '' | ViewMode
+	viewModeForced: null | ViewMode
 }
 
 export type Watcher = {
