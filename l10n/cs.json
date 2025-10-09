@@ -668,6 +668,7 @@
     "Remove votes of {displayName}" : "Odebrat hlasy {displayName}",
     "Click to sort by name" : "Kliknutím seřadíte podle názvu",
     "Click to remove sorting" : "Kliknutím odeberte řazení",
+    "more" : "další",
     "Poll settings" : "Nastavení ankety",
     "Change poll settings globally (for all accounts)" : "Změnit nastavení ankety globálně (pro všechny účty)",
     "Share settings" : "Nastavení sdílení",

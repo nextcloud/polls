@@ -334,6 +334,7 @@ OC.L10N.register(
     "Reset your votes" : "重置投票",
     "Vote saved" : "投票已保存",
     "Error saving vote" : "保存投票出错",
+    "more" : "更多",
     "Poll settings" : "投票设置",
     "Change poll settings globally (for all accounts)" : "全局更改投票设置（针对所有帐户）",
     "Change share settings globally (for all accounts)" : "全局更改共享设置（针对所有帐户）",

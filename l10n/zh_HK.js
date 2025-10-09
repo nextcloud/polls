@@ -670,6 +670,7 @@ OC.L10N.register(
     "Remove votes of {displayName}" : "移除 {displayName} 的投票",
     "Click to sort by name" : "點選以按名稱排序",
     "Click to remove sorting" : "點選以移除排序",
+    "more" : "更多",
     "Poll settings" : "投票設定",
     "Change poll settings globally (for all accounts)" : "全域變更投票設定（對所有帳號）",
     "Share settings" : "分享設定",

@@ -664,6 +664,7 @@
     "Remove votes of {displayName}" : "Видалити голоси {displayName}",
     "Click to sort by name" : "Натисніть, щоб відсортувати за назвою",
     "Click to remove sorting" : "Натисніть, щоб прибрати сортування",
+    "more" : "Більше",
     "Poll settings" : "Налаштування опитування",
     "Change poll settings globally (for all accounts)" : "Глобальна зміна налаштувань опитування (для всіх акаунтів)",
     "Share settings" : "Налаштування спільного доступу",

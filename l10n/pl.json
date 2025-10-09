@@ -382,6 +382,7 @@
     "Logout as {name} (delete cookie)" : "Wyloguj się jako {name} (usuń plik cookie)",
     "Vote saved" : "Głos zapisany",
     "Error saving vote" : "Błąd podczas zapisywania głosu",
+    "more" : "więcej",
     "Poll settings" : "Ustawienia Sondy",
     "Change poll settings globally (for all accounts)" : "Zmień ustawienia ankiety globalnie (dla wszystkich kont)",
     "Change share settings globally (for all accounts)" : "Zmień ustawienia udostępniania globalnie (dla wszystkich kont)",
