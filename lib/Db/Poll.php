@@ -243,6 +243,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'countParticipants' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW) ? $this->getParticipantsCount() : 0,
 			'maxVotes' => $this->getVoteLimit(),
 			'maxOptionVotes' => $this->getOptionLimit(),
+			'forcedViewMode' => $this->getForcedDisplayMode() === 'user-pref' ? null : $this->getForcedDisplayMode(),
 		];
 	}
 	public function getConfigurationArray(): array {
@@ -257,6 +258,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'description' => $this->getDescription(),
 			'expire' => $this->getExpire(),
 			'forceConfidentialComments' => $this->getForceConfidentialComments(),
+			'forcedDisplayMode' => $this->getForcedDisplayMode(),
 			'hideBookedUp' => boolval($this->getHideBookedUp()),
 			'maxVotesPerOption' => $this->getOptionLimit(),
 			'maxVotesPerUser' => $this->getVoteLimit(),
@@ -328,6 +330,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setHideBookedUp($pollConfiguration['hideBookedUp'] ?? $this->getHideBookedUp());
 		$this->setProposalsExpire($pollConfiguration['proposalsExpire'] ?? $this->getProposalsExpire());
 		$this->setShowResults($pollConfiguration['showResults'] ?? $this->getShowResults());
+		$this->setForcedDisplayMode($pollConfiguration['forcedDisplayMode'] ?? $this->getForcedDisplayMode());
 		$this->setUseNo($pollConfiguration['useNo'] ?? $this->getUseNo());
 		$this->setOptionLimit($pollConfiguration['maxVotesPerOption'] ?? $this->getOptionLimit());
 		$this->setVoteLimit($pollConfiguration['maxVotesPerUser'] ?? $this->getVoteLimit());
@@ -419,6 +422,14 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	public function getForceConfidentialComments(): bool {
 		return $this->getMiscSettingsArray()['forceConfidentialComments'] ?? false;
+	}
+
+	private function setForcedDisplayMode(string $value): void {
+		$this->setMiscSettingsByKey('forcedDisplayMode', $value);
+	}
+
+	public function getForcedDisplayMode(): string {
+		return $this->getMiscSettingsArray()['forcedDisplayMode'] ?? 'user-pref';
 	}
 
 	private function setCollapseDescription(bool|int $value): void {

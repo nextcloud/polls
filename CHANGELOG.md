@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Added
  - Show locale date as tooltip for relative date time information
  - Add popover to counter to show voters by answer
+ - Add forced display mode to poll configuration
 
 ## [8.5.0] - 2025-10-03
 ### Fixed

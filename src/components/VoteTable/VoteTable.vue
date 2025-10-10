@@ -192,7 +192,7 @@ function isVotable(participant: User, option: Option) {
 	grid-auto-flow: column;
 	overflow: scroll;
 	margin: auto;
-	& > div {
+	&.table-view > div {
 		border-inline-start: 1px solid var(--color-border);
 		&.participant {
 			border-inline-start: none;

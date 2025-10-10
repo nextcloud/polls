@@ -49,7 +49,7 @@ export const usePollStore = defineStore('poll', {
 	state: (): PollStore => ({
 		id: 0,
 		type: 'datePoll',
-		voteVariant: 'simple',
+		votingVariant: 'simple',
 		descriptionSafe: '',
 		configuration: {
 			title: '',
@@ -63,6 +63,7 @@ export const usePollStore = defineStore('poll', {
 			collapseDescription: true,
 			expire: 0,
 			forceConfidentialComments: false,
+			forcedDisplayMode: 'user-pref',
 			hideBookedUp: false,
 			proposalsExpire: 0,
 			showResults: 'always',
@@ -86,6 +87,7 @@ export const usePollStore = defineStore('poll', {
 			countParticipants: 0,
 			maxVotes: 0,
 			maxOptionVotes: 0,
+			forcedViewMode: null,
 		},
 		currentUserStatus: {
 			groupInvitations: [],
@@ -138,6 +140,10 @@ export const usePollStore = defineStore('poll', {
 	getters: {
 		viewMode(state): ViewMode {
 			const sessionStore = useSessionStore()
+			if (sessionStore.sessionSettings.viewModeForced) {
+				return sessionStore.sessionSettings.viewModeForced
+			}
+
 			if (state.type === 'textPoll') {
 				return sessionStore.viewModeTextPoll
 			}
@@ -242,7 +248,7 @@ export const usePollStore = defineStore('poll', {
 
 		setViewMode(viewMode: ViewMode): void {
 			const sessionStore = useSessionStore()
-			sessionStore.setViewMode(this.type, viewMode)
+			sessionStore.setViewMode(viewMode, this.type)
 		},
 
 		async load(isChanging: boolean = false): Promise<void> {
@@ -266,6 +272,10 @@ export const usePollStore = defineStore('poll', {
 				}
 
 				this.$patch(response.data.poll)
+
+				sessionStore.setViewMode(
+					response.data.poll.configuration.forcedDisplayMode,
+				)
 
 				this.meta.status = 'loaded'
 			} catch (error) {

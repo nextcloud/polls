@@ -14,7 +14,10 @@ import LockedIcon from 'vue-material-design-icons/LockOutline.vue'
 import UnlockedIcon from 'vue-material-design-icons/LockOpenVariantOutline.vue'
 import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
 import HideResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
+import UserPreferenceIcon from 'vue-material-design-icons/AccountCogOutline.vue'
 import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
+import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue'
+import TableViewIcon from 'vue-material-design-icons/Table.vue'
 
 import CardDiv from '../Base/modules/CardDiv.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'
@@ -32,6 +35,7 @@ import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
 import { usePollStore } from '../../stores/poll'
 import { useVotesStore } from '../../stores/votes'
 import ConfigDangerArea from '../Configuration/ConfigDangerArea.vue'
+import ConfigForceViewMode from '../Configuration/ConfigForceViewMode.vue'
 
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
@@ -93,6 +97,18 @@ const votesStore = useVotesStore()
 				v-if="pollStore.configuration.showResults === 'never'" />
 		</template>
 		<ConfigShowResults @change="pollStore.write" />
+	</ConfigBox>
+
+	<ConfigBox :name="t('polls', 'Forced display mode')">
+		<template #icon>
+			<UserPreferenceIcon
+				v-if="pollStore.configuration.forcedDisplayMode === 'user-pref'" />
+			<TableViewIcon
+				v-if="pollStore.configuration.forcedDisplayMode === 'table-view'" />
+			<ListViewIcon
+				v-if="pollStore.configuration.forcedDisplayMode === 'list-view'" />
+		</template>
+		<ConfigForceViewMode @change="pollStore.write" />
 	</ConfigBox>
 
 	<ConfigBox :name="t('polls', 'Deletion and owner')">
