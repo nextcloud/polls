@@ -348,6 +348,7 @@ OC.L10N.register(
     "Error while adding share" : "Błąd podczas dodawania udostępnienia",
     "Type to add an individual share" : "Wpisz, aby dodać indywidualne udostępnienie",
     "Unsent invitations" : "Niewysłane zaproszenia",
+    "Resolve and send all invitations" : "Rozwiąż i wyślij wszystkie zaproszenia",
     "No activity yet" : "Brak aktywności",
     "No comments" : "Bez komentarzy",
     "Be the first." : "Bądź pierwszy.",

@@ -670,6 +670,8 @@
     "Remove votes of {displayName}" : "Retirar os votos de {displayName}",
     "Click to sort by name" : "Prema para ordenar por nome",
     "Click to remove sorting" : "Prema para retirar a ordenación",
+    "No voters" : "Non hai votantes",
+    "more" : "máis",
     "Poll settings" : "Axustes da enquisa",
     "Change poll settings globally (for all accounts)" : "Cambiar os axustes das enquisas globalmente (para todas as contas)",
     "Share settings" : "Axustes do compartición",

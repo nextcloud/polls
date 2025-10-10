@@ -670,6 +670,7 @@
     "Remove votes of {displayName}" : "{displayName} kullanıcısının oylarını kaldır",
     "Click to sort by name" : "Ada göre sıralamak için tıklayın",
     "Click to remove sorting" : "Sıralamayı kaldırmak için tıklayın",
+    "No voters" : "Herhangi bir oy veren yok",
     "more" : "diğer",
     "Poll settings" : "Anket ayarları",
     "Change poll settings globally (for all accounts)" : "Genel olarak anket ayarlarını değiştir (tüm hesaplar için)",

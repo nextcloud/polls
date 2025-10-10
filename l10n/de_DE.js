@@ -672,6 +672,7 @@ OC.L10N.register(
     "Remove votes of {displayName}" : "Stimmen von {displayName} entfernen",
     "Click to sort by name" : "Klicken, um nach Namen zu sortieren",
     "Click to remove sorting" : "Klicken, um die Sortierung aufzuheben",
+    "No voters" : "Keine Abstimmenden",
     "more" : "mehr",
     "Poll settings" : "Umfrageeinstellungen",
     "Change poll settings globally (for all accounts)" : "Umfrageeinstellungen global ändern (Für alle Konten)",
