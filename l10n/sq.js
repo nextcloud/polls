@@ -16,6 +16,7 @@ OC.L10N.register(
     "Cancel" : "Anullo",
     "Ok" : "Në rregull",
     "Delete poll" : "Fshij sondazhin",
+    "List view" : "Pamje listë",
     "Title" : "Titulli",
     "Close" : "Mbylleni",
     "Yes" : "Yes",

@@ -220,6 +220,7 @@ OC.L10N.register(
     "Restore poll" : "Leheneratu galdeketa",
     "Archive poll" : "Artxibatu galdeketa",
     "Delete poll" : "Ezabatu galdeketa",
+    "List view" : "Zerrenda ikuspegia",
     "Limit \"Yes\" votes per option" : "Aukera bakoitzeko \"bai\" botoak mugatu",
     "Allow proposals" : "Onartu proposamenak",
     "Proposal closing date" : "Proposamenaren ixte-data",

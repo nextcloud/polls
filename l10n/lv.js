@@ -29,6 +29,7 @@ OC.L10N.register(
     "For polls created less than 2 days before the expiration." : "Aptaujām, kuras izveidotas mazāk kā 2 dienas pirms izbeigšanās.",
     "Cancel" : "Atcelt",
     "Ok" : "Labi",
+    "List view" : "Saraksta izkārtojums",
     "Hide results until poll is closed" : "Paslēpt iznākumu, kamēr aptauja nav slēgta",
     "Title" : "Nosaukums",
     "Close" : "Aizvērt",

@@ -14,6 +14,7 @@ OC.L10N.register(
     "Delete comment" : "Delete comment",
     "Cancel" : "Bekor qilish",
     "Ok" : "Yaxshi",
+    "List view" : "Ro'yxat ko'rinishi",
     "Title" : "Sarlavha",
     "Close" : "Yopish",
     "Yes" : "Yes",

@@ -95,6 +95,7 @@ OC.L10N.register(
     "Restore poll" : "Atkurti apklausą",
     "Archive poll" : "Archyvuoti apklausą",
     "Delete poll" : "Ištrinti apklausą",
+    "List view" : "Sąrašo rodinys",
     "Limit \"Yes\" votes per option" : "Kiekvienam variantui riboti „Taip“ balsus",
     "Allow proposals" : "Leisti teikti pasiūlymus",
     "Proposal closing date" : "Pasiūlymų teikimo pabaigos data",

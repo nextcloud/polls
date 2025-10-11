@@ -53,6 +53,7 @@ OC.L10N.register(
     "Restore poll" : "Riprìstina sondàgiu",
     "Archive poll" : "Archìvia sondàgiu",
     "Delete poll" : "Cantzella sondàgiu",
+    "List view" : "Bista de s'elencu",
     "Limit \"Yes\" votes per option" : "Lìmita is votos \"Eja\" pro sèberu",
     "Allow proposals" : "Permite propostas",
     "Proposal closing date" : "Data de serrada de sa proposta",

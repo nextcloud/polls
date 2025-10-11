@@ -23,6 +23,7 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Ok" : "Sawa",
     "Anonymous poll" : "Anonymous poll",
+    "List view" : "Mwonekano wa orodha",
     "Title" : "Kichwa cha habari",
     "Close" : "Funga",
     "Yes" : "Ndiyo",

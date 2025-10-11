@@ -334,6 +334,7 @@ OC.L10N.register(
     "Collapse long descriptions" : "Recolher descrições longas",
     "Force confidential comments (only visible to you and the author)" : "Impor comentários confidenciais (visíveis apenas para você e o autor)",
     "Force confidential comments (only visible to {displayName} and the author)" : "Impor comentários confidenciais (visíveis apenas para {displayName} e o autor)",
+    "List view" : "Visualização de lista",
     "Limit \"Yes\" votes per option" : "Limitar os votos \"Sim\" por opção",
     "Hide unavailable options" : "Ocultar opções indisponíveis",
     "Allow proposals" : "Permitir propostas",

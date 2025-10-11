@@ -128,6 +128,7 @@ OC.L10N.register(
     "Restore poll" : "Palauta kysely",
     "Archive poll" : "Arkistoi kysely",
     "Delete poll" : "Poista kysely",
+    "List view" : "Listanäkymä",
     "Allow proposals" : "Salli ehdotukset",
     "Always show results" : "Näytä aina tulokset",
     "Hide results until poll is closed" : "Piiloita tulokset kunnes äänestys on suljettu",

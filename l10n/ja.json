@@ -153,6 +153,7 @@
     "Restore poll" : "投票を再開",
     "Archive poll" : "投票をアーカイブ",
     "Delete poll" : "投票を削除",
+    "List view" : "リスト表示",
     "Limit \"Yes\" votes per option" : "オプション毎に「はい」の回数を制限",
     "Proposal closing date" : "提案の締め切り日",
     "Always show results" : "常に結果を表示",

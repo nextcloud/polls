@@ -16,6 +16,7 @@ OC.L10N.register(
     "deleted" : "yettwakkes",
     "Cancel" : "Sefsex",
     "Ok" : "Ih",
+    "List view" : "Timeẓri n tebdart",
     "Title" : "Azwel",
     "Close" : "Mdel",
     "Yes" : "Ih",

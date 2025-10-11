@@ -198,6 +198,7 @@ OC.L10N.register(
     "Restore poll" : "Herstel peiling",
     "Archive poll" : "Archiveer peiling",
     "Delete poll" : "Verwijder peiling",
+    "List view" : "Lijstweergave",
     "Limit \"Yes\" votes per option" : "Beperk het aantal \"Ja\" stemmen per optie",
     "Allow proposals" : "Sta voorstellen toe",
     "Proposal closing date" : "Voorstellen tot",

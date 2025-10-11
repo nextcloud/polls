@@ -334,6 +334,7 @@ OC.L10N.register(
     "Collapse long descriptions" : "Laghdaigh tuairiscí fada",
     "Force confidential comments (only visible to you and the author)" : "Tuairimí rúnda a fhorchur (le feiceáil agatsa agus ag an údar amháin)",
     "Force confidential comments (only visible to {displayName} and the author)" : "Tuairimí rúnda a fhorchur (le feiceáil ag {displayName} agus an t-údar amháin)",
+    "List view" : "Amharc liosta",
     "Limit \"Yes\" votes per option" : "Cuir teorainn le vótaí \"Tá\" in aghaidh na rogha",
     "Hide unavailable options" : "Folaigh roghanna nach bhfuil ar fáil",
     "Allow proposals" : "Ceadaigh tograí",

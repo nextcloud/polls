@@ -269,6 +269,7 @@ OC.L10N.register(
     "Restore poll" : "Obnoviť anketu",
     "Archive poll" : "Archivovať anketu",
     "Delete poll" : "Zmazať anketu",
+    "List view" : "Zobraziť ako zoznam",
     "Limit \"Yes\" votes per option" : "Obmedziť hlasovanie \"Áno\" pre každú možnosť",
     "Allow proposals" : "Povoliť návrhy",
     "Proposal closing date" : "Predpokladaný dátum ukončenia",

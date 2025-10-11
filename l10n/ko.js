@@ -120,6 +120,7 @@ OC.L10N.register(
     "Restore poll" : "투표 복원",
     "Archive poll" : "투표 보관",
     "Delete poll" : "투표 삭제",
+    "List view" : "목록 보기",
     "Allow proposals" : "제안을 허용함",
     "Always show results" : "항상 결과를 나타내다",
     "Hide results until poll is closed" : "투표가 끝날 때까지 결과를 숨기다",

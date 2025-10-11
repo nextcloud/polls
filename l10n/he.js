@@ -36,6 +36,7 @@ OC.L10N.register(
     "Anonymous poll" : "סקר אלמוני",
     "Restore poll" : "שחזור סקר",
     "Delete poll" : "מחיקת סקר",
+    "List view" : "תצוגת רשימה",
     "Always show results" : "תמיד להציג תוצאות",
     "Never show results" : "לעולם לא להציג את התוצאות",
     "Title" : "כותרת",

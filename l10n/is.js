@@ -36,6 +36,7 @@ OC.L10N.register(
     "Close poll" : "Loka könnun",
     "Restore poll" : "Endurheimta könnun",
     "Delete poll" : "Eyða könnun",
+    "List view" : "Listayfirlit",
     "Always show results" : "Alltaf birta niðurstöður",
     "Hide results until poll is closed" : "Fela niðurstöður þar til könnun er lokað",
     "Never show results" : "Aldrei birta niðurstöður",

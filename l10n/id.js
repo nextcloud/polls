@@ -16,6 +16,7 @@ OC.L10N.register(
     "deleted" : "terhapus",
     "Cancel" : "Membatalkan",
     "Ok" : "Oke",
+    "List view" : "Tampilan lis",
     "Title" : "Judul",
     "Close" : "Tutup",
     "Yes" : "Ya",

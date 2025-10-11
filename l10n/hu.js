@@ -233,6 +233,7 @@ OC.L10N.register(
     "Restore poll" : "Szavazás helyreállítása",
     "Archive poll" : "Szavazás archiválása",
     "Delete poll" : "Szavazás törlése",
+    "List view" : "Lista nézet",
     "Limit \"Yes\" votes per option" : "Az „Igen” szavazatok korlátozása lehetőségenként",
     "Allow proposals" : "Javaslatok engedélyezése",
     "Proposal closing date" : "Javaslatok lezárási dátuma",

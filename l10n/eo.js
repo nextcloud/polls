@@ -22,6 +22,7 @@ OC.L10N.register(
     "Ok" : "Bone",
     "Anonymous poll" : "Enketo sennoma",
     "Delete poll" : "Forigi enketon",
+    "List view" : "Lista vido",
     "Title" : "Titolo",
     "Poll type" : "Enketa tipo",
     "Close" : "Malfermi",

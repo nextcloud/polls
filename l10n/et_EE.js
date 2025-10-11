@@ -323,6 +323,7 @@ OC.L10N.register(
     "Collapse long descriptions" : "Ahenda pikad kirjeldused",
     "Force confidential comments (only visible to you and the author)" : "Kasuta konfidentsiaalset kommenteerimist (kommentaarid on nähtavad vaid sulle ja autorile)",
     "Force confidential comments (only visible to {displayName} and the author)" : "Kasuta konfidentsiaalset kommenteerimist (kommentaarid on nähtavad vaid kasutajale {displayName} ja autorile)",
+    "List view" : "Loendivaade",
     "Limit \"Yes\" votes per option" : "Piira „Jah“ hääli valiku kohta",
     "Hide unavailable options" : "Peida mittekasutatavad valikud",
     "Allow proposals" : "Luba pakkumised",

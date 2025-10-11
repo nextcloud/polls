@@ -170,6 +170,7 @@ OC.L10N.register(
     "deleted" : "deleted",
     "Cancel" : "Cancel",
     "Ok" : "Ok",
+    "List view" : "List view",
     "Close" : "Close",
     "Yes" : "Yes",
     "No" : "No",

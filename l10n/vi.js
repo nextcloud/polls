@@ -21,6 +21,7 @@ OC.L10N.register(
     "deleted" : "đã xóa",
     "Cancel" : "Hủy bỏ",
     "Ok" : "Đồng ý",
+    "List view" : "Xem theo danh sách",
     "Title" : "Tên",
     "Close" : "Đóng",
     "Yes" : "Đồng ý",

@@ -334,6 +334,7 @@ OC.L10N.register(
     "Collapse long descriptions" : "Сажми дугачке описе",
     "Force confidential comments (only visible to you and the author)" : "Форсирај поверљиве коментаре (које видите само ви и аутор)",
     "Force confidential comments (only visible to {displayName} and the author)" : "Форсирај поверљиве коментаре (које виде само {displayName} и аутор)",
+    "List view" : "Приказ листе",
     "Limit \"Yes\" votes per option" : "Ограничи „Да” гласове по опцији",
     "Hide unavailable options" : "Сакриј опцијe које нису доступне",
     "Allow proposals" : "Дозволи давање предлога",

@@ -206,6 +206,7 @@ OC.L10N.register(
     "Restore poll" : "Przywróć sondę",
     "Archive poll" : "Zarchiwizuj sondę",
     "Delete poll" : "Usuń sondę",
+    "List view" : "Widok listy",
     "Limit \"Yes\" votes per option" : "Ogranicz liczbę głosów na \"Tak\" na opcję",
     "Allow proposals" : "Zezwalaj na propozycje",
     "Proposal closing date" : "Data zakończenia propozycji",

@@ -282,6 +282,7 @@ OC.L10N.register(
     "Restore poll" : "Gjenopprett avstemning",
     "Archive poll" : "Arkiver avstemning",
     "Delete poll" : "Slett avstemning",
+    "List view" : "Listevisning",
     "Limit \"Yes\" votes per option" : "Begrens \"Ja\"-stemmer per alternativ",
     "Allow proposals" : "Tillat forslag",
     "Proposal closing date" : "Frist for forslag",

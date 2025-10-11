@@ -332,6 +332,7 @@
     "Collapse long descriptions" : "收起長描述",
     "Force confidential comments (only visible to you and the author)" : "強制保密留言（僅對您與作者可見）",
     "Force confidential comments (only visible to {displayName} and the author)" : "強制保密留言（僅對 {displayName} 與作者可見）",
+    "List view" : "清單檢視",
     "Limit \"Yes\" votes per option" : "限制每個選項的「贊成」票",
     "Hide unavailable options" : "隱藏不可用的選項",
     "Allow proposals" : "允許提案",

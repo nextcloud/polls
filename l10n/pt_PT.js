@@ -18,6 +18,7 @@ OC.L10N.register(
     "deleted" : "eliminado",
     "Cancel" : "Cancelar",
     "Ok" : "CONFIRMAR",
+    "List view" : "Visualização em lista",
     "Title" : "Título ",
     "Close" : "Fechar",
     "Yes" : "Sim",

@@ -334,6 +334,7 @@ OC.L10N.register(
     "Collapse long descriptions" : "Згорнути довгі описи",
     "Force confidential comments (only visible to you and the author)" : "Зробити коментарі конфіденційними (видимими лише вам та автору)",
     "Force confidential comments (only visible to {displayName} and the author)" : "Зробити коментарі конфіденційними (видимими лише для {displayName} та автора)",
+    "List view" : "Показувати списком",
     "Limit \"Yes\" votes per option" : "Обмежити кількість голосів \"Так\" за кожну опцію",
     "Hide unavailable options" : "Приховати недоступні опції",
     "Allow proposals" : "Дозволити пропозиції",

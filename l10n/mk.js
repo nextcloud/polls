@@ -26,6 +26,7 @@ OC.L10N.register(
     "The automatic reminder is sent to all shares via email:" : "Автоматски потсетник е испратен на сите споделувања по е-пошта:",
     "Cancel" : "Откажи",
     "Ok" : "Во ред",
+    "List view" : "Листа",
     "Hide results until poll is closed" : "Сокриј ги резултатите до затворање на анкетата",
     "Title" : "Наслов",
     "Close" : "Затвори",

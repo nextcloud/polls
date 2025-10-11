@@ -208,6 +208,7 @@ OC.L10N.register(
     "Restore poll" : "Восстановить опрос",
     "Archive poll" : "Архивный опрос",
     "Delete poll" : "Удалить опрос",
+    "List view" : "Вид списком",
     "Limit \"Yes\" votes per option" : "Ограничить количество голосов \"Да\" для каждого варианта",
     "Hide unavailable options" : "Скрыть недоступные опции",
     "Allow proposals" : "Разрешённые предложения",

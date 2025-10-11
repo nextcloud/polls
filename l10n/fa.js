@@ -207,6 +207,7 @@ OC.L10N.register(
     "Restore poll" : "بازیابی نظرسنجی",
     "Archive poll" : "Archive poll",
     "Delete poll" : "نظرسنجی را حذف کنید",
+    "List view" : "نمایش لیست",
     "Limit \"Yes\" votes per option" : "Limit \"Yes\" votes per option",
     "Allow proposals" : "Allow proposals",
     "Proposal closing date" : "Proposal closing date",

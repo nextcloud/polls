@@ -78,6 +78,7 @@ OC.L10N.register(
     "Restore poll" : "Vrati anketu",
     "Archive poll" : "Arhiviraj anketu",
     "Delete poll" : "Izbriši anketu",
+    "List view" : "Prikaz popisa",
     "Limit \"Yes\" votes per option" : "Ograniči glasove „Da” po mogućnosti",
     "Allow proposals" : "Dopusti prijedloge",
     "Proposal closing date" : "Datum zatvaranja prijedloga",

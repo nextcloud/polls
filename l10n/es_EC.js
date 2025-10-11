@@ -206,6 +206,7 @@ OC.L10N.register(
     "Restore poll" : "Restaurar encuesta",
     "Archive poll" : "Archivar encuesta",
     "Delete poll" : "Borrar encuesta",
+    "List view" : "Vista de lista",
     "Limit \"Yes\" votes per option" : "Límite de votos \"Sí\" por opción",
     "Allow proposals" : "Permitir propuestas",
     "Proposal closing date" : "Fecha de cierre de propuestas",

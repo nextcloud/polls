@@ -278,6 +278,7 @@ OC.L10N.register(
     "Restore poll" : "راي سىناشنى ئەسلىگە كەلتۈرۈش",
     "Archive poll" : "ئارخىپ تەكشۈرۈش",
     "Delete poll" : "راي سىناشنى ئۆچۈرۈڭ",
+    "List view" : "تىزىملىك كۆرۈنۈشى",
     "Limit \"Yes\" votes per option" : "ھەر بىر تاللاشتا «ھەئە» بېلەتلىرىنى چەكلەڭ",
     "Allow proposals" : "تەكلىپلەرگە يول قويۇڭ",
     "Proposal closing date" : "تەكلىپ يېپىلىش ۋاقتى",

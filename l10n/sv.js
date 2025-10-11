@@ -208,6 +208,7 @@ OC.L10N.register(
     "Restore poll" : "Återställ omröstning",
     "Archive poll" : "Arkivera omröstning",
     "Delete poll" : "Ta bort omröstningen",
+    "List view" : "Listvy",
     "Limit \"Yes\" votes per option" : "Begränsa \"Ja\"-röster per alternativ",
     "Allow proposals" : "Tillåt förslag",
     "Proposal closing date" : "Sista datum för förslag",

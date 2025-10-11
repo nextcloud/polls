@@ -22,6 +22,7 @@ OC.L10N.register(
     "deleted" : "Borrado",
     "Cancel" : "Cancelar",
     "Delete poll" : "Borrar encuesta",
+    "List view" : "Vista de lista",
     "Title" : "Título",
     "Close" : "Cerrar",
     "Yes" : "Sí",

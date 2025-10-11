@@ -192,6 +192,7 @@
     "Restore poll" : "恢复投票",
     "Archive poll" : "存档投票",
     "Delete poll" : "删除投票",
+    "List view" : "列表视图",
     "Limit \"Yes\" votes per option" : "限制每个选项的“赞成”票",
     "Allow proposals" : "允许提议",
     "Proposal closing date" : "提案关闭日期",

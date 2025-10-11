@@ -15,6 +15,7 @@ OC.L10N.register(
     "Delete comment" : "Borrar comentario",
     "deleted" : "Borrado",
     "Cancel" : "Cancelar",
+    "List view" : "Vista de lista",
     "Title" : "Título",
     "Close" : "Cerrar",
     "Yes" : "Si",

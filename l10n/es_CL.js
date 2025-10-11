@@ -18,6 +18,7 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "Ok" : "Ok",
     "Delete poll" : "Borrar encuesta",
+    "List view" : "Vista de lista",
     "Title" : "Título",
     "Close" : "Cerrar",
     "Yes" : "Sí",
