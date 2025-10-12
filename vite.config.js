@@ -8,7 +8,7 @@ import { join, resolve } from 'path'
 const customConfig = {
 	resolve: {
 		alias: {
-			'@': resolve('src/js'),
+			'@': resolve('src'),
 		},
 	},
 	css: {
