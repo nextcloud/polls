@@ -279,6 +279,7 @@ OC.L10N.register(
     "Restore poll" : "Restaura l'enquesta",
     "Archive poll" : "Arxiva enquesta",
     "Delete poll" : "Suprimir enquesta",
+    "List view" : "Vista de llista",
     "Limit \"Yes\" votes per option" : "Limiteu els vots \"Sí\" per opció",
     "Allow proposals" : "Permetre propostes",
     "Proposal closing date" : "Data de tancament de la proposta",

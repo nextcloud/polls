@@ -212,6 +212,7 @@ OC.L10N.register(
     "Delete poll" : "Изтриване на анкета",
     "Force confidential comments (only visible to you and the author)" : "Наложи конфиденциални коментари (видими само за теб и автора)",
     "Force confidential comments (only visible to {displayName} and the author)" : "Наложи конфиденциални коментари (видими само за {displayName} и автора)",
+    "List view" : "Списъчен изглед",
     "Limit \"Yes\" votes per option" : "Ограничение на гласовете „Да“ за опция",
     "Allow proposals" : "Забраняване на предложения",
     "Proposal closing date" : "Крайна дата на предложение",

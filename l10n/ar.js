@@ -294,6 +294,7 @@ OC.L10N.register(
     "Restore poll" : "استعادة الاستبيان",
     "Archive poll" : "أرشفة الاستبيان",
     "Delete poll" : "حذف الاستبيان",
+    "List view" : "عرض على شكل قائمة",
     "Limit \"Yes\" votes per option" : "تقييد عدد أصوات \"نعم\" لكل خيار",
     "Allow proposals" : "السماح بالمقترحات",
     "Proposal closing date" : "تاريخ إغلاق الاقتراح",

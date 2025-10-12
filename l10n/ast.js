@@ -128,6 +128,7 @@ OC.L10N.register(
     "Restore poll" : "Restaurar la encuesta",
     "Archive poll" : "Archivar la encuesta",
     "Delete poll" : "Desaniciar la encuesta",
+    "List view" : "Vista de llista",
     "Error while creating Poll \"{pollTitle}\"" : "Hebo un error mentanto se creaba la encuesta «{pollTitle}»",
     "Title" : "Tñitulu",
     "Poll type" : "Tipu d'encuesta",
