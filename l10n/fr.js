@@ -669,6 +669,7 @@ OC.L10N.register(
     "Remove votes of {displayName}" : "Supprimer les votes de {displayName}",
     "Click to sort by name" : "Cliquez pour trier par nom",
     "Click to remove sorting" : "Cliquez pour supprimer le tri",
+    "more" : "plus",
     "Poll settings" : "Paramètres du sondage",
     "Change poll settings globally (for all accounts)" : "Changer les paramètres des sondages globalement (pour tous les comptes)",
     "Share settings" : "Paramètres du partage",
