@@ -28,6 +28,7 @@ OC.L10N.register(
     "Ok" : "OK",
     "Anonymous poll" : "Anonym afstemning",
     "Delete poll" : "Slet afstemning",
+    "List view" : "Listevisning",
     "Always show results" : "Vis altid resultater",
     "Never show results" : "Vis aldrig resultater",
     "Title" : "Titel",
