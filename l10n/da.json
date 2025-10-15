@@ -62,6 +62,7 @@
     "Select the calendars to use for lookup." : "Vælg de kalendere, der skal bruges til opslag.",
     "Token: {token}" : "Token: {token}",
     "Public link: {token}" : "Offentligt link: {token}",
+    "Group share" : "Gruppeandel",
     "Share label" : "Del label",
     "Copy link to clipboard" : "Kopiér link til udklipsholderen",
     "Link copied to clipboard" : "Link kopieret til udklipsholder",
