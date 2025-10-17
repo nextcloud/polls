@@ -3,8 +3,11 @@ OC.L10N.register(
     {
     "Polls" : "Kura",
     "Team" : "Timu",
+    "Contact group" : "Contact group",
     "Group" : "Kundi",
     "Contact" : "Mawasiliano",
+    "External Email" : "Barua pepe ya nje",
+    "External participant" : "Mshiriki wa nje",
     "User" : "Mtumiaji",
     "Access denied" : "Access denied",
     "Poll" : "Kura ya maoni",
