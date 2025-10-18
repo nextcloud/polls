@@ -10,6 +10,7 @@ namespace OCA\Polls\Cron;
 
 use Exception;
 use OCA\Polls\AppConstants;
+use OCA\Polls\Attributes\ManuallyRunnableCronJob;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
@@ -17,34 +18,30 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\V5\TableManager;
 use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
-use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\BackgroundJob\TimedJob;
 use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
 /**
  * @psalm-api
  */
-class JanitorCron extends TimedJob {
-	private AppSettings $appSettings;
+#[ManuallyRunnableCronJob]
+class JanitorCron extends TimedCronJob {
+	// private AppSettings $appSettings;
 
 	public function __construct(
-		protected ITimeFactory $time,
-		private CommentMapper $commentMapper,
+		protected LoggerInterface $logger,
 		private ISession $session,
-		private LoggerInterface $logger,
+		private CommentMapper $commentMapper,
 		private LogMapper $logMapper,
 		private OptionMapper $optionMapper,
 		private PollMapper $pollMapper,
 		private ShareMapper $shareMapper,
 		private VoteMapper $voteMapper,
 		private TableManager $tableManager,
+		private AppSettings $appSettings,
+		protected bool $supportsManualRun = true,
 	) {
-		parent::__construct($time);
-		parent::setInterval(86400); // run once a day
-		$this->appSettings = Container::queryClass(AppSettings::class);
 	}
 
 	/**
@@ -69,6 +66,7 @@ class JanitorCron extends TimedJob {
 			$this->tableManager->updateHashes();
 
 			// purge entries virtually deleted more than 12 hours ago
+			$deleted = [];
 			$deleted['comments'] = $this->commentMapper->purgeDeletedComments(time() - 4320);
 			$deleted['options'] = $this->optionMapper->purgeDeletedOptions(time() - 4320);
 			$deleted['shares'] = $this->shareMapper->purgeDeletedShares(time() - 4320);
@@ -104,6 +102,7 @@ class JanitorCron extends TimedJob {
 			$autoArchiveOffset = $this->appSettings->getAutoArchiveOffsetDays();
 
 			if ($this->appSettings->getAutoArchiveEnabled() && $autoArchiveOffset > 0) {
+				$archived = [];
 				$archived['poll'] = $this->pollMapper->archiveExpiredPolls(
 					time() - ($autoArchiveOffset * 86400)
 				);

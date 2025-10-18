@@ -3,36 +3,33 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { AxiosResponse } from 'axios'
 import { httpInstance, createCancelTokenHandler } from './HttpApi'
+import type { Job, JobsList } from './api.types'
 
 const adminJobs = {
-	runAutoReminder() {
+	getJobsList(): Promise<AxiosResponse<JobsList>> {
 		return httpInstance.request({
 			method: 'GET',
-			url: 'administration/autoreminder/run',
+			url: 'administration/jobs',
 			cancelToken:
 				cancelTokenHandlerObject[
-					this.runAutoReminder.name
+					this.getJobsList.name
 				].handleRequestCancellation().token,
 		})
 	},
-	runJanitor() {
+
+	runJob(job: Job) {
 		return httpInstance.request({
-			method: 'GET',
-			url: 'administration/janitor/run',
+			method: 'POST',
+			url: 'administration/job/run',
+			data: {
+				job: job.className,
+			},
+
 			cancelToken:
 				cancelTokenHandlerObject[
-					this.runJanitor.name
-				].handleRequestCancellation().token,
-		})
-	},
-	runNotification() {
-		return httpInstance.request({
-			method: 'GET',
-			url: 'administration/notification/run',
-			cancelToken:
-				cancelTokenHandlerObject[
-					this.runNotification.name
+					this.runJob.name
 				].handleRequestCancellation().token,
 		})
 	},

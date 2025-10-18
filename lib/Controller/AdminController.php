@@ -13,11 +13,13 @@ use OCA\Polls\Cron\AutoReminderCron;
 use OCA\Polls\Cron\JanitorCron;
 use OCA\Polls\Cron\NotificationCron;
 use OCA\Polls\Service\PollService;
+use OCA\Polls\Service\SystemService;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\BackgroundJob\IJob;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
@@ -37,6 +39,7 @@ class AdminController extends BaseController {
 		private AutoReminderCron $autoReminderCron,
 		private JanitorCron $janitorCron,
 		private NotificationCron $notificationCron,
+		private SystemService $systemService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -51,6 +54,24 @@ class AdminController extends BaseController {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
 		$this->eventDispatcher->dispatchTyped(new LoadAdditionalScriptsEvent());
 		return new TemplateResponse(AppConstants::APP_ID, 'main', ['urlGenerator' => $this->urlGenerator]);
+	}
+
+	/**
+	 * Get list of cron jobs
+	 * @return JSONResponse A list of cron jobs
+	 */
+	#[FrontpageRoute(verb: 'GET', url: '/administration/jobs')]
+	public function getJobs(): JSONResponse {
+		return $this->response(fn () => ['jobs' => $this->systemService->getCronJobs()]);
+	}
+
+	/**
+	 * Run job
+	 * @param class-string<IJob> $job Job to run
+	 */
+	#[FrontpageRoute(verb: 'POST', url: '/administration/job/run')]
+	public function runJob($job): JSONResponse {
+		return $this->response(fn () => $this->systemService->runJob($job));
 	}
 
 	/**

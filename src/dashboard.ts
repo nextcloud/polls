@@ -9,9 +9,7 @@ import { pinia } from './stores'
 import Dashboard from './views/Dashboard.vue'
 import './assets/scss/polls-icon.scss'
 
-// Vue.config.devtools = import.meta.env.MODE !== 'production'
 /** global: OCA */
-
 document.addEventListener('DOMContentLoaded', () => {
 	// @ts-expect-error: Name not found error
 	OCA.Dashboard.register('polls', (el) => {

@@ -10,6 +10,8 @@ namespace OCA\Polls\Service;
 
 use Exception;
 use OCA\Polls\AppConstants;
+use OCA\Polls\Attributes\ManuallyRunnableCronJob;
+use OCA\Polls\Cron\TimedCronJob;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
@@ -24,9 +26,12 @@ use OCA\Polls\Model\Settings\SystemSettings;
 use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
 use OCA\Polls\Model\User\User;
+use OCP\BackgroundJob\IJob;
+use OCP\BackgroundJob\IJobList;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\L10N\IFactory;
 use OCP\Share\IShare;
+use phpDocumentor\Reflection\Types\This;
 use Psr\Log\LoggerInterface;
 
 class SystemService {
@@ -49,6 +54,7 @@ class SystemService {
 	public function __construct(
 		private IFactory $transFactory,
 		private ISearch $userSearch,
+		private IJobList $jobList,
 		private LoggerInterface $logger,
 		private ShareMapper $shareMapper,
 		private VoteMapper $voteMapper,
@@ -258,6 +264,68 @@ class SystemService {
 	public function validatePublicUsernameByToken(string $userName, string $token): string {
 		$share = $this->shareMapper->findByToken($token);
 		return $this->validatePublicUsername($userName, $share);
+	}
+
+	/**
+	 * Run a cron job immediately
+	 * @param class-string<IJob> $className The class name of the cron job to run
+	 * @throws Exception
+	 */
+	public function runJob($className): string {
+		$jobs = $this->jobList->getJobsIterator($className, null, 0);
+
+		foreach ($jobs as $job) {
+			$jobClassName = get_class($job);
+			$reflection_class = new \ReflectionClass($jobClassName);
+
+			if ($reflection_class->getNamespaceName() !== 'OCA\\Polls\\Cron') {
+				continue;
+			}
+
+			if (get_class($job) === $className) {
+				/** @var TimedCronJob $job */
+				$job->setLastRun(time());
+
+				if (
+					!empty($reflection_class->getAttributes(ManuallyRunnableCronJob::class))
+					&& $reflection_class->hasMethod('manuallyRun')
+				) {
+					return $job->manuallyRun();
+				} else {
+					$this->logger->error('Job {job} does not support manual execution', ['job' => $jobClassName]);
+					throw new Exception('Job does not support manual execution');
+				}
+			}
+		}
+		throw new Exception('Job not found');
+	}
+
+	/**
+	 * Get a list of cron jobs within Polls' namespace
+	 * @return array A list of cron jobs of Polls' namespace
+	 */
+	public function getCronJobs(): array {
+		$jobs = $this->jobList->getJobsIterator(null, 1000, 1);
+		$joblist = [];
+		foreach ($jobs as $job) {
+			$jobClassName = get_class($job);
+			$reflection_class = new \ReflectionClass($jobClassName);
+
+			if ($reflection_class->getNamespaceName() !== 'OCA\\Polls\\Cron') {
+				continue;
+			}
+
+			$joblist[] = [
+				'id' => $job->getId(),
+				'className' => get_class($job),
+				'lastRun' => $job->getLastRun(),
+				'argument' => $job->getArgument(),
+				'nameSpace' => $reflection_class->getNamespaceName(),
+				'name' => $reflection_class->getShortName(),
+				'manuallyRunnable' => !empty($reflection_class->getAttributes(ManuallyRunnableCronJob::class)),
+			];
+		}
+		return $joblist;
 	}
 
 	/**

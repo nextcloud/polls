@@ -9,6 +9,19 @@ import type { Poll } from '../../stores/poll.types'
 import type { Comment } from '../../stores/comments.types'
 import type { Share } from '../../stores/shares.types'
 
+export type Job = {
+	id: string
+	className: string
+	lastRun: number
+	argument: string | null
+	nameSpace: string
+	name: string
+	manuallyRunnable: boolean
+}
+export type JobsList = {
+	jobs: Job[]
+}
+
 export type ApiEmailAdressList = {
 	displayName: string
 	emailAddress: string
