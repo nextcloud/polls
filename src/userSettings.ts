@@ -5,10 +5,12 @@
 
 import { createApp } from 'vue'
 import { pinia } from './stores'
+import { Settings } from 'luxon'
+import { getLanguage } from '@nextcloud/l10n'
 
 import UserSettingsPage from './views/UserSettingsPage.vue'
 
-// Vue.config.devtools = import.meta.env.MODE !== 'production'
+Settings.defaultLocale = getLanguage()
 
 const Polls = createApp(UserSettingsPage).use(pinia)
 Polls.mount('#content_polls')
