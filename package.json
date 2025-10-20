@@ -50,7 +50,7 @@
     "linkify-urls": "^5.1.0",
     "lodash": "^4.17.21",
     "luxon": "^3.7.2",
-    "marked": "^16.4.0",
+    "marked": "^16.4.1",
     "marked-gfm-heading-id": "^4.1.0",
     "pinia": "^3.0.3",
     "qrcode": "^1.5.3",
