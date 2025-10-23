@@ -515,7 +515,7 @@
     "Sends out pending notifications about poll updates." : "Envia notificações pendentes sobre atualizações de enquetes.",
     "Description is missing." : "Falta a descrição.",
     "Not run yet" : "Ainda não executado",
-    "This job has never been run yet." : "Esta trabalho ainda não foi executado.",
+    "This job has never been run yet." : "Este trabalho ainda não foi executado.",
     "Please understand, that the jobs were defined as asynchronous jobs by intention." : "Por favor, entenda que os trabalhos foram definidos intencionalmente como trabalhos assíncronos.",
     "Only use them, if it is absolutely neccessary (i.e. your cron does not work properly) or for testing." : "Use-os apenas se for absolutamente necessário (ou seja, se o seu cron não estiver funcionando corretamente) ou para testes.",
     "Starting the jobs does not mean, that the rules for these actions are overridden." : "Iniciar os trabalhos não significa que as regras para estas ações sejam substituídas.",
