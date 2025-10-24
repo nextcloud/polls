@@ -193,18 +193,16 @@ onMounted(() => {
 
 <style lang="scss">
 .poll-list__list {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	overflow: scroll;
-	padding-bottom: 14px;
+	display: grid;
+	grid-auto-rows: 1fr;
+	margin: 0 0.5rem 1rem;
 }
 
 .observer_section {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 14px 0;
+	padding: 1rem 0;
 }
 
 .clickable_load_more {

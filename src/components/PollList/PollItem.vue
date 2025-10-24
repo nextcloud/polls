@@ -292,8 +292,9 @@ const descriptionLine = computed(() => {
 
 <style lang="scss">
 .poll-item {
-	display: flex;
-	column-gap: 0.3rem;
+	display: grid;
+	grid-template-columns: auto minmax(13.3rem, 1fr) auto auto;
+	column-gap: 1rem;
 	align-items: center;
 	padding: 0.3rem 0;
 	border-bottom: 1px solid var(--color-border-dark);
@@ -306,29 +307,14 @@ const descriptionLine = computed(() => {
 		background-color: var(--color-background-hover);
 	}
 
-	.item__type {
-		flex: 0 0 3rem;
-	}
-
-	.item__title {
-		flex: 4 0 11.3rem;
+	.item__title * {
 		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
-	.title_line,
-	.description_line {
-		display: flex;
-		gap: 0.5rem;
-		.title,
-		.description {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-		.title {
-			flex: 1;
-			font-weight: 600;
-		}
+	.title {
+		font-weight: 600;
 	}
 
 	.title-line {
@@ -339,7 +325,6 @@ const descriptionLine = computed(() => {
 	}
 	.badges {
 		display: flex;
-		flex: 1 0 10rem;
 		gap: 0.25rem;
 		flex-wrap: wrap;
 		justify-content: flex-end;
@@ -349,11 +334,6 @@ const descriptionLine = computed(() => {
 			line-height: normal;
 			min-height: 1.4rem;
 		}
-	}
-	.actions {
-		display: flex;
-		flex: 0 0 2.7rem;
-		justify-content: center;
 	}
 }
 </style>
