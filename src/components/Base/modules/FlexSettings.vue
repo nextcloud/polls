@@ -4,22 +4,15 @@
 -->
 
 <template>
-	<div class="flex_settings">
+	<div class="grid_settings">
 		<slot name="default" />
 	</div>
 </template>
 
 <style lang="scss">
-.flex_settings {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: stretch;
-
-	.settings-section {
-		flex: 1 0 480px;
-		margin-bottom: 0;
-		border-bottom: 1px solid var(--color-border);
-	}
+.grid_settings {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(var(--cap-width), 1fr));
 }
 
 .settings-description {
