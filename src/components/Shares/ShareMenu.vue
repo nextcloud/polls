@@ -402,17 +402,4 @@ async function submitLabel() {
 .deleted .user-item .description {
 	color: var(--color-error-text);
 }
-
-.vote-status {
-	margin-inline-start: 8px;
-	width: 32px;
-
-	&.voted {
-		color: var(--color-polls-foreground-yes);
-	}
-
-	&.unvoted {
-		color: var(--color-polls-foreground-no);
-	}
-}
 </style>
