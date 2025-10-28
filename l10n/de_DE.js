@@ -400,7 +400,7 @@ OC.L10N.register(
     "Duration" : "Dauer",
     "Duration time unit" : "Zeiteinheit Dauer",
     "Repetitions" : "Wiederholungen",
-    "Automatically vote \"Yes\" for new option." : "Für die neue Option automatisch mit „Ja“ stimmen.",
+    "Automatically vote \"Yes\" for new option." : "Für die neue Option automatisch mit \"Ja\" stimmen.",
     "Preview" : "Vorschau",
     "Added" : "Hinzugefügt",
     "Shifting dates is disabled to prevent shifting of proposals of other participants." : "Das Verschieben von Terminen ist deaktiviert, um das Verschieben von Vorschlägen anderer Teilnehmer zu verhindern.",
