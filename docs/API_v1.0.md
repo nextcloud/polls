@@ -235,12 +235,41 @@ A poll newly created will look like this.
 ```
 
 ### Add/update option (date poll)
+Add a single option
 ```json
 {
-	"timestamp": 1589195823,
-    "duration": 1800
+	"option":
+    {
+		"text": "",
+		"timestamp": 1589195823,
+	    "duration": 1800
+	}
 }
 ```
+Add with sequence options (like in the UI)
+````json
+{
+	"option":
+	{
+		"text":"",
+		"timestamp":1761343200,
+		"duration":86400
+	},
+	"sequence":
+	{
+		"unit":
+		{
+			"id":"day",
+			"value":"day",
+			"name":"Day",
+			"timeOption":false
+		},
+		"stepWidth":1,
+		"repetitions":0
+	},
+	"voteYes":false
+}
+````
 
 ### Keys and values
 | Key            | Type    | description             |
