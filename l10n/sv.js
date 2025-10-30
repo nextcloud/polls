@@ -324,6 +324,7 @@ OC.L10N.register(
     "Calendar check" : "Kalenderkontroll",
     "Styles" : "Stilar",
     "Token: {token}" : "Token: {token}",
+    "Group share" : "Gruppdelning",
     "Share label" : "Delningsetikett",
     "Has voted" : "Har röstat",
     "Has not voted" : "Har inte röstat",
