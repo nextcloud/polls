@@ -137,7 +137,7 @@ OC.L10N.register(
     "Next day" : "翌日",
     "Add" : "追加",
     "Propose an option" : "オプションを提案",
-    "Only visible to me" : "自分だけに見える",
+    "Only visible to me" : "自分だけに表示",
     "Error while saving comment" : "コメントの保存中にエラーが発生しました",
     "New comment …" : "あたらしいコメント",
     "Error while deleting the comment" : "コメントの削除中にエラーが発生しました",

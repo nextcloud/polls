@@ -52,6 +52,8 @@ OC.L10N.register(
     "Transfer poll ownership" : "Перадаць права ўласнасці на апытанне",
     "Create new group" : "Стварыць новую групу",
     "New group name" : "Назва новай групы",
+    "Descending" : "Па ўбыванні",
+    "Ascending" : "Па ўзрастанні",
     "Privacy policy" : "Палітыка прыватнасці",
     "Login" : "Лагін",
     "Additional email disclaimer" : "Дадатковая адмова ад адказнасці па электроннай пошце",

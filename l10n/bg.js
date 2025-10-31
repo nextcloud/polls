@@ -289,6 +289,7 @@ OC.L10N.register(
     "never" : "никога",
     "Error archiving/restoring poll." : "Грешка при архивиране/възстановяване на анкетата.",
     "Error cloning poll." : "Грешка при клониране на анкета.",
+    "Back" : "Назад",
     "Take over" : "Вземане на управление",
     "Sort by title" : "Сортиране по заглавие",
     "Direction" : "Посока",
