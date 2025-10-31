@@ -35,7 +35,7 @@ abstract class SqlHelper {
 			IDBConnection::PLATFORM_POSTGRES => $qb->createFunction('string_agg(distinct ' . $concatColumn . '::varchar, \'' . $separator . '\') AS ' . $asColumn),
 			IDBConnection::PLATFORM_ORACLE => $qb->createFunction('listagg(distinct ' . $concatColumn . ', \'' . $separator . '\') WITHIN GROUP (ORDER BY ' . $concatColumn . ') AS ' . $asColumn),
 			IDBConnection::PLATFORM_SQLITE => $qb->createFunction('group_concat(replace(distinct ' . $concatColumn . ' ,\'\',\'\'), \'' . $separator . '\') AS ' . $asColumn),
-			default => $qb->createFunction('group_concat(distinct ' . $concatColumn . ' SEPARATOR "' . $separator . '") AS ' . $asColumn),
+			default => $qb->createFunction('group_concat(distinct ' . $concatColumn . ' SEPARATOR \'' . $separator . '\') AS ' . $asColumn),
 		});
 	}
 }
