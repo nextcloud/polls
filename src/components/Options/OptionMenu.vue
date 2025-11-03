@@ -10,6 +10,7 @@ import { t } from '@nextcloud/l10n'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcModal from '@nextcloud/vue/components/NcModal'
+import NcActionText from '@nextcloud/vue/components/NcActionText'
 
 import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
@@ -55,6 +56,17 @@ const cloneAllowed = computed(
 		&& !pollStore.isClosed
 		&& pollStore.permissions.edit,
 )
+const proposalHint = computed(() => {
+	if (!option.owner || option.isOwner) {
+		return null
+	}
+
+	return option.owner
+		? t('polls', "{displayName}'s proposal", {
+				displayName: option.owner.displayName,
+			})
+		: ''
+})
 
 /**
  *
@@ -84,6 +96,8 @@ function confirmOption() {
 
 <template>
 	<NcActions class="option-menu">
+		<NcActionText v-if="proposalHint" :name="proposalHint" />
+
 		<NcActionButton
 			v-if="deleteAllowed"
 			:name="deleteOrRestoreStaticText"

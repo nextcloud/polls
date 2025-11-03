@@ -192,11 +192,11 @@ function isVotable(participant: User, option: Option) {
 	grid-auto-flow: column;
 	overflow: scroll;
 	margin: auto;
+	column-gap: 1px;
+	background: var(--color-border);
+
 	&.table-view > div {
-		border-inline-start: 1px solid var(--color-border);
-		&.participant {
-			border-inline-start: none;
-		}
+		background-color: var(--color-main-background);
 	}
 	.vote-cell {
 		padding: 0.4rem;
@@ -206,7 +206,6 @@ function isVotable(participant: User, option: Option) {
 
 	.participant {
 		grid-column: 1;
-		place-self: center;
 		inset-inline-start: 0;
 		background-color: var(--color-main-background);
 

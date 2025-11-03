@@ -86,9 +86,11 @@ const stickyClass = computed(() => ({
 		'top-left-corner top top-right-corner'
 		'left center right'
 		'bottom-left-corner bottom bottom-right-corner';
+	background: none !important;
 }
 
 .stage {
+	display: grid;
 	padding: 0.3rem;
 	grid-area: center;
 	width: 100%;

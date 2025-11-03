@@ -88,7 +88,7 @@ onUnmounted(() => {
 			<DateOptionsIcon />
 		</template>
 
-		<OptionsDate v-if="optionsStore.options.length" />
+		<OptionsDate v-if="optionsStore.options.length" class="options-list" />
 
 		<NcEmptyContent
 			v-else
@@ -113,7 +113,7 @@ onUnmounted(() => {
 
 		<OptionsTextAdd v-if="!pollStore.isClosed" />
 
-		<OptionsText v-if="optionsStore.options.length" />
+		<OptionsText v-if="optionsStore.options.length" class="options-list" />
 
 		<NcEmptyContent
 			v-else
@@ -129,3 +129,16 @@ onUnmounted(() => {
 		</template>
 	</ConfigBox>
 </template>
+
+<style lang="scss">
+.options-list {
+	display: grid;
+	grid-template-columns: auto 1fr auto auto;
+	place-items: center;
+
+	.option-item {
+		grid-template-columns: subgrid;
+		grid-column: 1 / 5;
+	}
+}
+</style>
