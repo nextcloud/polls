@@ -80,7 +80,6 @@ const showRegisterCard = computed(
 .vote-info-cards {
 	display: grid;
 	gap: 1rem;
-	flex-wrap: wrap;
 	grid-template-columns: repeat(auto-fit, minmax(calc(var(--cap-width) / 2), 1fr));
 
 	// remove margin from notecard in favor of gap
