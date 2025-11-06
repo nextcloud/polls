@@ -293,11 +293,12 @@ const descriptionLine = computed(() => {
 <style lang="scss">
 .poll-item {
 	display: grid;
-	grid-template-columns: auto minmax(13.3rem, 1fr) auto auto;
+	grid-template-columns: subgrid;
 	column-gap: 1rem;
 	align-items: center;
 	padding: 0.3rem 0;
 	border-bottom: 1px solid var(--color-border-dark);
+	grid-column: 1 / 5;
 
 	&.active {
 		background-color: var(--color-primary-element-light);

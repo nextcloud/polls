@@ -196,6 +196,7 @@ onMounted(() => {
 	display: grid;
 	grid-auto-rows: 1fr;
 	margin: 0 0.5rem 1rem;
+	grid-template-columns: auto minmax(13.3rem, 1fr) auto auto;
 }
 
 .observer_section {
