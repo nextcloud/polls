@@ -7,6 +7,7 @@ OC.L10N.register(
     "Register" : "Roʻyxatdan oʻtish",
     "Unknown error" : "Unknown error",
     "Maybe" : "Balki",
+    "Loading …" : "Yuklanmoqda…",
     "Previous day" : "Oldingi kun",
     "Next day" : "Keyingi kun",
     "Add" : "Add",

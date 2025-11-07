@@ -389,6 +389,7 @@ OC.L10N.register(
     "Logout as {name} (delete cookie)" : "Logga ut som {name} (ta bort cookie)",
     "Vote saved" : "Röst sparad",
     "Error saving vote" : "Det gick inte att spara rösten",
+    "more" : "mer",
     "Other settings" : "Andra inställningar",
     "Performance settings" : "Prestandainställningar",
     "If you are experiencing connection problems, change how auto updates are retrieved." : "Om du upplever anslutningsproblem, ändra hur automatiska uppdateringar hämtas.",
