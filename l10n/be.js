@@ -33,6 +33,7 @@ OC.L10N.register(
     "Email address" : "Адрас электроннай пошты",
     "OK" : "OK",
     "Select the user to transfer the ownership to" : "Выберыце карыстальніка, якому трэба перадаць права ўласнасці",
+    "Delete option" : "Выдаліць варыянт",
     "{displayName}'s proposal" : "Прапанова карыстальніка {displayName}",
     "All day" : "Увесь дзень",
     "Duration" : "Працягласць",
