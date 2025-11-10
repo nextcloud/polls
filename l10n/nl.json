@@ -4,6 +4,7 @@
     "Team" : "Team",
     "Contact group" : "Contactpersonengroep",
     "Group" : "Groep",
+    "_Confirmed option:_::_Confirmed options:_" : ["Bevestigde keuzes","Bevestigde keuzes"],
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Deze link geeft je persoonlijke toegang tot de bovenstaande peiling. Druk op de knop hierboven of kopieer de volgende link en voeg die toe aan de lokatiebalk van je browser:",
     "Do not share this link with other people, because it is connected to your votes." : "Deel deze link niet met anderen, want het zit verbonden aan jouw stemmen.",
     "Poll invitation \"%s\"" : "Peilingsuitnodiging \"%s\"",
