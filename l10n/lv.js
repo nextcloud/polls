@@ -76,6 +76,7 @@ OC.L10N.register(
     "Created" : "Izveidots",
     "Owner" : "Īpašnieks",
     "Last interaction" : "Pēdējā mijiedarbība",
+    "Openly accessible polls" : "Brīvi pieejamas aptaujas",
     "All polls" : "Visas aptaujas",
     "Archive" : "Arhīvi",
     "My archived polls" : "Manas arhivētās aptaujas",
