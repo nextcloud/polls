@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
  - Add forced display mode to poll configuration
 ### Changed
  - Updated job control for the administration
+ - Refactored some elements flex to grid
 
 ## [8.5.0] - 2025-10-03
 ### Fixed
