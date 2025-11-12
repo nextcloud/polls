@@ -192,11 +192,12 @@ function isVotable(participant: User, option: Option) {
 	grid-auto-flow: column;
 	overflow: scroll;
 	margin: auto;
-	column-gap: 1px;
-	background: var(--color-border);
 
 	&.table-view > div {
-		background-color: var(--color-main-background);
+		border-inline-start: 1px solid var(--color-border);
+		&.participant {
+			border-inline-start: none;
+		}
 	}
 	.vote-cell {
 		padding: 0.4rem;
@@ -249,12 +250,14 @@ function isVotable(participant: User, option: Option) {
 			grid-column: 1;
 			inset-inline-start: 0;
 			background-color: var(--color-main-background);
+			border-inline-start: none;
 		}
 
 		.option-item-spacer {
 			grid-row: 2;
 			grid-column: 1;
 			inset-inline-start: 0;
+			border-inline-start: none;
 		}
 
 		.counter-spacer {
@@ -262,6 +265,7 @@ function isVotable(participant: User, option: Option) {
 			grid-column: 1;
 			inset-inline-start: 0;
 			background-color: var(--color-main-background);
+			border-inline-start: none;
 		}
 
 		.option-menu-grid {
