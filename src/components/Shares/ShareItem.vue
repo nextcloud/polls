@@ -86,19 +86,17 @@ onMounted(() => {
 		:description="userDescription"
 		:label="share.label">
 		<template #status>
-			<div v-if="share.groupId || ['public', 'group'].includes(share.type)">
-				<div class="vote-status empty" />
-			</div>
-			<div v-else-if="share.voted">
-				<VotedIcon
-					class="vote-status voted"
-					:name="t('polls', 'Has voted')" />
-			</div>
-			<div v-else>
-				<UnvotedIcon
-					class="vote-status unvoted"
-					:name="t('polls', 'Has not voted')" />
-			</div>
+			<div
+				v-if="share.groupId || ['public', 'group'].includes(share.type)"
+				class="vote-status empty" />
+			<VotedIcon
+				v-else-if="share.voted"
+				class="vote-status voted"
+				:name="t('polls', 'Has voted')" />
+			<UnvotedIcon
+				v-else
+				class="vote-status unvoted"
+				:name="t('polls', 'Has not voted')" />
 		</template>
 
 		<ShareMenu :share="share" @show-qr-code="emit('showQrCode')" />
@@ -111,7 +109,6 @@ onMounted(() => {
 }
 
 .vote-status {
-	margin-inline-start: 8px;
 	width: 32px;
 
 	&.voted {

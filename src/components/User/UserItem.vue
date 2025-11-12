@@ -148,14 +148,17 @@ const componentClass = computed(() => [
 }
 
 .user-item {
-	position: relative;
-	display: flex;
+	display: grid;
+	grid-template-columns: auto auto 1fr auto;
 	align-items: center;
-	justify-content: space-around;
-	padding: 4px;
-	max-width: 100%;
+	column-gap: 8px;
+	margin: 8px 0;
 	&.disabled {
 		opacity: 0.6;
+	}
+	&.condensed {
+		grid-template-columns: 1fr;
+		justify-items: center;
 	}
 }
 
@@ -176,27 +179,18 @@ const componentClass = computed(() => [
 }
 
 .user-item__name {
-	flex: 1;
-	min-width: 50px;
-	padding-inline-start: 8px;
 	white-space: nowrap;
 	> div {
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
 	.description {
 		color: var(--color-text-maxcontrast);
 		font-size: 0.7em;
 	}
-}
 
-.condensed {
-	&.user-item {
-		flex-direction: column;
-		justify-content: center;
-		max-width: 70px;
-	}
-	.user-item__name {
+	.condensed & {
 		font-size: 0.7em;
 		text-align: center;
 		width: 70px;

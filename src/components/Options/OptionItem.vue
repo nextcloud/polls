@@ -69,6 +69,7 @@ const pollStore = usePollStore()
 	display: grid;
 	grid-template-columns: auto 1fr auto auto;
 	grid-template-areas: 'drag option owner actions';
+	align-items: center;
 	position: relative;
 	padding: 8px 0;
 	background-color: var(--color-main-background);

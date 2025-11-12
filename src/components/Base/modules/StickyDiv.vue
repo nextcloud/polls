@@ -59,85 +59,22 @@ const stickyClass = computed(() => ({
 
 <template>
 	<div :class="['sticky-div', stickyClass]" :style="style">
-		<div class="top-left-corner"></div>
-		<div class="top"></div>
-		<div class="top-right-corner"></div>
-
-		<div class="left"></div>
 		<div class="stage" :style="style">
 			<slot name="default">
 				<div class="inner"></div>
 			</slot>
 		</div>
-		<div class="right"></div>
-
-		<div class="bottom-right-corner"></div>
-		<div class="bottom"></div>
-		<div class="bottom-left-corner"></div>
 	</div>
 </template>
 
 <style lang="scss" scoped>
-.sticky-div {
-	display: grid;
-	grid-template-columns: auto 1fr auto;
-	grid-template-rows: auto 1fr auto;
-	grid-template-areas:
-		'top-left-corner top top-right-corner'
-		'left center right'
-		'bottom-left-corner bottom bottom-right-corner';
-}
-
 .stage {
+	display: grid;
 	padding: 0.3rem;
 	grid-area: center;
 	width: 100%;
 	height: 100%;
 	background-color: var(--color-main-background);
-}
-
-.top-left-corner {
-	grid-area: top-left-corner;
-	height: 0;
-	width: 0;
-}
-
-.top {
-	grid-area: top;
-	height: 0;
-}
-
-.top-right-corner {
-	grid-area: top-right-corner;
-	height: 0;
-	width: 0;
-}
-
-.right {
-	grid-area: right;
-	width: 0;
-}
-
-.bottom-right-corner {
-	grid-area: bottom-right-corner;
-	height: 0;
-	width: 0;
-}
-
-.bottom {
-	grid-area: bottom;
-	height: 0;
-}
-
-.bottom-left-corner {
-	grid-area: bottom-left-corner;
-	height: 0;
-	width: 0;
-}
-
-.left {
-	grid-area: left;
-	width: 0;
 }
 
 .sticky-left {
@@ -150,20 +87,35 @@ const stickyClass = computed(() => ({
 	top: 0;
 }
 
-.bottom-right-corner,
-.bottom,
-.bottom-left-corner {
+.sticky-div.sticky-bottom-shadow::after {
+	content: '';
 	background: linear-gradient(
 		to bottom,
 		rgba(var(--color-box-shadow-rgb), 0.3),
 		rgba(var(--color-box-shadow-rgb), 0)
 	);
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 6px;
+	bottom: -6px;
+	left: 0px;
+	z-index: -1;
+}
 
-	transition:
-		all var(--animation-slow) linear,
-		border 1ms;
-	.sticky-bottom-shadow & {
-		height: var(--shadow-height);
-	}
+.sticky-div.sticky-right-shadow::after {
+	content: '';
+	background: linear-gradient(
+		to right,
+		rgba(var(--color-box-shadow-rgb), 0.3),
+		rgba(var(--color-box-shadow-rgb), 0)
+	);
+	content: '';
+	position: absolute;
+	height: 100%;
+	width: 6px;
+	right: -6px;
+	top: 0px;
+	z-index: -1;
 }
 </style>

@@ -30,6 +30,7 @@ import AdminUnrescrictedOwners from '../components/Settings/AdminSettings/AdminU
 
 import { useAppSettingsStore } from '../stores/appSettings'
 import '../assets/scss/markdown.scss'
+import '../assets/scss/vars.scss'
 
 const appSettingsStore = useAppSettingsStore()
 

@@ -78,21 +78,13 @@ const showRegisterCard = computed(
 
 <style lang="scss" scoped>
 .vote-info-cards {
-	// margin: auto;
-	display: flex;
+	display: grid;
 	gap: 1rem;
-	flex-wrap: wrap;
-	justify-content: center;
+	grid-template-columns: repeat(auto-fit, minmax(calc(var(--cap-width) / 2), 1fr));
 
-	& > * {
-		flex: 1;
-	}
-
-	// remove margin from notecard in favor of flexbox gap
+	// remove margin from notecard in favor of gap
 	.notecard {
 		margin: unset;
-		flex: 1 calc(var(--cap-width) / 2);
-		max-width: var(--cap-width);
 	}
 }
 </style>

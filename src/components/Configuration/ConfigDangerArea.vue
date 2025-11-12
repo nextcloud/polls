@@ -96,9 +96,8 @@ function routeAway() {
 
 <style lang="scss">
 .delete-area {
-	display: flex;
+	display: grid;
 	gap: 8px;
-	justify-content: space-between;
-	flex-wrap: wrap;
+	grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 }
 </style>

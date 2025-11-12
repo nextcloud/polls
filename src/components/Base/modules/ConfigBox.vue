@@ -17,14 +17,12 @@ const { name, info = '', indented = false } = defineProps<Props>()
 
 <template>
 	<div class="config-box">
-		<div class="config-box__header">
-			<slot name="icon" />
-			<div :title="info" :class="['config-box__title', { indented }]">
-				{{ name }}
-				<InformationIcon v-if="info" />
-			</div>
-			<slot name="actions" />
+		<slot name="icon" />
+		<div :title="info" :class="['config-box__title', { indented }]">
+			{{ name }}
+			<InformationIcon v-if="info" />
 		</div>
+		<slot name="actions" />
 		<div class="config-box__container">
 			<slot />
 		</div>
@@ -32,38 +30,31 @@ const { name, info = '', indented = false } = defineProps<Props>()
 </template>
 
 <style lang="scss">
-.config-box__header {
-	display: flex;
-	align-content: center;
-	align-items: center;
-	gap: 5px;
-	margin: 8px 0 8px 0;
-}
-
 .config-box {
-	display: flex;
-	flex-direction: column;
-	padding: 8px 0;
-	.icon-container {
-		width: 20px;
-	}
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	grid-template-areas:
+		'icon title actions'
+		'. container container';
+	column-gap: 0.5rem;
+	margin: 1rem 0;
 
-	.config-box__title {
-		display: flex;
-		flex: 1;
+	&__title {
+		grid-area: title;
 		opacity: 0.7;
 		font-weight: bold;
-		margin: 0;
+		margin: 0.5rem 0;
 	}
 
-	.config-box__container {
-		display: flex;
-		flex-direction: column;
-		padding-inline-start: 24px;
+	&__container {
+		grid-area: container;
+		& > * {
+			width: 100%;
+		}
 	}
-}
 
-.indented {
-	margin-inline-start: 24px !important;
+	.indented {
+		margin-inline-start: 1.6rem !important;
+	}
 }
 </style>

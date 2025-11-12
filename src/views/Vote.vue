@@ -316,10 +316,6 @@ const appClass = computed(() => [
 		max-width: var(--cap-width);
 	}
 
-	& > * {
-		margin-top: 0.5rem;
-	}
-
 	.area__footer,
 	.area__top,
 	.list-view.area__vote {
