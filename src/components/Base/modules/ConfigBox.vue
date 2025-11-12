@@ -48,6 +48,9 @@ const { name, info = '', indented = false } = defineProps<Props>()
 
 	&__container {
 		grid-area: container;
+		& > * {
+			width: 100%;
+		}
 	}
 
 	.indented {
