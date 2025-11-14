@@ -19,6 +19,8 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\V5\TableManager;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\TimedJob;
 use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
@@ -26,10 +28,11 @@ use Psr\Log\LoggerInterface;
  * @psalm-api
  */
 #[ManuallyRunnableCronJob]
-class JanitorCron extends TimedCronJob {
+class JanitorCron extends TimedJob {
 	// private AppSettings $appSettings;
 
 	public function __construct(
+		protected ITimeFactory $time,
 		protected LoggerInterface $logger,
 		private ISession $session,
 		private CommentMapper $commentMapper,
@@ -42,6 +45,8 @@ class JanitorCron extends TimedCronJob {
 		private AppSettings $appSettings,
 		protected bool $supportsManualRun = true,
 	) {
+		parent::__construct($time);
+		parent::setInterval(86400); // run once a day
 	}
 
 	/**

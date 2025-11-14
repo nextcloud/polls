@@ -71,7 +71,7 @@ class AdminController extends BaseController {
 	 */
 	#[FrontpageRoute(verb: 'POST', url: '/administration/job/run')]
 	public function runJob($job): JSONResponse {
-		return $this->response(fn () => $this->systemService->runJob($job));
+		return $this->response(fn () => ['job' => $this->systemService->runJob($job)]);
 	}
 
 	/**

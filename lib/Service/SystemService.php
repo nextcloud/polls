@@ -11,7 +11,6 @@ namespace OCA\Polls\Service;
 use Exception;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Attributes\ManuallyRunnableCronJob;
-use OCA\Polls\Cron\TimedCronJob;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
@@ -31,7 +30,6 @@ use OCP\BackgroundJob\IJobList;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\L10N\IFactory;
 use OCP\Share\IShare;
-use phpDocumentor\Reflection\Types\This;
 use Psr\Log\LoggerInterface;
 
 class SystemService {
@@ -271,31 +269,34 @@ class SystemService {
 	 * @param class-string<IJob> $className The class name of the cron job to run
 	 * @throws Exception
 	 */
-	public function runJob($className): string {
+	public function runJob($className): array {
 		$jobs = $this->jobList->getJobsIterator($className, null, 0);
 
 		foreach ($jobs as $job) {
 			$jobClassName = get_class($job);
 			$reflection_class = new \ReflectionClass($jobClassName);
 
-			if ($reflection_class->getNamespaceName() !== 'OCA\\Polls\\Cron') {
+			if (
+				$reflection_class->getNamespaceName() !== 'OCA\\Polls\\Cron'
+				|| $jobClassName !== $className
+			) {
 				continue;
 			}
 
-			if (get_class($job) === $className) {
-				/** @var TimedCronJob $job */
-				$job->setLastRun(time());
+			$this->logger->info('{job}: started manually.', ['job' => $reflection_class->getShortName()]);
+			$job->setLastRun(0);
+			$job->start($this->jobList);
+			$job->setLastRun(time());
 
-				if (
-					!empty($reflection_class->getAttributes(ManuallyRunnableCronJob::class))
-					&& $reflection_class->hasMethod('manuallyRun')
-				) {
-					return $job->manuallyRun();
-				} else {
-					$this->logger->error('Job {job} does not support manual execution', ['job' => $jobClassName]);
-					throw new Exception('Job does not support manual execution');
-				}
-			}
+			return [
+				'id' => $job->getId(),
+				'className' => get_class($job),
+				'lastRun' => $job->getLastRun(),
+				'argument' => $job->getArgument(),
+				'nameSpace' => $reflection_class->getNamespaceName(),
+				'name' => $reflection_class->getShortName(),
+				'manuallyRunnable' => !empty($reflection_class->getAttributes(ManuallyRunnableCronJob::class)),
+			];
 		}
 		throw new Exception('Job not found');
 	}
@@ -315,7 +316,7 @@ class SystemService {
 				continue;
 			}
 
-			$joblist[] = [
+			$joblist[$reflection_class->getShortName()] = [
 				'id' => $job->getId(),
 				'className' => get_class($job),
 				'lastRun' => $job->getLastRun(),

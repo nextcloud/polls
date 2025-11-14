@@ -72,7 +72,7 @@ const sections = {
 		name: t('polls', 'Job control'),
 		description: t(
 			'polls',
-			'Manually start backgropund jobs, independent from the cron schedule.',
+			'Manually start background jobs, independent from the cron schedule.',
 		),
 	},
 }
