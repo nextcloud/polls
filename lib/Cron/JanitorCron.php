@@ -130,11 +130,4 @@ class JanitorCron extends TimedJob {
 			$this->session->remove(AppConstants::SESSION_KEY_CRON_JOB);
 		}
 	}
-
-	public function manuallyRun(): string {
-		$this->logger->info('JanitorCron manually run.');
-		$this->run(null);
-		return 'JanitorCron manually run.';
-	}
-
 }

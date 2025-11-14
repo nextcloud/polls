@@ -47,10 +47,4 @@ class AutoReminderCron extends TimedJob {
 			$this->session->remove(AppConstants::SESSION_KEY_CRON_JOB);
 		}
 	}
-
-	public function manuallyRun(): string {
-		$this->logger->Info('AutoReminderCron will manually run.');
-		$this->run(null);
-		return 'AutoReminderCron was manually executed.';
-	}
 }

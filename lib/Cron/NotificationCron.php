@@ -51,10 +51,4 @@ class NotificationCron extends TimedJob {
 		}
 
 	}
-
-	public function manuallyRun(): string {
-		$this->logger->info('NotificationCron manually run.');
-		$this->run(null);
-		return 'NotificationCron manually run.';
-	}
 }
