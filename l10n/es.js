@@ -326,7 +326,6 @@ OC.L10N.register(
     "Reopen poll" : "Reabrir encuesta",
     "Close poll" : "Cerrar encuesta",
     "Poll closing date" : "Fecha de cierre de la encuesta",
-    "Error {action} poll." : "Error al {action} encuesta",
     "Restore poll" : "Restaurar encuesta",
     "Archive poll" : "Archivar encuesta",
     "Delete poll" : "Borrar encuesta",

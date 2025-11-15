@@ -326,7 +326,6 @@ OC.L10N.register(
     "Reopen poll" : "Reopen poll",
     "Close poll" : "Close poll",
     "Poll closing date" : "Poll closing date",
-    "Error {action} poll." : "Error {action} poll.",
     "Restore poll" : "Restore poll",
     "Archive poll" : "Archive poll",
     "Delete poll" : "Delete poll",

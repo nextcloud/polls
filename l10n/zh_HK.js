@@ -326,7 +326,6 @@ OC.L10N.register(
     "Reopen poll" : "重新開啟投票",
     "Close poll" : "關閉投票",
     "Poll closing date" : "民意調查結束日期",
-    "Error {action} poll." : "{action} 投票時發生錯誤。",
     "Restore poll" : "復原投票",
     "Archive poll" : "封存民意調查",
     "Delete poll" : "刪除投票",

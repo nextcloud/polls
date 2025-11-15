@@ -326,7 +326,6 @@ OC.L10N.register(
     "Reopen poll" : "Повторне опитування",
     "Close poll" : "Закрите опитування",
     "Poll closing date" : "Дата закриття опитування",
-    "Error {action} poll." : "Помилка {action} опитування.",
     "Restore poll" : "Відновити опитування",
     "Archive poll" : "Архівне опитування",
     "Delete poll" : "Вилучити опитування",

@@ -278,7 +278,6 @@ OC.L10N.register(
     "Reopen poll" : "Gjenåpne avstemning",
     "Close poll" : "Lukk avstemning",
     "Poll closing date" : "Dato for lukking av avstemning",
-    "Error {action} poll." : "Feil {action} avstemning.",
     "Restore poll" : "Gjenopprett avstemning",
     "Archive poll" : "Arkiver avstemning",
     "Delete poll" : "Slett avstemning",

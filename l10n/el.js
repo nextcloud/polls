@@ -314,7 +314,6 @@ OC.L10N.register(
     "Reopen poll" : "Ανοίξτε ξανά τη δημοσκόπηση",
     "Close poll" : "Κλείστε τη δημοσκόπηση",
     "Poll closing date" : "Ημερομηνία λήξης δημοσκόπησης",
-    "Error {action} poll." : "Σφάλμα {action} δημοσκόπησης.",
     "Restore poll" : "Επαναφορά δημοσκόπησης",
     "Archive poll" : "Αρχειοθέτηση δημοσκόπησης",
     "Delete poll" : "Διαγραφή δημοσκόπησης",

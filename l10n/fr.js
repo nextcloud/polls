@@ -326,7 +326,6 @@ OC.L10N.register(
     "Reopen poll" : "Ré-ouvrir le sondage",
     "Close poll" : "Terminer le sondage",
     "Poll closing date" : "Date de fermeture du sondage",
-    "Error {action} poll." : "Erreur au moment d'effectuer {action} sur le sondage",
     "Restore poll" : "Restaurer le sondage",
     "Archive poll" : "Archiver le sondage",
     "Delete poll" : "Supprimer le sondage",

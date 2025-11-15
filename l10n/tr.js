@@ -326,7 +326,6 @@ OC.L10N.register(
     "Reopen poll" : "Anketi yeniden başlat",
     "Close poll" : "Anketi bitir",
     "Poll closing date" : "Anketin bitirileceği tarih",
-    "Error {action} poll." : "Ankette {action} işlemi yapılırken sorun çıktı.",
     "Restore poll" : "Anketi geri yükle",
     "Archive poll" : "Anketi arşivle",
     "Delete poll" : "Anketi sil",

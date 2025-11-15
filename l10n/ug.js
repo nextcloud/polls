@@ -274,7 +274,6 @@ OC.L10N.register(
     "Reopen poll" : "راي سىناشنى قايتا ئېچىڭ",
     "Close poll" : "راي سىناشنى تاقاش",
     "Poll closing date" : "بېلەت تاشلاش ئاخىرلىشىش ۋاقتى",
-    "Error {action} poll." : "خاتالىق {action} راي سىناش.",
     "Restore poll" : "راي سىناشنى ئەسلىگە كەلتۈرۈش",
     "Archive poll" : "ئارخىپ تەكشۈرۈش",
     "Delete poll" : "راي سىناشنى ئۆچۈرۈڭ",

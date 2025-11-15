@@ -326,7 +326,6 @@ OC.L10N.register(
     "Reopen poll" : "Поново отвори гласање",
     "Close poll" : "Затвори гласање",
     "Poll closing date" : "Датум затварања гласања",
-    "Error {action} poll." : "Грешка приликом {action} гласања.",
     "Restore poll" : "Поврати гласање",
     "Archive poll" : "Архивирај гласање",
     "Delete poll" : "Обриши гласање",
