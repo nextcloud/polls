@@ -18,9 +18,7 @@ export type Job = {
 	name: string
 	manuallyRunnable: boolean
 }
-export type JobsList = {
-	jobs: Job[]
-}
+export type JobsList = Record<string, Job>
 
 export type ApiEmailAdressList = {
 	displayName: string

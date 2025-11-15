@@ -8,7 +8,7 @@ import { httpInstance, createCancelTokenHandler } from './HttpApi'
 import type { Job, JobsList } from './api.types'
 
 const adminJobs = {
-	getJobsList(): Promise<AxiosResponse<JobsList>> {
+	getJobsList(): Promise<AxiosResponse<{ jobs: JobsList }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: 'administration/jobs',
@@ -19,7 +19,7 @@ const adminJobs = {
 		})
 	},
 
-	runJob(job: Job) {
+	runJob(job: Job): Promise<AxiosResponse<{ job: Job }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'administration/job/run',

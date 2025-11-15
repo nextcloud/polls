@@ -33,6 +33,7 @@ import { useOptionsStore } from '../../stores/options'
 import type { AxiosError } from '@nextcloud/axios'
 import type { Option } from '../../stores/options.types'
 import type { Answer } from '../../stores/votes.types'
+import { Logger } from '@/helpers/modules/logger'
 
 type ArrayStyle = 'symbols' | 'raw' | 'generic'
 type ExportFormat = 'html' | 'xlsx' | 'ods' | 'csv'
@@ -159,7 +160,7 @@ async function exportFile(exportFormat: ExportFormat) {
 			`pollStore.${exportFormat}`,
 		)
 	} catch (error) {
-		console.error(error)
+		Logger.error('Error exporting file.', { error })
 		showError(t('polls', 'Error exporting file.'))
 	}
 }

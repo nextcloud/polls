@@ -9,9 +9,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
-use OCA\Polls\Cron\AutoReminderCron;
-use OCA\Polls\Cron\JanitorCron;
-use OCA\Polls\Cron\NotificationCron;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\SystemService;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
@@ -36,9 +33,6 @@ class AdminController extends BaseController {
 		private IURLGenerator $urlGenerator,
 		private PollService $pollService,
 		private IEventDispatcher $eventDispatcher,
-		private AutoReminderCron $autoReminderCron,
-		private JanitorCron $janitorCron,
-		private NotificationCron $notificationCron,
 		private SystemService $systemService,
 	) {
 		parent::__construct($appName, $request);
@@ -71,7 +65,7 @@ class AdminController extends BaseController {
 	 */
 	#[FrontpageRoute(verb: 'POST', url: '/administration/job/run')]
 	public function runJob($job): JSONResponse {
-		return $this->response(fn () => $this->systemService->runJob($job));
+		return $this->response(fn () => ['job' => $this->systemService->runJob($job)]);
 	}
 
 	/**
@@ -91,29 +85,5 @@ class AdminController extends BaseController {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->takeover($pollId)
 		]);
-	}
-
-	/**
-	 * Run auto reminder job
-	 */
-	#[FrontpageRoute(verb: 'GET', url: '/administration/autoreminder/run')]
-	public function runAutoReminderJob(): JSONResponse {
-		return $this->response(fn () => $this->autoReminderCron->manuallyRun());
-	}
-
-	/**
-	 * Run janitor job
-	 */
-	#[FrontpageRoute(verb: 'GET', url: '/administration/janitor/run')]
-	public function runJanitorJob(): JSONResponse {
-		return $this->response(fn () => $this->janitorCron->manuallyRun());
-	}
-
-	/**
-	 * Run notification job
-	 */
-	#[FrontpageRoute(verb: 'GET', url: '/administration/notification/run')]
-	public function runNotificationJob(): JSONResponse {
-		return $this->response(fn () => $this->notificationCron->manuallyRun());
 	}
 }
