@@ -326,6 +326,8 @@ OC.L10N.register(
     "Reopen poll" : "Volver abrir a enquisa",
     "Close poll" : "Pechar a enquisa",
     "Poll closing date" : "Data de peche da enquisa",
+    "Error restoring poll." : "Produciuse un erro ao restaurar a enquisa.",
+    "Error archiving poll." : "Produciuse un erro ao arquivar a enquisa.",
     "Restore poll" : "Restaurar a enquisa",
     "Archive poll" : "Arquivar a enquisa",
     "Delete poll" : "Eliminar a enquisa",
