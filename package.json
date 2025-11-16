@@ -18,7 +18,7 @@
     "build": "vite --mode production build",
     "dev": "NODE_ENV=development vite --mode development build",
     "dev:win": "set NODE_ENV=development && vite --mode development build",
-    "format": "prettier --check .",
+    "format": "prettier --debug-check .",
     "format:fix": "prettier --write .",
     "lint": "eslint --ext .js,.ts,.vue src",
     "lint:fix": "eslint --ext .js,.ts,.vue src --fix",

@@ -13,6 +13,7 @@ use OCA\Polls\AppConstants;
 use OCA\Polls\Attributes\ManuallyRunnableCronJob;
 use OCA\Polls\Service\MailService;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\TimedJob;
 use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
@@ -20,7 +21,7 @@ use Psr\Log\LoggerInterface;
  * @psalm-api
  */
 #[ManuallyRunnableCronJob]
-class AutoReminderCron extends TimedCronJob {
+class AutoReminderCron extends TimedJob {
 	public function __construct(
 		protected ITimeFactory $time,
 		protected LoggerInterface $logger,
@@ -28,7 +29,8 @@ class AutoReminderCron extends TimedCronJob {
 		private ISession $session,
 		protected bool $supportsManualRun = true,
 	) {
-		parent::setInterval(30); // run every 30 minutes
+		parent::__construct($time);
+		parent::setInterval(300); // run every 5 minutes
 	}
 
 	/**
@@ -44,11 +46,5 @@ class AutoReminderCron extends TimedCronJob {
 		} finally {
 			$this->session->remove(AppConstants::SESSION_KEY_CRON_JOB);
 		}
-	}
-
-	public function manuallyRun(): string {
-		$this->logger->Info('AutoReminderCron will manually run.');
-		$this->run(null);
-		return 'AutoReminderCron was manually executed.';
 	}
 }

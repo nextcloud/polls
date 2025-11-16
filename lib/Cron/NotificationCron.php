@@ -12,6 +12,8 @@ use Exception;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Attributes\ManuallyRunnableCronJob;
 use OCA\Polls\Service\MailService;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\TimedJob;
 use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
@@ -19,14 +21,15 @@ use Psr\Log\LoggerInterface;
  * @psalm-api
  */
 #[ManuallyRunnableCronJob]
-class NotificationCron extends TimedCronJob {
+class NotificationCron extends TimedJob {
 	public function __construct(
+		protected ITimeFactory $time,
 		protected LoggerInterface $logger,
 		private ISession $session,
 		private MailService $mailService,
 		protected bool $supportsManualRun = true,
 	) {
-		// parent::__construct($time);
+		parent::__construct($time);
 		parent::setInterval(300); // run every 5 minutes
 	}
 
@@ -47,11 +50,5 @@ class NotificationCron extends TimedCronJob {
 			$this->session->remove(AppConstants::SESSION_KEY_CRON_JOB);
 		}
 
-	}
-
-	public function manuallyRun(): string {
-		$this->logger->info('NotificationCron manually run.');
-		$this->run(null);
-		return 'NotificationCron manually run.';
 	}
 }
