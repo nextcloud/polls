@@ -6,6 +6,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+
 import { t } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -24,9 +25,6 @@ const pollStore = usePollStore()
 const showDeleteDialog = ref(false)
 const showTransferDialog = ref(false)
 
-/**
- *
- */
 function toggleArchive() {
 	try {
 		pollStore.toggleArchive({ pollId: pollStore.id })
