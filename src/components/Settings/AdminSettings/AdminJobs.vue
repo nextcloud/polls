@@ -65,7 +65,7 @@ const jobsDescription: Record<
 }
 
 function getDescription(job: Job): string {
-	if (job.className in jobsDescription) {
+	if (job.name in jobsDescription) {
 		return jobsDescription[job.name].description
 	}
 	return t('polls', 'Description is missing.')
