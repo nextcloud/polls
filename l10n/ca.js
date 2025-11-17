@@ -393,7 +393,6 @@ OC.L10N.register(
     "Please understand, that the jobs were defined as asynchronous jobs by intention." : "Si us plau, entengueu que les tasques es van definir intencionalment com a feines asíncrones.",
     "Starting the jobs does not mean, that the rules for these actions are overridden." : "Començar les tasques no vol dir que les regles d'aquestes accions s'anul·lin.",
     "Each job can only be run once. If you want to rerun them, you have to refresh the page." : "Cada tasca només es pot executar una vegada. Si voleu tornar-les a executar, heu d'actualitzar la pàgina.",
-    "If you want to see the result, please check the logs." : "Si voleu veure el resultat, consulteu els registres.",
     "Enter the URL of your privacy policy" : "Introduïu l'URL de la vostra política de privadesa",
     "Enter the URL of your legal notice" : "Introduïu l'URL del vostre avís legal",
     "Privacy policy link:" : "Enllaç a la política de privadesa:",
