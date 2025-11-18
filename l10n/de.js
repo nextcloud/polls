@@ -520,6 +520,8 @@ OC.L10N.register(
     "Cleans up old or irrelevant data from the system to maintain optimal performance and organization." : "Bereinigt alte oder irrelevanten Daten, um die optimale Leistung und Organisation des Systems zu erhalten.",
     "Sends out pending notifications about poll updates." : "Sendet ausstehende Benachrichtigungen zu Umfrageaktualisierungen.",
     "Description is missing." : "Beschreibung fehlt.",
+    "Execution failed" : "Ausführung fehlgeschlagen",
+    "The last execution of this job has failed. Please check the logs for more details." : "Die letzte Ausführung dieses Jobs ist fehlgeschlagen. Weitere Einzelheiten finden sich in den Protokollen.",
     "Not run yet" : "Noch nicht ausgeführt",
     "This job has never been run yet." : "Dieser Job wurde noch nie ausgeführt.",
     "Request Execution" : "Ausführung anfordern",

@@ -520,6 +520,8 @@ OC.L10N.register(
     "Cleans up old or irrelevant data from the system to maintain optimal performance and organization." : "Glanann sé seanshonraí nó sonraí neamhábhartha ón gcóras chun feidhmíocht agus eagrú is fearr a choinneáil.",
     "Sends out pending notifications about poll updates." : "Seolann sé fógraí atá ar feitheamh faoi nuashonruithe pobalbhreithe.",
     "Description is missing." : "Tá cur síos ar iarraidh.",
+    "Execution failed" : "Theip ar an bhforghníomhú",
+    "The last execution of this job has failed. Please check the logs for more details." : "Theip ar an obair seo a fhorghníomhú go deireanach. Seiceáil na logaí le haghaidh tuilleadh sonraí.",
     "Not run yet" : "Níor rith fós",
     "This job has never been run yet." : "Níor rith an post seo riamh go fóill.",
     "Request Execution" : "Iarratas ar Fhorghníomhú",
