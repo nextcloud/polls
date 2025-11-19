@@ -518,6 +518,8 @@
     "Cleans up old or irrelevant data from the system to maintain optimal performance and organization." : "Cleans up old or irrelevant data from the system to maintain optimal performance and organisation.",
     "Sends out pending notifications about poll updates." : "Sends out pending notifications about poll updates.",
     "Description is missing." : "Description is missing.",
+    "Execution failed" : "Execution failed",
+    "The last execution of this job has failed. Please check the logs for more details." : "The last execution of this job has failed. Please check the logs for more details.",
     "Not run yet" : "Not run yet",
     "This job has never been run yet." : "This job has never been run yet.",
     "Request Execution" : "Request Execution",
