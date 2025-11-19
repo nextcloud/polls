@@ -12,6 +12,7 @@ use JsonSerializable;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Model\Group\Group;
 use OCA\Polls\UserSession;
+use OCP\App\IAppManager;
 use OCP\IAppConfig;
 use Psr\Log\LoggerInterface;
 
@@ -70,6 +71,7 @@ class AppSettings implements JsonSerializable {
 		private UserSession $userSession,
 		private SystemSettings $systemSettings,
 		protected LoggerInterface $logger,
+		protected IAppManager $appManager,
 	) {
 	}
 
@@ -101,6 +103,7 @@ class AppSettings implements JsonSerializable {
 			'useActivity' => false,
 			'navigationPollsInList' => false,
 			'updateType' => $this->getUpdateType(),
+			'currentVersion' => $this->appManager->getAppVersion(AppConstants::APP_ID),
 		];
 
 		if ($this->userSession->getIsLoggedIn()) {

@@ -60,6 +60,7 @@ use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Provider\ReferenceProvider;
 use OCA\Polls\Provider\SearchProvider;
 use OCA\Polls\UserSession;
+use OCP\App\IAppManager;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -155,6 +156,7 @@ class Application extends App implements IBootstrap {
 				$c->get(UserSession::class),
 				$c->get(SystemSettings::class),
 				$c->get(LoggerInterface::class),
+				$c->get(IAppManager::class),
 			);
 		});
 
