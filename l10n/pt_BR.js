@@ -521,6 +521,7 @@ OC.L10N.register(
     "Sends out pending notifications about poll updates." : "Envia notificações pendentes sobre atualizações de enquetes.",
     "Description is missing." : "Falta a descrição.",
     "Execution failed" : "Falha na execução",
+    "The last execution of this job has failed. Please check the logs for more details." : "A última execução desta tarefa falhou. Verifique os registros para obter mais detalhes.",
     "Not run yet" : "Ainda não executado",
     "This job has never been run yet." : "Este trabalho ainda não foi executado.",
     "Request Execution" : "Solicitar Execução",

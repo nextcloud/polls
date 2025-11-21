@@ -520,6 +520,7 @@ OC.L10N.register(
     "Cleans up old or irrelevant data from the system to maintain optimal performance and organization." : "Vyčistí stará nebo nerelevantní data ze systému, aby byl zachován výkon a pořádek.",
     "Sends out pending notifications about poll updates." : "Odešle čekající upozornění ohledně aktualizací anket.",
     "Description is missing." : "Popis chybí.",
+    "Execution failed" : "Vykonání se nezdařilo",
     "Not run yet" : "Doposud nespuštěno",
     "This job has never been run yet." : "Tato úloha doposud ještě nebyl spuštěna.",
     "Request Execution" : "Vyžádat si vykonání",
