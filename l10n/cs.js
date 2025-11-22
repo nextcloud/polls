@@ -521,6 +521,7 @@ OC.L10N.register(
     "Sends out pending notifications about poll updates." : "Odešle čekající upozornění ohledně aktualizací anket.",
     "Description is missing." : "Popis chybí.",
     "Execution failed" : "Vykonání se nezdařilo",
+    "The last execution of this job has failed. Please check the logs for more details." : "Poslední vykonání této úlohy se nezdařilo. Ohledně bližších podrobností nahlédněte do záznamů událostí.",
     "Not run yet" : "Doposud nespuštěno",
     "This job has never been run yet." : "Tato úloha doposud ještě nebyl spuštěna.",
     "Request Execution" : "Vyžádat si vykonání",
