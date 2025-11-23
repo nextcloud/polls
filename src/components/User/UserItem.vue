@@ -115,6 +115,9 @@ const componentClass = computed(() => [
 				:user="user"
 				:label="computedLabel"
 				@click="showMenu()" />
+			<div v-if="$slots.typeIcon" class="type-icon">
+				<slot name="typeIcon" />
+			</div>
 			<div v-if="$slots.menu" class="hover-menu">
 				<slot name="menu" />
 			</div>
@@ -139,10 +142,11 @@ const componentClass = computed(() => [
 .avatar-wrapper {
 	position: relative;
 	display: flex;
+
 	.type-icon {
 		position: absolute;
 		background-size: 16px;
-		top: -6px;
+		top: -3px;
 		inset-inline-start: -6px;
 	}
 }
