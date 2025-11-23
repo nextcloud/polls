@@ -340,6 +340,7 @@ OC.L10N.register(
     "Error while copying link to clipboard" : "هنگام کپی کردن پیوند به حافظه موقت خطایی رخ داد",
     "Show QR code" : "Show QR code",
     "Restore share" : "بازیابی مورد اشتراک گذاری شده",
+    "Delete share" : "حذف اشتراک‌گذاری",
     "Options for the registration dialog" : "Options for the registration dialog",
     "Email address is optional" : "Email address is optional",
     "Email address is mandatory" : "Email address is mandatory",
