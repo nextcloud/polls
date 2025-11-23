@@ -118,6 +118,28 @@ async function loadJobs() {
 		Logger.error('Error on fetching jobs list', { error })
 	}
 }
+
+function jobStatus(job: Job) {
+	if (executedJobs.value.has(job.name)) {
+		return {
+			component: JobExecutedIcon,
+			title: t('polls', '{jobName} has been executed.', { jobName: job.name }),
+		}
+	}
+	if (job.manuallyRunnable) {
+		return {
+			component: PlayIcon,
+			title: t('polls', 'Start {jobName} manually.', { jobName: job.name }),
+		}
+	}
+	return {
+		component: NotSupportedIcon,
+		title: t('polls', '{jobName} does not support manually run.', {
+			jobName: job.name,
+		}),
+	}
+}
+
 /**
  * fetch the jobs list on component mount
  */
@@ -158,29 +180,9 @@ onMounted(() => {
 						:aria-label="t('polls', 'Request job execution')"
 						@click="runJob(job)">
 						<template #icon>
-							<JobExecutedIcon
-								v-if="executedJobs.has(job.name)"
-								:title="
-									t('polls', '{jobName} has been executed.', {
-										jobName: job.name,
-									})
-								" />
-							<PlayIcon
-								v-else-if="job.manuallyRunnable"
-								:title="
-									t('polls', 'Start {jobName} manually.', {
-										jobName: job.name,
-									})
-								" />
-							<NotSupportedIcon
-								v-else
-								:title="
-									t(
-										'polls',
-										'{jobName} does not support manually run.',
-										{ jobName: job.name },
-									)
-								" />
+							<component
+								:is="jobStatus(job).component"
+								:title="jobStatus(job).title" />
 						</template>
 					</NcActionButton>
 				</template>
