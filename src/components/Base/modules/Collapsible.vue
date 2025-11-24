@@ -222,7 +222,6 @@ const containerClass = computed(() => ({
 	.collapsible_container {
 		position: relative;
 		overflow: auto;
-		width: 100%;
 		transition: height 0.3s ease;
 		padding-inline-end: 8px;
 

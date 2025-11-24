@@ -5,6 +5,12 @@
 // some hacks, do alter the display of third parity components
 
 // FIXME: remove this hack after the issue is fixed
+// make sure selects are 100% width in config box
+.config-box .v-select {
+	width: 100%;
+}
+
+// FIXME: remove this hack after the issue is fixed
 // limit the width of the user bubble to prevent it from overflowing
 .user-bubble__name {
 	max-width: 12rem;

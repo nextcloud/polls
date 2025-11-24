@@ -15,6 +15,11 @@ import ShareMenu from './ShareMenu.vue'
 
 import type { Share } from '../../stores/shares.types'
 import { AvatarTypeIcon } from '../User/UserAvatar.types'
+import AdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
+import ContactIcon from 'vue-material-design-icons/CardAccountDetailsOutline.vue'
+import EmailIcon from 'vue-material-design-icons/EmailOutline.vue'
+import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
+import PollGroupIcon from 'vue-material-design-icons/CodeBraces.vue'
 
 const emit = defineEmits(['showQrCode'])
 
@@ -26,6 +31,8 @@ const publicShareDescription = computed(() => {
 	}
 	return t('polls', 'Public link: {token}', { token: share.user.id })
 })
+
+const typeIconSize = 16
 
 const userDescription = computed(() => {
 	if (share.groupId && !share.pollId) {
@@ -53,13 +60,6 @@ const userDescription = computed(() => {
 	return ''
 })
 
-const computedTypeIcon = computed<AvatarTypeIcon>(() => {
-	if (share.groupId && !share.pollId) {
-		return 'pollGroupIcon'
-	}
-	return true
-})
-
 const label = ref({
 	inputValue: '',
 	inputProps: {
@@ -69,6 +69,67 @@ const label = ref({
 		labelOutside: false,
 		label: t('polls', 'Share label'),
 	},
+})
+
+const computedTypeIcon = computed<AvatarTypeIcon>(() => {
+	if (share.groupId && !share.pollId) {
+		return 'pollGroupIcon'
+	}
+	return share.type
+})
+
+const typeIconComponent = computed(() => {
+	switch (computedTypeIcon.value) {
+		case 'admin':
+			return AdminIcon
+		case 'contact':
+			return ContactIcon
+		case 'email':
+			return EmailIcon
+		case 'external':
+			return ShareIcon
+		case 'pollGroupIcon':
+			return PollGroupIcon
+		default:
+			return null
+	}
+})
+
+// const votedIndicator = computed(() => {
+// 	if (share.voted) {
+// 		return {
+// 			class: 'vote-status voted',
+// 			component: VotedIcon,
+// 			name: t('polls', 'Has voted'),
+// 		}
+// 	}
+// 	if (!share.voted) {
+// 		return {
+// 			class: 'vote-status unvoted',
+// 			component: UnvotedIcon,
+// 			name: t('polls', 'Has not voted'),
+// 		}
+// 	}
+// 	return { class: 'vote-status empty', component: null, name: '' }
+// })
+
+const votedIndicator = computed(() => {
+	if (share.groupId || ['public', 'group'].includes(share.type)) {
+		return { class: 'vote-status empty', component: 'div', name: '' }
+	}
+	if (share.voted) {
+		return {
+			class: 'vote-status voted',
+			component: VotedIcon,
+			name: t('polls', 'Has voted'),
+		}
+	}
+
+	return {
+		class: 'vote-status unvoted',
+		component: UnvotedIcon,
+		name: t('polls', 'Has not voted'),
+	}
 })
 
 onMounted(() => {
@@ -82,21 +143,21 @@ onMounted(() => {
 		:class="{ deleted: share.deleted }"
 		:user="share.user"
 		show-email
-		:type-icon="computedTypeIcon"
 		:description="userDescription"
 		:label="share.label">
+		<template #typeIcon>
+			<component
+				:is="typeIconComponent"
+				v-if="typeIconComponent"
+				:size="typeIconSize" />
+		</template>
+
 		<template #status>
-			<div
-				v-if="share.groupId || ['public', 'group'].includes(share.type)"
-				class="vote-status empty" />
-			<VotedIcon
-				v-else-if="share.voted"
-				class="vote-status voted"
-				:name="t('polls', 'Has voted')" />
-			<UnvotedIcon
-				v-else
-				class="vote-status unvoted"
-				:name="t('polls', 'Has not voted')" />
+			<component
+				:is="votedIndicator.component"
+				v-if="votedIndicator.component"
+				:class="votedIndicator.class"
+				:title="votedIndicator.name" />
 		</template>
 
 		<ShareMenu :share="share" @show-qr-code="emit('showQrCode')" />

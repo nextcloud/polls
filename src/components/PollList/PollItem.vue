@@ -44,10 +44,6 @@ const expirationDateTime = computed(() =>
 	DateTime.fromMillis(poll.configuration.expire * 1000),
 )
 
-const createdDateTime = computed(() =>
-	DateTime.fromMillis(poll.status.created * 1000),
-)
-
 const archiveDateTime = computed(() =>
 	DateTime.fromMillis(poll.status.archivedDate * 1000),
 )
@@ -75,25 +71,48 @@ const expiryClass = computed(() => {
 	return 'success'
 })
 
-const descriptionLine = computed(() => {
-	if (preferencesStore.user.verbosePollsList) {
-		if (poll.configuration.description) {
-			return poll.configuration.description
+const pollDetails = computed(() => {
+	if (noLink || !poll.permissions.view) {
+		return {
+			iconComponent: LockPollIcon,
+			title: t('polls', 'No access'),
+			description: t('polls', 'No access to this poll of {ownerName}.', {
+				ownerName: poll.owner.displayName,
+			}),
 		}
-		return t('polls', 'No description provided')
 	}
-
 	if (poll.status.isArchived) {
-		return t('polls', 'Archived {relativeTime}', {
-			relativeTime: archiveDateTime.value.toRelative() as string,
-		})
+		return {
+			iconComponent: ArchivedPollIcon,
+			title: t('polls', 'Archived poll'),
+			description: t('polls', 'Archived {relativeTime}', {
+				relativeTime: archiveDateTime.value.toRelative() as string,
+			}),
+		}
 	}
-
-	return t('polls', 'Started {relativeTime} from {ownerName}', {
-		ownerName: poll.owner.displayName,
-		relativeTime: createdDateTime.value.toRelative() as string,
-	})
+	if (poll.configuration.access === 'private') {
+		return {
+			iconComponent: PrivatePollIcon,
+			title: t('polls', 'Private poll'),
+			description: t(
+				'polls',
+				'Private poll, only invited participants have access',
+			),
+		}
+	}
+	return {
+		iconComponent: OpenPollIcon,
+		title: t('polls', 'Openly accessible poll'),
+		description: t(
+			'polls',
+			'Open poll, accessible to all users of this instance and invited participants',
+		),
+	}
 })
+
+const descriptionLine = computed(
+	() => poll.configuration.description || pollDetails.value.description,
+)
 </script>
 
 <template>
@@ -113,7 +132,7 @@ const descriptionLine = computed(() => {
 			</div>
 
 			<div class="description_line">
-				<LockPollIcon :size="16" />
+				<component :is="pollDetails.iconComponent" :size="16" />
 				<div class="description">
 					{{
 						t('polls', 'No access to this poll of {ownerName}.', {
@@ -143,27 +162,10 @@ const descriptionLine = computed(() => {
 			</div>
 
 			<div class="description_line">
-				<ArchivedPollIcon
-					v-if="
-						!preferencesStore.user.verbosePollsList
-						&& poll.status.isArchived
-					"
-					:title="t('polls', 'Archived  poll')"
-					:size="16" />
-				<OpenPollIcon
-					v-else-if="
-						!preferencesStore.user.verbosePollsList
-						&& poll.configuration.access === 'open'
-					"
-					:title="t('polls', 'Openly accessible poll')"
-					:size="16" />
-				<PrivatePollIcon
-					v-else-if="
-						!preferencesStore.user.verbosePollsList
-						&& poll.configuration.access === 'private'
-					"
-					:title="t('polls', 'Private poll')"
-					:size="16" />
+				<component
+					:is="pollDetails.iconComponent"
+					:size="16"
+					:title="pollDetails.title" />
 
 				<span class="description">
 					{{ descriptionLine }}
@@ -322,6 +324,9 @@ const descriptionLine = computed(() => {
 		justify-content: space-between;
 	}
 	.description_line {
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		gap: 0.25rem;
 		opacity: 0.5;
 	}
 	.badges {
