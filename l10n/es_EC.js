@@ -281,6 +281,7 @@ OC.L10N.register(
     "never" : "nunca",
     "Error archiving/restoring poll." : "Error al archivar/restaurar la encuesta.",
     "Error cloning poll." : "Error al clonar la encuesta.",
+    "Back" : "Regresar",
     "Take over" : "Tomar el control",
     "Sort by title" : "Ordenar por título",
     "Checking name …" : "Verificando nombre...",
