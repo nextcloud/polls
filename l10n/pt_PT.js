@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Group" : "Grupo",
     "Legal Notice" : "Notícia de legalidade",
+    "Privacy Policy" : "Política de Privacidade",
     "Contact" : "Contacto",
     "User" : "Utilizador",
     "Access denied" : "Acesso proibido",
