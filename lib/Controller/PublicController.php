@@ -354,7 +354,7 @@ class PublicController extends BaseController {
 	#[PublicPage]
 	#[ShareTokenRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
-	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/subscribe')]
+	#[FrontpageRoute(verb: 'PUT', url: '/s/{token}/subscribe')]
 	public function subscribe(): JSONResponse {
 		return $this->response(fn () => [
 			'subscribed' => $this->subscriptionService->set(true, $this->userSession->getShare()->getPollId())
@@ -367,7 +367,7 @@ class PublicController extends BaseController {
 	#[PublicPage]
 	#[ShareTokenRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
-	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/unsubscribe')]
+	#[FrontpageRoute(verb: 'PUT', url: '/s/{token}/unsubscribe')]
 	public function unsubscribe(): JSONResponse {
 		return $this->response(fn () => [
 			'subscribed' => $this->subscriptionService->set(false, $this->userSession->getShare()->getPollId())
