@@ -6,9 +6,13 @@
 All notable changes to this project will be documented in this file.
 
 ## [unreleased]
+### Known bugs
+ - Options of date polls spanning a DST change may result in miscalculated durations
+
 ### Fixed
  - Changed sql query to be ansi safe
  - Cloning polls
+ - Fix all day duration calculation of date polls
 
 ### Added
  - Show locale date as tooltip for relative date time information
