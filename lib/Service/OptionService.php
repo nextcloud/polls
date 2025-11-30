@@ -332,7 +332,9 @@ class OptionService {
 	 */
 	public function clone(int $fromPollId, int $toPollId): void {
 		$this->pollMapper->get($fromPollId)
-			->request(Poll::PERMISSION_POLL_ACCESS)
+			->request(Poll::PERMISSION_POLL_ACCESS);
+
+		$this->pollMapper->get($toPollId)
 			->request(Poll::PERMISSION_OPTION_ADD);
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {

@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 ### Fixed
  - Changed sql query to be ansi safe
+ - Cloning polls
 
 ### Added
  - Show locale date as tooltip for relative date time information
