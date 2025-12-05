@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Release
     steps:
-    - uses: actions/checkout@v6.0.0
+    - uses: actions/checkout@v6.0.1
     - name: Check correct app version
       id: appinfo
       uses: ./.github/actions/get-polls-version
