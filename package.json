@@ -44,7 +44,7 @@
     "@vueuse/integrations": "^14.1.0",
     "axios": "^1.13.2",
     "core-js": "^3.47.0",
-    "dompurify": "^3.3.0",
+    "dompurify": "^3.3.1",
     "file-saver": "^2.0.5",
     "linkify-string": "^4.3.1",
     "linkify-urls": "^5.2.0",
