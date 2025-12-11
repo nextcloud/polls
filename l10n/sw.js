@@ -344,6 +344,8 @@ OC.L10N.register(
     "Owner" : "Mmiliki",
     "Expire" : "Expire",
     "Last interaction" : "Last interaction",
+    "Relevant" : "Relevant",
+    "Participated" : "Participated",
     "Archive" : "Weka kumbukumbu",
     "Administration" : "Administration",
     "Administrative access" : "Administrative access"
