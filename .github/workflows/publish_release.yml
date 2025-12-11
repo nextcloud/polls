@@ -50,7 +50,7 @@ jobs:
     - name: Extract release notes
       if: success()
       id: extract-release-notes
-      uses: ffurrer2/extract-release-notes@v2
+      uses: ffurrer2/extract-release-notes@v3
 
     - name: Draft Release
       if: success()
