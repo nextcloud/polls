@@ -43,6 +43,7 @@ export type SignalingType =
 	| 'invalid'
 	| 'success'
 	| 'checking'
+	| 'missing'
 
 export type UserType =
 	| 'email'

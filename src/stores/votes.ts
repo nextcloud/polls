@@ -79,7 +79,7 @@ export const useVotesStore = defineStore('votes', {
 			const sessionStore = useSessionStore()
 			const pollStore = usePollStore()
 			if (pollStore.viewMode === 'list-view') {
-				return [sessionStore.currentUser]
+				return ['user', 'external', 'admin'].includes(sessionStore.currentUser.type) ? [sessionStore.currentUser] : []
 			}
 
 			if (
@@ -118,7 +118,7 @@ export const useVotesStore = defineStore('votes', {
 			if (
 				currentUserIndex < 0
 				&& !pollStore.status.isExpired
-				&& sessionStore.currentUser.type !== 'public'
+				&& ['user', 'external', 'admin'].includes(sessionStore.currentUser.type)
 			) {
 				// add current user to the begining of the list if not already present
 				// and if the poll is not expired

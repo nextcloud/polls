@@ -14,6 +14,8 @@ use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\Settings\SystemSettings;
+use OCA\Polls\Model\User\User;
+use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\IURLGenerator;
 
@@ -785,6 +787,11 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			return false;
 		}
 
+		// deny, if user is not allowed to vote
+		if (!$this->getAllowVote()) {
+			return false;
+		}
+
 		// public shares are not allowed to add options
 		if ($this->userSession->getShare()->getType() === Share::TYPE_PUBLIC) {
 			return false;
@@ -912,8 +919,9 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			return false;
 		}
 
-		// public shares are not allowed to vote
-		if ($this->userSession->getShare()->getType() === Share::TYPE_PUBLIC) {
+		// Only external, user or admin shares are allowed to vote
+		// All other external types have to register first
+		if (!in_array($this->userSession->getCurrentUser()->getType(), [UserBase::TYPE_EXTERNAL, UserBase::TYPE_USER, UserBase::TYPE_ADMIN])) {
 			return false;
 		}
 

@@ -78,6 +78,9 @@ const computedSignalingClass = computed(() => {
 	if (signalingClass === 'invalid') {
 		return 'error'
 	}
+	if (signalingClass === 'missing') {
+		return 'error'
+	}
 	return signalingClass
 })
 
@@ -307,7 +310,7 @@ const inputClass = computed(() => [
 		opacity: 0.8;
 		&.error {
 			opacity: 1;
-			color: var(--color-error);
+			color: var(--color-text-error);
 		}
 	}
 

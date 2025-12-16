@@ -44,7 +44,7 @@ function setStatus(status: StatusResults) {
 	inputProps.value.showTrailingButton = status === 'success'
 }
 
-const validate = debounce(async function () {
+const validatePublicUsername = debounce(async function () {
 	if (sessionStore.share.user.displayName.length < 1) {
 		setStatus('unchanged')
 		return
@@ -90,7 +90,7 @@ async function submit() {
 		v-if="sessionStore.route.name === 'publicVote'"
 		v-bind="inputProps"
 		v-model="sessionStore.share.user.displayName"
-		@update:value-value="validate"
+		@update:value="validatePublicUsername"
 		@submit="submit">
 		<template #icon>
 			<EditAccountIcon />
