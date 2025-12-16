@@ -24,6 +24,7 @@ use OCA\Polls\Service\SystemService;
 use OCA\Polls\Service\VoteService;
 use OCA\Polls\Service\WatchService;
 use OCA\Polls\UserSession;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
@@ -58,8 +59,11 @@ class PublicController extends BaseController {
 		private SystemService $systemService,
 		private VoteService $voteService,
 		private WatchService $watchService,
+		private IAppManager $appManager,
+		private string $scriptPrefix = '',
 	) {
 		parent::__construct($appName, $request);
+		$this->scriptPrefix = 'polls-' . $this->appManager->getAppVersion(AppConstants::APP_ID) . '-';
 	}
 
 	/**
