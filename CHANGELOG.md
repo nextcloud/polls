@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
  - Cloning polls
  - Fix all day duration calculation of date polls
  - Fixed subscription for public users
+ - Avoid cached code causing loading issues
+ - Fixed some bugs regarding public registration
 
 ### Added
  - Show locale date as tooltip for relative date time information
@@ -22,8 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
  - Updated job control for the administration
- - Refactored some elements flex to grid
- - Rearranged Job control in admin settings
+ - Refactored some elements from flex to grid
 
 ## [8.5.0] - 2025-10-03
 ### Fixed

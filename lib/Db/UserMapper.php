@@ -65,6 +65,9 @@ class UserMapper extends QBMapper {
 		}
 
 		try {
+			if ($pollId === null) {
+				throw new ShareNotFoundException('PollId is required to get share user');
+			}
 			$share = $this->getShareByPollAndUser($userId, $pollId);
 			return $this->getUserFromShare($share);
 		} catch (ShareNotFoundException $e) {
