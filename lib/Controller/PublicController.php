@@ -75,7 +75,7 @@ class PublicController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}')]
 	public function votePage() {
-		Util::addScript(AppConstants::APP_ID, 'polls-main');
+		Util::addScript(AppConstants::APP_ID, $this->scriptPrefix . 'main');
 		if ($this->userSession->getIsLoggedIn()) {
 			return new TemplateResponse(AppConstants::APP_ID, 'main');
 		} else {
