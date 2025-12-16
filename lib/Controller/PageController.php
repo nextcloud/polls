@@ -10,6 +10,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Service\NotificationService;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -31,8 +32,11 @@ class PageController extends Controller {
 		IRequest $request,
 		private NotificationService $notificationService,
 		private IEventDispatcher $eventDispatcher,
+		private IAppManager $appManager,
+		private string $scriptPrefix = '',
 	) {
 		parent::__construct($appName, $request);
+		$this->scriptPrefix = 'polls-' . $this->appManager->getAppVersion(AppConstants::APP_ID) . '-';
 	}
 
 	/**
@@ -46,7 +50,7 @@ class PageController extends Controller {
 	#[FrontpageRoute(verb: 'GET', url: '/list/{category}', postfix: 'list')]
 	#[FrontpageRoute(verb: 'GET', url: '/group/{slug}', postfix: 'group')]
 	public function index(): TemplateResponse {
-		Util::addScript(AppConstants::APP_ID, 'polls-main');
+		Util::addScript(AppConstants::APP_ID, $this->scriptPrefix . 'main');
 		$this->eventDispatcher->dispatchTyped(new LoadAdditionalScriptsEvent());
 		$response = new TemplateResponse(AppConstants::APP_ID, 'main');
 		$csp = new ContentSecurityPolicy();
@@ -66,7 +70,7 @@ class PageController extends Controller {
 	#[FrontpageRoute(verb: 'GET', url: '/vote/{id}')]
 	public function vote(int $id): TemplateResponse {
 		$this->notificationService->removeNotificationsForPoll($id);
-		Util::addScript(AppConstants::APP_ID, 'polls-main');
+		Util::addScript(AppConstants::APP_ID, $this->scriptPrefix . 'main');
 		$response = new TemplateResponse(AppConstants::APP_ID, 'main');
 		$csp = new ContentSecurityPolicy();
 		$csp->addAllowedWorkerSrcDomain('blob:');

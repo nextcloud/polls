@@ -18,6 +18,9 @@ const customConfig = {
 			},
 		},
 	},
+    define: {
+        '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
+    },
 }
 export default createAppConfig(
 	{
@@ -30,5 +33,6 @@ export default createAppConfig(
 	{
 		inlineCSS: { relativeCSSInjection: true },
 		config: customConfig,
+		assetsPrefix: `polls-${process.env.npm_package_version}-`,
 	},
 )

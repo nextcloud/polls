@@ -9,16 +9,21 @@ declare(strict_types=1);
 namespace OCA\Polls\Dashboard;
 
 use OCA\Polls\AppConstants;
+use OCP\App\IAppManager;
 use OCP\Dashboard\IWidget;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use OCP\Util;
 
 class PollWidget implements IWidget {
 	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private IL10N $l10n,
 		private IURLGenerator $urlGenerator,
+		private IAppManager $appManager,
+		private string $scriptPrefix = '',
 	) {
+		$this->scriptPrefix = 'polls-' . $this->appManager->getAppVersion(AppConstants::APP_ID) . '-';
 	}
 
 	public function getId(): string {
@@ -42,6 +47,6 @@ class PollWidget implements IWidget {
 	}
 
 	public function load(): void {
-		\OCP\Util::addScript(AppConstants::APP_ID, 'polls-dashboard');
+		Util::addScript(AppConstants::APP_ID, $this->scriptPrefix . 'dashboard');
 	}
 }

@@ -11,6 +11,7 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\SystemService;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
@@ -34,8 +35,11 @@ class AdminController extends BaseController {
 		private PollService $pollService,
 		private IEventDispatcher $eventDispatcher,
 		private SystemService $systemService,
+		private IAppManager $appManager,
+		private string $scriptPrefix = '',
 	) {
 		parent::__construct($appName, $request);
+		$this->scriptPrefix = 'polls-' . $this->appManager->getAppVersion(AppConstants::APP_ID) . '-';
 	}
 
 	/**
@@ -45,7 +49,7 @@ class AdminController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/administration')]
 	public function index(): TemplateResponse {
-		Util::addScript(AppConstants::APP_ID, 'polls-main');
+		Util::addScript(AppConstants::APP_ID, $this->scriptPrefix . 'main');
 		$this->eventDispatcher->dispatchTyped(new LoadAdditionalScriptsEvent());
 		return new TemplateResponse(AppConstants::APP_ID, 'main', ['urlGenerator' => $this->urlGenerator]);
 	}
