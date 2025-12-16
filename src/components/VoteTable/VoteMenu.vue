@@ -288,7 +288,7 @@ async function submitEmail() {
 			v-if="sessionStore.share?.type === 'external'"
 			v-bind="displayNameInputProps"
 			v-model="sessionStore.share.user.displayName"
-			@update:value-value="validateDisplayName"
+			@update:model-value="validateDisplayName"
 			@submit="submitDisplayName">
 			<template #icon>
 				<EditAccountIcon />
