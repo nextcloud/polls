@@ -18,6 +18,7 @@ use OCP\Util;
 
 /**
  * @template-implements IEventListener<Event>
+ * @psalm-api
  */
 class PollsReferenceListener implements IEventListener {
 	public function __construct(
