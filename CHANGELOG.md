@@ -5,7 +5,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [8.6.0] - 2025-12-17
 ### Known bugs
  - Options of date polls spanning a DST change may result in miscalculated durations
 
