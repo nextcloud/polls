@@ -5,100 +5,79 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { DateTime, Duration, Interval } from 'luxon'
+import { DateTime, Duration } from 'luxon'
+import { getDates } from '../../../composables/optionDateTime'
 
 interface Props {
-	dateTime: DateTime
+	startDate: DateTime
 	duration?: Duration
 }
-const { dateTime, duration = Duration.fromMillis(0) } = defineProps<Props>()
 
-// the dates span one or more entire days
-// do not display the time in this case
-const allDay = computed(
-	() =>
-		dateTime.startOf('day').toSeconds() === dateTime.toSeconds()
-		&& duration.as('seconds') % 86400 === 0,
-)
+const { startDate, duration = Duration.fromMillis(0) } = defineProps<Props>()
 
-// 'to' is 'from' plus the duration
-// subtract a day if allDay is true and luxonDuration is greater than 0 to match the
-// end of the day after the duration instead of the beginning of the next day
-const to = computed(() => {
-	// FIXME: this should be replaced by a more stable solution
-	// The last change reintroduced the DST bug (see #4276)
-	if (allDay.value) {
-		return dateTime.plus(duration)
-	}
-	return dateTime
-		.plus(duration)
-		.minus({ day: allDay.value && duration.as('seconds') > 0 ? 1 : 0 })
-})
-
-// to and from dates have the same month (and year)
-// suppress the 'to' month if they are the same
-const isSameMonth = computed(
-	() => dateTime.month === to.value.month && dateTime.year === to.value.year,
-)
-
-// to and from dates have the same day (in the same month and year)
-// suppress the 'to' day if they are the same
-// display the interval as timespan inside the same day
-const isSameDay = computed(() => dateTime.day === to.value.day && isSameMonth.value)
-
-// Shortcut: 'to' and 'from' are identical
-// suppress the 'to' time if they are the same
-const isSameTime = computed(() => duration.as('seconds') === 0)
-
-const interval = computed(() => Interval.fromDateTimes(dateTime, to.value))
+const optionDateTimes = computed(() => getDates(startDate, duration))
 </script>
 
 <template>
-	<div :title="interval.toISO()" class="datebox">
-		<div class="month from" :class="{ span: isSameMonth }">
+	<div :title="optionDateTimes.optionInterval.toISO()" class="datebox">
+		<div class="month from" :class="{ span: optionDateTimes.isSameMonth }">
 			{{
-				dateTime.toLocaleString(
-					DateTime.now().year === dateTime.year
+				startDate.toLocaleString(
+					DateTime.now().year === startDate.year
 						? { month: 'short' }
 						: { month: 'short', year: '2-digit' },
 				)
 			}}
 		</div>
 
-		<div v-if="!isSameMonth" class="month to">
+		<div v-if="!optionDateTimes.isSameMonth" class="month to">
 			{{
-				to.toLocaleString(
-					DateTime.now().year === dateTime.year
+				optionDateTimes.optionEnd.toLocaleString(
+					DateTime.now().year === startDate.year
 						? { month: 'short' }
 						: { month: 'short', year: '2-digit' },
 				)
 			}}
 		</div>
 
-		<div class="day from" :class="{ span: isSameDay }">
-			{{ dateTime.toLocaleString({ weekday: 'short', day: 'numeric' }) }}
+		<div class="day from" :class="{ span: optionDateTimes.isSameDay }">
+			{{ startDate.toLocaleString({ weekday: 'short', day: 'numeric' }) }}
 		</div>
 
-		<span v-if="!isSameDay" class="day divider">–</span>
+		<span v-if="!optionDateTimes.isSameDay" class="day divider">–</span>
 
-		<div v-if="!isSameDay" class="day to">
-			{{ to.toLocaleString({ weekday: 'short', day: 'numeric' }) }}
-		</div>
-
-		<div v-if="!allDay" class="time from" :class="{ span: isSameDay }">
+		<div v-if="!optionDateTimes.isSameDay" class="day to">
 			{{
-				isSameDay && !isSameTime
-					? interval.toLocaleString(DateTime.TIME_SIMPLE)
-					: dateTime.toLocaleString(DateTime.TIME_SIMPLE)
+				optionDateTimes.optionEnd.toLocaleString({
+					weekday: 'short',
+					day: 'numeric',
+				})
 			}}
 		</div>
 
-		<span v-if="!allDay && !isSameDay" class="time divider">
-			{{ isSameDay ? '-' : '&nbsp;' }}
+		<div
+			v-if="!optionDateTimes.isFullDays"
+			class="time from"
+			:class="{ span: optionDateTimes.isSameDay }">
+			{{
+				optionDateTimes.isSameDay && !optionDateTimes.isSameTime
+					? optionDateTimes.optionInterval.toLocaleString(
+							DateTime.TIME_SIMPLE,
+						)
+					: startDate.toLocaleString(DateTime.TIME_SIMPLE)
+			}}
+		</div>
+
+		<span
+			v-if="!optionDateTimes.isFullDays && !optionDateTimes.isSameDay"
+			class="time divider">
+			{{ optionDateTimes.isSameDay ? '-' : '&nbsp;' }}
 		</span>
 
-		<div v-if="!allDay && !isSameDay" class="time to">
-			{{ to.toLocaleString(DateTime.TIME_SIMPLE) }}
+		<div
+			v-if="!optionDateTimes.isFullDays && !optionDateTimes.isSameDay"
+			class="time to">
+			{{ optionDateTimes.optionEnd.toLocaleString(DateTime.TIME_SIMPLE) }}
 		</div>
 	</div>
 </template>

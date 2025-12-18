@@ -279,7 +279,7 @@ async function addOption(): Promise<void> {
 					<div class="preview___entry">
 						<DateBox
 							class="from"
-							:date-time="from"
+							:start-date="from"
 							:duration="duration" />
 					</div>
 					<div
@@ -296,7 +296,7 @@ async function addOption(): Promise<void> {
 						<div class="preview___entry">
 							<DateBox
 								class="from"
-								:date-time="lastFrom"
+								:start-date="lastFrom"
 								:duration="duration" />
 						</div>
 					</div>
