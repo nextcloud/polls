@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [8.6.2] - 2025-12-18
+### Fixed
+ - Fixed display of calculated end time of options
+
 ## [8.6.0] - 2025-12-17
 ### Known bugs
  - Options of date polls spanning a DST change may result in miscalculated durations
