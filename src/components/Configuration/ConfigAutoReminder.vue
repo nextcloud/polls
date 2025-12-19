@@ -8,8 +8,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcPopover from '@nextcloud/vue/components/NcPopover'
-import NcActions from '@nextcloud/vue/components/NcActions'
-import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
 import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
 import AutoReminderInformation from './AutoReminderInformation.vue'
@@ -31,15 +30,14 @@ const pollStore = usePollStore()
 		</NcCheckboxRadioSwitch>
 		<NcPopover no-focus-trap close-on-click-outside>
 			<template #trigger>
-				<NcActions>
-					<NcActionButton
-						:name="t('polls', 'Autoreminder information')"
-						:aria-label="t('polls', 'Autoreminder information')">
-						<template #icon>
-							<InformationIcon />
-						</template>
-					</NcActionButton>
-				</NcActions>
+				<NcButton
+					variant="tertiary-no-background"
+					:title="t('polls', 'Autoreminder information')"
+					:aria-label="t('polls', 'Autoreminder information')">
+					<template #icon>
+						<InformationIcon />
+					</template>
+				</NcButton>
 			</template>
 			<AutoReminderInformation />
 		</NcPopover>

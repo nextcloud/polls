@@ -31,8 +31,9 @@ const showList =
 	</div>
 	<div v-else class="counter">
 		<NcPopover no-focus-trap class="yes">
-			<template #trigger>
+			<template #trigger="{ attrs }">
 				<YesCounterIcon
+					v-bind="attrs"
 					fill-color="var(--color-polls-foreground-yes)"
 					:size="20" />
 				<span>{{ option.votes.yes }}</span>
@@ -40,8 +41,9 @@ const showList =
 			<VotersList v-if="showList" :option="option" answer-filter="yes" />
 		</NcPopover>
 		<NcPopover v-show="showMaybe" no-focus-trap class="maybe">
-			<template #trigger>
+			<template #trigger="{ attrs }">
 				<MaybeCounterIcon
+					v-bind="attrs"
 					fill-color="var(--color-polls-foreground-maybe)"
 					:size="20" />
 				<span>{{ option.votes.maybe }}</span>
