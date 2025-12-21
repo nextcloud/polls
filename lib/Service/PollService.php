@@ -189,7 +189,7 @@ class PollService {
 	/**
 	 * Add poll
 	 */
-	public function add(string $type, string $title, string $votingVariant = Poll::VARIANT_SIMPLE): Poll {
+	public function add(string $type, string $title, ?string $timezoneName = null, string $votingVariant = Poll::VARIANT_SIMPLE): Poll {
 		if (!$this->appSettings->getPollCreationAllowed()) {
 			throw new ForbiddenException('Poll creation is disabled');
 		}
@@ -211,6 +211,7 @@ class PollService {
 		$this->poll->setCreated($timestamp);
 		$this->poll->setLastInteraction($timestamp);
 		$this->poll->setOwner($this->userSession->getCurrentUserId());
+		$this->poll->setTimezoneName($timezoneName);
 
 		// create new poll before resetting all values to
 		// ensure that the poll has all required values and an id

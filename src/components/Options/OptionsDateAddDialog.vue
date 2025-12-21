@@ -127,7 +127,7 @@ const blockedOption = computed(() => {
 
 const sameOption = computed(() => {
 	const option = optionsStore.find(
-		from.value.toSeconds(),
+		from.value.toUnixInteger(),
 		duration.value.as('seconds'),
 	)
 	return option
@@ -178,8 +178,10 @@ async function addOption(): Promise<void> {
 		await optionsStore.add(
 			{
 				text: '',
-				timestamp: from.value.toSeconds(),
+				timestamp: from.value.toUnixInteger(),
 				duration: duration.value.as('seconds'),
+				isoTimestamp: from.value.toISO() || '',
+				isoDuration: duration.value.toISO() || '',
 			},
 			sequenceInput.value,
 			voteYes.value,

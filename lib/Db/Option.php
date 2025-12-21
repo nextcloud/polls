@@ -43,6 +43,10 @@ use OCP\IL10N;
  * @method void setTimestamp(int $value)
  * @method int getDeleted()
  * @method void setDeleted(int $value)
+ * @method int getIsoTimestamp()
+ * @method void setIsoTimestamp(string $value)
+ * @method int getIsoDuration()
+ * @method void setIsoDuration(string $value)
  *
  * Joined Attributes
  * @method string getUserVoteAnswer()
@@ -64,7 +68,9 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected string $pollOptionText = '';
 	protected string $pollOptionHash = '';
 	protected int $timestamp = 0;
+	protected string $isoTimestamp = '';
 	protected int $duration = 0;
+	protected string $isoDuration = '';
 	protected int $order = 0;
 	protected int $confirmed = 0;
 	protected string $owner = '';
@@ -113,6 +119,8 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'pollId' => $this->getPollId(),
 			'text' => $this->getPollOptionText(),
 			'timestamp' => $this->getTimestamp(),
+			'isoTimestamp' => $this->getIsoTimestamp(),
+			'isoDuration' => $this->getIsoDuration(),
 			'deleted' => $this->getDeleted(),
 			'order' => $this->getOrder(),
 			'confirmed' => $this->getConfirmed(),
@@ -148,6 +156,8 @@ class Option extends EntityWithUser implements JsonSerializable {
 			$option->getDuration(),
 			$option->getText(),
 			$option->getOrder(),
+			$option->getIsoTimestamp(),
+			$option->getIsoDuration(),
 		);
 		$this->setDeleted(0);
 		$this->syncOption();
@@ -168,11 +178,15 @@ class Option extends EntityWithUser implements JsonSerializable {
 		int $duration = 0,
 		string $pollOptionText = '',
 		int $order = 0,
+		string $isoTimestamp = '',
+		string $isoDuration = '',
 	): void {
 
 		if ($timestamp) {
 			$this->setTimestamp($timestamp);
 			$this->setDuration($duration);
+			$this->setIsoTimestamp($isoTimestamp);
+			$this->setIsoDuration($isoDuration);
 		} elseif ($pollOptionText) {
 			$this->setPollOptionText($pollOptionText);
 			if ($order > 0) {

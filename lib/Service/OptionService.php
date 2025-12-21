@@ -77,12 +77,12 @@ class OptionService {
 	 */
 	public function addWithSequenceAndAutoVote(
 		int $pollId,
-		SimpleOption $option,
+		SimpleOption $simpleOption,
 		bool $voteYes = false,
 		?Sequence $sequence = null,
 	): array {
 
-		$newOption = $this->add($pollId, $option, $voteYes);
+		$newOption = $this->add($pollId, $simpleOption, $voteYes);
 
 
 		if ($sequence) {

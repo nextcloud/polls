@@ -14,7 +14,6 @@ use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\Settings\SystemSettings;
-use OCA\Polls\Model\User\User;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\IURLGenerator;
@@ -65,6 +64,8 @@ use OCP\IURLGenerator;
  * @method void setMiscSettings(string $value)
  * @method string getVotingVariant()
  * @method void setVotingVariant(string $value)
+ * @method ?string getTimezoneName()
+ * @method void setTimezoneName(?string $value)
  *
  * Magic functions for joined columns
  * @method string getShareToken()
@@ -162,6 +163,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $lastInteraction = 0;
 	protected ?string $miscSettings = '';
 	protected string $votingVariant = '';
+	protected ?string $timezoneName = null;
 
 	// joined columns
 	protected ?int $isCurrentUserLocked = 0;
@@ -268,6 +270,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'showResults' => $this->getShowResults(),
 			'title' => $this->getTitle(),
 			'useNo' => boolval($this->getUseNo()),
+			'timezoneName' => $this->getTimezoneName(),
 		];
 	}
 
@@ -336,6 +339,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setUseNo($pollConfiguration['useNo'] ?? $this->getUseNo());
 		$this->setOptionLimit($pollConfiguration['maxVotesPerOption'] ?? $this->getOptionLimit());
 		$this->setVoteLimit($pollConfiguration['maxVotesPerUser'] ?? $this->getVoteLimit());
+		$this->setTimezoneName($pollConfiguration['timezoneName'] ?? $this->getTimezoneName());
 		return $this;
 	}
 
