@@ -167,6 +167,7 @@ OC.L10N.register(
     "Checking email address …" : "Tikrinamas el. pašto adresas…",
     "Invalid email address." : "Neteisingas el. pašto adresas.",
     "Email could not be sent to {emailAddress}" : "Nepavyko išsiųsti el. laiško, adresu {emailAddress}",
+    "Remember me for 30 days" : "Prisiminti mane 30 dienų",
     "Privacy policy" : "Privatumo politika",
     "Login" : "Prisijungti",
     "Styles" : "Stiliai",
