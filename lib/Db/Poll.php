@@ -211,6 +211,16 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->userSession = Container::queryClass(UserSession::class);
 	}
 
+	public function __clone() {
+		$this->setId(0);
+		$this->setTitle('Clone of ' . $this->getTitle());
+		$this->setDeleted(0);
+		$this->setCreated(time());
+		$this->setAccess(self::ACCESS_PRIVATE);
+		// deanonymize cloned polls by default, to avoid locked anonymous polls
+		$this->setAnonymous(0);
+	}
+
 	/**
 	 * @return array
 	 *

@@ -52,6 +52,7 @@ class PollService {
 
 	/**
 	 * Get list of polls including Threshold for "relevant polls"
+	 * @return Poll[]
 	 */
 	public function listPolls(): array {
 		$pollList = $this->pollMapper->findForMe($this->userSession->getCurrentUserId());
@@ -66,6 +67,7 @@ class PollService {
 
 	/**
 	 * Get list of polls
+	 * @return Poll[]
 	 */
 	public function search(ISearchQuery $query): array {
 		$pollList = [];
@@ -103,6 +105,7 @@ class PollService {
 	}
 
 	/**
+	 * Transfer all polls from one user to another
 	 * @return Poll[]
 	 * @psalm-return array<Poll>
 	 */
@@ -166,9 +169,8 @@ class PollService {
 
 	/**
 	 * get poll configuration
-	 * @return Poll
 	 */
-	public function get(int $pollId) {
+	public function get(int $pollId): Poll {
 		try {
 			$this->poll = $this->pollMapper->get($pollId);
 			$this->poll->request(Poll::PERMISSION_POLL_ACCESS);
@@ -240,7 +242,6 @@ class PollService {
 	 *
 	 * @param int $pollId Poll id
 	 * @param array $pollConfiguration Poll configuration
-	 * @return array
 	 *
 	 * @psalm-return array{poll: Poll, diff: array, changes: array}
 	 */
@@ -297,7 +298,6 @@ class PollService {
 
 	/**
 	 * Manually lock anonymization
-	 * @return Poll
 	 */
 	public function lockAnonymous(int $pollId): Poll {
 		$this->poll = $this->pollMapper->get($pollId);
@@ -330,7 +330,6 @@ class PollService {
 
 	/**
 	 * Move to archive or restore
-	 * @return Poll
 	 */
 	public function toggleArchive(int $pollId): Poll {
 		$this->poll = $this->pollMapper->get($pollId)
@@ -350,7 +349,6 @@ class PollService {
 
 	/**
 	 * Delete poll
-	 * @return Poll
 	 */
 	public function delete(int $pollId): Poll {
 		try {
@@ -368,7 +366,6 @@ class PollService {
 
 	/**
 	 * Close poll
-	 * @return Poll
 	 */
 	public function close(int $pollId): Poll {
 		$this->pollMapper->get($pollId)
@@ -378,7 +375,6 @@ class PollService {
 
 	/**
 	 * Reopen poll
-	 * @return Poll
 	 */
 	public function reopen(int $pollId): Poll {
 		$this->pollMapper->get($pollId)
@@ -388,7 +384,6 @@ class PollService {
 
 	/**
 	 * Close poll
-	 * @return Poll
 	 */
 	private function toggleClose(int $pollId, int $expiry): Poll {
 		$this->poll = $this->pollMapper->get($pollId)
@@ -408,30 +403,17 @@ class PollService {
 
 	/**
 	 * Clone poll
-	 * @return Poll
 	 */
 	public function clone(int $pollId): Poll {
 		$origin = $this->pollMapper->get($pollId)
 			->request(Poll::PERMISSION_POLL_ACCESS);
-		$this->appSettings->getPollCreationAllowed();
+		if (!$this->appSettings->getPollCreationAllowed()) {
+			throw new ForbiddenException('Poll creation is disabled');
+		}
 
-		$this->poll = new Poll();
-		$this->poll->setCreated(time());
+		$this->poll = clone $origin;
+
 		$this->poll->setOwner($this->userSession->getCurrentUserId());
-		$this->poll->setTitle('Clone of ' . $origin->getTitle());
-		$this->poll->setDeleted(0);
-		$this->poll->setAccess(Poll::ACCESS_PRIVATE);
-
-		$this->poll->setType($origin->getType());
-		$this->poll->setVotingVariant($origin->getVotingVariant());
-		$this->poll->setDescription($origin->getDescription());
-		$this->poll->setExpire($origin->getExpire());
-		// deanonymize cloned polls by default, to avoid locked anonymous polls
-		$this->poll->setAnonymous(0);
-		$this->poll->setAllowMaybe($origin->getAllowMaybe());
-		$this->poll->setVoteLimit($origin->getVoteLimit());
-		$this->poll->setShowResults($origin->getShowResults());
-		$this->poll->setAdminAccess($origin->getAdminAccess());
 
 		$this->poll = $this->pollMapper->insert($this->poll);
 		$this->eventDispatcher->dispatchTyped(new PollCreatedEvent($this->poll));
@@ -440,7 +422,6 @@ class PollService {
 
 	/**
 	 * Collect email addresses from particitipants
-	 *
 	 */
 	public function getParticipantsEmailAddresses(int $pollId): array {
 		$this->poll = $this->pollMapper->get($pollId)

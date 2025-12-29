@@ -14,6 +14,6 @@ class InsufficientAttributesException extends Exception {
 	public function __construct(
 		string $e = 'Attribut constraints not met',
 	) {
-		parent::__construct($e, Http::STATUS_CONFLICT);
+		parent::__construct($e, Http::STATUS_BAD_REQUEST);
 	}
 }

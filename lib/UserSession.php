@@ -182,7 +182,7 @@ class UserSession {
 	}
 
 	/**
-	 *
+	 * Get client time zone from session or return default time zone
 	 * @return non-empty-string
 	 */
 	public function getClientTimeZone(): string {

@@ -108,6 +108,13 @@ class Option extends EntityWithUser implements JsonSerializable {
 		$this->addType('showResults', 'integer');
 	}
 
+	public function __clone() {
+		$this->setPollId(0);
+		$this->setDeleted(0);
+		$this->setConfirmed(0);
+		$this->setOwner('');
+		$this->updateHash();
+	}
 	/**
 	 * @return array
 	 *
