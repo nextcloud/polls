@@ -187,6 +187,7 @@ class UserSession {
 	 */
 	public function getClientTimeZone(): string {
 		return $this->session->get(self::CLIENT_TZ) ?? date_default_timezone_get();
+		// TODO: Use \OCP\IDateTimeZone::getDefaultTimezone() when available (NC32+)
 	}
 
 	public function setClientTimeZone(string $clientTimeZone): void {

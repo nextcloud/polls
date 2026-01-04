@@ -17,6 +17,7 @@ import HideResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vu
 import UserPreferenceIcon from 'vue-material-design-icons/AccountCogOutline.vue'
 import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
 import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue'
+import TimezoneIcon from 'vue-material-design-icons/MapClockOutline.vue'
 import TableViewIcon from 'vue-material-design-icons/Table.vue'
 
 import CardDiv from '../Base/modules/CardDiv.vue'
@@ -25,17 +26,18 @@ import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe.vue'
 import ConfigAnonymous from '../Configuration/ConfigAnonymous.vue'
 import ConfigAutoReminder from '../Configuration/ConfigAutoReminder.vue'
 import ConfigClosing from '../Configuration/ConfigClosing.vue'
+import ConfigDangerArea from '../Configuration/ConfigDangerArea.vue'
 import ConfigDescription from '../Configuration/ConfigDescription.vue'
+import ConfigForceViewMode from '../Configuration/ConfigForceViewMode.vue'
 import ConfigOptionLimit from '../Configuration/ConfigOptionLimit.vue'
 import ConfigShowResults from '../Configuration/ConfigShowResults.vue'
+import ConfigTimezone from '../Configuration/ConfigTimezone.vue'
 import ConfigTitle from '../Configuration/ConfigTitle.vue'
 import ConfigUseNo from '../Configuration/ConfigUseNo.vue'
 import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
 
 import { usePollStore } from '../../stores/poll'
 import { useVotesStore } from '../../stores/votes'
-import ConfigDangerArea from '../Configuration/ConfigDangerArea.vue'
-import ConfigForceViewMode from '../Configuration/ConfigForceViewMode.vue'
 
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
@@ -109,6 +111,13 @@ const votesStore = useVotesStore()
 				v-if="pollStore.configuration.forcedDisplayMode === 'list-view'" />
 		</template>
 		<ConfigForceViewMode @change="pollStore.write" />
+	</ConfigBox>
+
+	<ConfigBox :name="t('polls', 'Set default timezone for this poll')">
+		<template #icon>
+			<TimezoneIcon />
+		</template>
+		<ConfigTimezone @change="pollStore.write" />
 	</ConfigBox>
 
 	<ConfigBox :name="t('polls', 'Deletion and owner')">

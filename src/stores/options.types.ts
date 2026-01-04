@@ -43,7 +43,7 @@ export type Option = {
 
 export type SimpleOption = Pick<
 	Option,
-	'text' | 'timestamp' | 'isoTimestamp' | 'duration' | 'isoDuration'
+	'text' | 'isoTimestamp' | 'isoDuration' | 'timestamp' | 'duration'
 >
 
 export type OptionsStore = {

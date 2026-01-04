@@ -42,7 +42,7 @@ export type PollConfiguration = {
 	showResults: ShowResults
 	title: string
 	useNo: boolean
-	timezoneName: string | null
+	timezoneName: string | undefined // actually the api returns null when not set. But we use undefined to avoid ts errors
 }
 
 export type PollStatus = {
