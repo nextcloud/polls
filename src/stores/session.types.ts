@@ -36,6 +36,7 @@ export type SessionSettings = {
 	viewModeDatePoll: '' | ViewMode
 	viewModeTextPoll: '' | ViewMode
 	viewModeForced: null | ViewMode
+	timezoneName: 'local' | 'poll' | string
 }
 
 export type Watcher = {

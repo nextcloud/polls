@@ -113,7 +113,9 @@ const votesStore = useVotesStore()
 		<ConfigForceViewMode @change="pollStore.write" />
 	</ConfigBox>
 
-	<ConfigBox :name="t('polls', 'Set default timezone for this poll')">
+	<ConfigBox
+		v-if="pollStore.type === 'datePoll'"
+		:name="t('polls', 'Set default timezone for this poll')">
 		<template #icon>
 			<TimezoneIcon />
 		</template>

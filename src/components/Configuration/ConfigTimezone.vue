@@ -14,6 +14,6 @@ const pollStore = usePollStore()
 
 <template>
 	<NcTimezonePicker
-		v-model="pollStore.configuration.timezoneName"
+		v-model="pollStore.configuration.timezoneName as string"
 		@update:model-value="emit('change')" />
 </template>

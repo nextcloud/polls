@@ -139,6 +139,12 @@ export const usePollStore = defineStore('poll', {
 	}),
 
 	getters: {
+		getTimezoneName(state): string {
+			return (
+				state.configuration.timezoneName
+				|| Intl.DateTimeFormat().resolvedOptions().timeZone
+			)
+		},
 		viewMode(state): ViewMode {
 			const sessionStore = useSessionStore()
 			if (sessionStore.sessionSettings.viewModeForced) {
