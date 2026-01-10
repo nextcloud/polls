@@ -166,6 +166,8 @@ OC.L10N.register(
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Verwijderen over {countdown} seconde","Verwijderen over {countdown} seconden"],
     "Add some!" : "Voeg wat toe!",
     "Register" : "Aanmelden",
+    "See result" : "Bekijk resultaat",
+    "No valid email address" : "Geen geldig e-mailadres",
     "Unknown error" : "Onbekende fout",
     "Loading …" : "Laden …",
     "Previous day" : "Vorige dag",
