@@ -1,6 +1,10 @@
 OC.L10N.register(
     "polls",
     {
+    "Team" : "Jamoa",
+    "Contact group" : "Aloqadagi guruh",
+    "Group" : "Guruh",
+    "_Confirmed option:_::_Confirmed options:_" : ["Tasdiqlangan variantlar:"],
     "Contact" : "Aloqa",
     "Add option" : "Variant qo'shish",
     "Delete" : "O'chirish",
