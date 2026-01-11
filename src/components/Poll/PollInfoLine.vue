@@ -14,15 +14,12 @@ import UnpublishedIcon from 'vue-material-design-icons/PublishOff.vue'
 import ArchivedPollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import ClosedPollIcon from 'vue-material-design-icons/LockOutline.vue'
 import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
-import TimezoneIcon from 'vue-material-design-icons/MapClockOutline.vue'
 import ProposalsIcon from 'vue-material-design-icons/HandExtendedOutline.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
 import { DateTime } from 'luxon'
-import { useSessionStore } from '@/stores/session'
 
 const pollStore = usePollStore()
 const sharesStore = useSharesStore()
-const sessionStore = useSessionStore()
 
 const isNoAccessSet = computed(
 	() =>
@@ -33,14 +30,6 @@ const isNoAccessSet = computed(
 
 const subTexts = computed(() => {
 	const subTexts = []
-
-	subTexts.push({
-		id: 'timezone',
-		text: sessionStore.currentTimezoneName,
-		class: 'timeZone',
-		iconComponent: TimezoneIcon,
-		title: '',
-	})
 
 	if (pollStore.status.isArchived) {
 		subTexts.push({
