@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Team" : "Tim",
     "Group" : "Grup",
     "Contact" : "Kontak",
     "User" : "Pengguna",
@@ -25,8 +26,10 @@ OC.L10N.register(
     "OK" : "OK",
     "All day" : "Sepanjang hari",
     "Preview" : "Pratinjau",
+    "Submit" : "Kirim",
     "Description" : "Deskrisi",
     "never" : "tidak pernah.",
+    "Back" : "Kembali",
     "Descending" : "Menurun",
     "Ascending" : "Naik",
     "Privacy policy" : "Kebijakan privasi",
@@ -35,6 +38,7 @@ OC.L10N.register(
     "No activity yet" : "Belum ada aktivitas",
     "Configuration" : "Konfigurasi",
     "Public link" : "Tautan publik",
+    "Switch to list view" : "Beralih ke tampilan daftar",
     "Navigation" : "Navigasi",
     "Show all" : "Lihat semua",
     "Comments" : "Komentar",
