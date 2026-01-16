@@ -290,6 +290,7 @@ OC.L10N.register(
     "The style settings are still experimental!" : "De stijl instellingen zijn nog experimenteel!",
     "Styles" : "Stijlen",
     "Token: {token}" : "Token: {token}",
+    "Group share" : "Delen met groep",
     "Share label" : "Deel het label",
     "Has voted" : "Heeft gestemd",
     "Has not voted" : "Heeft niet gestemd",
