@@ -11,6 +11,7 @@ import CardLimitedVotes from './CardLimitedVotes.vue'
 import CardLocked from './CardLocked.vue'
 import CardRegister from './CardRegister.vue'
 import CardSendConfirmations from './CardSendConfirmations.vue'
+import CardTimezone from './CardTimezone.vue'
 import CardUnpublishedPoll from './CardUnpublishedPoll.vue'
 
 import { usePollStore } from '../../stores/poll'
@@ -22,6 +23,13 @@ const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const sharesStore = useSharesStore()
 const sessionStore = useSessionStore()
+
+const showTimezoneHint = computed(
+	() =>
+		pollStore.type === 'datePoll'
+		&& Intl.DateTimeFormat().resolvedOptions().timeZone
+			!== pollStore.getTimezoneName,
+)
 
 const showUnpublishedPollCard = computed(
 	() =>
@@ -67,6 +75,7 @@ const showRegisterCard = computed(
 <template>
 	<TransitionGroup tag="div" class="vote-info-cards">
 		<CardLimitedVotes v-if="showLimitCard" :key="2" />
+		<CardTimezone v-if="showTimezoneHint" />
 		<CardUnpublishedPoll v-if="showUnpublishedPollCard" :key="0" />
 		<CardClosedPoll v-if="showClosedCard" :key="3" />
 		<CardLocked v-if="pollStore.currentUserStatus.isLocked" :key="5" />

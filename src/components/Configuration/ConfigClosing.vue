@@ -22,7 +22,7 @@ const pollStore = usePollStore()
 const expire = computed({
 	get: () => pollStore.getExpirationDateTime.toJSDate(),
 	set: (value) => {
-		pollStore.configuration.expire = DateTime.fromJSDate(value).toSeconds()
+		pollStore.configuration.expire = DateTime.fromJSDate(value).toUnixInteger()
 		pollStore.write()
 	},
 })
@@ -33,7 +33,7 @@ const useExpire = computed({
 		if (value) {
 			pollStore.configuration.expire = DateTime.now()
 				.plus({ week: 1 })
-				.toSeconds()
+				.toUnixInteger()
 		} else {
 			pollStore.configuration.expire = 0
 		}

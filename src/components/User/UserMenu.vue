@@ -48,6 +48,7 @@ import { Event } from '../../Types'
 import type { StatusResults } from '../../Types'
 import type { ViewMode } from '../../stores/preferences.types'
 import type { AxiosError } from '@nextcloud/axios'
+import { NcActionRadio } from '@nextcloud/vue'
 
 type InputProps = {
 	success: boolean
@@ -57,6 +58,23 @@ type InputProps = {
 	label: string
 }
 
+const timezones = computed(() => {
+	const sessionStore = useSessionStore()
+	return [
+		{
+			value: 'local',
+			label: t('polls', 'Your timezone: ({timezone})', {
+				timezone: sessionStore.userIANAZone.name,
+			}),
+		},
+		{
+			value: 'poll',
+			label: t('polls', 'Poll timezone: ({timezone})', {
+				timezone: sessionStore.pollIANAZone.name,
+			}),
+		},
+	]
+})
 const optionsStore = useOptionsStore()
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
@@ -357,6 +375,15 @@ async function submitEmail() {
 			</NcActionButton>
 		</NcActionButtonGroup>
 
+		<NcActionSeparator />
+		<NcActionRadio
+			v-for="option in timezones"
+			:key="option.value"
+			v-model="sessionStore.sessionSettings.timezoneName"
+			:value="option.value"
+			name="timeZone">
+			{{ option.label }}
+		</NcActionRadio>
 		<NcActionSeparator />
 
 		<NcActionButton

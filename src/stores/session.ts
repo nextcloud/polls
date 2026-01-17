@@ -28,6 +28,7 @@ import type { FilterType } from './polls.types'
 import type { User } from '../Types'
 
 import type { SessionStore } from './session.types'
+import { IANAZone } from 'luxon'
 
 const MOBILE_BREAKPOINT = 480
 
@@ -50,6 +51,7 @@ export const useSessionStore = defineStore('session', {
 			viewModeDatePoll: '',
 			viewModeTextPoll: '',
 			viewModeForced: null,
+			timezoneName: 'local',
 		},
 		appSettings: {
 			allAccessGroups: [],
@@ -182,6 +184,40 @@ export const useSessionStore = defineStore('session', {
 			}
 
 			return `${windowTitle.prefix} – ${windowTitle.name}`
+		},
+
+		userIANAZone(): IANAZone {
+			return IANAZone.create(
+				this.currentUser.timeZone
+					|| Intl.DateTimeFormat().resolvedOptions().timeZone,
+			)
+		},
+
+		pollIANAZone(): IANAZone {
+			const pollStore = usePollStore()
+			return IANAZone.create(
+				pollStore.configuration.timezoneName
+					|| this.currentUser.timeZone
+					|| Intl.DateTimeFormat().resolvedOptions().timeZone,
+			)
+		},
+
+		currentIANAZone(): IANAZone {
+			if (this.sessionSettings.timezoneName === 'local') {
+				return this.userIANAZone
+			}
+
+			if (this.sessionSettings.timezoneName === 'poll') {
+				return this.pollIANAZone
+			}
+			if (IANAZone.isValidZone(this.sessionSettings.timezoneName)) {
+				return IANAZone.create(this.sessionSettings.timezoneName)
+			}
+			return this.userIANAZone
+		},
+
+		currentTimezoneName(): string {
+			return this.currentIANAZone.name
 		},
 	},
 

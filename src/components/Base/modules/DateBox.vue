@@ -19,11 +19,11 @@ const optionDateTimes = computed(() => getDates(startDate, duration))
 </script>
 
 <template>
-	<div :title="optionDateTimes.optionInterval.toISO()" class="datebox">
+	<div :title="optionDateTimes.interval.toISO()" class="datebox">
 		<div class="month from" :class="{ span: optionDateTimes.isSameMonth }">
 			{{
-				startDate.toLocaleString(
-					DateTime.now().year === startDate.year
+				optionDateTimes.optionStart.toLocaleString(
+					DateTime.now().year === optionDateTimes.optionStart.year
 						? { month: 'short' }
 						: { month: 'short', year: '2-digit' },
 				)
@@ -33,7 +33,7 @@ const optionDateTimes = computed(() => getDates(startDate, duration))
 		<div v-if="!optionDateTimes.isSameMonth" class="month to">
 			{{
 				optionDateTimes.optionEnd.toLocaleString(
-					DateTime.now().year === startDate.year
+					DateTime.now().year === optionDateTimes.optionStart.year
 						? { month: 'short' }
 						: { month: 'short', year: '2-digit' },
 				)
@@ -41,7 +41,12 @@ const optionDateTimes = computed(() => getDates(startDate, duration))
 		</div>
 
 		<div class="day from" :class="{ span: optionDateTimes.isSameDay }">
-			{{ startDate.toLocaleString({ weekday: 'short', day: 'numeric' }) }}
+			{{
+				optionDateTimes.optionStart.toLocaleString({
+					weekday: 'short',
+					day: 'numeric',
+				})
+			}}
 		</div>
 
 		<span v-if="!optionDateTimes.isSameDay" class="day divider">–</span>
@@ -61,10 +66,10 @@ const optionDateTimes = computed(() => getDates(startDate, duration))
 			:class="{ span: optionDateTimes.isSameDay }">
 			{{
 				optionDateTimes.isSameDay && !optionDateTimes.isSameTime
-					? optionDateTimes.optionInterval.toLocaleString(
+					? optionDateTimes.interval.toLocaleString(DateTime.TIME_SIMPLE)
+					: optionDateTimes.optionStart.toLocaleString(
 							DateTime.TIME_SIMPLE,
 						)
-					: startDate.toLocaleString(DateTime.TIME_SIMPLE)
 			}}
 		</div>
 
