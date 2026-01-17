@@ -10,6 +10,7 @@ OC.L10N.register(
     "Delete" : "Apagar",
     "Register" : "Registar",
     "Unknown error" : "Erro desconhecido",
+    "Maybe" : "Talvez",
     "Previous day" : "Dia anterior",
     "Next day" : "Dia seguinte",
     "Add" : "Adicionar",
