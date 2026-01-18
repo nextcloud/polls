@@ -12,6 +12,7 @@ import type { Share } from './shares.types'
 import type { FilterType } from './polls.types'
 import type { User } from '../Types'
 import { WatcherMode, WatcherStatus } from '../composables/usePollWatcher.types'
+import { TimeZoneTypes } from '@/Types/dateTime'
 
 interface RouteParams {
 	id: number
@@ -36,7 +37,7 @@ export type SessionSettings = {
 	viewModeDatePoll: '' | ViewMode
 	viewModeTextPoll: '' | ViewMode
 	viewModeForced: null | ViewMode
-	timezoneName: 'local' | 'poll' | string
+	timezoneName: TimeZoneTypes | string
 }
 
 export type Watcher = {

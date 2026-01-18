@@ -49,6 +49,7 @@ import type { StatusResults } from '../../Types'
 import type { ViewMode } from '../../stores/preferences.types'
 import type { AxiosError } from '@nextcloud/axios'
 import { NcActionRadio } from '@nextcloud/vue'
+import { TimeZoneOption } from '@/Types/dateTime'
 
 type InputProps = {
 	success: boolean
@@ -58,19 +59,19 @@ type InputProps = {
 	label: string
 }
 
-const timezones = computed(() => {
+const timezones = computed<TimeZoneOption[]>(() => {
 	const sessionStore = useSessionStore()
 	return [
 		{
 			value: 'local',
 			label: t('polls', 'Your timezone: ({timezone})', {
-				timezone: sessionStore.userIANAZone.name,
+				timezone: sessionStore.userTimezoneName,
 			}),
 		},
 		{
 			value: 'poll',
 			label: t('polls', 'Poll timezone: ({timezone})', {
-				timezone: sessionStore.pollIANAZone.name,
+				timezone: sessionStore.pollTimezoneName,
 			}),
 		},
 	]

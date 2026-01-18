@@ -186,38 +186,33 @@ export const useSessionStore = defineStore('session', {
 			return `${windowTitle.prefix} – ${windowTitle.name}`
 		},
 
-		userIANAZone(): IANAZone {
-			return IANAZone.create(
+		userTimezoneName(): string {
+			return (
 				this.currentUser.timeZone
-					|| Intl.DateTimeFormat().resolvedOptions().timeZone,
+				|| Intl.DateTimeFormat().resolvedOptions().timeZone
 			)
 		},
 
-		pollIANAZone(): IANAZone {
+		pollTimezoneName(): string {
 			const pollStore = usePollStore()
-			return IANAZone.create(
+			return (
 				pollStore.configuration.timezoneName
-					|| this.currentUser.timeZone
-					|| Intl.DateTimeFormat().resolvedOptions().timeZone,
+				|| this.currentUser.timeZone
+				|| Intl.DateTimeFormat().resolvedOptions().timeZone
 			)
-		},
-
-		currentIANAZone(): IANAZone {
-			if (this.sessionSettings.timezoneName === 'local') {
-				return this.userIANAZone
-			}
-
-			if (this.sessionSettings.timezoneName === 'poll') {
-				return this.pollIANAZone
-			}
-			if (IANAZone.isValidZone(this.sessionSettings.timezoneName)) {
-				return IANAZone.create(this.sessionSettings.timezoneName)
-			}
-			return this.userIANAZone
 		},
 
 		currentTimezoneName(): string {
-			return this.currentIANAZone.name
+			if (this.sessionSettings.timezoneName === 'local') {
+				return this.userTimezoneName
+			}
+			if (this.sessionSettings.timezoneName === 'poll') {
+				return this.pollTimezoneName
+			}
+			if (IANAZone.isValidZone(this.sessionSettings.timezoneName)) {
+				return this.sessionSettings.timezoneName
+			}
+			return this.userTimezoneName
 		},
 	},
 

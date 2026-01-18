@@ -7,15 +7,32 @@
 import { computed } from 'vue'
 import { DateTime, Duration } from 'luxon'
 import { getDates } from '../../../composables/optionDateTime'
+import { useSessionStore } from '@/stores/session'
 
 interface Props {
 	startDate: DateTime
 	duration?: Duration
+	timezone?: string | undefined
 }
 
-const { startDate, duration = Duration.fromMillis(0) } = defineProps<Props>()
+const sessionStore = useSessionStore()
 
-const optionDateTimes = computed(() => getDates(startDate, duration))
+const {
+	startDate,
+	duration = Duration.fromMillis(0),
+	timezone = undefined,
+} = defineProps<Props>()
+
+const useTimeZone = computed(
+	() =>
+		timezone
+		|| sessionStore.currentTimezoneName
+		|| Intl.DateTimeFormat().resolvedOptions().timeZone,
+)
+
+const optionDateTimes = computed(() =>
+	getDates(startDate, duration, useTimeZone.value),
+)
 </script>
 
 <template>

@@ -4,7 +4,7 @@
  */
 
 import type { User } from '../Types'
-import type { DateTimeUnitType } from '../constants/dateUnits'
+import type { DateTimeUnitType } from '../Types/dateTime'
 import type { Answer } from './votes.types'
 
 export type RankedType = 'yes' | 'no'
@@ -45,6 +45,8 @@ export type SimpleOption = Pick<
 	Option,
 	'text' | 'isoTimestamp' | 'isoDuration' | 'timestamp' | 'duration'
 >
+
+export type DateOptionFinder = Pick<SimpleOption, 'isoTimestamp' | 'isoDuration'>
 
 export type OptionsStore = {
 	options: Option[]

@@ -4,73 +4,63 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { DateTime, Duration } from 'luxon'
 
 import { showError } from '@nextcloud/dialogs'
-import { n, t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 
-import DateBox from '../Base/modules/DateBox.vue'
-import DateTimePicker from '../Base/modules/DateTimePicker.vue'
-import InputDiv from '../Base/modules/InputDiv.vue'
-import { dateTimeUnitsKeyed } from '../../constants/dateUnits'
+import { dateTimeUnitsKeyed, ceilDate } from '@/helpers/modules/dateHelpers'
 import { useResizeObserver } from '../../composables/elementWidth'
 
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
-import { useOptionsStore } from '../../stores/options'
+import InputDiv from '../Base/modules/InputDiv.vue'
+import LuxonPicker from '../Base/modules/LuxonPicker.vue'
+import OptionsPreviewBox from './OptionsPreviewBox.vue'
 
-import type { DurationType } from '../../constants/dateUnits'
+import type { DurationType, TimeZoneOption } from '../../Types/dateTime'
 import type { AxiosError } from '@nextcloud/axios'
-import type { Sequence } from '../../stores/options.types'
+import type { Sequence, SimpleOption } from '@/stores/options.types'
+
+import { useOptionsStore } from '@/stores/options'
+import { useSessionStore } from '@/stores/session'
+import { usePollStore } from '@/stores/poll'
 
 const { isBelowWidthOffset } = useResizeObserver('add-date-options-container', 355)
 
 const optionsStore = useOptionsStore()
+const pollStore = usePollStore()
+const sessionStore = useSessionStore()
 
-const timeStepMinutes = 15
 const successColor = getComputedStyle(document.documentElement).getPropertyValue(
 	'--color-success',
 )
+
+/**
+ * Ref to store the result of adding an option
+ */
 const result = ref('')
 
 // *** refs for the inputs
-// allDay is a boolean to toggle between all day and time based options
-const allDay = ref(true)
 
-// Vote yes for new options
-const voteYes = ref(true)
-
-// set initial time mark to the next full quater of the hour
-const fromInput = ref(
-	new Date(
-		new Date().setMinutes(
-			Math.ceil((new Date().getMinutes() / 60) * (60 / timeStepMinutes))
-				* timeStepMinutes,
-			0,
-			0,
-		),
-	),
-)
-
-// set initial duration to one Day
-const durationInput = ref<DurationType>({
-	unit: dateTimeUnitsKeyed.day,
-	amount: 0,
-})
-
-// set initial sequence to one week but disabled
+/**
+ * The sequence input used for the input fields
+ * Initially set to 1 Week, but with 0 repetitions
+ */
 const sequenceInput = ref<Sequence>({
 	unit: dateTimeUnitsKeyed.week,
 	stepWidth: 1,
 	repetitions: 0,
 })
 
+/**
+ * The available dateTime options for the selects
+ */
 const dateTimeOptions = Object.entries(dateTimeUnitsKeyed).map(([key, value]) => ({
 	id: key,
 	value: value.id,
@@ -78,6 +68,9 @@ const dateTimeOptions = Object.entries(dateTimeUnitsKeyed).map(([key, value]) =>
 	timeOption: value.timeOption,
 }))
 
+/**
+ * The available dateTime options filtered based on allDay
+ */
 const dateTimeOptionsFiltered = computed(() => {
 	if (allDay.value) {
 		return dateTimeOptions.filter((unit) => !unit.timeOption)
@@ -85,79 +78,46 @@ const dateTimeOptionsFiltered = computed(() => {
 	return dateTimeOptions
 })
 
-// computed from as DateTime from Luxon
-const from = computed(() => {
-	const dateFrom = DateTime.fromJSDate(fromInput.value)
-	// if the option is an all day option, the time is set to 00:00
-	if (allDay.value) {
-		return dateFrom.startOf('day')
+/**
+ * The actual start dateTime used for the input
+ * Initially set to the next quarter hour in the current timezone
+ * @return ref DateTime
+ */
+const startDateTime = ref(
+	ceilDate(DateTime.now().setZone(sessionStore.currentTimezoneName), 15),
+)
+
+/**
+ * Resultin option based on the inputs
+ */
+const newOption = computed<SimpleOption>(() => {
+	const dateTime = startDateTime.value.startOf(allDay.value ? 'day' : 'minute')
+
+	return {
+		text: '',
+		duration: duration.value.as('seconds') || 0,
+		timestamp: dateTime.toUnixInteger(),
+		isoTimestamp:
+			dateTime.setZone(sessionStore.currentTimezoneName).toISO() || '',
+		isoDuration: duration.value.toISO() || 'PT0S',
 	}
-	return dateFrom
 })
 
-// computed duration as Duration from Luxon
-// Set duration to 1 Day if allDay is true and duration is 0
-const duration = computed(() =>
-	durationInput.value.amount < 1 && allDay.value
-		? Duration.fromObject({ day: 1 })
-		: Duration.fromObject({
-				[durationInput.value.unit.id]: durationInput.value.amount,
-			}),
-)
-
-// computed sequence as Duration from Luxon
-// Set sequence to 0 if repetitions are 0
-const sequence = computed(() =>
-	sequenceInput.value.repetitions > 0
-		? Duration.fromObject({
-				[sequenceInput.value.unit.id]:
-					sequenceInput.value.stepWidth * sequenceInput.value.repetitions,
-			})
-		: Duration.fromObject({ millisecond: 0 }),
-)
-
-// computed last from dateTime repetition
-const lastFrom = computed(() => from.value.plus(sequence.value))
-
-// computed if the option is blocked by an existing option
-const blockedOption = computed(() => {
-	const option = sameOption.value
-	return option && !option.deleted
+/**
+ * The duration input used for the input fields
+ * Initially set to 0 Days, which currently is equal to 1 Day if allDay is true
+ * @return ref DurationType
+ */
+const durationInput = ref<DurationType>({
+	unit: dateTimeUnitsKeyed.day,
+	amount: 0,
 })
 
-const sameOption = computed(() => {
-	const option = optionsStore.find(
-		from.value.toUnixInteger(),
-		duration.value.as('seconds'),
-	)
-	return option
-})
-
-// computed if the option is addable
-const addable = computed(() => !blockedOption.value && result.value !== 'loading')
-const optionInfo = computed(() =>
-	blockedOption.value && result.value !== 'success'
-		? t('polls', 'Option already exists')
-		: '',
-)
-
-watch(
-	() => allDay.value,
-	() => {
-		resetduratonUnits()
-	},
-)
-
-watch(
-	() => fromInput.value,
-	() => {
-		onAnyChange()
-	},
-)
-
+/**
+ * Reset duration units when switching between all day and time based options
+ */
 function resetduratonUnits(): void {
 	if (allDay.value) {
-		// change date units, when switching from time based to all day, since minutes and hours are not valid anymore
 		if (
 			durationInput.value.unit.id === 'minute'
 			|| durationInput.value.unit.id === 'hour'
@@ -167,25 +127,90 @@ function resetduratonUnits(): void {
 	}
 }
 
-function onAnyChange(): void {
-	result.value = addable.value ? '' : 'error'
+/**
+ * Computed if the user's timezone is different from the poll's timezone
+ */
+const differentTimezones = computed(
+	() =>
+		pollStore.getTimezoneName
+		!== Intl.DateTimeFormat().resolvedOptions().timeZone,
+)
+
+function setZone(): void {
+	startDateTime.value = startDateTime.value.setZone(
+		sessionStore.currentTimezoneName,
+		{ keepLocalTime: true },
+	)
 }
+
+/**
+ * Computed duration as Duration from Luxon
+ * Set duration to 1 Day if allDay is true and duration is 0
+ */
+const duration = computed(() =>
+	durationInput.value.amount < 1 && allDay.value
+		? Duration.fromObject({ day: 1 })
+		: Duration.fromObject({
+				[durationInput.value.unit.id]: durationInput.value.amount,
+			}),
+)
+
+/**
+ * Computed as boolean if the option is blocked by an existing option
+ */
+const blockedOption = computed(() => {
+	const option = duplicateOption.value
+	return option && !option.deleted
+})
+
+/**
+ * Computed to find an existing option with the same dateTime and duration
+ * @return found option or undefined
+ */
+const duplicateOption = computed(() => optionsStore.find(newOption.value))
+
+/**
+ * Ref as boolean to toggle between all day and time based options
+ */
+const allDay = ref(true)
+
+/**
+ * Ref as boolean to automatically vote yes for the new option
+ */
+const voteYes = ref(true)
+
+/**
+ * Computed boolean if the option is addable
+ * An option is addable if it is not blocked and the result is not loading
+ * Used to enable/disable the add button
+ * @return computed boolean
+ */
+const addable = computed(() => !blockedOption.value && result.value !== 'loading')
+
+// *** Miscellaneous captions
+
+const optionInfoCaption = computed(() =>
+	blockedOption.value && result.value !== 'success'
+		? t('polls', 'Option already exists')
+		: '',
+)
+
+const thisTimezoneCaption = computed(() =>
+	t('polls', 'Your timezone ({timezoneName})', {
+		timezoneName: Intl.DateTimeFormat().resolvedOptions().timeZone,
+	}),
+)
+const thatTimezoneCaption = computed(() =>
+	t('polls', 'Original timezone ({timezoneName})', {
+		timezoneName: pollStore.getTimezoneName,
+	}),
+)
 
 async function addOption(): Promise<void> {
 	result.value = 'loading'
 
 	try {
-		await optionsStore.add(
-			{
-				text: '',
-				timestamp: from.value.toUnixInteger(),
-				duration: duration.value.as('seconds'),
-				isoTimestamp: from.value.toISO() || '',
-				isoDuration: duration.value.toISO() || '',
-			},
-			sequenceInput.value,
-			voteYes.value,
-		)
+		await optionsStore.add(newOption.value, sequenceInput.value, voteYes.value)
 
 		result.value = 'success'
 	} catch (error) {
@@ -199,12 +224,73 @@ async function addOption(): Promise<void> {
 		result.value = 'error'
 	}
 }
+
+// *** Props for the input components
+
+const LuxonPickerProps = computed(() => ({
+	useDayButtons: !isBelowWidthOffset.value,
+	hideLabel: true,
+	label: t('polls', 'Add a new date/time'),
+	type: allDay.value ? 'date' : 'datetime-local',
+}))
+
+const TimeZoneSelectProps = computed(() => ({
+	options: [
+		{
+			label: pollStore.getTimezoneName,
+			value: 'poll',
+		},
+		{
+			label: Intl.DateTimeFormat().resolvedOptions().timeZone,
+			value: 'local',
+		},
+	],
+	label: 'label',
+	clearable: false,
+	reduce: (option: TimeZoneOption) => option.value,
+}))
+
+const DurationInputProps = computed(() => ({
+	numMin: 0,
+	useNumModifiers: !isBelowWidthOffset.value,
+	label: t('polls', 'Duration'),
+}))
+
+const DurationTimeUnitSelectProps = computed(() => ({
+	inputLabel: t('polls', 'Duration time unit'),
+	clearable: false,
+	filterable: false,
+	options: dateTimeOptionsFiltered.value,
+	label: 'name',
+}))
+
+const SequenceRepetitionsInputProps = computed(() => ({
+	numMin: 0,
+	useNumModifiers: !isBelowWidthOffset.value,
+	label: t('polls', 'Repetitions'),
+}))
+
+const SequenceStepWidthInputProps = computed(() => ({
+	numMin: 0,
+	useNumModifiers: !isBelowWidthOffset.value,
+	label: t('polls', 'Step width'),
+}))
+
+const SequenceUnitSelectProps = computed(() => ({
+	inputLabel: t('polls', 'Step unit'),
+	clearable: false,
+	filterable: false,
+	options: dateTimeOptionsFiltered.value,
+	label: 'name',
+}))
 </script>
 
 <template>
 	<div class="header-container">
 		<h2>{{ t('polls', 'Add times') }}</h2>
-		<NcCheckboxRadioSwitch v-model="allDay">
+		<NcCheckboxRadioSwitch
+			v-model="allDay"
+			@update:model-value="resetduratonUnits">
 			{{ t('polls', 'All day') }}
 		</NcCheckboxRadioSwitch>
 	</div>
@@ -212,57 +298,45 @@ async function addOption(): Promise<void> {
 	<div id="add-date-options-container" class="add-container">
 		<div class="select-container">
 			<div class="selection from">
-				<DateTimePicker
-					v-model="fromInput"
-					:use-day-buttons="!isBelowWidthOffset"
-					hide-label
-					:label="t('polls', 'Add a new date/time')"
-					:type="allDay ? 'date' : 'datetime-local'" />
+				<LuxonPicker v-model="startDateTime" v-bind="LuxonPickerProps" />
+				<NcSelect
+					v-if="differentTimezones"
+					v-model="sessionStore.sessionSettings.timezoneName"
+					v-bind="TimeZoneSelectProps"
+					@update:model-value="setZone()" />
 			</div>
 
 			<div class="selection duration">
 				<InputDiv
 					v-model="durationInput.amount"
-					:label="t('polls', 'Duration')"
+					v-bind="DurationInputProps"
 					type="number"
-					inputmode="numeric"
-					:num-min="0"
-					:use-num-modifiers="!isBelowWidthOffset" />
+					inputmode="numeric" />
 				<NcSelect
 					v-model="durationInput.unit"
+					v-bind="DurationTimeUnitSelectProps"
 					class="time-unit"
-					:input-label="t('polls', 'Duration time unit')"
-					:clearable="false"
-					:filterable="false"
-					:options="dateTimeOptionsFiltered"
 					label="name" />
 			</div>
 
 			<div class="selection repetition">
 				<InputDiv
 					v-model="sequenceInput.repetitions"
-					:label="t('polls', 'Repetitions')"
+					v-bind="SequenceRepetitionsInputProps"
 					type="number"
-					inputmode="numeric"
-					:num-min="0"
-					:use-num-modifiers="!isBelowWidthOffset" />
+					inputmode="numeric" />
 
 				<div v-if="sequenceInput.repetitions > 0" class="set-repetition">
 					<InputDiv
 						v-model="sequenceInput.stepWidth"
-						:label="t('polls', 'Step width')"
+						v-bind="SequenceStepWidthInputProps"
 						type="number"
-						inputmode="numeric"
-						:use-num-modifiers="!isBelowWidthOffset" />
+						inputmode="numeric" />
 
 					<NcSelect
 						v-model="sequenceInput.unit"
-						class="time-unit"
-						:input-label="t('polls', 'Step unit')"
-						:clearable="false"
-						:filterable="false"
-						:options="dateTimeOptions"
-						label="name" />
+						v-bind="SequenceUnitSelectProps"
+						class="time-unit" />
 				</div>
 			</div>
 			<div>
@@ -275,37 +349,25 @@ async function addOption(): Promise<void> {
 
 	<div class="preview-container">
 		<h2>{{ t('polls', 'Preview') }}</h2>
+
 		<div class="preview">
-			<div class="preview-container">
-				<div class="preview-group">
-					<div class="preview___entry">
-						<DateBox
-							class="from"
-							:start-date="from"
-							:duration="duration" />
-					</div>
-					<div
-						v-if="sequenceInput.repetitions > 0"
-						class="preview___repetitions">
-						<span>{{
-							n(
-								'polls',
-								'%n repetition until',
-								'%n repetitions until',
-								sequenceInput.repetitions,
-							)
-						}}</span>
-						<div class="preview___entry">
-							<DateBox
-								class="from"
-								:start-date="lastFrom"
-								:duration="duration" />
-						</div>
-					</div>
-				</div>
-				<div :class="['duration-info', { error: blockedOption }]">
-					{{ optionInfo }}
-				</div>
+			<OptionsPreviewBox
+				class="local"
+				:option="newOption"
+				:sequence="sequenceInput"
+				:timezone="Intl.DateTimeFormat().resolvedOptions().timeZone"
+				:title="differentTimezones ? thisTimezoneCaption : undefined" />
+
+			<OptionsPreviewBox
+				v-if="differentTimezones"
+				class="poll"
+				:option="newOption"
+				:sequence="sequenceInput"
+				:timezone="pollStore.getTimezoneName"
+				:title="differentTimezones ? thatTimezoneCaption : undefined" />
+
+			<div :class="['duration-info', { error: blockedOption }]">
+				{{ optionInfoCaption }}
 			</div>
 
 			<CheckIcon
@@ -353,13 +415,19 @@ async function addOption(): Promise<void> {
 	.selection {
 		display: flex;
 		flex-wrap: wrap;
-		column-gap: 1rem;
-		align-items: start;
+		gap: 1rem;
+		align-items: end;
 		padding: 0 1rem;
 		margin: 0.2rem 0;
 
-		.v-select.select.time-unit {
-			min-width: 11rem;
+		.v-select.select {
+			// TODO: temporary tweak to fix width issue
+			min-width: 12rem;
+			max-width: 16rem;
+
+			&.time-unit {
+				min-width: 11rem;
+			}
 		}
 
 		&.repetition {
@@ -404,15 +472,47 @@ async function addOption(): Promise<void> {
 	}
 }
 
+.date-add-button {
+	grid-row: 1 / span 4;
+}
+
 .preview {
-	display: flex;
+	display: grid;
 	align-items: center;
-	flex-wrap: wrap;
+	grid-template-rows: auto;
+	grid-template-columns: auto auto;
+	grid-template-areas:
+		'dateLocal repetitionLocal button'
+		'timezoneLocal timezoneLocal button'
+		'datePoll repetitionPoll button'
+		'timezonePoll timezonePoll button'
+		'info info .';
+
 	> * {
 		flex: 1 auto;
 	}
 
+	& .local {
+		grid-row: 1;
+		grid-column: 1;
+	}
+	& .poll {
+		grid-row: 2;
+		grid-column: 1;
+		background-color: rgb(from var(--color-background-darker) r g b/0.6);
+		border-radius: var(--border-radius-container-large);
+		padding: 1rem;
+	}
+	& .date-added,
+	.date-add-button {
+		grid-row: 1 / span 4;
+		grid-column: 3;
+		align-self: center;
+		justify-self: center;
+	}
 	.duration-info {
+		grid-row: 3;
+		grid-column: 1 / span 2;
 		font-size: 0.8em;
 		color: var(--color-text-maxcontrast);
 		font-weight: 600;
@@ -422,58 +522,8 @@ async function addOption(): Promise<void> {
 		}
 	}
 
-	.preview-group {
-		display: flex;
-		flex: 1 auto;
-		row-gap: 0.6rem;
-		column-gap: 2rem;
-	}
-
-	.preview-container {
-		align-items: center;
-		display: flex;
-		flex-direction: column;
-		min-height: 6.5rem;
-		margin-bottom: 1rem;
-	}
-	.preview___entry {
-		display: flex;
-		flex: 1 auto;
-		justify-content: center;
-		column-gap: 0.6rem;
-		min-height: 5.5rem;
-	}
-	.preview___repetitions {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		font-weight: bold;
-		font-size: 0.8em;
-		opacity: 0.6;
-		background-color: var(--color-background-darker);
-		padding: 1rem 1rem 0 1rem;
-		border-radius: var(--border-radius-container-large);
-	}
-
-	.preview___devider {
-		flex: 0 auto;
-		display: flex;
-		align-items: center;
-	}
-
-	button {
-		flex: 1 0 4.5rem;
-	}
-}
-
-.switch-container {
-	display: flex;
-	flex: 1;
-	flex-wrap: wrap;
-	justify-content: end;
-	& > * {
-		flex: 1 fit-content;
-		text-wrap: nowrap;
-	}
+	// button {
+	// 	flex: 1 0 4.5rem;
+	// }
 }
 </style>
