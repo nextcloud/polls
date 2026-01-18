@@ -435,7 +435,6 @@ async function submitEmail() {
 		</NcActionButton>
 
 		<NcActionCheckbox
-			v-if="pollStore.viewMode === 'list-view'"
 			:model-value="subscriptionStore.subscribed"
 			:disabled="!pollStore.permissions.subscribe"
 			title="check"
@@ -467,7 +466,7 @@ async function submitEmail() {
 		</NcActionButton>
 
 		<NcActionButton
-			v-if="pollStore.permissions.vote && pollStore.viewMode === 'list-view'"
+			v-if="pollStore.permissions.vote"
 			:name="t('polls', 'Reset your votes')"
 			:aria-label="t('polls', 'Reset your votes')"
 			@click="resetVotes()">
