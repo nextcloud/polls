@@ -182,7 +182,7 @@ class OptionService {
 	 */
 	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
 		$option = $this->optionMapper->find($optionId);
-		$this->getPoll($option->getPollId(), Poll::PERMISSION_POLL_EDIT);
+		$this->getPoll($option->getPollId())->request(Poll::PERMISSION_POLL_EDIT);
 
 		$option->setOption($timestamp, $duration, $pollOptionText);
 
