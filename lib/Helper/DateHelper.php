@@ -12,6 +12,9 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 abstract class DateHelper {
 	/**
 	 * Get DateTimeImmutable from various input types and apply time zone if provided
