@@ -5,6 +5,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [8.6.3] - 2026-01-18
+### Fixed
+ - Fixed missing user menu items, when table view is active
+
+### Changed
+ - Support Nextcloud 33
+
 ## [8.6.2] - 2025-12-18
 ### Fixed
  - Fixed display of calculated end time of options
