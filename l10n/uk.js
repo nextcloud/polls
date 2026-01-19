@@ -494,7 +494,7 @@ OC.L10N.register(
     "Login" : "Логін",
     "You can also log in and participate with your regular account." : "Ви також можете увійти і проголосувати із застосуванням свого звичайного акаунту.",
     "Otherwise participate as a guest participant." : "В іншому випадку візьміть участь в опитуванні як гість.",
-    "Enable the tracking of activities with the Activities app" : "Увімкніть відстеження дій за допомогою програми Дії",
+    "Enable the tracking of activities with the Activities app" : "Увімкнути відстеження змін за допомогою застосунку Події",
     "Enable the automatic poll archiving" : "Увімкнути автоматичне архівування опитування",
     "Days after which polls should be archived after closing" : "Дні, після закінчення яких опитування мають бути заархівовані після закриття",
     "Enable the usage of the combo view globally" : "Увімкніть використання комбінованого подання в усьому світі",
