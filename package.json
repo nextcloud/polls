@@ -73,7 +73,7 @@
     "baseline-browser-mapping": "^2.9.16",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.5",
-    "prettier": "^3.8.0",
+    "prettier": "^3.8.1",
     "vite": "^7.3.1",
     "vite-plugin-node-polyfills": "^0.25.0",
     "xml2js": "^0.6.2"
