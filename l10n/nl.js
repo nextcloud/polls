@@ -236,7 +236,7 @@ OC.L10N.register(
     "Clone option" : "Klonen optie",
     "Unconfirm option" : "Keuze ongedaan maken",
     "Confirm option" : "Keuze bevestigen",
-    "All day" : "Alle dagen",
+    "All day" : "Hele dag",
     "Duration" : "Duur",
     "Preview" : "Voorbeeld",
     "Added" : "Toegevoegd",
