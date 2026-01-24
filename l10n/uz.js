@@ -44,6 +44,7 @@ OC.L10N.register(
     "Login" : "Login",
     "Group share" : "Guruh ulushi",
     "Share label" : "Yorliq almashish",
+    "Shares" : "Ulashishlar",
     "No activity yet" : "Afsuski, faollik mavjud emas",
     "Other settings" : "Boshqa sozlamalar",
     "Navigation" : "Navigatsiya",
