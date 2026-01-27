@@ -7,23 +7,40 @@
 import { computed } from 'vue'
 import { DateTime, Duration } from 'luxon'
 import { getDates } from '../../../composables/optionDateTime'
+import { useSessionStore } from '@/stores/session'
 
 interface Props {
 	startDate: DateTime
 	duration?: Duration
+	timezone?: string | undefined
 }
 
-const { startDate, duration = Duration.fromMillis(0) } = defineProps<Props>()
+const sessionStore = useSessionStore()
 
-const optionDateTimes = computed(() => getDates(startDate, duration))
+const {
+	startDate,
+	duration = Duration.fromMillis(0),
+	timezone = undefined,
+} = defineProps<Props>()
+
+const useTimeZone = computed(
+	() =>
+		timezone
+		|| sessionStore.currentTimezoneName
+		|| Intl.DateTimeFormat().resolvedOptions().timeZone,
+)
+
+const optionDateTimes = computed(() =>
+	getDates(startDate, duration, useTimeZone.value),
+)
 </script>
 
 <template>
-	<div :title="optionDateTimes.optionInterval.toISO()" class="datebox">
+	<div :title="optionDateTimes.interval.toISO()" class="datebox">
 		<div class="month from" :class="{ span: optionDateTimes.isSameMonth }">
 			{{
-				startDate.toLocaleString(
-					DateTime.now().year === startDate.year
+				optionDateTimes.optionStart.toLocaleString(
+					DateTime.now().year === optionDateTimes.optionStart.year
 						? { month: 'short' }
 						: { month: 'short', year: '2-digit' },
 				)
@@ -33,7 +50,7 @@ const optionDateTimes = computed(() => getDates(startDate, duration))
 		<div v-if="!optionDateTimes.isSameMonth" class="month to">
 			{{
 				optionDateTimes.optionEnd.toLocaleString(
-					DateTime.now().year === startDate.year
+					DateTime.now().year === optionDateTimes.optionStart.year
 						? { month: 'short' }
 						: { month: 'short', year: '2-digit' },
 				)
@@ -41,7 +58,12 @@ const optionDateTimes = computed(() => getDates(startDate, duration))
 		</div>
 
 		<div class="day from" :class="{ span: optionDateTimes.isSameDay }">
-			{{ startDate.toLocaleString({ weekday: 'short', day: 'numeric' }) }}
+			{{
+				optionDateTimes.optionStart.toLocaleString({
+					weekday: 'short',
+					day: 'numeric',
+				})
+			}}
 		</div>
 
 		<span v-if="!optionDateTimes.isSameDay" class="day divider">–</span>
@@ -61,10 +83,10 @@ const optionDateTimes = computed(() => getDates(startDate, duration))
 			:class="{ span: optionDateTimes.isSameDay }">
 			{{
 				optionDateTimes.isSameDay && !optionDateTimes.isSameTime
-					? optionDateTimes.optionInterval.toLocaleString(
+					? optionDateTimes.interval.toLocaleString(DateTime.TIME_SIMPLE)
+					: optionDateTimes.optionStart.toLocaleString(
 							DateTime.TIME_SIMPLE,
 						)
-					: startDate.toLocaleString(DateTime.TIME_SIMPLE)
 			}}
 		</div>
 

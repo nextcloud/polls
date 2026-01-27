@@ -10,6 +10,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Attributes\ShareTokenRequired;
+use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Model\SentResult;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -224,6 +225,12 @@ class PublicController extends BaseController {
 		?array $sequence = null,
 	): JSONResponse {
 		$pollId = $this->userSession->getShare()->getPollId();
+
+		/** @psalm-suppress RiskyTruthyFalsyComparison */
+		if (!$pollId) {
+			throw new InsufficientAttributesException('PollId of share is missing or invalid');
+		}
+
 		return $this->response(fn () => array_merge(
 			$this->optionService->addWithSequenceAndAutoVote(
 				$pollId,

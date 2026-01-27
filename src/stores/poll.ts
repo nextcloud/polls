@@ -70,6 +70,7 @@ export const usePollStore = defineStore('poll', {
 			useNo: true,
 			maxVotesPerOption: 0,
 			maxVotesPerUser: 0,
+			timezoneName: null,
 		},
 		owner: createDefault<User>(),
 		pollGroups: [],
@@ -138,6 +139,12 @@ export const usePollStore = defineStore('poll', {
 	}),
 
 	getters: {
+		getTimezoneName(state): string {
+			return (
+				state.configuration.timezoneName
+				|| Intl.DateTimeFormat().resolvedOptions().timeZone
+			)
+		},
 		viewMode(state): ViewMode {
 			const sessionStore = useSessionStore()
 			if (sessionStore.sessionSettings.viewModeForced) {
@@ -292,7 +299,10 @@ export const usePollStore = defineStore('poll', {
 			const pollsStore = usePollsStore()
 
 			try {
-				const response = await PollsAPI.addPoll(payload.type, payload.title)
+				const response = await PollsAPI.addPoll({
+					...payload,
+					timezoneName: Intl.DateTimeFormat().resolvedOptions().timeZone,
+				})
 				return response.data.poll
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {

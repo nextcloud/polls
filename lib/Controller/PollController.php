@@ -106,49 +106,17 @@ class PollController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}')]
 	public function getFull(int $pollId): JSONResponse {
-		return $this->response(fn () => $this->getFullPoll($pollId, true), Http::STATUS_OK);
+		return $this->response(fn () => $this->getFullPoll($pollId), Http::STATUS_OK);
 	}
 
-	private function getFullPoll(int $pollId, bool $withTimings = false): array {
-		$timerMicro['start'] = microtime(true);
-
+	private function getFullPoll(int $pollId): array {
 		$poll = $this->pollService->get($pollId);
-		$timerMicro['poll'] = microtime(true);
-
 		$options = $this->optionService->list($pollId);
-		$timerMicro['options'] = microtime(true);
-
 		$votes = $this->voteService->list($pollId);
-		$timerMicro['votes'] = microtime(true);
-
 		$comments = $this->commentService->list($pollId);
-		$timerMicro['comments'] = microtime(true);
-
 		$shares = $this->shareService->list($pollId);
-		$timerMicro['shares'] = microtime(true);
-
 		$subscribed = $this->subscriptionService->get($pollId);
-		$timerMicro['subscribed'] = microtime(true);
 
-		$diffMicro['total'] = microtime(true) - $timerMicro['start'];
-		$diffMicro['poll'] = $timerMicro['poll'] - $timerMicro['start'];
-		$diffMicro['options'] = $timerMicro['options'] - $timerMicro['poll'];
-		$diffMicro['votes'] = $timerMicro['votes'] - $timerMicro['options'];
-		$diffMicro['comments'] = $timerMicro['comments'] - $timerMicro['votes'];
-		$diffMicro['shares'] = $timerMicro['shares'] - $timerMicro['comments'];
-		$diffMicro['subscribed'] = $timerMicro['subscribed'] - $timerMicro['shares'];
-
-		if ($withTimings) {
-			return [
-				'poll' => $poll,
-				'options' => $options,
-				'votes' => $votes,
-				'comments' => $comments,
-				'shares' => $shares,
-				'subscribed' => $subscribed,
-				'diffMicro' => $diffMicro,
-			];
-		}
 		return [
 			'poll' => $poll,
 			'options' => $options,
@@ -170,10 +138,10 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/poll/add')]
-	public function add(string $type, string $title, string $votingVariant = Poll::VARIANT_SIMPLE): JSONResponse {
+	public function add(string $type, string $title, ?string $timezoneName = null, string $votingVariant = Poll::VARIANT_SIMPLE): JSONResponse {
 		return $this->response(
 			fn () => [
-				'poll' => $this->pollService->add($type, $title, $votingVariant)
+				'poll' => $this->pollService->add($type, $title, $timezoneName, $votingVariant)
 			],
 			Http::STATUS_CREATED
 		);
