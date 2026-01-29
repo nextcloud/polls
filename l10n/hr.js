@@ -136,6 +136,7 @@ OC.L10N.register(
     "never" : "nikad",
     "Error archiving/restoring poll." : "Pogreška pri arhiviranju/vraćanju ankete.",
     "Error cloning poll." : "Pogreška pri kloniranju ankete.",
+    "Back" : "Natrag",
     "Take over" : "Preuzmi",
     "Sort by title" : "Razvrstaj prema naslovu",
     "Checking name …" : "Provjera imena...",
