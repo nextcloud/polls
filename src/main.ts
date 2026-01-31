@@ -8,6 +8,7 @@ import { router } from './router'
 
 import App from './App.vue'
 
+// simulate a code change in vue files
 // TODO: FInd a way to use the devtools in the browser
 // Vue.config.devtools = import.meta.env.MODE !== 'production'
 
