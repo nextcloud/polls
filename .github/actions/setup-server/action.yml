@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2022 Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
 name: Checkout and setup server
+description: 'Checkout Nextcloud server and app, setup PHP and install dependencies'
 inputs:
   server-version:
     required: false
@@ -55,7 +56,7 @@ runs:
   using: 'composite'
   steps:
     - name: Checkout server ${{ inputs.server-version }}
-      uses: actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         path: ${{ inputs.server-path }}
         repository: nextcloud/server
@@ -70,12 +71,12 @@ runs:
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
     - name: Checkout ${{ inputs.app-name }}
-      uses: actions/checkout@v4
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         path: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
 
     - name: Set up php ${{ inputs.php-version }}
-      uses: shivammathur/setup-php@v2
+      uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
       with:
         php-version: ${{ inputs.php-version }}
         tools: ${{ inputs.php-tools }}

@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2022 Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
 name: Setup node and dependencies
+description: 'Setup node environment and install npm dependencies'
 inputs:
   node-version:
     required: false
@@ -16,7 +17,7 @@ runs:
   using: 'composite'
   steps:
     - name: Use or setup caching npm modules
-      uses: actions/cache@v4
+      uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # version 5.0.3
       id: cache-modules
       env:
         cache-name: cache-node-modules
@@ -29,7 +30,7 @@ runs:
           ${{ runner.os }}-
 
     - name: Set up node ${{ inputs.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
       with:
         node-version: ${{ inputs.node-version }}
 

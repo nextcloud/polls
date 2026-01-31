@@ -50,11 +50,11 @@ jobs:
     - name: Extract release notes
       if: success()
       id: extract-release-notes
-      uses: ffurrer2/extract-release-notes@v3
+      uses: ffurrer2/extract-release-notes@202313ec7461b6b9e401996714484690ab1ae105 # 3.0.0
 
     - name: Draft Release
       if: success()
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # 2.5.0
       with:
         body: "# Changelog ${{ steps.appinfo.outputs.app-version }} \n ${{ steps.extract-release-notes.outputs.release_notes }} "
         prerelease: false
