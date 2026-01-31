@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2022 Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
 name: Read polls version from info.xml
+description: 'Read polls app version from info.xml and compare it to tag name'
 inputs:
   skip-check:
     description: Do not check tag against version
