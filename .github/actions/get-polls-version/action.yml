@@ -22,7 +22,7 @@ runs:
   steps:
     - name: Get app version from appinfo/info.xml
       id: appinfo
-      uses: mavrosxristoforos/get-xml-info@2.0
+      uses: mavrosxristoforos/get-xml-info@afaa5058ead44cfaff92c6a861b46dd7a8929f60 # v2.0
       with:
         xml-file: 'appinfo/info.xml'
         xpath: '//info//version'
@@ -34,7 +34,7 @@ runs:
 
     - name: Compare versions
       if: ${{ !inputs.skip-version && format('v{0}', steps.appinfo.outputs.info) != steps.gettag.outputs.VERSION }}
-      uses: actions/github-script@v6
+      uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6.4.1
       with:
         script: |
           core.setFailed('App version ${{ format('v{0}', steps.appinfo.outputs.info) }} is not equal to tag name ${{ steps.gettag.outputs.VERSION }}!')

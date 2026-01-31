@@ -35,7 +35,7 @@ runs:
   using: 'composite'
   steps:
     - name: Use or setup caching composer packages (${{ inputs.mode }})
-      uses: actions/cache@v4
+      uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # version 5.0.3
       id: cache-composer
       env:
         cache-name: cache-composer-${{ inputs.mode }}
@@ -48,7 +48,7 @@ runs:
           ${{ runner.os }}-
 
     - name: Set up php ${{ inputs.php-version }}
-      uses: shivammathur/setup-php@v2
+      uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
       with:
         php-version: ${{ inputs.php-version }}
         tools: ${{ inputs.php-tools }}
