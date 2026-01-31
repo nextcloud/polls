@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2022 Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
 name: Checkout and setup server
+description: 'Checkout Nextcloud server and app, setup PHP and install dependencies'
 inputs:
   server-version:
     required: false

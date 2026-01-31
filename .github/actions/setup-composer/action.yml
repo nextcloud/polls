@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2022 Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
 name: Setup composer and PHP
+description: 'Setup PHP environment and install composer dependencies with caching'
 inputs:
   php-version:
     description: 'PHP version (default: 8.2)'

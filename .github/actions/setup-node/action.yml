@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2022 Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
 name: Setup node and dependencies
+description: 'Setup node environment and install npm dependencies'
 inputs:
   node-version:
     required: false
