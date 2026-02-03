@@ -189,23 +189,6 @@ const addable = computed(() => !blockedOption.value && result.value !== 'loading
 
 // *** Miscellaneous captions
 
-const optionInfoCaption = computed(() =>
-	blockedOption.value && result.value !== 'success'
-		? t('polls', 'Option already exists')
-		: '',
-)
-
-const thisTimezoneCaption = computed(() =>
-	t('polls', 'Your timezone ({timezoneName})', {
-		timezoneName: Intl.DateTimeFormat().resolvedOptions().timeZone,
-	}),
-)
-const thatTimezoneCaption = computed(() =>
-	t('polls', 'Original timezone ({timezoneName})', {
-		timezoneName: pollStore.getTimezoneName,
-	}),
-)
-
 async function addOption(): Promise<void> {
 	result.value = 'loading'
 
@@ -246,9 +229,20 @@ const TimeZoneSelectProps = computed(() => ({
 		},
 	],
 	label: 'label',
+	inputLabel: t('polls', 'Timezone'),
 	clearable: false,
 	reduce: (option: TimeZoneOption) => option.value,
 }))
+
+const otherTimeZoneName = computed(() => {
+	if (!differentTimezones.value) {
+		return undefined
+	}
+	if (pollStore.getTimezoneName === sessionStore.currentTimezoneName) {
+		return Intl.DateTimeFormat().resolvedOptions().timeZone
+	}
+	return pollStore.getTimezoneName
+})
 
 const DurationInputProps = computed(() => ({
 	numMin: 0,
@@ -295,56 +289,51 @@ const SequenceUnitSelectProps = computed(() => ({
 		</NcCheckboxRadioSwitch>
 	</div>
 
-	<div id="add-date-options-container" class="add-container">
-		<div class="select-container">
-			<div class="selection from">
-				<LuxonPicker v-model="startDateTime" v-bind="LuxonPickerProps" />
-				<NcSelect
-					v-if="differentTimezones"
-					v-model="sessionStore.sessionSettings.timezoneName"
-					v-bind="TimeZoneSelectProps"
-					@update:model-value="setZone()" />
-			</div>
+	<div class="select-container">
+		<LuxonPicker v-model="startDateTime" v-bind="LuxonPickerProps" />
+		<NcSelect
+			v-if="differentTimezones"
+			v-model="sessionStore.sessionSettings.timezoneName"
+			v-bind="TimeZoneSelectProps"
+			@update:model-value="setZone()" />
 
-			<div class="selection duration">
-				<InputDiv
-					v-model="durationInput.amount"
-					v-bind="DurationInputProps"
-					type="number"
-					inputmode="numeric" />
-				<NcSelect
-					v-model="durationInput.unit"
-					v-bind="DurationTimeUnitSelectProps"
-					class="time-unit"
-					label="name" />
-			</div>
+		<InputDiv
+			v-model="durationInput.amount"
+			v-bind="DurationInputProps"
+			class="select-duration"
+			type="number"
+			inputmode="numeric" />
+		<NcSelect
+			v-model="durationInput.unit"
+			v-bind="DurationTimeUnitSelectProps"
+			class="time-unit"
+			label="name" />
 
-			<div class="selection repetition">
-				<InputDiv
-					v-model="sequenceInput.repetitions"
-					v-bind="SequenceRepetitionsInputProps"
-					type="number"
-					inputmode="numeric" />
+		<div class="repetition-input-wrapper">
+			<InputDiv
+				v-model="sequenceInput.repetitions"
+				v-bind="SequenceRepetitionsInputProps"
+				type="number"
+				inputmode="numeric" />
 
-				<div v-if="sequenceInput.repetitions > 0" class="set-repetition">
-					<InputDiv
-						v-model="sequenceInput.stepWidth"
-						v-bind="SequenceStepWidthInputProps"
-						type="number"
-						inputmode="numeric" />
-
-					<NcSelect
-						v-model="sequenceInput.unit"
-						v-bind="SequenceUnitSelectProps"
-						class="time-unit" />
-				</div>
-			</div>
-			<div>
-				<NcCheckboxRadioSwitch v-model="voteYes">
-					{{ t('polls', 'Automatically vote "Yes" for new option.') }}
-				</NcCheckboxRadioSwitch>
-			</div>
+			<InputDiv
+				v-if="sequenceInput.repetitions > 0"
+				v-model="sequenceInput.stepWidth"
+				v-bind="SequenceStepWidthInputProps"
+				type="number"
+				inputmode="numeric" />
 		</div>
+
+		<NcSelect
+			v-if="sequenceInput.repetitions > 0"
+			v-model="sequenceInput.unit"
+			v-bind="SequenceUnitSelectProps"
+			class="time-unit" />
+	</div>
+	<div>
+		<NcCheckboxRadioSwitch v-model="voteYes">
+			{{ t('polls', 'Automatically vote "Yes" for new option.') }}
+		</NcCheckboxRadioSwitch>
 	</div>
 
 	<div class="preview-container">
@@ -352,47 +341,44 @@ const SequenceUnitSelectProps = computed(() => ({
 
 		<div class="preview">
 			<OptionsPreviewBox
-				class="local"
 				:option="newOption"
 				:sequence="sequenceInput"
-				:timezone="Intl.DateTimeFormat().resolvedOptions().timeZone"
-				:title="differentTimezones ? thisTimezoneCaption : undefined" />
+				:timezone="sessionStore.currentTimezoneName"
+				:other-time-zone="otherTimeZoneName">
+			</OptionsPreviewBox>
 
-			<OptionsPreviewBox
-				v-if="differentTimezones"
-				class="poll"
-				:option="newOption"
-				:sequence="sequenceInput"
-				:timezone="pollStore.getTimezoneName"
-				:title="differentTimezones ? thatTimezoneCaption : undefined" />
+			<div class="bottom-line">
+				<div
+					v-if="blockedOption && result !== 'success'"
+					class="blocked-option">
+					{{ t('polls', 'Option already exists') }}
+				</div>
 
-			<div :class="['duration-info', { error: blockedOption }]">
-				{{ optionInfoCaption }}
+				<CheckIcon
+					v-if="result === 'success' && blockedOption"
+					class="date-added"
+					:title="t('polls', 'Added')"
+					:fill-color="successColor"
+					:size="26" />
+
+				<NcButton
+					v-else
+					class="date-add-button"
+					:variant="'primary'"
+					:disabled="!addable"
+					@click="addOption">
+					{{ t('polls', 'Add') }}
+				</NcButton>
 			</div>
-
-			<CheckIcon
-				v-if="result === 'success' && blockedOption"
-				class="date-added"
-				:title="t('polls', 'Added')"
-				:fill-color="successColor"
-				:size="26" />
-
-			<NcButton
-				v-else
-				class="date-add-button"
-				:variant="'primary'"
-				:disabled="!addable"
-				@click="addOption">
-				{{ t('polls', 'Add') }}
-			</NcButton>
 		</div>
 	</div>
 </template>
 
 <style lang="scss">
-.add-container {
-	display: flex;
-	flex-wrap: wrap-reverse;
+.luxon-picker,
+.select-duration,
+.repetition-input-wrapper {
+	grid-column: 1;
 }
 
 .header-container {
@@ -402,128 +388,35 @@ const SequenceUnitSelectProps = computed(() => ({
 }
 
 .select-container {
-	display: flex;
-	flex-direction: column;
-	min-height: 5.4rem;
-	flex: 1 18rem;
-	.to,
-	.from {
-		display: flex;
-		align-items: center;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+
+	.v-select.select {
+		min-width: 8rem;
+		max-width: 16rem;
+		margin-inline-start: var(--default-clickable-area);
+		margin-block-end: 2rem;
 	}
-
-	.selection {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1rem;
-		align-items: end;
-		padding: 0 1rem;
-		margin: 0.2rem 0;
-
-		.v-select.select {
-			// TODO: temporary tweak to fix width issue
-			min-width: 12rem;
-			max-width: 16rem;
-
-			&.time-unit {
-				min-width: 11rem;
-			}
-		}
-
-		&.repetition {
-			border-radius: var(--border-radius-container-large);
-			background-color: rgb(from var(--color-background-darker) r g b / 0.6);
-			padding: 1rem 1rem;
-		}
-
-		.set-repetition {
-			display: flex;
-			column-gap: 1rem;
-			flex-wrap: wrap;
-		}
+	.repetition-input-wrapper {
+		display: grid;
+		grid-template-columns: repeat(2, 9rem);
 	}
-}
-
-.select-duration {
-	display: flex;
-	align-items: center;
-}
-
-.lock-duration {
-	position: relative;
-	top: 1.3rem;
-	inset-inline-start: -0.8rem;
-}
-
-.time-lock {
-	border-style: solid;
-	width: 22px;
-	height: 0.5rem;
-	margin-inline-start: 0.5rem;
-
-	&.upper {
-		border-width: 2px 2px 0 0;
-		border-top-right-radius: 25%;
-	}
-
-	&.lower {
-		border-width: 0 2px 2px 0;
-		border-bottom-right-radius: 25%;
-	}
-}
-
-.date-add-button {
-	grid-row: 1 / span 4;
 }
 
 .preview {
-	display: grid;
-	align-items: center;
-	grid-template-rows: auto;
-	grid-template-columns: auto auto;
-	grid-template-areas:
-		'dateLocal repetitionLocal button'
-		'timezoneLocal timezoneLocal button'
-		'datePoll repetitionPoll button'
-		'timezonePoll timezonePoll button'
-		'info info .';
-
-	> * {
-		flex: 1 auto;
+	.bottom-line {
+		display: flex;
+		align-items: center;
+		padding: 0.5rem 0;
+		justify-content: end;
 	}
 
-	& .local {
-		grid-row: 1;
-		grid-column: 1;
-	}
-	& .poll {
-		grid-row: 2;
-		grid-column: 1;
-		background-color: rgb(from var(--color-background-darker) r g b/0.6);
-		border-radius: var(--border-radius-container-large);
-		padding: 1rem;
-	}
-	& .date-added,
-	.date-add-button {
-		grid-row: 1 / span 4;
-		grid-column: 3;
-		align-self: center;
-		justify-self: center;
-	}
-	.duration-info {
-		grid-row: 3;
-		grid-column: 1 / span 2;
+	.blocked-option {
+		flex: 1;
 		font-size: 0.8em;
-		color: var(--color-text-maxcontrast);
 		font-weight: 600;
 		text-align: center;
-		&.error {
-			color: var(--color-error-text);
-		}
+		color: var(--color-error-text);
 	}
-
-	// button {
-	// 	flex: 1 0 4.5rem;
-	// }
 }
 </style>

@@ -202,14 +202,13 @@ const inputClass = computed(() => [
 
 <template>
 	<div :class="componentClass">
-		<label v-if="label">
+		<label v-if="label" :class="{ indented: useNumModifiers }">
 			{{ label }}
 		</label>
 
 		<div class="input-wrapper">
 			<NcButton
 				v-if="useNumModifiers && !useNumericVariant"
-				class="date-add-button"
 				:title="t('polls', 'minus')"
 				:variant="'tertiary-no-background'"
 				@click="subtract">
@@ -272,6 +271,9 @@ const inputClass = computed(() => [
 	label {
 		display: block;
 		margin-bottom: 2px;
+		&.indented {
+			margin-inline-start: var(--default-clickable-area);
+		}
 	}
 
 	input {

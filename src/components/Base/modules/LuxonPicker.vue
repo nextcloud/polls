@@ -42,7 +42,7 @@ function nextDay() {
 
 <template>
 	<div class="luxon-picker">
-		<div v-if="label">{{ label }}</div>
+		<label v-if="label" :class="{ indented: useDayButtons }">{{ label }}</label>
 		<div class="date-time-picker">
 			<NcButton
 				v-if="useDayButtons"
@@ -68,10 +68,19 @@ function nextDay() {
 </template>
 
 <style lang="scss" scoped>
+label {
+	display: block;
+	margin-bottom: 2px;
+	&.indented {
+		margin-inline-start: var(--default-clickable-area);
+	}
+}
+
 .luxon-picker {
 	display: flex;
 	flex-direction: column;
 }
+
 .date-time-picker {
 	display: flex;
 	align-items: end;
