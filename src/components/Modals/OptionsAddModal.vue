@@ -81,6 +81,7 @@ onUnmounted(() => {
 				var(--border-radius-container-large) 0 0;
 		}
 		> div:last-child {
+			padding-bottom: 1rem;
 			border-radius: 0 0 var(--border-radius-container-large)
 				var(--border-radius-container-large);
 		}
