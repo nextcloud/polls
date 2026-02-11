@@ -50,6 +50,7 @@ OC.L10N.register(
     "Add some!" : "Dodajte ih!",
     "Register" : "Registriraj se",
     "Unknown error" : "Nepoznata pogreška",
+    "Maybe" : "Možda",
     "Loading …" : "Učitavanje…",
     "Previous day" : "Prethodni dan",
     "Next day" : "Sljedeći dan",
