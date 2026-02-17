@@ -39,10 +39,10 @@ function dialogOK() {
 const dialogText = adminAccess.value
 	? t(
 			'polls',
-			'This will finally delete the poll and {username} will get notified.',
+			'This will irreversibly delete the poll and {username} will get notified.',
 			{ username: poll.owner.displayName },
 		)
-	: t('polls', 'This will finally delete the poll.')
+	: t('polls', 'This will irreversibly delete the poll.')
 
 const dialogProps = {
 	name: t('polls', 'Delete poll'),
