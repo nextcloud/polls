@@ -318,8 +318,6 @@
     "Download CSV file" : "تنزيل ملف CSV",
     "Download HTML file" : "تنزيل ملف HTML",
     "Error deleting poll." : "خطأ في حذف الاستبيان.",
-    "This will finally delete the poll and {username} will get notified." : "سيؤدي هذا لحذف الاستبيان؛ وسيتم إشعار {username} بذلك.",
-    "This will finally delete the poll." : "سيؤدي هذا لحذف الاستبيان نهائياً",
     "OK" : "موافق",
     "Add date option" : "أضِف خيار التاريخ",
     "Adding options is disabled" : "إضافة الخيارات مُعطَّلة",
