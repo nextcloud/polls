@@ -1,31 +1,25 @@
 /**
- * SPDX-FileCopyrightText: 2020 Nextcloud contributors
+ * SPDX-FileCopyrightText: 2021 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 import { t } from '@nextcloud/l10n'
+import type { DateTimeUnits, DateTimeUnitType } from '../../Types/dateTime'
+import { DateTime } from 'luxon'
 
-export type DateTimeUnit = 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'
-
-export type DateTimeUnitType = {
-	id: DateTimeUnit
-	name: string
-	timeOption: boolean
+/**
+ * Set time to next timeStep
+ * @param dateTime DateTime
+ * @param timeStep in minutes
+ * @return DateTime
+ */
+export function ceilDate(dateTime: DateTime, timeStep: number): DateTime {
+	return dateTime.set({
+		minute: (Math.ceil(dateTime.minute / timeStep) * timeStep) % 60,
+	})
 }
 
-export type TimeUnitsType = {
-	unit: DateTimeUnitType
-	value: number
-}
-
-export type DurationType = {
-	unit: DateTimeUnitType
-	amount: number
-}
-
-export type DateFormats = 'dateTime' | 'dateShort'
-
-export const dateTimeUnitsKeyed: Record<DateTimeUnit, DateTimeUnitType> = {
+export const dateTimeUnitsKeyed: Record<DateTimeUnits, DateTimeUnitType> = {
 	minute: {
 		id: 'minute',
 		name: t('polls', 'Minute'),

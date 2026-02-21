@@ -74,7 +74,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
 					$ownerId = $poll->getUser()->getId();
 					$ownerDisplayName = $poll->getUser()->getDisplayName();
 					$url = $poll->getVoteUrl();
-					$expired = $poll->getExpired();
+					$expired = $poll->getIsExpired();
 					$expiry = $poll->getExpire();
 					$participated = $poll->getCurrentUserVotes() ? true : false;
 

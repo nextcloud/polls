@@ -22,6 +22,8 @@ class SimpleOption implements JsonSerializable {
 		protected ?int $timestamp,
 		protected ?int $duration = 0,
 		protected ?int $order = 0,
+		protected string $isoTimestamp = '',
+		protected string $isoDuration = '',
 	) {
 	}
 
@@ -31,6 +33,8 @@ class SimpleOption implements JsonSerializable {
 			'timestamp' => $this->timestamp ?? 0,
 			'duration' => $this->duration ?? 0,
 			'order' => $this->order ?? 0,
+			'isoDate' => $this->isoTimestamp,
+			'isoDuration' => $this->isoDuration,
 		];
 	}
 
@@ -42,8 +46,16 @@ class SimpleOption implements JsonSerializable {
 		return $this->timestamp ?? 0;
 	}
 
+	public function getIsoTimestamp(): string {
+		return $this->isoTimestamp;
+	}
+
 	public function getDuration(): int {
 		return $this->duration ?? 0;
+	}
+
+	public function getIsoDuration(): string {
+		return $this->isoDuration;
 	}
 
 	public function getOrder(): int {
@@ -60,6 +72,8 @@ class SimpleOption implements JsonSerializable {
 			$option['timestamp'] ?? 0,
 			$option['duration'] ?? 0,
 			$option['order'] ?? 0,
+			$option['isoTimestamp'] ?? '',
+			$option['isoDuration'] ?? '',
 		);
 	}
 }
