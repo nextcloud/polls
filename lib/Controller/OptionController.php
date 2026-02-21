@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use DateInterval;
+use DateTimeImmutable;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Service\CalendarService;
@@ -21,6 +23,8 @@ use OCP\IRequest;
 
 /**
  * @psalm-api
+ * @psalm-import-type SimpleOptionsArray from SimpleOption
+ * @psalm-import-type SequenceArray from Sequence
  */
 class OptionController extends BaseController {
 	public function __construct(
@@ -48,9 +52,9 @@ class OptionController extends BaseController {
 	/**
 	 * Add a new option
 	 * @param int $pollId poll id
-	 * @param array $option Options text for text poll
-	 * @param array $sequence sequence of new options
+	 * @param SimpleOptionsArray $option Options text for text poll
 	 * @param bool $voteYes vote yes
+	 * @param SequenceArray $sequence sequence of new options
 	 * @return JSONResponse
 	 */
 	#[NoAdminRequired]
@@ -88,14 +92,19 @@ class OptionController extends BaseController {
 	/**
 	 * Update option
 	 * @param int $optionId option id
-	 * @param int $timestamp timestamp for datepoll
+	 * @param string $isoTimestamp ISO 8601 timestamp for date poll
 	 * @param string $text Option text for text poll
-	 * @param int duration duration of option
+	 * @param string $isoDuration ISO 8601 duration for date poll
 	 */
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'PUT', url: '/option/{optionId}')]
-	public function update(int $optionId, int $timestamp, string $text, int $duration): JSONResponse {
-		return $this->response(fn () => ['option' => $this->optionService->update($optionId, $timestamp, $text, $duration)]);
+	public function update(int $optionId, string $isoTimestamp, string $text, string $isoDuration): JSONResponse {
+		return $this->response(fn () => ['option' => $this->optionService->update(
+			$optionId,
+			$text,
+			new DateTimeImmutable($isoTimestamp),
+			new DateInterval($isoDuration),
+		)]);
 	}
 
 	/**

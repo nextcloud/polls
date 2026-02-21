@@ -27,12 +27,10 @@ export type Option = {
 	id: number
 	pollId: number
 	text: string
-	timestamp: number
 	isoTimestamp: string
 	deleted: number
 	order: number
 	confirmed: number
-	duration: number
 	isoDuration: string
 	locked: boolean
 	hash: string
@@ -41,10 +39,7 @@ export type Option = {
 	owner: User | undefined
 }
 
-export type SimpleOption = Pick<
-	Option,
-	'text' | 'isoTimestamp' | 'isoDuration' | 'timestamp' | 'duration'
->
+export type SimpleOption = Pick<Option, 'text' | 'isoTimestamp' | 'isoDuration'>
 
 export type DateOptionFinder = Pick<SimpleOption, 'isoTimestamp' | 'isoDuration'>
 

@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { Option } from '@/stores/options.types'
 import { DateTime, Duration, Interval } from 'luxon'
 import { computed } from 'vue'
 
@@ -17,6 +18,12 @@ type OptionDateTime = {
 	interval: Interval
 }
 
+export function getDatesFromOption(
+	option: Option,
+	timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
+): OptionDateTime {
+	return getDates(option.isoTimestamp, option.isoDuration || null, timezone)
+}
 /**
  *
  * @param optionStart DateTime object representing the start date and time
@@ -25,10 +32,17 @@ type OptionDateTime = {
  * @return OptionDateTime object containing computed date and time information of the option
  */
 export function getDates(
-	optionStart: DateTime,
-	optionDuration: Duration | null,
+	optionStart: DateTime | string,
+	optionDuration: Duration | string | null,
 	timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
 ): OptionDateTime {
+	if (typeof optionStart === 'string') {
+		optionStart = DateTime.fromISO(optionStart)
+	}
+	if (typeof optionDuration === 'string') {
+		optionDuration = Duration.fromISO(optionDuration)
+	}
+
 	optionStart = optionStart.setZone(timezone)
 	// duration equals optionDuration with special handling for full days
 	const computedDuration = computed(() => {

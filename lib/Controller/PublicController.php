@@ -43,6 +43,8 @@ use OCP\Util;
  * Requesting the token inside the controller is not possible, because the token is submitted
  * as a paramter and not known while contruction time
  * @psalm-api
+ * @psalm-import-type SimpleOptionsArray from SimpleOption
+ * @psalm-import-type SequenceArray from Sequence
  */
 class PublicController extends BaseController {
 	public function __construct(
@@ -211,8 +213,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Add options
-	 * @param array $option Options text for text poll
-	 * @param array $sequence Sequence of the option
+	 * @param SimpleOptionsArray $option Options text for text poll
+	 * @param SequenceArray $sequence Sequence of the option
 	 * @param bool $voteYes Vote yes
 	 */
 	#[PublicPage]
