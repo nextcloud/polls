@@ -57,7 +57,7 @@ export const useOptionsStore = defineStore('options', {
 		sortedOptions(state): Option[] {
 			const pollStore = usePollStore()
 			return pollStore.type === 'datePoll'
-				? orderBy(state.options, ['timestamp', 'duration'], ['asc', 'asc'])
+				? orderBy(state.options, ['order', 'duration'], ['asc', 'asc'])
 				: state.options
 		},
 
