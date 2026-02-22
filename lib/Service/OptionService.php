@@ -128,13 +128,6 @@ class OptionService {
 		try {
 			// Insert the new option
 			$newOption = $this->optionMapper->insert($newOption);
-			$this->logger->error(
-				'Added option to poll {pollId}',
-				[
-					'pollId' => $pollId,
-					'newOption' => json_encode($newOption),
-				]
-			);
 		} catch (Exception $e) {
 			// TODO: Change exception catch to actual exception
 			// Currently OC\DB\Exceptions\DbalException is thrown instead of
