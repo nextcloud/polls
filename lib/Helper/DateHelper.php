@@ -107,14 +107,17 @@ abstract class DateHelper {
 	 * Convert DateInterval to total seconds based on a base date
 	 * This is necessary because DateInterval does not have a built-in method to get total seconds, and the actual duration in seconds can vary due to factors like daylight saving time changes when dealing with daylong options.
 	 *
-	 * @param DateInterval $interval The DateInterval to convert
+	 * @param null|DateInterval $interval The DateInterval to convert
 	 * @param null|DateTimeImmutable $baseDate The base date to use for calculating the end date and total seconds. If null or missing, the current date and time will be used as the base date.
 	 * @return int Total seconds represented by the DateInterval based on the base date
 	 */
 	public static function dateIntervalToSeconds(
-		DateInterval $interval,
+		?DateInterval $interval,
 		?DateTimeImmutable $baseDate = null,
 	): int {
+		if ($interval === null) {
+			return 0;
+		}
 		if ($baseDate === null) {
 			$baseDate = new DateTimeImmutable();
 		}

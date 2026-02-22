@@ -141,10 +141,10 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'id' => $this->getId(),
 			'pollId' => $this->getPollId(),
 			'text' => $this->getPollOptionText(),
-			'timestamp' => $this->getTimestamp(),
-			'duration' => $this->getDuration(),
-			'isoTimestamp' => $this->getIsoTimestamp(),
-			'isoDuration' => $this->getIsoDuration(),
+			'timestamp' => $this->getDateTime()?->getTimestamp() ?? 0,
+			'duration' => DateHelper::dateIntervalToSeconds($this->getInterval()),
+			'isoTimestamp' => DateHelper::getDateTimeIso($this->getDateTime()),
+			'isoDuration' => DateHelper::dateIntervalToIso($this->getInterval()),
 			'deleted' => $this->getDeleted(),
 			'order' => $this->getOrder(),
 			'confirmed' => $this->getConfirmed(),
@@ -206,8 +206,8 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 */
 	public function updateHash(): void {
 		$this->setPollOptionHash(Hash::getOptionHash(
-			$this->pollId,
-			$this->pollOptionText
+			$this->getPollId(),
+			$this->getPollOptionText(),
 		));
 	}
 
@@ -223,7 +223,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 * @return DateTimeImmutable|null
 	 */
 	public function getDateTime(): ?DateTimeImmutable {
-		return DateHelper::getDateTimeImmutable($this->timestamp);
+		return DateHelper::getDateTimeImmutable($this->getTimestamp());
 	}
 
 	/**
@@ -283,7 +283,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 				throw new InsufficientAttributesException('Setting an interval requires a valid timestamp on the option');
 			}
 
-			$this->setIsoDuration(DateHelper::dateIntervalToIso($optionInterval), true);
+			$this->setIsoDuration(DateHelper::dateIntervalToIso($optionInterval));
 			$this->setDuration(DateHelper::dateIntervalToSeconds($optionInterval));
 			$this->setPollOptionText($this->getOptionTextFromTimestamp());
 			$this->setPollOptionText(DateHelper::getDateString($dateTime, $optionInterval));
@@ -351,10 +351,11 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 * @return string The text of the option, either as an ISO string of the timestamp or the regular option text
 	 */
 	public function getPollOptionTextStart(): string {
-		if (!$this->optionDateTimeImmutable) {
-			return htmlspecialchars_decode($this->pollOptionText);
+		$dateTime = $this->getDateTime();
+		if (!$dateTime) {
+			return htmlspecialchars_decode($this->getPollOptionText());
 		}
-		return $this->optionDateTimeImmutable->format(DateTimeInterface::ATOM);
+		return $dateTime->format(DateTimeInterface::ATOM);
 	}
 
 	/**

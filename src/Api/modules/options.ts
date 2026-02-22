@@ -50,7 +50,6 @@ const options = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `option/${option.id}`,
-			// TODO: replace text with timestamp
 			data: { ...option },
 			cancelToken:
 				cancelTokenHandlerObject[
