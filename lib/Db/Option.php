@@ -214,6 +214,12 @@ class Option extends EntityWithUser implements JsonSerializable {
 	/**
 	 * Get the option's date and time as a DateTimeImmutable object.
 	 * Returns null if null or empty
+	 *
+	 * Always use this method to get the option's date and time instead of
+	 * directly accessing the timestamp or isoTimestamp properties, as this
+	 * method will handle the conversion and ensure that the correct date and
+	 * time is returned based on the current properties of the option.
+	 *
 	 * @return DateTimeImmutable|null
 	 */
 	public function getDateTime(): ?DateTimeImmutable {
@@ -223,6 +229,13 @@ class Option extends EntityWithUser implements JsonSerializable {
 	/**
 	 * Get the option's duration as a DateInterval object.
 	 * Returns null if no valid duration is set.
+	 *
+	 * Always use this method to get the option's duration instead of directly
+	 * accessing the duration or isoDuration properties, as this method will
+	 * handle the conversion and ensure that the correct duration is returned
+	 * based on the current properties of the option.
+	 *
+	 * @return DateInterval|null The duration of the option as a DateInterval object, or null if no valid duration is set
 	 */
 	public function getInterval(): ?DateInterval {
 		$duration = $this->getIsoDuration();
@@ -305,6 +318,14 @@ class Option extends EntityWithUser implements JsonSerializable {
 		return $this;
 	}
 
+	/**
+	 * Get the option's text based on its timestamp and interval. This is used
+	 * to generate the option text for date options based on their timestamp
+	 * and interval.
+	 *
+	 * @return string The generated option text based on the timestamp and interval
+	 * @throws InsufficientAttributesException if the option does not have a valid timestamp
+	 */
 	private function getOptionTextFromTimestamp(): string {
 		$datetime = $this->getDatetime();
 		if (!$datetime) {
@@ -314,7 +335,21 @@ class Option extends EntityWithUser implements JsonSerializable {
 		return DateHelper::getDateString($datetime, $this->getInterval());
 	}
 
-	// only used in migration, to set the option text to the timestamp for old options
+	/**
+	 * Get the option's text for old options that only have a timestamp. If
+	 * the option has a valid timestamp, the text will be returned as an
+	 * ISO string of the timestamp. Otherwise, the regular option text will be
+	 * returned.
+	 *
+	 * This is used in the migration to set the option text for old options that
+	 * only have a timestamp, as the option text is now required and cannot be
+	 * empty. This ensures that old options will have a valid option text after
+	 * the migration, even if they only had a timestamp before. The option text
+	 * will be set to the ISO string of the timestamp to ensure it is unique and
+	 * does not conflict with any existing option texts.
+	 *
+	 * @return string The text of the option, either as an ISO string of the timestamp or the regular option text
+	 */
 	public function getPollOptionTextStart(): string {
 		if (!$this->optionDateTimeImmutable) {
 			return htmlspecialchars_decode($this->pollOptionText);
@@ -322,6 +357,13 @@ class Option extends EntityWithUser implements JsonSerializable {
 		return $this->optionDateTimeImmutable->format(DateTimeInterface::ATOM);
 	}
 
+	/**
+	 * Check if the option is locked for the current user. An option is considered locked if:
+	 * - It is marked as deleted, or
+	 * - The user did not vote yes for this option, and either the option limit or the vote limit has been reached.
+	 *
+	 * @return bool Returns true if the option is locked for the current user, false otherwise
+	 */
 	public function getIsLocked(): bool {
 		return $this->getDeleted()
 			|| ($this->getUserVoteAnswer() !== Vote::VOTE_YES
@@ -330,6 +372,12 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 
 	/**
+	 * Check if this option is locked by the optionLimit:
+	 * If an option limit is set
+	 * and the user did not vote yes for this option
+	 * and the count of yes votes for this option is EQUAL OR GREATER THAN the option limit,
+	 * the option is locked for the current user
+	 *
 	 * @return bool Returns true, if this option is locked by the optionLimit and the user has not voted yes
 	 */
 	public function getIsLockedByOptionLimit(): bool {
@@ -349,16 +397,25 @@ class Option extends EntityWithUser implements JsonSerializable {
 		return $this->getVoteLimit() && $this->getUserCountYesVotes() >= $this->getVoteLimit();
 	}
 
+	/**
+	 * Get the order of the option. If a valid timestamp is set, the timestamp
+	 * will be used as the order to ensure options are ordered by date and time.
+	 * Otherwise, the order field will be used.
+	 *
+	 * @return int The order of the option
+	 */
 	public function getOrder(): int {
-		// if ($this->optionDateTimeImmutable) {
-		// 	return $this->optionDateTimeImmutable->getTimestamp();
-		// }
+		$dateTime = $this->getDateTime();
+		if ($dateTime) {
+			return $dateTime->getTimestamp();
+		}
 		return $this->order;
 	}
 
 	/**
 	 * Set option's text, date and time, and duration from a SimpleOption instance.
 	 * This will also sync the option to update the order and hash.
+	 *
 	 * @param SimpleOption $simpleOption The SimpleOption instance to set the option's attributes from
 	 * @param string $pollTypeHint The type of the poll to determine which attributes to set. If empty, all attributes will be set.
 	 * @return Option Returns the Option instance for method chaining
