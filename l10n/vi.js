@@ -53,6 +53,7 @@ OC.L10N.register(
     "Navigation" : "Điều hướng",
     "Comments" : "Các bình luận",
     "Details" : "Thông tin",
+    "Options" : "Tùy chọn",
     "Sharing" : "Đang chia sẽ",
     "Activity" : "Hoạt động",
     "Day" : "Ngày",

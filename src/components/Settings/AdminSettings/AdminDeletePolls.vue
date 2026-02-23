@@ -32,7 +32,7 @@ const appSettingsStore = useAppSettingsStore()
 			:label="
 				t(
 					'polls',
-					'Days after which archived polls should be finally deleted',
+					'Days after which archived polls should be permanently deleted',
 				)
 			"
 			@change="appSettingsStore.write()" />

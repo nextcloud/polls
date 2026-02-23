@@ -163,6 +163,8 @@ OC.L10N.register(
     "Sort by last interaction" : "Rikiuoti pagal paskutinę sąveiką",
     "Sort by creation date" : "Rikiuoti pagal sukūrimo datą",
     "Sort by owner name" : "Rikiuoti pagal savininko vardą",
+    "Descending" : "Mažėjančia tvarka",
+    "Ascending" : "Didėjančia tvarka",
     "Checking name …" : "Tikrinamas vardas…",
     "Checking email address …" : "Tikrinamas el. pašto adresas…",
     "Invalid email address." : "Neteisingas el. pašto adresas.",
