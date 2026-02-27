@@ -432,6 +432,7 @@ OC.L10N.register(
     "Created" : "ایجاد شده",
     "Access" : "دسترسی",
     "Owner" : "Owner",
+    "Expire" : "منقضی شدن",
     "Relevant" : "Relevant",
     "My polls" : "نظرسنجی های من",
     "Private polls" : "Private polls",
