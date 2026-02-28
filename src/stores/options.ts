@@ -14,8 +14,14 @@ import { useSessionStore } from './session'
 import { useVotesStore } from './votes'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { TimeUnitsType } from '../constants/dateUnits'
-import type { Sequence, SimpleOption, Option, OptionsStore } from './options.types'
+import type { TimeUnitsType } from '../Types/dateTime'
+import type {
+	Sequence,
+	SimpleOption,
+	Option,
+	OptionsStore,
+	DateOptionFinder,
+} from './options.types'
 
 export const useOptionsStore = defineStore('options', {
 	state: (): OptionsStore => ({
@@ -51,7 +57,7 @@ export const useOptionsStore = defineStore('options', {
 		sortedOptions(state): Option[] {
 			const pollStore = usePollStore()
 			return pollStore.type === 'datePoll'
-				? orderBy(state.options, ['timestamp', 'duration'], ['asc', 'asc'])
+				? orderBy(state.options, ['order', 'duration'], ['asc', 'asc'])
 				: state.options
 		},
 
@@ -70,11 +76,14 @@ export const useOptionsStore = defineStore('options', {
 	},
 
 	actions: {
-		find(timestamp: number, duration: number): Option | undefined {
-			return this.options.find(
-				(option) =>
-					option.timestamp === timestamp && option.duration === duration,
-			)
+		find(option: DateOptionFinder): Option | undefined {
+			if (option) {
+				return this.options.find(
+					(opt) =>
+						opt.isoTimestamp === option.isoTimestamp
+						&& opt.isoDuration === option.isoDuration,
+				)
+			}
 		},
 
 		async load() {

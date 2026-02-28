@@ -8,10 +8,23 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Model;
 
-use DateTime;
-use DateTimeZone;
+use DateTimeImmutable;
 use JsonSerializable;
+use OCA\Polls\Exceptions\InsufficientAttributesException;
 
+/**
+ * @psalm-type SequenceUnitArray = array{
+ *   id: string,
+ *   name: string,
+ *   timeOption: bool,
+ * }
+ *
+ * @psalm-type SequenceArray = array{
+ * 	 repetitions: int,
+ * 	 stepWidth: int,
+ * 	 unit: SequenceUnitArray,
+ * }
+ */
 class Sequence implements JsonSerializable {
 	public const REPETITION_YEAR = 'year';
 	public const REPETITION_MONTH = 'month';
@@ -20,8 +33,7 @@ class Sequence implements JsonSerializable {
 	public const REPETITION_HOUR = 'hour';
 	public const REPETITION_MINUTE = 'minute';
 
-	protected DateTimeZone $timeZone;
-	protected ?int $baseTimeStamp = null;
+	protected DateTimeImmutable $baseDateTimeImmutable;
 	/**
 	 * @param SequenceUnit $unit The unit of time for the sequence
 	 * @param int $stepWidth The step width for the sequence according to the unit
@@ -32,7 +44,6 @@ class Sequence implements JsonSerializable {
 		protected int $stepWidth,
 		protected int $repetitions,
 	) {
-		$this->timeZone = new DateTimeZone(date_default_timezone_get());
 	}
 
 	public function jsonSerialize(): array {
@@ -55,35 +66,21 @@ class Sequence implements JsonSerializable {
 		return $this->repetitions;
 	}
 
-	public function setTimeZone(DateTimeZone $timeZone): void {
-		$this->timeZone = $timeZone;
+	public function setBaseDateTime(DateTimeImmutable $baseDateTime): void {
+		$this->baseDateTimeImmutable = $baseDateTime;
 	}
 
-	private function getTimeZone(): DateTimeZone {
-		return $this->timeZone;
-	}
-
-	public function setBaseTimeStamp(int $baseTimeStamp): void {
-		$this->baseTimeStamp = $baseTimeStamp;
-	}
-
-	private function getBaseTimeStamp(): int {
-		if ($this->baseTimeStamp === null) {
-			throw new \Exception('Base timestamp not set');
+	public function getOccurence(int $index): DateTimeImmutable {
+		$occurence = $this->baseDateTimeImmutable->modify($this->getStepWidth() * $index . ' ' . $this->getUnit()->getId());
+		if (!$occurence) {
+			throw new InsufficientAttributesException('Failed to calculate occurrence for index ' . $index);
 		}
-		return $this->baseTimeStamp;
-	}
-
-	public function getOccurence(int $index): int {
-		return ((new DateTime())
-			->setTimestamp($this->getBaseTimeStamp())
-			->setTimezone($this->getTimeZone())
-			->modify($this->getStepWidth() * $index . ' ' . $this->getUnit()->getId()))
-			->getTimestamp();
+		return $occurence;
 	}
 
 	/**
-	 * @param array $sequence The sequence to create
+	 * Create a Sequence instance from an array
+	 * @param SequenceArray $sequence The sequence to create
 	 */
 	public static function fromArray(?array $sequence): Sequence {
 		if ($sequence === null) {

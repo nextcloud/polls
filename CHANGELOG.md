@@ -5,6 +5,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [unreleased] - tbd
+### Added
+ - Timezone support for polls and options
+   - Set default timezone for any poll
+   - Choose timezone to display, if the poll's original timezone differs from the user's one
+   - Choose timezone, when adding options in case of different timezones between poll and user
+
+### Changed
+ - Use ISO formatted timestamps and durations
+
 ## [8.6.3] - 2026-01-18
 ### Fixed
  - Fixed missing user menu items, when table view is active

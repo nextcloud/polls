@@ -254,6 +254,7 @@ abstract class TableSchema {
 			'last_interaction' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'misc_settings' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => null, 'length' => 65535]],
 			'voting_variant' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'simple', 'length' => 64]],
+			'timezone_name' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => null, 'length' => 64]],
 		],
 		Option::TABLE => [
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
@@ -261,6 +262,8 @@ abstract class TableSchema {
 			'poll_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 1024]],
 			'poll_option_hash' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 32]],
 			'timestamp' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'iso_timestamp' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 32]],
+			'iso_duration' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 32]],
 			'duration' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'order' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'confirmed' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],

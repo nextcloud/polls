@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
-use DateTimeZone;
+use DateInterval;
+use DateTimeImmutable;
+use InvalidArgumentException;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
@@ -21,6 +23,7 @@ use OCA\Polls\Event\OptionUnconfirmedEvent;
 use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Exceptions\ForbiddenException;
+use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\SimpleOption;
@@ -59,7 +62,8 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function list(int $pollId): array {
-		$this->getPoll($pollId, Poll::PERMISSION_POLL_ACCESS);
+		$this->getPoll($pollId)
+			->request(Poll::PERMISSION_POLL_ACCESS);
 
 		try {
 			$this->options = $this->optionMapper->findByPoll($pollId, !$this->poll->getIsAllowed(Poll::PERMISSION_POLL_RESULTS_VIEW));
@@ -77,13 +81,11 @@ class OptionService {
 	 */
 	public function addWithSequenceAndAutoVote(
 		int $pollId,
-		SimpleOption $option,
+		SimpleOption $simpleOption,
 		bool $voteYes = false,
 		?Sequence $sequence = null,
 	): array {
-
-		$newOption = $this->add($pollId, $option, $voteYes);
-
+		$newOption = $this->add($pollId, $simpleOption, $voteYes);
 
 		if ($sequence) {
 			$repetitions = $this->sequence($newOption, $sequence, $voteYes);
@@ -105,17 +107,19 @@ class OptionService {
 	 * @param bool $voteYes Directly vote 'yes' for the new option
 	 * @return Option
 	 */
-	public function add(int $pollId, SimpleOption $simpleOption, bool $voteYes = false): Option {
-		$this->getPoll($pollId, Poll::PERMISSION_OPTION_ADD);
-
-		if ($this->poll->getType() === Poll::TYPE_TEXT) {
-			$simpleOption->setOrder($this->getHighestOrder($pollId) + 1);
-		}
+	public function add(
+		int $pollId,
+		SimpleOption $simpleOption,
+		bool $voteYes = false,
+	): Option {
+		$this->getPoll($pollId)->request(Poll::PERMISSION_OPTION_ADD);
 
 		// Build the new option
 		$newOption = new Option();
-		$newOption->setPollId($pollId);
-		$newOption->setFromSimpleOption($simpleOption);
+		$newOption->setPollId($this->poll->getId());
+		// A new option initially is positioned at the end of the list
+		$newOption->setOrder($this->getHighestOrder($pollId) + 1);
+		$newOption->setFromSimpleOption($simpleOption, $this->poll->getType());
 
 		if (!$this->poll->getIsPollOwner()) {
 			$newOption->setOwner($this->userSession->getCurrentUserId());
@@ -160,13 +164,21 @@ class OptionService {
 	 * @return Option[]
 	 */
 	public function addBulk(int $pollId, string $bulkText = ''): array {
-		$this->getPoll($pollId, Poll::PERMISSION_OPTION_ADD);
+		$this->getPoll($pollId)
+			->request(Poll::PERMISSION_OPTION_ADD);
 
 		$newOptionsTexts = array_unique(explode(PHP_EOL, $bulkText));
 
 		foreach ($newOptionsTexts as $pollOptionText) {
 			if ($pollOptionText) {
-				$this->add($pollId, new SimpleOption($pollOptionText, 0));
+				try {
+					$this->add(
+						$pollId,
+						(new SimpleOption())->setText($pollOptionText)
+					);
+				} catch (InvalidArgumentException) {
+					$this->logger->warning('Skipping bulk operation because of invalid option text: {optionText}', ['optionText' => $pollOptionText]);
+				}
 			}
 		}
 
@@ -178,11 +190,26 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
+	public function update(
+		int $optionId,
+		string $pollOptionText = '',
+		?DateTimeImmutable $dateTime = null,
+		?DateInterval $interval = null,
+	): Option {
 		$option = $this->optionMapper->find($optionId);
-		$this->getPoll($option->getPollId(), Poll::PERMISSION_POLL_EDIT);
+		$this->getPoll($option->getPollId())->request(Poll::PERMISSION_POLL_EDIT);
 
-		$option->setOption($timestamp, $duration, $pollOptionText);
+		if ($this->poll->getType() === Poll::TYPE_TEXT) {
+			if (!$pollOptionText) {
+				throw new InsufficientAttributesException('Text is required for text polls');
+			}
+			$option->setPollOptionText($pollOptionText);
+		}
+
+		if ($this->poll->getType() === Poll::TYPE_DATE) {
+			$option->setDateTime($dateTime);
+			$option->setInterval($interval);
+		}
 
 		$option = $this->optionMapper->update($option);
 		$this->eventDispatcher->dispatchTyped(new OptionUpdatedEvent($option));
@@ -217,7 +244,8 @@ class OptionService {
 	 */
 	public function confirm(int $optionId): Option {
 		$option = $this->optionMapper->find($optionId);
-		$this->getPoll($option->getPollId(), Poll::PERMISSION_OPTION_CONFIRM);
+		$this->getPoll($option->getPollId())
+			->request(Poll::PERMISSION_OPTION_CONFIRM);
 
 		$option->setConfirmed($option->getConfirmed() ? 0 : time());
 		$option = $this->optionMapper->update($option);
@@ -234,10 +262,10 @@ class OptionService {
 	/**
 	 * Make a sequence of date poll options
 	 *
-	 * @param int | Option $optionOrOptionId Option od optionId of the option to clone
+	 * @param int|Option $optionOrOptionId Option or optionId of the option to clone
 	 * @param Sequence $sequence Sequence object
 	 * @param bool $voteYes Directly vote 'yes' for the new options
-	 * @return Option[]
+	 * @return Option[] Returns all options of the poll
 	 *
 	 * @psalm-return array<array-key, Option>
 	 */
@@ -252,25 +280,29 @@ class OptionService {
 			$baseOption = $this->optionMapper->find($optionOrOptionId);
 		}
 
-		$this->getPoll($baseOption->getPollId(), Poll::PERMISSION_OPTION_ADD);
+		$this->getPoll($baseOption->getPollId())
+			->request(Poll::PERMISSION_OPTION_ADD);
 
 		if ($this->poll->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Sequences are only available in date polls');
 		}
 
-		$sequence->setTimeZone(new DateTimeZone($this->userSession->getClientTimeZone()));
-		$sequence->setBaseTimeStamp($baseOption->getTimestamp());
+		$baseDate = $baseOption->getDateTime();
+
+		if (!$baseDate) {
+			throw new InsufficientAttributesException('Base option does not have a valid timestamp');
+		}
+
+		$sequence->setBaseDateTime($baseDate->setTimezone($this->userSession->getClientTimeZone()));
 
 		// iterate over the amount of options to create
 		for ($i = 1; $i <= ($sequence->getRepetitions()); $i++) {
 			// build a new option
 			$this->add(
 				$baseOption->getPollId(),
-				new SimpleOption(
-					'',
-					$sequence->getOccurence($i),
-					$baseOption->getDuration(),
-				),
+				(new SimpleOption)
+					->setDateTime($sequence->getOccurence($i))
+					->setInterval($baseOption->getInterval()),
 				$voteYes
 			);
 		}
@@ -308,10 +340,10 @@ class OptionService {
 		$options = $this->optionMapper->findByPoll($pollId);
 
 		if ($this->countProposals($options) > 0) {
-			throw new ForbiddenException('dates is not allowed');
+			throw new ForbiddenException('Shifting dates is not allowed, when proposals exist');
 		}
 
-		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
+		$timezone = $this->userSession->getClientTimeZone();
 
 		if ($step > 0) {
 			// start from last item if moving option into the future
@@ -320,7 +352,7 @@ class OptionService {
 		}
 
 		foreach ($options as $option) {
-			$option->shiftOption($timezone, $step, $unit);
+			$option->shiftOption($step, $unit, $timezone);
 			$this->optionMapper->update($option);
 		}
 
@@ -338,15 +370,8 @@ class OptionService {
 			->request(Poll::PERMISSION_OPTION_ADD);
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
-			$option = new Option();
+			$option = clone $origin;
 			$option->setPollId($toPollId);
-			$option->setConfirmed(0);
-			$option->setOption(
-				$origin->getTimestamp(),
-				$origin->getDuration(),
-				$origin->getPollOptionText(),
-			);
-			$option->setOrder($origin->getOrder());
 			$option = $this->optionMapper->insert($option);
 			$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($option));
 		}
@@ -360,11 +385,8 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function reorder(int $pollId, array $options): array {
-		$this->getPoll($pollId, Poll::PERMISSION_POLL_EDIT);
-
-		if ($this->poll->getType() === Poll::TYPE_DATE) {
-			throw new InvalidPollTypeException('Not allowed in date polls');
-		}
+		$this->getPoll($pollId)
+			->request(Poll::PERMISSION_OPTIONS_REORDER);
 
 		$i = 0;
 		foreach ($options as $option) {
@@ -397,11 +419,8 @@ class OptionService {
 	 */
 	public function setOrder(int $optionId, int $newOrder): array {
 		$option = $this->optionMapper->find($optionId);
-		$this->getPoll($option->getPollId(), Poll::PERMISSION_POLL_EDIT);
-
-		if ($this->poll->getType() === Poll::TYPE_DATE) {
-			throw new InvalidPollTypeException('Not allowed in date polls');
-		}
+		$this->getPoll($option->getPollId())
+			->request(Poll::PERMISSION_OPTIONS_REORDER);
 
 		if ($newOrder < 1) {
 			$newOrder = 1;
@@ -440,15 +459,15 @@ class OptionService {
 	}
 
 	/**
-	 * Load the poll and check permissions
+	 * Load the poll if not already loaded
 	 *
-	 * @return void
+	 * @return Poll
 	 */
-	private function getPoll(int $pollId, string $permission = Poll::PERMISSION_POLL_ACCESS): void {
+	private function getPoll(int $pollId): Poll {
 		if ($this->poll->getId() !== $pollId) {
 			$this->poll = $this->pollMapper->get($pollId);
 		}
-		$this->poll->request($permission);
+		return $this->poll;
 	}
 
 	/**
@@ -472,7 +491,7 @@ class OptionService {
 	 *
 	 * @return int
 	 */
-	public function getHighestOrder(int $pollId): int {
+	private function getHighestOrder(int $pollId): int {
 		$result = intval($this->optionMapper->getOrderBoundaries($pollId)['max']);
 		return $result;
 	}

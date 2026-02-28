@@ -10,6 +10,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Attributes\ShareTokenRequired;
+use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Model\SentResult;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -42,6 +43,8 @@ use OCP\Util;
  * Requesting the token inside the controller is not possible, because the token is submitted
  * as a paramter and not known while contruction time
  * @psalm-api
+ * @psalm-import-type SimpleOptionsArray from SimpleOption
+ * @psalm-import-type SequenceArray from Sequence
  */
 class PublicController extends BaseController {
 	public function __construct(
@@ -210,8 +213,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Add options
-	 * @param array $option Options text for text poll
-	 * @param array $sequence Sequence of the option
+	 * @param SimpleOptionsArray $option Options text for text poll
+	 * @param SequenceArray $sequence Sequence of the option
 	 * @param bool $voteYes Vote yes
 	 */
 	#[PublicPage]
@@ -224,6 +227,12 @@ class PublicController extends BaseController {
 		?array $sequence = null,
 	): JSONResponse {
 		$pollId = $this->userSession->getShare()->getPollId();
+
+		/** @psalm-suppress RiskyTruthyFalsyComparison */
+		if (!$pollId) {
+			throw new InsufficientAttributesException('PollId of share is missing or invalid');
+		}
+
 		return $this->response(fn () => array_merge(
 			$this->optionService->addWithSequenceAndAutoVote(
 				$pollId,

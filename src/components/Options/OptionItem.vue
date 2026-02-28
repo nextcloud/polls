@@ -57,8 +57,8 @@ const pollStore = usePollStore()
 		<DateBox
 			v-else
 			class="option-item__option--date"
-			:start-date="DateTime.fromSeconds(option.timestamp)"
-			:duration="Duration.fromMillis(option.duration * 1000)" />
+			:start-date="DateTime.fromISO(option.isoTimestamp)"
+			:duration="Duration.fromISO(option.isoDuration)" />
 
 		<slot name="actions" />
 	</component>

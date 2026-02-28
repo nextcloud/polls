@@ -10,9 +10,9 @@ declare(strict_types=1);
 namespace OCA\Polls\Service;
 
 use DateInterval;
-use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use InvalidArgumentException;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Model\CalendarEvent;
@@ -71,21 +71,23 @@ class CalendarService {
 	 */
 	private function getTimerange(int $optionId, DateTimeZone $timezone): array {
 		$option = $this->optionMapper->find($optionId);
+		$optionDateTime = $option->getDateTime();
+		$optionInterval = $option->getInterval() ?? new DateInterval('PT0S');
+
+		if ($optionDateTime === null) {
+			throw new InvalidArgumentException('Option has no valid date time');
+		}
+
 		$searchIntervalBefore = new DateInterval("PT{$this->preferences->getCheckCalendarsHoursBefore()}H");
 		$searchIntervalAfter = new DateInterval("PT{$this->preferences->getCheckCalendarsHoursAfter()}H");
 
-		$from = (new DateTime())
-			->setTimeZone($timezone)
-			->setTimestamp($option->getTimestamp())
-			->sub($searchIntervalBefore);
-		$to = (new DateTime())
-			->setTimeZone($timezone)
-			->setTimestamp($option->getTimestamp() + $option->getDuration())
-			->add($searchIntervalAfter);
-
 		return [
-			'from' => DateTimeImmutable::createFromMutable($from),
-			'to' => DateTimeImmutable::createFromMutable($to),
+			'from' => $optionDateTime
+				->setTimeZone($timezone)
+				->sub($searchIntervalBefore),
+			'to' => $optionDateTime
+				->add($optionInterval)
+				->add($searchIntervalAfter)
 		];
 	}
 
@@ -114,7 +116,7 @@ class CalendarService {
 	 * @psalm-return list<CalendarEvent>
 	 */
 	public function getEvents(int $optionId): array {
-		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
+		$timezone = $this->userSession->getClientTimeZone();
 		$timerange = $this->getTimerange($optionId, $timezone);
 
 		$events = [];

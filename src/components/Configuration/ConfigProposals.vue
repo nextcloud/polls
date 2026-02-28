@@ -27,7 +27,7 @@ const pollExpire = computed({
 	get: () => pollStore.getProposalExpirationDateTime.toJSDate(),
 	set: (value) => {
 		pollStore.configuration.proposalsExpire =
-			DateTime.fromJSDate(value).toSeconds()
+			DateTime.fromJSDate(value).toUnixInteger()
 		pollStore.write()
 	},
 })
@@ -38,7 +38,7 @@ const proposalExpiration = computed({
 		if (value) {
 			pollStore.configuration.proposalsExpire = DateTime.now()
 				.plus({ week: 1 })
-				.toSeconds()
+				.toUnixInteger()
 		} else {
 			pollStore.configuration.proposalsExpire = 0
 		}

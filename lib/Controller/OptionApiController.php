@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Helper\DateHelper;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Service\OptionService;
@@ -22,6 +23,8 @@ use OCP\IRequest;
 
 /**
  * @psalm-api
+ * @psalm-import-type SimpleOptionsArray from SimpleOption
+ * @psalm-import-type SequenceArray from Sequence
  */
 class OptionApiController extends BaseApiV2Controller {
 	public function __construct(
@@ -47,10 +50,11 @@ class OptionApiController extends BaseApiV2Controller {
 
 	/**
 	 * Add a new option
+	 *
 	 * @param int $pollId poll id
-	 * @param array $option Options text for text poll
-	 * @param array $sequence Sequence of the option
-	 * @param bool $voteYes Vote yes
+	 * @param SimpleOptionsArray $option The array containing the option data
+	 * @param bool $voteYes Vote yes for this option and for all generated sequence
+	 * @param SequenceArray $sequence Sequence of the option
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -99,8 +103,15 @@ class OptionApiController extends BaseApiV2Controller {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}', requirements: ['apiVersion' => '(v2)'])]
-	public function update(int $optionId, int $timestamp = 0, string $text = '', int $duration = 0): DataResponse {
-		return $this->response(fn () => ['option' => $this->optionService->update($optionId, $timestamp, $text, $duration)]);
+	public function update(int $optionId, int $timestamp = 0, string $text = '', int $duration = 0, ?string $isoTimestamo = null, ?string $isoDuration = null): DataResponse {
+		$dateTime = DateHelper::getDateTimeImmutable($isoTimestamo ?? $timestamp);
+		$interval = DateHelper::getDateInterval($isoDuration ?? $duration, $dateTime);
+		return $this->response(fn () => ['option' => $this->optionService->update(
+			$optionId,
+			$text,
+			$dateTime,
+			$interval,
+		)]);
 	}
 
 	/**

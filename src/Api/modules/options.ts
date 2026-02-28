@@ -4,7 +4,7 @@
  */
 import { httpInstance, createCancelTokenHandler } from './HttpApi'
 
-import type { DateTimeUnit } from '../../constants/dateUnits'
+import type { DateTimeUnits } from '../../Types/dateTime'
 import type { AxiosResponse } from '@nextcloud/axios'
 import type { Vote } from '../../stores/votes.types'
 import type { Option, Sequence, SimpleOption } from '../../stores/options.types'
@@ -50,7 +50,6 @@ const options = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `option/${option.id}`,
-			// TODO: replace text with timestamp
 			data: { ...option },
 			cancelToken:
 				cancelTokenHandlerObject[
@@ -158,7 +157,7 @@ const options = {
 	shiftOptions(
 		pollId: number,
 		step: number,
-		unit: DateTimeUnit,
+		unit: DateTimeUnits,
 	): Promise<AxiosResponse<{ options: Option[] }>> {
 		return httpInstance.request({
 			method: 'POST',

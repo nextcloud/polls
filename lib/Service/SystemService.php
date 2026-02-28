@@ -226,8 +226,6 @@ class SystemService {
 			foreach (ContactGroup::search($query) as $contact) {
 				$items[] = $contact->getRichUserArray();
 			}
-			// $items = array_merge($items, Contact::search($query));
-			// $items = array_merge($items, ContactGroup::search($query));
 		}
 
 		$this->logger->debug('Search took {time}s overall', ['time' => microtime(true) - $startSearchTimer]);

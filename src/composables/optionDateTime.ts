@@ -3,71 +3,101 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { Option } from '@/stores/options.types'
 import { DateTime, Duration, Interval } from 'luxon'
-import { ref, toValue, watchEffect } from 'vue'
+import { computed } from 'vue'
 
+type OptionDateTime = {
+	optionStart: DateTime
+	duration: Duration | null
+	optionEnd: DateTime
+	isFullDays: boolean
+	isSameMonth: boolean
+	isSameDay: boolean
+	isSameTime: boolean
+	interval: Interval
+}
+
+export function getDatesFromOption(
+	option: Option,
+	timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
+): OptionDateTime {
+	return getDates(option.isoTimestamp, option.isoDuration || null, timezone)
+}
 /**
- * returns the width of the element with the given id
  *
- * @param elementId the id of the element whose width should be checked
- * @param elWidthOffset the width offset to check against
+ * @param optionStart DateTime object representing the start date and time
+ * @param optionDuration  Duration object representing the duration
+ * @param timezone string representing the timezone (defaults to the user's local timezone)
+ * @return OptionDateTime object containing computed date and time information of the option
  */
-
-export const dateFrom = ref()
-
-export function getDates(optionStart: DateTime, optionDuration: Duration | null) {
-	const endDate = ref(optionStart)
-	const localDuration = ref(null as Duration | null)
-	const interval = ref(Interval.fromDateTimes(optionStart, optionStart))
-
-	const fullDays = ref(false)
-	const isSameMonth = ref(false)
-	const isSameDay = ref(false)
-	const isSameTime = ref(false)
-
-	const calculateValues = () => {
-		endDate.value = toValue(optionStart)
-		localDuration.value = toValue(optionDuration)
-		fullDays.value = false
-
-		if (!localDuration.value) {
-			// without duration, no further calculation is possible
-			// end date remains the same as from date
-			return
-		}
-
-		// Check if the duration represents full days
-		fullDays.value =
-			optionStart.valueOf() === optionStart.startOf('day').valueOf()
-			&& localDuration.value.hours + localDuration.value.minutes === 0
-
-		// If full days are selected and duration is 0 days, set duration to 1 day
-		if (fullDays.value && localDuration.value.as('days') === 0) {
-			optionDuration = Duration.fromObject({ days: 1 })
-		}
-
-		endDate.value = optionStart.plus(localDuration.value)
-		// If full days are selected, subtract 1 millisecond for display purposes
-		if (fullDays.value) {
-			endDate.value = endDate.value.minus({ milliseconds: 1 })
-		}
-		isSameMonth.value = optionStart.hasSame(endDate.value, 'month')
-		isSameDay.value = optionStart.hasSame(endDate.value, 'day')
-		isSameTime.value = localDuration.value.as('minutes') === 0
-		interval.value = Interval.fromDateTimes(optionStart, endDate.value)
+export function getDates(
+	optionStart: DateTime | string,
+	optionDuration: Duration | string | null,
+	timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
+): OptionDateTime {
+	if (typeof optionStart === 'string') {
+		optionStart = DateTime.fromISO(optionStart)
+	}
+	if (typeof optionDuration === 'string') {
+		optionDuration = Duration.fromISO(optionDuration)
 	}
 
-	watchEffect(() => {
-		calculateValues()
+	optionStart = optionStart.setZone(timezone)
+	// duration equals optionDuration with special handling for full days
+	const computedDuration = computed(() => {
+		if (
+			optionDuration?.as('days') === 0
+			&& optionStart.valueOf() === optionStart.startOf('day').valueOf()
+		) {
+			return Duration.fromObject({ days: 1 })
+		}
+
+		return optionDuration
 	})
+
+	const computedFullDays = computed(() => {
+		if (computedDuration.value === null) {
+			return false
+		}
+
+		return (
+			optionStart.valueOf() === optionStart.startOf('day').valueOf()
+			&& computedDuration.value.hours + computedDuration.value.minutes === 0
+		)
+	})
+
+	const computedEndDate = computed(() =>
+		optionStart
+			.plus(computedDuration.value || Duration.fromObject({}))
+			// If full days are selected, subtract 1 millisecond for display purposes
+			.minus({ milliseconds: computedFullDays.value ? 1 : 0 }),
+	)
+
+	const computedInterval = computed(() =>
+		Interval.fromDateTimes(optionStart, computedEndDate.value),
+	)
+
+	const computedIsSameMonth = computed(() =>
+		optionStart.hasSame(computedEndDate.value, 'month'),
+	)
+
+	const computedIsSameDay = computed(() =>
+		optionStart.hasSame(computedEndDate.value, 'day'),
+	)
+
+	const computedIsSameTime = computed(
+		() => computedDuration.value?.as('minutes') === 0,
+	)
 
 	return {
 		optionStart,
-		optionEnd: endDate.value,
-		isFullDays: fullDays.value,
-		isSameMonth: isSameMonth.value,
-		isSameDay: isSameDay.value,
-		isSameTime: isSameTime.value,
-		optionInterval: interval.value,
+		duration: computedDuration.value,
+		optionEnd: computedEndDate.value,
+		isFullDays: computedFullDays.value,
+		isSameMonth: computedIsSameMonth.value,
+		isSameDay: computedIsSameDay.value,
+		isSameTime: computedIsSameTime.value,
+		interval: computedInterval.value,
 	}
 }

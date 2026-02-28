@@ -10,10 +10,10 @@ import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../../stores/poll'
 import { useSharesStore } from '../../stores/shares'
 
-import unpublishedIcon from 'vue-material-design-icons/PublishOff.vue'
-import archivedPollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-import closedPollIcon from 'vue-material-design-icons/LockOutline.vue'
-import creationIcon from 'vue-material-design-icons/ClockOutline.vue'
+import UnpublishedIcon from 'vue-material-design-icons/PublishOff.vue'
+import ArchivedPollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
+import ClosedPollIcon from 'vue-material-design-icons/LockOutline.vue'
+import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
 import ProposalsIcon from 'vue-material-design-icons/HandExtendedOutline.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
 import { DateTime } from 'luxon'
@@ -36,7 +36,7 @@ const subTexts = computed(() => {
 			id: 'deleted',
 			text: t('polls', 'Archived'),
 			class: 'archived',
-			iconComponent: archivedPollIcon,
+			iconComponent: ArchivedPollIcon,
 			title: '',
 		})
 		return subTexts
@@ -47,7 +47,7 @@ const subTexts = computed(() => {
 			id: 'no-access',
 			text: [t('polls', 'Unpublished')].join('. '),
 			class: 'unpublished',
-			iconComponent: unpublishedIcon,
+			iconComponent: UnpublishedIcon,
 			title: '',
 		})
 		return subTexts
@@ -80,7 +80,7 @@ const subTexts = computed(() => {
 			id: 'closed',
 			text: pollStore.getExpirationDateTime.toRelative() as string,
 			class: 'closed',
-			iconComponent: closedPollIcon,
+			iconComponent: ClosedPollIcon,
 			title: pollStore.getExpirationDateTime.toLocaleString(
 				DateTime.DATETIME_SHORT,
 			) as string,
@@ -141,12 +141,13 @@ const subTexts = computed(() => {
 			id: 'created',
 			text: pollStore.getCreationDateTime.toRelative(),
 			class: 'created',
-			iconComponent: creationIcon,
+			iconComponent: CreationIcon,
 			title: pollStore.getCreationDateTime.toLocaleString(
 				DateTime.DATETIME_SHORT,
 			) as string,
 		})
 	}
+
 	return subTexts
 })
 

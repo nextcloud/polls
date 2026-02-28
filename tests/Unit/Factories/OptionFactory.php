@@ -17,6 +17,8 @@ $fm->define('OCA\Polls\Db\Option')->setDefinitions([
 	},
 	'pollOptionText' => Faker::text(255),
 	'timestamp' => 0,
+	'isoTimestamp' => null,
+	'isoDuration' => null,
 	'order' => 0,
 	'confirmed' => 0,
 	'duration' => 0,

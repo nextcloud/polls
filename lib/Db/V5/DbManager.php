@@ -170,6 +170,12 @@ abstract class DbManager {
 		return;
 	}
 
+	/**
+	 * Format the caller of a method for logging purposes.
+	 *
+	 * @param int $skip number of stack frames to skip (default is 1, which means the direct caller)
+	 * @return string formatted caller information in the format "ClassName->methodName@file:line"
+	 */
 	private static function formatCaller(int $skip = 1): string {
 		$bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, $skip + 2);
 		$f = $bt[$skip + 0] ?? null; // Frame of this method (0)

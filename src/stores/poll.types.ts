@@ -42,6 +42,7 @@ export type PollConfiguration = {
 	showResults: ShowResults
 	title: string
 	useNo: boolean
+	timezoneName: string | null
 }
 
 export type PollStatus = {
@@ -115,5 +116,7 @@ export type Poll = {
 	sortParticipants: SortParticipants
 	meta: Meta
 }
+export type PollMandatory = Pick<Poll, 'type'>
+	& Pick<PollConfiguration, 'title' | 'timezoneName'>
 
 export type PollStore = Poll

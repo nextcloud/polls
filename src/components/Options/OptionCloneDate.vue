@@ -13,10 +13,10 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 
 import InputDiv from '../Base/modules/InputDiv.vue'
 
-import { useOptionsStore } from '../../stores/options'
+import { useOptionsStore } from '@/stores/options'
 
-import { dateTimeUnitsKeyed } from '../../constants/dateUnits'
-import type { Option, Sequence } from '../../stores/options.types'
+import { dateTimeUnitsKeyed } from '@/helpers/modules/dateHelpers'
+import type { Option, Sequence } from '@/stores/options.types'
 
 const { option } = defineProps<{ option: Option }>()
 
@@ -36,7 +36,7 @@ const sequence = ref<Sequence>({
 })
 
 const dateBaseOptionString = computed(() =>
-	DateTime.fromSeconds(option.timestamp).toLocaleString(DateTime.DATETIME_FULL),
+	DateTime.fromISO(option.isoTimestamp).toLocaleString(DateTime.DATETIME_FULL),
 )
 
 /**
