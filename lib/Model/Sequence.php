@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Model;
 
-use DateTimeImmutable;
 use JsonSerializable;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
 

@@ -8,10 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Model;
 
-use DateInterval;
-use DateTimeImmutable;
 use JsonSerializable;
-use OCA\Polls\Helper\DateHelper;
 
 /**
  * @psalm-type SimpleOptionsArray = array{
@@ -24,14 +21,14 @@ use OCA\Polls\Helper\DateHelper;
  */
 class SimpleOption implements JsonSerializable {
 	protected ?string $text = null;
-	protected ?DateTimeImmutable $dateTime = null;
-	protected ?DateInterval $interval = null;
+	protected DateTimeImmutable $dateTime;
+	protected DateInterval $interval;
 
 	public function jsonSerialize(): array {
 		return [
 			'text' => $this->getText(),
 			'isoDuration' => $this->getIsoDuration(),
-			'timestamp' => $this->getDateTime()?->getTimestamp() ?? 0,
+			'timestamp' => $this->getDateTime()->getTimestamp(),
 		];
 	}
 
@@ -42,7 +39,7 @@ class SimpleOption implements JsonSerializable {
 	 * @return self Return the SimpleOption instance for method chaining
 	 */
 	public function setDateTime(null|int|string|DateTimeImmutable $dateTime): self {
-		$this->dateTime = DateHelper::getDateTimeImmutable($dateTime);
+		$this->dateTime = new DateTimeImmutable($dateTime);
 		return $this;
 	}
 
@@ -53,7 +50,7 @@ class SimpleOption implements JsonSerializable {
 	 * @return self Return the SimpleOption instance for method chaining
 	 */
 	public function setInterval(null|int|string|DateInterval $duration): self {
-		$this->interval = DateHelper::getDateInterval($duration);
+		$this->interval = new DateInterval($duration);
 		return $this;
 	}
 
@@ -69,17 +66,17 @@ class SimpleOption implements JsonSerializable {
 
 	/**
 	 * Get the timestamp of the option as DateTimeImmutable or null if not set
-	 * @return DateTimeImmutable|null
+	 * @return DateTimeImmutable
 	 */
-	public function getDateTime(): ?DateTimeImmutable {
+	public function getDateTime(): DateTimeImmutable {
 		return $this->dateTime;
 	}
 
 	/**
 	 * Get the duration of the option as DateInterval or null if not set
-	 * @return DateInterval|null
+	 * @return DateInterval
 	 */
-	public function getInterval(): ?DateInterval {
+	public function getInterval(): DateInterval {
 		return $this->interval;
 	}
 
@@ -88,7 +85,7 @@ class SimpleOption implements JsonSerializable {
 	 * @return string|null
 	 */
 	public function getIsoDuration(): ?string {
-		return DateHelper::dateIntervalToIso($this->interval);
+		return $this->interval->getISO();
 	}
 
 	/**

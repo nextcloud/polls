@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
-use DateInterval;
-use DateTimeImmutable;
 use InvalidArgumentException;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
@@ -25,6 +23,8 @@ use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
+use OCA\Polls\Model\DateInterval;
+use OCA\Polls\Model\DateTimeImmutable;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\UserSession;
@@ -194,7 +194,7 @@ class OptionService {
 		int $optionId,
 		string $pollOptionText = '',
 		?DateTimeImmutable $dateTime = null,
-		?DateInterval $interval = null,
+		DateInterval $interval = new DateInterval('PT0S'),
 	): Option {
 		$option = $this->optionMapper->find($optionId);
 		$this->getPoll($option->getPollId())->request(Poll::PERMISSION_POLL_EDIT);
@@ -207,6 +207,9 @@ class OptionService {
 		}
 
 		if ($this->poll->getType() === Poll::TYPE_DATE) {
+			if ($dateTime === null) {
+				throw new InsufficientAttributesException('Date time is required for date polls');
+			}
 			$option->setDateTime($dateTime);
 			$option->setInterval($interval);
 		}
@@ -288,10 +291,6 @@ class OptionService {
 		}
 
 		$baseDate = $baseOption->getDateTime();
-
-		if (!$baseDate) {
-			throw new InsufficientAttributesException('Base option does not have a valid timestamp');
-		}
 
 		$sequence->setBaseDateTime($baseDate->setTimezone($this->userSession->getClientTimeZone()));
 

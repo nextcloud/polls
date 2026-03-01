@@ -8,7 +8,8 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Helper\DateHelper;
+use OCA\Polls\Model\DateInterval;
+use OCA\Polls\Model\DateTimeImmutable;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Service\OptionService;
@@ -104,13 +105,11 @@ class OptionApiController extends BaseApiV2Controller {
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}', requirements: ['apiVersion' => '(v2)'])]
 	public function update(int $optionId, int $timestamp = 0, string $text = '', int $duration = 0, ?string $isoTimestamo = null, ?string $isoDuration = null): DataResponse {
-		$dateTime = DateHelper::getDateTimeImmutable($isoTimestamo ?? $timestamp);
-		$interval = DateHelper::getDateInterval($isoDuration ?? $duration, $dateTime);
 		return $this->response(fn () => ['option' => $this->optionService->update(
 			$optionId,
 			$text,
-			$dateTime,
-			$interval,
+			new DateTimeImmutable($isoTimestamo ?? $timestamp),
+			new DateInterval($isoDuration ?? $duration),
 		)]);
 	}
 

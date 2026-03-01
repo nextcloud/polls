@@ -55,7 +55,6 @@ class OptionMapperTest extends UnitTestCase {
 				/** @var Option $option */
 				$option = $this->fm->instance('OCA\Polls\Db\Option');
 				$option->setPollId($poll->getId());
-				$option->updateHash();
 				array_push($this->options, $this->optionMapper->insert($option));
 
 				/** @var Vote $vote */
@@ -95,7 +94,6 @@ class OptionMapperTest extends UnitTestCase {
 		$i = 0;
 		foreach ($this->options as &$option) {
 			$option->setPollOptionText('Changed option' . ++$i);
-			$option->updateHash();
 			$this->assertInstanceOf(Option::class, $this->optionMapper->update($option));
 		}
 	}

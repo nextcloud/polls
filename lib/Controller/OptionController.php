@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use DateInterval;
-use DateTimeImmutable;
+use OCA\Polls\Model\DateInterval;
+use OCA\Polls\Model\DateTimeImmutable;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Service\CalendarService;
