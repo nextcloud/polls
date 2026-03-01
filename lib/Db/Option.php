@@ -142,12 +142,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'isOwner' => $this->getCurrentUserIsEntityUser(),
 			'votes' => $this->getVotes(),
 			'owner' => $this->getOwnerUser(),
-			'check' => [
-				'timestamp' => $this->timestamp,
-				'isoTimestamp' => $this->isoTimestamp,
-				'duration' => $this->duration,
-				'isoDuration' => $this->isoDuration,
-			]
 		];
 	}
 
