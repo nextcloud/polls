@@ -23,20 +23,16 @@ use OCA\Polls\Model\UserBase;
  * @method void setId(int $value)
  * @method int getConfirmed()
  * @method void setConfirmed(int $value)
- * @method int getOrder()
- * @method void setOrder(int $value)
  * @method string getOwner()
- * @method void setPollOptionText(?string $value)
- * @method string getPollOptionText()
  * @method void setOwner(string $value)
  * @method int getPollId()
- * @method void setPollId(int $value)
- * @method string getPollOptionHash()
- * @method void setPollOptionHash(string $value)
  * @method int getReleased()
  * @method void setReleased(int $value)
  * @method int getDeleted()
  * @method void setDeleted(int $value)
+ *
+ * No magic getters, getters are overwritten for special handling of timestamp and option text
+ * @method void setOrder(int $value)
  *
  * Joined Attributes
  * @method string getUserVoteAnswer()
@@ -48,6 +44,20 @@ use OCA\Polls\Model\UserBase;
  * @method int getVotesNo()
  * @method int getVotesMaybe()
  * @method int getShowResults()
+ *
+ * Protected setters for pollId, pollOptionText, setPollOptionHash, timestamp
+ * and duration, as they should not be set directly, but through setPoll(),
+ * setText(), setDateTime() and setInterval()
+ *
+ * protected setPollId(int $value)
+ * protected setTimestamp(int $value)
+ * protected setDuration(int $value)
+ * protected setIsoTimestamp(?string $value)
+ * protected setIsoDuration(?string $value)
+ * protected setPollOptionText(string $value)
+ * protected setPollOptionHash(string $value)
+ *
+ * Nextcloud generates them automagically through the entity class.
  *
  */
 class Option extends EntityWithUser implements JsonSerializable {
@@ -111,11 +121,11 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 * @return void
 	 */
 	public function __clone() {
-		$this->setPollId(0);
 		$this->setDeleted(0);
 		$this->setConfirmed(0);
 		$this->setOwner('');
-		$this->updateHash();
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setPollId(0);
 	}
 
 	/**
@@ -130,10 +140,10 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'id' => $this->getId(),
 			'pollId' => $this->getPollId(),
 			'text' => $this->getPollOptionText(),
-			'timestamp' => $this->getDateTime()->getTimestamp(),
-			'duration' => $this->getInterval()->getSeconds(),
-			'isoTimestamp' => $this->getDateTime()->getISO(),
-			'isoDuration' => $this->getInterval()->getISO(),
+			'timestamp' => $this->getTimestamp(),
+			'duration' => $this->getDuration(),
+			'isoTimestamp' => $this->getIsoTimestamp(),
+			'isoDuration' => $this->getIsoDuration(),
 			'deleted' => $this->getDeleted(),
 			'order' => $this->getOrder(),
 			'confirmed' => $this->getConfirmed(),
@@ -141,7 +151,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'hash' => $this->getPollOptionHash(),
 			'isOwner' => $this->getCurrentUserIsEntityUser(),
 			'votes' => $this->getVotes(),
-			'owner' => $this->getOwnerUser(),
+			'owner' => $this->getUser(),
 		];
 	}
 
@@ -178,12 +188,19 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 * @return UserBase|null The owner user object or null if not set or does not exist
 	 */
 	public function getOwnerUser(): ?UserBase {
-		if ($this->getOwner() === '') {
+		if ($this->getUserId() === '') {
+			$this->getUser();
 			return null;
 		}
 		return parent::getUser();
 	}
 
+	public function getPollOptionHash(): string {
+		return Hash::getOptionHash(
+			$this->getPollId(),
+			$this->getPollOptionText(),
+		);
+	}
 	/**
 	 * Get the order of the option. If the option has a valid timestamp,
 	 * the order will be determined by the timestamp to ensure correct
@@ -192,10 +209,9 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 * @return int The order of the option, determined by the timestamp if valid, otherwise the order value from the database
 	 */
 	public function getOrder(): int {
-		$timestamp = $this->getTimestamp();
-		return $timestamp !== 0
-		? $timestamp
-		: $this->order;
+		return $this->getTimestamp() !== 0
+			? $this->getTimestamp()
+			: $this->order;
 	}
 
 	/**
@@ -203,10 +219,9 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 * the text will be generated from the timestamp and duration
 	 */
 	public function getPollOptionText(): string {
-		if ($this->getTimestamp() > 0) {
-			return $this->getDateTimePollOptionText();
-		}
-		return htmlspecialchars_decode($this->pollOptionText);
+		return $this->getTimestamp() !== 0
+			? $this->getDateTimePollOptionText()
+			: htmlspecialchars_decode($this->pollOptionText);
 	}
 
 	/***************************************************
@@ -214,27 +229,27 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 ***************************************************/
 
 	/**
-	 * Set the poll ID for this option. This will also update the poll option hash
-	 *
-	 * @param int $value The poll ID to set for this option
+	 * Set the poll ID for the option. Also updates the poll option hash to ensure
 	 */
-	public function setPollId(int $value): void {
-		$this->pollId = $value;
-		$this->updateHash();
+	public function setPoll(int $pollId): void {
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setPollId($pollId);
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setPollOptionHash($this->getPollOptionHash());
 	}
 
 	/**
-	 * Set the text of the option. This will also update the poll option hash
-	 * use only for text polls, for date polls the text is generated from the
-	 * timestamp and duration and should not be set directly
+	 * Set the text of the option. Also updates the poll option hash to ensure
+	 * it is always in sync with the text and poll ID.
 	 *
-	 * @param string $value The text to set for the option
+	 * @param string $text The text to set for the option
 	 */
-	public function setPollOptionText(string $value): void {
-		$this->pollOptionText = $value;
-		$this->updateHash();
+	public function setText(string $text): void {
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setPollOptionText($text);
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setPollOptionHash($this->getPollOptionHash());
 	}
-
 	/***************************************************
 	 * date and time getters
 	 ***************************************************/
@@ -288,36 +303,13 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 * @return void
 	 */
 	public function setDateTime(DateTimeImmutable $dateTime): void {
+		/** @psalm-suppress UndefinedMagicMethod */
 		$this->setTimestamp($dateTime->getTimestamp());
+		$this->setOrder($dateTime->getTimestamp());
+		/** @psalm-suppress UndefinedMagicMethod */
 		$this->setIsoTimestamp($dateTime->getISO());
 		$this->setOrder($dateTime->getTimestamp());
-		$this->setPollOptionText($this->getDateTimePollOptionText());
-	}
-
-	/**
-	 * Set the option's timestamp. This method is used by the mappers to set
-	 * the timestamp from the database values.
-	 *
-	 * Avoid using this method directly and prefer setDateTime()
-	 *
-	 * @param int $value The timestamp to set for the option
-	 * @return void
-	 */
-	public function setTimestamp(int $value): void {
-		$this->timestamp = $value;
-	}
-
-	/**
-	 * Set the option's ISO timestamp. This method is used by the mappers to set
-	 * the ISO timestamp from the database values.
-	 *
-	 * Avoid using this method directly and prefer setDateTime()
-	 *
-	 * @param string|null $value The ISO timestamp to set for the option, or null to unset
-	 * @return void
-	 */
-	public function setIsoTimestamp(?string $value): void {
-		$this->isoTimestamp = $value;
+		$this->setText($this->getDateTimePollOptionText());
 	}
 
 	/***************************************************
@@ -375,50 +367,16 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 * @return void
 	 */
 	public function setInterval(DateInterval $optionInterval): void {
+		/** @psalm-suppress UndefinedMagicMethod */
 		$this->setDuration($optionInterval->getSeconds());
+		/** @psalm-suppress UndefinedMagicMethod */
 		$this->setIsoDuration($optionInterval->getISO());
-		$this->setPollOptionText($this->getDateTimePollOptionText());
-	}
-
-	/**
-	 * Set the option's duration in seconds. This method is used by the mappers to set
-	 * the duration from the database values.
-	 *
-	 * Avoid using this method directly and prefer setInterval()
-	 *
-	 * @param int $value The duration in seconds to set for the option
-	 * @return void
-	 */
-	public function setDuration(int $value): void {
-		$this->duration = $value;
-	}
-
-	/**
-	 * Set the option's ISO duration. This method is used by the mappers to set
-	 * the ISO duration from the database values.
-	 *
-	 * Avoid using this method directly and prefer setInterval()
-	 *
-	 * @param string|null $value The ISO duration to set for the option, or null to unset
-	 * @return void
-	 */
-	public function setIsoDuration(?string $value): void {
-		$this->isoDuration = $value;
+		$this->setText($this->getDateTimePollOptionText());
 	}
 
 	/***************************************************
 	 * misc private and public methods and helpers
 	 ***************************************************/
-
-	/**
-	 * Update the pollOptionHash based on the current pollId and pollOptionText
-	 */
-	private function updateHash(): void {
-		$this->setPollOptionHash(Hash::getOptionHash(
-			$this->getPollId(),
-			$this->getPollOptionText(),
-		));
-	}
 
 	private function getDateTimePollOptionText(): string {
 		$isoTimestamp = $this->getIsoTimestamp();
@@ -527,10 +485,10 @@ class Option extends EntityWithUser implements JsonSerializable {
 			$this->setDateTime($simpleOption->getDateTime());
 			$this->setInterval($simpleOption->getInterval());
 		} elseif ($pollTypeHint === Poll::TYPE_TEXT) {
-			$this->setPollOptionText($simpleOption->getText() ?? '');
+			$this->setText($simpleOption->getText() ?? '');
 		} else {
 			// Without poll type hint, set all properties
-			$this->setPollOptionText($simpleOption->getText() ?? '');
+			$this->setText($simpleOption->getText() ?? '');
 			$this->setDateTime($simpleOption->getDateTime());
 			$this->setInterval($simpleOption->getInterval());
 		}

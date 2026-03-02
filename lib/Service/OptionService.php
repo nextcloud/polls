@@ -116,7 +116,7 @@ class OptionService {
 
 		// Build the new option
 		$newOption = new Option();
-		$newOption->setPollId($this->poll->getId());
+		$newOption->setPoll($this->poll->getId());
 		// A new option initially is positioned at the end of the list
 		$newOption->setOrder($this->getHighestOrder($pollId) + 1);
 		$newOption->setFromSimpleOption($simpleOption, $this->poll->getType());
@@ -124,11 +124,20 @@ class OptionService {
 		if (!$this->poll->getIsPollOwner()) {
 			$newOption->setOwner($this->userSession->getCurrentUserId());
 		}
-
+		$this->logger->error('Trying to add option', [
+			'optionText' => json_encode($newOption),
+			'pollId' => $pollId,
+		]);
 		try {
 			// Insert the new option
 			$newOption = $this->optionMapper->insert($newOption);
 		} catch (Exception $e) {
+			$this->logger->error('Error while adding option', [
+				'optionText' => json_encode($newOption),
+				'pollId' => $pollId,
+				'exceptionMessage' => $e->getMessage(),
+				'exceptionReason' => $e->getReason(),
+			]);
 			// TODO: Change exception catch to actual exception
 			// Currently OC\DB\Exceptions\DbalException is thrown instead of
 			// UniqueConstraintViolationException
@@ -203,7 +212,7 @@ class OptionService {
 			if (!$pollOptionText) {
 				throw new InsufficientAttributesException('Text is required for text polls');
 			}
-			$option->setPollOptionText($pollOptionText);
+			$option->setText($pollOptionText);
 		}
 
 		if ($this->poll->getType() === Poll::TYPE_DATE) {
@@ -370,7 +379,7 @@ class OptionService {
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
 			$option = clone $origin;
-			$option->setPollId($toPollId);
+			$option->setPoll($toPollId);
 			$option = $this->optionMapper->insert($option);
 			$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($option));
 		}
