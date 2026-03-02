@@ -691,7 +691,7 @@ class TableManager extends DbManager {
 			try {
 				// if the option's hash differs from $actualHash update the option
 				if ($option->getPollOptionHash() !== Hash::getOptionHash($option->getPollId(), $option->getPollOptionText())) {
-					$option->setPollOptionHash(Hash::getOptionHash($option->getPollId(), $option->getPollOptionText()));
+					$option->setText($option->getPollOptionText());
 					$option = $this->optionMapper->update($option);
 					$updated++;
 				}
