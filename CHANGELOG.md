@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
  - Use ISO formatted timestamps and durations
+ - Drop support for Nexcloud Hub 10
+ - Drop support for PHP 8.1
 
 ## [8.6.3] - 2026-01-18
 ### Fixed

@@ -172,12 +172,9 @@ body:
       description: |
         Which Nextcloud Server version are you running.
       options:
-        - 'Nextcloud 27'
-        - 'Nextcloud 28'
-        - 'Nextcloud 29'
-        - 'Nextcloud 30'
-        - 'Nextcloud 31'
-        - 'Nextcloud 32'
+        - 'Nextcloud 31 (Hub 10)'
+        - 'Nextcloud 32 (Hub 25 Autumn)'
+        - 'Nextcloud 33 (Hub 26 Winter)'
         - "Other/Don't know"
     validations:
       required: true
@@ -185,7 +182,7 @@ body:
     id: server-nc-version-other
     attributes:
       label: Other Nextcloud version
-      placeholder: i.e. Nextcloud 21.1.1
+      placeholder: i.e. Nextcloud 29 or Hub 8
 
   - type: dropdown
     id: server-php
