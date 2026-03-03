@@ -24,7 +24,7 @@
   <screenshot>https://raw.githubusercontent.com/nextcloud/polls/main/screenshots/edit-poll.png</screenshot>
   <donation>https://buymeacoffee.com/dartcafe</donation>
   <dependencies>
-    <php min-version="8.2"/>
+    <php min-version="8.1"/>
     <nextcloud min-version="32" max-version="33"/>
   </dependencies>
   <background-jobs>
