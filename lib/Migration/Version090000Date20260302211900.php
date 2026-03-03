@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Migration;
 
-use OCA\Polls\Db\V6\IndexManager;
 use OCA\Polls\Db\V6\TableManager;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
