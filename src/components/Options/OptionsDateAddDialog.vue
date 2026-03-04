@@ -91,14 +91,15 @@ const startDateTime = ref(
  * Resultin option based on the inputs
  */
 const newOption = computed<SimpleOption>(() => {
-	const dateTime = startDateTime.value.startOf(allDay.value ? 'day' : 'minute')
+	const dateTime = startDateTime.value
+		.startOf(allDay.value ? 'day' : 'minute')
+		.setZone(sessionStore.currentTimezoneName, { keepLocalTime: true })
 
 	return {
 		text: '',
 		duration: duration.value.as('seconds') || 0,
 		timestamp: dateTime.toUnixInteger(),
-		isoTimestamp:
-			dateTime.setZone(sessionStore.currentTimezoneName).toISO() || '',
+		isoTimestamp: dateTime.toISO() || '',
 		isoDuration: duration.value.toISO() || 'PT0S',
 	}
 })
