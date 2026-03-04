@@ -3,13 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export {
-	DateTimeUnits as DateTimeUnit,
-	DateTimeUnitType,
-	TimeUnitsType,
-	DurationType,
-} from './dateTime'
-
 export enum Event {
 	TransitionsOff = 'polls:transitions:off',
 	TransitionsOn = 'polls:transitions:on',
