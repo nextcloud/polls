@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { DateTime, Duration } from 'luxon'
 import type { User } from '../Types'
 import type { DateTimeUnitType } from '../Types/dateTime'
 import type { Answer } from './votes.types'
@@ -23,15 +24,19 @@ export type OptionVotes = {
 	currentUser?: Answer
 }
 
-export type Option = {
+export type HasIsoFields = {
+	isoTimestamp: string | null | undefined
+	isoDuration: string | null | undefined
+}
+export type OptionDto = {
 	id: number
 	pollId: number
 	text: string
-	isoTimestamp: string
+	isoTimestamp: string | null | undefined
 	deleted: number
 	order: number
 	confirmed: number
-	isoDuration: string
+	isoDuration: string | null | undefined
 	locked: boolean
 	hash: string
 	isOwner: boolean
@@ -39,7 +44,24 @@ export type Option = {
 	owner: User | undefined
 }
 
-export type SimpleOption = Pick<Option, 'text' | 'isoTimestamp' | 'isoDuration'>
+export type OptionDurationMethod = {
+	getDuration: () => Duration
+}
+
+export type OptionTimestampMethod = {
+	getDateTime: () => DateTime
+}
+
+export type Option = OptionDto & OptionDurationMethod & OptionTimestampMethod
+
+export type SimpleOptionDto = Pick<
+	OptionDto,
+	'text' | 'isoTimestamp' | 'isoDuration'
+>
+
+export type SimpleOption = SimpleOptionDto
+	& OptionDurationMethod
+	& OptionTimestampMethod
 
 export type DateOptionFinder = Pick<SimpleOption, 'isoTimestamp' | 'isoDuration'>
 

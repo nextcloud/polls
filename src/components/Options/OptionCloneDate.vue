@@ -36,7 +36,7 @@ const sequence = ref<Sequence>({
 })
 
 const dateBaseOptionString = computed(() =>
-	DateTime.fromISO(option.isoTimestamp).toLocaleString(DateTime.DATETIME_FULL),
+	option.getDateTime().toLocaleString(DateTime.DATETIME_FULL),
 )
 
 /**

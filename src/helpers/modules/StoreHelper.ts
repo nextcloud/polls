@@ -8,11 +8,11 @@ import { usePollStore } from '../../stores/poll'
 import { useOptionsStore } from '../../stores/options'
 
 import type { Poll } from '../../stores/poll.types'
-import type { Option } from '../../stores/options.types'
+import type { OptionDto } from '../../stores/options.types'
 import type { Vote } from '../../stores/votes.types'
 
 const StoreHelper = {
-	updateStores(data: { poll?: Poll; votes?: Vote[]; options?: Option[] }) {
+	updateStores(data: { poll?: Poll; votes?: Vote[]; options?: OptionDto[] }) {
 		const pollStore = usePollStore()
 		const votesStore = useVotesStore()
 		const optionsStore = useOptionsStore()
@@ -24,7 +24,9 @@ const StoreHelper = {
 			votesStore.votes = data.votes as Vote[]
 		}
 		if (Object.hasOwn(data, 'options')) {
-			optionsStore.options = data.options as Option[]
+			optionsStore.options = optionsStore.optionsDtoToOptions(
+				data.options as OptionDto[],
+			)
 		}
 	},
 }

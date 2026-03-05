@@ -18,7 +18,8 @@ const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 // const element = useTemplateRef<HTMLElement>('list')
 
-useSortable(useTemplateRef<HTMLElement>('list'), optionsStore.options, {
+const listRef = useTemplateRef<HTMLElement>('list')
+useSortable(listRef, optionsStore.options, {
 	animation: 200,
 	group: 'options',
 	disabled: false,
@@ -30,7 +31,7 @@ useSortable(useTemplateRef<HTMLElement>('list'), optionsStore.options, {
 			/* do nothing, wait for nextTick() */
 		})
 	},
-})
+} as Parameters<typeof useSortable>[2])
 
 const componentStyle = {
 	'--content-deleted': `" (${t('polls', 'deleted')})"`,

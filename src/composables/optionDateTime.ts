@@ -5,11 +5,10 @@
 
 import { Option } from '@/stores/options.types'
 import { DateTime, Duration, Interval } from 'luxon'
-import { computed } from 'vue'
 
 type OptionDateTime = {
 	optionStart: DateTime
-	duration: Duration | null
+	duration: Duration
 	optionEnd: DateTime
 	isFullDays: boolean
 	isSameMonth: boolean
@@ -22,7 +21,7 @@ export function getDatesFromOption(
 	option: Option,
 	timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
 ): OptionDateTime {
-	return getDates(option.isoTimestamp, option.isoDuration || null, timezone)
+	return getDates(option.getDateTime(), option.getDuration(), timezone)
 }
 /**
  *
@@ -32,72 +31,36 @@ export function getDatesFromOption(
  * @return OptionDateTime object containing computed date and time information of the option
  */
 export function getDates(
-	optionStart: DateTime | string,
-	optionDuration: Duration | string | null,
+	optionStart: DateTime,
+	optionDuration: Duration,
 	timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
 ): OptionDateTime {
-	if (typeof optionStart === 'string') {
-		optionStart = DateTime.fromISO(optionStart)
-	}
-	if (typeof optionDuration === 'string') {
-		optionDuration = Duration.fromISO(optionDuration)
-	}
-
 	optionStart = optionStart.setZone(timezone)
-	// duration equals optionDuration with special handling for full days
-	const computedDuration = computed(() => {
-		if (
-			optionDuration?.as('days') === 0
-			&& optionStart.valueOf() === optionStart.startOf('day').valueOf()
-		) {
-			return Duration.fromObject({ days: 1 })
-		}
 
-		return optionDuration
-	})
+	// Special handling for full-day options with zero duration: treat as 1 day
+	const duration =
+		optionDuration.as('days') === 0
+		&& optionStart.valueOf() === optionStart.startOf('day').valueOf()
+			? Duration.fromObject({ days: 1 })
+			: optionDuration
 
-	const computedFullDays = computed(() => {
-		if (computedDuration.value === null) {
-			return false
-		}
+	const isFullDays =
+		optionStart.valueOf() === optionStart.startOf('day').valueOf()
+		&& duration.hours + duration.minutes === 0
 
-		return (
-			optionStart.valueOf() === optionStart.startOf('day').valueOf()
-			&& computedDuration.value.hours + computedDuration.value.minutes === 0
-		)
-	})
-
-	const computedEndDate = computed(() =>
-		optionStart
-			.plus(computedDuration.value || Duration.fromObject({}))
-			// If full days are selected, subtract 1 millisecond for display purposes
-			.minus({ milliseconds: computedFullDays.value ? 1 : 0 }),
-	)
-
-	const computedInterval = computed(() =>
-		Interval.fromDateTimes(optionStart, computedEndDate.value),
-	)
-
-	const computedIsSameMonth = computed(() =>
-		optionStart.hasSame(computedEndDate.value, 'month'),
-	)
-
-	const computedIsSameDay = computed(() =>
-		optionStart.hasSame(computedEndDate.value, 'day'),
-	)
-
-	const computedIsSameTime = computed(
-		() => computedDuration.value?.as('minutes') === 0,
-	)
+	// Subtract 1 millisecond from full-day end dates for display purposes
+	const optionEnd = optionStart
+		.plus(duration)
+		.minus({ milliseconds: isFullDays ? 1 : 0 })
 
 	return {
 		optionStart,
-		duration: computedDuration.value,
-		optionEnd: computedEndDate.value,
-		isFullDays: computedFullDays.value,
-		isSameMonth: computedIsSameMonth.value,
-		isSameDay: computedIsSameDay.value,
-		isSameTime: computedIsSameTime.value,
-		interval: computedInterval.value,
+		duration,
+		optionEnd,
+		isFullDays,
+		isSameMonth: optionStart.hasSame(optionEnd, 'month'),
+		isSameDay: optionStart.hasSame(optionEnd, 'day'),
+		isSameTime: duration.as('minutes') === 0,
+		interval: Interval.fromDateTimes(optionStart, optionEnd),
 	}
 }

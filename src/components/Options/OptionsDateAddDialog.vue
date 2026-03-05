@@ -88,20 +88,23 @@ const startDateTime = ref(
 )
 
 /**
- * Resultin option based on the inputs
+ * Resulting option based on the inputs
  */
+
 const newOption = computed<SimpleOption>(() => {
 	const dateTime = startDateTime.value
 		.startOf(allDay.value ? 'day' : 'minute')
 		.setZone(sessionStore.currentTimezoneName, { keepLocalTime: true })
 
-	return {
+	const dur = duration.value
+	const option: SimpleOption = {
 		text: '',
-		duration: duration.value.as('seconds') || 0,
-		timestamp: dateTime.toUnixInteger(),
 		isoTimestamp: dateTime.toISO() || '',
-		isoDuration: duration.value.toISO() || 'PT0S',
+		isoDuration: dur.toISO() || 'PT0S',
+		getDateTime: () => dateTime,
+		getDuration: () => dur,
 	}
+	return option
 })
 
 /**

@@ -24,6 +24,11 @@ class SimpleOption implements JsonSerializable {
 	protected DateTimeImmutable $dateTime;
 	protected DateInterval $interval;
 
+	public function __construct() {
+		$this->dateTime = new DateTimeImmutable(null);
+		$this->interval = new DateInterval(null);
+	}
+
 	public function jsonSerialize(): array {
 		return [
 			'text' => $this->getText(),
@@ -65,7 +70,7 @@ class SimpleOption implements JsonSerializable {
 	}
 
 	/**
-	 * Get the timestamp of the option as DateTimeImmutable or null if not set
+	 * Get the timestamp of the option as DateTimeImmutable
 	 * @return DateTimeImmutable
 	 */
 	public function getDateTime(): DateTimeImmutable {
@@ -73,7 +78,7 @@ class SimpleOption implements JsonSerializable {
 	}
 
 	/**
-	 * Get the duration of the option as DateInterval or null if not set
+	 * Get the duration of the option as DateInterval
 	 * @return DateInterval
 	 */
 	public function getInterval(): DateInterval {

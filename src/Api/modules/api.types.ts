@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { Option } from '../../stores/options.types'
+import type { OptionDto } from '../../stores/options.types'
 import type { Vote } from '../../stores/votes.types'
 import type { Poll } from '../../stores/poll.types'
 import type { Comment } from '../../stores/comments.types'
@@ -28,7 +28,7 @@ export type ApiEmailAdressList = {
 
 export type FullPollResponse = {
 	poll: Poll
-	options: Option[]
+	options: OptionDto[]
 	votes: Vote[]
 	comments: Comment[]
 	shares: Share[]
@@ -36,21 +36,21 @@ export type FullPollResponse = {
 }
 
 export type AddOptionResponse = {
-	option: Option
-	repetitions: Option[]
-	options: Option[]
+	option: OptionDto
+	repetitions: OptionDto[]
+	options: OptionDto[]
 	votes: Vote[]
 }
 
 export type setVoteResponse = {
 	vote: Vote
 	poll: Poll
-	options: Option[]
+	options: OptionDto[]
 	votes: Vote[]
 }
 
 export type RemoveVotesResponse = {
 	poll: Poll
-	options: Option[]
+	options: OptionDto[]
 	votes: Vote[]
 }

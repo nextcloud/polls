@@ -30,15 +30,9 @@ const {
 	title,
 } = defineProps<Props>()
 
-const dateTime = computed(() =>
-	DateTime.fromISO(option.isoTimestamp).setZone(timezone),
-)
-
-const duration = computed(() => Duration.fromISO(option.isoDuration || 'PT0S'))
-
 // computed last from dateTime repetition
 const lastRepetitionDateTime = computed(() =>
-	dateTime.value.plus(sequenceDuration.value),
+	option.getDateTime().plus(sequenceDuration.value),
 )
 
 const sequenceDuration = computed(() =>
@@ -56,7 +50,7 @@ const repetitionCaption = computed(() =>
 )
 
 const simpleDate = computed(() => {
-	const dates = getDates(dateTime.value, duration.value, otherTimeZone)
+	const dates = getDates(option.getDateTime(), option.getDuration(), otherTimeZone)
 	return dates.interval.toLocaleString(DateTime.DATETIME_MED)
 })
 </script>
@@ -70,8 +64,8 @@ const simpleDate = computed(() => {
 		</div>
 		<div class="preview-date">
 			<DateBox
-				:start-date="dateTime"
-				:duration="duration"
+				:start-date="option.getDateTime()"
+				:duration="option.getDuration()"
 				:timezone="timezone" />
 		</div>
 
@@ -79,7 +73,7 @@ const simpleDate = computed(() => {
 			<span>{{ repetitionCaption }}</span>
 			<DateBox
 				:start-date="lastRepetitionDateTime"
-				:duration="duration"
+				:duration="option.getDuration()"
 				:timezone="timezone" />
 		</div>
 		<div

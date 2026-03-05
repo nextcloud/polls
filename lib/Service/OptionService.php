@@ -124,10 +124,6 @@ class OptionService {
 		if (!$this->poll->getIsPollOwner()) {
 			$newOption->setOwner($this->userSession->getCurrentUserId());
 		}
-		$this->logger->error('Trying to add option', [
-			'optionText' => json_encode($newOption),
-			'pollId' => $pollId,
-		]);
 		try {
 			// Insert the new option
 			$newOption = $this->optionMapper->insert($newOption);
@@ -136,13 +132,12 @@ class OptionService {
 				'optionText' => json_encode($newOption),
 				'pollId' => $pollId,
 				'exceptionMessage' => $e->getMessage(),
-				'exceptionReason' => $e->getReason(),
 			]);
 			// TODO: Change exception catch to actual exception
 			// Currently OC\DB\Exceptions\DbalException is thrown instead of
 			// UniqueConstraintViolationException
 			// since the exception is from private namespace, we check the type string
-			if (get_class($e) === 'OC\DB\Exceptions\DbalException' || $e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+			if (get_class($e) === 'OC\DB\Exceptions\DbalException' && $e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 
 				// Option already exists, so we need to update the existing one
 				// and remove deleted setting

@@ -11,7 +11,7 @@ import { useSessionStore } from '@/stores/session'
 
 interface Props {
 	startDate: DateTime
-	duration?: Duration
+	duration: Duration
 	timezone?: string | undefined
 }
 

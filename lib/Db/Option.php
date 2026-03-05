@@ -189,7 +189,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 */
 	public function getOwnerUser(): ?UserBase {
 		if ($this->getUserId() === '') {
-			$this->getUser();
 			return null;
 		}
 		return parent::getUser();
@@ -308,7 +307,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 		$this->setOrder($dateTime->getTimestamp());
 		/** @psalm-suppress UndefinedMagicMethod */
 		$this->setIsoTimestamp($dateTime->getISO());
-		$this->setOrder($dateTime->getTimestamp());
 		$this->setText($this->getDateTimePollOptionText());
 	}
 
