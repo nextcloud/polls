@@ -3,13 +3,12 @@
  * SPDX-FileCopyrightText: 2017 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-use League\FactoryMuffin\Faker\Facade as Faker;
-
-/**
- * General factory for the vote model.
- */
 $fm->define('OCA\Polls\Db\Vote')->setDefinitions([
-	'userId' => Faker::firstNameMale(),
-	'voteOptionText' => Faker::text(255),
+	'userId' => function () {
+		return bin2hex(random_bytes(8));
+	},
+	'voteOptionText' => function () {
+		return bin2hex(random_bytes(64));
+	},
 	'voteAnswer' => 'yes',
 ]);

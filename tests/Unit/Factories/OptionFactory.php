@@ -4,18 +4,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-use League\FactoryMuffin\Faker\Facade as Faker;
-
-/**
- * General factory for the text model.
- */
 $fm->define('OCA\Polls\Db\Option')->setDefinitions([
-	'owner' => Faker::firstNameMale(),
+	'owner' => function () {
+		return bin2hex(random_bytes(8));
+	},
 	'released' => function () {
 		$date = new DateTime('now');
 		return $date->getTimestamp();
 	},
-	'pollOptionText' => Faker::text(255),
+	'pollOptionText' => function () {
+		return bin2hex(random_bytes(64));
+	},
 	'timestamp' => 0,
 	'isoTimestamp' => null,
 	'isoDuration' => null,

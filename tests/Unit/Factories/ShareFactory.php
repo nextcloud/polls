@@ -3,7 +3,6 @@
  * SPDX-FileCopyrightText: 2017 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-use League\FactoryMuffin\Faker\Facade as Faker;
 use OCA\Polls\Db\Share;
 
 $fm->define('OCA\Polls\Db\Share')->setDefinitions([
@@ -11,9 +10,15 @@ $fm->define('OCA\Polls\Db\Share')->setDefinitions([
 	'token' => function () {
 		return bin2hex(random_bytes(16));
 	},
-	'userId' => Faker::firstNameMale(),
-	'emailAddress' => Faker::safeEmail(),
-	'displayName' => Faker::lastName(),
+	'userId' => function () {
+		return bin2hex(random_bytes(8));
+	},
+	'emailAddress' => function () {
+		return bin2hex(random_bytes(8)) . '@example.com';
+	},
+	'displayName' => function () {
+		return bin2hex(random_bytes(8));
+	},
 	'invitationSent' => 0,
 	'reminderSent' => 0,
 	'deleted' => 0,
