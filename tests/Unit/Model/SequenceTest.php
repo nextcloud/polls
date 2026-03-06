@@ -55,9 +55,8 @@ class SequenceTest extends TestCase {
 	public function testJsonSerializeUnitIsSerialized(): void {
 		$unit = new SequenceUnit(SequenceUnit::REPETITION_WEEK);
 		$seq = new Sequence($unit, 1, 3);
-		$json = $seq->jsonSerialize();
+		$json = json_decode((string)json_encode($seq), true);
 
-		// The 'unit' value is the SequenceUnit itself (JsonSerializable), so it must be an array
 		$this->assertIsArray($json['unit']);
 		$this->assertSame('week', $json['unit']['id']);
 	}
