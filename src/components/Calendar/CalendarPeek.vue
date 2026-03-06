@@ -7,7 +7,6 @@
 import { computed, onMounted, ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 import orderBy from 'lodash/orderBy'
-import { DateTime } from 'luxon'
 
 import NcPopover from '@nextcloud/vue/components/NcPopover'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -22,6 +21,7 @@ import { usePollStore } from '../../stores/poll'
 
 import type { AxiosError } from '@nextcloud/axios'
 import type { Option } from '../../stores/options.types'
+import { getDatesFromOption } from '@/composables/optionDateTime'
 
 export type CalendarEvent = {
 	id: number
@@ -37,7 +37,7 @@ export type CalendarEvent = {
 	end: number
 	status: string
 	summary: string
-	type: string
+	type: 'date' | 'dateTime'
 	busy: boolean
 }
 
@@ -46,20 +46,7 @@ const { option } = defineProps<{ option: Option }>()
 const events = ref<CalendarEvent[]>([])
 
 const pollStore = usePollStore()
-
-const detectAllDay = computed(() => {
-	const from = DateTime.fromSeconds(option.timestamp)
-
-	const dayLongEvent =
-		from.startOf('day')
-		&& from.plus({ seconds: option.duration }).startOf('day')
-		&& option.duration > 0
-
-	return {
-		allDay: dayLongEvent,
-		type: dayLongEvent ? 'date' : 'dateTime',
-	}
-})
+const optionDates = getDatesFromOption(option)
 
 const sortedEvents = computed(() => {
 	const sortedEvents = [...events.value]
@@ -75,14 +62,14 @@ const currentEvent = computed(
 		calendarKey: 0,
 		calendarName: 'Polls',
 		displayColor: 'transparent',
-		allDay: detectAllDay.value.allDay,
+		allDay: optionDates.isFullDays,
 		description: pollStore.configuration.description,
-		start: option.timestamp,
+		start: optionDates.optionStart.toSeconds(),
 		location: '',
-		end: option.timestamp + option.duration,
+		end: optionDates.optionEnd.toSeconds(),
 		status: 'self',
 		summary: pollStore.configuration.title,
-		type: detectAllDay.value.type,
+		type: optionDates.isFullDays ? 'date' : 'dateTime',
 		busy: false,
 	}),
 )

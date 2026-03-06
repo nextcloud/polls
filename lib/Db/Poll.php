@@ -14,7 +14,6 @@ use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\Settings\SystemSettings;
-use OCA\Polls\Model\User\User;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\IURLGenerator;
@@ -65,6 +64,7 @@ use OCP\IURLGenerator;
  * @method void setMiscSettings(string $value)
  * @method string getVotingVariant()
  * @method void setVotingVariant(string $value)
+ * @method void setTimezoneName(?string $value)
  *
  * Magic functions for joined columns
  * @method string getShareToken()
@@ -162,6 +162,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $lastInteraction = 0;
 	protected ?string $miscSettings = '';
 	protected string $votingVariant = '';
+	protected ?string $timezoneName = null;
 
 	// joined columns
 	protected ?int $isCurrentUserLocked = 0;
@@ -209,6 +210,16 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->userSession = Container::queryClass(UserSession::class);
 	}
 
+	public function __clone() {
+		$this->setId(0);
+		$this->setTitle('Clone of ' . $this->getTitle());
+		$this->setDeleted(0);
+		$this->setCreated(time());
+		$this->setAccess(self::ACCESS_PRIVATE);
+		// deanonymize cloned polls by default, to avoid locked anonymous polls
+		$this->setAnonymous(0);
+	}
+
 	/**
 	 * @return array
 	 *
@@ -237,7 +248,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'created' => $this->getCreated(),
 			'isAnonymous' => boolval($this->getAnonymous()),
 			'isArchived' => boolval($this->getDeleted()),
-			'isExpired' => $this->getExpired(),
+			'isExpired' => $this->getIsExpired(),
 			'isRealAnonymous' => $this->getAnonymous() < 0,
 			'relevantThreshold' => $this->getRelevantThreshold(),
 			'deletionDate' => $this->getDeletionDate(),
@@ -268,6 +279,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'showResults' => $this->getShowResults(),
 			'title' => $this->getTitle(),
 			'useNo' => boolval($this->getUseNo()),
+			'timezoneName' => $this->getTimezoneName(),
 		];
 	}
 
@@ -336,10 +348,11 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setUseNo($pollConfiguration['useNo'] ?? $this->getUseNo());
 		$this->setOptionLimit($pollConfiguration['maxVotesPerOption'] ?? $this->getOptionLimit());
 		$this->setVoteLimit($pollConfiguration['maxVotesPerUser'] ?? $this->getVoteLimit());
+		$this->setTimezoneName($pollConfiguration['timezoneName'] ?? $this->getTimezoneName());
 		return $this;
 	}
 
-	public function getExpired(): bool {
+	public function getIsExpired(): bool {
 		$compareTime = time();
 		$expiry = $this->getExpire();
 
@@ -351,6 +364,16 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	public function getPollOwnerId() {
 		return $this->getOwner();
+	}
+
+	/**
+	 * @psalm-return non-empty-string|null
+	 */
+	public function getTimezoneName(): ?string {
+		if ($this->timezoneName === '') {
+			return null;
+		}
+		return $this->timezoneName;
 	}
 
 	public function getUserRole(): string {
@@ -473,6 +496,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * @psalm-return list<int>
 	 */
 	public function getPollGroups(): array {
+		/** @psalm-suppress RiskyTruthyFalsyComparison */
 		if (!$this->pollGroups) {
 			return [];
 		}
@@ -487,6 +511,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * @psalm-return list<string>
 	 */
 	public function getPollGroupUserShares(): array {
+		/** @psalm-suppress RiskyTruthyFalsyComparison */
 		if (!$this->pollGroupUserShares) {
 			return [];
 		}
@@ -503,7 +528,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return $this->access;
 	}
 
-	private function getProposalsExpired(): bool {
+	private function getProposalPeriodIsExpired(): bool {
 		return (
 			$this->getProposalsExpire() > 0
 			&& $this->getProposalsExpire() < time()
@@ -798,7 +823,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		}
 
 		// Request for option proposals is expired, deny
-		if ($this->getProposalsExpired()) {
+		if ($this->getProposalPeriodIsExpired()) {
 			return false;
 		}
 
@@ -826,21 +851,14 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * Is current user allowed to confirm options
 	 */
 	private function getAllowConfirmOption(): bool {
-		return $this->getAllowEditPoll() && $this->getExpired();
+		return $this->getAllowEditPoll() && $this->getIsExpired();
 	}
 
 	/**
 	 * Is current user allowed to confirm options
 	 */
 	private function getAllowReorderOptions(): bool {
-		return $this->getAllowEditPoll() && !$this->getExpired() && $this->getType() === Poll::TYPE_TEXT;
-	}
-
-	/**
-	 * Compare $userId with current user's id
-	 */
-	public function matchUser(string $userId): bool {
-		return (bool)$this->userSession->getCurrentUser()->getId() && $this->userSession->getCurrentUser()->getId() === $userId;
+		return $this->getAllowEditPoll() && !$this->getIsExpired() && $this->getType() === Poll::TYPE_TEXT;
 	}
 
 	/**
@@ -931,7 +949,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		}
 
 		// deny votes, if poll is expired
-		return !$this->getExpired();
+		return !$this->getIsExpired();
 	}
 
 	/**
@@ -961,7 +979,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		}
 
 		// show results, when poll is closed
-		if ($this->getShowResults() === Poll::SHOW_RESULTS_CLOSED && $this->getExpired()) {
+		if ($this->getShowResults() === Poll::SHOW_RESULTS_CLOSED && $this->getIsExpired()) {
 			return true;
 		}
 		// return poll settings

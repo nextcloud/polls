@@ -79,7 +79,7 @@ const accessCaption = computed(() =>
 		: t('polls', 'Openly accessible poll'),
 )
 
-const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+const currentTimeZone = sessionStore.currentTimezoneName
 const countAllYesVotes = computed(() => votesStore.countAllVotesByAnswer('yes'))
 const countAllMaybeVotes = computed(() => votesStore.countAllVotesByAnswer('maybe'))
 const countAllNoVotes = computed(
@@ -222,8 +222,18 @@ const countUsedVotes = computed(
 				<TimezoneIcon />
 			</template>
 			{{
-				t('polls', 'Time zone: {timezoneString}', {
+				t('polls', 'Current timezone: {timezoneString}', {
 					timezoneString: currentTimeZone,
+				})
+			}}
+		</BadgeDiv>
+		<BadgeDiv v-if="currentTimeZone !== pollStore.getTimezoneName">
+			<template #icon>
+				<TimezoneIcon />
+			</template>
+			{{
+				t('polls', 'Original timezone: {timezoneString}', {
+					timezoneString: pollStore.getTimezoneName,
 				})
 			}}
 		</BadgeDiv>

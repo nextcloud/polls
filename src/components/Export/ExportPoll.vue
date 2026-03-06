@@ -7,7 +7,7 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { DateTime, Interval } from 'luxon'
+import { DateTime } from 'luxon'
 
 // eslint-disable-next-line import/named
 import { Sheet, WorkBook, utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
@@ -31,9 +31,9 @@ import { useVotesStore } from '../../stores/votes'
 import { useOptionsStore } from '../../stores/options'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { Option } from '../../stores/options.types'
 import type { Answer } from '../../stores/votes.types'
 import { Logger } from '@/helpers/modules/logger'
+import { getDatesFromOption } from '@/composables/optionDateTime'
 
 type ArrayStyle = 'symbols' | 'raw' | 'generic'
 type ExportFormat = 'html' | 'xlsx' | 'ods' | 'csv'
@@ -125,21 +125,35 @@ async function exportFile(exportFormat: ExportFormat) {
 	} else if (['csv'].includes(exportFormat)) {
 		sheetData.value.push([
 			...participantsHeader,
-			...optionsStore.options.map((option) => getIntervalIso(option)),
+			...optionsStore.options.map((option) =>
+				getDatesFromOption(option).interval.toISO(),
+			),
 		])
 	} else if (['html'].includes(exportFormat)) {
 		sheetData.value.push([
 			...participantsHeader,
-			...optionsStore.options.map((option) => getIntervalRaw(option)),
+			...optionsStore.options.map((option) =>
+				getDatesFromOption(option).interval.toLocaleString(
+					DateTime.DATETIME_MED_WITH_WEEKDAY,
+				),
+			),
 		])
 	} else {
 		sheetData.value.push([
 			...fromHeader,
-			...optionsStore.options.map((option) => getFromFormatted(option)),
+			...optionsStore.options.map((option) =>
+				getDatesFromOption(option).optionStart.toLocaleString(
+					DateTime.DATETIME_MED_WITH_WEEKDAY,
+				),
+			),
 		])
 		sheetData.value.push([
 			...toHeader,
-			...optionsStore.options.map((option) => getToFormatted(option)),
+			...optionsStore.options.map((option) =>
+				getDatesFromOption(option).optionEnd.toLocaleString(
+					DateTime.DATETIME_MED_WITH_WEEKDAY,
+				),
+			),
 		])
 	}
 
@@ -165,51 +179,6 @@ async function exportFile(exportFormat: ExportFormat) {
 	}
 }
 
-/**
- * Get the interval in ISO format (slightly modified)
- * @param option - option
- */
-function getIntervalIso(option: Option): string {
-	return Interval.fromDateTimes(
-		DateTime.fromSeconds(option.timestamp).toUTC(),
-		DateTime.fromSeconds(option.timestamp)
-			.plus({ seconds: option.duration })
-			.toUTC(),
-	)
-		.toISO()
-		.replace('/', ' - ')
-}
-
-/**
- * Get the interval in local format
- * @param option - option
- */
-function getIntervalRaw(option: Option): string {
-	return Interval.fromDateTimes(
-		DateTime.fromSeconds(option.timestamp),
-		DateTime.fromSeconds(option.timestamp).plus({ seconds: option.duration }),
-	).toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
-}
-
-/**
- * Get the start date in local format
- * @param option - option
- */
-function getFromFormatted(option: Option): string {
-	return DateTime.fromSeconds(option.timestamp).toLocaleString(
-		DateTime.DATETIME_MED_WITH_WEEKDAY,
-	)
-}
-
-/**
- * Get the end date in local format
- * @param option - option
- */
-function getToFormatted(option: Option): string {
-	return DateTime.fromSeconds(option.timestamp)
-		.plus({ seconds: option.duration })
-		.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
-}
 /**
  *
  * @param style - style

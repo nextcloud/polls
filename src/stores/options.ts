@@ -14,8 +14,35 @@ import { useSessionStore } from './session'
 import { useVotesStore } from './votes'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { TimeUnitsType } from '../constants/dateUnits'
-import type { Sequence, SimpleOption, Option, OptionsStore } from './options.types'
+import type { TimeUnitsType } from '../Types/dateTime'
+import type {
+	Sequence,
+	SimpleOption,
+	OptionDto,
+	Option,
+	OptionsStore,
+	DateOptionFinder,
+	HasIsoFields,
+	OptionDurationMethod,
+	OptionTimestampMethod,
+} from './options.types'
+import { DateTime, Duration } from 'luxon'
+
+export const hydrateOption = (dto: OptionDto): Option => withLuxon(dto)
+
+const withLuxon = <T extends HasIsoFields>(
+	dto: T,
+): T & OptionDurationMethod & OptionTimestampMethod => ({
+	...dto,
+
+	getDuration() {
+		return Duration.fromISO(this.isoDuration ?? 'PT0S')
+	},
+
+	getDateTime() {
+		return DateTime.fromISO(this.isoTimestamp ?? new Date().toISOString())
+	},
+})
 
 export const useOptionsStore = defineStore('options', {
 	state: (): OptionsStore => ({
@@ -51,7 +78,7 @@ export const useOptionsStore = defineStore('options', {
 		sortedOptions(state): Option[] {
 			const pollStore = usePollStore()
 			return pollStore.type === 'datePoll'
-				? orderBy(state.options, ['timestamp', 'duration'], ['asc', 'asc'])
+				? orderBy(state.options, ['order', 'duration'], ['asc', 'asc'])
 				: state.options
 		},
 
@@ -70,11 +97,18 @@ export const useOptionsStore = defineStore('options', {
 	},
 
 	actions: {
-		find(timestamp: number, duration: number): Option | undefined {
-			return this.options.find(
-				(option) =>
-					option.timestamp === timestamp && option.duration === duration,
-			)
+		optionsDtoToOptions(optionsDto: OptionDto[]): Option[] {
+			return optionsDto.map(hydrateOption)
+		},
+
+		find(option: DateOptionFinder): Option | undefined {
+			if (option) {
+				return this.options.find(
+					(opt) =>
+						opt.isoTimestamp === option.isoTimestamp
+						&& opt.isoDuration === option.isoDuration,
+				)
+			}
 		},
 
 		async load() {
@@ -97,7 +131,7 @@ export const useOptionsStore = defineStore('options', {
 					return
 				}
 
-				this.options = response.data.options
+				this.options = this.optionsDtoToOptions(response.data.options)
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
@@ -149,7 +183,7 @@ export const useOptionsStore = defineStore('options', {
 					)
 				})()
 
-				this.options = response.data.options
+				this.options = this.optionsDtoToOptions(response.data.options)
 
 				if (response.data.votes) {
 					const votesStore = useVotesStore()
@@ -240,7 +274,7 @@ export const useOptionsStore = defineStore('options', {
 					sessionStore.currentPollId,
 					payload.text,
 				)
-				this.options = response.data.options
+				this.options = this.optionsDtoToOptions(response.data.options)
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
@@ -291,7 +325,7 @@ export const useOptionsStore = defineStore('options', {
 						text,
 					})),
 				)
-				this.options = response.data.options
+				this.options = this.optionsDtoToOptions(response.data.options)
 			} catch (error) {
 				Logger.error('Error reordering option', {
 					error,
@@ -310,7 +344,7 @@ export const useOptionsStore = defineStore('options', {
 					payload.option.id,
 					payload.sequence,
 				)
-				this.options = response.data.options
+				this.options = this.optionsDtoToOptions(response.data.options)
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
@@ -332,7 +366,7 @@ export const useOptionsStore = defineStore('options', {
 					payload.shift.value,
 					payload.shift.unit.id,
 				)
-				this.options = response.data.options
+				this.options = this.optionsDtoToOptions(response.data.options)
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return

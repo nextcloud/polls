@@ -9,7 +9,6 @@ import DragIcon from 'vue-material-design-icons/DotsVertical.vue'
 import DateBox from '../Base/modules/DateBox.vue'
 import { usePollStore } from '../../stores/poll'
 import OptionItemOwner from './OptionItemOwner.vue'
-import { DateTime, Duration } from 'luxon'
 
 import type { Option } from '../../stores/options.types'
 
@@ -57,8 +56,8 @@ const pollStore = usePollStore()
 		<DateBox
 			v-else
 			class="option-item__option--date"
-			:start-date="DateTime.fromSeconds(option.timestamp)"
-			:duration="Duration.fromMillis(option.duration * 1000)" />
+			:start-date="option.getDateTime()"
+			:duration="option.getDuration()" />
 
 		<slot name="actions" />
 	</component>

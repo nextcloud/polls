@@ -12,6 +12,7 @@ namespace OCA\Polls\Model\Mail;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Model\DateTimeIntervalText;
 
 class ConfirmationMail extends MailBase {
 	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Confirmation';
@@ -46,9 +47,24 @@ class ConfirmationMail extends MailBase {
 			$this->l10n->n('Confirmed option:', 'Confirmed options:', count($this->confirmedOptions))
 		);
 
+		$localizedDateSpan = new DateTimeIntervalText($this->l10n);
+
 		foreach ($this->confirmedOptions as $option) {
 			if ($this->poll->getType() === Poll::TYPE_DATE) {
-				$this->emailTemplate->addBodyListItem($option->getDateStringLocalized($this->recipient->getTimeZone(), $this->l10n));
+				$dateTime = $option->getDateTime();
+
+				if ($dateTime->getISO() === null) {
+					continue;
+				}
+
+				$localizedDateSpan
+					->setStartDateTime($option->getDateTime())
+					->setInterval($option->getInterval());
+
+				$this->emailTemplate->addBodyListItem(
+					$localizedDateSpan->getLocalizedDateTimeString()
+				);
+
 			} else {
 				$this->emailTemplate->addBodyListItem($option->getPollOptionText());
 			}

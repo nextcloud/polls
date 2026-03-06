@@ -18,7 +18,7 @@ interface Props {
 	buttonVariant?: ButtonVariant
 	buttonMode?: ButtonMode
 	buttonCaption?: string
-	modalSize?: string
+	modalSize?: 'small' | 'normal' | 'full' | 'large'
 	noClose?: boolean
 }
 

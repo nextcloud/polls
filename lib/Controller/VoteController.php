@@ -59,7 +59,6 @@ class VoteController extends BaseController {
 			$vote = $this->voteService->set($optionId, $setTo);
 			return [
 				'vote' => $vote,
-				// 'poll' => $this->pollService->get($option->getPollId()),
 				'options' => $this->optionService->list($option->getPollId()),
 				'votes' => $this->voteService->list($option->getPollId())
 			];
@@ -78,7 +77,6 @@ class VoteController extends BaseController {
 	public function delete(int $pollId, string $userId = ''): JSONResponse {
 		$this->voteService->deleteUserFromPoll($pollId, $userId);
 		return $this->response(fn () => [
-			// 'poll' => $this->pollService->get($pollId),
 			'options' => $this->optionService->list($pollId),
 			'votes' => $this->voteService->list($pollId)
 		]);

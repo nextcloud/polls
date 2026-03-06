@@ -9,13 +9,11 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
-use DateInterval;
-use DateTime;
-use DateTimeImmutable;
-use DateTimeZone;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Model\CalendarEvent;
+use OCA\Polls\Model\DateInterval;
+use OCA\Polls\Model\DateTimeImmutable;
 use OCA\Polls\UserSession;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
@@ -69,23 +67,20 @@ class CalendarService {
 	 *
 	 * @psalm-return array{from: DateTimeImmutable, to: DateTimeImmutable}
 	 */
-	private function getTimerange(int $optionId, DateTimeZone $timezone): array {
+	private function getTimerange(int $optionId): array {
 		$option = $this->optionMapper->find($optionId);
+		$optionDateTime = $option->getDateTime();
+		$optionInterval = $option->getInterval();
+
 		$searchIntervalBefore = new DateInterval("PT{$this->preferences->getCheckCalendarsHoursBefore()}H");
 		$searchIntervalAfter = new DateInterval("PT{$this->preferences->getCheckCalendarsHoursAfter()}H");
 
-		$from = (new DateTime())
-			->setTimeZone($timezone)
-			->setTimestamp($option->getTimestamp())
-			->sub($searchIntervalBefore);
-		$to = (new DateTime())
-			->setTimeZone($timezone)
-			->setTimestamp($option->getTimestamp() + $option->getDuration())
-			->add($searchIntervalAfter);
-
 		return [
-			'from' => DateTimeImmutable::createFromMutable($from),
-			'to' => DateTimeImmutable::createFromMutable($to),
+			'from' => $optionDateTime
+				->sub($searchIntervalBefore),
+			'to' => $optionDateTime
+				->add($optionInterval)
+				->add($searchIntervalAfter)
 		];
 	}
 
@@ -114,8 +109,7 @@ class CalendarService {
 	 * @psalm-return list<CalendarEvent>
 	 */
 	public function getEvents(int $optionId): array {
-		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
-		$timerange = $this->getTimerange($optionId, $timezone);
+		$timerange = $this->getTimerange($optionId);
 
 		$events = [];
 		$foundEvents = $this->searchEventsByTimeRange($timerange['from'], $timerange['to']);
@@ -131,7 +125,7 @@ class CalendarService {
 				continue;
 			}
 
-			$calendarEvent = new CalendarEvent($event, $calendar, $timerange['from'], $timerange['to'], $timezone);
+			$calendarEvent = new CalendarEvent($event, $calendar, $timerange['from'], $timerange['to']);
 
 			if ($calendarEvent->getOccurrences()) {
 				for ($index = 0; $index < count($calendarEvent->getOccurrences()); $index++) {

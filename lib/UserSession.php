@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls;
 
+use DateTimeZone;
 use Exception;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
@@ -182,11 +183,12 @@ class UserSession {
 	}
 
 	/**
-	 *
-	 * @return non-empty-string
+	 * Get client time zone from session or return default time zone
+	 * @return DateTimeZone
 	 */
-	public function getClientTimeZone(): string {
-		return $this->session->get(self::CLIENT_TZ) ?? date_default_timezone_get();
+	public function getClientTimeZone(): DateTimeZone {
+		return new DateTimeZone($this->session->get(self::CLIENT_TZ) ?? date_default_timezone_get());
+		// TODO: Use \OCP\IDateTimeZone::getDefaultTimezone() when available (NC32+)
 	}
 
 	public function setClientTimeZone(string $clientTimeZone): void {

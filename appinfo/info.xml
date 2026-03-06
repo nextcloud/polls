@@ -4,7 +4,7 @@
   <name>Polls</name>
   <summary>A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access.</summary>
   <description>A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public).</description>
-  <version>8.6.3</version>
+  <version>9.0.0-beta.2</version>
   <licence>agpl</licence>
   <author>Vinzenz Rosenkranz</author>
   <author>René Gieling</author>
@@ -25,7 +25,7 @@
   <donation>https://buymeacoffee.com/dartcafe</donation>
   <dependencies>
     <php min-version="8.1"/>
-    <nextcloud min-version="31" max-version="33"/>
+    <nextcloud min-version="32" max-version="33"/>
   </dependencies>
   <background-jobs>
     <job>OCA\Polls\Cron\NotificationCron</job>

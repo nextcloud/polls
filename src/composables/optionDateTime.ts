@@ -3,71 +3,64 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { Option } from '@/stores/options.types'
 import { DateTime, Duration, Interval } from 'luxon'
-import { ref, toValue, watchEffect } from 'vue'
 
+type OptionDateTime = {
+	optionStart: DateTime
+	duration: Duration
+	optionEnd: DateTime
+	isFullDays: boolean
+	isSameMonth: boolean
+	isSameDay: boolean
+	isSameTime: boolean
+	interval: Interval
+}
+
+export function getDatesFromOption(
+	option: Option,
+	timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
+): OptionDateTime {
+	return getDates(option.getDateTime(), option.getDuration(), timezone)
+}
 /**
- * returns the width of the element with the given id
  *
- * @param elementId the id of the element whose width should be checked
- * @param elWidthOffset the width offset to check against
+ * @param optionStart DateTime object representing the start date and time
+ * @param optionDuration  Duration object representing the duration
+ * @param timezone string representing the timezone (defaults to the user's local timezone)
+ * @return OptionDateTime object containing computed date and time information of the option
  */
+export function getDates(
+	optionStart: DateTime,
+	optionDuration: Duration,
+	timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,
+): OptionDateTime {
+	optionStart = optionStart.setZone(timezone)
 
-export const dateFrom = ref()
+	// Special handling for full-day options with zero duration: treat as 1 day
+	const duration =
+		optionDuration.as('days') === 0
+		&& optionStart.valueOf() === optionStart.startOf('day').valueOf()
+			? Duration.fromObject({ days: 1 })
+			: optionDuration
 
-export function getDates(optionStart: DateTime, optionDuration: Duration | null) {
-	const endDate = ref(optionStart)
-	const localDuration = ref(null as Duration | null)
-	const interval = ref(Interval.fromDateTimes(optionStart, optionStart))
+	const isFullDays =
+		optionStart.valueOf() === optionStart.startOf('day').valueOf()
+		&& duration.hours + duration.minutes === 0
 
-	const fullDays = ref(false)
-	const isSameMonth = ref(false)
-	const isSameDay = ref(false)
-	const isSameTime = ref(false)
-
-	const calculateValues = () => {
-		endDate.value = toValue(optionStart)
-		localDuration.value = toValue(optionDuration)
-		fullDays.value = false
-
-		if (!localDuration.value) {
-			// without duration, no further calculation is possible
-			// end date remains the same as from date
-			return
-		}
-
-		// Check if the duration represents full days
-		fullDays.value =
-			optionStart.valueOf() === optionStart.startOf('day').valueOf()
-			&& localDuration.value.hours + localDuration.value.minutes === 0
-
-		// If full days are selected and duration is 0 days, set duration to 1 day
-		if (fullDays.value && localDuration.value.as('days') === 0) {
-			optionDuration = Duration.fromObject({ days: 1 })
-		}
-
-		endDate.value = optionStart.plus(localDuration.value)
-		// If full days are selected, subtract 1 millisecond for display purposes
-		if (fullDays.value) {
-			endDate.value = endDate.value.minus({ milliseconds: 1 })
-		}
-		isSameMonth.value = optionStart.hasSame(endDate.value, 'month')
-		isSameDay.value = optionStart.hasSame(endDate.value, 'day')
-		isSameTime.value = localDuration.value.as('minutes') === 0
-		interval.value = Interval.fromDateTimes(optionStart, endDate.value)
-	}
-
-	watchEffect(() => {
-		calculateValues()
-	})
+	// Subtract 1 millisecond from full-day end dates for display purposes
+	const optionEnd = optionStart
+		.plus(duration)
+		.minus({ milliseconds: isFullDays ? 1 : 0 })
 
 	return {
 		optionStart,
-		optionEnd: endDate.value,
-		isFullDays: fullDays.value,
-		isSameMonth: isSameMonth.value,
-		isSameDay: isSameDay.value,
-		isSameTime: isSameTime.value,
-		optionInterval: interval.value,
+		duration,
+		optionEnd,
+		isFullDays,
+		isSameMonth: optionStart.hasSame(optionEnd, 'month'),
+		isSameDay: optionStart.hasSame(optionEnd, 'day'),
+		isSameTime: duration.as('minutes') === 0,
+		interval: Interval.fromDateTimes(optionStart, optionEnd),
 	}
 }

@@ -22,7 +22,7 @@ import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 interface Props {
 	caption?: string
-	modalSize?: string
+	modalSize?: 'small' | 'normal' | 'full' | 'large'
 	buttonMode?: ButtonMode
 }
 

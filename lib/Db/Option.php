@@ -8,16 +8,14 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
-use DateInterval;
-use DateTime;
-use DateTimeImmutable;
 use DateTimeZone;
 use JsonSerializable;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Helper\Hash;
+use OCA\Polls\Model\DateInterval;
+use OCA\Polls\Model\DateTimeImmutable;
 use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Model\UserBase;
-use OCP\IL10N;
 
 /**
  * @psalm-suppress UnusedProperty
@@ -25,24 +23,16 @@ use OCP\IL10N;
  * @method void setId(int $value)
  * @method int getConfirmed()
  * @method void setConfirmed(int $value)
- * @method int getDuration()
- * @method void setDuration(int $value)
- * @method int getOrder()
- * @method void setOrder(int $value)
  * @method string getOwner()
  * @method void setOwner(string $value)
  * @method int getPollId()
- * @method void setPollId(int $value)
- * @method string getPollOptionText()
- * @method void setPollOptionText(string $value)
- * @method string getPollOptionHash()
- * @method void setPollOptionHash(string $value)
  * @method int getReleased()
  * @method void setReleased(int $value)
- * @method int getTimestamp()
- * @method void setTimestamp(int $value)
  * @method int getDeleted()
  * @method void setDeleted(int $value)
+ *
+ * No magic getters, getters are overwritten for special handling of timestamp and option text
+ * @method void setOrder(int $value)
  *
  * Joined Attributes
  * @method string getUserVoteAnswer()
@@ -54,6 +44,21 @@ use OCP\IL10N;
  * @method int getVotesNo()
  * @method int getVotesMaybe()
  * @method int getShowResults()
+ *
+ * Protected setters for pollId, pollOptionText, setPollOptionHash, timestamp
+ * and duration, as they should not be set directly, but through setPoll(),
+ * setText(), setDateTime() and setInterval()
+ *
+ * protected setPollId(int $value)
+ * protected setTimestamp(int $value)
+ * protected setDuration(int $value)
+ * protected setIsoTimestamp(?string $value)
+ * protected setIsoDuration(?string $value)
+ * protected setPollOptionText(string $value)
+ * protected setPollOptionHash(string $value)
+ *
+ * Nextcloud generates them automagically through the entity class.
+ *
  */
 class Option extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_options';
@@ -66,6 +71,8 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected int $timestamp = 0;
 	protected int $duration = 0;
 	protected int $order = 0;
+	protected ?string $isoTimestamp = null;
+	protected ?string $isoDuration = null;
 	protected int $confirmed = 0;
 	protected string $owner = '';
 	protected int $released = 0;
@@ -82,13 +89,18 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected int $votesMaybe = 0;
 	protected int $showResults = 0;
 
+	protected DateInterval $optionInterval;
+	protected DateTimeImmutable $optionDateTimeImmutable;
+
+	// deprecated columns
+
 	public function __construct() {
 		$this->addType('released', 'integer');
 		$this->addType('pollId', 'integer');
-		$this->addType('timestamp', 'integer');
 		$this->addType('order', 'integer');
-		$this->addType('confirmed', 'integer');
+		$this->addType('timestamp', 'integer');
 		$this->addType('duration', 'integer');
+		$this->addType('confirmed', 'integer');
 		$this->addType('deleted', 'integer');
 
 		// joined Attributes
@@ -103,6 +115,22 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 
 	/**
+	 * Clone this option and reset the id, pollId, deleted
+	 * and confirmed status, as well as the owner and the hash.
+	 *
+	 * @return void
+	 */
+	public function __clone() {
+		$this->setDeleted(0);
+		$this->setConfirmed(0);
+		$this->setOwner('');
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setPollId(0);
+	}
+
+	/**
+	 * Return the option data as an associative array for JSON serialization.
+	 *
 	 * @return array
 	 *
 	 * @psalm-suppress PossiblyUnusedMethod
@@ -113,10 +141,12 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'pollId' => $this->getPollId(),
 			'text' => $this->getPollOptionText(),
 			'timestamp' => $this->getTimestamp(),
+			'duration' => $this->getDuration(),
+			'isoTimestamp' => $this->getIsoTimestamp(),
+			'isoDuration' => $this->getIsoDuration(),
 			'deleted' => $this->getDeleted(),
 			'order' => $this->getOrder(),
 			'confirmed' => $this->getConfirmed(),
-			'duration' => $this->getDuration(),
 			'locked' => $this->getIsLocked(),
 			'hash' => $this->getPollOptionHash(),
 			'isOwner' => $this->getCurrentUserIsEntityUser(),
@@ -125,6 +155,11 @@ class Option extends EntityWithUser implements JsonSerializable {
 		];
 	}
 
+	/**
+	 * Get the vote status for this option
+	 *
+	 * @return array An associative array containing the counts of 'yes', 'no', 'maybe' votes, the total count of votes and the current user's vote answer.
+	 */
 	private function getVotes(): array {
 		return [
 			'no' => $this->getVotesNo() * $this->getShowResults(),
@@ -135,127 +170,273 @@ class Option extends EntityWithUser implements JsonSerializable {
 		];
 	}
 
+	/**
+	 * alias of getOwner()
+	 *
+	 * @return string The user ID of the option's owner
+	 */
+	public function getUserId(): string {
+		return $this->getOwner();
+	}
+
+	/***************************************************
+	 * special getters
+	 ***************************************************/
+	/**
+	 * Get the owner user object. Returns null if the owner is not set or if the owner does not exist.
+	 *
+	 * @return UserBase|null The owner user object or null if not set or does not exist
+	 */
 	public function getOwnerUser(): ?UserBase {
-		if ($this->getOwner() === '') {
+		if ($this->getUserId() === '') {
 			return null;
 		}
 		return parent::getUser();
 	}
 
-	public function setFromSimpleOption(SimpleOption $option): void {
-		$this->setOption(
-			$option->getTimestamp(),
-			$option->getDuration(),
-			$option->getText(),
-			$option->getOrder(),
+	public function getPollOptionHash(): string {
+		return Hash::getOptionHash(
+			$this->getPollId(),
+			$this->getPollOptionText(),
 		);
-		$this->setDeleted(0);
-		$this->syncOption();
+	}
+	/**
+	 * Get the order of the option. If the option has a valid timestamp,
+	 * the order will be determined by the timestamp to ensure correct
+	 * ordering of options based on their date and time.
+	 *
+	 * @return int The order of the option, determined by the timestamp if valid, otherwise the order value from the database
+	 */
+	public function getOrder(): int {
+		return $this->getTimestamp() !== 0
+			? $this->getTimestamp()
+			: $this->order;
 	}
 
 	/**
-	 * cumulative Set option entities cumulative and validated
-	 * if timestamp is given, the pollOptionText will be synced according to the timestamp and duration
+	 * Get the text of the option. If the option has a valid timestamp,
+	 * the text will be generated from the timestamp and duration
+	 */
+	public function getPollOptionText(): string {
+		return $this->getTimestamp() !== 0
+			? $this->getDateTimePollOptionText()
+			: htmlspecialchars_decode($this->pollOptionText);
+	}
+
+	/***************************************************
+	 * special setters
+	 ***************************************************/
+
+	/**
+	 * Set the poll ID for the option. Also updates the poll option hash to ensure
+	 */
+	public function setPoll(int $pollId): void {
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setPollId($pollId);
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setPollOptionHash($this->getPollOptionHash());
+	}
+
+	/**
+	 * Set the text of the option. Also updates the poll option hash to ensure
+	 * it is always in sync with the text and poll ID.
 	 *
-	 * @param int $timestamp Timestamp to set
-	 * @param int $duration Set duration of option in seconds and used together with timestamp, defaults to 0
-	 * @param string $pollOptionText Option text, ignored if $timestamp is set
-	 * @param int $order Set order of this option inside the poll, defaults to 0, ignored if timestap is set
+	 * @param string $text The text to set for the option
+	 */
+	public function setText(string $text): void {
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setPollOptionText($text);
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setPollOptionHash($this->getPollOptionHash());
+	}
+	/***************************************************
+	 * date and time getters
+	 ***************************************************/
+
+	/**
+	 * Get the option's date and time as a DateTimeImmutable object.
+	 * Returns the date and time based on the isoTimestamp if it is set,
+	 * otherwise it falls back to the timestamp.
+	 *
+	 * @return DateTimeImmutable
+	 */
+	public function getDateTime(): DateTimeImmutable {
+		if ($this->isoTimestamp !== null && $this->isoTimestamp !== '') {
+			return new DateTimeImmutable($this->isoTimestamp);
+		}
+		return new DateTimeImmutable($this->timestamp);
+	}
+
+	/**
+	 * Get the option's timestamp as an integer.
+	 * Always returns the timestamp from getDateTime()
+	 *
+	 * @return int The timestamp of the option as Unix timestamp in seconds
+	 */
+	public function getTimestamp(): int {
+		return $this->getDateTime()->getTimestamp();
+	}
+
+	/**
+	 * Get the option's date and time as an ISO 8601 string.
+	 * Always returns the ISO timestamp from getDateTime()
+	 *
+	 * @return string|null The ISO 8601 timestamp string of the option, or null if no valid date and time is set
+	 */
+	public function getIsoTimestamp(): ?string {
+		return $this->getDateTime()->getISO();
+	}
+
+	/***************************************************
+	 * date and time setters
+	 ***************************************************/
+
+	/**
+	 * Set the option's date and time from a DateTimeImmutable object.
+	 * Also updates the timestamp, isoTimestamp, order, and pollOptionText
+	 * based on the new date and time.
+	 *
+	 * Prefer this method over setTimestamp() and setIsoTimestamp()
+	 *
+	 * @param DateTimeImmutable $dateTime The DateTimeImmutable object to set the option's date and time from
 	 * @return void
 	 */
-	public function setOption(
-		int $timestamp = 0,
-		int $duration = 0,
-		string $pollOptionText = '',
-		int $order = 0,
-	): void {
-
-		if ($timestamp) {
-			$this->setTimestamp($timestamp);
-			$this->setDuration($duration);
-		} elseif ($pollOptionText) {
-			$this->setPollOptionText($pollOptionText);
-			if ($order > 0) {
-				$this->setOrder($order);
-			}
-		} else {
-			throw new InsufficientAttributesException('Option must have a value');
-		}
-
-		$this->syncOption();
+	public function setDateTime(DateTimeImmutable $dateTime): void {
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setTimestamp($dateTime->getTimestamp());
+		$this->setOrder($dateTime->getTimestamp());
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setIsoTimestamp($dateTime->getISO());
+		$this->setText($this->getDateTimePollOptionText());
 	}
 
-	public function shiftOption(DateTimeZone $timeZone, int $step, string $unit): void {
-		$from = (new DateTime())
-			->setTimestamp($this->getTimestamp())
-			->setTimezone($timeZone)
-			->modify($step . ' ' . $unit);
-		$to = (new DateTime())
-			->setTimestamp($this->getTimestamp() + $this->getDuration())
-			->setTimezone($timeZone)
-			->modify($step . ' ' . $unit);
-		$this->setTimestamp($from->getTimestamp());
-		$this->setDuration($to->getTimestamp() - $from->getTimestamp());
-		$this->syncOption();
+	/***************************************************
+	 * Duration getters
+	 ***************************************************/
+
+	/**
+	 * Get the option's duration as a DateInterval object.
+	 * Returns the duration based on the isoDuration if it is set,
+	 * otherwise it falls back to the duration in seconds.
+	 *
+	 * @return DateInterval The duration of the option as a DateInterval object, or null if no valid duration is set
+	 */
+	public function getInterval(): DateInterval {
+		if ($this->isoDuration !== null && $this->isoDuration !== '') {
+			return new DateInterval($this->isoDuration);
+		}
+		return new DateInterval($this->duration);
 	}
 
 	/**
-	 * Syncs pollOptionText and order according to timestamp and duration if timestamp > 0 and
-	 * updates hash based on synced pollId and pollOptionText
+	 * Get the option's duration in seconds.
+	 * Always returns the duration in seconds from getInterval()
+	 *
+	 * @return int The duration of the option in seconds
+	 * @psalm-suppress PossiblyUnusedMethod
 	 */
-	public function syncOption(): void {
-		// make sure, pollOptionText matches timestamp and duration
-		// timestamp gets precedence over pollOptionText
-		if ($this->getTimestamp()) {
-			$this->setOrder($this->getTimestamp());
-
-			if ($this->duration) {
-				$this->setPollOptionText(date('c', $this->getTimestamp()) . ' - ' . date('c', $this->getTimestamp() + $this->getDuration()));
-			} else {
-				$this->setPollOptionText(date('c', $this->timestamp));
-			}
-		}
-
-		// update hash
-		$this->updateHash();
+	public function getDuration(): int {
+		return $this->getInterval()->getSeconds();
 	}
 
-	private function updateHash(): void {
-		$this->setPollOptionHash(Hash::getOptionHash(
-			$this->getPollId(),
-			$this->getPollOptionText()
-		));
+	/**
+	 * Get the option's duration as an ISO 8601 string.
+	 * Always returns the ISO duration from getInterval()
+	 *
+	 * @return string|null The ISO 8601 duration string of the option, or null if no valid duration is set
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
+	public function getIsoDuration(): ?string {
+		return $this->getInterval()->getISO();
 	}
 
-	public function getPollOptionText(): string {
-		if ($this->getTimestamp() === 0) {
+	/***************************************************
+	 * Duration setters
+	 ***************************************************/
+
+	/**
+	 * Set the option's duration from a DateInterval object.
+	 * Also updates the duration in seconds, isoDuration, and pollOptionText
+	 * based on the new duration.
+	 *
+	 * Prefer this method over setDuration() and setIsoDuration()
+	 *
+	 * @param DateInterval $optionInterval The DateInterval object to set the option's duration from
+	 * @return void
+	 */
+	public function setInterval(DateInterval $optionInterval): void {
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setDuration($optionInterval->getSeconds());
+		/** @psalm-suppress UndefinedMagicMethod */
+		$this->setIsoDuration($optionInterval->getISO());
+		$this->setText($this->getDateTimePollOptionText());
+	}
+
+	/***************************************************
+	 * misc private and public methods and helpers
+	 ***************************************************/
+
+	private function getDateTimePollOptionText(): string {
+		$isoTimestamp = $this->getIsoTimestamp();
+		if ($isoTimestamp === null) {
 			return htmlspecialchars_decode($this->pollOptionText);
 		}
 
-		// return timespan, if duration is set
-		if ($this->getDuration()) {
-			return date('c', $this->getTimestamp()) . ' - ' . date('c', $this->getTimestamp() + $this->getDuration());
+		if ($this->getInterval()->isZeroDuration()) {
+			return $isoTimestamp;
 		}
 
-		// else return formatted timestamp
-		return date('c', $this->getTimestamp());
+		return $isoTimestamp
+		. ' - '
+		. ($this->getDateTime()->add($this->getInterval())->getISO() ?? '');
 	}
 
-	/** @psalm-suppress PossiblyUnusedMethod */
-	public function getPollOptionTextEnd(): string {
-		if ($this->getTimestamp()) {
-			return date('c', $this->getTimestamp() + $this->getDuration());
+	/**
+	 * Shift the option's date and time by a specified amount of time.
+	 *
+	 * @param int $step The amount of time to shift the option by
+	 * @param string $unit The unit of time to shift by (e.g. 'day', 'hour', 'minute')
+	 * @param DateTimeZone $timeZone The time zone to use for the date and time calculations
+	 * @return Option Returns the Option instance for method chaining
+	 */
+	public function shiftOption(int $step, string $unit, DateTimeZone $timeZone): self {
+		$shifted = $this->getDateTime()
+			->setTimeZone($timeZone)
+			->modify($step . ' ' . $unit);
+		if (!$shifted) {
+			throw new InsufficientAttributesException('Failed to shift option, invalid step or unit');
 		}
-		return htmlspecialchars_decode($this->pollOptionText);
+		$this->setDateTime($shifted);
+
+		return $this;
 	}
 
+	/**
+	 * Get the option's text for old options that only have a timestamp. If
+	 * the option has a valid timestamp, the text will be returned as an
+	 * ISO string of the timestamp. Otherwise, the regular option text will be
+	 * returned.
+	 *
+	 * This is used in the migration to set the option text for old options that
+	 * only have a timestamp, as the option text is now required and cannot be
+	 * empty. This ensures that old options will have a valid option text after
+	 * the migration, even if they only had a timestamp before. The option text
+	 * will be set to the ISO string of the timestamp to ensure it is unique and
+	 * does not conflict with any existing option texts.
+	 *
+	 * @return string The text of the option, either as an ISO string of the timestamp or the regular option text
+	 */
 	public function getPollOptionTextStart(): string {
-		if ($this->getTimestamp()) {
-			return date('c', $this->getTimestamp());
-		}
-		return htmlspecialchars_decode($this->pollOptionText);
+		return $this->getIsoTimestamp() ?? htmlspecialchars_decode($this->pollOptionText);
 	}
 
+	/**
+	 * Check if the option is locked for the current user. An option is considered locked if:
+	 * - It is marked as deleted, or
+	 * - The user did not vote yes for this option, and either the option limit or the vote limit has been reached.
+	 *
+	 * @return bool Returns true if the option is locked for the current user, false otherwise
+	 */
 	public function getIsLocked(): bool {
 		return $this->getDeleted()
 			|| ($this->getUserVoteAnswer() !== Vote::VOTE_YES
@@ -264,90 +445,51 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 
 	/**
+	 * Check if this option is locked by the optionLimit:
+	 * If an option limit is set
+	 * and the user did not vote yes for this option
+	 * and the count of yes votes for this option is EQUAL OR GREATER THAN the option limit,
+	 * the option is locked for the current user
+	 *
 	 * @return bool Returns true, if this option is locked by the optionLimit and the user has not voted yes
 	 */
 	public function getIsLockedByOptionLimit(): bool {
 		return $this->getOptionLimit() && $this->getVotesYes() >= $this->getOptionLimit() && $this->getUserVoteAnswer() !== Vote::VOTE_YES;
 	}
 
+	/**
+	 * Check if this option is locked by the voteLimit:
+	 * If a vote limit is set
+	 * and the user did not vote yes for this option
+	 * and the count of yes votes of the current user is EQUAL OR GREATER THAN the vote limit,
+	 * the option is locked for the current user
+	 *
+	 * @return bool Returns true, if this option is locked by the voteLimit
+	 */
 	public function getIsLockedByVotesLimit(): bool {
-		// IF a vote limit is set
-		// AND the user did not vote yes for this option
-		// AND the count of yes votes of the current user is EQUAL OR GREATER THAN the vote limit
-		// return true (locked option for current user)
 		return $this->getVoteLimit() && $this->getUserCountYesVotes() >= $this->getVoteLimit();
 	}
 
-	public function getOrder(): int {
-		if ($this->timestamp) {
-			return $this->getTimestamp();
-		}
-		return $this->order;
-	}
-
-	// alias of getOwner()
-	public function getUserId(): string {
-		return $this->getOwner();
-	}
-
-	public function getDateStringLocalized(DateTimeZone $timeZone, IL10N $l10n): string {
-		$mutableFrom = DateTime::createFromImmutable($this->getDateObjectFrom($timeZone));
-		$mutableTo = DateTime::createFromImmutable($this->getDateObjectTo($timeZone));
-		$dayLongSecond = new DateInterval('PT1S');
-		$sameDay = $this->getDateObjectFrom($timeZone)->format('Y-m-d') === $this->getDateObjectTo($timeZone)->format('Y-m-d');
-
-		// If duration is zero, the option represents a moment with day and time
-		if ($this->getDuration() === 0) {
-			return (string)$l10n->l('datetime', $mutableFrom);
-		}
-
-		$dateTimeFrom = $l10n->l('datetime', $mutableFrom);
-		$dateTimeTo = $l10n->l('datetime', $mutableTo);
-
-		// If the option spans over on or more whole days, the option represents only the days without time
-		// adjust the end by substracting a second, to represent the last moment at the day and not the first moment of the following day
-		// which is calculated by adding the duration
-		if ($this->getDaylong($timeZone)) {
-			$dateTimeFrom = $l10n->l('date', $mutableFrom);
-			$dateTimeTo = $l10n->l('date', $mutableTo->sub($dayLongSecond));
-			// if start and end day are identiacal, just return the start day
-			if ($dateTimeFrom === $dateTimeTo) {
-				return (string)$dateTimeFrom;
-			}
-		}
-
-		if ($sameDay) {
-			$dateTimeTo = $l10n->l('time', $mutableTo);
-		}
-
-		return (string)$dateTimeFrom . ' - ' . (string)$dateTimeTo;
-	}
-
 	/**
-	 * Check, if the date option spans one or more whole days (from 00:00 to 24:00)
+	 * Set option's text, date and time, and duration from a SimpleOption instance.
+	 * This will also sync the option to update the order and hash.
+	 *
+	 * @param SimpleOption $simpleOption The SimpleOption instance to set the option's attributes from
+	 * @param string $pollTypeHint The type of the poll to determine which attributes to set. If empty, all attributes will be set.
+	 * @return Option Returns the Option instance for method chaining
 	 */
-	private function getDaylong(DateTimeZone $timeZone): bool {
-		$from = $this->getDateObjectFrom($timeZone);
-		$to = $this->getDateObjectTo($timeZone);
-		$dateInterval = $from->diff($to);
-
-		if (
-			$this->getDuration() > 0
-			&& $from->format('H') === '00'
-			&& $dateInterval->h + $dateInterval->i + $dateInterval->h === 0
-		) {
-			return true;
+	public function setFromSimpleOption(SimpleOption $simpleOption, string $pollTypeHint = ''): self {
+		if ($pollTypeHint === Poll::TYPE_DATE) {
+			$this->setDateTime($simpleOption->getDateTime());
+			$this->setInterval($simpleOption->getInterval());
+		} elseif ($pollTypeHint === Poll::TYPE_TEXT) {
+			$this->setText($simpleOption->getText() ?? '');
+		} else {
+			// Without poll type hint, set all properties
+			$this->setText($simpleOption->getText() ?? '');
+			$this->setDateTime($simpleOption->getDateTime());
+			$this->setInterval($simpleOption->getInterval());
 		}
-		return false;
-	}
-
-	private function getDateObjectFrom(DateTimeZone $timeZone): DateTimeImmutable {
-		$dateTime = (new DateTimeImmutable())->setTimestamp($this->getTimestamp());
-		return $dateTime->setTimezone($timeZone);
-	}
-
-	private function getDateObjectTo(DateTimeZone $timeZone): DateTimeImmutable {
-		$dateTime = (new DateTimeImmutable())->setTimestamp($this->getTimestamp() + $this->getDuration());
-		return $dateTime->setTimezone($timeZone);
+		return $this;
 	}
 }

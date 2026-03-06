@@ -121,7 +121,9 @@ export const usePollWatcher = (interval = 30000) => {
 
 					break
 				default:
-					Logger.warn('[PollWatcher] Unknown message type:', { type })
+					Logger.warn(
+						`[PollWatcher] Unknown message type: ${type satisfies never}`,
+					)
 			}
 		}
 	}

@@ -9,6 +9,7 @@ import { DateTime } from 'luxon'
 import { CalendarEvent } from '../../components/Calendar/CalendarPeek.vue'
 
 import type { Option } from '../../stores/options.types'
+import { getDatesFromOption } from '@/composables/optionDateTime'
 
 interface Props {
 	calendarEvent: CalendarEvent
@@ -70,7 +71,7 @@ const conflictLevel = computed(() => {
 	}
 
 	// No conflict, if calendarEvent starts after end of option
-	if (calendarEvent.start >= option.timestamp + option.duration) {
+	if (calendarEvent.start >= getDatesFromOption(option).optionEnd.toSeconds()) {
 		return 'conflict-no'
 	}
 
@@ -80,7 +81,7 @@ const conflictLevel = computed(() => {
 	}
 
 	// No conflict, if calendarEvent ends before option
-	if (calendarEvent.end <= option.timestamp) {
+	if (calendarEvent.end <= getDatesFromOption(option).optionStart.toSeconds()) {
 		return 'conflict-no'
 	}
 

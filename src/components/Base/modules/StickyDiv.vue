@@ -88,7 +88,6 @@ const stickyClass = computed(() => ({
 }
 
 .sticky-div.sticky-bottom-shadow::after {
-	content: '';
 	background: linear-gradient(
 		to bottom,
 		rgba(var(--color-box-shadow-rgb), 0.3),
@@ -99,12 +98,11 @@ const stickyClass = computed(() => ({
 	width: 100%;
 	height: 6px;
 	bottom: -6px;
-	left: 0px;
+	inset-inline-start: 0px;
 	z-index: -1;
 }
 
 .sticky-div.sticky-right-shadow::after {
-	content: '';
 	background: linear-gradient(
 		to right,
 		rgba(var(--color-box-shadow-rgb), 0.3),
@@ -114,7 +112,7 @@ const stickyClass = computed(() => ({
 	position: absolute;
 	height: 100%;
 	width: 6px;
-	right: -6px;
+	inset-inline-end: -6px;
 	top: 0px;
 	z-index: -1;
 }
