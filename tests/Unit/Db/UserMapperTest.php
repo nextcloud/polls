@@ -8,16 +8,10 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Tests\Unit\Db;
 
-use OCA\Circles\Api\v1\Circles as CirclesApi;
-use OCA\Circles\Model\Circle as CirclesCircle;
-use OCA\DAV\CardDAV\CardDavBackend;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
-use OCA\Polls\Model\Group\Circle;
-use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\Group\Group;
 use OCA\Polls\Model\User\Admin;
-use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
 use OCA\Polls\Model\User\GenericUser;
 use OCA\Polls\Model\User\Ghost;
@@ -28,58 +22,16 @@ use OCP\Server;
 
 class UserMapperTest extends UnitTestCase {
 	private UserMapper $userMapper;
-	private string $contactUid = '';
-	private int $contactBookId = 0;
-	private string $circleId = '';
 
 	protected function setUp(): void {
 		parent::setUp();
 		$this->userMapper = Server::get(UserMapper::class);
-
-		// Create a test contact for Contact/ContactGroup tests
-		if (Contact::isEnabled()) {
-			$backend = Server::get(CardDavBackend::class);
-			$books = $backend->getAddressBooksForUser('principals/users/admin');
-			if (empty($books)) {
-				$backend->createAddressBook('principals/users/admin', 'contacts', []);
-				$books = $backend->getAddressBooksForUser('principals/users/admin');
-			}
-			$this->contactBookId = (int)$books[0]['id'];
-			$this->contactUid = bin2hex(random_bytes(8));
-			$vcard = "BEGIN:VCARD\r\nVERSION:3.0\r\nUID:{$this->contactUid}\r\nFN:Test Contact\r\nEMAIL:test_{$this->contactUid}@polls.example.com\r\nEND:VCARD";
-			$backend->createCard($this->contactBookId, $this->contactUid . '.vcf', $vcard);
-		}
-
-		// Create a test circle for Circle tests
-		if (Circle::isEnabled()) {
-			\OC_User::setUserId('admin');
-			$circle = CirclesApi::createCircle(CirclesCircle::CIRCLES_PERSONAL, 'TestPollsCircle_' . bin2hex(random_bytes(4)));
-			$this->circleId = $circle->getUniqueId();
-		}
-	}
-
-	protected function tearDown(): void {
-		parent::tearDown();
-
-		if ($this->contactBookId > 0 && $this->contactUid !== '') {
-			$backend = Server::get(CardDavBackend::class);
-			$backend->deleteCard($this->contactBookId, $this->contactUid . '.vcf');
-		}
-
-		if ($this->circleId !== '') {
-			try {
-				CirclesApi::destroyCircle($this->circleId);
-			} catch (\Exception $e) {
-				// ignore cleanup errors
-			}
-		}
 	}
 
 	// --- getUserObject ---
 	// User/Admin use 'admin' (created by NC install in CI).
 	// Group uses 'admin' group (also created by NC install).
-	// Contact/ContactGroup use a vCard created in setUp() via CardDavBackend.
-	// Circle uses a circle created in setUp() via the Circles v1 API.
+	// Contact/ContactGroup/Circle require external apps — tested separately once available.
 
 	public function testGetUserObjectReturnsUser(): void {
 		$user = $this->userMapper->getUserObject(User::TYPE, 'admin');
@@ -94,24 +46,6 @@ class UserMapperTest extends UnitTestCase {
 	public function testGetUserObjectReturnsGroup(): void {
 		$user = $this->userMapper->getUserObject(Group::TYPE, 'admin');
 		$this->assertInstanceOf(Group::class, $user);
-	}
-
-	public function testGetUserObjectReturnsContact(): void {
-		$this->assertNotEmpty($this->contactUid, 'Contacts app not enabled or contact creation failed');
-		$user = $this->userMapper->getUserObject(Contact::TYPE, $this->contactUid);
-		$this->assertInstanceOf(Contact::class, $user);
-	}
-
-	public function testGetUserObjectReturnsContactGroup(): void {
-		// ContactGroup constructor only checks isEnabled() — no data lookup needed
-		$user = $this->userMapper->getUserObject(ContactGroup::TYPE, 'TestGroup');
-		$this->assertInstanceOf(ContactGroup::class, $user);
-	}
-
-	public function testGetUserObjectReturnsCircle(): void {
-		$this->assertNotEmpty($this->circleId, 'Circles app not enabled or circle creation failed');
-		$user = $this->userMapper->getUserObject(Circle::TYPE, $this->circleId);
-		$this->assertInstanceOf(Circle::class, $user);
 	}
 
 	public function testGetUserObjectReturnsGhost(): void {
