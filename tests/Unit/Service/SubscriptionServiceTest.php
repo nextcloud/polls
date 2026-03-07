@@ -12,18 +12,38 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
+use OCA\Polls\UserSession;
 use OCP\ISession;
+use OCP\IUserManager;
 use OCP\Server;
 
 class SubscriptionServiceTest extends UnitTestCase {
 	private SubscriptionService $subscriptionService;
 	private PollMapper $pollMapper;
 	private ISession $session;
+	private string $adminOriginalEmail = '';
 
 	private Poll $poll;
 
 	protected function setUp(): void {
 		parent::setUp();
+
+		// getAllowSubscribeToPoll() requires getCurrentUser()->getHasEmail().
+		// Ensure admin has an email and that the core NC session is active so
+		// UserSession::getIsLoggedIn() returns true and getCurrentUser() resolves
+		// to the real admin user rather than Ghost.
+		$adminUser = Server::get(IUserManager::class)->get('admin');
+		$this->adminOriginalEmail = $adminUser?->getEMailAddress() ?? '';
+		if ($adminUser !== null && !$adminUser->getEMailAddress()) {
+			$adminUser->setEMailAddress('admin@test.local');
+		}
+		\OC_User::setUserId('admin');
+
+		// Reset the polls UserSession cache so getCurrentUser() is re-resolved
+		// from the core session set above, then restore the polls session key.
+		$userSession = Server::get(UserSession::class);
+		$userSession->cleanSession();
+
 		$this->session = Server::get(ISession::class);
 		$this->session->set('ncPollsUserId', 'admin');
 
@@ -37,6 +57,7 @@ class SubscriptionServiceTest extends UnitTestCase {
 
 	protected function tearDown(): void {
 		parent::tearDown();
+		Server::get(IUserManager::class)->get('admin')?->setEMailAddress($this->adminOriginalEmail);
 		// Subscriptions cascade-delete with the poll
 		try {
 			$this->pollMapper->delete($this->poll);
