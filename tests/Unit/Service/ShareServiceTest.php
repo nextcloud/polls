@@ -108,11 +108,10 @@ class ShareServiceTest extends UnitTestCase {
 		$this->assertSame($this->poll->getId(), $share->getPollId());
 	}
 
-	public function testAddDuplicatePublicShareReturnsSameToken(): void {
+	public function testAddDuplicatePublicShareCreatesNewShare(): void {
 		$first = $this->shareService->add($this->poll->getId(), Share::TYPE_PUBLIC);
 		$second = $this->shareService->add($this->poll->getId(), Share::TYPE_PUBLIC);
-		// ShareAlreadyExistsException is caught internally; same share returned
-		$this->assertSame($first->getToken(), $second->getToken());
+		$this->assertNotSame($first->getId(), $second->getId());
 	}
 
 	// --- get ---
