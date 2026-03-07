@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Tests\Unit\Service;
 
 use OCA\Polls\Db\Option;
-use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
@@ -21,7 +20,6 @@ use OCP\Server;
 
 class OptionServiceTest extends UnitTestCase {
 	private OptionService $optionService;
-	private OptionMapper $optionMapper;
 	private PollMapper $pollMapper;
 	private ISession $session;
 
@@ -35,7 +33,6 @@ class OptionServiceTest extends UnitTestCase {
 		$this->session->set('ncPollsUserId', 'admin');
 
 		$this->optionService = Server::get(OptionService::class);
-		$this->optionMapper = Server::get(OptionMapper::class);
 		$this->pollMapper = Server::get(PollMapper::class);
 
 		// Text poll owned by admin, private, open
@@ -66,11 +63,11 @@ class OptionServiceTest extends UnitTestCase {
 		// Options are deleted when their poll is deleted
 		try {
 			$this->pollMapper->delete($this->textPoll);
-		} catch (\Exception $e) {
+		} catch (\Exception) {
 		}
 		try {
 			$this->pollMapper->delete($this->datePoll);
-		} catch (\Exception $e) {
+		} catch (\Exception) {
 		}
 	}
 
@@ -163,6 +160,10 @@ class OptionServiceTest extends UnitTestCase {
 		$this->textPoll->setExpire(time() - 3600);
 		$this->pollMapper->update($this->textPoll);
 
+		// Bust OptionService poll cache: load datePoll so the next call for textPoll
+		// causes a cache miss and re-reads the updated expire from DB
+		$this->optionService->list($this->datePoll->getId());
+
 		$confirmed = $this->optionService->confirm($this->textOption->getId());
 		$this->assertGreaterThan(0, $confirmed->getConfirmed());
 
@@ -174,6 +175,9 @@ class OptionServiceTest extends UnitTestCase {
 	public function testConfirmTogglesConfirmation(): void {
 		$this->textPoll->setExpire(time() - 3600);
 		$this->pollMapper->update($this->textPoll);
+
+		// Bust OptionService poll cache so updated expire is read from DB
+		$this->optionService->list($this->datePoll->getId());
 
 		$this->optionService->confirm($this->textOption->getId()); // confirm
 		$unconfirmed = $this->optionService->confirm($this->textOption->getId()); // toggle back

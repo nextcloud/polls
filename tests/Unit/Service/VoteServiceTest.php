@@ -9,13 +9,14 @@ declare(strict_types=1);
 namespace OCA\Polls\Tests\Unit\Service;
 
 use OCA\Polls\Db\Option;
-use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Model\SimpleOption;
+use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\VoteService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\UserSession;
@@ -24,8 +25,8 @@ use OCP\Server;
 
 class VoteServiceTest extends UnitTestCase {
 	private VoteService $voteService;
+	private OptionService $optionService;
 	private PollMapper $pollMapper;
-	private OptionMapper $optionMapper;
 	private ShareMapper $shareMapper;
 	private VoteMapper $voteMapper;
 	private ISession $session;
@@ -42,10 +43,10 @@ class VoteServiceTest extends UnitTestCase {
 		parent::setUp();
 		$this->session = Server::get(ISession::class);
 		$this->pollMapper = Server::get(PollMapper::class);
-		$this->optionMapper = Server::get(OptionMapper::class);
 		$this->shareMapper = Server::get(ShareMapper::class);
 		$this->voteMapper = Server::get(VoteMapper::class);
 		$this->voteService = Server::get(VoteService::class);
+		$this->optionService = Server::get(OptionService::class);
 		$this->userSession = Server::get(UserSession::class);
 
 		// Poll owned by admin, private access, voting open (useNo=0 is default)
@@ -54,12 +55,6 @@ class VoteServiceTest extends UnitTestCase {
 		$poll->setAccess(Poll::ACCESS_PRIVATE);
 		$poll->setExpire(0);
 		$this->poll = $this->pollMapper->insert($poll);
-
-		// Option belonging to the poll
-		$option = $this->fm->instance('OCA\Polls\Db\Option');
-		$option->setPollId($this->poll->getId());
-		$option->setOwner('admin');
-		$this->option = $this->optionMapper->insert($option);
 
 		// TYPE_USER share for admin — gives getCurrentUser() a User object (TYPE_USER)
 		$ownerShare = $this->fm->instance('OCA\Polls\Db\Share');
@@ -75,7 +70,16 @@ class VoteServiceTest extends UnitTestCase {
 		$externalShare->setUserId(self::EXTERNAL_USER_ID);
 		$this->externalShare = $this->shareMapper->insert($externalShare);
 
+		// Login before creating option so OptionService can check permissions
 		$this->loginAsOwner();
+
+		// Option created via service so pollOptionHash is computed and stored in DB
+		// (factory-created options bypass setPoll() and lack the hash, causing VoteMapper
+		// join failures)
+		$this->option = $this->optionService->add(
+			$this->poll->getId(),
+			(new SimpleOption())->setText('Test option')
+		);
 	}
 
 	protected function tearDown(): void {

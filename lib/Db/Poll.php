@@ -221,6 +221,39 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	/**
+	 * Build a fresh Poll entity pre-populated from this poll's settings.
+	 * The fresh entity's id is never set, so QBMapper::insert() relies on the
+	 * DB autoincrement to assign a fresh id.
+	 */
+	public function createClone(string $newOwner): self {
+		$clone = new self();
+		$clone->setType($this->getType());
+		$clone->setVotingVariant($this->getVotingVariant());
+		$clone->setTitle('Clone of ' . $this->getTitle());
+		$clone->setDescription($this->getDescription());
+		$clone->setOwner($newOwner);
+		$clone->setCreated(time());
+		$clone->setLastInteraction(0);
+		$clone->setExpire($this->getExpire());
+		$clone->setDeleted(0);
+		$clone->setAccess(self::ACCESS_PRIVATE);
+		$clone->setAnonymous(0);
+		$clone->setAllowComment($this->getAllowComment());
+		$clone->setAllowMaybe($this->getAllowMaybe());
+		$clone->setAllowProposals($this->getAllowProposals());
+		$clone->setProposalsExpire($this->getProposalsExpire());
+		$clone->setVoteLimit($this->getVoteLimit());
+		$clone->setOptionLimit($this->getOptionLimit());
+		$clone->setShowResults($this->getShowResults());
+		$clone->setAdminAccess($this->getAdminAccess());
+		$clone->setHideBookedUp($this->getHideBookedUp());
+		$clone->setUseNo($this->getUseNo());
+		$clone->setMiscSettings($this->getMiscSettings());
+		$clone->setTimezoneName($this->getTimezoneName());
+		return $clone;
+	}
+
+	/**
 	 * @return array
 	 *
 	 * @psalm-suppress PossiblyUnusedMethod
