@@ -15,6 +15,7 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
+use OCA\Polls\UserSession;
 use OCP\ISession;
 use OCP\Server;
 
@@ -23,6 +24,7 @@ class ShareServiceTest extends UnitTestCase {
 	private ShareMapper $shareMapper;
 	private PollMapper $pollMapper;
 	private ISession $session;
+	private UserSession $userSession;
 
 	private Poll $poll;
 	private Share $userShare;
@@ -30,8 +32,7 @@ class ShareServiceTest extends UnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->session = Server::get(ISession::class);
-		$this->session->set('ncPollsUserId', 'admin');
-
+		$this->userSession = Server::get(UserSession::class);
 		$this->shareService = Server::get(ShareService::class);
 		$this->shareMapper = Server::get(ShareMapper::class);
 		$this->pollMapper = Server::get(PollMapper::class);
@@ -40,12 +41,16 @@ class ShareServiceTest extends UnitTestCase {
 		$poll->setOwner('admin');
 		$this->poll = $this->pollMapper->insert($poll);
 
-		// Pre-create a TYPE_USER share for admin (used in setType tests)
+		// Pre-create a TYPE_USER share for admin.
+		// Also used to establish a proper logged-in session so that
+		// UserSession::getIsLoggedIn() returns true (required for PERMISSION_SHARE_ADD).
 		$share = $this->fm->instance('OCA\Polls\Db\Share');
 		$share->setPollId($this->poll->getId());
 		$share->setType(Share::TYPE_USER);
 		$share->setUserId('admin');
 		$this->userShare = $this->shareMapper->insert($share);
+
+		$this->login();
 	}
 
 	protected function tearDown(): void {
@@ -55,6 +60,12 @@ class ShareServiceTest extends UnitTestCase {
 			$this->pollMapper->delete($this->poll);
 		} catch (\Exception) {
 		}
+	}
+
+	private function login(): void {
+		$this->userSession->cleanSession();
+		$this->session->set(UserSession::SESSION_KEY_SHARE_TOKEN, $this->userShare->getToken());
+		$this->session->set(UserSession::SESSION_KEY_USER_ID, 'admin');
 	}
 
 	// --- add ---
