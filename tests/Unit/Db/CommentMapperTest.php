@@ -6,7 +6,6 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
-use League\FactoryMuffin\Faker\Facade as Faker;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 
 use OCA\Polls\Db\Comment;
@@ -75,8 +74,7 @@ class CommentMapperTest extends UnitTestCase {
 	 */
 	public function testUpdate() {
 		foreach ($this->comments as &$comment) {
-			$newComment = Faker::paragraph();
-			$comment->setComment($newComment());
+			$comment->setComment(bin2hex(random_bytes(64)));
 			$this->assertInstanceOf(Comment::class, $this->commentMapper->update($comment));
 		}
 		unset($comment);

@@ -411,9 +411,7 @@ class PollService {
 			throw new ForbiddenException('Poll creation is disabled');
 		}
 
-		$this->poll = clone $origin;
-
-		$this->poll->setOwner($this->userSession->getCurrentUserId());
+		$this->poll = $origin->createClone($this->userSession->getCurrentUserId());
 
 		$this->poll = $this->pollMapper->insert($this->poll);
 		$this->eventDispatcher->dispatchTyped(new PollCreatedEvent($this->poll));

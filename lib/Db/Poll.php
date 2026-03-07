@@ -158,7 +158,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $adminAccess = 0;
 	protected int $allowComment = 0;
 	protected int $hideBookedUp = 0;
-	protected int $useNo = 0;
+	protected int $useNo = 1;
 	protected int $lastInteraction = 0;
 	protected ?string $miscSettings = '';
 	protected string $votingVariant = '';
@@ -218,6 +218,39 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setAccess(self::ACCESS_PRIVATE);
 		// deanonymize cloned polls by default, to avoid locked anonymous polls
 		$this->setAnonymous(0);
+	}
+
+	/**
+	 * Build a fresh Poll entity pre-populated from this poll's settings.
+	 * The fresh entity's id is never set, so QBMapper::insert() relies on the
+	 * DB autoincrement to assign a fresh id.
+	 */
+	public function createClone(string $newOwner): self {
+		$clone = new self();
+		$clone->setType($this->getType());
+		$clone->setVotingVariant($this->getVotingVariant());
+		$clone->setTitle('Clone of ' . $this->getTitle());
+		$clone->setDescription($this->getDescription());
+		$clone->setOwner($newOwner);
+		$clone->setCreated(time());
+		$clone->setLastInteraction(0);
+		$clone->setExpire($this->getExpire());
+		$clone->setDeleted(0);
+		$clone->setAccess(self::ACCESS_PRIVATE);
+		$clone->setAnonymous(0);
+		$clone->setAllowComment($this->getAllowComment());
+		$clone->setAllowMaybe($this->getAllowMaybe());
+		$clone->setAllowProposals($this->getAllowProposals());
+		$clone->setProposalsExpire($this->getProposalsExpire());
+		$clone->setVoteLimit($this->getVoteLimit());
+		$clone->setOptionLimit($this->getOptionLimit());
+		$clone->setShowResults($this->getShowResults());
+		$clone->setAdminAccess($this->getAdminAccess());
+		$clone->setHideBookedUp($this->getHideBookedUp());
+		$clone->setUseNo($this->getUseNo());
+		$clone->setMiscSettings($this->getMiscSettings());
+		$clone->setTimezoneName($this->getTimezoneName());
+		return $clone;
 	}
 
 	/**

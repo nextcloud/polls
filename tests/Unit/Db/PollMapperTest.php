@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Tests\Unit\Db;
 
-use League\FactoryMuffin\Faker\Facade as Faker;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
@@ -42,10 +41,8 @@ class PollMapperTest extends UnitTestCase {
 	 */
 	public function testUpdate() {
 		foreach ($this->polls as &$poll) {
-			$newTitle = Faker::sentence(10);
-			$newDescription = Faker::paragraph();
-			$poll->setTitle($newTitle());
-			$poll->setDescription($newDescription());
+			$poll->setTitle(bin2hex(random_bytes(16)));
+			$poll->setDescription(bin2hex(random_bytes(64)));
 
 			$this->assertInstanceOf(Poll::class, $this->pollMapper->update($poll));
 		}

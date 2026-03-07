@@ -4,17 +4,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-use League\FactoryMuffin\Faker\Facade as Faker;
 use OCA\Polls\Db\Poll;
-/**
- * General factory for the poll model.
- */
+
 $fm->define('OCA\Polls\Db\Poll')->setDefinitions([
 	'type' => 'textPoll',
-	'title' => Faker::text(124),
+	'title' => function () {
+		return bin2hex(random_bytes(16));
+	},
 	'votingVariant' => Poll::VARIANT_SIMPLE,
-	'description' => Faker::text(255),
-	'owner' => Faker::firstNameMale(),
+	'description' => function () {
+		return bin2hex(random_bytes(64));
+	},
+	'owner' => function () {
+		return bin2hex(random_bytes(8));
+	},
 	'created' => function () {
 		$date = new DateTime('today');
 		return $date->getTimestamp();
@@ -42,6 +45,6 @@ $fm->define('OCA\Polls\Db\Poll')->setDefinitions([
 	'showResults' => Poll::SHOW_RESULTS_ALWAYS,
 	'adminAccess' => 0,
 	'hideBookedUp' => 0,
-	'useNo' => 0,
+	'useNo' => 1,
 	'misc_settings' => '',
 ]);
