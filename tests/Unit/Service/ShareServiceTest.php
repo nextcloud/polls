@@ -13,6 +13,7 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
+use OCA\Polls\Model\Settings\SystemSettings;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\UserSession;
@@ -25,12 +26,23 @@ class ShareServiceTest extends UnitTestCase {
 	private PollMapper $pollMapper;
 	private ISession $session;
 	private UserSession $userSession;
+	private SystemSettings $originalSystemSettings;
 
 	private Poll $poll;
 	private Share $userShare;
 
 	protected function setUp(): void {
 		parent::setUp();
+
+		// Save the real SystemSettings and replace it with a permissive mock so
+		// that PERMISSION_SHARE_ADD / PERMISSION_SHARE_ADD_EXTERNAL are not
+		// blocked by core IAppConfig group-restriction settings in the CI env.
+		$this->originalSystemSettings = Server::get(SystemSettings::class);
+		$settingsMock = $this->createMock(SystemSettings::class);
+		$settingsMock->method('getShareCreateAllowed')->willReturn(true);
+		$settingsMock->method('getExternalShareCreationAllowed')->willReturn(true);
+		\OC::$server->registerService(SystemSettings::class, fn () => $settingsMock);
+
 		$this->session = Server::get(ISession::class);
 		$this->userSession = Server::get(UserSession::class);
 		$this->shareService = Server::get(ShareService::class);
@@ -60,10 +72,15 @@ class ShareServiceTest extends UnitTestCase {
 			$this->pollMapper->delete($this->poll);
 		} catch (\Exception) {
 		}
+		// Restore the real SystemSettings so other test classes are unaffected
+		$original = $this->originalSystemSettings;
+		\OC::$server->registerService(SystemSettings::class, fn () => $original);
 	}
 
 	private function login(): void {
 		$this->userSession->cleanSession();
+		// Set the core Nextcloud user session so IUserSession::isLoggedIn() returns true
+		\OC_User::setUserId('admin');
 		$this->session->set(UserSession::SESSION_KEY_SHARE_TOKEN, $this->userShare->getToken());
 		$this->session->set(UserSession::SESSION_KEY_USER_ID, 'admin');
 	}
