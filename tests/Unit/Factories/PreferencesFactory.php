@@ -8,10 +8,12 @@
  * General factory for the poll model.
  */
 $fm->define('OCA\Polls\Db\Preferences')->setDefinitions([
-	'type' => 'textPoll',
+	'userId' => function () {
+		return 'test_user_' . bin2hex(random_bytes(4));
+	},
 	'timestamp' => function () {
 		$date = new DateTime('today');
 		return $date->getTimestamp();
 	},
-	'preferences' => '{"someJSON":0}'
+	'preferences' => '{"someJSON":0}',
 ]);

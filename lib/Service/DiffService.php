@@ -103,12 +103,12 @@ class DiffService {
 		foreach ($diff as $key => $value) {
 			if (is_array($value)) {
 				// If 'new' exists, add it to the correct position in the structure
-				if (isset($value['new'])) {
+				if (array_key_exists('new', $value)) {
 					$newValues[$key] = $value['new'];
 				}
 
 				// If the element is an array and the key isn't set yet, initialize it
-				if (!isset($newValues[$key])) {
+				if (!array_key_exists($key, $newValues)) {
 					$newValues[$key] = [];
 				}
 
