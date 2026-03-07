@@ -41,31 +41,29 @@ class SubscriptionService {
 	}
 
 	public function set(bool $setToSubscribed, int $pollId): bool {
-		if (!$setToSubscribed) {
-			// user wants to unsubscribe, allow unsubscribe neverteheless the permissions are set
-			try {
-				$subscription = $this->subscriptionMapper->findByPollAndUser($pollId, $this->userSession->getCurrentUserId());
-				$this->subscriptionMapper->delete($subscription);
-			} catch (DoesNotExistException $e) {
-				// Not found, assume already unsubscribed
-				return false;
-			}
-		} else {
-			try {
+		try {
+			if ($setToSubscribed) {
 				$this->pollMapper->get($pollId)->request(Poll::PERMISSION_POLL_SUBSCRIBE);
 				$this->add($pollId, $this->userSession->getCurrentUserId());
-			} catch (ForbiddenException $e) {
-				return false;
-			} catch (Exception $e) {
-				if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
-					// Already subscribed
-					return true;
-				} else {
-					throw $e;
-				}
+			} else {
+				$subscription = $this->subscriptionMapper->findByPollAndUser($pollId, $this->userSession->getCurrentUserId());
+				$this->subscriptionMapper->delete($subscription);
 			}
+
+			return $this->get($pollId);
+		} catch (DoesNotExistException $e) {
+			// No subscription found
+			return false;
+		} catch (ForbiddenException $e) {
+			// Is not allowed to subscribe
+			return false;
+		} catch (Exception $e) {
+			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				// Is already subscribed
+				return true;
+			}
+			throw $e;
 		}
-		return $setToSubscribed;
 	}
 
 	private function add(int $pollId, string $userId): void {
