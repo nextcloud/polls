@@ -45,6 +45,6 @@ $fm->define('OCA\Polls\Db\Poll')->setDefinitions([
 	'showResults' => Poll::SHOW_RESULTS_ALWAYS,
 	'adminAccess' => 0,
 	'hideBookedUp' => 0,
-	'useNo' => 0,
+	'useNo' => 1,
 	'misc_settings' => '',
 ]);

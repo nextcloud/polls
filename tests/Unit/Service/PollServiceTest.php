@@ -154,7 +154,7 @@ class PollServiceTest extends UnitTestCase {
 		$clone = $this->pollService->clone($this->poll->getId());
 		$this->assertInstanceOf(Poll::class, $clone);
 		$this->assertNotSame($this->poll->getId(), $clone->getId());
-		$this->assertSame($this->poll->getTitle(), $clone->getTitle());
+		$this->assertSame('Clone of ' . $this->poll->getTitle(), $clone->getTitle());
 		$this->assertSame('admin', $clone->getOwner());
 		$this->pollMapper->delete($clone);
 	}

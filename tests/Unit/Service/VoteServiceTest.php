@@ -54,6 +54,7 @@ class VoteServiceTest extends UnitTestCase {
 		$poll->setOwner('admin');
 		$poll->setAccess(Poll::ACCESS_PRIVATE);
 		$poll->setExpire(0);
+		$poll->setUseNo(0);
 		$this->poll = $this->pollMapper->insert($poll);
 
 		// TYPE_USER share for admin — gives getCurrentUser() a User object (TYPE_USER)
