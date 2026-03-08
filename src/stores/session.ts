@@ -254,32 +254,9 @@ export const useSessionStore = defineStore('session', {
 			this.watcher.id = Math.random().toString(36).substring(2)
 		},
 
-		async load(
-			payload: {
-				to?: null | RouteLocationNormalized
-				cheapLoading?: boolean
-				reload?: boolean
-			} = {
-				to: null,
-				cheapLoading: false,
-				reload: false,
-			},
-		) {
+		async loadSession() {
 			Logger.debug('Loading session')
 			this.generateWatcherId()
-
-			if (payload.to) {
-				Logger.debug('Set requested route', { to: payload.to })
-				await this.setRouter(payload.to)
-				Logger.debug('Route set', { route: this.route })
-			}
-
-			if (payload.reload) {
-				Logger.debug('Reloading session')
-			} else if (payload.cheapLoading) {
-				Logger.debug('Same route, skipping session load')
-				return
-			}
 
 			try {
 				const response = await (() => {
@@ -296,11 +273,7 @@ export const useSessionStore = defineStore('session', {
 				}
 
 				this.$reset()
-				if (this.route.name === null) {
-					this.$reset()
-				} else {
-					throw error
-				}
+				throw error
 			}
 			Logger.debug('Session loaded')
 		},

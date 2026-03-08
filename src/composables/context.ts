@@ -25,16 +25,21 @@ async function loadContext(
 	const sessionStore = useSessionStore()
 	const preferencesStore = usePreferencesStore()
 
-	await sessionStore.load({ to, cheapLoading })
+	sessionStore.setRouter(to)
 
-	if (!cheapLoading) {
-		Settings.defaultLocale =
-			sessionStore.currentUser.localeCodeIntl
-			|| sessionStore.currentUser.languageCodeIntl
+	if (cheapLoading) {
+		Logger.info('Context loaded (cheap)')
+		return
+	}
 
-		if (sessionStore.userStatus.isLoggedin) {
-			await preferencesStore.load()
-		}
+	await sessionStore.loadSession()
+
+	Settings.defaultLocale =
+		sessionStore.currentUser.localeCodeIntl
+		|| sessionStore.currentUser.languageCodeIntl
+
+	if (sessionStore.userStatus.isLoggedin) {
+		await preferencesStore.load()
 	}
 	Logger.info('Context loaded')
 }
