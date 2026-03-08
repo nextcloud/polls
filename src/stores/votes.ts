@@ -43,20 +43,16 @@ export const useVotesStore = defineStore('votes', {
 		 * @param state
 		 * @return
 		 */
-		participants: (state): User[] =>
-			Array.from(
+		participants(state): User[] {
+			const { localeCodeIntl } = useSessionStore().currentUser
+			return Array.from(
 				new Map(
 					state.votes.map((vote) => [vote.user.id, vote.user]),
 				).values(),
-			).sort((aUser, bUser) => {
-				if (aUser.displayName < bUser.displayName) {
-					return -1
-				}
-				if (aUser.displayName > bUser.displayName) {
-					return 1
-				}
-				return 0
-			}),
+			).sort((a, b) =>
+				a.displayName.localeCompare(b.displayName, localeCodeIntl ?? navigator.language),
+			)
+		},
 
 		loadedParticipants(state: VotesStore): number {
 			return Math.min(
@@ -229,14 +225,9 @@ export const useVotesStore = defineStore('votes', {
 						&& matchingAnswer.includes(vote.answer),
 				)
 				.map((vote) => vote.user)
-				.sort((aUser, bUser) => {
-					if (aUser.displayName < bUser.displayName) {
-						return -1
-					}
-					if (aUser.displayName > bUser.displayName) {
-						return 1
-					}
-					return 0
+				.sort((a, b) => {
+					const { localeCodeIntl } = useSessionStore().currentUser
+					return a.displayName.localeCompare(b.displayName, localeCodeIntl ?? navigator.language)
 				})
 		},
 
