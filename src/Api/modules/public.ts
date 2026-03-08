@@ -131,7 +131,7 @@ const publicPoll = {
 			cancelToken:
 				cancelTokenHandlerObject[
 					this.setVote.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation(optionId).token,
 		})
 	},
 

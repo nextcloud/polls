@@ -47,18 +47,18 @@ httpInstance.interceptors.request.use((config) => {
 const createCancelTokenHandler = (apiObject) => {
 	const cancelTokenHandler = {}
 	Object.getOwnPropertyNames(apiObject).forEach((propertyName) => {
-		const cancelTokenRequestHandler = {
-			cancelToken: undefined,
-		}
+		const handlers = {}
 
 		cancelTokenHandler[propertyName] = {
-			handleRequestCancellation: () => {
-				cancelTokenRequestHandler.cancelToken
-					&& cancelTokenRequestHandler.cancelToken.cancel(
-						`${propertyName} canceled`,
-					)
-				cancelTokenRequestHandler.cancelToken = CancelToken.source()
-				return cancelTokenRequestHandler.cancelToken
+			handleRequestCancellation: (subKey) => {
+				const key = String(subKey ?? '__default__')
+				if (!handlers[key]) {
+					handlers[key] = { cancelToken: undefined }
+				}
+				const handler = handlers[key]
+				handler.cancelToken?.cancel(`${propertyName} canceled`)
+				handler.cancelToken = CancelToken.source()
+				return handler.cancelToken
 			},
 		}
 	})

@@ -295,8 +295,7 @@ export const useVotesStore = defineStore('votes', {
 			this.votes.push(payload.vote)
 		},
 
-		async set(payload: { option: Option; setTo: Answer }) {
-			// place a fake vote for a slightly better UX in huge polls
+		setOptimistic(payload: { option: Option; setTo: Answer }) {
 			this.setItem({
 				option: payload.option,
 				vote: {
@@ -310,6 +309,10 @@ export const useVotesStore = defineStore('votes', {
 					pollId: payload.option.pollId,
 				},
 			})
+		},
+
+		async set(payload: { option: Option; setTo: Answer }) {
+			this.setOptimistic(payload)
 
 			const sessionStore = useSessionStore()
 			const pollStore = usePollStore()
