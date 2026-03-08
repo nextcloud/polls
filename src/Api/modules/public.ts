@@ -9,7 +9,7 @@ import type { AxiosResponse } from '@nextcloud/axios'
 import type { Session } from '../../stores/session.types'
 import type { Comment } from '../../stores/comments.types'
 import type { Share } from '../../stores/shares.types'
-import type { Option, Sequence, SimpleOption } from '../../stores/options.types'
+import type { OptionDto, Sequence, SimpleOption } from '../../stores/options.types'
 import type { Answer, Vote } from '../../stores/votes.types'
 
 import type {
@@ -44,7 +44,7 @@ const publicPoll = {
 		})
 	},
 
-	getOptions(shareToken: string): Promise<AxiosResponse<{ options: Option[] }>> {
+	getOptions(shareToken: string): Promise<AxiosResponse<{ options: OptionDto[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `/s/${shareToken}/options`,
@@ -76,7 +76,7 @@ const publicPoll = {
 	deleteOption(
 		shareToken: string,
 		optionId: number,
-	): Promise<AxiosResponse<{ option: Option }>> {
+	): Promise<AxiosResponse<{ option: OptionDto }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/option/${optionId}`,
@@ -91,7 +91,7 @@ const publicPoll = {
 	restoreOption(
 		shareToken: string,
 		optionId: number,
-	): Promise<AxiosResponse<{ option: Option }>> {
+	): Promise<AxiosResponse<{ option: OptionDto }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}/option/${optionId}/restore`,
