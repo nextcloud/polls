@@ -33,6 +33,7 @@ OC.L10N.register(
     "Email address" : "Retpoŝtadreso",
     "OK" : "Bone",
     "Clone poll" : "Duobligi la enketon",
+    "Timezone" : "Horzono",
     "All day" : "Tuttage",
     "Preview" : "Antaŭvidi",
     "Submit" : "Sendi",

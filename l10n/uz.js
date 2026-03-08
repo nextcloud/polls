@@ -30,6 +30,7 @@ OC.L10N.register(
     "Email address" : "E-pochta manzili",
     "OK" : "Yaxshi",
     "Delete option" : "O'chirish opsiyasi",
+    "Timezone" : "Vaqt mintaqasi",
     "Duration" : "Davomiyligi",
     "All day" : "Butun kun",
     "Preview" : "Ko‘rib chiqish",

@@ -263,6 +263,7 @@ OC.L10N.register(
     "Clone option" : "Клониране на опция",
     "Unconfirm option" : "Отказ от потвърждение",
     "Confirm option" : "Потвърждение на опция",
+    "Timezone" : "Часови пояс",
     "Duration" : "Продължителност",
     "All day" : "Цял ден",
     "Preview" : "Визуализация",

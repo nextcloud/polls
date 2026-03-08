@@ -35,6 +35,7 @@ OC.L10N.register(
     "Select the user to transfer the ownership to" : "Выберыце карыстальніка, якому трэба перадаць права ўласнасці",
     "Delete option" : "Выдаліць варыянт",
     "{displayName}'s proposal" : "Прапанова карыстальніка {displayName}",
+    "Timezone" : "Часавы пояс",
     "Duration" : "Працягласць",
     "All day" : "Увесь дзень",
     "Preview" : "Перадпрагляд",

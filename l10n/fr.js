@@ -392,6 +392,7 @@ OC.L10N.register(
     "Option already exists" : "Cette option existe déjà",
     "Error adding Option" : "Erreur à l'ajout de l'Option",
     "Add a new date/time" : "Ajouter une nouvelle date/horaire",
+    "Timezone" : "Fuseau horaire",
     "Duration" : "Durée",
     "Duration time unit" : "Unité de durée",
     "Repetitions" : "Répétitions",

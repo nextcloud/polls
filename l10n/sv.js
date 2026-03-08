@@ -281,6 +281,7 @@ OC.L10N.register(
     "Clone option" : "Klona alternativ",
     "Unconfirm option" : "Avbekräfta alternativ",
     "Confirm option" : "Bekräfta alternativet",
+    "Timezone" : "Tidszon",
     "Duration" : "Varaktighet",
     "Duration time unit" : "Tidsenhet",
     "Repetitions" : "Återkommande",

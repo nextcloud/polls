@@ -338,6 +338,7 @@ OC.L10N.register(
     "Confirm option" : "تأكيد الخيار",
     "Option already exists" : "الخيار موجود سلفاً",
     "Error adding Option" : "حدث خطأ أثناء إضافة الخيار",
+    "Timezone" : "المنطقة الزمنية",
     "Duration" : "المُدَّة",
     "Duration time unit" : "الوحدة الزمنية للمدة",
     "Repetitions" : "التكرارات",

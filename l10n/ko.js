@@ -142,6 +142,7 @@ OC.L10N.register(
     "Delete option" : "옵션 삭제",
     "Clone option" : "복제 옵션",
     "Confirm option" : "옵션 확인",
+    "Timezone" : "시간대",
     "All day" : "하루 종일",
     "Preview" : "미리 보기",
     "Added" : "추가된",

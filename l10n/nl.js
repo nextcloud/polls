@@ -240,6 +240,7 @@ OC.L10N.register(
     "Clone option" : "Klonen optie",
     "Unconfirm option" : "Keuze ongedaan maken",
     "Confirm option" : "Keuze bevestigen",
+    "Timezone" : "Tijdzone",
     "Duration" : "Duur",
     "All day" : "Hele dag",
     "Preview" : "Voorbeeld",

@@ -110,6 +110,7 @@ OC.L10N.register(
     "Clone option" : "Mogućnost kloniranja",
     "Unconfirm option" : "Otkaži mogućnost",
     "Confirm option" : "Potvrdi mogućnost",
+    "Timezone" : "Vremenska zona",
     "Duration" : "Trajanje",
     "All day" : "Cijeli dan",
     "Preview" : "Pretpregled",

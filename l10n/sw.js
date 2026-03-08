@@ -173,6 +173,7 @@ OC.L10N.register(
     "Clone option" : "Clone option",
     "Unconfirm option" : "Unconfirm option",
     "Confirm option" : "Confirm option",
+    "Timezone" : "Muda wa mahali",
     "Duration" : "Muda",
     "All day" : "Siku yote",
     "Preview" : "Mwonekano wa awali",

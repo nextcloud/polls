@@ -166,6 +166,7 @@ OC.L10N.register(
     "Clone option" : "Klon opsi",
     "Unconfirm option" : "Batalkan konfirmasi opsi",
     "Confirm option" : "Konfirmasi opsi",
+    "Timezone" : "Zona waktu",
     "Duration" : "Durasi",
     "All day" : "Sepanjang hari",
     "Preview" : "Pratinjau",

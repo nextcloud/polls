@@ -396,6 +396,7 @@ OC.L10N.register(
     "Option already exists" : "Tá rogha ann cheana féin",
     "Error adding Option" : "Earráid agus Rogha á cur leis",
     "Add a new date/time" : "Cuir dáta/am nua leis",
+    "Timezone" : "Crios ama",
     "Duration" : "Fad",
     "Duration time unit" : "Aonad ama ama",
     "Repetitions" : "Athrá",

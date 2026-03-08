@@ -394,6 +394,7 @@
     "Option already exists" : "選項已存在",
     "Error adding Option" : "添加選項時發生錯誤",
     "Add a new date/time" : "添加新日期/時間",
+    "Timezone" : "時區",
     "Duration" : "歷時",
     "Duration time unit" : "持續時間單位",
     "Repetitions" : "重複",

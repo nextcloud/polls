@@ -319,6 +319,7 @@ OC.L10N.register(
     "Clone option" : "Klon alternativ",
     "Unconfirm option" : "Avbekreft alternativ",
     "Confirm option" : "Bekreft alternativ",
+    "Timezone" : "Tidssone",
     "Duration" : "Varighet",
     "All day" : "Hele dagen",
     "Preview" : "Forhåndsvis",

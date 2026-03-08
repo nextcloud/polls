@@ -28,6 +28,7 @@ OC.L10N.register(
     "To" : "Para",
     "Email address" : "Dirección de correo electrónico",
     "OK" : "OK",
+    "Timezone" : "Zona horaria",
     "All day" : "Todo el día",
     "Preview" : "Previsualizar",
     "Submit" : "Enviar",

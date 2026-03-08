@@ -31,6 +31,7 @@ OC.L10N.register(
     "To" : "Tới",
     "Email address" : "Địa chỉ thư điện tử",
     "OK" : "OK",
+    "Timezone" : "Múi giờ",
     "Duration" : "Khoảng thời gian",
     "All day" : "Cả ngày",
     "Preview" : "Xem trước",

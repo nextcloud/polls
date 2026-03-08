@@ -392,6 +392,7 @@ OC.L10N.register(
     "Option already exists" : "Опција већ постоји",
     "Error adding Option" : "Грешка приликом додавања опције",
     "Add a new date/time" : "Додај нови датум/време",
+    "Timezone" : "Временска зона",
     "Duration" : "Трајање",
     "Duration time unit" : "Временска јединица трајања",
     "Repetitions" : "Понављања",

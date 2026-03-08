@@ -212,6 +212,7 @@ OC.L10N.register(
     "Clone option" : "選択肢をクローン",
     "Unconfirm option" : "選択肢を未確認",
     "Confirm option" : "選択肢を確認",
+    "Timezone" : "タイムゾーン",
     "Duration" : "期間",
     "Add times" : "時刻を追加",
     "All day" : "終日",

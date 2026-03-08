@@ -270,6 +270,7 @@ OC.L10N.register(
     "Unconfirm option" : "Lehetőség megerősítésének visszavonása",
     "Confirm option" : "Lehetőség megerősítése",
     "Add a new date/time" : "Új dátum/időpont hozzáadása",
+    "Timezone" : "Időzóna",
     "Duration" : "Időtartam",
     "Duration time unit" : "Időtartam egysége",
     "Repetitions" : "Ismétlődések",

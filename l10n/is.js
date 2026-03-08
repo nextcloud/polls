@@ -56,6 +56,7 @@ OC.L10N.register(
     "Delete option" : "Eyða valkosti",
     "Clone option" : "Klóna valkost",
     "Confirm option" : "Staðfesta valkost",
+    "Timezone" : "Tímabelti",
     "Duration" : "Tímalengd",
     "All day" : "Heilsdagsviðburður",
     "Preview" : "Forskoðun",

@@ -178,6 +178,7 @@ OC.L10N.register(
     "Clone option" : "Kloniraj možnost",
     "Unconfirm option" : "Odstrani potrditev",
     "Confirm option" : "Potrdi možnost",
+    "Timezone" : "Časovni pas",
     "Duration" : "Trajanje",
     "All day" : "Ves dan",
     "Preview" : "Predogled",

@@ -238,6 +238,7 @@ OC.L10N.register(
     "Clone option" : "Копировать вариант",
     "Unconfirm option" : "Неподтверждённый вариант",
     "Confirm option" : "Подтверждённый вариант",
+    "Timezone" : "Часовой пояс",
     "Duration" : "Продолжительность",
     "All day" : "Весь день",
     "Preview" : "Предпросмотр",

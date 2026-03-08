@@ -394,6 +394,7 @@
     "Option already exists" : "Opção já existe",
     "Error adding Option" : "Erro ao adicionar Opção",
     "Add a new date/time" : "Adicionar nova data/hora",
+    "Timezone" : "Fuso horário",
     "Duration" : "Duração",
     "Duration time unit" : "Unidade do tempo de duração",
     "Repetitions" : "Repetições",

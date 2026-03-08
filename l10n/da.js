@@ -43,6 +43,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Clone poll" : "Klon afstemning",
     "Delete option" : "Slet valg",
+    "Timezone" : "Tidszone",
     "Duration" : "Varighed",
     "All day" : "Hele dagen",
     "Preview" : "Forhåndsvisning",

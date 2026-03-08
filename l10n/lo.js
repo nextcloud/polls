@@ -394,6 +394,7 @@ OC.L10N.register(
     "Option already exists" : "ຕົວເລືອກນີ້ມີຢູ່ແລ້ວ",
     "Error adding Option" : "ຜິດພາດໃນການເພີ່ມຕົວເລືອກ",
     "Add a new date/time" : "ເພີ່ມວັນທີ/ເວລາໃໝ່",
+    "Timezone" : "Timezone",
     "Duration" : "ໄລຍະເວລາ",
     "Duration time unit" : "ຫົວໜ່ວຍເວລາຂອງໄລຍະເວລາ",
     "Repetitions" : "ການເຮັດຊ້ຳ",

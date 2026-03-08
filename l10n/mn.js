@@ -396,6 +396,7 @@ OC.L10N.register(
     "Option already exists" : "Сонголт аль хэдийн байна",
     "Error adding Option" : "Сонголт нэмэхэд алдаа гарлаа",
     "Add a new date/time" : "Шинэ огноо/цаг нэмэх",
+    "Timezone" : "Цагийн бүс",
     "Duration" : "Хугацаа",
     "Duration time unit" : "Үргэлжлэх хугацааны нэгж",
     "Repetitions" : "Давталтууд",

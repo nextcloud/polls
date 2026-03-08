@@ -55,6 +55,7 @@ OC.L10N.register(
     "Create a sequence of date options starting with {dateOption}." : "יצירת רצף של אפשרויות תאריכים החל מ־{dateOption}.",
     "Delete option" : "מחיקת אפשרות",
     "Clone option" : "שכפול אפשרות",
+    "Timezone" : "אזור זמן",
     "Duration" : "משך",
     "All day" : "כל היום",
     "Preview" : "תצוגה מקדימה",

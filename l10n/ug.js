@@ -394,6 +394,7 @@ OC.L10N.register(
     "Option already exists" : "تاللانما ئاللىبۇرۇن مەۋجۇت",
     "Error adding Option" : "تاللانما قۇشۇش خاتالىقى",
     "Add a new date/time" : "يېڭى چېسلا/ۋاقىت قوش",
+    "Timezone" : "ۋاقىت رايۇنى",
     "Duration" : "ئۇزۇنلىقى",
     "Duration time unit" : "ئۇزۇنلۇق ۋاقىت بىرلىكى",
     "Repetitions" : "قايتىلىنىشلار",

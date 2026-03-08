@@ -158,6 +158,7 @@ OC.L10N.register(
     "Clone option" : "Kloonaa valinta",
     "Unconfirm option" : "Peru vaihtoehdon vahvistaminen",
     "Confirm option" : "Vahvista vaihtoehto",
+    "Timezone" : "Aikavyöhyke",
     "Duration" : "Kesto",
     "All day" : "Koko päivä",
     "Preview" : "Esikatselu",

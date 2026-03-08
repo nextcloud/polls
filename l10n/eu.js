@@ -257,6 +257,7 @@ OC.L10N.register(
     "Clone option" : "Klonatu aukera",
     "Unconfirm option" : "Desegin aukera hau berrestea",
     "Confirm option" : "Berretsi aukera hau",
+    "Timezone" : "Ordu-zona",
     "Duration" : "Iraupena",
     "All day" : "Egun osoa",
     "Preview" : "Aurrebista",

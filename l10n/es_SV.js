@@ -25,6 +25,7 @@ OC.L10N.register(
     "No" : "No",
     "Participants" : "Participantes",
     "OK" : "OK",
+    "Timezone" : "Zona horaria",
     "All day" : "Todo el día",
     "Preview" : "Previsualizar",
     "Submit" : "Enviar",

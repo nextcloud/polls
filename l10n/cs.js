@@ -396,6 +396,7 @@ OC.L10N.register(
     "Option already exists" : "Volba už existuje",
     "Error adding Option" : "Chyba při přidávání volby",
     "Add a new date/time" : "Přidat nové datum/čas",
+    "Timezone" : "Časová zóna",
     "Duration" : "Trvání",
     "Duration time unit" : "Jednotka času doby trvání",
     "Repetitions" : "Opakování",

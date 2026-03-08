@@ -389,6 +389,7 @@ OC.L10N.register(
     "Option already exists" : "Опція вже існує",
     "Error adding Option" : "Помилка додавання опції",
     "Add a new date/time" : "Додати нову дату/час",
+    "Timezone" : "Часовий пояс",
     "Duration" : "Тривалість",
     "Duration time unit" : "Тривалість Одиниця виміру часу",
     "Repetitions" : "Повторення",

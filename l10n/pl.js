@@ -241,6 +241,7 @@ OC.L10N.register(
     "Clone option" : "Klonuj opcję",
     "Unconfirm option" : "Nie potwierdzaj opcji",
     "Confirm option" : "Potwierdź opcję",
+    "Timezone" : "Strefa czasowa",
     "Duration" : "Czas trwania",
     "All day" : "Cały dzień",
     "Preview" : "Podgląd",

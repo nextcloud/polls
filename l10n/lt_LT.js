@@ -126,6 +126,7 @@ OC.L10N.register(
     "Clone option" : "Dubliuoti variantą",
     "Unconfirm option" : "Panaikinti varianto patvirtinimą",
     "Confirm option" : "Patvirtinti variantą",
+    "Timezone" : "Laiko juosta",
     "Duration" : "Trukmė",
     "All day" : "Visą dieną",
     "Preview" : "Peržiūra",

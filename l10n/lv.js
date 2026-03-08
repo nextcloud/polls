@@ -40,6 +40,7 @@ OC.L10N.register(
     "To" : "Līdz",
     "Email address" : "E-pasta adrese",
     "OK" : "Labi",
+    "Timezone" : "Laika josla",
     "Duration" : "Ilgums",
     "All day" : "Visas dienas",
     "Preview" : "Priekšskatīt",

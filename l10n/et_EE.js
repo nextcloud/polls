@@ -386,6 +386,7 @@ OC.L10N.register(
     "Option already exists" : "Valik on juba olemas",
     "Error adding Option" : "Viga valiku lisamisel",
     "Add a new date/time" : "Lisa uus kuupäev/kellaaeg",
+    "Timezone" : "Ajavöönd",
     "Duration" : "Kestus",
     "Duration time unit" : "Kestuse mõõtühik",
     "Repetitions" : "Kordused",

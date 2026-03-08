@@ -378,6 +378,7 @@ OC.L10N.register(
     "Option already exists" : "Η επιλογή υπάρχει ήδη",
     "Error adding Option" : "Σφάλμα προσθήκης επιλογής",
     "Add a new date/time" : "Προσθήκη νέας ημερομηνίας/ώρας",
+    "Timezone" : "Ζώνη ώρας",
     "Duration" : "Διάρκεια",
     "Duration time unit" : "Μονάδα χρόνου διάρκειας",
     "Repetitions" : "Επαναλήψεις",
