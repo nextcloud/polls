@@ -18,14 +18,13 @@ import { usePreferencesStore } from './preferences'
 import { usePollStore } from './poll'
 import { usePollsStore } from './polls'
 
-import { createDefault } from '../Types'
+import { defaultUser } from '../Types'
 
 import type { AxiosError } from '@nextcloud/axios'
 import type { ViewMode } from './preferences.types'
-import type { Share } from './shares.types'
+import { defaultShare } from './shares.types'
 import type { PollType } from './poll.types'
 import type { FilterType } from './polls.types'
-import type { User } from '../Types'
 
 import type { SessionStore } from './session.types'
 import { IANAZone } from 'luxon'
@@ -113,8 +112,8 @@ export const useSessionStore = defineStore('session', {
 			lastUpdate: Math.floor(Date.now() / 1000),
 		},
 		token: null,
-		currentUser: createDefault<User>(),
-		share: createDefault<Share>(),
+		currentUser: defaultUser,
+		share: defaultShare,
 	}),
 
 	getters: {
@@ -327,7 +326,7 @@ export const useSessionStore = defineStore('session', {
 		// Share store
 		async loadShare(): Promise<void> {
 			if (this.route.name !== 'publicVote') {
-				this.share = createDefault<Share>()
+				this.share = defaultShare
 				return
 			}
 

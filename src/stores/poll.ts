@@ -16,13 +16,12 @@ import { emit } from '@nextcloud/event-bus'
 
 import { Logger } from '../helpers/modules/logger'
 import { PublicAPI, PollsAPI } from '../Api'
-import { createDefault, Event } from '../Types'
+import { defaultUser, Event } from '../Types'
 
 import { usePollsStore } from './polls'
 import { useSessionStore } from './session'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { User } from '../Types'
 import type {
 	Poll,
 	PollType,
@@ -72,7 +71,7 @@ export const usePollStore = defineStore('poll', {
 			maxVotesPerUser: 0,
 			timezoneName: null,
 		},
-		owner: createDefault<User>(),
+		owner: defaultUser,
 		pollGroups: [],
 		status: {
 			anonymizeLevel: 'ANON_NONE',
