@@ -54,18 +54,6 @@ class VoteService {
 		return $votes;
 	}
 
-	private function checkLimits(Option $option): void {
-		// check, if the optionlimit is reached or exceeded, if one is set
-		if ($option->getIsLockedByOptionLimit()) {
-			throw new VoteLimitExceededException;
-		}
-
-		if ($option->getIsLockedByVotesLimit()) {
-			throw new VoteLimitExceededException;
-		}
-		return;
-	}
-
 	private function checkVoteLimit(Option $option): void {
 		// check, if the optionlimit is reached or exceeded, if one is set
 		if ($option->getIsLockedByOptionLimit()) {
@@ -75,17 +63,16 @@ class VoteService {
 		if ($option->getIsLockedByVotesLimit()) {
 			throw new VoteLimitExceededException;
 		}
-		return;
 	}
 
 	/**
 	 * Set vote
 	 */
-	public function set(Option|int $optionOrOptionIdoptionId, string $setTo): ?Vote {
-		if ($optionOrOptionIdoptionId instanceof Option) {
-			$option = $optionOrOptionIdoptionId;
+	public function set(Option|int $optionOrOptionId, string $setTo): ?Vote {
+		if ($optionOrOptionId instanceof Option) {
+			$option = $optionOrOptionId;
 		} else {
-			$option = $this->optionMapper->find($optionOrOptionIdoptionId);
+			$option = $this->optionMapper->find($optionOrOptionId);
 		}
 		$poll = $this->pollMapper->get($option->getPollId())
 			->request(Poll::PERMISSION_VOTE_EDIT);
@@ -103,7 +90,7 @@ class VoteService {
 			}
 
 			if ($setTo === Vote::VOTE_YES) {
-				$this->checkLimits($option);
+				$this->checkVoteLimit($option);
 			}
 
 			//  delete no votes, if poll setting is set to useNo === 0
