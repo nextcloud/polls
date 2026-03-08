@@ -180,7 +180,7 @@ export const usePollStore = defineStore('poll', {
 			return (
 				state.configuration.showResults === 'always'
 				|| (state.configuration.showResults === 'closed'
-					&& !this.status.isExpired)
+					&& this.status.isExpired)
 			)
 		},
 
