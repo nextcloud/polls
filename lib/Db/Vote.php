@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
+use OCA\Polls\Helper\Hash;
 
 /**
  * @psalm-suppress UnusedProperty
@@ -70,6 +71,17 @@ class Vote extends EntityWithUser implements JsonSerializable {
 			default:
 				return '';
 		}
+	}
+
+	public function getVoteOptionHash(): string {
+		return Hash::getOptionHash(
+			$this->getPollId(),
+			$this->getVoteOptionText(),
+		);
+	}
+
+	public function getVoteOptionHashInDb(): string {
+		return $this->voteOptionHash;
 	}
 
 	/**

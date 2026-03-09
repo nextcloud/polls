@@ -635,11 +635,19 @@ class TableManager extends DbManager {
 		foreach ($this->voteMapper->getAll(includeNull: true) as $vote) {
 			try {
 				// if the hash of the vote differs from calculated hash update the vote hash
-				if ($vote->getVoteOptionHash() !== Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText())) {
+				if ($vote->getVoteOptionHashInDB() !== Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText())) {
+					$messages[] = 'update voteId ' . $vote->getId()
+						. ' hash:  ' . $vote->getVoteOptionHashInDB()
+						. ':' . Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText())
+						.'\'' . $vote->getVoteOptionText() . '\'';
+
 					$vote->setVoteOptionHash(Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()));
 					$vote = $this->voteMapper->update($vote);
+
+
 					$updated++;
 				}
+
 
 				$count++;
 
@@ -690,9 +698,17 @@ class TableManager extends DbManager {
 		foreach ($this->optionMapper->getAll(includeNull: true) as $option) {
 			try {
 				// if the option's hash differs from $actualHash update the option
-				if ($option->getPollOptionHash() !== Hash::getOptionHash($option->getPollId(), $option->getPollOptionText())) {
+				if ($option->getPollOptionHashInDB() !== Hash::getOptionHash($option->getPollId(), $option->getPollOptionText())) {
+
+					$messages[] = 'update optionId ' . $option->getId()
+						. ' hash:  ' . $option->getPollOptionHashInDB()
+						. ':' . Hash::getOptionHash($option->getPollId(), $option->getPollOptionText())
+						.'\'' . $option->getPollOptionText() . '\'';
+
 					$option->setText($option->getPollOptionText());
 					$option = $this->optionMapper->update($option);
+
+
 					$updated++;
 				}
 

@@ -204,6 +204,10 @@ class Option extends EntityWithUser implements JsonSerializable {
 			$this->getPollOptionText(),
 		);
 	}
+
+	public function getPollOptionHashInDB(): string {
+		return $this->pollOptionHash;
+	}
 	/**
 	 * Get the order of the option. If the option has a valid timestamp,
 	 * the order will be determined by the timestamp to ensure correct
