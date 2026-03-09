@@ -45,18 +45,48 @@ class DateInterval extends \DateInterval {
 	 *
 	 * @return string|null The ISO 8601 duration string or null if the interval is zero.
 	 */
-	public function getISO(): ?string {
-		if (
-			$this->y === 0
-			&& $this->m === 0
-			&& $this->d === 0
-			&& $this->h === 0
-			&& $this->i === 0
-			&& $this->s === 0
-		) {
+	public function getISOExpanded(): ?string {
+		if ($this->isZeroDuration()) {
 			return null;
 		}
 		return $this->format('P%yY%mM%dDT%hH%iM%sS');
+	}
+
+	/**
+	 * Get the ISO 8601 duration string representation of this DateInterval, rescaled to a more compact form.
+	 * For example, if the interval represents 2 days and 3 hours, it will return "P2DT3H" instead of "P0Y0M2DT3H0M0S".
+	 * If the interval is zero (all components are zero), this method returns null.
+	 *
+	 * @return string The rescaled ISO 8601 duration string.
+	 */
+	public function getISO(): ?string {
+		if ($this->isZeroDuration()) {
+			return null;
+		}
+
+		$parts = ['P'];
+		if ($this->y > 0) {
+			$parts[] = $this->y . 'Y';
+		}
+		if ($this->m > 0) {
+			$parts[] = $this->m . 'M';
+		}
+		if ($this->d > 0) {
+			$parts[] = $this->d . 'D';
+		}
+		if ($this->h > 0 || $this->i > 0 || $this->s > 0) {
+			$parts[] = 'T';
+			if ($this->h > 0) {
+				$parts[] = $this->h . 'H';
+			}
+			if ($this->i > 0) {
+				$parts[] = $this->i . 'M';
+			}
+			if ($this->s > 0) {
+				$parts[] = $this->s . 'S';
+			}
+		}
+		return implode('', $parts);
 	}
 
 	/**
