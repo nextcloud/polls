@@ -104,6 +104,7 @@
     "You have reordered the options" : "Je hebt de opties geherordend",
     "{actor} has reordered the options" : "{actor} heeft de opties geherordend",
     "You have changed your email address" : "Je hebt je e-mailadres gewijzigd",
+    "{sharee} has changed the email address" : "{sharee} heeft het e-mailadres gewijzigd",
     "Email address of {sharee} has been changed" : "Het email adres van {sharee} is gewijzigd",
     "You have changed your name" : "Je hebt je naam gewijzigd",
     "You have changed the share type" : "Je hebt het share type gewijzigd",
