@@ -97,7 +97,6 @@ class VoteService {
 			$deleteVoteInsteadOfNoVote = in_array(trim($setTo), [Vote::VOTE_NO, '']) && !boolval($poll->getUseNo());
 
 			if ($deleteVoteInsteadOfNoVote) {
-				$this->vote->setVoteAnswer('');
 				$this->voteMapper->delete($this->vote);
 			} else {
 				$this->vote->setVoteAnswer($setTo);
@@ -105,12 +104,8 @@ class VoteService {
 			}
 		} catch (DoesNotExistException $e) {
 			// Vote does not exist, insert as new Vote
-			$this->vote = new Vote();
+			$this->vote = $option->getNewVote($this->userSession->getCurrentUserId());
 
-			$this->vote->setPollId($poll->getId());
-			$this->vote->setUserId($this->userSession->getCurrentUserId());
-			$this->vote->setVoteOptionText($option->getPollOptionText());
-			$this->vote->setVoteOptionId($option->getId());
 			$this->vote->setVoteAnswer($setTo);
 			$this->vote = $this->voteMapper->insert($this->vote);
 		}
@@ -161,6 +156,7 @@ class VoteService {
 		// fake a vote so that the event can be triggered
 		// suppress logging of this action
 		$this->vote = new Vote();
+
 		$this->vote->setPollId($pollId);
 		$this->vote->setUserId($userId);
 		$this->voteMapper->deleteByPollAndUserId($pollId, $userId);

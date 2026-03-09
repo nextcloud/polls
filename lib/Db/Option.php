@@ -478,6 +478,16 @@ class Option extends EntityWithUser implements JsonSerializable {
 		return $this->getVoteLimit() && $this->getUserCountYesVotes() >= $this->getVoteLimit();
 	}
 
+	public function getNewVote(string $userId): Vote {
+		$vote = new Vote();
+		$vote->setPollId($this->getPollId());
+		$vote->setUserId($userId);
+		$vote->setVoteOptionText($this->getPollOptionText());
+		$vote->setVoteOptionId($this->getId());
+		$vote->setVoteOptionHash($this->getPollOptionHash());
+
+		return $vote;
+	}
 	/**
 	 * Set option's text, date and time, and duration from a SimpleOption instance.
 	 * This will also sync the option to update the order and hash.
