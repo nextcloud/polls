@@ -77,10 +77,7 @@ export const useCommentsStore = defineStore('comments', {
 
 				if (!response) {
 					this.$reset()
-					return
 				}
-
-				this.load()
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
@@ -90,6 +87,8 @@ export const useCommentsStore = defineStore('comments', {
 					payload,
 				})
 				throw error
+			} finally {
+				this.load()
 			}
 		},
 
