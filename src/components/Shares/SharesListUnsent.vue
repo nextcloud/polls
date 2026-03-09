@@ -25,9 +25,10 @@ const sharesStore = useSharesStore()
  *
  */
 async function sendAllInvitations() {
-	const response = await sharesStore.inviteAll({ pollId: pollStore.id })
-	if (response?.data.sentResult?.sentMails) {
-		response.data.sentResult.sentMails.forEach((item) => {
+	try {
+		const result = await sharesStore.inviteAll({ pollId: pollStore.id })
+
+		result.sentMails.forEach((item) => {
 			showSuccess(
 				t('polls', 'Invitation sent to {displayName} ({emailAddress})', {
 					emailAddress: item.emailAddress,
@@ -35,9 +36,8 @@ async function sendAllInvitations() {
 				}),
 			)
 		})
-	}
-	if (response?.data.sentResult?.abortedMails) {
-		response.data.sentResult.abortedMails.forEach((item) => {
+
+		result.abortedMails.forEach((item) => {
 			Logger.error('Mail could not be sent!', { recipient: item })
 			showError(
 				t(
@@ -50,6 +50,8 @@ async function sendAllInvitations() {
 				),
 			)
 		})
+	} catch {
+		showError(t('polls', 'Error sending invitations'))
 	}
 }
 </script>

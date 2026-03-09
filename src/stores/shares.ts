@@ -215,15 +215,20 @@ export const useSharesStore = defineStore('shares', {
 			}
 		},
 
-		async inviteAll(payload: { pollId: number }) {
+		async inviteAll(payload: { pollId: number }): Promise<SentResults> {
 			try {
 				const response = await SharesAPI.inviteAll(payload.pollId)
 				this.load()
-				return response
+				return response.data.sentResult
 			} catch (error) {
 				this.handleError(error, 'Error inviting all users', payload)
 			}
+			return {
+				sentMails: [],
+				abortedMails: [],
+			}
 		},
+
 		async sendInvitation(payload: { share: Share }): Promise<{
 			share: Share
 			sentResult: null | SentResults
