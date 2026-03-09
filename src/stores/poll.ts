@@ -213,7 +213,7 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		isConfirmationAllowed(state): boolean {
-			return state.permissions.confirmOptions || !this.isClosed
+			return state.permissions.confirmOptions && this.isClosed
 		},
 
 		isOptionCloneAllowed(state): boolean {
