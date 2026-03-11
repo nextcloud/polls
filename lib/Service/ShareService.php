@@ -496,11 +496,11 @@ class ShareService {
 		return $share;
 	}
 
-	public function sendAllInvitations(int $pollId): ?SentResult {
+	public function sendAllInvitations(int $pollId): SentResult {
 		$sentResult = new SentResult();
+		$shares = $this->listNotInvited($pollId);
 
 		// first resolve group shares
-		$shares = $this->listNotInvited($pollId);
 		foreach ($shares as $share) {
 			if (in_array($share->getType(), Share::RESOLVABLE_SHARES)) {
 				$this->resolveGroup($share);
@@ -560,7 +560,7 @@ class ShareService {
 	 * @param Share $share
 	 * @param SentResult $sentResult to collect results
 	 */
-	public function sendInvitation(Share $share, ?SentResult &$sentResult = null): ?SentResult {
+	public function sendInvitation(Share $share, SentResult &$sentResult = new SentResult()): SentResult {
 		if (in_array($share->getType(), [Share::TYPE_USER, Share::TYPE_ADMIN], true)) {
 			$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
 		} elseif ($share->getType() === Share::TYPE_GROUP) {

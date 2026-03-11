@@ -7,7 +7,7 @@
 import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { createDefault } from '../../Types'
+import { defaultUser } from '../../Types'
 import type { User, VirtualUserItemType } from '../../Types'
 import LinkIcon from 'vue-material-design-icons/Link.vue'
 import ContactGroupIcon from 'vue-material-design-icons/AccountGroupOutline.vue'
@@ -26,7 +26,7 @@ interface Props {
 const {
 	mdIconSize = 20,
 	virtualUserType,
-	user = createDefault<User>(),
+	user = defaultUser,
 } = defineProps<Props>()
 
 const computedIsGuest = computed(

@@ -140,14 +140,24 @@ const showBottomObserver = computed(
 
 async function loadPoll(isChanging: boolean = false) {
 	try {
-		pollStore.load(isChanging)
-	} catch (error) {
+		await pollStore.load(isChanging)
+	} catch {
 		showError(t('polls', 'Error loading poll'))
+		votesStore.$reset()
+		optionsStore.$reset()
+		subscriptionStore.$reset()
+		return
 	}
 
-	votesStore.load()
-	optionsStore.load()
-	subscriptionStore.load()
+	const results = await Promise.allSettled([
+		votesStore.load(),
+		optionsStore.load(),
+		subscriptionStore.load(),
+	])
+
+	if (results.some((result) => result.status === 'rejected')) {
+		showError(t('polls', 'Error loading poll data'))
+	}
 }
 
 async function resetPoll() {

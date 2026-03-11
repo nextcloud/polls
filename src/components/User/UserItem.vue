@@ -7,7 +7,7 @@
 import { computed } from 'vue'
 import { t } from '@nextcloud/l10n'
 
-import { createDefault, User, UserType, VirtualUserItemType } from '../../Types'
+import { defaultUser, User, UserType, VirtualUserItemType } from '../../Types'
 import UserAvatar from './UserAvatar.vue'
 
 defineOptions({ inheritAttrs: false })
@@ -32,7 +32,7 @@ const {
 	showEmail = false,
 	tag = 'div',
 	virtualUserType,
-	user = createDefault<User>(),
+	user = defaultUser,
 	itemStyle = {},
 } = defineProps<Props>()
 

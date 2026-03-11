@@ -66,6 +66,9 @@ async function validateToken(to: RouteLocationNormalized) {
 			}
 		}
 	}
+
+	// Proceed with the public vote page
+	return true
 }
 
 const Combo = () => import('./views/Combo.vue')

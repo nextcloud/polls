@@ -9,13 +9,13 @@ import { t } from '@nextcloud/l10n'
 
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 
-import { createDefault, type User } from '../../Types'
+import { defaultUser, type User } from '../../Types'
 
 interface Props {
 	user: User
 }
 
-const { user = createDefault<User>() } = defineProps<Props>()
+const { user = defaultUser } = defineProps<Props>()
 
 const bubbleProps = computed(() => ({
 	user: user.isNoUser || user.isGuest ? undefined : user.id,

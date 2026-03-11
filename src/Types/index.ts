@@ -90,9 +90,22 @@ export type Participant = {
 	user: User
 }
 
-/**
- *
- */
-export function createDefault<T>(): T {
-	return {} as T
+export const defaultUser: User = {
+	id: '',
+	displayName: '',
+	emailAddress: '',
+	isAdmin: false,
+	isNoUser: true,
+	isGuest: true,
+	type: '',
+	subName: null,
+	subtitle: null,
+	desc: null,
+	organisation: null,
+	languageCode: '',
+	languageCodeIntl: '',
+	localeCode: null,
+	localeCodeIntl: null,
+	timeZone: null,
+	categories: null,
 }

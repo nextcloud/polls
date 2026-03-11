@@ -116,7 +116,9 @@ export const usePollWatcher = (interval = 30000) => {
 					if (message) Logger.info(`[PollWatcher] ${message}`, { params })
 
 					if (status === 'modeChanged') {
-						sessionStore.load()
+						sessionStore.loadSession().catch((error) => {
+							Logger.error("[PollWatcher] Error reloading session after mode change", { error })
+						})
 					}
 
 					break
@@ -192,7 +194,11 @@ export const usePollWatcher = (interval = 30000) => {
 							// User is not allowed to load shares.
 							// instead assume a changed share affecting the user.
 							// Reload the session context to update the share
-							sessionStore.load()
+							try {
+								await sessionStore.loadSession()
+							} catch (loadError) {
+								Logger.error('[PollWatcher] Error reloading session after share change', { error: loadError })
+							}
 							return
 						}
 						Logger.error('Error loading poll shares', { error })

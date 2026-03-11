@@ -4,7 +4,8 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onUnmounted } from 'vue'
+import debounce from 'lodash/debounce'
 
 import { t } from '@nextcloud/l10n'
 import { showSuccess, showError } from '@nextcloud/dialogs'
@@ -60,20 +61,30 @@ const nextAnswer = computed<richAnswer>(() => {
 	return pollStore.configuration.useNo ? richAnswers.no : richAnswers['']
 })
 
-async function setVote() {
+const debouncedSave = debounce(async (answer: Answer) => {
 	try {
 		await votesStore.set({
 			option,
-			setTo: nextAnswer.value.name,
+			setTo: answer,
 		})
 		showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
 	} catch (error) {
-		if ((error as AxiosError).status === 409) {
+		if ((error as AxiosError).response?.status === 409) {
 			showError(t('polls', 'Vote already booked out'))
 		} else {
 			showError(t('polls', 'Error saving vote'))
 		}
 	}
+}, 300)
+
+onUnmounted(() => {
+	debouncedSave.cancel()
+})
+
+function setVote() {
+	const answer = nextAnswer.value.name
+	votesStore.setOptimistic({ option, setTo: answer })
+	debouncedSave(answer)
 }
 </script>
 

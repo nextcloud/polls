@@ -454,7 +454,7 @@ export const usePollsStore = defineStore('polls', {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
 				}
-				Logger.error('Error archiving/restoring poll', {
+				Logger.error('Error taking over poll', {
 					error,
 					payload,
 				})
