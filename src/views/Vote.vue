@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRouter } from 'vue-router'
 
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
@@ -42,6 +42,7 @@ import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vu
 import { Event } from '../Types'
 import { loadContext } from '../composables/context'
 
+const router = useRouter()
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const preferencesStore = usePreferencesStore()
@@ -142,10 +143,10 @@ async function loadPoll(isChanging: boolean = false) {
 	try {
 		await pollStore.load(isChanging)
 	} catch {
-		showError(t('polls', 'Error loading poll'))
 		votesStore.$reset()
 		optionsStore.$reset()
 		subscriptionStore.$reset()
+		router.replace({ name: 'notfound' })
 		return
 	}
 
