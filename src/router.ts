@@ -14,10 +14,17 @@ import { generateUrl } from '@nextcloud/router'
 import { getCookieValue, setCookie } from './helpers/modules/cookieHelper'
 import { Logger } from './helpers/modules/logger'
 import { loadContext } from './composables/context'
+import { emit } from '@nextcloud/event-bus'
+import { Event } from './Types'
 
 import Navigation from './views/Navigation.vue'
 
 import { useSessionStore } from './stores/session'
+import { usePollStore } from './stores/poll'
+import { usePollsStore } from './stores/polls'
+import { useVotesStore } from './stores/votes'
+import { useOptionsStore } from './stores/options'
+import { useSubscriptionStore } from './stores/subscription'
 
 async function validateToken(to: RouteLocationNormalized) {
 	const sessionStore = useSessionStore()
@@ -199,6 +206,20 @@ const router = createRouter({
 router.beforeEach(
 	async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
 		const sessionStore = useSessionStore()
+		const pollStore = usePollStore()
+		const votesStore = useVotesStore()
+		const optionsStore = useOptionsStore()
+		const subscriptionStore = useSubscriptionStore()
+
+		sessionStore.navigationStatus = 'loading'
+		emit(Event.TransitionsOff, 0)
+
+		if (from.meta.votePage) {
+			pollStore.$reset()
+			votesStore.$reset()
+			optionsStore.$reset()
+			subscriptionStore.$reset()
+		}
 
 		// if the previous and the requested routes have the same name and
 		// the watcher is active, we can do a cheap loading
@@ -226,5 +247,42 @@ router.beforeEach(
 		}
 	},
 )
+
+router.beforeResolve(async (to: RouteLocationNormalized) => {
+	const sessionStore = useSessionStore()
+	const watcherActive =
+		sessionStore.watcher.mode !== 'noPolling'
+		&& sessionStore.watcher.status !== 'stopped'
+
+	if (to.meta.listPage) {
+		const pollsStore = usePollsStore()
+		await pollsStore.load(!watcherActive)
+	}
+
+	if (to.meta.votePage) {
+		const pollStore = usePollStore()
+		const votesStore = useVotesStore()
+		const optionsStore = useOptionsStore()
+		const subscriptionStore = useSubscriptionStore()
+
+		try {
+			await pollStore.load()
+		} catch {
+			return { name: 'notfound' }
+		}
+
+		await Promise.allSettled([
+			votesStore.load(),
+			optionsStore.load(),
+			subscriptionStore.load(),
+		])
+	}
+})
+
+router.afterEach(() => {
+	const sessionStore = useSessionStore()
+	sessionStore.navigationStatus = 'idle'
+	emit(Event.TransitionsOn, null)
+})
 
 export { router }

@@ -122,9 +122,7 @@ async function loadMore() {
 	}
 }
 
-onMounted(() => {
-	pollsStore.load(false)
-})
+
 </script>
 
 <template>
