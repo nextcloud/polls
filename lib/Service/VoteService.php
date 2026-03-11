@@ -98,6 +98,8 @@ class VoteService {
 
 			if ($deleteVoteInsteadOfNoVote) {
 				$this->voteMapper->delete($this->vote);
+				$this->eventDispatcher->dispatchTyped(new VoteSetEvent($this->vote));
+				return null;
 			} else {
 				$this->vote->setVoteAnswer($setTo);
 				$this->vote = $this->voteMapper->update($this->vote);

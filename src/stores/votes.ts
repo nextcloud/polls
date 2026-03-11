@@ -348,10 +348,6 @@ export const useVotesStore = defineStore('votes', {
 					pollStore.load()
 				}
 
-				this.setItem({
-					option: payload.option,
-					vote: response.data.vote,
-				})
 				StoreHelper.updateStores(response.data)
 
 				return response
