@@ -114,6 +114,7 @@ export const useSessionStore = defineStore('session', {
 		token: null,
 		currentUser: defaultUser,
 		share: defaultShare,
+		navigationStatus: 'idle',
 	}),
 
 	getters: {
