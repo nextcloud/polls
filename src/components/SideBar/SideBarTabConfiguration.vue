@@ -23,6 +23,7 @@ import TableViewIcon from 'vue-material-design-icons/Table.vue'
 import CardDiv from '../Base/modules/CardDiv.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'
 import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe.vue'
+import ConfigAllowDownload from '../Configuration/ConfigAllowDownload.vue'
 import ConfigAnonymous from '../Configuration/ConfigAnonymous.vue'
 import ConfigAutoReminder from '../Configuration/ConfigAutoReminder.vue'
 import ConfigClosing from '../Configuration/ConfigClosing.vue'
@@ -37,9 +38,11 @@ import ConfigUseNo from '../Configuration/ConfigUseNo.vue'
 import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
 
 import { usePollStore } from '../../stores/poll'
+import { useSessionStore } from '../../stores/session'
 import { useVotesStore } from '../../stores/votes'
 
 const pollStore = usePollStore()
+const sessionStore = useSessionStore()
 const votesStore = useVotesStore()
 </script>
 
@@ -76,6 +79,9 @@ const votesStore = useVotesStore()
 
 		<ConfigVoteLimit @change="pollStore.write" />
 		<ConfigOptionLimit @change="pollStore.write" />
+		<ConfigAllowDownload
+			v-if="sessionStore.appPermissions.pollDownload"
+			@change="pollStore.write" />
 	</ConfigBox>
 
 	<ConfigBox :name="t('polls', 'Poll closing status')">
