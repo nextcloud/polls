@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 import { showError } from '@nextcloud/dialogs'
@@ -121,8 +121,6 @@ async function loadMore() {
 		showError(t('polls', 'Error loading more polls'))
 	}
 }
-
-
 </script>
 
 <template>
