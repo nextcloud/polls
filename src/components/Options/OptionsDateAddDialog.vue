@@ -90,7 +90,6 @@ const startDateTime = ref(
 /**
  * Resulting option based on the inputs
  */
-
 const newOption = computed<SimpleOption>(() => {
 	const dateTime = startDateTime.value
 		.startOf(allDay.value ? 'day' : 'minute')
@@ -99,7 +98,7 @@ const newOption = computed<SimpleOption>(() => {
 	const dur = duration.value
 	const option: SimpleOption = {
 		text: '',
-		isoTimestamp: dateTime.toISO() || '',
+		isoTimestamp: dateTime.toISO({ precision: 'seconds' }) || '',
 		isoDuration: dur.toISO() || 'PT0S',
 		getDateTime: () => dateTime,
 		getDuration: () => dur,
@@ -156,13 +155,13 @@ const duration = computed(() =>
 		? Duration.fromObject({ day: 1 })
 		: Duration.fromObject({
 				[durationInput.value.unit.id]: durationInput.value.amount,
-			}),
+			}).rescale(),
 )
 
 /**
  * Computed as boolean if the option is blocked by an existing option
  */
-const blockedOption = computed(() => {
+const isBlockedOption = computed(() => {
 	const option = duplicateOption.value
 	return option && !option.deleted
 })
@@ -189,7 +188,7 @@ const voteYes = ref(true)
  * Used to enable/disable the add button
  * @return computed boolean
  */
-const addable = computed(() => !blockedOption.value && result.value !== 'loading')
+const addable = computed(() => !isBlockedOption.value && result.value !== 'loading')
 
 // *** Miscellaneous captions
 
@@ -353,13 +352,13 @@ const SequenceUnitSelectProps = computed(() => ({
 
 			<div class="bottom-line">
 				<div
-					v-if="blockedOption && result !== 'success'"
+					v-if="isBlockedOption && result !== 'success'"
 					class="blocked-option">
 					{{ t('polls', 'Option already exists') }}
 				</div>
 
 				<CheckIcon
-					v-if="result === 'success' && blockedOption"
+					v-if="result === 'success' && isBlockedOption"
 					class="date-added"
 					:title="t('polls', 'Added')"
 					:fill-color="successColor"

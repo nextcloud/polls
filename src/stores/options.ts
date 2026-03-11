@@ -21,7 +21,6 @@ import type {
 	OptionDto,
 	Option,
 	OptionsStore,
-	DateOptionFinder,
 	HasIsoFields,
 	OptionDurationMethod,
 	OptionTimestampMethod,
@@ -36,7 +35,7 @@ const withLuxon = <T extends HasIsoFields>(
 	...dto,
 
 	getDuration() {
-		return Duration.fromISO(this.isoDuration ?? 'PT0S')
+		return Duration.fromISO(this.isoDuration ?? 'PT0S').rescale()
 	},
 
 	getDateTime() {
@@ -101,12 +100,13 @@ export const useOptionsStore = defineStore('options', {
 			return optionsDto.map(hydrateOption)
 		},
 
-		find(option: DateOptionFinder): Option | undefined {
+		find(option: SimpleOption): Option | undefined {
 			if (option) {
 				return this.options.find(
 					(opt) =>
-						opt.isoTimestamp === option.isoTimestamp
-						&& opt.isoDuration === option.isoDuration,
+						opt.getDateTime().toSeconds()
+							=== option.getDateTime().toSeconds()
+						&& opt.getDuration().equals(option.getDuration()),
 				)
 			}
 		},
