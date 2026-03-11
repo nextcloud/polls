@@ -639,7 +639,7 @@ class TableManager extends DbManager {
 					$messages[] = 'update voteId ' . $vote->getId()
 						. ' hash:  ' . $vote->getVoteOptionHashInDB()
 						. ':' . Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText())
-						.'\'' . $vote->getVoteOptionText() . '\'';
+						. '\'' . $vote->getVoteOptionText() . '\'';
 
 					$vote->setVoteOptionHash(Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()));
 					$vote = $this->voteMapper->update($vote);
@@ -703,7 +703,7 @@ class TableManager extends DbManager {
 					$messages[] = 'update optionId ' . $option->getId()
 						. ' hash:  ' . $option->getPollOptionHashInDB()
 						. ':' . Hash::getOptionHash($option->getPollId(), $option->getPollOptionText())
-						.'\'' . $option->getPollOptionText() . '\'';
+						. '\'' . $option->getPollOptionText() . '\'';
 
 					$option->setText($option->getPollOptionText());
 					$option = $this->optionMapper->update($option);

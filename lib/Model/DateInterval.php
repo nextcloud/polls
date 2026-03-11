@@ -43,7 +43,11 @@ class DateInterval extends \DateInterval {
 	 * Get the ISO 8601 duration string representation of this DateInterval.
 	 * If the interval is zero (all components are zero), this method returns null.
 	 *
+	 * NOTE: Currently not used
+	 *
 	 * @return string|null The ISO 8601 duration string or null if the interval is zero.
+	 *
+	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function getISOExpanded(): ?string {
 		if ($this->isZeroDuration()) {
