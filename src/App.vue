@@ -14,11 +14,13 @@ import {
 } from 'vue'
 import debounce from 'lodash/debounce'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 
 import NcContent from '@nextcloud/vue/components/NcContent'
 
 // import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 
+import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
 import { usePollWatcher } from './composables/usePollWatcher'
 
 import { useSessionStore } from './stores/session'
@@ -86,7 +88,10 @@ function transitionsOff(delay: number) {
 	}
 }
 
-const debouncedNotify = debounce(async function (payload: { store: string; message: string }) {
+const debouncedNotify = debounce(async function (payload: {
+	store: string
+	message: string
+}) {
 	if (payload.store === 'poll') {
 		showSuccess(payload.message)
 	}
@@ -123,6 +128,10 @@ onUnmounted(() => {
 		<router-view />
 		<router-view v-if="useSidebar" name="sidebar" />
 		<UserSettingsDlg />
+		<LoadingOverlay
+			:show="sessionStore.navigationStatus === 'loading'"
+			:name="t('polls', 'Loading…')"
+			teleport-to="#content" />
 	</NcContent>
 </template>
 
