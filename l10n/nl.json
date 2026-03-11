@@ -339,6 +339,7 @@
     "Error saving email address {emailAddress}" : "Fout bij opslaan e-mailadres {emailAddress}",
     "Add public link" : "Voeg openbare link toe",
     "Public link" : "Openbare Link",
+    "Your timezone: ({timezone})" : "Jouw tijdzone: ({timezone})",
     "Email address deleted." : "E-mailadres verwijderd.",
     "Error deleting email address {emailAddress}" : "Fout bij verwijderen e-mailadres {emailAddress}",
     "Invitation resent to {emailAddress}" : "Uitnodiging opnieuw verzonden naar {emailAddress}",
