@@ -741,7 +741,6 @@
     "No vote options available" : "Санал өгөх сонголт байхгүй",
     "Maybe the owner did not provide some until now." : "Магадгүй эзэмшигч одоог хүртэл юу ч нэмээгүй байж магадгүй.",
     "Error loading more participants" : "Олон оролцогч ачаалахад алдаа гарлаа",
-    "Error loading poll" : "Санал асуулга ачаалахад алдаа гарлаа",
     "Add options" : "Сонголтууд нэмэх",
     "Minute" : "Минут",
     "Hour" : "Цаг",

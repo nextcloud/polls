@@ -398,7 +398,6 @@ OC.L10N.register(
     "Experimental styles" : "Экспериментальные стили",
     "No vote options available" : "Варианты голосования отсуствуют",
     "Maybe the owner did not provide some until now." : "Возможно, владелец не предоставил их до сих пор.",
-    "Error loading poll" : "Не удалось загрузить опрос",
     "Add options" : "Добавить параметры",
     "Minute" : "Минута",
     "Hour" : "Час",

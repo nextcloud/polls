@@ -705,7 +705,6 @@ OC.L10N.register(
     "No vote options available" : "Δεν υπάρχουν διαθέσιμες επιλογές ψήφου",
     "Maybe the owner did not provide some until now." : "Ίσως ο ιδιοκτήτης δεν παρείχε κάποια μέχρι τώρα.",
     "Error loading more participants" : "Σφάλμα φόρτωσης περισσότερων συμμετεχόντων",
-    "Error loading poll" : "Σφάλμα φόρτωσης δημοσκόπησης",
     "Add options" : "Προσθήκη επιλογών",
     "Minute" : "Λεπτό",
     "Hour" : "Ώρα",

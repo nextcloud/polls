@@ -415,7 +415,6 @@ OC.L10N.register(
     "Some visual styling options." : "Some visual styling options.",
     "No vote options available" : "No vote options available",
     "Maybe the owner did not provide some until now." : "Maybe the owner did not provide some until now.",
-    "Error loading poll" : "Error loading poll",
     "Add options" : "افزودن گزینه‌ها",
     "Minute" : "Minute",
     "Hour" : "Hour",

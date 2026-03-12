@@ -743,7 +743,6 @@ OC.L10N.register(
     "No vote options available" : "Non hai opcións de voto dispoñíbeis",
     "Maybe the owner did not provide some until now." : "Quizais o propietario non forneceu ningunha ata agora.",
     "Error loading more participants" : "Produciuse un erro ao cargar máis participantes",
-    "Error loading poll" : "Produciuse un erro ao cargar a enquisa",
     "Add options" : "Engadir opcións",
     "Minute" : "Minuto",
     "Hour" : "Hora",

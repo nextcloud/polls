@@ -228,7 +228,6 @@ OC.L10N.register(
     "Experimental styles" : "Eksperimentalni stilovi",
     "No vote options available" : "Nema dostupnih mogućnosti glasanja",
     "Maybe the owner did not provide some until now." : "Možda vlasnik nije dosad odredio nikakve mogućnosti.",
-    "Error loading poll" : "Pogreška pri učitavanju ankete",
     "Add options" : "Dodaj opcije",
     "Minute" : "Minuta",
     "Hour" : "Sat",
