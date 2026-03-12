@@ -133,14 +133,16 @@ class ShareService {
 	private function convertPublicShareToPersonalShare(): Share {
 		try {
 			$this->share = $this->createNewShare(
-				$this->share->getPollId(),
+				(int) $this->share->getPollId(),
 				$this->userSession->getCurrentUser(),
 				preventInvitation: true
 			);
 		} catch (ShareAlreadyExistsException $e) {
 			// replace share by existing personal share
-			$this->share = $e->getShare()
-				?? $this->share = $this->shareMapper->findByPollAndUser($this->share->getPollId(), $this->userSession->getCurrentUserId());
+			$this->share = $this->shareMapper->findByPollAndUser(
+				(int) $this->share->getPollId(),
+				$this->userSession->getCurrentUserId()
+			);
 			// remove the public token from session
 			$this->userSession->setShareToken($this->share->getToken());
 		}
@@ -149,24 +151,33 @@ class ShareService {
 
 	/**
 	 * Request access to a share by share token
+	 * Returns the share for the given token, if the user has access to it.
+	 * - If the user accesses a public share and is logged in, a personal share
+	 *   will be created for the user and returned instead of the public share.
+	 * - In case of convertable shares (email and contact shares), the share
+	 *   will be converted to an external share with a unique user id
 	 *
 	 * @param string $token Token of share to get
 	 */
-	public function request(string $token): Share {
-		$this->share = $this->shareMapper->findByToken($token);
+	public function request(?string $token = null): Share {
+		if ($token !== null) {
+			$this->share = $this->shareMapper->findByToken($token);
+		} else {
+			$this->share = $this->userSession->getShare();
+		}
 
 		$this->validateShareType();
 
-		$poll = $this->pollMapper->get($this->share->getPollId());
+		$poll = $this->pollMapper->get((int) $this->share->getPollId());
 
 		// deletes the displayname, to avoid displayname preset in case of public polls
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			$this->share->setDisplayName('');
 		}
 
-
+		// If user is already involved in the poll
+		// return the joint share, otherwise return the requested share
 		if ($poll->getIsInvolved()) {
-			// user is already involved in the poll
 			if ($poll->getShareToken()) {
 				// return personal share, if exists
 				return $this->shareMapper->findByToken($poll->getShareToken());
@@ -175,15 +186,13 @@ class ShareService {
 			return $this->share;
 		}
 
+		// if the share is a public share and the user is logged in,
+		// create a personal share for the user and return it
+		if ($this->share->getType() === Share::TYPE_PUBLIC
+			&& $this->userSession->getIsLoggedIn()) {
 
-		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			// Exception: logged in user, accesses the poll via public share link
-			if ($this->userSession->getIsLoggedIn()) {
-				return $this->convertPublicShareToPersonalShare();
-			}
-			return $this->share;
+			return $this->convertPublicShareToPersonalShare();
 		}
-
 
 		// Exception for convertable (email and contact) shares
 		if (in_array($this->share->getType(), Share::CONVERATABLE_PUBLIC_SHARES, true)) {
@@ -649,7 +658,7 @@ class ShareService {
 		}
 
 		// TODO: extend event for pollGroups
-		if ($share->getPollId()) {
+		if ($share->getPollId() !== null) {
 			$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
 		}
 		return $share;
@@ -668,7 +677,7 @@ class ShareService {
 
 	/**
 	 * Validate if share type is allowed to be used to acess a poll
-	 * or is accessible for use by the current user
+	 * and is accessible for use by the current user
 	 */
 	private function validateShareType(): void {
 
@@ -686,6 +695,7 @@ class ShareService {
 
 			// Note: $this->share->getUserId() is actually the group name in case of Share::TYPE_GROUP
 			Share::TYPE_GROUP => $this->userSession->getIsLoggedIn() && $this->userSession->getCurrentUser()->getIsInGroup($this->share->getUserId()),
+
 			default => throw new ForbiddenException("Invalid share type {$this->share->getType()}"),
 		};
 
@@ -799,7 +809,7 @@ class ShareService {
 					$share = $this->shareMapper->update($share);
 				}
 				// return existing undeleted share
-				throw new ShareAlreadyExistsException(existingShare: $share);
+				throw new ShareAlreadyExistsException('Share already exists', $share);
 			}
 			// other error
 			throw $e;

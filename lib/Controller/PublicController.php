@@ -98,7 +98,7 @@ class PublicController extends BaseController {
 	public function getPoll(): JSONResponse {
 		return $this->response(function () {
 			return [
-				'poll' => $this->pollService->get($this->userSession->getShare()->getPollId()),
+				'poll' => $this->pollService->get((int) $this->userSession->getShare()->getPollId()),
 			];
 		});
 	}
@@ -114,9 +114,9 @@ class PublicController extends BaseController {
 		return $this->response(fn () => [
 			'token' => $this->request->getParam('token'),
 			'currentUser' => $this->userSession->getCurrentUser(),
+			'share' => $this->shareService->request(),
 			'appPermissions' => $this->appSettings->getPermissionsArray(),
 			'appSettings' => $this->appSettings->getAppSettings(),
-			'share' => $this->userSession->getShare(),
 		]);
 	}
 
@@ -133,7 +133,7 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/watch')]
 	public function watchPoll(string $mode, ?int $offset): JSONResponse {
 		return $this->response(fn () => [
-			'updates' => $this->watchService->watchUpdates($this->userSession->getShare()->getPollId(), $mode, $offset)
+			'updates' => $this->watchService->watchUpdates((int) $this->userSession->getShare()->getPollId(), $mode, $offset)
 		]);
 	}
 
@@ -160,7 +160,7 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/votes')]
 	public function getVotes(): JSONResponse {
 		return $this->response(fn () => [
-			'votes' => $this->voteService->list($this->userSession->getShare()->getPollId())
+			'votes' => $this->voteService->list((int) $this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -172,7 +172,7 @@ class PublicController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'DELETE', url: '/s/{token}/user')]
 	public function deleteUser(): JSONResponse {
-		$pollId = $this->userSession->getShare()->getPollId();
+		$pollId = (int) $this->userSession->getShare()->getPollId();
 		$this->voteService->deleteUserFromPoll($pollId);
 		return $this->response(fn () => [
 			'poll' => $this->pollService->get($pollId),
@@ -189,7 +189,7 @@ class PublicController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'DELETE', url: '/s/{token}/votes/orphaned')]
 	public function deleteOrphanedVotes(): JSONResponse {
-		$pollId = $this->userSession->getShare()->getPollId();
+		$pollId = (int) $this->userSession->getShare()->getPollId();
 		$this->voteService->deleteUserFromPoll($pollId, deleteOnlyOrphaned: true);
 		return $this->response(fn () => [
 			'poll' => $this->pollService->get($pollId),
@@ -207,7 +207,7 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/options')]
 	public function getOptions(): JSONResponse {
 		return $this->response(fn () => [
-			'options' => $this->optionService->list($this->userSession->getShare()->getPollId())
+			'options' => $this->optionService->list((int) $this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -302,7 +302,7 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/comments')]
 	public function getComments(): JSONResponse {
 		return $this->response(fn () => [
-			'comments' => $this->commentService->list($this->userSession->getShare()->getPollId())
+			'comments' => $this->commentService->list((int) $this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -316,7 +316,7 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/comment')]
 	public function addComment(string $message): JSONResponse {
 		return $this->response(fn () => [
-			'comment' => $this->commentService->add($message, $this->userSession->getShare()->getPollId())
+			'comment' => $this->commentService->add($message, (int) $this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -357,7 +357,7 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/subscription')]
 	public function getSubscription(): JSONResponse {
 		return $this->response(fn () => [
-			'subscribed' => $this->subscriptionService->get($this->userSession->getShare()->getPollId())
+			'subscribed' => $this->subscriptionService->get((int) $this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -370,7 +370,7 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'PUT', url: '/s/{token}/subscribe')]
 	public function subscribe(): JSONResponse {
 		return $this->response(fn () => [
-			'subscribed' => $this->subscriptionService->set(true, $this->userSession->getShare()->getPollId())
+			'subscribed' => $this->subscriptionService->set(true, (int) $this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -383,7 +383,7 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'PUT', url: '/s/{token}/unsubscribe')]
 	public function unsubscribe(): JSONResponse {
 		return $this->response(fn () => [
-			'subscribed' => $this->subscriptionService->set(false, $this->userSession->getShare()->getPollId())
+			'subscribed' => $this->subscriptionService->set(false, (int) $this->userSession->getShare()->getPollId())
 		]);
 	}
 

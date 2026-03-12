@@ -145,7 +145,7 @@ class UserSession {
 	 * @return Share
 	 */
 	public function getShare(): Share {
-		if ($this->hasShare() && !$this->share->getId()) {
+		if ($this->hasShare() && $this->share->getToken() !== $this->getShareToken()) {
 			$this->share = $this->shareMapper->findByToken($this->getShareToken());
 		}
 		return $this->share;
