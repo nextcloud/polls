@@ -29,41 +29,26 @@ import { useSubscriptionStore } from './stores/subscription'
 async function validateToken(to: RouteLocationNormalized) {
 	const sessionStore = useSessionStore()
 
-	try {
-		await sessionStore.loadShare()
-
-		// if the user is logged in, reroute to the vote page
-		if (getCurrentUser()) {
-			return {
-				name: 'vote',
-				params: {
-					id: sessionStore.share.pollId,
-				},
-			}
+	// if the user is logged in, reroute to the vote page
+	if (getCurrentUser()) {
+		return {
+			name: 'vote',
+			params: {
+				id: sessionStore.share.pollId,
+			},
 		}
-	} catch (error) {
-		if (getCurrentUser()) {
-			// User has no access, always assume forbidden (403)
-			return { name: 'forbidden' }
-		}
-
-		// external users will get redirected to the login page
-		window.location.replace(generateUrl('login'))
 	}
 
-	// Continue for external users
-	//
+	// Check, if user has a personal token from the user's client stored cookie
+	// matching the public token
 	if (sessionStore.share.type === 'public') {
-		// Check, if user has a personal token from the user's client stored cookie
-		// matching the public token
 		const personalToken = getCookieValue(to.params.token as string)
 
 		if (personalToken) {
-			// participant has already access to the poll and a private token
 			// extend expiry time for 30 days after successful access
 			const cookieExpiration = 30 * 24 * 60 * 1000
 			setCookie(to.params.token as string, personalToken, cookieExpiration)
-
+			// participant has already access to the poll and a private token
 			// reroute to the public vote page using the personal token
 			return {
 				name: 'publicVote',
@@ -74,7 +59,6 @@ async function validateToken(to: RouteLocationNormalized) {
 		}
 	}
 
-	// Proceed with the public vote page
 	return true
 }
 
@@ -276,6 +260,12 @@ router.beforeResolve(async (to: RouteLocationNormalized) => {
 			optionsStore.load(),
 			subscriptionStore.load(),
 		])
+		Logger.debug('Vote page data loaded', {
+			session: sessionStore.currentUser,
+			poll: pollStore,
+			votes: votesStore.votes,
+			options: optionsStore.options,
+		})
 	}
 })
 
