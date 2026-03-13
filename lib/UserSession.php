@@ -10,6 +10,7 @@ namespace OCA\Polls;
 
 use DateTimeZone;
 use Exception;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
@@ -22,7 +23,7 @@ use OCP\IUserSession;
 
 class UserSession {
 	/** @var string */
-	public const SESSION_KEY_CRON_JOB = AppConstants::SESSION_KEY_CRON_JOB;
+	public const SESSION_KEY_CRON_JOB = Application::SESSION_KEY_CRON_JOB;
 	/** @var string */
 	public const SESSION_KEY_USER_ID = 'ncPollsUserId';
 	/** @var string */

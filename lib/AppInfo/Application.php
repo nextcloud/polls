@@ -80,6 +80,12 @@ use Psr\Log\LoggerInterface;
 class Application extends App implements IBootstrap {
 	/** @var string */
 	public const APP_ID = 'polls';
+	/** @var string */
+	public const CLIENT_ID = 'ncPollsClientId';
+	/** @var string */
+	public const CLIENT_TZ = 'ncPollsClientTimeZone';
+	/** @var string */
+	public const SESSION_KEY_CRON_JOB = 'ncPollsCronJob';
 
 	public function __construct(array $urlParams = []) {
 		parent::__construct(self::APP_ID, $urlParams);
