@@ -63,7 +63,7 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 	 * @psalm-return list<int>
 	 */
 	public function getPollIds(): array {
-		if (!$this->pollIds) {
+		if ($this->pollIds === null || $this->pollIds === '') {
 			return [];
 		}
 		return array_map('intval', explode(self::CONCAT_SEPARATOR, $this->pollIds));

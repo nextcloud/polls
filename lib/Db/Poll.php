@@ -83,10 +83,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const TYPE_DATE = 'datePoll';
 	public const TYPE_TEXT = 'textPoll';
 	public const VARIANT_SIMPLE = 'simple';
-	/** @deprecated use ACCESS_PRIVATE instead  */
-	public const ACCESS_HIDDEN = 'hidden';
-	/** @deprecated use ACCESS_OPEN instead  */
-	public const ACCESS_PUBLIC = 'public';
 	public const ACCESS_PRIVATE = 'private';
 	public const ACCESS_OPEN = 'open';
 	public const SHOW_RESULTS_ALWAYS = 'always';
@@ -564,10 +560,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	private function getAccess(): string {
-		if ($this->access === self::ACCESS_PUBLIC) {
+		if ($this->access === 'public') {
 			return self::ACCESS_OPEN;
 		}
-		if ($this->access === self::ACCESS_HIDDEN) {
+		if ($this->access === 'hidden') {
 			return self::ACCESS_PRIVATE;
 		}
 		return $this->access;

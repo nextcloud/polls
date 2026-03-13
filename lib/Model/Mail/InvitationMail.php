@@ -19,7 +19,7 @@ class InvitationMail extends MailBase {
 		protected string $recipientId,
 		protected Share $share,
 	) {
-		parent::__construct($recipientId, $share->getPollId());
+		parent::__construct($recipientId, $share->getPollIdOrFail());
 	}
 
 	protected function getSubject(): string {

@@ -35,11 +35,11 @@ class AdminController extends BaseController {
 		private PollService $pollService,
 		private IEventDispatcher $eventDispatcher,
 		private SystemService $systemService,
-		private IAppManager $appManager,
+		IAppManager $appManager,
 		private string $scriptPrefix = '',
 	) {
 		parent::__construct($appName, $request);
-		$this->scriptPrefix = 'polls-' . $this->appManager->getAppVersion(AppConstants::APP_ID) . '-';
+		$this->scriptPrefix = 'polls-' . $appManager->getAppVersion(AppConstants::APP_ID) . '-';
 	}
 
 	/**

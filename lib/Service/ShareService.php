@@ -128,14 +128,14 @@ class ShareService {
 		try {
 			// Create a new new personal share
 			$this->share = $this->createNewShare(
-				$this->share->getPollId(),
+				$this->share->getPollIdOrFail(),
 				$this->userSession->getCurrentUser(),
 				preventInvitation: true
 			);
 		} catch (ShareAlreadyExistsException $e) {
 			// return existing personal share
 			$this->share = $this->shareMapper->findByPollAndUser(
-				$this->share->getPollId(),
+				$this->share->getPollIdOrFail(),
 				$this->userSession->getCurrentUserId()
 			);
 		}
@@ -161,7 +161,7 @@ class ShareService {
 
 		$this->validateShareType();
 
-		$poll = $this->pollMapper->get($this->share->getPollId());
+		$poll = $this->pollMapper->get($this->share->getPollIdOrFail());
 
 		// TODO: remove after label migration is complete
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
@@ -202,7 +202,7 @@ class ShareService {
 	 */
 	public function setType(string $token, string $type): Share {
 		$this->share = $this->shareMapper->findByToken($token);
-		$this->pollMapper->get($this->share->getPollId())
+		$this->pollMapper->get($this->share->getPollIdOrFail())
 			->request(Poll::PERMISSION_POLL_EDIT);
 
 		// ATM only type user can transform to type admin and vice versa
@@ -222,7 +222,7 @@ class ShareService {
 	public function setPublicPollEmail(string $token, string $value): Share {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
-			$this->pollMapper->get($this->share->getPollId())
+			$this->pollMapper->get($this->share->getPollIdOrFail())
 				->request(Poll::PERMISSION_POLL_EDIT);
 			$this->share->setPublicPollEmail($value);
 			$this->share = $this->shareMapper->update($this->share);
@@ -286,7 +286,7 @@ class ShareService {
 		$this->share = $this->shareMapper->findByToken($token);
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			$this->pollMapper->get($this->share->getPollId())
+			$this->pollMapper->get($this->share->getPollIdOrFail())
 				->request(Poll::PERMISSION_POLL_EDIT);
 			$this->share->setLabel($label);
 
@@ -353,7 +353,7 @@ class ShareService {
 		// remove personal information from user id
 		$this->share->setUserId($this->generatePublicUserId());
 		$this->share = $this->shareMapper->update($this->share);
-		$this->convertDependingObjects($initialUserId, $this->share->getUserId(), $this->share->getPollId());
+		$this->convertDependingObjects($initialUserId, $this->share->getUserId(), $this->share->getPollIdOrFail());
 		return $this->share;
 	}
 
@@ -403,7 +403,7 @@ class ShareService {
 			// Create new external share for user, who entered the poll via public link,
 			// prevent invtation sending, when no email address is given
 			$this->createNewShare(
-				$this->share->getPollId(),
+				$this->share->getPollIdOrFail(),
 				$this->userMapper->getUserObject(Share::TYPE_EXTERNAL, $userId, $displayName, $emailAddress, $language, $language, $timeZone),
 				!$emailAddress,
 				$timeZone
@@ -483,7 +483,7 @@ class ShareService {
 	 * @param bool $unlock Set true, if share is to be unlocked
 	 */
 	private function lock(Share $share, bool $unlock = false): Share {
-		$this->pollMapper->get($share->getPollId())
+		$this->pollMapper->get($share->getPollIdOrFail())
 			->request(Poll::PERMISSION_POLL_EDIT);
 
 		$share->setLocked($unlock ? 0 : time());
@@ -536,7 +536,7 @@ class ShareService {
 
 		foreach ($this->userMapper->getUserObject($share->getType(), $share->getUserId())->getMembers() as $member) {
 			try {
-				$newShare = $this->add($share->getPollId(), $member->getType(), $member->getId());
+				$newShare = $this->add($share->getPollIdOrFail(), $member->getType(), $member->getId());
 				$shares[] = $newShare;
 			} catch (ForbiddenException $e) {
 				// skip, if user is not allowed to add share, usually because of forbidden share type
@@ -559,10 +559,10 @@ class ShareService {
 	 */
 	public function sendInvitation(Share $share, SentResult &$sentResult = new SentResult()): SentResult {
 		if (in_array($share->getType(), [Share::TYPE_USER, Share::TYPE_ADMIN], true)) {
-			$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
+			$this->notificationService->sendInvitation($share->getPollIdOrFail(), $share->getUserId());
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
 			foreach ($this->userMapper->getUserFromShare($share)->getMembers() as $member) {
-				$this->notificationService->sendInvitation($share->getPollId(), $member->getId());
+				$this->notificationService->sendInvitation($share->getPollIdOrFail(), $member->getId());
 			}
 		}
 

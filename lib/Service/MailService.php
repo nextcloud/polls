@@ -116,6 +116,7 @@ class MailService {
 
 	}
 
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public static function parseEmailStrings(array $emailArray): array {
 		$validEmails = [];
 		$invalidEmails = [];

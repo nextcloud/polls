@@ -19,10 +19,10 @@ use OCP\Util;
  */
 class AdminSettings implements ISettings {
 	public function __construct(
-		private IAppManager $appManager,
+		IAppManager $appManager,
 		private string $scriptPrefix = '',
 	) {
-		$this->scriptPrefix = 'polls-' . $this->appManager->getAppVersion(AppConstants::APP_ID) . '-';
+		$this->scriptPrefix = 'polls-' . $appManager->getAppVersion(AppConstants::APP_ID) . '-';
 
 	}
 	public function getForm(): TemplateResponse {

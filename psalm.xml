@@ -30,6 +30,18 @@
 	<issueHandlers>
         <PossiblyUnusedMethod>
         </PossiblyUnusedMethod>
+        <PossiblyInvalidPropertyAssignmentValue>
+            <errorLevel type="suppress">
+                <directory name="lib/Command" />
+                <directory name="lib/Migration" />
+            </errorLevel>
+        </PossiblyInvalidPropertyAssignmentValue>
+        <PossiblyInvalidArgument>
+            <errorLevel type="suppress">
+                <directory name="lib/Command" />
+                <directory name="lib/Migration" />
+            </errorLevel>
+        </PossiblyInvalidArgument>
         <UnusedClass>
             <errorLevel type="suppress">
                 <directory name="lib/Migration/RepairSteps" />
