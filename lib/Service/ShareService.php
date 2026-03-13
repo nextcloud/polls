@@ -133,14 +133,14 @@ class ShareService {
 	private function convertPublicShareToPersonalShare(): Share {
 		try {
 			$this->share = $this->createNewShare(
-				(int) $this->share->getPollId(),
+				(int)$this->share->getPollId(),
 				$this->userSession->getCurrentUser(),
 				preventInvitation: true
 			);
 		} catch (ShareAlreadyExistsException $e) {
 			// replace share by existing personal share
 			$this->share = $this->shareMapper->findByPollAndUser(
-				(int) $this->share->getPollId(),
+				(int)$this->share->getPollId(),
 				$this->userSession->getCurrentUserId()
 			);
 			// remove the public token from session
@@ -168,7 +168,7 @@ class ShareService {
 
 		$this->validateShareType();
 
-		$poll = $this->pollMapper->get((int) $this->share->getPollId());
+		$poll = $this->pollMapper->get((int)$this->share->getPollId());
 
 		// deletes the displayname, to avoid displayname preset in case of public polls
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
