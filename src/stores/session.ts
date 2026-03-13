@@ -112,8 +112,8 @@ export const useSessionStore = defineStore('session', {
 			lastUpdate: Math.floor(Date.now() / 1000),
 		},
 		token: null,
-		currentUser: defaultUser,
-		share: defaultShare,
+		currentUser: { ...defaultUser },
+		share: { ...defaultShare, user: { ...defaultUser } },
 		navigationStatus: 'idle',
 	}),
 
@@ -295,25 +295,6 @@ export const useSessionStore = defineStore('session', {
 			this.route.params.token = setRoute.params.token as string
 			this.route.params.type = setRoute.params.type as FilterType
 			this.route.params.slug = setRoute.params.slug as string
-		},
-
-		// Share store
-		async loadShare(): Promise<void> {
-			if (this.route.name !== 'publicVote') {
-				this.share = defaultShare
-				return
-			}
-
-			try {
-				const response = await PublicAPI.getShare(this.publicToken)
-				this.share = response.data.share
-			} catch (error) {
-				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
-					return
-				}
-				Logger.error('Error retrieving share', { error })
-				throw error
-			}
 		},
 
 		loadAppSettings(): void {},

@@ -32,11 +32,11 @@ class PageController extends Controller {
 		IRequest $request,
 		private NotificationService $notificationService,
 		private IEventDispatcher $eventDispatcher,
-		private IAppManager $appManager,
+		IAppManager $appManager,
 		private string $scriptPrefix = '',
 	) {
 		parent::__construct($appName, $request);
-		$this->scriptPrefix = 'polls-' . $this->appManager->getAppVersion(AppConstants::APP_ID) . '-';
+		$this->scriptPrefix = 'polls-' . $appManager->getAppVersion(AppConstants::APP_ID) . '-';
 	}
 
 	/**

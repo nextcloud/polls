@@ -72,7 +72,7 @@ export const usePollStore = defineStore('poll', {
 			maxVotesPerUser: 0,
 			timezoneName: null,
 		},
-		owner: defaultUser,
+		owner: { ...defaultUser },
 		pollGroups: [],
 		status: {
 			anonymizeLevel: 'ANON_NONE',

@@ -370,14 +370,14 @@ class SystemService {
 		}
 
 		// get all participants
-		foreach ($this->voteMapper->findParticipantsByPoll($share->getPollId()) as $vote) {
+		foreach ($this->voteMapper->findParticipantsByPoll($share->getPollIdOrFail()) as $vote) {
 			if ($vote->getUser()->hasName($compareUserName)) {
 				throw new InvalidUsernameException;
 			}
 		}
 
 		// get all shares for this poll
-		foreach ($this->shareMapper->findByPoll($share->getPollId()) as $share) {
+		foreach ($this->shareMapper->findByPoll($share->getPollIdOrFail()) as $share) {
 			if ($share->getType() !== Circle::TYPE && $share->getUser()->hasName($compareUserName)) {
 				throw new InvalidUsernameException;
 			}

@@ -52,7 +52,7 @@ export const useVotesStore = defineStore('votes', {
 			).sort((a, b) =>
 				a.displayName.localeCompare(
 					b.displayName,
-					localeCodeIntl ?? navigator.language,
+					localeCodeIntl || navigator.language,
 				),
 			)
 		},
@@ -238,7 +238,7 @@ export const useVotesStore = defineStore('votes', {
 					const { localeCodeIntl } = useSessionStore().currentUser
 					return a.displayName.localeCompare(
 						b.displayName,
-						localeCodeIntl ?? navigator.language,
+						localeCodeIntl || navigator.language,
 					)
 				})
 		},

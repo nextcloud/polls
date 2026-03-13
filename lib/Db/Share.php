@@ -10,6 +10,7 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 use OCA\Polls\AppConstants;
+use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Helper\Container;
 use OCP\IURLGenerator;
 
@@ -166,8 +167,19 @@ class Share extends EntityWithUser implements JsonSerializable {
 		];
 	}
 
+	/**
+	 * Returns the poll ID or throws if this share is not associated with a poll.
+	 * @throws InvalidShareTypeException
+	 */
+	public function getPollIdOrFail(): int {
+		if ($this->pollId === null) {
+			throw new InvalidShareTypeException('Share is not associated with a poll');
+		}
+		return $this->pollId;
+	}
+
 	private function getVoted(): int {
-		return $this->getAnonymizedVotes() ? 0 : $this->voted;
+		return ($this->getAnonymizedVotes() ?? 0) > 0 ? 0 : $this->voted;
 	}
 
 	/**
@@ -252,7 +264,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getURL(): string {
-		if (!$this->getPollId()) {
+		if ($this->getPollId() === null) {
 			return '';
 		}
 

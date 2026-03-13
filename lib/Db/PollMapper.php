@@ -393,7 +393,7 @@ class PollMapper extends QBMapper {
 			->andWhere($expr->eq($subAlias . '.user_id', $currentUserParam));
 
 		// filter by answer
-		if ($answerFilter) {
+		if ($answerFilter !== null && $answerFilter !== '') {
 			$subQuery->andWhere($expr->eq($subAlias . '.vote_answer', $qb->createNamedParameter($answerFilter, IQueryBuilder::PARAM_STR)));
 			$alias = $alias . '_' . $answerFilter;
 		}

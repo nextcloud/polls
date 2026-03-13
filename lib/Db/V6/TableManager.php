@@ -809,7 +809,7 @@ class TableManager extends DbManager {
 
 		$qb->update($tableName)
 			->set('access', $qb->expr()->literal(Poll::ACCESS_OPEN))
-			->where($qb->expr()->eq($prefixedTableName . '.' . $affectedColumn, $qb->expr()->literal(Poll::ACCESS_PUBLIC)));
+			->where($qb->expr()->eq($prefixedTableName . '.' . $affectedColumn, $qb->expr()->literal('public')));
 		$updated = $qb->executeStatement();
 
 		if ($updated === 0) {

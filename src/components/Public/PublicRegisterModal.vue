@@ -244,15 +244,6 @@ const disableSubmit = computed(
 )
 
 onMounted(() => {
-	if (route.name === 'publicVote') {
-		// TODO: remove displayName at controller side
-		// this ist just a quick fix
-		sessionStore.currentUser.displayName =
-			(route.query.displayName as string) || ''
-		sessionStore.currentUser.emailAddress =
-			(route.query.emailAddress as string) || ''
-	}
-
 	// pre-fill input field with existing data
 	userName.value = sessionStore.currentUser.displayName
 	validatePublicUsername()
