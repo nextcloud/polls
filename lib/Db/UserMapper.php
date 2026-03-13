@@ -50,10 +50,11 @@ class UserMapper extends QBMapper {
 	 * Returns a UserBase child from share determined by userId and pollId or from userbase by userId
 	 *
 	 * @param string $userId
-	 * @param int $pollId Can only be used together with $userId and will return the internal user or the share user
+	 * @param int|string|null $pollId Can only be used together with $userId and will return the internal user or the share user
 	 * @return UserBase
 	 **/
-	public function getParticipant(string $userId, ?int $pollId): UserBase {
+	public function getParticipant(string $userId, int|string|null $pollId): UserBase {
+		$pollId = is_string($pollId) ? (int) $pollId : $pollId;
 		if ($userId === '') {
 			return new UserBase($userId, UserBase::TYPE_EMPTY);
 		}
@@ -81,7 +82,7 @@ class UserMapper extends QBMapper {
 	 * Get participans of a poll as array of user objects
 	 * @return UserBase[]
 	 */
-	public function getParticipants(int $pollId): array {
+	public function getParticipants(?int $pollId): array {
 		$users = [];
 		// get the distict list of usernames from the votes
 		$participants = $this->findParticipantsByPoll($pollId);
