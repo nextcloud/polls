@@ -54,7 +54,7 @@ class UserMapper extends QBMapper {
 	 * @return UserBase
 	 **/
 	public function getParticipant(string $userId, int|string|null $pollId): UserBase {
-		$pollId = is_string($pollId) ? (int) $pollId : $pollId;
+		$pollId = is_string($pollId) ? (int)$pollId : $pollId;
 		if ($userId === '') {
 			return new UserBase($userId, UserBase::TYPE_EMPTY);
 		}
