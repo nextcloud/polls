@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Provider;
 
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Model\UserBase;
@@ -39,7 +39,7 @@ class ActivityProvider implements IProvider {
 	}
 
 	public function parse($language, IEvent $event, ?IEvent $previousEvent = null) {
-		if ($event->getApp() !== AppConstants::APP_ID) {
+		if ($event->getApp() !== Application::APP_ID) {
 			throw new UnknownActivityException();
 		}
 

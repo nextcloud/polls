@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Settings;
 
-use OCA\Polls\AppConstants;
-use OCP\App\IAppManager;
+use OCA\Polls\AppInfo\Application;
+use OCA\Polls\Helper\AssetLoader;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 use OCP\Util;
@@ -18,21 +18,16 @@ use OCP\Util;
  * @psalm-suppress UnusedClass
  */
 class PersonalSettings implements ISettings {
-	public function __construct(
-		IAppManager $appManager,
-		private string $scriptPrefix = '',
-	) {
-		$this->scriptPrefix = 'polls-' . $appManager->getAppVersion(AppConstants::APP_ID) . '-';
-
+	public function __construct() {
 	}
 
 	public function getForm(): TemplateResponse {
-		Util::addScript(AppConstants::APP_ID, $this->scriptPrefix . 'userSettings');
-		return new TemplateResponse(AppConstants::APP_ID, 'main', []);
+		Util::addScript(Application::APP_ID, AssetLoader::getScript('userSettings'));
+		return new TemplateResponse(Application::APP_ID, 'main', []);
 	}
 
 	public function getSection(): string {
-		return AppConstants::APP_ID;
+		return Application::APP_ID;
 	}
 
 	public function getPriority(): int {

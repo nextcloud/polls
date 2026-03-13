@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Service;
 
 use Exception;
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Attributes\ManuallyRunnableCronJob;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
@@ -245,7 +245,7 @@ class SystemService {
 	 * find appropriate language
 	 */
 	public function getGenericLanguage(): string {
-		return $this->transFactory->findGenericLanguage(AppConstants::APP_ID);
+		return $this->transFactory->findGenericLanguage(Application::APP_ID);
 	}
 
 	/**

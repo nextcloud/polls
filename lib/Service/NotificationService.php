@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Service;
 
 use DateTime;
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\UserSession;
 use OCP\Notification\IManager;
@@ -36,7 +36,7 @@ class NotificationService {
 	public function removeNotificationsForPoll(int $pollId): void {
 		$notification = $this->notificationManager->createNotification();
 
-		$notification->setApp(AppConstants::APP_ID)
+		$notification->setApp(Application::APP_ID)
 			->setObject('poll', strval($pollId));
 
 		if (!$this->userSession->getIsLoggedIn()) {
@@ -50,7 +50,7 @@ class NotificationService {
 
 	public function sendInvitation(int $pollId, string $recipient): void {
 		$notification = $this->notificationManager->createNotification();
-		$notification->setApp(AppConstants::APP_ID)
+		$notification->setApp(Application::APP_ID)
 			->setUser($recipient)
 			->setDateTime(new DateTime())
 			->setObject('poll', strval($pollId))
@@ -60,7 +60,7 @@ class NotificationService {
 
 	public function createNotification(array $params = []): void {
 		$notification = $this->notificationManager->createNotification();
-		$notification->setApp(AppConstants::APP_ID)
+		$notification->setApp(Application::APP_ID)
 			->setUser($params['recipient'])
 			->setDateTime(new DateTime())
 			->setObject($params['objectType'], strval($params['objectValue']))

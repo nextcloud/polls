@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Event\BaseEvent;
 use OCA\Polls\Event\CommentEvent;
@@ -23,7 +23,7 @@ use OCP\IL10N;
 use OCP\L10N\IFactory;
 
 class ActivityService {
-	protected const APP_ID = AppConstants::APP_ID;
+	protected const APP_ID = Application::APP_ID;
 	private ActivityEvent $activityEvent;
 	private BaseEvent $baseEvent;
 
@@ -73,7 +73,7 @@ class ActivityService {
 
 	private function createActivityEvent(): void {
 		$this->activityEvent = $this->activityManager->generateEvent();
-		$this->activityEvent->setApp(AppConstants::APP_ID)
+		$this->activityEvent->setApp(Application::APP_ID)
 			->setType($this->baseEvent->getActivityType() ?? '')
 			->setAuthor($this->baseEvent->getActor())
 			->setObject($this->baseEvent->getActivityObjectType() ?? '', $this->baseEvent->getActivityObjectId())

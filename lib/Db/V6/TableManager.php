@@ -10,7 +10,7 @@ namespace OCA\Polls\Db\V6;
 
 use Doctrine\DBAL\Types\Type;
 use Exception;
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollGroup;
@@ -87,7 +87,7 @@ class TableManager extends DbManager {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('migrations')
 			->where('app = :appName')
-			->setParameter('appName', AppConstants::APP_ID)
+			->setParameter('appName', Application::APP_ID)
 			->executeStatement();
 
 		$this->logger->info('Removed all migration records from {dbPrefix}migrations', ['dbPrefix' => $this->dbPrefix]);
@@ -98,7 +98,7 @@ class TableManager extends DbManager {
 		// to the migrations table which belong to the core
 		$query->delete('appconfig')
 			->where('appid = :appid')
-			->setParameter('appid', AppConstants::APP_ID)
+			->setParameter('appid', Application::APP_ID)
 			->executeStatement();
 
 		$this->logger->info('Removed all app config records from {dbPrefix}appconfig', ['dbPrefix' => $this->dbPrefix]);
@@ -447,7 +447,7 @@ class TableManager extends DbManager {
 			$query->delete('migrations')
 				->where('app = :appName')
 				->andWhere('version = :version')
-				->setParameter('appName', AppConstants::APP_ID)
+				->setParameter('appName', Application::APP_ID)
 				->setParameter('version', $version)
 				->executeStatement();
 		}

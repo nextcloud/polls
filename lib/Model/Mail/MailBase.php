@@ -13,7 +13,7 @@ use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\Table\TableExtension;
 use League\CommonMark\MarkdownConverter;
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\UserMapper;
@@ -29,7 +29,7 @@ use Psr\Log\LoggerInterface;
 
 abstract class MailBase {
 	/** @var string */
-	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Mail';
+	protected const TEMPLATE_CLASS = Application::APP_ID . '.Mail';
 
 	protected AppSettings $appSettings;
 	protected IEmailTemplate $emailTemplate;
@@ -75,7 +75,7 @@ abstract class MailBase {
 		$languageCode = $this->recipient->getLanguageCode() !== '' ? $this->recipient->getLanguageCode() : $this->transFactory->findGenericLanguage();
 
 		$this->l10n = $this->transFactory->get(
-			AppConstants::APP_ID,
+			Application::APP_ID,
 			$languageCode,
 			$this->recipient->getLocaleCode()
 		);
