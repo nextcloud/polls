@@ -48,11 +48,6 @@ use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 
 class ShareService {
-	private const SHARES_TO_CONVERT_ON_ACCESS = [
-		Share::TYPE_EMAIL,
-		Share::TYPE_CONTACT,
-	];
-
 	/** @var Share[] * */
 	private array $shares;
 
@@ -126,26 +121,26 @@ class ShareService {
 	}
 
 	/**
-	 * Converts the public share to a personal share for hte current logged in user
-	 * If user is not authorized for this poll, create a personal share
-	 * for this user and return the created share instead of the public share
+	 * Creates a new personal share based on a public share for the current user
+	 * or returns the existing personal share, if it already exists
 	 */
 	private function convertPublicShareToPersonalShare(): Share {
 		try {
+			// Create a new new personal share
 			$this->share = $this->createNewShare(
-				(int)$this->share->getPollId(),
+				$this->share->getPollId(),
 				$this->userSession->getCurrentUser(),
 				preventInvitation: true
 			);
 		} catch (ShareAlreadyExistsException $e) {
-			// replace share by existing personal share
+			// return existing personal share
 			$this->share = $this->shareMapper->findByPollAndUser(
-				(int)$this->share->getPollId(),
+				$this->share->getPollId(),
 				$this->userSession->getCurrentUserId()
 			);
-			// remove the public token from session
-			$this->userSession->setShareToken($this->share->getToken());
 		}
+		// remove the public token from session
+		$this->userSession->setShareToken($this->share->getToken());
 		return $this->share;
 	}
 
@@ -159,47 +154,38 @@ class ShareService {
 	 *
 	 * @param string $token Token of share to get
 	 */
-	public function request(?string $token = null): Share {
-		if ($token !== null) {
-			$this->share = $this->shareMapper->findByToken($token);
-		} else {
-			$this->share = $this->userSession->getShare();
-		}
+	public function getEffectiveShare(?string $token = null): Share {
+		$this->share = $token !== null
+			? $this->shareMapper->findByToken($token)
+			: $this->userSession->getShare();
 
 		$this->validateShareType();
 
-		$poll = $this->pollMapper->get((int)$this->share->getPollId());
+		$poll = $this->pollMapper->get($this->share->getPollId());
 
-		// deletes the displayname, to avoid displayname preset in case of public polls
+		// TODO: remove after label migration is complete
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			$this->share->setDisplayName('');
 		}
 
-		// If user is already involved in the poll
-		// return the joint share, otherwise return the requested share
-		if ($poll->getIsInvolved()) {
-			if ($poll->getShareToken()) {
-				// return personal share, if exists
-				return $this->shareMapper->findByToken($poll->getShareToken());
-			}
-			// Otherwise return the requested share
-			return $this->share;
-		}
+		return match (true) {
+			// User is already involved: return their personal share or the accessed share
+			$poll->getIsInvolved()
+				=> $poll->getShareToken()
+					? $this->shareMapper->findByToken($poll->getShareToken())
+					: $this->share,
 
-		// if the share is a public share and the user is logged in,
-		// create a personal share for the user and return it
-		if ($this->share->getType() === Share::TYPE_PUBLIC
-			&& $this->userSession->getIsLoggedIn()) {
+			// Logged-in user on public share: create/retrieve personal share
+			$this->share->getType() === Share::TYPE_PUBLIC && $this->userSession->getIsLoggedIn()
+				=> $this->convertPublicShareToPersonalShare(),
 
-			return $this->convertPublicShareToPersonalShare();
-		}
+			// Email/contact share: convert to external share
+			in_array($this->share->getType(), Share::CONVERATABLE_PUBLIC_SHARES, true)
+				=> $this->convertPersonalPublicShareToExternalShare(),
 
-		// Exception for convertable (email and contact) shares
-		if (in_array($this->share->getType(), Share::CONVERATABLE_PUBLIC_SHARES, true)) {
-			return $this->convertPersonalPublicShareToExternalShare();
-		}
-
-		return $this->share;
+			// Default: return validated share as-is
+			default => $this->share,
+		};
 	}
 
 	/**
@@ -461,11 +447,13 @@ class ShareService {
 	 * @param bool $restore Set true, if share is to be restored
 	 */
 	public function delete(Share $share, bool $restore = false): Share {
-		if (!$share->getPollId() && $share->getGroupId()) {
-			$this->pollGroupMapper->find($share->getGroupId())
+		$pollId = $share->getPollId();
+		$groupId = $share->getGroupId();
+		if ($pollId === null && $groupId !== null) {
+			$this->pollGroupMapper->find($groupId)
 				->request(PollGroup::PERMISSION_POLL_GROUP_EDIT);
-		} else {
-			$this->pollMapper->get($share->getPollId())
+		} elseif ($pollId !== null && $groupId === null) {
+			$this->pollMapper->get($pollId)
 				->request(Poll::PERMISSION_POLL_EDIT);
 		}
 
@@ -473,7 +461,7 @@ class ShareService {
 		$this->shareMapper->update($share);
 
 		// skip event when deleting a poll group share
-		if ($share->getPollId()) {
+		if ($pollId !== null) {
 			$this->eventDispatcher->dispatchTyped(new ShareDeletedEvent($share));
 		}
 		return $share;

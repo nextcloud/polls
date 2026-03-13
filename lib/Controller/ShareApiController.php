@@ -55,7 +55,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/share/{token}', requirements: ['apiVersion' => '(v2)'])]
 	public function get(string $token): DataResponse {
-		return $this->response(fn () => ['share' => $this->shareService->request($token)]);
+		return $this->response(fn () => ['share' => $this->shareService->getEffectiveShare($token)]);
 	}
 
 
@@ -84,7 +84,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[ApiRoute(verb: 'PUT', url: 'api/v1.0/s/{token}/email/{emailAddress}')]
 	public function setEmailAddress(string $token, string $emailAddress = ''): DataResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->setEmailAddress($this->shareService->request($token), $emailAddress)
+			'share' => $this->shareService->setEmailAddress($this->shareService->getEffectiveShare($token), $emailAddress)
 		]);
 	}
 
@@ -101,7 +101,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[ApiRoute(verb: 'DELETE', url: 'api/v1.0/s/{token}/email')]
 	public function deleteEmailAddress(string $token): DataResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->deleteEmailAddress($this->shareService->request($token))
+			'share' => $this->shareService->deleteEmailAddress($this->shareService->getEffectiveShare($token))
 		]);
 	}
 
