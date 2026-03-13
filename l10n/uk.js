@@ -235,6 +235,7 @@ OC.L10N.register(
     "Someone voted in a <strong>poll</strong>" : "Хтось проголосував в <strong>опитуванні</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Додаток для опитувань, схожий на Doodle/DuD-Poll з можливістю обмеження доступу.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Додаток для опитувань, подібний до Doodle/DuD-Poll з можливістю обмеження доступу (учасники, певні групи/користувачі, приховані та публічні).",
+    "Loading…" : "Завантаження…",
     "Add option" : "Додати варіант",
     "Add poll" : "Додати опитування",
     "\"{pollTitle}\" has been successfully created." : "\"{pollTitle}\" успішно створено.",

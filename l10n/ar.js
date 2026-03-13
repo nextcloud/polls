@@ -218,6 +218,7 @@ OC.L10N.register(
     "Events happening inside of a <strong>poll</strong>" : "الأحداث التي تجري داخل <strong>استبيان </strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "تطبيق الاستبيان؛ مماثل لاستبيان Doodle/DuD مع إمكانية تقييد الوصول.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "تطبيق الاستبيان؛ مماثل لاستبيان Doodle/DuD مع إمكانية تقييد الوصول بحسب (الأعضاء، أشخاص ومجموعات معينة، مخفي وعمومي).",
+    "Loading…" : "التحميل جارٍ ...",
     "Add option" : "إضافة خيار",
     "Add poll" : "إضافة استبيان",
     "\"{pollTitle}\" has been successfully created." : "\"{pollTitle}\" تمّ الإنشاء بنجاحٍ.",

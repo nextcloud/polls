@@ -164,6 +164,7 @@ OC.L10N.register(
     "You have done something indescribable with this poll" : "Вы сделали что-то невероятное с этим опросом.",
     "{actor} has done something indescribable with this poll" : "{actor} сделал что-то невероятное с этим опросом",
     "Events happening inside of a <strong>poll</strong>" : "События, происходящие внутри <strong>опроса</strong>",
+    "Loading…" : "Загрузка…",
     "Add option" : "Добавить вариант",
     "New poll" : "Новый опрос",
     "Delete" : "Удалить",

@@ -165,6 +165,7 @@
     "You have done something indescribable with this poll" : "Has hecho algo indescriptible con esta encuesta",
     "{actor} has done something indescribable with this poll" : "{actor} ha hecho algo indescriptible con esta encuesta",
     "Events happening inside of a <strong>poll</strong>" : "Eventos ocurriendo dentro de una <strong>encuesta</strong>",
+    "Loading…" : "Cargando",
     "Add option" : "Agregar opción",
     "Delete" : "Borrar",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Eliminando en {countdown} segundo","Eliminando en {countdown} segundos","Eliminando en {countdown} segundos"],

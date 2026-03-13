@@ -178,6 +178,7 @@
     "You have done something indescribable with this poll" : "Valami leírhatatlant tett ezzel a szavazással",
     "{actor} has done something indescribable with this poll" : "{actor} valami leírhatatlant tett ezzel a szavazással",
     "Events happening inside of a <strong>poll</strong>" : "Egy <strong>szavazásban</strong> történő események",
+    "Loading…" : "Betöltés…",
     "Add option" : "Lehetőség hozzáadása",
     "New poll" : "Új szavazás",
     "Delete" : "Törlés",

@@ -235,6 +235,7 @@ OC.L10N.register(
     "Someone voted in a <strong>poll</strong>" : "Quelqu'un a voté dans un <strong>sondage</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Une application de sondage, similaire à Doode / DuD-Poll avec la possibilité de restreindre l'accès.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Une application de sodages, similaire à Doodle / DuD-Poll avec la possibilité de restreindre l'accès (membres, certains groupes/utilisateurs, caché et public).",
+    "Loading…" : "Chargement…",
     "Add option" : "Ajouter une option",
     "Add poll" : "Ajouter un sondage",
     "\"{pollTitle}\" has been successfully created." : "\"{pollTitle}\" a été créé avec succès.",

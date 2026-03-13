@@ -89,6 +89,7 @@
     "You have shared this poll with circle {sharee}" : "Olet jakanut tämän kyselyn piirin {sharee} kanssa",
     "You have deleted a public share" : "Poistit julkisen jaon",
     "{actor} has deleted a public share" : "{actor} poisti julkisen jaon",
+    "Loading…" : "Ladataan…",
     "Add option" : "Lisää valinta",
     "Add poll" : "Lisää kysely",
     "\"{pollTitle}\" has been successfully created." : "\"{pollTitle}\" on luotu onnistuneesti.",

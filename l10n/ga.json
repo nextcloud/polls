@@ -233,6 +233,7 @@
     "Someone voted in a <strong>poll</strong>" : "Vótáil duine éigin i<strong>vótaíocht</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Aip pobalbhreithe, cosúil le Doodle/DuD-Poll agus an fhéidearthacht ann rochtain a shrianadh.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aip pobalbhreithe, cosúil le Doodle/DuD-Poll leis an bhféidearthacht rochtain a shrianadh (comhaltaí, grúpaí/úsáideoirí áirithe, i bhfolach agus poiblí).",
+    "Loading…" : "Á lódáil…",
     "Add option" : "Cuir rogha leis",
     "Add poll" : "Cuir vótaíocht leis",
     "\"{pollTitle}\" has been successfully created." : "Cruthaíodh \"{pollTitle}\" go rathúil.",

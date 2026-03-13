@@ -156,6 +156,7 @@
     "You have done something indescribable with this poll" : "你对这个投票做了莫名其妙的事情",
     "{actor} has done something indescribable with this poll" : "{actor} 对这个投票做了莫名其妙的事情",
     "Events happening inside of a <strong>poll</strong>" : "<strong>投票</strong>内发生的事件",
+    "Loading…" : "正在加载 ...",
     "Add option" : "添加选项",
     "Delete" : "删除",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["将在{countdown}秒后删除"],

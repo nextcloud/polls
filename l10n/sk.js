@@ -235,6 +235,7 @@ OC.L10N.register(
     "Someone voted in a <strong>poll</strong>" : "Niekto hlasoval v <strong>ankete</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Aplikácia na ankety, podobná Doodle/DuD-Poll, s možnosťou obmedziť prístup.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aplikácia na ankety, podobná Doodle/DuD-Poll, s možnosťou obmedziť prístup (členovia, určité skupiny/používatelia, skryté a verejné).",
+    "Loading…" : "Nahrávam...",
     "Add option" : "Pridajte možnosť",
     "Add poll" : "Pridať anketu",
     "\"{pollTitle}\" has been successfully created." : "\"{pollTitle}\" bolo úspešne vytvorené.",

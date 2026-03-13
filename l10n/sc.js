@@ -24,6 +24,7 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} at cantzelladu su sondàgiu tuo \"%s\" ",
     "%s archived your poll" : "%s at archiviadu su sondàgiu tuo",
     "{actor} archived your poll \"%s\"." : "{actor} at archiviadu su sondàgiu tuo \"%s\".",
+    "Loading…" : "Carrighende…",
     "Add option" : "Agiunghe sèberu",
     "New poll" : "Sondàgiu nou",
     "Delete" : "Cantzella",

@@ -216,6 +216,7 @@ OC.L10N.register(
     "You have done something indescribable with this poll" : "Heu fet alguna cosa indescriptible amb aquesta enquesta",
     "{actor} has done something indescribable with this poll" : "{actor} ha fet alguna cosa indescriptible amb aquesta enquesta",
     "Events happening inside of a <strong>poll</strong>" : "Esdeveniments que tenen lloc dins d'una <strong>enquesta</strong>",
+    "Loading…" : "S'està carregant…",
     "Add option" : "Afegeix una opció",
     "New poll" : "Nova enquesta",
     "Delete" : "Suprimir",

@@ -233,6 +233,7 @@ OC.L10N.register(
     "Someone voted in a <strong>poll</strong>" : "Keegi hääletas <strong>küsitluses</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Küsitlusrakendus, mis sarnaneb Doodle/DuD-Poll rakendustele, kuid juures on võimalus ligipääsu piiramiseks.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Küsitlusrakendus, mis sarnaneb Doodle/DuD-Poll rakendustele, kuid juures on võimalus ligipääsu piiramiseks (liikmed, valitud grupid/kasutajad, peidetud või avalik).",
+    "Loading…" : "Laadin...",
     "Add option" : "Lisa valik",
     "Add poll" : "Lisa küsitlus",
     "\"{pollTitle}\" has been successfully created." : "„{pollTitle}“ küsitluse loomine õnnestus.",

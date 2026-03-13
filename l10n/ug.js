@@ -235,6 +235,7 @@ OC.L10N.register(
     "Someone voted in a <strong>poll</strong>" : "بىرەيلەن <strong>راي-سىناش</strong> قا بېلەت تاشلىدى",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "زىيارەتنى چەكلەش مۇمكىنچىلىكى بار Doodle / Dudle غا ئوخشاش راي سىناش دېتالى.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "زىيارەتنى چەكلەش مۇمكىنچىلىكى بار Doodle / Dudle غا ئوخشاش راي سىناش دېتالى (ئەزالار ، بەزى گۇرۇپپىلار / ئابونتلار ، يوشۇرۇن ۋە ئاممىۋى).",
+    "Loading…" : "يۈكلەۋاتىدۇ…",
     "Add option" : "تاللاش قوشۇڭ",
     "Add poll" : "راي سىناش قوش",
     "\"{pollTitle}\" has been successfully created." : "\"{pollTitle}\" مۇۋەپپەقىيەتلىك قۇرۇلدى.",

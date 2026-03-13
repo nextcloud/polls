@@ -233,6 +233,7 @@
     "Someone voted in a <strong>poll</strong>" : "Qualcuno ha votato in un <strong>sondaggio</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Un'applicazione per sondaggi, simile a Doodle/DuD-Poll, con la possibilità di limitare l'accesso.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Un'applicazione per sondaggi, simile a Doodle/DuD-Poll, con la possibilità di limitare l'accesso (membri, determinati gruppi/utenti, nascosto e pubblico).",
+    "Loading…" : "Caricamento…",
     "Add option" : "Aggiungi opzione",
     "Add poll" : "Aggiungi sondaggio",
     "\"{pollTitle}\" has been successfully created." : "\"{pollTitle}\" è stato creato con successo.",

@@ -235,6 +235,7 @@ OC.L10N.register(
     "Someone voted in a <strong>poll</strong>" : "Someone voted in a <strong>poll</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public).",
+    "Loading…" : "Loading…",
     "Add option" : "Add option",
     "Add poll" : "Add poll",
     "\"{pollTitle}\" has been successfully created." : "\"{pollTitle}\" has been successfully created.",

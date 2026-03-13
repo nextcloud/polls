@@ -6,6 +6,7 @@ OC.L10N.register(
     "Group" : "Guruh",
     "_Confirmed option:_::_Confirmed options:_" : ["Tasdiqlangan variantlar:"],
     "Contact" : "Aloqa",
+    "Loading…" : "Yuklanmoqda...",
     "Add option" : "Variant qo'shish",
     "Delete" : "O'chirish",
     "Register" : "Roʻyxatdan oʻtish",

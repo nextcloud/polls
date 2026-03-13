@@ -223,6 +223,7 @@ OC.L10N.register(
     "Someone voted in a <strong>poll</strong>" : "Κάποιος ψήφισε σε μια <strong>δημοσκόπηση</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Μια εφαρμογή δημοσκοπήσεων, παρόμοια με το Doodle/DuD-Poll με δυνατότητα περιορισμού πρόσβασης.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Μια εφαρμογή δημοσκοπήσεων, παρόμοια με το Doodle/DuD-Poll με δυνατότητα περιορισμού πρόσβασης (μέλη, συγκεκριμένες ομάδες/χρήστες, κρυφές και δημόσιες).",
+    "Loading…" : "Γίνεται φόρτωση…",
     "Add option" : "Προσθήκη επιλογής",
     "Add poll" : "Προσθήκη δημοσκόπησης",
     "\"{pollTitle}\" has been successfully created." : "Η \"{pollTitle}\" δημιουργήθηκε με επιτυχία.",

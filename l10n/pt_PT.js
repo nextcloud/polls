@@ -7,6 +7,7 @@ OC.L10N.register(
     "Contact" : "Contacto",
     "User" : "Utilizador",
     "Access denied" : "Acesso proibido",
+    "Loading…" : "A carregar…",
     "Delete" : "Apagar",
     "Register" : "Registar",
     "Unknown error" : "Erro desconhecido",

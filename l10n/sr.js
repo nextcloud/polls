@@ -235,6 +235,7 @@ OC.L10N.register(
     "Someone voted in a <strong>poll</strong>" : "Неко је гласао у <strong>гласању</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Апликација за гласања, слична са Doodle/DuD-Poll уз могућност ограничавања приступа.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Апликација за гласања, слична са Doodle/DuD-Poll уз могућност ограничавања приступа (чланови, одређене групе/корисници, скривено и јавно).",
+    "Loading…" : "Учитавам…",
     "Add option" : "Додај ставку",
     "Add poll" : "Додај гласање",
     "\"{pollTitle}\" has been successfully created." : "„{pollTitle}” је успешно креирано.",

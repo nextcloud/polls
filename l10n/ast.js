@@ -99,6 +99,7 @@ OC.L10N.register(
     "{actor} has voted in poll {pollTitle}" : "{actor} votó na encuesta «{pollTitle}»",
     "You have voted" : "Votesti",
     "{actor} has voted" : "{actor} votó",
+    "Loading…" : "Cargando…",
     "New poll" : "Encuesta nueva",
     "Delete" : "Desaniciar",
     "Register" : "Rexistrase",

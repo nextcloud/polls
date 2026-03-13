@@ -61,6 +61,7 @@ OC.L10N.register(
     "{actor} has deleted a share" : "{actor} ištrynė viešinį",
     "You have deleted a public share" : "Jūs ištrynėte viešą viešinį",
     "{actor} has deleted a public share" : "{actor} ištrynė viešą viešinį",
+    "Loading…" : "Įkeliama…",
     "Add option" : "Pridėti variantą",
     "Delete" : "Ištrinti",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Ištrinama po {countdown} sekundės","Ištrinama po {countdown} sekundžių","Ištrinama po {countdown} sekundžių","Ištrinama po {countdown} sekundės"],

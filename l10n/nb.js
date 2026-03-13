@@ -217,6 +217,7 @@ OC.L10N.register(
     "You have done something indescribable with this poll" : "Du har gjort noe ubeskrivelig med denne avstemningen",
     "{actor} has done something indescribable with this poll" : "{actor} har gjort noe ubeskrivelig med denne avstemningen",
     "Events happening inside of a <strong>poll</strong>" : "Hendelser som skjer inne i en <strong>avstemning</strong>",
+    "Loading…" : "Laster...",
     "Add option" : "Legg til alternativ",
     "New poll" : "Ny avstemning",
     "Delete" : "Slett",

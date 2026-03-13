@@ -9,6 +9,7 @@ OC.L10N.register(
     "Contact" : "Kontakto",
     "User" : "Uzanto",
     "Access denied" : "Aliro malpermesata",
+    "Loading…" : "Ŝargado...",
     "Add option" : "Aldoni opcion",
     "Delete" : "Forigi",
     "Register" : "Registriĝi",

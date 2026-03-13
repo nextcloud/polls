@@ -166,6 +166,7 @@
     "You have done something indescribable with this poll" : "You have done something indescribable with this poll",
     "{actor} has done something indescribable with this poll" : "{actor} has done something indescribable with this poll",
     "Events happening inside of a <strong>poll</strong>" : "Events happening inside of a <strong>poll</strong>",
+    "Loading…" : "درحال بارگیری…",
     "Add option" : "Add option",
     "Delete" : "حذف",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Deleting in {countdown} second","Deleting in {countdown} seconds"],

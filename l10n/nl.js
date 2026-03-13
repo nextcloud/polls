@@ -166,6 +166,7 @@ OC.L10N.register(
     "You have done something indescribable with this poll" : "Je hebt iets onbeschrijfelijks gedaan met deze peiling",
     "{actor} has done something indescribable with this poll" : "{actor} heeft iets onbeschrijfelijks gedaan met deze peiling",
     "Events happening inside of a <strong>poll</strong>" : "Gebeurtenissen binnen een <strong>peiling</strong>",
+    "Loading…" : "Laden…",
     "Add option" : "Voeg een optie toe",
     "Delete" : "Verwijderen",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Verwijderen over {countdown} seconde","Verwijderen over {countdown} seconden"],

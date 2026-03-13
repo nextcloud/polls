@@ -170,6 +170,7 @@ OC.L10N.register(
     "You have done something indescribable with this poll" : "Galdeketa honekin deskribaezina den zerbait egin duzu",
     "{actor} has done something indescribable with this poll" : "{actor}-(e)k zerbait deskribaezina egin du galdeketa honekin",
     "Events happening inside of a <strong>poll</strong>" : "<strong>Galdeketa</strong> baten barneko gertaerak",
+    "Loading…" : "Kargatzen…",
     "Add option" : "Gehitu aukera",
     "New poll" : "Galdeketa berria",
     "Delete" : "Ezabatu",

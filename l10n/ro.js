@@ -9,6 +9,7 @@ OC.L10N.register(
     "Contact" : "Contact",
     "User" : "Utilizator",
     "Access denied" : "Acces interzis",
+    "Loading…" : "Se încarcă...",
     "Delete" : "Șterge",
     "Register" : "Înregistrează-te",
     "Unknown error" : "Eroare necunoscută",

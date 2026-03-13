@@ -235,6 +235,7 @@ OC.L10N.register(
     "Someone voted in a <strong>poll</strong>" : "ມີຄົນລົງຄະແນນໃນ <strong>ໂພລ</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "ແອັບສຳລັບສ້າງໂພລ, ຄ້າຍຄືກັບ Doodle/DuD-Poll ທີ່ມີຄວາມສາມາດໃນການຈຳກັດການເຂົ້າເຖິງ.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "ແອັບສຳລັບສ້າງໂພລ, ຄ້າຍຄືກັບ Doodle/DuD-Poll ທີ່ມີຄວາມສາມາດໃນການຈຳກັດການເຂົ້າເຖິງ (ສະມາຊິກ, ກຸ່ມ/ຜູ້ໃຊ້ທີ່ແນ່ນອນ, ແບບຊ່ອນ ແລະ ແບບສາທາລະນະ).",
+    "Loading…" : "ກຳລັງໂຫຼດ…",
     "Add option" : "ເພີ່ມຕົວເລືອກ",
     "Add poll" : "ເພີ່ມໂພລ",
     "\"{pollTitle}\" has been successfully created." : "ສ້າງ \"{pollTitle}\" ສຳເລັດແລ້ວ.",

@@ -187,6 +187,7 @@ OC.L10N.register(
     "You have done something indescribable with this poll" : "Du har gjort nåt obeskrivbart med omröstningen",
     "{actor} has done something indescribable with this poll" : "{actor} har gjort nåt obeskrivbart med omröstningen",
     "Events happening inside of a <strong>poll</strong>" : "Händelsen skedde i en <strong>omröstning</strong>",
+    "Loading…" : "Laddar...",
     "Add option" : "Lägg till alternativ",
     "New poll" : "Ny omröstning",
     "Delete" : "Radera",

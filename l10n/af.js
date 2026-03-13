@@ -5,6 +5,7 @@ OC.L10N.register(
     "Legal Notice" : "Regskennisgewing",
     "Contact" : "Kontak",
     "User" : "Gebruiker",
+    "Loading…" : "Laai…",
     "Delete" : "Skrap",
     "Register" : "Registreer",
     "Unknown error" : "Onbekende fout",

@@ -6,6 +6,7 @@ OC.L10N.register(
     "Legal Notice" : "Shënim i ligjshëm",
     "Contact" : "Kontakt",
     "User" : "Përdorues",
+    "Loading…" : "Duke u ngarkuar…",
     "Delete" : "Fshij",
     "Register" : "Regjistrohu",
     "Unknown error" : "Gabim i panjohur",

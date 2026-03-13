@@ -181,6 +181,7 @@
     "You have done something indescribable with this poll" : "Направихте нещо неописуемо с тази анкета",
     "{actor} has done something indescribable with this poll" : "{actor} направи нещо неописуемо с тази анкета",
     "Events happening inside of a <strong>poll</strong>" : "Събития, случващи се вътре в <strong>анкета</strong>",
+    "Loading…" : "Зареждане…",
     "Add option" : "Добавяне на опция",
     "Delete" : "Изтриване",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Изтриване след {countdown} секунди","Изтриване след {countdown} секунди"],

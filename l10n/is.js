@@ -15,6 +15,7 @@ OC.L10N.register(
     "User" : "Notandi",
     "%s invited you to a poll" : "%s bauð þér að taka þátt í könnun",
     "Access denied" : "Aðgangur ekki leyfður",
+    "Loading…" : "Hleð inn…",
     "Add option" : "Bæta við valkosti",
     "Delete" : "Eyða",
     "Add some!" : "Bættu einhverju við!",

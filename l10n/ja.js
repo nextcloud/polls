@@ -126,6 +126,7 @@ OC.L10N.register(
     "{actor} has reordered the options of poll {pollTitle}" : "{actor} が投票 {pollTitle} の選択肢を並べ替えました",
     "You have reordered the options" : "あなたは選択肢の順序を変更しました",
     "{actor} has reordered the options" : "{actor} が選択肢の順序を変更しました",
+    "Loading…" : "読み込み中…",
     "Add option" : "オプションを追加",
     "Add poll" : "投票を追加",
     "Add another poll" : "別の投票を追加",

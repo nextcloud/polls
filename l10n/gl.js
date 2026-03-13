@@ -235,6 +235,7 @@ OC.L10N.register(
     "Someone voted in a <strong>poll</strong>" : "Alguén votou nunha <strong>enquisa</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Unha aplicación de enquisas, semellante a Doodle//DuD-Poll, coa posibilidade de restrinxir o acceso.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Unha aplicación de enquisas, semellante a Doodle//DuD-Poll, coa posibilidade de restrinxir o acceso (membros, determinados grupos/usuarios, agochados e públicos).",
+    "Loading…" : "Cargando…",
     "Add option" : "Engadir opción",
     "Add poll" : "Engadir unha enquisa",
     "\"{pollTitle}\" has been successfully created." : "«{pollTitle}» foi creada satisfactoriamente",

@@ -100,6 +100,7 @@
     "{actor} has voted" : "{actor} odda glas",
     "You have deleted a public share from poll {pollTitle}" : "Izbrišete javno povezavo do ankete {pollTitle}",
     "{actor} has deleted a public share from poll {pollTitle}" : "{actor} izbriše javno povezavo do ankete {pollTitle}",
+    "Loading…" : "Poteka nalaganje …",
     "Add option" : "Dodaj možnost",
     "New poll" : "Nova anketa",
     "Delete" : "Izbriši",

@@ -10,6 +10,7 @@ OC.L10N.register(
     "User" : "Bruger",
     "Access denied" : "Adgang nægtet",
     "Poll" : "Afstemning",
+    "Loading…" : "Indlæser…",
     "Add option" : "Tilføj valg",
     "Delete" : "Slet",
     "Register" : "Register",

@@ -11,6 +11,7 @@ OC.L10N.register(
     "User" : "Корисник",
     "Access denied" : "Забранет пристап",
     "Poll" : "Анкета",
+    "Loading…" : "Се вчитува…",
     "Delete" : "Избриши",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Бришење за 1 секунда","Бришење за {countdown} секунди"],
     "Register" : "Регистрирај се",

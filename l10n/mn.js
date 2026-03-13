@@ -235,6 +235,7 @@ OC.L10N.register(
     "Someone voted in a <strong>poll</strong>" : "Хэн нэгэн <strong>санал асуулга</strong>-д санал өгсөн",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Doodle/DuD-Poll-тай төстэй, хандалтыг хязгаарлах боломжтой санал асуулгын апп.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Doodle/DuD-Poll-тай төстэй, хандалтыг хязгаарлах боломжтой (гишүүд, тодорхой бүлэг/хэрэглэгч, нуугдмал болон нийтийн) санал асуулгын апп.",
+    "Loading…" : "уншиж байна",
     "Add option" : "Сонголт нэмэх",
     "Add poll" : "Санал асуулга нэмэх",
     "\"{pollTitle}\" has been successfully created." : "\"{pollTitle}\" амжилттай үүсгэгдсэн.",
