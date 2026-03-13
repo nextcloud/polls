@@ -5,17 +5,24 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [unreleased] - tbd
+## [unreleased]
+### Fixed
+ - Fixing some bugs around share access
+
 ### Added
  - Timezone support for polls and options
    - Set default timezone for any poll
    - Choose timezone to display, if the poll's original timezone differs from the user's one
    - Choose timezone, when adding options in case of different timezones between poll and user
+ - Option to disable poll download per poll
 
 ### Changed
  - Use ISO formatted timestamps and durations
  - Drop support for Nexcloud Hub 10
- - Drop support for PHP 8.1
+ - Added some more backend tests
+ - Optimized API-usage
+ - Centralized Backend calls to the router
+ - A lot of refactoring
 
 ## [8.6.3] - 2026-01-18
 ### Fixed
