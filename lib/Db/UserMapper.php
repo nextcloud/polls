@@ -82,7 +82,7 @@ class UserMapper extends QBMapper {
 	 * Get participans of a poll as array of user objects
 	 * @return UserBase[]
 	 */
-	public function getParticipants(?int $pollId): array {
+	public function getParticipants(int $pollId): array {
 		$users = [];
 		// get the distict list of usernames from the votes
 		$participants = $this->findParticipantsByPoll($pollId);
