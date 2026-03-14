@@ -263,7 +263,6 @@ OC.L10N.register(
     "Next day" : "Nächster Tag",
     "minus" : "Minus",
     "plus" : "Plus",
-    "Please wait…" : "Benötigt keine Übersetzung. Für Android wird nur die formelle Übersetzung verwendet (de_DE).",
     "Possibly affected calendar events" : "Möglicherweise betroffene Kalenderereignisse",
     "Add" : "Hinzufügen",
     "You are asked to propose more options." : "Du darfst weitere Optionen vorschlagen.",
