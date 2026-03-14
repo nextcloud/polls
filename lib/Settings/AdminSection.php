@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Settings;
 
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Settings\IIconSection;
@@ -24,7 +24,7 @@ class AdminSection implements IIconSection {
 	}
 
 	public function getID(): string {
-		return AppConstants::APP_ID;
+		return Application::APP_ID;
 	}
 
 	public function getName(): string {
@@ -36,6 +36,6 @@ class AdminSection implements IIconSection {
 	}
 
 	public function getIcon(): string {
-		return $this->urlGenerator->imagePath(AppConstants::APP_ID, 'polls-dark.svg');
+		return $this->urlGenerator->imagePath(Application::APP_ID, 'polls-dark.svg');
 	}
 }

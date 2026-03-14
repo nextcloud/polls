@@ -159,6 +159,7 @@ OC.L10N.register(
     "{actor} has shared poll {pollTitle} with contact group {sharee}" : "{actor} has shared poll {pollTitle} with contact group {sharee}",
     "You have shared this poll with contact group {sharee}" : "You have shared this poll with contact group {sharee}",
     "{actor} has shared this poll with contact group {sharee}" : "{actor} has shared this poll with contact group {sharee}",
+    "Loading…" : "Loading…",
     "Delete" : "Delete",
     "Register" : "Register",
     "Unknown error" : "Unknown error",

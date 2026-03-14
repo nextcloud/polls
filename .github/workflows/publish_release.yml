@@ -50,7 +50,7 @@ jobs:
     - name: Extract release notes
       if: success()
       id: extract-release-notes
-      uses: ffurrer2/extract-release-notes@202313ec7461b6b9e401996714484690ab1ae105 # 3.0.0
+      uses: ffurrer2/extract-release-notes@273da39a24fb7db106a35526c8162815faffd31d # 3.1.0
 
     - name: Draft Release
       if: success()

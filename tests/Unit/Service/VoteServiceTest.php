@@ -147,8 +147,8 @@ class VoteServiceTest extends UnitTestCase {
 		// useNo=0 (default): setting 'no' on an existing vote deletes it
 		$this->voteService->set($this->option->getId(), Vote::VOTE_YES);
 		$result = $this->voteService->set($this->option->getId(), Vote::VOTE_NO);
-		// Service returns the vote entity with empty answer after deletion
-		$this->assertSame('', $result->getVoteAnswer());
+		// Service returns null after deletion
+		$this->assertNull($result);
 	}
 
 	public function testSetVoteNoStoredWhenUseNoIsTrue(): void {

@@ -32,6 +32,7 @@ export type PollConfiguration = {
 	autoReminder: boolean
 	collapseDescription: boolean
 	description: string
+	allowDownload: boolean
 	expire: number
 	forceConfidentialComments: boolean
 	forcedDisplayMode: ViewMode | 'user-pref'
@@ -74,6 +75,7 @@ export type PollPermissions = {
 	confirmOptions: boolean
 	deanonymize: boolean
 	delete: boolean
+	download: boolean
 	edit: boolean
 	reorderOptions: boolean
 	seeResults: boolean

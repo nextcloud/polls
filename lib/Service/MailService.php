@@ -116,6 +116,7 @@ class MailService {
 
 	}
 
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public static function parseEmailStrings(array $emailArray): array {
 		$validEmails = [];
 		$invalidEmails = [];
@@ -178,26 +179,20 @@ class MailService {
 		}
 	}
 
-	public function sendInvitation(Share $share, ?SentResult &$sentResult = null): ?SentResult {
+	public function sendInvitation(Share $share, SentResult &$sentResult = new SentResult()): SentResult {
 		foreach ($this->userMapper->getUserFromShare($share)->getMembers() as $recipient) {
 			$invitation = new InvitationMail($recipient->getId(), $share);
 
 			try {
 				$invitation->send();
-				if ($sentResult) {
-					$sentResult->AddSentMail($recipient);
-				}
+				$sentResult->AddSentMail($recipient);
 
 			} catch (InvalidEmailAddress $e) {
-				if ($sentResult) {
-					$sentResult->AddAbortedMail($recipient, SentResult::INVALID_EMAIL_ADDRESS);
-				}
+				$sentResult->AddAbortedMail($recipient, SentResult::INVALID_EMAIL_ADDRESS);
 				$this->logger->warning('Invalid or no email address for invitation', ['recipient' => json_encode($recipient)]);
 
 			} catch (\Exception $e) {
-				if ($sentResult) {
-					$sentResult->AddAbortedMail($recipient);
-				}
+				$sentResult->AddAbortedMail($recipient);
 
 				$this->logger->error('Error sending invitation', [
 					'recipient' => json_encode($recipient),

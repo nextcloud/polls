@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Dashboard;
 
-use OCA\Polls\AppConstants;
-use OCP\App\IAppManager;
+use OCA\Polls\AppInfo\Application;
+use OCA\Polls\Helper\AssetLoader;
 use OCP\Dashboard\IWidget;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -20,14 +20,11 @@ class PollWidget implements IWidget {
 	public function __construct(
 		private IL10N $l10n,
 		private IURLGenerator $urlGenerator,
-		private IAppManager $appManager,
-		private string $scriptPrefix = '',
 	) {
-		$this->scriptPrefix = 'polls-' . $this->appManager->getAppVersion(AppConstants::APP_ID) . '-';
 	}
 
 	public function getId(): string {
-		return AppConstants::APP_ID;
+		return Application::APP_ID;
 	}
 
 	public function getTitle(): string {
@@ -43,10 +40,10 @@ class PollWidget implements IWidget {
 	}
 
 	public function getUrl(): ?string {
-		return $this->urlGenerator->linkToRouteAbsolute(AppConstants::APP_ID . '.page.indexindex');
+		return $this->urlGenerator->linkToRouteAbsolute(Application::APP_ID . '.page.indexindex');
 	}
 
 	public function load(): void {
-		Util::addScript(AppConstants::APP_ID, $this->scriptPrefix . 'dashboard');
+		Util::addScript(Application::APP_ID, AssetLoader::getScript('dashboard'));
 	}
 }

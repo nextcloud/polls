@@ -147,7 +147,8 @@ const emailAddressHint = computed(() => {
 
 const validateEmailAddress = debounce(async function (): Promise<void> {
 	if (emailAddress.value.length < 1) {
-		checkStatus.value.email = sessionStore.share.publicPollEmail === 'mandatory' ? 'missing': 'empty'
+		checkStatus.value.email =
+			sessionStore.share.publicPollEmail === 'mandatory' ? 'missing' : 'empty'
 		return
 	}
 
@@ -181,7 +182,7 @@ function routeToPersonalShare(token: string): void {
 		// if share was not a public share, but a personal share
 		// (i.e. email shares allow to change personal data by fist entering of the poll),
 		// just refresh the session and load the poll
-		sessionStore.load()
+		sessionStore.loadSession()
 		pollStore.load()
 	} else {
 		// in case of a public share, redirect to the generated share
@@ -243,13 +244,6 @@ const disableSubmit = computed(
 )
 
 onMounted(() => {
-	if (route.name === 'publicVote') {
-		// TODO: remove displayName at controller side
-		// this ist just a quick fix
-		sessionStore.currentUser.displayName = route.query.displayName as string || ''
-		sessionStore.currentUser.emailAddress = route.query.emailAddress as string || ''
-	}
-
 	// pre-fill input field with existing data
 	userName.value = sessionStore.currentUser.displayName
 	validatePublicUsername()

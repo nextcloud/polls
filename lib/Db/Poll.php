@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -83,10 +83,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const TYPE_DATE = 'datePoll';
 	public const TYPE_TEXT = 'textPoll';
 	public const VARIANT_SIMPLE = 'simple';
-	/** @deprecated use ACCESS_PRIVATE instead  */
-	public const ACCESS_HIDDEN = 'hidden';
-	/** @deprecated use ACCESS_OPEN instead  */
-	public const ACCESS_PUBLIC = 'public';
 	public const ACCESS_PRIVATE = 'private';
 	public const ACCESS_OPEN = 'open';
 	public const SHOW_RESULTS_ALWAYS = 'always';
@@ -112,14 +108,15 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	public const PERMISSION_OVERRIDE = 'override_permission';
 	public const PERMISSION_POLL_ACCESS = 'accessPoll';
-	public const PERMISSION_POLL_EDIT = 'editPoll';
+	public const PERMISSION_POLL_ARCHIVE = 'archivePoll';
 	public const PERMISSION_POLL_CHANGE_OWNER = 'changePollOwner';
 	public const PERMISSION_POLL_DELETE = 'deletePoll';
-	public const PERMISSION_POLL_ARCHIVE = 'archivePoll';
+	public const PERMISSION_POLL_DOWNLOAD = 'downloadPoll';
+	public const PERMISSION_POLL_EDIT = 'editPoll';
 	public const PERMISSION_POLL_RESULTS_VIEW = 'seePollResults';
-	public const PERMISSION_POLL_USERNAMES_VIEW = 'seeUserNames';
-	public const PERMISSION_POLL_TAKEOVER = 'takeOverPoll';
 	public const PERMISSION_POLL_SUBSCRIBE = 'subscribePoll';
+	public const PERMISSION_POLL_TAKEOVER = 'takeOverPoll';
+	public const PERMISSION_POLL_USERNAMES_VIEW = 'seeUserNames';
 	public const PERMISSION_COMMENT_ADD = 'addComment';
 	public const PERMISSION_COMMENT_DELETE = 'deleteComment';
 	public const PERMISSION_OPTION_ADD = 'addOptions';
@@ -302,6 +299,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'autoReminder' => $this->getAutoReminder(),
 			'collapseDescription' => $this->getCollapseDescription(),
 			'description' => $this->getDescription(),
+			'allowDownload' => $this->getAllowDownload(),
 			'expire' => $this->getExpire(),
 			'forceConfidentialComments' => $this->getForceConfidentialComments(),
 			'forcedDisplayMode' => $this->getForcedDisplayMode(),
@@ -356,6 +354,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'takeOver' => $this->getIsAllowed(self::PERMISSION_POLL_TAKEOVER),
 			'view' => $this->getIsAllowed(self::PERMISSION_POLL_ACCESS),
 			'vote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
+			'download' => $this->getIsAllowed(self::PERMISSION_POLL_DOWNLOAD),
 		];
 	}
 
@@ -367,6 +366,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setDescription($pollConfiguration['description'] ?? $this->getDescription());
 		$this->setAccess($pollConfiguration['access'] ?? $this->getAccess());
 		$this->setAllowComment($pollConfiguration['allowComment'] ?? $this->getAllowComment());
+		$this->setAllowDownload($pollConfiguration['allowDownload'] ?? $this->getAllowDownload());
 		$this->setAllowMaybe($pollConfiguration['allowMaybe'] ?? $this->getAllowMaybe());
 		$this->setAllowProposals($pollConfiguration['allowProposals'] ?? $this->getAllowProposals());
 		$this->setAnonymousSafe($pollConfiguration['anonymous'] ?? $this->getAnonymous());
@@ -441,7 +441,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	public function getVoteUrl(): string {
 		return $this->urlGenerator->linkToRouteAbsolute(
-			AppConstants::APP_ID . '.page.vote',
+			Application::APP_ID . '.page.vote',
 			['id' => $this->getId()]
 		);
 	}
@@ -498,6 +498,14 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return $this->getMiscSettingsArray()['collapseDescription'] ?? true;
 	}
 
+	private function setAllowDownload(bool|int $value): void {
+		$this->setMiscSettingsByKey('allowDownload', (bool)$value);
+	}
+
+	private function getAllowDownload(): bool {
+		return $this->getMiscSettingsArray()['allowDownload'] ?? true;
+	}
+
 	// alias of getId()
 	public function getPollId(): int {
 		return $this->getId();
@@ -552,10 +560,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	private function getAccess(): string {
-		if ($this->access === self::ACCESS_PUBLIC) {
+		if ($this->access === 'public') {
 			return self::ACCESS_OPEN;
 		}
-		if ($this->access === self::ACCESS_HIDDEN) {
+		if ($this->access === 'hidden') {
 			return self::ACCESS_PRIVATE;
 		}
 		return $this->access;
@@ -676,13 +684,15 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			self::PERMISSION_SHARE_ADD => $this->systemSettings->getShareCreateAllowed(),
 			self::PERMISSION_SHARE_ADD_EXTERNAL => $this->systemSettings->getExternalShareCreationAllowed(),
 			self::PERMISSION_DEANONYMIZE => $this->getAllowDeanonymize(),
+			self::PERMISSION_POLL_DOWNLOAD => $this->appSettings->getPollDownloadAllowed() && $this->getAllowDownload(),
 			default => false,
 		};
 	}
 
 	/**
 	 * getIsInvolved - Is current user involved in current poll?
-	 * @return bool Returns true, if the current user is involved in the poll via share, as a participant or as the poll owner.
+	 * @return bool Returns true, if the current user is involved in the poll
+	 *              via personal or group share, as a participant or as the poll owner.
 	 */
 	public function getIsInvolved(): bool {
 		return (

@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\AppInfo;
 
-use OCA\Polls\AppConstants;
 use OCA\Polls\Dashboard\PollWidget;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\LogMapper;
@@ -80,10 +79,16 @@ use Psr\Log\LoggerInterface;
  */
 class Application extends App implements IBootstrap {
 	/** @var string */
-	public const APP_ID = AppConstants::APP_ID;
+	public const APP_ID = 'polls';
+	/** @var string */
+	public const CLIENT_ID = 'ncPollsClientId';
+	/** @var string */
+	public const CLIENT_TZ = 'ncPollsClientTimeZone';
+	/** @var string */
+	public const SESSION_KEY_CRON_JOB = 'ncPollsCronJob';
 
 	public function __construct(array $urlParams = []) {
-		parent::__construct(AppConstants::APP_ID, $urlParams);
+		parent::__construct(self::APP_ID, $urlParams);
 	}
 
 	public function boot(IBootContext $context): void {

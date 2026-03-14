@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { defaultUser } from '../Types'
 import type { User } from '../Types'
 
 export type ShareType =
@@ -38,6 +39,26 @@ export type Share = {
 	URL: string
 	voted: boolean
 	deleted: boolean
+}
+
+export const defaultShare: Share = {
+	displayName: '',
+	id: '',
+	invitationSent: false,
+	locked: false,
+	pollId: null,
+	groupId: null,
+	token: '',
+	type: 'public',
+	emailAddress: '',
+	userId: '',
+	publicPollEmail: 'optional',
+	user: defaultUser,
+	reminderSent: false,
+	label: '',
+	URL: '',
+	voted: false,
+	deleted: false,
 }
 
 export type SharesStore = {

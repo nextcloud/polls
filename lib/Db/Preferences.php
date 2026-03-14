@@ -19,7 +19,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setUserId(string $value)
  * @method string getTimestamp()
  * @method void setTimestamp(int $value)
- * @method string getPreferences()
+ * @method ?string getPreferences()
  * @method void setPreferences(string $value)
  */
 class Preferences extends Entity implements JsonSerializable {

@@ -9,13 +9,13 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Model\Mail;
 
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Model\DateTimeIntervalText;
 
 class ConfirmationMail extends MailBase {
-	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Confirmation';
+	protected const TEMPLATE_CLASS = Application::APP_ID . '.Confirmation';
 
 	/** @var Option[] */
 	protected array $confirmedOptions;

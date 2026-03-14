@@ -373,8 +373,7 @@ class OptionService {
 			->request(Poll::PERMISSION_OPTION_ADD);
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
-			$option = clone $origin;
-			$option->setPoll($toPollId);
+			$option = $origin->createClone($toPollId);
 			$option = $this->optionMapper->insert($option);
 			$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($option));
 		}

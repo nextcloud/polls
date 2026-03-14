@@ -85,6 +85,7 @@ OC.L10N.register(
     "{actor} has restored the share for circle {sharee}" : "{actor} telah memulihkan pembagian untuk lingkaran {sharee}",
     "You have restored the share for contact group {sharee}" : "Anda telah memulihkan pembagian untuk grup kontak {sharee}",
     "{actor} has restored the share for contact group {sharee}" : "{actor} telah memulihkan pembagian untuk grup kontak {sharee}",
+    "Loading…" : "Memuat…",
     "Add option" : "Tambahkan opsi",
     "Delete" : "Hapus",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Menghapus dalam {countdown} detik"],

@@ -9,17 +9,17 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Model\Mail;
 
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\Share;
 
 class InvitationMail extends MailBase {
-	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Invitation';
+	protected const TEMPLATE_CLASS = Application::APP_ID . '.Invitation';
 
 	public function __construct(
 		protected string $recipientId,
 		protected Share $share,
 	) {
-		parent::__construct($recipientId, $share->getPollId());
+		parent::__construct($recipientId, $share->getPollIdOrFail());
 	}
 
 	protected function getSubject(): string {

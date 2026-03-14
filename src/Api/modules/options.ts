@@ -7,10 +7,10 @@ import { httpInstance, createCancelTokenHandler } from './HttpApi'
 import type { DateTimeUnits } from '../../Types/dateTime'
 import type { AxiosResponse } from '@nextcloud/axios'
 import type { Vote } from '../../stores/votes.types'
-import type { Option, Sequence, SimpleOption } from '../../stores/options.types'
+import type { Option, OptionDto, Sequence, SimpleOption } from '../../stores/options.types'
 
 const options = {
-	getOptions(pollId: number): Promise<AxiosResponse<{ options: Option[] }>> {
+	getOptions(pollId: number): Promise<AxiosResponse<{ options: OptionDto[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/options`,
@@ -29,8 +29,8 @@ const options = {
 		voteYes: boolean = false,
 	): Promise<
 		AxiosResponse<{
-			added: Option[]
-			options: Option[]
+			added: OptionDto[]
+			options: OptionDto[]
 			votes: Vote[]
 		}>
 	> {
@@ -46,7 +46,7 @@ const options = {
 		})
 	},
 
-	updateOption(option: Option): Promise<AxiosResponse<{ option: Option }>> {
+	updateOption(option: Option): Promise<AxiosResponse<{ option: OptionDto }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `option/${option.id}`,
@@ -58,7 +58,7 @@ const options = {
 		})
 	},
 
-	deleteOption(optionId: number): Promise<AxiosResponse<{ option: Option }>> {
+	deleteOption(optionId: number): Promise<AxiosResponse<{ option: OptionDto }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `option/${optionId}`,
@@ -70,7 +70,7 @@ const options = {
 		})
 	},
 
-	restoreOption(optionId: number): Promise<AxiosResponse<{ option: Option }>> {
+	restoreOption(optionId: number): Promise<AxiosResponse<{ option: OptionDto }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `option/${optionId}/restore`,
@@ -88,9 +88,9 @@ const options = {
 		optionsBatch: string,
 	): Promise<
 		AxiosResponse<{
-			option: Option
-			repetitions: Option[]
-			options: Option[]
+			option: OptionDto
+			repetitions: OptionDto[]
+			options: OptionDto[]
 			votes: Vote[]
 		}>
 	> {
@@ -108,7 +108,7 @@ const options = {
 		})
 	},
 
-	confirmOption(optionId: number): Promise<AxiosResponse<{ option: Option }>> {
+	confirmOption(optionId: number): Promise<AxiosResponse<{ option: OptionDto }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `option/${optionId}/confirm`,
@@ -125,7 +125,7 @@ const options = {
 			id: number
 			text: string
 		}[],
-	): Promise<AxiosResponse<{ options: Option[] }>> {
+	): Promise<AxiosResponse<{ options: OptionDto[] }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/options/reorder`,
@@ -140,7 +140,7 @@ const options = {
 	addOptionsSequence(
 		optionId: number,
 		sequence: Sequence,
-	): Promise<AxiosResponse<{ options: Option[] }>> {
+	): Promise<AxiosResponse<{ options: OptionDto[] }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `option/${optionId}/sequence`,
@@ -158,7 +158,7 @@ const options = {
 		pollId: number,
 		step: number,
 		unit: DateTimeUnits,
-	): Promise<AxiosResponse<{ options: Option[] }>> {
+	): Promise<AxiosResponse<{ options: OptionDto[] }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/shift`,

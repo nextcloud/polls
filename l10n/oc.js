@@ -12,6 +12,7 @@ OC.L10N.register(
     "User" : "User",
     "%s invited you to a poll" : "%s vos condivèt a un sondatge",
     "Poll" : "Sondatge",
+    "Loading…" : "Telecargament…",
     "Delete" : "Suprimir",
     "Register" : "S'inscriure",
     "Unknown error" : "Error desconeguda",

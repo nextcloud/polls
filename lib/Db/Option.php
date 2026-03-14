@@ -115,17 +115,21 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 
 	/**
-	 * Clone this option and reset the id, pollId, deleted
-	 * and confirmed status, as well as the owner and the hash.
-	 *
-	 * @return void
+	 * Build a fresh Option entity pre-populated from this option's data,
+	 * assigned to $toPollId. The fresh entity's id is never set, so
+	 * QBMapper::insert() relies on the DB autoincrement to assign a fresh id.
 	 */
-	public function __clone() {
-		$this->setDeleted(0);
-		$this->setConfirmed(0);
-		$this->setOwner('');
-		/** @psalm-suppress UndefinedMagicMethod */
-		$this->setPollId(0);
+	public function createClone(int $toPollId): self {
+		$clone = new self();
+		$clone->setPoll($toPollId);
+		if ($this->getTimestamp() !== 0) {
+			$clone->setDateTime($this->getDateTime());
+			$clone->setInterval($this->getInterval());
+		} else {
+			$clone->setText($this->getPollOptionText());
+			$clone->setOrder($this->order);
+		}
+		return $clone;
 	}
 
 	/**
@@ -199,6 +203,10 @@ class Option extends EntityWithUser implements JsonSerializable {
 			$this->getPollId(),
 			$this->getPollOptionText(),
 		);
+	}
+
+	public function getPollOptionHashInDB(): string {
+		return $this->pollOptionHash;
 	}
 	/**
 	 * Get the order of the option. If the option has a valid timestamp,
@@ -470,6 +478,16 @@ class Option extends EntityWithUser implements JsonSerializable {
 		return $this->getVoteLimit() && $this->getUserCountYesVotes() >= $this->getVoteLimit();
 	}
 
+	public function getNewVote(string $userId): Vote {
+		$vote = new Vote();
+		$vote->setPollId($this->getPollId());
+		$vote->setUserId($userId);
+		$vote->setVoteOptionText($this->getPollOptionText());
+		$vote->setVoteOptionId($this->getId());
+		$vote->setVoteOptionHash($this->getPollOptionHash());
+
+		return $vote;
+	}
 	/**
 	 * Set option's text, date and time, and duration from a SimpleOption instance.
 	 * This will also sync the option to update the order and hash.

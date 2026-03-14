@@ -14,49 +14,41 @@ import { generateUrl } from '@nextcloud/router'
 import { getCookieValue, setCookie } from './helpers/modules/cookieHelper'
 import { Logger } from './helpers/modules/logger'
 import { loadContext } from './composables/context'
+import { emit } from '@nextcloud/event-bus'
+import { Event } from './Types'
 
 import Navigation from './views/Navigation.vue'
 
 import { useSessionStore } from './stores/session'
+import { usePollStore } from './stores/poll'
+import { usePollsStore } from './stores/polls'
+import { useVotesStore } from './stores/votes'
+import { useOptionsStore } from './stores/options'
+import { useSubscriptionStore } from './stores/subscription'
 
 async function validateToken(to: RouteLocationNormalized) {
 	const sessionStore = useSessionStore()
 
-	try {
-		await sessionStore.loadShare()
-
-		// if the user is logged in, reroute to the vote page
-		if (getCurrentUser()) {
-			return {
-				name: 'vote',
-				params: {
-					id: sessionStore.share.pollId,
-				},
-			}
+	// if the user is logged in, reroute to the vote page
+	if (getCurrentUser()) {
+		return {
+			name: 'vote',
+			params: {
+				id: sessionStore.share.pollId,
+			},
 		}
-	} catch (error) {
-		if (getCurrentUser()) {
-			// User has no access, always assume forbidden (403)
-			return { name: 'forbidden' }
-		}
-
-		// external users will get redirected to the login page
-		window.location.replace(generateUrl('login'))
 	}
 
-	// Continue for external users
-	//
+	// Check, if user has a personal token from the user's client stored cookie
+	// matching the public token
 	if (sessionStore.share.type === 'public') {
-		// Check, if user has a personal token from the user's client stored cookie
-		// matching the public token
 		const personalToken = getCookieValue(to.params.token as string)
 
 		if (personalToken) {
-			// participant has already access to the poll and a private token
 			// extend expiry time for 30 days after successful access
 			const cookieExpiration = 30 * 24 * 60 * 1000
 			setCookie(to.params.token as string, personalToken, cookieExpiration)
-
+			// participant has already access to the poll and a private token
 			// reroute to the public vote page using the personal token
 			return {
 				name: 'publicVote',
@@ -66,6 +58,8 @@ async function validateToken(to: RouteLocationNormalized) {
 			}
 		}
 	}
+
+	return true
 }
 
 const Combo = () => import('./views/Combo.vue')
@@ -196,6 +190,20 @@ const router = createRouter({
 router.beforeEach(
 	async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
 		const sessionStore = useSessionStore()
+		const pollStore = usePollStore()
+		const votesStore = useVotesStore()
+		const optionsStore = useOptionsStore()
+		const subscriptionStore = useSubscriptionStore()
+
+		sessionStore.navigationStatus = 'loading'
+		emit(Event.TransitionsOff, 0)
+
+		if (from.meta.votePage) {
+			pollStore.$reset()
+			votesStore.$reset()
+			optionsStore.$reset()
+			subscriptionStore.$reset()
+		}
 
 		// if the previous and the requested routes have the same name and
 		// the watcher is active, we can do a cheap loading
@@ -223,5 +231,48 @@ router.beforeEach(
 		}
 	},
 )
+
+router.beforeResolve(async (to: RouteLocationNormalized) => {
+	const sessionStore = useSessionStore()
+	const watcherActive =
+		sessionStore.watcher.mode !== 'noPolling'
+		&& sessionStore.watcher.status !== 'stopped'
+
+	if (to.meta.listPage) {
+		const pollsStore = usePollsStore()
+		await pollsStore.load(!watcherActive)
+	}
+
+	if (to.meta.votePage) {
+		const pollStore = usePollStore()
+		const votesStore = useVotesStore()
+		const optionsStore = useOptionsStore()
+		const subscriptionStore = useSubscriptionStore()
+
+		try {
+			await pollStore.load()
+		} catch {
+			return { name: 'notfound' }
+		}
+
+		await Promise.allSettled([
+			votesStore.load(),
+			optionsStore.load(),
+			subscriptionStore.load(),
+		])
+		Logger.debug('Vote page data loaded', {
+			session: sessionStore.currentUser,
+			poll: pollStore,
+			votes: votesStore.votes,
+			options: optionsStore.options,
+		})
+	}
+})
+
+router.afterEach(() => {
+	const sessionStore = useSessionStore()
+	sessionStore.navigationStatus = 'idle'
+	emit(Event.TransitionsOn, null)
+})
 
 export { router }

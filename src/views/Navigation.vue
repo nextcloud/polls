@@ -107,11 +107,9 @@ function getIconComponent(iconId: FilterType) {
  * @param pollId
  */
 function toggleArchive(pollId: number) {
-	try {
-		pollsStore.toggleArchive({ pollId })
-	} catch {
+	pollsStore.toggleArchive({ pollId }).catch(() => {
 		showError(t('polls', 'Error archiving/restoring poll.'))
-	}
+	})
 }
 
 /**
@@ -120,11 +118,9 @@ function toggleArchive(pollId: number) {
  * @param pollId poll id to delete
  */
 function deletePoll(pollId: number) {
-	try {
-		pollsStore.delete({ pollId })
-	} catch {
+	pollsStore.delete({ pollId }).catch(() => {
 		showError(t('polls', 'Error deleting poll.'))
-	}
+	})
 }
 
 /**
@@ -132,11 +128,9 @@ function deletePoll(pollId: number) {
  * @param pollId poll id to clone
  */
 function clonePoll(pollId: number) {
-	try {
-		pollsStore.clone({ pollId })
-	} catch {
+	pollsStore.clone({ pollId }).catch(() => {
 		showError(t('polls', 'Error cloning poll.'))
-	}
+	})
 }
 
 /**

@@ -25,6 +25,7 @@ OC.L10N.register(
     "You have deleted a public share" : "Has eliminado un recurso público compartido",
     "{actor} has restored a share" : "{actor} ha restaurado un recurso compartido",
     "You have restored a public share" : "Has restaurado un recurso público compartido",
+    "Loading…" : "Cargando...",
     "Add option" : "Añade una opción",
     "Delete" : "Eliminar",
     "Register" : "Registrar",

@@ -21,7 +21,8 @@ const commentsStore = useCommentsStore()
 const sessionStore = useSessionStore()
 const pollStore = usePollStore()
 const comment = ref('')
-const confidantial = ref(false)
+const confidential = ref(false)
+
 const confidentialText =
 	pollStore.owner.id === sessionStore.currentUser.id
 		? t('polls', 'Only visible to me')
@@ -29,15 +30,12 @@ const confidentialText =
 				displayName: pollStore.owner.displayName,
 			})
 
-/**
- *
- */
 async function writeComment() {
 	if (comment.value) {
 		try {
 			await commentsStore.add({
 				message: comment.value,
-				confidential: confidantial.value,
+				confidential: confidential.value,
 			})
 			comment.value = ''
 		} catch {
@@ -58,7 +56,7 @@ async function writeComment() {
 				@submit="writeComment()" />
 			<NcCheckboxRadioSwitch
 				v-if="!pollStore.configuration.forceConfidentialComments"
-				v-model="confidantial"
+				v-model="confidential"
 				type="switch">
 				{{ confidentialText }}
 			</NcCheckboxRadioSwitch>

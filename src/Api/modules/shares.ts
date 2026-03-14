@@ -181,7 +181,7 @@ const shares = {
 
 	inviteAll(
 		pollId: number,
-	): Promise<AxiosResponse<{ poll: number; sentResult: null | SentResults }>> {
+	): Promise<AxiosResponse<{ poll: number; sentResult: SentResults }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/inviteAll`,

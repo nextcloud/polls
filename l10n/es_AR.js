@@ -5,6 +5,7 @@ OC.L10N.register(
     "Legal Notice" : "Aviso legal",
     "Contact" : "Contacto",
     "User" : "Usuario",
+    "Loading…" : "Cargando…",
     "Delete" : "Eliminar",
     "Register" : "Registrar",
     "Unknown error" : "Error desconocido",

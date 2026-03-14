@@ -9,7 +9,8 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
+use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Helper\Container;
 use OCP\IURLGenerator;
 
@@ -166,8 +167,19 @@ class Share extends EntityWithUser implements JsonSerializable {
 		];
 	}
 
+	/**
+	 * Returns the poll ID or throws if this share is not associated with a poll.
+	 * @throws InvalidShareTypeException
+	 */
+	public function getPollIdOrFail(): int {
+		if ($this->pollId === null) {
+			throw new InvalidShareTypeException('Share is not associated with a poll');
+		}
+		return $this->pollId;
+	}
+
 	private function getVoted(): int {
-		return $this->getAnonymizedVotes() ? 0 : $this->voted;
+		return ($this->getAnonymizedVotes() ?? 0) > 0 ? 0 : $this->voted;
 	}
 
 	/**
@@ -252,18 +264,18 @@ class Share extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getURL(): string {
-		if (!$this->getPollId()) {
+		if ($this->getPollId() === null) {
 			return '';
 		}
 
 		if (in_array($this->type, [self::TYPE_USER, self::TYPE_ADMIN, self::TYPE_GROUP], true)) {
 			return $this->urlGenerator->linkToRouteAbsolute(
-				AppConstants::APP_ID . '.page.vote',
+				Application::APP_ID . '.page.vote',
 				['id' => $this->pollId]
 			);
 		} elseif ($this->token) {
 			return $this->urlGenerator->linkToRouteAbsolute(
-				AppConstants::APP_ID . '.public.votePage',
+				Application::APP_ID . '.public.votePage',
 				['token' => $this->token]
 			);
 		} else {

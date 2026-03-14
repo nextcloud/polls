@@ -11,6 +11,7 @@ OC.L10N.register(
     "Display name of {sharee} has been changed" : "Імя карыстальніка для паказу {sharee} зменена",
     "You have registered" : "Вы зарэгістраваліся",
     "{sharee} has registered" : "{sharee} зарэгістраваў(-ла)ся",
+    "Loading…" : "Загрузка…",
     "Add option" : "Дадаць варыянт",
     "Delete" : "Выдаліць",
     "Unknown error" : "Невядомая памылка",

@@ -4,8 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
@@ -36,17 +35,13 @@ import { usePollStore } from '../stores/poll'
 import { useOptionsStore } from '../stores/options'
 import { usePreferencesStore } from '../stores/preferences'
 import { useVotesStore } from '../stores/votes'
-import { useSubscriptionStore } from '../stores/subscription'
-
 import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
 import { Event } from '../Types'
-import { loadContext } from '../composables/context'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const preferencesStore = usePreferencesStore()
 const votesStore = useVotesStore()
-const subscriptionStore = useSubscriptionStore()
 
 const voteMainId = 'vote-view'
 const topObserverVisible = ref(false)
@@ -138,44 +133,8 @@ const showBottomObserver = computed(
 		&& pollStore.viewMode === 'table-view',
 )
 
-async function loadPoll(isChanging: boolean = false) {
-	try {
-		pollStore.load(isChanging)
-	} catch (error) {
-		showError(t('polls', 'Error loading poll'))
-	}
-
-	votesStore.load()
-	optionsStore.load()
-	subscriptionStore.load()
-}
-
-async function resetPoll() {
-	pollStore.$reset()
-	votesStore.$reset()
-	optionsStore.$reset()
-	subscriptionStore.$reset()
-}
-
-onBeforeRouteUpdate(async (to, from) => {
-	if (to.name === 'publicVote' && to.params.token !== from.params.token) {
-		loadContext(to)
-		// Same poll, no need to reload
-	}
-	loadPoll(true)
-})
-
-onBeforeRouteLeave(() => {
-	resetPoll()
-})
-
 onMounted(() => {
-	loadPoll(true)
 	emit(Event.TransitionsOff, 500)
-})
-
-onUnmounted(() => {
-	resetPoll()
 })
 
 watch(

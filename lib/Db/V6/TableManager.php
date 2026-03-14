@@ -10,7 +10,7 @@ namespace OCA\Polls\Db\V6;
 
 use Doctrine\DBAL\Types\Type;
 use Exception;
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollGroup;
@@ -87,7 +87,7 @@ class TableManager extends DbManager {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('migrations')
 			->where('app = :appName')
-			->setParameter('appName', AppConstants::APP_ID)
+			->setParameter('appName', Application::APP_ID)
 			->executeStatement();
 
 		$this->logger->info('Removed all migration records from {dbPrefix}migrations', ['dbPrefix' => $this->dbPrefix]);
@@ -98,7 +98,7 @@ class TableManager extends DbManager {
 		// to the migrations table which belong to the core
 		$query->delete('appconfig')
 			->where('appid = :appid')
-			->setParameter('appid', AppConstants::APP_ID)
+			->setParameter('appid', Application::APP_ID)
 			->executeStatement();
 
 		$this->logger->info('Removed all app config records from {dbPrefix}appconfig', ['dbPrefix' => $this->dbPrefix]);
@@ -447,7 +447,7 @@ class TableManager extends DbManager {
 			$query->delete('migrations')
 				->where('app = :appName')
 				->andWhere('version = :version')
-				->setParameter('appName', AppConstants::APP_ID)
+				->setParameter('appName', Application::APP_ID)
 				->setParameter('version', $version)
 				->executeStatement();
 		}
@@ -635,11 +635,19 @@ class TableManager extends DbManager {
 		foreach ($this->voteMapper->getAll(includeNull: true) as $vote) {
 			try {
 				// if the hash of the vote differs from calculated hash update the vote hash
-				if ($vote->getVoteOptionHash() !== Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText())) {
+				if ($vote->getVoteOptionHashInDB() !== Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText())) {
+					$messages[] = 'update voteId ' . $vote->getId()
+						. ' hash:  ' . $vote->getVoteOptionHashInDB()
+						. ':' . Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText())
+						. '\'' . $vote->getVoteOptionText() . '\'';
+
 					$vote->setVoteOptionHash(Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()));
 					$vote = $this->voteMapper->update($vote);
+
+
 					$updated++;
 				}
+
 
 				$count++;
 
@@ -690,9 +698,17 @@ class TableManager extends DbManager {
 		foreach ($this->optionMapper->getAll(includeNull: true) as $option) {
 			try {
 				// if the option's hash differs from $actualHash update the option
-				if ($option->getPollOptionHash() !== Hash::getOptionHash($option->getPollId(), $option->getPollOptionText())) {
+				if ($option->getPollOptionHashInDB() !== Hash::getOptionHash($option->getPollId(), $option->getPollOptionText())) {
+
+					$messages[] = 'update optionId ' . $option->getId()
+						. ' hash:  ' . $option->getPollOptionHashInDB()
+						. ':' . Hash::getOptionHash($option->getPollId(), $option->getPollOptionText())
+						. '\'' . $option->getPollOptionText() . '\'';
+
 					$option->setText($option->getPollOptionText());
 					$option = $this->optionMapper->update($option);
+
+
 					$updated++;
 				}
 
@@ -793,7 +809,7 @@ class TableManager extends DbManager {
 
 		$qb->update($tableName)
 			->set('access', $qb->expr()->literal(Poll::ACCESS_OPEN))
-			->where($qb->expr()->eq($prefixedTableName . '.' . $affectedColumn, $qb->expr()->literal(Poll::ACCESS_PUBLIC)));
+			->where($qb->expr()->eq($prefixedTableName . '.' . $affectedColumn, $qb->expr()->literal('public')));
 		$updated = $qb->executeStatement();
 
 		if ($updated === 0) {

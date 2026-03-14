@@ -43,20 +43,19 @@ export const useVotesStore = defineStore('votes', {
 		 * @param state
 		 * @return
 		 */
-		participants: (state): User[] =>
-			Array.from(
+		participants(state): User[] {
+			const { localeCodeIntl } = useSessionStore().currentUser
+			return Array.from(
 				new Map(
 					state.votes.map((vote) => [vote.user.id, vote.user]),
 				).values(),
-			).sort((aUser, bUser) => {
-				if (aUser.displayName < bUser.displayName) {
-					return -1
-				}
-				if (aUser.displayName > bUser.displayName) {
-					return 1
-				}
-				return 0
-			}),
+			).sort((a, b) =>
+				a.displayName.localeCompare(
+					b.displayName,
+					localeCodeIntl || navigator.language,
+				),
+			)
+		},
 
 		loadedParticipants(state: VotesStore): number {
 			return Math.min(
@@ -79,7 +78,11 @@ export const useVotesStore = defineStore('votes', {
 			const sessionStore = useSessionStore()
 			const pollStore = usePollStore()
 			if (pollStore.viewMode === 'list-view') {
-				return ['user', 'external', 'admin'].includes(sessionStore.currentUser.type) ? [sessionStore.currentUser] : []
+				return ['user', 'external', 'admin'].includes(
+					sessionStore.currentUser.type,
+				)
+					? [sessionStore.currentUser]
+					: []
 			}
 
 			if (
@@ -118,7 +121,9 @@ export const useVotesStore = defineStore('votes', {
 			if (
 				currentUserIndex < 0
 				&& !pollStore.status.isExpired
-				&& ['user', 'external', 'admin'].includes(sessionStore.currentUser.type)
+				&& ['user', 'external', 'admin'].includes(
+					sessionStore.currentUser.type,
+				)
 			) {
 				// add current user to the begining of the list if not already present
 				// and if the poll is not expired
@@ -229,14 +234,12 @@ export const useVotesStore = defineStore('votes', {
 						&& matchingAnswer.includes(vote.answer),
 				)
 				.map((vote) => vote.user)
-				.sort((aUser, bUser) => {
-					if (aUser.displayName < bUser.displayName) {
-						return -1
-					}
-					if (aUser.displayName > bUser.displayName) {
-						return 1
-					}
-					return 0
+				.sort((a, b) => {
+					const { localeCodeIntl } = useSessionStore().currentUser
+					return a.displayName.localeCompare(
+						b.displayName,
+						localeCodeIntl || navigator.language,
+					)
 				})
 		},
 
@@ -304,8 +307,7 @@ export const useVotesStore = defineStore('votes', {
 			this.votes.push(payload.vote)
 		},
 
-		async set(payload: { option: Option; setTo: Answer }) {
-			// place a fake vote for a slightly better UX in huge polls
+		setOptimistic(payload: { option: Option; setTo: Answer }) {
 			this.setItem({
 				option: payload.option,
 				vote: {
@@ -319,6 +321,10 @@ export const useVotesStore = defineStore('votes', {
 					pollId: payload.option.pollId,
 				},
 			})
+		},
+
+		async set(payload: { option: Option; setTo: Answer }) {
+			this.setOptimistic(payload)
 
 			const sessionStore = useSessionStore()
 			const pollStore = usePollStore()
@@ -342,10 +348,6 @@ export const useVotesStore = defineStore('votes', {
 					pollStore.load()
 				}
 
-				this.setItem({
-					option: payload.option,
-					vote: response.data.vote,
-				})
 				StoreHelper.updateStores(response.data)
 
 				return response
@@ -358,7 +360,7 @@ export const useVotesStore = defineStore('votes', {
 					pollStore.load()
 					throw error
 				} else {
-					Logger.error('Error setting vote aa', {
+					Logger.error('Error setting vote', {
 						error,
 						payload,
 					})
@@ -367,7 +369,7 @@ export const useVotesStore = defineStore('votes', {
 			}
 		},
 
-		async setSort(payload: { optionId: number }) {
+		setSort(payload: { optionId: number }) {
 			this.sortByOption = payload.optionId
 		},
 

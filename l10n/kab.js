@@ -6,6 +6,7 @@ OC.L10N.register(
     "Privacy Policy" : "Tasertit n tbaḍnit",
     "User" : "Aseqdac",
     "No one." : "Ula yiwen.",
+    "Loading…" : "Asali...",
     "Add option" : "Rnu aɣewwaṛ",
     "Delete" : "Kkes",
     "Unknown error" : "Erreur inconnue",

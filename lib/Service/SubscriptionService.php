@@ -15,7 +15,6 @@ use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\DB\Exception;
 
 class SubscriptionService {
 	/** @psalm-suppress PossiblyUnusedMethod */
@@ -44,7 +43,13 @@ class SubscriptionService {
 		try {
 			if ($setToSubscribed) {
 				$this->pollMapper->get($pollId)->request(Poll::PERMISSION_POLL_SUBSCRIBE);
-				$this->add($pollId, $this->userSession->getCurrentUserId());
+				try {
+					$this->subscriptionMapper->findByPollAndUser($pollId, $this->userSession->getCurrentUserId());
+					// Already subscribed — nothing to do
+					return true;
+				} catch (DoesNotExistException) {
+					$this->add($pollId, $this->userSession->getCurrentUserId());
+				}
 			} else {
 				$subscription = $this->subscriptionMapper->findByPollAndUser($pollId, $this->userSession->getCurrentUserId());
 				$this->subscriptionMapper->delete($subscription);
@@ -57,12 +62,6 @@ class SubscriptionService {
 		} catch (ForbiddenException $e) {
 			// Is not allowed to subscribe
 			return false;
-		} catch (Exception $e) {
-			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
-				// Is already subscribed
-				return true;
-			}
-			throw $e;
 		}
 	}
 

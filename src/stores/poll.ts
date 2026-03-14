@@ -16,13 +16,12 @@ import { emit } from '@nextcloud/event-bus'
 
 import { Logger } from '../helpers/modules/logger'
 import { PublicAPI, PollsAPI } from '../Api'
-import { createDefault, Event } from '../Types'
+import { defaultUser, Event } from '../Types'
 
 import { usePollsStore } from './polls'
 import { useSessionStore } from './session'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { User } from '../Types'
 import type {
 	Poll,
 	PollType,
@@ -62,6 +61,7 @@ export const usePollStore = defineStore('poll', {
 			autoReminder: false,
 			collapseDescription: true,
 			expire: 0,
+			allowDownload: true,
 			forceConfidentialComments: false,
 			forcedDisplayMode: 'user-pref',
 			hideBookedUp: false,
@@ -72,7 +72,7 @@ export const usePollStore = defineStore('poll', {
 			maxVotesPerUser: 0,
 			timezoneName: null,
 		},
-		owner: createDefault<User>(),
+		owner: { ...defaultUser },
 		pollGroups: [],
 		status: {
 			anonymizeLevel: 'ANON_NONE',
@@ -118,6 +118,7 @@ export const usePollStore = defineStore('poll', {
 			confirmOptions: false,
 			deanonymize: false,
 			delete: false,
+			download: false,
 			edit: false,
 			reorderOptions: false,
 			seeResults: false,
@@ -181,7 +182,7 @@ export const usePollStore = defineStore('poll', {
 			return (
 				state.configuration.showResults === 'always'
 				|| (state.configuration.showResults === 'closed'
-					&& !this.status.isExpired)
+					&& this.status.isExpired)
 			)
 		},
 
@@ -214,7 +215,7 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		isConfirmationAllowed(state): boolean {
-			return state.permissions.confirmOptions || !this.isClosed
+			return state.permissions.confirmOptions && this.isClosed
 		},
 
 		isOptionCloneAllowed(state): boolean {

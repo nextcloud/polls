@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Model\Settings;
 
 use JsonSerializable;
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Model\Group\Group;
 use OCA\Polls\UserSession;
 use OCP\App\IAppManager;
@@ -103,7 +103,7 @@ class AppSettings implements JsonSerializable {
 			'useActivity' => false,
 			'navigationPollsInList' => false,
 			'updateType' => $this->getUpdateType(),
-			'currentVersion' => $this->appManager->getAppVersion(AppConstants::APP_ID),
+			'currentVersion' => $this->appManager->getAppVersion(Application::APP_ID),
 		];
 
 		if ($this->userSession->getIsLoggedIn()) {
@@ -134,7 +134,7 @@ class AppSettings implements JsonSerializable {
 		];
 	}
 
-	private function checkSettingType(string $key, int $expectedType, string $app = AppConstants::APP_ID): bool {
+	private function checkSettingType(string $key, int $expectedType, string $app = Application::APP_ID): bool {
 		try {
 			$actualType = $this->appConfig->getValueType($app, $key);
 			if ($actualType === $expectedType || $actualType === IAppConfig::VALUE_MIXED) {
@@ -166,7 +166,7 @@ class AppSettings implements JsonSerializable {
 	/**
 	 * Get the value of a boolean setting
 	 */
-	public function getBooleanSetting(string $key, string $groupKey = self::NO_GROUPCHECK, bool $default = true, string $app = AppConstants::APP_ID): bool {
+	public function getBooleanSetting(string $key, string $groupKey = self::NO_GROUPCHECK, bool $default = true, string $app = Application::APP_ID): bool {
 		// key missing or invalid, return default
 		if (!$this->checkSettingType($key, IAppConfig::VALUE_BOOL, $app)) {
 			return $default;
@@ -185,13 +185,13 @@ class AppSettings implements JsonSerializable {
 	 * Set a boolean setting
 	 */
 	public function setBooleanSetting(string $key, bool $value): void {
-		$this->appConfig->setValueBool(AppConstants::APP_ID, $key, $value);
+		$this->appConfig->setValueBool(Application::APP_ID, $key, $value);
 	}
 
 	/**
 	 * Get the value of an group (array) setting
 	 */
-	public function getGroupSetting(string $key, array $default = [], string $app = AppConstants::APP_ID): array {
+	public function getGroupSetting(string $key, array $default = [], string $app = Application::APP_ID): array {
 		if (!$this->checkSettingType($key, IAppConfig::VALUE_ARRAY, $app)) {
 			return $default;
 		}
@@ -202,13 +202,13 @@ class AppSettings implements JsonSerializable {
 	 * Set an array setting
 	 */
 	public function setGroupSetting(string $key, array $value): void {
-		$this->appConfig->setValueArray(AppConstants::APP_ID, $key, $value);
+		$this->appConfig->setValueArray(Application::APP_ID, $key, $value);
 	}
 
 	/**
 	 * Get the value of an integer setting
 	 */
-	private function getIntegerSetting(string $key, int $default = 0, string $app = AppConstants::APP_ID): int {
+	private function getIntegerSetting(string $key, int $default = 0, string $app = Application::APP_ID): int {
 		if (!$this->checkSettingType($key, IAppConfig::VALUE_INT, $app)) {
 			return $default;
 		}
@@ -219,13 +219,13 @@ class AppSettings implements JsonSerializable {
 	 * Set a integer setting
 	 */
 	public function setIntegerSetting(string $key, int $value): void {
-		$this->appConfig->setValueInt(AppConstants::APP_ID, $key, $value);
+		$this->appConfig->setValueInt(Application::APP_ID, $key, $value);
 	}
 
 	/**
 	 * Get the value of a string setting
 	 */
-	private function getStringSetting(string $key, string $default = '', string $app = AppConstants::APP_ID): string {
+	private function getStringSetting(string $key, string $default = '', string $app = Application::APP_ID): string {
 		if (!$this->checkSettingType($key, IAppConfig::VALUE_STRING, $app)) {
 			return $default;
 		}
@@ -236,7 +236,7 @@ class AppSettings implements JsonSerializable {
 	 * Set a string setting
 	 */
 	public function setStringSetting(string $key, string $value): void {
-		$this->appConfig->setValueString(AppConstants::APP_ID, $key, $value);
+		$this->appConfig->setValueString(Application::APP_ID, $key, $value);
 	}
 
 	// Checks
@@ -328,7 +328,7 @@ class AppSettings implements JsonSerializable {
 	 * Get the disclaimer text
 	 */
 	public function getDisclaimer(): string {
-		return $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_DISCLAIMER);
+		return $this->appConfig->getValueString(Application::APP_ID, self::SETTING_DISCLAIMER);
 	}
 
 	/**
@@ -367,7 +367,7 @@ class AppSettings implements JsonSerializable {
 	 * - periodicPolling
 	 */
 	public function getUpdateType(): string {
-		return $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_UPDATE_TYPE, self::SETTING_UPDATE_TYPE_DEFAULT);
+		return $this->appConfig->getValueString(Application::APP_ID, self::SETTING_UPDATE_TYPE, self::SETTING_UPDATE_TYPE_DEFAULT);
 	}
 
 	/**
@@ -445,9 +445,9 @@ class AppSettings implements JsonSerializable {
 
 			self::SETTING_USE_SITE_LEGAL => $this->getBooleanSetting(self::SETTING_USE_SITE_LEGAL),
 			self::SETTING_LEGAL_TERMS_IN_EMAIL => $this->getBooleanSetting(self::SETTING_LEGAL_TERMS_IN_EMAIL),
-			self::SETTING_DISCLAIMER => $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_DISCLAIMER),
-			self::SETTING_IMPRINT_URL => $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_IMPRINT_URL),
-			self::SETTING_PRIVACY_URL => $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_PRIVACY_URL),
+			self::SETTING_DISCLAIMER => $this->appConfig->getValueString(Application::APP_ID, self::SETTING_DISCLAIMER),
+			self::SETTING_IMPRINT_URL => $this->appConfig->getValueString(Application::APP_ID, self::SETTING_IMPRINT_URL),
+			self::SETTING_PRIVACY_URL => $this->appConfig->getValueString(Application::APP_ID, self::SETTING_PRIVACY_URL),
 			self::SETTING_UPDATE_TYPE => $this->getUpdateType(),
 
 			self::SETTING_USE_ACTIVITY => $this->getBooleanSetting(self::SETTING_USE_ACTIVITY),

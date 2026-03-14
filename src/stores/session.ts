@@ -18,14 +18,13 @@ import { usePreferencesStore } from './preferences'
 import { usePollStore } from './poll'
 import { usePollsStore } from './polls'
 
-import { createDefault } from '../Types'
+import { defaultUser } from '../Types'
 
 import type { AxiosError } from '@nextcloud/axios'
 import type { ViewMode } from './preferences.types'
-import type { Share } from './shares.types'
+import { defaultShare } from './shares.types'
 import type { PollType } from './poll.types'
 import type { FilterType } from './polls.types'
-import type { User } from '../Types'
 
 import type { SessionStore } from './session.types'
 import { IANAZone } from 'luxon'
@@ -113,8 +112,9 @@ export const useSessionStore = defineStore('session', {
 			lastUpdate: Math.floor(Date.now() / 1000),
 		},
 		token: null,
-		currentUser: createDefault<User>(),
-		share: createDefault<Share>(),
+		currentUser: { ...defaultUser },
+		share: { ...defaultShare, user: { ...defaultUser } },
+		navigationStatus: 'idle',
 	}),
 
 	getters: {
@@ -255,32 +255,9 @@ export const useSessionStore = defineStore('session', {
 			this.watcher.id = Math.random().toString(36).substring(2)
 		},
 
-		async load(
-			payload: {
-				to?: null | RouteLocationNormalized
-				cheapLoading?: boolean
-				reload?: boolean
-			} = {
-				to: null,
-				cheapLoading: false,
-				reload: false,
-			},
-		) {
+		async loadSession() {
 			Logger.debug('Loading session')
 			this.generateWatcherId()
-
-			if (payload.to) {
-				Logger.debug('Set requested route', { to: payload.to })
-				await this.setRouter(payload.to)
-				Logger.debug('Route set', { route: this.route })
-			}
-
-			if (payload.reload) {
-				Logger.debug('Reloading session')
-			} else if (payload.cheapLoading) {
-				Logger.debug('Same route, skipping session load')
-				return
-			}
 
 			try {
 				const response = await (() => {
@@ -297,11 +274,7 @@ export const useSessionStore = defineStore('session', {
 				}
 
 				this.$reset()
-				if (this.route.name === null) {
-					this.$reset()
-				} else {
-					throw error
-				}
+				throw error
 			}
 			Logger.debug('Session loaded')
 		},
@@ -322,25 +295,6 @@ export const useSessionStore = defineStore('session', {
 			this.route.params.token = setRoute.params.token as string
 			this.route.params.type = setRoute.params.type as FilterType
 			this.route.params.slug = setRoute.params.slug as string
-		},
-
-		// Share store
-		async loadShare(): Promise<void> {
-			if (this.route.name !== 'publicVote') {
-				this.share = createDefault<Share>()
-				return
-			}
-
-			try {
-				const response = await PublicAPI.getShare(this.publicToken)
-				this.share = response.data.share
-			} catch (error) {
-				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
-					return
-				}
-				Logger.error('Error retrieving share', { error })
-				throw error
-			}
 		},
 
 		loadAppSettings(): void {},

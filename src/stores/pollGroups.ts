@@ -211,7 +211,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 				throw error
 			}
 		} finally {
-			// pollsStore.load()
+			pollsStore.load()
 		}
 	}
 

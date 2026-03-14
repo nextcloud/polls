@@ -75,4 +75,6 @@ export type Session = {
 	watcher: Watcher
 }
 
-export type SessionStore = Session
+export type SessionStore = Session & {
+	navigationStatus: 'idle' | 'loading'
+}

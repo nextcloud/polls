@@ -109,7 +109,7 @@ class AddTest extends TestCase {
 				$userIdConstraint->evaluate($userId);
 
 				if (in_array($userId, $pollData['initialShares'][$type] ?? [])) {
-					throw new ShareAlreadyExistsException();
+					throw new ShareAlreadyExistsException('Share already exists', $mockedShares[$type][$userId]);
 				}
 
 				return $mockedShares[$type][$userId];

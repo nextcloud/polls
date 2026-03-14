@@ -18,11 +18,9 @@ import PollInformation from '../Poll/PollInformation.vue'
 import UserMenu from '../User/UserMenu.vue'
 
 import { usePollStore } from '../../stores/poll'
-import { useSessionStore } from '../../stores/session'
 
 const route = useRoute()
 const pollStore = usePollStore()
-const sessionStore = useSessionStore()
 const caption = t('polls', 'Poll information')
 
 const ExportPoll = defineAsyncComponent(() => import('../Export/ExportPoll.vue'))
@@ -55,7 +53,7 @@ onBeforeUnmount(() => {
 			</template>
 			<PollInformation />
 		</NcPopover>
-		<ExportPoll v-if="sessionStore.appPermissions.pollDownload" />
+		<ExportPoll v-if="pollStore.permissions.download" />
 		<ActionToggleSidebar
 			v-if="pollStore.permissions.edit || pollStore.permissions.comment" />
 	</div>

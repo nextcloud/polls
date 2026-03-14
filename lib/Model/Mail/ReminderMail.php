@@ -10,12 +10,12 @@ declare(strict_types=1);
 namespace OCA\Polls\Model\Mail;
 
 use DateTime;
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Exceptions\NoDeadLineException;
 
 class ReminderMail extends MailBase {
-	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Reminder';
+	protected const TEMPLATE_CLASS = Application::APP_ID . '.Reminder';
 	public const REASON_EXPIRATION = 'expiry';
 	public const REASON_OPTION = 'option';
 	public const REASON_NONE = null;
