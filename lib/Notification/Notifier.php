@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Notification;
 
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\UserMapper;
@@ -45,7 +45,7 @@ class Notifier implements INotifier {
 	 * Identifier of the notifier, only use [a-z0-9_]
 	 */
 	public function getID(): string {
-		return AppConstants::APP_ID;
+		return Application::APP_ID;
 	}
 
 	/**
@@ -102,21 +102,21 @@ class Notifier implements INotifier {
 	 * Human readable name describing the notifier
 	 */
 	public function getName(): string {
-		return $this->l10nFactory->get(AppConstants::APP_ID)->t('Polls');
+		return $this->l10nFactory->get(Application::APP_ID)->t('Polls');
 	}
 
 	public function prepare(INotification $notification, string $languageCode): INotification {
-		if ($notification->getApp() !== AppConstants::APP_ID) {
+		if ($notification->getApp() !== Application::APP_ID) {
 			// not for polls, don't bother me
 			throw new UnknownNotificationException();
 		}
 
-		$l = $this->l10nFactory->get(AppConstants::APP_ID, $languageCode);
+		$l = $this->l10nFactory->get(Application::APP_ID, $languageCode);
 
 
 		$notification->setIcon(
 			$this->urlGenerator->getAbsoluteURL(
-				$this->urlGenerator->imagePath(AppConstants::APP_ID, 'polls-dark.svg')
+				$this->urlGenerator->imagePath(Application::APP_ID, 'polls-dark.svg')
 			)
 		);
 

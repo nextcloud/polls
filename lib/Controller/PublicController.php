@@ -8,9 +8,10 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Attributes\ShareTokenRequired;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
+use OCA\Polls\Helper\AssetLoader;
 use OCA\Polls\Model\SentResult;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -25,7 +26,6 @@ use OCA\Polls\Service\SystemService;
 use OCA\Polls\Service\VoteService;
 use OCA\Polls\Service\WatchService;
 use OCA\Polls\UserSession;
-use OCP\App\IAppManager;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
@@ -62,11 +62,8 @@ class PublicController extends BaseController {
 		private SystemService $systemService,
 		private VoteService $voteService,
 		private WatchService $watchService,
-		IAppManager $appManager,
-		private string $scriptPrefix = '',
 	) {
 		parent::__construct($appName, $request);
-		$this->scriptPrefix = 'polls-' . $appManager->getAppVersion(AppConstants::APP_ID) . '-';
 	}
 
 	/**
@@ -78,11 +75,11 @@ class PublicController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}')]
 	public function votePage() {
-		Util::addScript(AppConstants::APP_ID, $this->scriptPrefix . 'main');
+		Util::addScript(Application::APP_ID, AssetLoader::getScript('main'));
 		if ($this->userSession->getIsLoggedIn()) {
-			return new TemplateResponse(AppConstants::APP_ID, 'main');
+			return new TemplateResponse(Application::APP_ID, 'main');
 		} else {
-			$template = new PublicTemplateResponse(AppConstants::APP_ID, 'main');
+			$template = new PublicTemplateResponse(Application::APP_ID, 'main');
 			$template->setFooterVisible($this->appConfig->getValueBool('polls', AppSettings::SETTING_USE_SITE_LEGAL, true));
 			return $template;
 		}

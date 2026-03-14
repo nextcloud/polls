@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Cron;
 
 use Exception;
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Attributes\ManuallyRunnableCronJob;
 use OCA\Polls\Service\MailService;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -38,7 +38,7 @@ class NotificationCron extends TimedJob {
 	 * @return void
 	 */
 	protected function run($argument) {
-		$this->session->set(AppConstants::SESSION_KEY_CRON_JOB, true);
+		$this->session->set(Application::SESSION_KEY_CRON_JOB, true);
 		try {
 			$this->mailService->sendNotifications();
 		} catch (Exception $e) {
@@ -47,7 +47,7 @@ class NotificationCron extends TimedJob {
 				['message' => $e->getMessage()]
 			);
 		} finally {
-			$this->session->remove(AppConstants::SESSION_KEY_CRON_JOB);
+			$this->session->remove(Application::SESSION_KEY_CRON_JOB);
 		}
 
 	}

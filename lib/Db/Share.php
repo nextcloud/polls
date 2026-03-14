@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Helper\Container;
 use OCP\IURLGenerator;
@@ -270,12 +270,12 @@ class Share extends EntityWithUser implements JsonSerializable {
 
 		if (in_array($this->type, [self::TYPE_USER, self::TYPE_ADMIN, self::TYPE_GROUP], true)) {
 			return $this->urlGenerator->linkToRouteAbsolute(
-				AppConstants::APP_ID . '.page.vote',
+				Application::APP_ID . '.page.vote',
 				['id' => $this->pollId]
 			);
 		} elseif ($this->token) {
 			return $this->urlGenerator->linkToRouteAbsolute(
-				AppConstants::APP_ID . '.public.votePage',
+				Application::APP_ID . '.public.votePage',
 				['token' => $this->token]
 			);
 		} else {

@@ -8,9 +8,8 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Listener;
 
-use OCA\Polls\AppConstants;
 use OCA\Polls\AppInfo\Application;
-use OCP\App\IAppManager;
+use OCA\Polls\Helper\AssetLoader;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
@@ -21,18 +20,14 @@ use OCP\Util;
  * @psalm-api
  */
 class PollsReferenceListener implements IEventListener {
-	public function __construct(
-		IAppManager $appManager,
-		private string $scriptPrefix = '',
-	) {
-		$this->scriptPrefix = 'polls-' . $appManager->getAppVersion(AppConstants::APP_ID) . '-';
-
+	public function __construct() {
 	}
+
 	public function handle(Event $event): void {
 		if (!$event instanceof RenderReferenceEvent) {
 			return;
 		}
 
-		Util::addScript(Application::APP_ID, $this->scriptPrefix . 'reference');
+		Util::addScript(Application::APP_ID, AssetLoader::getScript('reference'));
 	}
 }

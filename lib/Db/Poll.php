@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -441,7 +441,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	public function getVoteUrl(): string {
 		return $this->urlGenerator->linkToRouteAbsolute(
-			AppConstants::APP_ID . '.page.vote',
+			Application::APP_ID . '.page.vote',
 			['id' => $this->getId()]
 		);
 	}

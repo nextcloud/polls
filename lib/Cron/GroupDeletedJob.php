@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Cron;
 
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -34,13 +34,13 @@ class GroupDeletedJob extends QueuedJob {
 	 * @return void
 	 */
 	protected function run($argument) {
-		$this->session->set(AppConstants::SESSION_KEY_CRON_JOB, true);
+		$this->session->set(Application::SESSION_KEY_CRON_JOB, true);
 		$group = $argument['group'];
 		$this->logger->info('Removing group shares for deleted group', [
 			'group' => $group
 		]);
 
 		$this->shareMapper->deleteByIdAndType($group, Share::TYPE_GROUP);
-		$this->session->remove(AppConstants::SESSION_KEY_CRON_JOB);
+		$this->session->remove(Application::SESSION_KEY_CRON_JOB);
 	}
 }

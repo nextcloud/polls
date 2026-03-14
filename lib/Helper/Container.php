@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Helper;
 
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
@@ -46,7 +46,7 @@ abstract class Container {
 	}
 
 	public static function getL10N(?string $lang = null): IL10N {
-		return Server::get(IFactory::class)->get(AppConstants::APP_ID, $lang);
+		return Server::get(IFactory::class)->get(Application::APP_ID, $lang);
 	}
 	public static function isAppEnabled(string $app): bool {
 		return Server::get(IAppManager::class)->isEnabledForUser($app);

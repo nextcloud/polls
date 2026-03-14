@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace OCA\Polls\Activity;
 
-use OCA\Polls\AppConstants;
+use OCA\Polls\AppInfo\Application;
 use OCP\Activity\IFilter;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -23,7 +23,7 @@ class PollChanges implements IFilter {
 	}
 
 	public function getIdentifier() : string {
-		return AppConstants::APP_ID;
+		return Application::APP_ID;
 	}
 
 	public function getName() : string {
@@ -31,7 +31,7 @@ class PollChanges implements IFilter {
 	}
 
 	public function getIcon() : string {
-		return $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath(AppConstants::APP_ID, 'polls.svg'));
+		return $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath(Application::APP_ID, 'polls.svg'));
 	}
 
 	public function getPriority() : int {
@@ -39,7 +39,7 @@ class PollChanges implements IFilter {
 	}
 
 	public function allowedApps() : array {
-		return [AppConstants::APP_ID];
+		return [Application::APP_ID];
 	}
 
 	public function filterTypes(array $types) : array {
