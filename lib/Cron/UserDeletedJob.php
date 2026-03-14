@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Cron;
 
-use OCA\Polls\AppInfo\Application;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
@@ -51,7 +51,7 @@ class UserDeletedJob extends QueuedJob {
 	 * @return void
 	 */
 	protected function run($argument) {
-		$this->session->set(Application::SESSION_KEY_CRON_JOB, true);
+		$this->session->set(AppConstants::SESSION_KEY_CRON_JOB, true);
 		$userId = $argument['userId'];
 		$this->logger->info('Deleting polls for deleted user', [
 			'userId' => $userId
@@ -72,6 +72,6 @@ class UserDeletedJob extends QueuedJob {
 		$this->commentMapper->renameUserId($userId, $replacementName);
 		$this->optionMapper->renameUserId($userId, $replacementName);
 		$this->voteMapper->renameUserId($userId, $replacementName);
-		$this->session->remove(Application::SESSION_KEY_CRON_JOB);
+		$this->session->remove(AppConstants::SESSION_KEY_CRON_JOB);
 	}
 }
