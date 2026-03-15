@@ -11,6 +11,7 @@ namespace OCA\Polls\Db;
 use Exception;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\User\Anon;
+use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\Entity;
@@ -105,13 +106,13 @@ abstract class EntityWithUser extends Entity {
 		try {
 			$pollId = $this->getPollId();
 			if ($pollId === null) {
+				// If pollId is not set, we assume that the user is not a participant of a poll
 				return $userMapper->getUserFromUserBase($this->getUserId());
 			}
 			$user = $userMapper->getParticipant($this->getUserId(), $pollId);
 			// Get user from userbase
-		} catch (Exception $e) {
-			// If pollId is not set, we assume that the user is not a participant of a poll
-			$user = $userMapper->getUserFromUserBase($this->getUserId());
+		} catch (Exception) {
+			$user = new Ghost($this->getUserId());
 		}
 		return $user;
 	}
