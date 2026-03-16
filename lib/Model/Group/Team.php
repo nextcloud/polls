@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace OCA\Polls\Model\Group;
 
 use OCA\Circles\Api\v1\Circles;
-use OCA\Circles\Model\Circle as CirclesCircle;
-use OCA\Polls\Exceptions\CirclesNotEnabledException;
+use OCA\Circles\Model\Circle;
+use OCA\Polls\Exceptions\TeamsNotEnabledException;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
@@ -20,11 +20,11 @@ use OCA\Polls\Model\UserBase;
 /**
  * @psalm-suppress UnusedClass
  */
-class Circle extends UserBase {
+class Team extends UserBase {
 	/** @var string */
 	public const TYPE = 'circle';
 
-	private CirclesCircle $circle;
+	private Circle $circle;
 
 	public function __construct(
 		string $id,
@@ -37,12 +37,12 @@ class Circle extends UserBase {
 			$this->circle = Circles::detailsCircle($id);
 			$this->displayName = $this->circle->getName();
 		} else {
-			throw new CirclesNotEnabledException();
+			throw new TeamsNotEnabledException();
 		}
 	}
 
 	public static function isEnabled() : bool {
-		return Container::isAppEnabled('circles');
+		return Container::isAppEnabled('circles') && class_exists('\OCA\Circles\ShareByCircleProvider');
 	}
 
 	public function getRichObjectString() : array {
@@ -55,14 +55,14 @@ class Circle extends UserBase {
 	}
 
 	/**
-	 * @return Circle[]
+	 * @return Team[]
 	 */
 	public static function search(string $query = '', array $skip = []) : array {
 		$circles = [];
 		if (self::isEnabled()) {
-			foreach (Circles::listCircles(CirclesCircle::CIRCLES_ALL, $query) as $circle) {
-				if (!in_array($circle->getUniqueId(), $skip)) {
-					$circles[] = new self($circle->getUniqueId());
+			foreach (Circles::listCircles(Circles::CIRCLES_ALL, $query) as $circle) {
+				if (!in_array($circle->getSingleId(), $skip)) {
+					$circles[] = new self($circle->getSingleId());
 				}
 			}
 		}

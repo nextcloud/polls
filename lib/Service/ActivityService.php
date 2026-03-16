@@ -275,11 +275,11 @@ class ActivityService {
 					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has shared this poll with group {sharee}'),
 
 				],
-				Share::TYPE_CIRCLE => [
-					self::FIRST_PERSON_FULL => $this->l10n->t('You have shared poll {pollTitle} with circle {sharee}'),
-					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has shared poll {pollTitle} with circle {sharee}'),
-					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have shared this poll with circle {sharee}'),
-					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has shared this poll with circle {sharee}'),
+				Share::TYPE_TEAM => [
+					self::FIRST_PERSON_FULL => $this->l10n->t('You have shared poll {pollTitle} with team {sharee}'),
+					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has shared poll {pollTitle} with team {sharee}'),
+					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have shared this poll with team {sharee}'),
+					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has shared this poll with team {sharee}'),
 
 				],
 				Share::TYPE_CONTACTGROUP => [
@@ -316,11 +316,11 @@ class ActivityService {
 					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have deleted the share for group {sharee}'),
 					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has deleted the share for group {sharee}'),
 				],
-				Share::TYPE_CIRCLE => [
-					self::FIRST_PERSON_FULL => $this->l10n->t('You have deleted the share for circle {sharee} from poll {pollTitle}'),
-					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has deleted the share for circle {sharee} from poll {pollTitle}'),
-					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have deleted the share for circle {sharee}'),
-					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has deleted the share for circle {sharee}'),
+				Share::TYPE_TEAM => [
+					self::FIRST_PERSON_FULL => $this->l10n->t('You have deleted the share for team {sharee} from poll {pollTitle}'),
+					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has deleted the share for team {sharee} from poll {pollTitle}'),
+					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have deleted the share for team {sharee}'),
+					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has deleted the share for team {sharee}'),
 				],
 				Share::TYPE_CONTACTGROUP => [
 					self::FIRST_PERSON_FULL => $this->l10n->t('You have deleted the share for contact group {sharee} from poll {pollTitle}'),
@@ -354,11 +354,11 @@ class ActivityService {
 					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored the share for group {sharee}'),
 					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored the share for group {sharee}'),
 				],
-				Share::TYPE_CIRCLE => [
-					self::FIRST_PERSON_FULL => $this->l10n->t('You have restored the share for circle {sharee} from poll {pollTitle}'),
-					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has restored the share for circle {sharee} from poll {pollTitle}'),
-					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored the share for circle {sharee}'),
-					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored the share for circle {sharee}'),
+				Share::TYPE_TEAM => [
+					self::FIRST_PERSON_FULL => $this->l10n->t('You have restored the share for team {sharee} from poll {pollTitle}'),
+					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has restored the share for team {sharee} from poll {pollTitle}'),
+					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored the share for team {sharee}'),
+					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored the share for team {sharee}'),
 				],
 				Share::TYPE_CONTACTGROUP => [
 					self::FIRST_PERSON_FULL => $this->l10n->t('You have restored the share for contact group {sharee} from poll {pollTitle}'),

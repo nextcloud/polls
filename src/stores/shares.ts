@@ -105,9 +105,12 @@ export const useSharesStore = defineStore('shares', {
 				)
 				this.shares = response.data.shares
 			} catch (error) {
-				this.handleError(error, 'Error loading shares', {
-					pollId: pollOrPollGroupId,
-				})
+				if ((error as AxiosError)?.code !== 'ERR_CANCELED') {
+					Logger.error('Error loading shares', {
+						error,
+						pollId: pollOrPollGroupId,
+					})
+				}
 			}
 		},
 
@@ -285,6 +288,7 @@ export const useSharesStore = defineStore('shares', {
 				this.handleError(error, 'Error restoring share', payload)
 			}
 		},
+
 		handleError(error: unknown, message: string, payload?: unknown): void {
 			if ((error as AxiosError)?.code === 'ERR_CANCELED') return
 

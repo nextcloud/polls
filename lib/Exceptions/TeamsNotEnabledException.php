@@ -10,7 +10,7 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class CirclesNotEnabledException extends Exception {
+class TeamsNotEnabledException extends Exception {
 	public function __construct(
 		string $e = 'Teams are not enabled for this user',
 	) {

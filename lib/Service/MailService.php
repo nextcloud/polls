@@ -180,7 +180,7 @@ class MailService {
 	}
 
 	public function sendInvitation(Share $share, SentResult &$sentResult = new SentResult()): SentResult {
-		foreach ($this->userMapper->getUserFromShare($share)->getMembers() as $recipient) {
+		foreach ($share->resolveUser()->getMembers() as $recipient) {
 			$invitation = new InvitationMail($recipient->getId(), $share);
 
 			try {
@@ -254,7 +254,7 @@ class MailService {
 	private function processSharesForAutoReminder(Poll $poll): void {
 		$shares = $this->shareMapper->findByPollUnreminded($poll->getId());
 		foreach ($shares as $share) {
-			if (in_array($share->getType(), [Share::TYPE_CIRCLE, Share::TYPE_CONTACTGROUP])) {
+			if (in_array($share->getType(), [Share::TYPE_TEAM, Share::TYPE_CONTACTGROUP])) {
 				continue;
 			}
 
@@ -270,7 +270,7 @@ class MailService {
 	}
 
 	private function sendAutoReminderToRecipients(Share $share, Poll $poll): void {
-		foreach ($this->userMapper->getUserFromShare($share)->getMembers() as $recipient) {
+		foreach ($share->resolveUser()->getMembers() as $recipient) {
 			$reminder = new ReminderMail(
 				$recipient->getId(),
 				$poll->getId()

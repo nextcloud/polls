@@ -11,7 +11,6 @@ use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
-use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\UserSession;
@@ -23,7 +22,6 @@ abstract class BaseEvent extends Event {
 	protected array $activitySubjectParams = [];
 	protected bool $log = true;
 	protected Poll $poll;
-	protected UserMapper $userMapper;
 	protected UserSession $userSession;
 
 
@@ -32,7 +30,6 @@ abstract class BaseEvent extends Event {
 	) {
 		parent::__construct();
 		$this->poll = Container::queryPoll($this->getPollId());
-		$this->userMapper = Container::queryClass(UserMapper::class);
 		$this->userSession = Container::queryClass(UserSession::class);
 
 		// Default
