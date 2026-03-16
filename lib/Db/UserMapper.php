@@ -11,7 +11,7 @@ namespace OCA\Polls\Db;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Exceptions\UserNotFoundException;
-use OCA\Polls\Model\Group\Circle;
+use OCA\Polls\Model\Group\Team;
 use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\Group\Group;
 use OCA\Polls\Model\User\Admin;
@@ -70,7 +70,7 @@ class UserMapper extends QBMapper {
 				throw new ShareNotFoundException('PollId is required to get share user');
 			}
 			$share = $this->getShareByPollAndUser($userId, $pollId);
-			return $this->getUserFromShare($share);
+			return $share->resolveUser();
 		} catch (ShareNotFoundException $e) {
 			// User seems to be probaly deleted, use fake share
 		}
@@ -122,29 +122,10 @@ class UserMapper extends QBMapper {
 		throw new UserNotFoundException();
 	}
 
-	/**
-	 * Get participans of a poll as array of user objects
-	 *
-	 * Returns a UserBase child build from a share
-	 *
-	 * @return Circle|Contact|ContactGroup|Email|GenericUser|Ghost|Group|User
-	 */
-	public function getUserFromShare(Share $share): GenericUser|Email|User|ContactGroup|Contact|Circle|Group|Ghost {
-		return $this->getUserObject(
-			$share->getType(),
-			$share->getUserId(),
-			$share->getDisplayName(),
-			$share->getEmailAddress(),
-			$share->getLanguage(),
-			$share->getLocale(),
-			$share->getTimeZoneName()
-		);
-	}
-
 	public function getUserFromShareToken(string $token): UserBase {
 		$share = $this->getShareByToken($token);
 
-		return $this->getUserFromShare($share);
+		return $share->resolveUser();
 	}
 
 	private function getShareByToken(string $token): Share {
@@ -181,20 +162,26 @@ class UserMapper extends QBMapper {
 	/**
 	 * @throws InvalidShareTypeException
 	 */
-	public function getUserObject(string $type, string $id, string $displayName = '', string $emailAddress = '', string $language = '', string $locale = '', string $timeZoneName = ''): Ghost|Group|Circle|Contact|ContactGroup|User|Email|GenericUser {
-		return match ($type) {
-			Ghost::TYPE => new Ghost($id),
-			Group::TYPE => new Group($id),
-			Circle::TYPE => new Circle($id),
-			Contact::TYPE => new Contact($id),
-			ContactGroup::TYPE => new ContactGroup($id),
-			User::TYPE => new User($id),
-			Admin::TYPE => new Admin($id),
-			Email::TYPE => new Email($id, $displayName, $emailAddress, $language),
-			UserBase::TYPE_EXTERNAL => new GenericUser($id, UserBase::TYPE_EXTERNAL, $displayName, $emailAddress, $language, $locale, $timeZoneName),
-			UserBase::TYPE_PUBLIC => new GenericUser($id, UserBase::TYPE_PUBLIC, $displayName),
-			default => throw new InvalidShareTypeException('Invalid user type (' . $type . ')'),
-		};
+	public static function getUserObject(string $type, string $id, string $displayName = '', string $emailAddress = '', string $language = '', string $locale = '', string $timeZoneName = ''): Ghost|Group|Team|Contact|ContactGroup|User|Email|GenericUser {
+		try {
+			return match ($type) {
+				Ghost::TYPE => new Ghost($id),
+				Group::TYPE => new Group($id),
+				Team::TYPE => new Team($id),
+				Contact::TYPE => new Contact($id),
+				ContactGroup::TYPE => new ContactGroup($id),
+				User::TYPE => new User($id),
+				Admin::TYPE => new Admin($id),
+				Email::TYPE => new Email($id, $displayName, $emailAddress, $language),
+				UserBase::TYPE_EXTERNAL => new GenericUser($id, UserBase::TYPE_EXTERNAL, $displayName, $emailAddress, $language, $locale, $timeZoneName),
+				UserBase::TYPE_PUBLIC => new GenericUser($id, UserBase::TYPE_PUBLIC, $displayName),
+				default => throw new InvalidShareTypeException('Invalid user type (' . $type . ')'),
+			};
+		} catch (InvalidShareTypeException $e) {
+			throw $e;
+		} catch (\Exception) {
+			return new Ghost($id);
+		}
 	}
 
 	/**

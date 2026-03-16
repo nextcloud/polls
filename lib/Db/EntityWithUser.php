@@ -51,7 +51,7 @@ abstract class EntityWithUser extends Entity {
 		return $userSession->getCurrentUserId() === $this->getUserId();
 	}
 
-	private function getEntityAnonymization(): bool {
+	protected function getEntityAnonymization(): bool {
 		if ($this->getCurrentUserIsEntityUser()) {
 			// if the current user is the owner of the entity, don't anonymize the entity
 			return false;
@@ -101,6 +101,7 @@ abstract class EntityWithUser extends Entity {
 			return $user;
 		}
 
+		/** @var UserMapper */
 		$userMapper = (Container::queryClass(UserMapper::class));
 
 		try {

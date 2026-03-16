@@ -34,43 +34,43 @@ class UserMapperTest extends UnitTestCase {
 	// Contact/ContactGroup/Circle require external apps — tested separately once available.
 
 	public function testGetUserObjectReturnsUser(): void {
-		$user = $this->userMapper->getUserObject(User::TYPE, 'admin');
+		$user = UserMapper::getUserObject(User::TYPE, 'admin');
 		$this->assertInstanceOf(User::class, $user);
 	}
 
 	public function testGetUserObjectReturnsAdmin(): void {
-		$user = $this->userMapper->getUserObject(Admin::TYPE, 'admin');
+		$user = UserMapper::getUserObject(Admin::TYPE, 'admin');
 		$this->assertInstanceOf(Admin::class, $user);
 	}
 
 	public function testGetUserObjectReturnsGroup(): void {
-		$user = $this->userMapper->getUserObject(Group::TYPE, 'admin');
+		$user = UserMapper::getUserObject(Group::TYPE, 'admin');
 		$this->assertInstanceOf(Group::class, $user);
 	}
 
 	public function testGetUserObjectReturnsGhost(): void {
-		$user = $this->userMapper->getUserObject(Ghost::TYPE, 'ghost1');
+		$user = UserMapper::getUserObject(Ghost::TYPE, 'ghost1');
 		$this->assertInstanceOf(Ghost::class, $user);
 	}
 
 	public function testGetUserObjectReturnsEmail(): void {
-		$user = $this->userMapper->getUserObject(Email::TYPE, 'email_user', 'Display', 'test@example.com', 'en');
+		$user = UserMapper::getUserObject(Email::TYPE, 'email_user', 'Display', 'test@example.com', 'en');
 		$this->assertInstanceOf(Email::class, $user);
 	}
 
 	public function testGetUserObjectReturnsExternalGenericUser(): void {
-		$user = $this->userMapper->getUserObject(UserBase::TYPE_EXTERNAL, 'ext1', 'External User');
+		$user = UserMapper::getUserObject(UserBase::TYPE_EXTERNAL, 'ext1', 'External User');
 		$this->assertInstanceOf(GenericUser::class, $user);
 	}
 
 	public function testGetUserObjectReturnsPublicGenericUser(): void {
-		$user = $this->userMapper->getUserObject(UserBase::TYPE_PUBLIC, 'pub1', 'Public User');
+		$user = UserMapper::getUserObject(UserBase::TYPE_PUBLIC, 'pub1', 'Public User');
 		$this->assertInstanceOf(GenericUser::class, $user);
 	}
 
 	public function testGetUserObjectThrowsForInvalidType(): void {
 		$this->expectException(InvalidShareTypeException::class);
-		$this->userMapper->getUserObject('invalid_type', 'user1');
+		UserMapper::getUserObject('invalid_type', 'user1');
 	}
 
 	// --- getParticipant: DB-touching paths ---

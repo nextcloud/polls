@@ -12,6 +12,16 @@ use JsonSerializable;
 use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\Group\Team;
+use OCA\Polls\Model\Group\ContactGroup;
+use OCA\Polls\Model\Group\Group;
+use OCA\Polls\Model\User\Anon;
+use OCA\Polls\Model\User\Contact;
+use OCA\Polls\Model\User\Email;
+use OCA\Polls\Model\User\GenericUser;
+use OCA\Polls\Model\User\Ghost;
+use OCA\Polls\Model\User\User;
+use OCA\Polls\Model\UserBase;
 use OCP\IURLGenerator;
 
 /**
@@ -66,7 +76,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 	public const TYPE_EXTERNAL = 'external';
 
 	// no direct Access
-	public const TYPE_CIRCLE = 'circle';
+	public const TYPE_TEAM = 'circle';
 	public const TYPE_CONTACTGROUP = 'contactGroup';
 
 
@@ -98,11 +108,11 @@ class Share extends EntityWithUser implements JsonSerializable {
 		self::TYPE_CONTACT,
 		self::TYPE_EMAIL,
 		self::TYPE_EXTERNAL,
-		self::TYPE_CIRCLE,
+		self::TYPE_TEAM,
 		self::TYPE_CONTACTGROUP,
 	];
 	public const RESOLVABLE_SHARES = [
-		self::TYPE_CIRCLE,
+		self::TYPE_TEAM,
 		self::TYPE_CONTACTGROUP
 	];
 
@@ -165,6 +175,25 @@ class Share extends EntityWithUser implements JsonSerializable {
 			'deleted' => boolval($this->getDeleted()),
 			'user' => $this->getUser()->getRichUserArray(),
 		];
+	}
+
+	public function resolveUser(): Ghost|Group|Team|Contact|ContactGroup|User|Email|GenericUser {
+		return UserMapper::getUserObject(
+			$this->getType(),
+			$this->getUserId(),
+			$this->getDisplayName(),
+			$this->getEmailAddress(),
+			$this->getLanguage(),
+			$this->getLocale(),
+			$this->getTimeZoneName()
+		);
+	}
+
+	public function getUser(): UserBase {
+		if ($this->getEntityAnonymization()) {
+			return new Anon($this->getUserId());
+		}
+		return $this->resolveUser();
 	}
 
 	/**

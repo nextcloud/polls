@@ -18,7 +18,7 @@ use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\TooShortException;
-use OCA\Polls\Model\Group\Circle;
+use OCA\Polls\Model\Group\Team;
 use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\Group\Group;
 use OCA\Polls\Model\Settings\SystemSettings;
@@ -72,12 +72,12 @@ class SystemService {
 	}
 
 	/**
-	 * Get a combined list of users, groups, circles, contact groups and contacts
+	 * Get a combined list of users, groups, team, contact groups and contacts
 	 *
 	 * @param list<int> $types list of types to search for
-	 * @return (Circle|Email|Group|User|Contact|ContactGroup|mixed)[]
+	 * @return (Team|Email|Group|User|Contact|ContactGroup|mixed)[]
 	 *
-	 * @psalm-return array<array-key, Circle|Email|Group|User|Contact|ContactGroup|mixed>
+	 * @psalm-return array<array-key, Team|Email|Group|User|Contact|ContactGroup|mixed>
 	 */
 	public function getSiteUsersAndGroups(string $query, array $types): array {
 		$list = [];
@@ -92,7 +92,7 @@ class SystemService {
 		} catch (Exception $e) {
 			// catch silent
 		}
-		// search more matches in circles, users, groups and contacts
+		// search more matches in teams, users, groups and contacts
 		$list = array_merge($list, $this->search($query, $types));
 
 		return $list;
@@ -133,7 +133,6 @@ class SystemService {
 					$IShareTypes[] = IShare::TYPE_EMAIL;
 					break;
 				case IShare::TYPE_CIRCLE:
-					$this->logger->error('Search for circles found');
 					$IShareTypes[] = IShare::TYPE_CIRCLE;
 					break;
 				case self::TYPE_CONTACT:
@@ -208,11 +207,11 @@ class SystemService {
 			}
 
 			foreach (($result['circles'] ?? []) as $item) {
-				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith'])->getRichUserArray();
+				$items[] = UserMapper::getUserObject(Team::TYPE, $item['value']['shareWith'])->getRichUserArray();
 			}
 
 			foreach (($result['exact']['circles'] ?? []) as $item) {
-				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith'])->getRichUserArray();
+				$items[] = UserMapper::getUserObject(Team::TYPE, $item['value']['shareWith'])->getRichUserArray();
 			}
 		}
 
@@ -378,7 +377,7 @@ class SystemService {
 
 		// get all shares for this poll
 		foreach ($this->shareMapper->findByPoll($share->getPollIdOrFail()) as $share) {
-			if ($share->getType() !== Circle::TYPE && $share->getUser()->hasName($compareUserName)) {
+			if ($share->getType() !== Team::TYPE && $share->getUser()->hasName($compareUserName)) {
 				throw new InvalidUsernameException;
 			}
 		}

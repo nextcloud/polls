@@ -12,7 +12,7 @@ use DateTimeZone;
 use JsonSerializable;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Helper\Hash;
-use OCA\Polls\Model\Group\Circle;
+use OCA\Polls\Model\Group\Team;
 use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\Group\Group;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -41,7 +41,7 @@ class UserBase implements JsonSerializable {
 	/** @var string */
 	public const TYPE_GUEST = 'guest';
 	/** @var string */
-	public const TYPE_CIRCLE = Circle::TYPE;
+	public const TYPE_TEAM = Team::TYPE;
 	/** @var string */
 	public const TYPE_CONTACT = Contact::TYPE;
 	/** @var string */
@@ -122,7 +122,7 @@ class UserBase implements JsonSerializable {
 	 * 		User::TYPE (NC User),
 	 * 		Admin::TYPE (NC user with admin rights),
 	 * 		Group::TYPE (NC Group),
-	 * 		Circle::TYPE (Share),
+	 * 		Team::TYPE (Share),
 	 * 		ContactGroup::TYPE (Share)
 	 * 		Anon::TYPE (Anonymized User)
 	 *
@@ -141,7 +141,7 @@ class UserBase implements JsonSerializable {
 	 * 		User::TYPE (NC User),
 	 * 		Admin::TYPE (NC user with admin rights),
 	 * 		Group::TYPE (NC Group),
-	 * 		Circle::TYPE (Share),
+	 * 		Team::TYPE (Share),
 	 * 		ContactGroup::TYPE (Share)
 	 * 		Anon::TYPE (Anonymized User)
 	 *
@@ -261,7 +261,7 @@ class UserBase implements JsonSerializable {
 			IShare::TYPE_GROUP,
 			IShare::TYPE_EMAIL
 		];
-		if (Circle::isEnabled() && class_exists('\OCA\Circles\ShareByCircleProvider')) {
+		if (Team::isEnabled()) {
 			$types[] = IShare::TYPE_CIRCLE;
 		}
 
@@ -286,12 +286,12 @@ class UserBase implements JsonSerializable {
 		$items = array_merge($items, Contact::search($query));
 		$items = array_merge($items, ContactGroup::search($query));
 
-		if (Circle::isEnabled()) {
+		if (Team::isEnabled()) {
 			foreach (($result['circles'] ?? []) as $item) {
-				$items[] = new Circle($item['value']['shareWith']);
+				$items[] = new Team($item['value']['shareWith']);
 			}
 			foreach (($result['exact']['circles'] ?? []) as $item) {
-				$items[] = new Circle($item['value']['shareWith']);
+				$items[] = new Team($item['value']['shareWith']);
 			}
 		}
 

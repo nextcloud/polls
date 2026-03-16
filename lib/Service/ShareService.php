@@ -404,7 +404,7 @@ class ShareService {
 			// prevent invtation sending, when no email address is given
 			$this->createNewShare(
 				$this->share->getPollIdOrFail(),
-				$this->userMapper->getUserObject(Share::TYPE_EXTERNAL, $userId, $displayName, $emailAddress, $language, $language, $timeZone),
+				UserMapper::getUserObject(Share::TYPE_EXTERNAL, $userId, $displayName, $emailAddress, $language, $language, $timeZone),
 				!$emailAddress,
 				$timeZone
 			);
@@ -534,7 +534,7 @@ class ShareService {
 			throw new InvalidShareTypeException('Cannot resolve members from share type ' . $share->getType());
 		}
 
-		foreach ($this->userMapper->getUserObject($share->getType(), $share->getUserId())->getMembers() as $member) {
+		foreach (UserMapper::getUserObject($share->getType(), $share->getUserId())->getMembers() as $member) {
 			try {
 				$newShare = $this->add($share->getPollIdOrFail(), $member->getType(), $member->getId());
 				$shares[] = $newShare;
@@ -561,7 +561,7 @@ class ShareService {
 		if (in_array($share->getType(), [Share::TYPE_USER, Share::TYPE_ADMIN], true)) {
 			$this->notificationService->sendInvitation($share->getPollIdOrFail(), $share->getUserId());
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
-			foreach ($this->userMapper->getUserFromShare($share)->getMembers() as $member) {
+			foreach ($share->resolveUser()->getMembers() as $member) {
 				$this->notificationService->sendInvitation($share->getPollIdOrFail(), $member->getId());
 			}
 		}
@@ -626,7 +626,7 @@ class ShareService {
 			}) {
 				$poll->request(Poll::PERMISSION_SHARE_ADD_EXTERNAL);
 			}
-			$shareUser = $this->userMapper->getUserObject($type, $userId, $displayName, $emailAddress);
+			$shareUser = UserMapper::getUserObject($type, $userId, $displayName, $emailAddress);
 			$preventInvitation = false;
 		} else {
 			$shareUser = $this->userMapper->getUserFromUserBase($userId);
