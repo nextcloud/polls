@@ -2,8 +2,8 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Apklausos",
-    "Team" : "Komanda",
     "Group" : "Grupė",
+    "Team" : "Komanda",
     "{owner} wants to inform you about the final result of the poll \"{title}\"" : "{owner} nori jus informuoti apie galutinius apklausos „{title}“ rezultatus",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Ši nuoroda suteikia jums asmeninę prieigą prie aukščiau paminėtos apklausos. Spustelėkite aukščiau esantį mygtuką arba nukopijuokite sekančią nuorodą ir įdėkite ją į savo naršyklės adresų juostą:",
     "Do not share this link with other people, because it is connected to your votes." : "Nebendrinkite šios nuorodos su kitais žmonėmis, nes ji yra susieta su jūsų balsais.",

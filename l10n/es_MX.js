@@ -2,9 +2,9 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Encuestas",
-    "Team" : "Equipo",
     "Contact group" : "Grupo de contacto",
     "Group" : "Grupo",
+    "Team" : "Equipo",
     "_Confirmed option:_::_Confirmed options:_" : ["Opción confirmada:","Opciones confirmadas:","Opciones confirmadas:"],
     "Legal Notice" : "Aviso legal",
     "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",

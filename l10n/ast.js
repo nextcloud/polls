@@ -2,8 +2,8 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Encuestes",
-    "Team" : "Equipu",
     "Group" : "Grupu",
+    "Team" : "Equipu",
     "Poll \"%s\" - Confirmation" : "Encuesta «%s» - Confirmación",
     "_Confirmed option:_::_Confirmed options:_" : ["Opción confrimada:","Opciones confirmaes:"],
     "%s has voted." : "%s votó.",

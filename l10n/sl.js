@@ -3,9 +3,9 @@ OC.L10N.register(
     {
     "Poll changes" : "Spremembe ankete",
     "Polls" : "Ankete",
-    "Team" : "Skupina",
     "Contact group" : "Skupina stikov",
     "Group" : "Skupina",
+    "Team" : "Skupina",
     "Poll \"%s\" - Confirmation" : "Anketa »%s« – potrditev",
     "This email is sent to you to inform you about the result of a poll you participated in. At least your name or your email address was recorded in this poll. If you want to be removed from this poll, contact the site administrator or the poll initiator, where the mail is sent from." : "Elektronsko sporočilo z rezultati izpolnjevanja ste prejeli, ker ste sodelovali pri anketi. Vaše ime in elektronski naslov sta bila pri tem zabeležena. Če se želite odstraniti s seznama, stopite v stik s skrbnikom oziroma avtorjem ankete, ki vam je sporočilo poslal.",
     "{owner} wants to inform you about the final result of the poll \"{title}\"" : "{owner} vas želi obvestiti o rezultatih ankete »{title}«",

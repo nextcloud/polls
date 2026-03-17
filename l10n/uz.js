@@ -1,9 +1,9 @@
 OC.L10N.register(
     "polls",
     {
-    "Team" : "Jamoa",
     "Contact group" : "Aloqadagi guruh",
     "Group" : "Guruh",
+    "Team" : "Jamoa",
     "_Confirmed option:_::_Confirmed options:_" : ["Tasdiqlangan variantlar:"],
     "Contact" : "Aloqa",
     "Loading…" : "Yuklanmoqda...",

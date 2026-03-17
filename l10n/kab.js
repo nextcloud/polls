@@ -1,8 +1,8 @@
 OC.L10N.register(
     "polls",
     {
-    "Team" : "Tarbaɛt",
     "Group" : "Agraw",
+    "Team" : "Tarbaɛt",
     "Privacy Policy" : "Tasertit n tbaḍnit",
     "User" : "Aseqdac",
     "No one." : "Ula yiwen.",

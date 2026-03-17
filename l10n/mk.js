@@ -2,8 +2,8 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Анкети",
-    "Team" : "Тим",
     "Group" : "Група",
+    "Team" : "Тим",
     "Poll invitation \"%s\"" : "Покана за анкета \"%s\"",
     "Reminder for poll \"%s\"" : "Потсетник за анкета \"%s\"",
     "{owner} sends you this reminder to make sure, your votes are set." : "{owner} ви испрати потсетник за да се осигура дека сте гласале.",

@@ -2,9 +2,9 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Aptaujas",
-    "Team" : "Komanda",
     "Contact group" : "Kontaktpersonu kopa",
     "Group" : "Grupa",
+    "Team" : "Komanda",
     "Privacy Policy" : "Privātuma politika",
     "Polls App - New Activity" : "Aptauju lietotne - jauna darbība",
     "A participant" : "Dalībnieks",

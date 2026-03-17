@@ -2,9 +2,9 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Апытанні",
-    "Team" : "Каманда",
     "Contact group" : "Група кантактаў",
     "Group" : "Група",
+    "Team" : "Каманда",
     "Contact" : "Кантакт",
     "User" : "Карыстальнік",
     "Poll" : "Апытанне",

@@ -2,8 +2,8 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Afstemning",
-    "Team" : "Team",
     "Group" : "Gruppe",
+    "Team" : "Team",
     "Go to poll" : "Gå til afstemninger",
     "Legal Notice" : "Juridisk notits",
     "Contact" : "takt",

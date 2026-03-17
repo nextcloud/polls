@@ -2,9 +2,9 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Voturi",
-    "Team" : "Echipă",
     "Contact group" : "Grup de contact",
     "Group" : "Grup",
+    "Team" : "Echipă",
     "%s has left a comment." : "%s a lăsat un comentariu.",
     "Contact" : "Contact",
     "User" : "Utilizator",

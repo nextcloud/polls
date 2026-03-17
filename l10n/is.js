@@ -2,9 +2,9 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Kannanir",
-    "Team" : "Teymi",
     "Contact group" : "Tengiliðahópur",
     "Group" : "Hópur",
+    "Team" : "Teymi",
     "Poll invitation \"%s\"" : "Boð um þátttöku í könnuninni \"%s\"",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} bauð þér að taka þátt í könnuninni \"{title}\"",
     "Go to poll" : "Fara á könnun",

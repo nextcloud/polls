@@ -3,9 +3,9 @@ OC.L10N.register(
     {
     "Poll changes" : "投票を更新",
     "Polls" : "投票",
-    "Team" : "チーム",
     "Contact group" : "連絡先グループ",
     "Group" : "グループ",
+    "Team" : "チーム",
     "Poll \"%s\" - Confirmation" : "投票 \"1%s\" - 確認",
     "This email is sent to you to inform you about the result of a poll you participated in. At least your name or your email address was recorded in this poll. If you want to be removed from this poll, contact the site administrator or the poll initiator, where the mail is sent from." : "このメールは、参加した投票の結果をお知らせするために送信されます。少なくともあなたの名前かメールアドレスはこの投票に記録されています。この投票から削除する場合は、メールの送信元であるサイト管理者または投票の開始者に連絡してください。",
     "{owner} wants to inform you about the final result of the poll \"{title}\"" : "{owner} があなたに投票「{title}」の最終結果についてお知らせしたいそうです。",
