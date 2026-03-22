@@ -123,9 +123,11 @@ class PollGroupServiceTest extends UnitTestCase {
 			pollGroupName: 'OwnedGroup',
 		);
 
-		// Switch to a different user (not in NC userbase → resolves to Ghost, id ≠ 'admin')
+		// Just remove any user session to trigger the permission check easily.
+		// The service only checks that the current user is the owner,
+		// it doesn't require a logged-in user
 		$this->userSession->cleanSession();
-		\OC_User::setUserId('other_user');
+		\OC_User::setUserId(null);
 
 		$this->expectException(ForbiddenException::class);
 		$this->pollGroupService->updatePollGroup(

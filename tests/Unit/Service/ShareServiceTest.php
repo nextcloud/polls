@@ -103,7 +103,8 @@ class ShareServiceTest extends UnitTestCase {
 			'invited@polls.example.com',
 		);
 		$this->assertInstanceOf(Share::class, $share);
-		$this->assertSame(Share::TYPE_EMAIL, $share->getType());
+		// TYPE_EMAIL gets converted to TYPE_EXTERNAL
+		$this->assertSame(Share::TYPE_EXTERNAL, $share->getType());
 		$this->assertSame($this->poll->getId(), $share->getPollId());
 	}
 

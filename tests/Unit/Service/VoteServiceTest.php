@@ -100,15 +100,18 @@ class VoteServiceTest extends UnitTestCase {
 	 */
 	private function loginAsOwner(): void {
 		$this->userSession->cleanSession();
+		\OC_User::setUserId('admin');
 		$this->session->set(UserSession::SESSION_KEY_SHARE_TOKEN, $this->ownerShare->getToken());
 	}
 
 	/**
 	 * Login as external participant via TYPE_EXTERNAL share.
-	 * UserSession resolves getCurrentUser() → GenericUser with TYPE_EXTERNAL.
+	 * Clear the NC user session first so isLoggedIn() returns false and
+	 * UserSession resolves getCurrentUser() via share token → GenericUser(TYPE_EXTERNAL).
 	 */
 	private function loginAsExternalUser(): void {
 		$this->userSession->cleanSession();
+		\OC_User::setUserId(null);
 		$this->session->set(UserSession::SESSION_KEY_SHARE_TOKEN, $this->externalShare->getToken());
 	}
 
