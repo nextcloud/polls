@@ -16,6 +16,8 @@ use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\UserSession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
 
 class OptionServiceTest extends UnitTestCase {
@@ -28,7 +30,7 @@ class OptionServiceTest extends UnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		\OC_User::setUserId('admin');
+		Server::get(IUserSession::class)->setUser(Server::get(IUserManager::class)->get('admin'));
 		Server::get(UserSession::class)->cleanSession();
 
 		$this->optionService = Server::get(OptionService::class);

@@ -21,6 +21,8 @@ use OCA\Polls\Service\VoteService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\UserSession;
 use OCP\ISession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
 
 class VoteServiceTest extends UnitTestCase {
@@ -100,7 +102,7 @@ class VoteServiceTest extends UnitTestCase {
 	 */
 	private function loginAsOwner(): void {
 		$this->userSession->cleanSession();
-		\OC_User::setUserId('admin');
+		Server::get(IUserSession::class)->setUser(Server::get(IUserManager::class)->get('admin'));
 		$this->session->set(UserSession::SESSION_KEY_SHARE_TOKEN, $this->ownerShare->getToken());
 	}
 
@@ -111,7 +113,7 @@ class VoteServiceTest extends UnitTestCase {
 	 */
 	private function loginAsExternalUser(): void {
 		$this->userSession->cleanSession();
-		\OC_User::setUserId(null);
+		Server::get(IUserSession::class)->setUser(null);
 		$this->session->set(UserSession::SESSION_KEY_SHARE_TOKEN, $this->externalShare->getToken());
 	}
 

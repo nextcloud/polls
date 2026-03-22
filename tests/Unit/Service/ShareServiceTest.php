@@ -18,6 +18,8 @@ use OCA\Polls\Service\ShareService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\UserSession;
 use OCP\ISession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
 
 class ShareServiceTest extends UnitTestCase {
@@ -80,7 +82,7 @@ class ShareServiceTest extends UnitTestCase {
 	private function login(): void {
 		$this->userSession->cleanSession();
 		// Set the core Nextcloud user session so IUserSession::isLoggedIn() returns true
-		\OC_User::setUserId('admin');
+		Server::get(IUserSession::class)->setUser(Server::get(IUserManager::class)->get('admin'));
 		$this->session->set(UserSession::SESSION_KEY_SHARE_TOKEN, $this->userShare->getToken());
 	}
 

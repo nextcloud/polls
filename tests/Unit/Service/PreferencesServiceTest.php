@@ -12,6 +12,8 @@ use OCA\Polls\Db\Preferences;
 use OCA\Polls\Service\PreferencesService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\UserSession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
 
 class PreferencesServiceTest extends UnitTestCase {
@@ -19,7 +21,7 @@ class PreferencesServiceTest extends UnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		\OC_User::setUserId('admin');
+		Server::get(IUserSession::class)->setUser(Server::get(IUserManager::class)->get('admin'));
 		Server::get(UserSession::class)->cleanSession();
 
 		// PreferencesService is a singleton; call load() explicitly so it picks

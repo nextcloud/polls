@@ -15,6 +15,8 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\UserSession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
 
 class CommentServiceTest extends UnitTestCase {
@@ -26,7 +28,7 @@ class CommentServiceTest extends UnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		\OC_User::setUserId('admin');
+		Server::get(IUserSession::class)->setUser(Server::get(IUserManager::class)->get('admin'));
 		Server::get(UserSession::class)->cleanSession();
 
 		$this->commentService = Server::get(CommentService::class);

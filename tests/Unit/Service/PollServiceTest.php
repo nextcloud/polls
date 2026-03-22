@@ -18,6 +18,8 @@ use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\UserSession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
 
 class PollServiceTest extends UnitTestCase {
@@ -27,7 +29,7 @@ class PollServiceTest extends UnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		\OC_User::setUserId('admin');
+		Server::get(IUserSession::class)->setUser(Server::get(IUserManager::class)->get('admin'));
 		Server::get(UserSession::class)->cleanSession();
 
 		$this->pollService = Server::get(PollService::class);

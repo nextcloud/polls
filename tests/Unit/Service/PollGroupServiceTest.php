@@ -17,6 +17,8 @@ use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Service\PollGroupService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\UserSession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
 
 class PollGroupServiceTest extends UnitTestCase {
@@ -30,7 +32,7 @@ class PollGroupServiceTest extends UnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->userSession = Server::get(UserSession::class);
-		\OC_User::setUserId('admin');
+		Server::get(IUserSession::class)->setUser(Server::get(IUserManager::class)->get('admin'));
 		$this->userSession->cleanSession();
 
 		$this->pollGroupService = Server::get(PollGroupService::class);
@@ -127,7 +129,7 @@ class PollGroupServiceTest extends UnitTestCase {
 		// The service only checks that the current user is the owner,
 		// it doesn't require a logged-in user
 		$this->userSession->cleanSession();
-		\OC_User::setUserId(null);
+		Server::get(IUserSession::class)->setUser(null);
 
 		$this->expectException(ForbiddenException::class);
 		$this->pollGroupService->updatePollGroup(

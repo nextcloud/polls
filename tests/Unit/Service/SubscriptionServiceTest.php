@@ -14,6 +14,7 @@ use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\UserSession;
 use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
 
 class SubscriptionServiceTest extends UnitTestCase {
@@ -35,7 +36,7 @@ class SubscriptionServiceTest extends UnitTestCase {
 		if ($adminUser !== null && !$adminUser->getEMailAddress()) {
 			$adminUser->setEMailAddress('admin@test.local');
 		}
-		\OC_User::setUserId('admin');
+		Server::get(IUserSession::class)->setUser($adminUser);
 
 		// Reset the polls UserSession cache so getCurrentUser() is re-resolved
 		// from the core session set above.
