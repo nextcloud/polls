@@ -16,21 +16,24 @@ use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Service\PollGroupService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\ISession;
+use OCA\Polls\UserSession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
 
 class PollGroupServiceTest extends UnitTestCase {
 	private PollGroupService $pollGroupService;
 	private PollGroupMapper $pollGroupMapper;
 	private PollMapper $pollMapper;
-	private ISession $session;
+	private UserSession $userSession;
 
 	private Poll $poll;
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->session = Server::get(ISession::class);
-		$this->session->set('ncPollsUserId', 'admin');
+		$this->userSession = Server::get(UserSession::class);
+		Server::get(IUserSession::class)->setUser(Server::get(IUserManager::class)->get('admin'));
+		$this->userSession->cleanSession();
 
 		$this->pollGroupService = Server::get(PollGroupService::class);
 		$this->pollGroupMapper = Server::get(PollGroupMapper::class);
@@ -122,8 +125,11 @@ class PollGroupServiceTest extends UnitTestCase {
 			pollGroupName: 'OwnedGroup',
 		);
 
-		// Switch session to a different user
-		$this->session->set('ncPollsUserId', 'other_user');
+		// Just remove any user session to trigger the permission check easily.
+		// The service only checks that the current user is the owner,
+		// it doesn't require a logged-in user
+		$this->userSession->cleanSession();
+		Server::get(IUserSession::class)->setUser(null);
 
 		$this->expectException(ForbiddenException::class);
 		$this->pollGroupService->updatePollGroup(
@@ -151,7 +157,6 @@ class PollGroupServiceTest extends UnitTestCase {
 			$this->pollGroupService->addPollToPollGroup($poll2->getId(), pollGroupId: $group->getId());
 
 			// Remove only the first poll; group should survive
-			$this->session->set('ncPollsUserId', 'admin');
 			$remaining = $this->pollGroupService->removePollFromPollGroup(
 				$this->poll->getId(),
 				$group->getId(),

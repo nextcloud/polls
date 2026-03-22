@@ -13,7 +13,6 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\ISession;
 use OCP\Server;
 
 class ShareMapperTest extends UnitTestCase {
@@ -26,9 +25,6 @@ class ShareMapperTest extends UnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		$session = Server::get(ISession::class);
-		$session->set('ncPollsUserId', 'TestUser');
-
 		$this->shareMapper = Server::get(ShareMapper::class);
 		$this->pollMapper = Server::get(PollMapper::class);
 

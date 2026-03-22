@@ -24,11 +24,7 @@ class UserSession {
 	/** @var string */
 	public const SESSION_KEY_CRON_JOB = 'ncPollsCronJob';
 	/** @var string */
-	public const SESSION_KEY_USER_ID = 'ncPollsUserId';
-	/** @var string */
 	public const SESSION_KEY_SHARE_TOKEN = 'ncPollsPublicToken';
-	/** @var string */
-	public const SESSION_KEY_SHARE_TYPE = 'ncPollsShareType';
 	/** @var string */
 	public const CLIENT_ID = 'ncPollsClientId';
 	/** @var string */
@@ -37,7 +33,7 @@ class UserSession {
 	public const TABLE = Share::TABLE;
 
 	protected ?UserBase $currentUser = null;
-	// protected Share|null $share = null;
+	private ?string $userId = null;
 
 	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
@@ -83,11 +79,11 @@ class UserSession {
 			return 'CONSOLE';
 		}
 
-		if (!$this->session->get(self::SESSION_KEY_USER_ID)) {
-			$this->session->set(self::SESSION_KEY_USER_ID, $this->getCurrentUser()->getId());
+		if ($this->userId === null) {
+			$this->userId = $this->getCurrentUser()->getId();
 		}
 
-		return (string)$this->session->get(self::SESSION_KEY_USER_ID);
+		return $this->userId;
 	}
 
 	public function getIsLoggedIn(): bool {
@@ -96,10 +92,9 @@ class UserSession {
 
 	public function cleanSession(): void {
 		$this->session->remove(self::SESSION_KEY_SHARE_TOKEN);
-		$this->session->remove(self::SESSION_KEY_SHARE_TYPE);
-		$this->session->remove(self::SESSION_KEY_USER_ID);
 		$this->share = new Share();
 		$this->currentUser = null;
+		$this->userId = null;
 	}
 
 	/**
@@ -163,11 +158,7 @@ class UserSession {
 			return '';
 		}
 
-		if (!$this->session->get(self::SESSION_KEY_SHARE_TYPE)) {
-			$this->session->set(self::SESSION_KEY_SHARE_TYPE, $this->getShare()->getType());
-		}
-
-		return (string)$this->session->get(self::SESSION_KEY_SHARE_TYPE);
+		return $this->getShare()->getType();
 	}
 
 	public function getClientId(): string {

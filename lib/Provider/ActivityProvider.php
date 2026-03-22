@@ -11,6 +11,7 @@ namespace OCA\Polls\Provider;
 use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
+use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\Service\ActivityService;
 use OCP\Activity\Exceptions\UnknownActivityException;
@@ -69,21 +70,18 @@ class ActivityProvider implements IProvider {
 	protected function setSubjects(IEvent $event, string $subject): void {
 		$parameters = $this->patchParameters($event->getSubjectParameters());
 
-		try {
-			$actor = $this->userMapper->getParticipant($event->getAuthor(), $event->getObjectId());
-			$parameters['actor'] = [
-				'type' => $actor->getSimpleType(),
-				'id' => $actor->getId(),
-				'name' => $actor->getDisplayName(),
-			];
-		} catch (\Exception $e) {
-			$parameters['actor'] = [
-				'type' => UserBase::TYPE_GUEST,
-				'id' => $event->getAuthor(),
-				'name' => 'An unknown participant',
-			];
+		/** @psalm-suppress RedundantCast */
+		$actor = $this->userMapper->getUser($event->getAuthor(), (int)$event->getObjectId());
+
+		if ($actor instanceof Ghost) {
+			$actor = new UserBase($actor->getId(), UserBase::TYPE_GUEST, $actor->getDisplayName(), 'An unknown participant');
 		}
 
+		$parameters['actor'] = [
+			'type' => $actor->getSimpleType(),
+			'id' => $actor->getId(),
+			'name' => $actor->getDisplayName(),
+		];
 
 		$placeholders = $replacements = [];
 		foreach ($parameters as $placeholder => $parameter) {

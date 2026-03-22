@@ -18,6 +18,7 @@ use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\TooShortException;
+use OCA\Polls\Helper\NameGenerator;
 use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\Group\Group;
 use OCA\Polls\Model\Group\Team;
@@ -25,6 +26,7 @@ use OCA\Polls\Model\Settings\SystemSettings;
 use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
 use OCA\Polls\Model\User\User;
+use OCA\Polls\Model\UserBase;
 use OCP\BackgroundJob\IJob;
 use OCP\BackgroundJob\IJobList;
 use OCP\Collaboration\Collaborators\ISearch;
@@ -207,11 +209,11 @@ class SystemService {
 			}
 
 			foreach (($result['circles'] ?? []) as $item) {
-				$items[] = UserMapper::getUserObject(Team::TYPE, $item['value']['shareWith'])->getRichUserArray();
+				$items[] = UserMapper::createUserObject(UserBase::TYPE_TEAM, $item['value']['shareWith'])->getRichUserArray();
 			}
 
 			foreach (($result['exact']['circles'] ?? []) as $item) {
-				$items[] = UserMapper::getUserObject(Team::TYPE, $item['value']['shareWith'])->getRichUserArray();
+				$items[] = UserMapper::createUserObject(UserBase::TYPE_TEAM, $item['value']['shareWith'])->getRichUserArray();
 			}
 		}
 
@@ -259,6 +261,20 @@ class SystemService {
 	public function validatePublicUsernameByToken(string $userName, string $token): string {
 		$share = $this->shareMapper->findByToken($token);
 		return $this->validatePublicUsername($userName, $share);
+	}
+
+	public function getRandomDisplayName(string $token): string {
+		$share = $this->shareMapper->findByToken($token);
+		for ($i = 0; $i < 10; $i++) {
+			$userName = NameGenerator::generateRandom();
+			try {
+				$this->validatePublicUsername($userName, $share);
+				return $userName;
+			} catch (InvalidUsernameException|TooShortException) {
+				$userName = '';
+			}
+		}
+		return $userName;
 	}
 
 	/**
@@ -377,7 +393,7 @@ class SystemService {
 
 		// get all shares for this poll
 		foreach ($this->shareMapper->findByPoll($share->getPollIdOrFail()) as $share) {
-			if ($share->getType() !== Team::TYPE && $share->getUser()->hasName($compareUserName)) {
+			if ($share->getType() !== UserBase::TYPE_TEAM && $share->getUser()->hasName($compareUserName)) {
 				throw new InvalidUsernameException;
 			}
 		}

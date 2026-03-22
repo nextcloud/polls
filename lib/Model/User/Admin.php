@@ -15,9 +15,4 @@ class Admin extends User {
 	public function __construct(string $id) {
 		parent::__construct($id, self::TYPE);
 	}
-
-	public function getPrincipalUri(): string {
-		return 'principals/users/' . $this->getId();
-	}
-
 }

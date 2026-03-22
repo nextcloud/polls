@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Model\User;
 
+use OCA\Polls\Helper\NameGenerator;
 use OCA\Polls\Model\UserBase;
 
 class Ghost extends UserBase {
@@ -23,7 +24,15 @@ class Ghost extends UserBase {
 	}
 
 	public function getDisplayName(): string {
-		return 'Deleted User';
+		return NameGenerator::generate($this->id);
+	}
+
+	public function getDescription(): string {
+		return 'Deleted user';
+	}
+
+	public function getIsNoUser(): bool {
+		return true;
 	}
 
 }

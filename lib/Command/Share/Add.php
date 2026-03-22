@@ -12,9 +12,7 @@ use OC\Core\Command\Base;
 use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
-use OCA\Polls\Model\Group\Group;
-use OCA\Polls\Model\User\Email;
-use OCA\Polls\Model\User\User;
+use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
@@ -86,7 +84,7 @@ class Add extends Base {
 	private function inviteUsers(Poll $poll, array $userIds): void {
 		foreach ($userIds as $userId) {
 			try {
-				$share = $this->shareService->add($poll->getId(), User::TYPE, $userId);
+				$share = $this->shareService->add($poll->getId(), UserBase::TYPE_USER, $userId);
 				$this->shareService->sendInvitation($share);
 			} catch (ShareAlreadyExistsException $e) {
 				// silently ignore already existing shares
@@ -102,7 +100,7 @@ class Add extends Base {
 	private function inviteGroups(Poll $poll, array $groupIds): void {
 		foreach ($groupIds as $groupId) {
 			try {
-				$share = $this->shareService->add($poll->getId(), Group::TYPE, $groupId);
+				$share = $this->shareService->add($poll->getId(), UserBase::TYPE_GROUP, $groupId);
 				$this->shareService->sendInvitation($share);
 			} catch (ShareAlreadyExistsException $e) {
 				// silently ignore already existing shares
@@ -118,7 +116,7 @@ class Add extends Base {
 	private function inviteEmails(Poll $poll, array $emails): void {
 		foreach ($emails as $email) {
 			try {
-				$share = $this->shareService->add($poll->getId(), Email::TYPE, $email);
+				$share = $this->shareService->add($poll->getId(), UserBase::TYPE_EMAIL, $email);
 				$this->shareService->sendInvitation($share);
 			} catch (ShareAlreadyExistsException $e) {
 				// silently ignore already existing shares

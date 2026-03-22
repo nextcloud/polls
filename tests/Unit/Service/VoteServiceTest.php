@@ -21,6 +21,8 @@ use OCA\Polls\Service\VoteService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\UserSession;
 use OCP\ISession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
 
 class VoteServiceTest extends UnitTestCase {
@@ -100,18 +102,19 @@ class VoteServiceTest extends UnitTestCase {
 	 */
 	private function loginAsOwner(): void {
 		$this->userSession->cleanSession();
+		Server::get(IUserSession::class)->setUser(Server::get(IUserManager::class)->get('admin'));
 		$this->session->set(UserSession::SESSION_KEY_SHARE_TOKEN, $this->ownerShare->getToken());
-		$this->session->set(UserSession::SESSION_KEY_USER_ID, 'admin');
 	}
 
 	/**
 	 * Login as external participant via TYPE_EXTERNAL share.
-	 * UserSession resolves getCurrentUser() → GenericUser with TYPE_EXTERNAL.
+	 * Clear the NC user session first so isLoggedIn() returns false and
+	 * UserSession resolves getCurrentUser() via share token → GenericUser(TYPE_EXTERNAL).
 	 */
 	private function loginAsExternalUser(): void {
 		$this->userSession->cleanSession();
+		Server::get(IUserSession::class)->setUser(null);
 		$this->session->set(UserSession::SESSION_KEY_SHARE_TOKEN, $this->externalShare->getToken());
-		$this->session->set(UserSession::SESSION_KEY_USER_ID, self::EXTERNAL_USER_ID);
 	}
 
 	// --- set vote ---

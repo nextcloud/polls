@@ -11,20 +11,21 @@ namespace OCA\Polls\Tests\Unit\Service;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Service\PreferencesService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\ISession;
+use OCA\Polls\UserSession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
 
 class PreferencesServiceTest extends UnitTestCase {
 	private PreferencesService $preferencesService;
-	private ISession $session;
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->session = Server::get(ISession::class);
-		$this->session->set('ncPollsUserId', 'admin');
+		Server::get(IUserSession::class)->setUser(Server::get(IUserManager::class)->get('admin'));
+		Server::get(UserSession::class)->cleanSession();
 
 		// PreferencesService is a singleton; call load() explicitly so it picks
-		// up the session user set above instead of whatever was set before.
+		// up the active user instead of whatever was cached before.
 		$this->preferencesService = Server::get(PreferencesService::class);
 		$this->preferencesService->load();
 	}

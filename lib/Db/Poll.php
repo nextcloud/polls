@@ -516,6 +516,13 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return $this->getOwner();
 	}
 
+	/**
+	 * Return null for user identification for the poll user to support caching
+	 */
+	public function getUserRelevantPollId(): ?int {
+		return null;
+	}
+
 	// alias of setOwner($value)
 	public function setUserId(string $userId): void {
 		$this->setOwner($userId);

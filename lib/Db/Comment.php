@@ -67,7 +67,7 @@ class Comment extends EntityWithUser implements JsonSerializable {
 		try {
 			/* @var UserMapper $userMapper */
 			$userMapper = (Container::queryClass(UserMapper::class));
-			$user = $userMapper->getParticipant($this->getRecipient(), $this->getPollId());
+			$user = $userMapper->getUser($this->getRecipient(), $this->getPollId());
 		} catch (Exception $e) {
 			return null;
 		}

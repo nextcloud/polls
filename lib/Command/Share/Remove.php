@@ -12,11 +12,7 @@ use OC\Core\Command\Base;
 use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
-use OCA\Polls\Model\Group\Group;
-use OCA\Polls\Model\User\Contact;
-use OCA\Polls\Model\User\Email;
-use OCA\Polls\Model\User\GenericUser;
-use OCA\Polls\Model\User\User;
+use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -126,7 +122,7 @@ class Remove extends Base {
 	private function getUserShares(Poll $poll): array {
 		$shares = $this->shareMapper->findByPoll($poll->getId());
 		return array_values(array_filter($shares, static function (Share $share): bool {
-			return ($share->getType() === User::TYPE);
+			return ($share->getType() === UserBase::TYPE_USER);
 		}));
 	}
 
@@ -138,7 +134,7 @@ class Remove extends Base {
 	private function getGroupShares(Poll $poll): array {
 		$shares = $this->shareMapper->findByPoll($poll->getId());
 		return array_values(array_filter($shares, static function (Share $share): bool {
-			return ($share->getType() === Group::TYPE);
+			return ($share->getType() === UserBase::TYPE_GROUP);
 		}));
 	}
 
@@ -150,11 +146,11 @@ class Remove extends Base {
 	private function getEmailShares(Poll $poll): array {
 		$shares = $this->shareMapper->findByPoll($poll->getId());
 		return array_values(array_filter($shares, static function (Share $share): bool {
-			if (($share->getType() === GenericUser::TYPE) && $share->getEmailAddress()) {
+			if (($share->getType() === UserBase::TYPE_GENERIC) && $share->getEmailAddress()) {
 				return true;
 			}
 
-			return (($share->getType() === Email::TYPE) || ($share->getType() === Contact::TYPE));
+			return (($share->getType() === UserBase::TYPE_EMAIL) || ($share->getType() === UserBase::TYPE_CONTACT));
 		}));
 	}
 }
