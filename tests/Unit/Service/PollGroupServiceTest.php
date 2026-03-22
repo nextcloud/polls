@@ -16,21 +16,22 @@ use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Service\PollGroupService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\ISession;
+use OCA\Polls\UserSession;
 use OCP\Server;
 
 class PollGroupServiceTest extends UnitTestCase {
 	private PollGroupService $pollGroupService;
 	private PollGroupMapper $pollGroupMapper;
 	private PollMapper $pollMapper;
-	private ISession $session;
+	private UserSession $userSession;
 
 	private Poll $poll;
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->session = Server::get(ISession::class);
-		$this->session->set('ncPollsUserId', 'admin');
+		$this->userSession = Server::get(UserSession::class);
+		\OC_User::setUserId('admin');
+		$this->userSession->cleanSession();
 
 		$this->pollGroupService = Server::get(PollGroupService::class);
 		$this->pollGroupMapper = Server::get(PollGroupMapper::class);
@@ -122,8 +123,9 @@ class PollGroupServiceTest extends UnitTestCase {
 			pollGroupName: 'OwnedGroup',
 		);
 
-		// Switch session to a different user
-		$this->session->set('ncPollsUserId', 'other_user');
+		// Switch to a different user (not in NC userbase → resolves to Ghost, id ≠ 'admin')
+		$this->userSession->cleanSession();
+		\OC_User::setUserId('other_user');
 
 		$this->expectException(ForbiddenException::class);
 		$this->pollGroupService->updatePollGroup(
@@ -151,7 +153,6 @@ class PollGroupServiceTest extends UnitTestCase {
 			$this->pollGroupService->addPollToPollGroup($poll2->getId(), pollGroupId: $group->getId());
 
 			// Remove only the first poll; group should survive
-			$this->session->set('ncPollsUserId', 'admin');
 			$remaining = $this->pollGroupService->removePollFromPollGroup(
 				$this->poll->getId(),
 				$group->getId(),

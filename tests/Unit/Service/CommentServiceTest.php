@@ -14,21 +14,20 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\ISession;
+use OCA\Polls\UserSession;
 use OCP\Server;
 
 class CommentServiceTest extends UnitTestCase {
 	private CommentService $commentService;
 	private CommentMapper $commentMapper;
 	private PollMapper $pollMapper;
-	private ISession $session;
 
 	private Poll $poll;
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->session = Server::get(ISession::class);
-		$this->session->set('ncPollsUserId', 'admin');
+		\OC_User::setUserId('admin');
+		Server::get(UserSession::class)->cleanSession();
 
 		$this->commentService = Server::get(CommentService::class);
 		$this->commentMapper = Server::get(CommentMapper::class);

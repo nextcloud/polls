@@ -82,7 +82,6 @@ class ShareServiceTest extends UnitTestCase {
 		// Set the core Nextcloud user session so IUserSession::isLoggedIn() returns true
 		\OC_User::setUserId('admin');
 		$this->session->set(UserSession::SESSION_KEY_SHARE_TOKEN, $this->userShare->getToken());
-		$this->session->set(UserSession::SESSION_KEY_USER_ID, 'admin');
 	}
 
 	// --- add ---

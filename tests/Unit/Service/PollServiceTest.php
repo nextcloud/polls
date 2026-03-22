@@ -17,19 +17,18 @@ use OCA\Polls\Exceptions\InvalidShowResultsException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\ISession;
+use OCA\Polls\UserSession;
 use OCP\Server;
 
 class PollServiceTest extends UnitTestCase {
 	private PollService $pollService;
 	private PollMapper $pollMapper;
-	private ISession $session;
 	private Poll $poll;
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->session = Server::get(ISession::class);
-		$this->session->set('ncPollsUserId', 'admin');
+		\OC_User::setUserId('admin');
+		Server::get(UserSession::class)->cleanSession();
 
 		$this->pollService = Server::get(PollService::class);
 		$this->pollMapper = Server::get(PollMapper::class);

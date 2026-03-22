@@ -16,11 +16,9 @@ use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
-use OCP\ISession;
 use OCP\Server;
 
 class OptionMapperTest extends UnitTestCase {
-	private ISession $session;
 	private OptionMapper $optionMapper;
 	private PollMapper $pollMapper;
 	private VoteMapper $voteMapper;
@@ -36,9 +34,6 @@ class OptionMapperTest extends UnitTestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->session = Server::get(ISession::class);
-		$this->session->set('ncPollsUserId', 'TestUser');
-
 		$this->voteMapper = Server::get(VoteMapper::class);
 		$this->optionMapper = Server::get(OptionMapper::class);
 		$this->pollMapper = Server::get(PollMapper::class);

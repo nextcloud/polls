@@ -15,13 +15,12 @@ use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\ISession;
+use OCA\Polls\UserSession;
 use OCP\Server;
 
 class OptionServiceTest extends UnitTestCase {
 	private OptionService $optionService;
 	private PollMapper $pollMapper;
-	private ISession $session;
 
 	private Poll $textPoll;
 	private Poll $datePoll;
@@ -29,8 +28,8 @@ class OptionServiceTest extends UnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		$this->session = Server::get(ISession::class);
-		$this->session->set('ncPollsUserId', 'admin');
+		\OC_User::setUserId('admin');
+		Server::get(UserSession::class)->cleanSession();
 
 		$this->optionService = Server::get(OptionService::class);
 		$this->pollMapper = Server::get(PollMapper::class);

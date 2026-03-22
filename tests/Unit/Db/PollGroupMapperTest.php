@@ -13,7 +13,6 @@ use OCA\Polls\Db\PollGroup;
 use OCA\Polls\Db\PollGroupMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\ISession;
 use OCP\Server;
 
 class PollGroupMapperTest extends UnitTestCase {
@@ -26,9 +25,6 @@ class PollGroupMapperTest extends UnitTestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		$session = Server::get(ISession::class);
-		$session->set('ncPollsUserId', 'TestUser');
-
 		$this->pollGroupMapper = Server::get(PollGroupMapper::class);
 		$this->pollMapper = Server::get(PollMapper::class);
 

@@ -13,14 +13,12 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\UserSession;
-use OCP\ISession;
 use OCP\IUserManager;
 use OCP\Server;
 
 class SubscriptionServiceTest extends UnitTestCase {
 	private SubscriptionService $subscriptionService;
 	private PollMapper $pollMapper;
-	private ISession $session;
 	private string $adminOriginalEmail = '';
 
 	private Poll $poll;
@@ -40,12 +38,9 @@ class SubscriptionServiceTest extends UnitTestCase {
 		\OC_User::setUserId('admin');
 
 		// Reset the polls UserSession cache so getCurrentUser() is re-resolved
-		// from the core session set above, then restore the polls session key.
-		$userSession = Server::get(UserSession::class);
-		$userSession->cleanSession();
+		// from the core session set above.
+		Server::get(UserSession::class)->cleanSession();
 
-		$this->session = Server::get(ISession::class);
-		$this->session->set('ncPollsUserId', 'admin');
 
 		$this->subscriptionService = Server::get(SubscriptionService::class);
 		$this->pollMapper = Server::get(PollMapper::class);

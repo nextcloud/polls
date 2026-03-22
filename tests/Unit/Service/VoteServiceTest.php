@@ -101,7 +101,6 @@ class VoteServiceTest extends UnitTestCase {
 	private function loginAsOwner(): void {
 		$this->userSession->cleanSession();
 		$this->session->set(UserSession::SESSION_KEY_SHARE_TOKEN, $this->ownerShare->getToken());
-		$this->session->set(UserSession::SESSION_KEY_USER_ID, 'admin');
 	}
 
 	/**
@@ -111,7 +110,6 @@ class VoteServiceTest extends UnitTestCase {
 	private function loginAsExternalUser(): void {
 		$this->userSession->cleanSession();
 		$this->session->set(UserSession::SESSION_KEY_SHARE_TOKEN, $this->externalShare->getToken());
-		$this->session->set(UserSession::SESSION_KEY_USER_ID, self::EXTERNAL_USER_ID);
 	}
 
 	// --- set vote ---
