@@ -48,6 +48,8 @@ use OCP\IURLGenerator;
  * @method void setLocked(int $value)
  * @method string getDisplayName()
  * @method void setDisplayName(string $value)
+ * @method string getLabel()
+ * @method void setLabel(string $value)
  * @method string getMiscSettings()
  * @method void setMiscSettings(string $value)
  * @method ?int getAnonymizedVotes()
@@ -63,17 +65,17 @@ class Share extends EntityWithUser implements JsonSerializable {
 	public const EMAIL_DISABLED = 'disabled';
 
 	// Only authenticated access
-	public const TYPE_USER = 'user';
-	public const TYPE_ADMIN = 'admin';
-	public const TYPE_GROUP = 'group';
+	public const TYPE_USER = UserBase::TYPE_USER;
+	public const TYPE_ADMIN = UserBase::TYPE_ADMIN;
+	public const TYPE_GROUP = UserBase::TYPE_GROUP;
 
 	// Public and authenticated Access
-	public const TYPE_PUBLIC = 'public';
+	public const TYPE_PUBLIC = UserBase::TYPE_PUBLIC;
 
 	// Only public access
-	public const TYPE_EMAIL = 'email';
-	public const TYPE_CONTACT = 'contact';
-	public const TYPE_EXTERNAL = 'external';
+	public const TYPE_EMAIL = UserBase::TYPE_EMAIL;
+	public const TYPE_CONTACT = UserBase::TYPE_CONTACT;
+	public const TYPE_EXTERNAL = UserBase::TYPE_EXTERNAL;
 
 	// no direct Access
 	public const TYPE_TEAM = 'circle';
@@ -178,7 +180,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function resolveUser(): Ghost|Group|Team|Contact|ContactGroup|User|Email|GenericUser {
-		return UserMapper::getUserObject(
+		return UserMapper::createUserObject(
 			$this->getType(),
 			$this->getUserId(),
 			$this->getDisplayName(),
@@ -243,21 +245,12 @@ class Share extends EntityWithUser implements JsonSerializable {
 	}
 
 	/**
-	 * Share label for public shares, now stored as displayName
-	 * TODO: remove after migration was introduced
-	 */
-	public function setLabel(string $label): void {
-		$this->setDisplayName($label);
-		$this->label = $label;
-	}
-
-	/**
 	 * Share label for public shares
 	 * TODO: remove after migrating labels to displayName
 	 */
 	public function getLabel(): string {
 		// In case of public poll use label as fallback for displayName
-		return $this->displayName ?? $this->label ?? '';
+		return $this->label ?? $this->displayName ?? '';
 	}
 
 	/**
@@ -265,11 +258,35 @@ class Share extends EntityWithUser implements JsonSerializable {
 	 * TODO: remove public poll check after migration labels to displayName
 	 */
 	public function getDisplayName(): string {
-		if ($this->getType() === self::TYPE_PUBLIC) {
-			return $this->getLabel();
-		}
 		return $this->displayName ?? '';
 	}
+
+	public function setFromUserObject(UserBase $userGroup, string $token, string $purpose = 'poll'): void {
+		// Contacts are converted: with email → email share, without email → external share
+		$type = $userGroup->getType();
+		if ($type === self::TYPE_CONTACT || $type === self::TYPE_EMAIL) {
+			$type = self::TYPE_EXTERNAL;
+		}
+
+		$this->setType($type);
+		$this->setDisplayName($userGroup->getDisplayName());
+		$this->setEmailAddress($userGroup->getEmailAddress());
+
+		// ignore if share is for poll Groups
+		if ($purpose === 'poll') {
+			if ($type === self::TYPE_PUBLIC) {
+				// public share to create, set token as userId
+				$this->setUserId($token);
+			} else {
+				$this->setUserId($userGroup->getShareUserId());
+			}
+			if ($type === self::TYPE_EXTERNAL) {
+				$this->setLanguage($userGroup->getLanguageCode());
+				$this->setTimeZoneName($userGroup->getTimeZoneName());
+			}
+		}
+	}
+
 
 	public function getTimeZoneName(): string {
 		return $this->getMiscSettingsArray()['timeZone'] ?? '';

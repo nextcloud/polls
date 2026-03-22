@@ -36,6 +36,9 @@ use OCP\IUserManager;
 class UserMapper extends QBMapper {
 	public const TABLE = Share::TABLE;
 
+	/** @var array<string, UserBase> */
+	private static array $userCache = [];
+
 	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		IDBConnection $db,
@@ -50,32 +53,43 @@ class UserMapper extends QBMapper {
 	 * Returns a UserBase child from share determined by userId and pollId or from userbase by userId
 	 *
 	 * @param string $userId
-	 * @param int|string|null $pollId Can only be used together with $userId and will return the internal user or the share user
+	 * @param int|null $pollId Can only be used together with $userId and will return the internal user or the share user
 	 * @return UserBase
 	 **/
-	public function getParticipant(string $userId, int|string|null $pollId): UserBase {
-		$pollId = is_string($pollId) ? (int)$pollId : $pollId;
+	public function getUser(string $userId, ?int $pollId = null): UserBase {
 		if ($userId === '') {
 			return new UserBase($userId, UserBase::TYPE_EMPTY);
 		}
 
 		try {
-			return $this->getUserFromUserBase($userId, $pollId);
-		} catch (UserNotFoundException $e) {
-			// just catch and continue if not found and try to find user by share;
+			return $this->getCachedUser($userId, $pollId);
+		} catch (UserNotFoundException) {
+			// Not found in cache, continue to fetch from userbase or share
 		}
 
 		try {
-			if ($pollId === null) {
-				throw new ShareNotFoundException('PollId is required to get share user');
+			$user = $this->getUserFromUserBase($userId);
+			try {
+				if ($pollId !== null && $this->getShareByPollAndUser($userId, $pollId)->getType() === Share::TYPE_ADMIN) {
+					$user = new Admin($userId);
+				}
+			} catch (ShareNotFoundException) {
+				// No admin share found
 			}
-			$share = $this->getShareByPollAndUser($userId, $pollId);
-			return $share->resolveUser();
-		} catch (ShareNotFoundException $e) {
-			// User seems to be probaly deleted, use fake share
+		} catch (UserNotFoundException) {
+			try {
+				if ($pollId === null) {
+					throw new ShareNotFoundException('PollId is required to get share user');
+				}
+				$user = $this->getShareByPollAndUser($userId, $pollId)->resolveUser();
+			} catch (ShareNotFoundException) {
+				$user = new Ghost($userId);
+			}
 		}
 
-		return new Ghost($userId);
+		$cacheKey = $userId . ':' . ($pollId ?? 'null');
+		self::$userCache[$cacheKey] = $user;
+		return $user;
 	}
 
 	/**
@@ -88,39 +102,34 @@ class UserMapper extends QBMapper {
 		$participants = $this->findParticipantsByPoll($pollId);
 
 		foreach ($participants as &$participant) {
-			$users[] = $this->getParticipant($participant->getUserId(), $pollId);
+			$users[] = $this->getUser($participant->getUserId(), $pollId);
 		}
 		return $users;
 	}
 
 	/**
-	 * Get a user from the userbase
-	 *
-	 * Returns a User child build from the userId and
-	 * if pollId is given, it will check if the user has admin rights for the poll
+	 * Get a user from the NC userbase
 	 *
 	 * @param string $userId
-	 * @param int|null $pollId
 	 * @return User
 	 * @throws UserNotFoundException
 	 */
-	public function getUserFromUserBase(string $userId, ?int $pollId = null): User {
+	public function getUserFromUserBase(string $userId): User {
 		$user = $this->userManager->get($userId);
-
-		if ($user instanceof IUser) {
-			try {
-				// check if we find a share, where the user got admin rights for the particular poll
-				if ($pollId !== null && $this->getShareByPollAndUser($userId, $pollId)->getType() === Share::TYPE_ADMIN) {
-					return new Admin($userId);
-				}
-			} catch (ShareNotFoundException $e) {
-				// No share found, user has no admin delegation granted by share
-				// silent catch
-			}
-			return new User($userId);
+		if (!$user instanceof IUser) {
+			throw new UserNotFoundException();
 		}
-		throw new UserNotFoundException();
+		return new User($userId);
 	}
+
+	private function getCachedUser(string $userId, ?int $pollId = null): UserBase {
+		$cacheKey = $userId . ':' . ($pollId ?? 'null');
+		if (isset(self::$userCache[$cacheKey])) {
+			return self::$userCache[$cacheKey];
+		}
+		throw new UserNotFoundException('User not found in cache');
+	}
+
 
 	public function getUserFromShareToken(string $token): UserBase {
 		$share = $this->getShareByToken($token);
@@ -154,7 +163,7 @@ class UserMapper extends QBMapper {
 
 		try {
 			return $this->findEntity($qb);
-		} catch (DoesNotExistException $e) {
+		} catch (DoesNotExistException) {
 			throw new ShareNotFoundException('Share not found by userId and pollId');
 		}
 	}
@@ -162,17 +171,17 @@ class UserMapper extends QBMapper {
 	/**
 	 * @throws InvalidShareTypeException
 	 */
-	public static function getUserObject(string $type, string $id, string $displayName = '', string $emailAddress = '', string $language = '', string $locale = '', string $timeZoneName = ''): Ghost|Group|Team|Contact|ContactGroup|User|Email|GenericUser {
+	public static function createUserObject(string $type, string $id, string $displayName = '', string $emailAddress = '', string $language = '', string $locale = '', string $timeZoneName = ''): Ghost|Group|Team|Contact|ContactGroup|User|Email|GenericUser {
 		try {
 			return match ($type) {
-				Ghost::TYPE => new Ghost($id),
-				Group::TYPE => new Group($id),
-				Team::TYPE => new Team($id),
-				Contact::TYPE => new Contact($id),
-				ContactGroup::TYPE => new ContactGroup($id),
-				User::TYPE => new User($id),
-				Admin::TYPE => new Admin($id),
-				Email::TYPE => new Email($id, $displayName, $emailAddress, $language),
+				UserBase::TYPE_GHOST => new Ghost($id),
+				UserBase::TYPE_GROUP => new Group($id),
+				UserBase::TYPE_TEAM => new Team($id),
+				UserBase::TYPE_CONTACT => new Contact($id),
+				UserBase::TYPE_CONTACTGROUP => new ContactGroup($id),
+				UserBase::TYPE_USER => new User($id),
+				UserBase::TYPE_ADMIN => new Admin($id),
+				UserBase::TYPE_EMAIL => new Email($id, $displayName, $emailAddress, $language),
 				UserBase::TYPE_EXTERNAL => new GenericUser($id, UserBase::TYPE_EXTERNAL, $displayName, $emailAddress, $language, $locale, $timeZoneName),
 				UserBase::TYPE_PUBLIC => new GenericUser($id, UserBase::TYPE_PUBLIC, $displayName),
 				default => throw new InvalidShareTypeException('Invalid user type (' . $type . ')'),

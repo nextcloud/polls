@@ -31,7 +31,9 @@ use OCP\Share\IShare;
 
 class UserBase implements JsonSerializable {
 	/** @var string */
-	public const TYPE = 'generic';
+	public const TYPE_GENERIC = 'generic';
+	/** @var string */
+	public const TYPE = self::TYPE_GENERIC;
 	/** @var string */
 	public const TYPE_PUBLIC = 'public';
 	/** @var string */
@@ -116,15 +118,15 @@ class UserBase implements JsonSerializable {
 	 * Returns the users' type
 	 *
 	 * Returned Type will be one of
-	 * 		Contact::TYPE (Share),
-	 * 		Email::TYPE (Share),
-	 * 		Ghost::TYPE (deleted user),
-	 * 		User::TYPE (NC User),
-	 * 		Admin::TYPE (NC user with admin rights),
-	 * 		Group::TYPE (NC Group),
-	 * 		Team::TYPE (Share),
-	 * 		ContactGroup::TYPE (Share)
-	 * 		Anon::TYPE (Anonymized User)
+	 * 		UserBase::TYPE_CONTACT (Share),
+	 * 		UserBase::TYPE_EMAIL (Share),
+	 * 		UserBase::TYPE_GHOST (deleted user),
+	 * 		UserBase::TYPE_USER (NC User),
+	 * 		UserBase::TYPE_ADMIN (NC user with admin rights),
+	 * 		UserBase::TYPE_GROUP (NC Group),
+	 * 		UserBase::TYPE_TEAM (Share),
+	 * 		UserBase::TYPE_CONTACTGROUP (Share)
+	 * 		UserBase::TYPE_ANON (Anonymized User)
 	 *
 	 * @return string
 	 **/
@@ -132,33 +134,14 @@ class UserBase implements JsonSerializable {
 		return $this->type;
 	}
 
-	/**
-	 * Returns the users' type used in shares
-	 *
-	 * Returned Type will be one of
-	 * 		Email::TYPE (Share),
-	 * 		Ghost::TYPE (deleted user),
-	 * 		User::TYPE (NC User),
-	 * 		Admin::TYPE (NC user with admin rights),
-	 * 		Group::TYPE (NC Group),
-	 * 		Team::TYPE (Share),
-	 * 		ContactGroup::TYPE (Share)
-	 * 		Anon::TYPE (Anonymized User)
-	 *
-	 * @return string
-	 **/
-	public function getShareType(): string {
-		return $this->type;
-	}
-
 	public function getIsGuest(): bool {
-		return !in_array($this->type, [User::TYPE, Admin::TYPE]);
+		return !in_array($this->type, [self::TYPE_USER, self::TYPE_ADMIN]);
 	}
 	/**
 	 * used for telling internal from guest users
 	 */
 	public function getSimpleType(): string {
-		if (in_array($this->type, [User::TYPE, Admin::TYPE])) {
+		if (in_array($this->type, [self::TYPE_USER, self::TYPE_ADMIN])) {
 			return self::TYPE_USER;
 		}
 
@@ -360,7 +343,7 @@ class UserBase implements JsonSerializable {
 			'array' => 'simpleArray',
 			'categories' => '',
 			'desc' => '',
-			'displayName' => $this->getSafeDisplayName(),
+			'displayName' => $this->getDisplayName(),
 			'emailAddress' => $this->getSafeEmailAddress(),
 			'id' => $this->getSafeId(),
 			'user' => null,
@@ -395,13 +378,6 @@ class UserBase implements JsonSerializable {
 
 		// otherwise return the obfuscated userId
 		return $this->getId();
-	}
-
-	/**
-	 * anonymize the displayname in case of anonymous settings
-	 */
-	public function getSafeDisplayName(): string {
-		return $this->displayName;
 	}
 
 	// Function for obfuscating mail adresses; Default return the email address

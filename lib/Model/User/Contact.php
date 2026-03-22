@@ -50,16 +50,6 @@ class Contact extends UserBase {
 	 *
 	 * @return string
 	 **/
-	public function getShareType(): string {
-		return UserBase::TYPE_EMAIL;
-	}
-
-	/**
-	 * In shares, contact users are used as email users
-	 * return Email::TYPE (Share),
-	 *
-	 * @return string
-	 **/
 	public function getShareUserId(): string {
 		if ($this->emailAddress !== '') {
 			return $this->emailAddress;
@@ -79,6 +69,14 @@ class Contact extends UserBase {
 	 */
 	private function loadContact(): void {
 		$contacts = self::listRaw($this->id, ['UID', 'FN']);
+
+		if (empty($contacts)) {
+			$contacts = self::listRaw($this->id, ['EMAIL']);
+		}
+
+		if (empty($contacts)) {
+			throw new \Exception('Contact not found: ' . $this->id);
+		}
 
 		// workaround fur multiple found UIDs
 		// Don't throw an error, log the error and take the first entry

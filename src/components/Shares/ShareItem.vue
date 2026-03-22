@@ -95,24 +95,6 @@ const typeIconComponent = computed(() => {
 	}
 })
 
-// const votedIndicator = computed(() => {
-// 	if (share.voted) {
-// 		return {
-// 			class: 'vote-status voted',
-// 			component: VotedIcon,
-// 			name: t('polls', 'Has voted'),
-// 		}
-// 	}
-// 	if (!share.voted) {
-// 		return {
-// 			class: 'vote-status unvoted',
-// 			component: UnvotedIcon,
-// 			name: t('polls', 'Has not voted'),
-// 		}
-// 	}
-// 	return { class: 'vote-status empty', component: null, name: '' }
-// })
-
 const votedIndicator = computed(() => {
 	if (share.groupId || ['public', 'group'].includes(share.type)) {
 		return { class: 'vote-status empty', component: 'div', name: '' }

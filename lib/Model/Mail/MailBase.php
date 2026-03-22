@@ -170,7 +170,7 @@ abstract class MailBase {
 	}
 
 	protected function getUser(string $userId) : UserBase {
-		return $this->userMapper->getParticipant($userId, $this->poll->getId());
+		return $this->userMapper->getUser($userId, $this->poll->getId());
 	}
 
 	protected function getRichDescription() : string {

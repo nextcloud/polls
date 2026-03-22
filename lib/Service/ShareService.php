@@ -28,17 +28,14 @@ use OCA\Polls\Event\ShareLockedEvent;
 use OCA\Polls\Event\ShareRegistrationEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
 use OCA\Polls\Exceptions\ForbiddenException;
+use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
-use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\SentResult;
 use OCA\Polls\Model\Settings\AppSettings;
-use OCA\Polls\Model\User\Contact;
-use OCA\Polls\Model\User\Email;
-use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -121,30 +118,6 @@ class ShareService {
 	}
 
 	/**
-	 * Creates a new personal share based on a public share for the current user
-	 * or returns the existing personal share, if it already exists
-	 */
-	private function convertPublicShareToPersonalShare(): Share {
-		try {
-			// Create a new new personal share
-			$this->share = $this->createNewShare(
-				$this->share->getPollIdOrFail(),
-				$this->userSession->getCurrentUser(),
-				preventInvitation: true
-			);
-		} catch (ShareAlreadyExistsException $e) {
-			// return existing personal share
-			$this->share = $this->shareMapper->findByPollAndUser(
-				$this->share->getPollIdOrFail(),
-				$this->userSession->getCurrentUserId()
-			);
-		}
-		// remove the public token from session
-		$this->userSession->setShareToken($this->share->getToken());
-		return $this->share;
-	}
-
-	/**
 	 * Request access to a share by share token
 	 * Returns the share for the given token, if the user has access to it.
 	 * - If the user accesses a public share and is logged in, a personal share
@@ -177,7 +150,7 @@ class ShareService {
 
 			// Logged-in user on public share: create/retrieve personal share
 			$this->share->getType() === Share::TYPE_PUBLIC && $this->userSession->getIsLoggedIn()
-				=> $this->convertPublicShareToPersonalShare(),
+				=> $this->registerInternalUser($this->share->getToken()),
 
 			// Email/contact share: convert to external share
 			in_array($this->share->getType(), Share::CONVERATABLE_PUBLIC_SHARES, true)
@@ -217,7 +190,13 @@ class ShareService {
 	}
 
 	/**
-	 * Change share type
+	 * Set email requirement for public poll registration
+	 * @param string $token Token of share to update
+	 * @param string $value One of the Share::EMAIL_* constants
+	 * @return Share
+	 * @throws NotFoundException if token does not exist
+	 * @throws ForbiddenException if user has no permission to edit the poll
+	 * @throws ShareNotFoundException if token does not exist in shareMapper
 	 */
 	public function setPublicPollEmail(string $token, string $value): Share {
 		try {
@@ -236,6 +215,13 @@ class ShareService {
 
 	/**
 	 * Set emailAddress of personal public share
+	 *
+	 * @param Share $share Share to update
+	 * @param string $emailAddress new email address to set
+	 * @param bool $emptyIsValid Set true, if empty email address should be accepted, otherwise an exception will be thrown
+	 * @throws InvalidShareTypeException if share type is not external
+	 * @throws InvalidEmailAddress if email address is not valid
+	 *
 	 *
 	 * @return Share
 	 */
@@ -375,13 +361,7 @@ class ShareService {
 	}
 
 	/**
-	 * Create a personal share from a public share
-	 * or update an email share with the displayName
-	 * @param string $publicShareToken
-	 * @param string $displayName
-	 * @param string $emailAddress
-	 * @param string $timeZone
-	 * @return Share
+	 * @deprecated Use registerGuest() instead
 	 */
 	public function register(
 		string $publicShareToken,
@@ -389,46 +369,7 @@ class ShareService {
 		string $emailAddress = '',
 		string $timeZone = '',
 	): Share {
-		$this->share = $this->get($publicShareToken);
-		$displayName = $this->systemService->validatePublicUsername($displayName, share: $this->share);
-
-		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
-			MailService::validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
-		}
-
-		$language = $this->systemService->getGenericLanguage();
-		$userId = $this->generatePublicUserId();
-
-		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			// Create new external share for user, who entered the poll via public link,
-			// prevent invtation sending, when no email address is given
-			$this->createNewShare(
-				$this->share->getPollIdOrFail(),
-				UserMapper::getUserObject(Share::TYPE_EXTERNAL, $userId, $displayName, $emailAddress, $language, $language, $timeZone),
-				!$emailAddress,
-				$timeZone
-			);
-			$this->eventDispatcher->dispatchTyped(new ShareRegistrationEvent($this->share));
-
-		} elseif (in_array($this->share->getType(), Share::CONVERATABLE_PUBLIC_SHARES, true)) {
-			// Convert email and contact shares to external share, if user registers
-			// this should be avoided by the actual use cases, but keep code in case of later changes
-			$this->convertPersonalPublicShareToExternalShare($userId, $displayName, $emailAddress, $timeZone, $language);
-
-		} else {
-			throw new ForbiddenException('Share does not allow registering for poll');
-		}
-
-		// send invitation mail, if invitationSent has no timestamp
-		try {
-			if (!$this->share->getInvitationSent()) {
-				$this->mailService->sendInvitation($this->share);
-			}
-		} catch (\Exception $e) {
-			$this->logger->error('Error sending Mail', ['emailAddress' => $this->share->getEmailAddress()]);
-		}
-
-		return $this->share;
+		return $this->registerGuest($publicShareToken, $displayName, $emailAddress, $timeZone);
 	}
 
 	/**
@@ -534,9 +475,9 @@ class ShareService {
 			throw new InvalidShareTypeException('Cannot resolve members from share type ' . $share->getType());
 		}
 
-		foreach (UserMapper::getUserObject($share->getType(), $share->getUserId())->getMembers() as $member) {
+		foreach (UserMapper::createUserObject($share->getType(), $share->getUserId())->getMembers() as $member) {
 			try {
-				$newShare = $this->add($share->getPollIdOrFail(), $member->getType(), $member->getId());
+				$newShare = $this->createShare($share->getPollIdOrFail(), $member);
 				$shares[] = $newShare;
 			} catch (ForbiddenException $e) {
 				// skip, if user is not allowed to add share, usually because of forbidden share type
@@ -591,11 +532,136 @@ class ShareService {
 	}
 
 	/**
-	 * Add share
-	 *
-	 * @param int $pollOrPollGroupId Poll or PollGroup id
-	 * @param string $type Type of share, e.g. UserBase::TYPE_EXTERNAL, UserBase::TYPE_PUBLIC, Ghost::TYPE, Contact::TYPE, ContactGroup::TYPE, Email::TYPE
-	 * @return Share
+	 * Use case 1a: Owner creates a public share link for a poll
+	 */
+	public function createPublicShare(int $pollId): Share {
+		$this->pollMapper->get($pollId)
+			->request(Poll::PERMISSION_POLL_EDIT)
+			->request(Poll::PERMISSION_SHARE_ADD)
+			->request(Poll::PERMISSION_SHARE_ADD_EXTERNAL);
+		$this->appSettings->getPublicSharesAllowed();
+
+		$shareUser = UserMapper::createUserObject(UserBase::TYPE_PUBLIC, '');
+
+		try {
+			$share = $this->createNewShare($pollId, $shareUser);
+		} catch (ShareAlreadyExistsException $e) {
+			$share = $e->getShare();
+		}
+
+		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
+		return $share;
+	}
+
+	/**
+	 * Use case 1b: Owner shares poll with a specific user object (User, Group, Team, Contact, External)
+	 * Contacts are automatically converted to external shares (with email) in Share::setFromUserObject()
+	 */
+	public function createShare(int $pollOrPollGroupId, UserBase $userGroup, string $purpose = 'poll'): Share {
+		if ($purpose === 'poll') {
+			$poll = $this->pollMapper->get($pollOrPollGroupId)
+				->request(Poll::PERMISSION_POLL_EDIT)
+				->request(Poll::PERMISSION_SHARE_ADD);
+
+			if (in_array($userGroup->getType(), [
+				UserBase::TYPE_GHOST,
+				UserBase::TYPE_CONTACT,
+				UserBase::TYPE_CONTACTGROUP,
+				UserBase::TYPE_EMAIL,
+				UserBase::TYPE_EXTERNAL,
+			], true)) {
+				$poll->request(Poll::PERMISSION_SHARE_ADD_EXTERNAL);
+			}
+			$preventInvitation = false;
+		} else {
+			$preventInvitation = true;
+		}
+
+		try {
+			$share = $this->createNewShare($pollOrPollGroupId, $userGroup, $preventInvitation, $purpose);
+		} catch (ShareAlreadyExistsException $e) {
+			$share = $e->getShare();
+		}
+
+		if ($share->getPollId() !== null) {
+			$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
+		}
+		return $share;
+	}
+
+	/**
+	 * Use case 2a: Guest user registers via a public share link
+	 * Creates a new external share with displayName and optional email address
+	 */
+	public function registerGuest(
+		string $token,
+		string $displayName,
+		string $emailAddress = '',
+		string $timeZone = '',
+	): Share {
+		$this->share = $this->get($token);
+
+		if ($this->share->getType() !== Share::TYPE_PUBLIC) {
+			throw new ForbiddenException('Registration is only allowed for public shares');
+		}
+
+		$displayName = $this->systemService->validatePublicUsername($displayName, share: $this->share);
+
+		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
+			MailService::validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
+		}
+
+		$language = $this->systemService->getGenericLanguage();
+		$userId = $this->generatePublicUserId();
+		$user = UserMapper::createUserObject(Share::TYPE_EXTERNAL, $userId, $displayName, $emailAddress, $language, $language, $timeZone);
+
+		$this->createNewShare(
+			$this->share->getPollIdOrFail(),
+			$user,
+			$user->getEmailAddress() !== '',
+		);
+		$this->eventDispatcher->dispatchTyped(new ShareRegistrationEvent($this->share));
+
+		try {
+			if (!$this->share->getInvitationSent()) {
+				$this->mailService->sendInvitation($this->share);
+			}
+		} catch (\Exception $e) {
+			$this->logger->error('Error sending Mail', ['emailAddress' => $this->share->getEmailAddress()]);
+		}
+
+		return $this->share;
+	}
+
+	/**
+	 * Use case 2b: Logged-in NC user accesses poll via public share
+	 * Automatically creates a personal user share if not already involved
+	 */
+	public function registerInternalUser(string $token): Share {
+		$this->share = $this->get($token);
+
+		if ($this->share->getType() !== Share::TYPE_PUBLIC) {
+			throw new ForbiddenException('Internal user registration is only allowed for public shares');
+		}
+
+		try {
+			$this->share = $this->createNewShare(
+				$this->share->getPollIdOrFail(),
+				$this->userSession->getCurrentUser(),
+				preventInvitation: true
+			);
+		} catch (ShareAlreadyExistsException) {
+			$this->share = $this->shareMapper->findByPollAndUser(
+				$this->share->getPollIdOrFail(),
+				$this->userSession->getCurrentUserId()
+			);
+		}
+		$this->userSession->setShareToken($this->share->getToken());
+		return $this->share;
+	}
+
+	/**
+	 * @deprecated Use createPublicShare(), createShare(), registerGuest(), or registerInternalUser() instead
 	 */
 	public function add(
 		int $pollOrPollGroupId,
@@ -605,51 +671,13 @@ class ShareService {
 		string $emailAddress = '',
 		string $purpose = 'poll',
 	): Share {
-		if ($purpose === 'poll') {
-			$poll = $this->pollMapper->get($pollOrPollGroupId)
-				->request(Poll::PERMISSION_POLL_EDIT)
-				->request(Poll::PERMISSION_SHARE_ADD);
-
-			if ($type === UserBase::TYPE_PUBLIC) {
-				$this->appSettings->getPublicSharesAllowed();
-				$poll->request(Poll::PERMISSION_SHARE_ADD_EXTERNAL);
-			}
-
-			// validate user type for external types and check, if user is allowed to create this type of share
-			if (match ($type) {
-				Ghost::TYPE => true,
-				Contact::TYPE => true,
-				ContactGroup::TYPE => true,
-				Email::TYPE => true,
-				UserBase::TYPE_EXTERNAL => true,
-				default => false,
-			}) {
-				$poll->request(Poll::PERMISSION_SHARE_ADD_EXTERNAL);
-			}
-			$shareUser = UserMapper::getUserObject($type, $userId, $displayName, $emailAddress);
-			$preventInvitation = false;
-		} else {
-			$shareUser = $this->userMapper->getUserFromUserBase($userId);
-			$preventInvitation = true;
+		if ($type === UserBase::TYPE_PUBLIC) {
+			return $this->createPublicShare($pollOrPollGroupId);
 		}
-
-		try {
-			$share = $this->createNewShare(
-				pollOrPollGroupId: $pollOrPollGroupId,
-				userGroup: $shareUser,
-				preventInvitation: $preventInvitation,
-				timeZone: '',
-				purpose: $purpose
-			);
-		} catch (ShareAlreadyExistsException $e) {
-			$share = $e->getShare();
-		}
-
-		// TODO: extend event for pollGroups
-		if ($share->getPollId() !== null) {
-			$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
-		}
-		return $share;
+		$shareUser = $purpose === 'poll'
+			? UserMapper::createUserObject($type, $userId, $displayName, $emailAddress)
+			: $this->userMapper->getUserFromUserBase($userId);
+		return $this->createShare($pollOrPollGroupId, $shareUser, $purpose);
 	}
 
 	private function sortByCategory(): void {
@@ -725,14 +753,12 @@ class ShareService {
 	 * @param int $pollOrPollGroupId Poll or PollGroup id
 	 * @param UserBase $userGroup UserBase object of the user group to share with
 	 * @param bool $preventInvitation Set true, if no invitation should be sent
-	 * @param string $timeZone Timezone of the user, used for external users
 	 * @param string $purpose Purpose of the share, either 'poll' or 'pollGroup'
 	 */
 	private function createNewShare(
 		int $pollOrPollGroupId,
 		UserBase $userGroup,
 		bool $preventInvitation = false,
-		string $timeZone = '',
 		string $purpose = 'poll',
 	): Share {
 		$preventInvitation = $userGroup->getType() === UserBase::TYPE_PUBLIC ?: $preventInvitation;
@@ -751,27 +777,8 @@ class ShareService {
 		}
 
 		$this->share->setToken($token);
-		$this->share->setType($userGroup->getShareType());
-		$this->share->setDisplayName($userGroup->getDisplayName());
+		$this->share->setFromUserObject($userGroup, $token, $purpose);
 		$this->share->setInvitationSent($preventInvitation ? time() : 0);
-		$this->share->setEmailAddress($userGroup->getEmailAddress());
-		$this->share->setUserId($userGroup->getShareUserId());
-
-		// skip for poll groups
-		if ($purpose === 'poll') {
-			// normal continuation
-			// public share to create, set token as userId
-			if ($userGroup->getType() === UserBase::TYPE_PUBLIC) {
-				$this->share->setUserId($token);
-			}
-
-			// user is created from public share. Store locale information for
-			// usage in server side actions, i.e. scheduled emails
-			if ($userGroup->getType() === UserBase::TYPE_EXTERNAL) {
-				$this->share->setLanguage($userGroup->getLanguageCode());
-				$this->share->setTimeZoneName($timeZone);
-			}
-		}
 
 		try {
 			$this->share = $this->shareMapper->insert($this->share);

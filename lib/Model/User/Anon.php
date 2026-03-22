@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Model\User;
 
 use DateTimeZone;
+use OCA\Polls\Helper\NameGenerator;
 use OCA\Polls\Model\UserBase;
 
 class Anon extends UserBase {
@@ -43,11 +44,11 @@ class Anon extends UserBase {
 	}
 
 	public function getDisplayName(): string {
-		return 'Anon';
+		return NameGenerator::generate($this->id);
 	}
 
 	public function getDescription(): string {
-		return $this->getDisplayName();
+		return 'Anonymous';
 	}
 
 	public function getEmailAddress(): string {
@@ -68,10 +69,6 @@ class Anon extends UserBase {
 
 	public function jsonSerialize(): array {
 		return $this->getSimpleUserArray();
-	}
-
-	public function getSafeDisplayName(): string {
-		return $this->getDisplayName();
 	}
 
 	public function getSafeEmailAddress(): string {

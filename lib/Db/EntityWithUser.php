@@ -91,30 +91,29 @@ abstract class EntityWithUser extends Entity {
 		return false;
 	}
 
+	/**
+	 * get the pollId, if relevant for user identification, otherwise return null
+	 * Overwrite if user identificaton needs another pollId than the one of the entity
+	 */
+	public function getUserRelevantPollId(): ?int {
+		return $this->getPollId();
+	}
 
 	/**
-	 * @return UserBase Gets owner of the entity
+	 * @return UserBase Gets user of the entity
 	 */
 	public function getUser(): UserBase {
 		if ($this->getEntityAnonymization()) {
 			$user = new Anon($this->getUserId());
 			return $user;
 		}
-
 		/** @var UserMapper */
-		$userMapper = (Container::queryClass(UserMapper::class));
+		$userMapper = Container::queryClass(UserMapper::class);
 
 		try {
-			$pollId = $this->getPollId();
-			if ($pollId === null) {
-				// If pollId is not set, we assume that the user is not a participant of a poll
-				return $userMapper->getUserFromUserBase($this->getUserId());
-			}
-			$user = $userMapper->getParticipant($this->getUserId(), $pollId);
-			// Get user from userbase
+			return $userMapper->getUser($this->getUserId(), $this->getUserRelevantPollId());
 		} catch (Exception) {
-			$user = new Ghost($this->getUserId());
+			return new Ghost($this->getUserId());
 		}
-		return $user;
 	}
 }

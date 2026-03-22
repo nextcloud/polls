@@ -22,6 +22,7 @@ interface Props {
 	virtualUserType?: VirtualUserItemType
 	user?: User
 	itemStyle?: Record<string, string | number>
+	label?: string
 }
 
 const {
@@ -34,6 +35,7 @@ const {
 	virtualUserType,
 	user = defaultUser,
 	itemStyle = {},
+	label,
 } = defineProps<Props>()
 
 const computedRoleType = computed<UserType | VirtualUserItemType>(
@@ -67,10 +69,10 @@ const computedLabel = computed(() => {
 		return t('polls', 'Add public link')
 	}
 	if (user.type === 'public') {
-		return user.displayName || t('polls', 'Public link')
+		return label || t('polls', 'Public link')
 	}
 	if (user.type === 'deleted') {
-		return t('polls', 'Deleted participant')
+		return `${user.displayName} (${t('polls', 'Deleted participant')})`
 	}
 	return user.displayName ?? user.id
 })

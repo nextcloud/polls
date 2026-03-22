@@ -12,6 +12,7 @@ use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\UserMapper;
+use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Service\NotificationService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IURLGenerator;
@@ -134,7 +135,16 @@ class Notifier implements INotifier {
 		}
 
 		$actorId = $this->extractActorId($notification) ?? $poll->getOwner();
-		$actor = $this->userMapper->getUserFromUserBase($actorId);
+		$actor = $this->userMapper->getUser($actorId);
+
+		if ($actor instanceof Ghost) {
+			// no valid actor, withdraw notification
+			$this->logger->info('Notification silently removed, actor not found', [
+				'notification' => $notification->getObjectId(),
+				'actorId' => $actorId,
+			]);
+			$this->notificationService->removeNotification($notification);
+		}
 
 		$pollTitle = $poll->getTitle();
 		$notification->setLink($poll->getVoteUrl());
@@ -172,7 +182,7 @@ class Notifier implements INotifier {
 
 		switch ($notification->getSubject()) {
 			case self::NOTIFY_POLL_CHANGED_OWNER:
-				$newOwner = $this->userMapper->getUserFromUserBase($parameters['newOwner']);
+				$newOwner = $this->userMapper->getUser($parameters['newOwner']);
 				// overwrite the subject with the new owner
 				$notification->setParsedSubject(
 					$l->t('%s is the new owner of your poll.', $newOwner->getDisplayName())

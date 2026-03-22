@@ -41,6 +41,8 @@ const sharesStore = useSharesStore()
 const pollGroupsStore = usePollGroupsStore()
 const pollStore = usePollStore()
 
+const actionsRef = ref<InstanceType<typeof NcActions> | null>(null)
+
 const isDirectShare = computed(
 	() =>
 		share.groupId === pollGroupsStore.currentPollGroup?.id
@@ -177,9 +179,13 @@ const switchAdmin = computed<ButtonProps>(() => ({
 const copyLinkButton = computed<ButtonProps>(() => ({
 	activate: !share.groupId && !share.deleted && !!share.URL,
 	name: t('polls', 'Copy link to clipboard'),
-	action: () => {
+	action: async () => {
+		// Close menu first to deactivate focus trap (active for public shares
+		// due to NcActionInput). On HTTP, the browser aborts a pending clipboard
+		// write when the focus trap deactivates simultaneously.
+		await actionsRef.value?.closeMenu(false)
 		try {
-			navigator.clipboard.writeText(share.URL)
+			await navigator.clipboard.writeText(share.URL)
 			showSuccess(t('polls', 'Link copied to clipboard'))
 		} catch {
 			showError(t('polls', 'Error while copying link to clipboard'))
@@ -259,7 +265,7 @@ async function submitLabel() {
 </script>
 
 <template>
-	<NcActions>
+	<NcActions ref="actionsRef">
 		<NcActionInput
 			v-if="isActivePublicShare"
 			v-bind="label.inputProps"
@@ -306,7 +312,6 @@ async function submitLabel() {
 
 		<NcActionButton
 			v-if="copyLinkButton.activate"
-			close-after-click
 			:name="copyLinkButton.name"
 			:aria-label="copyLinkButton.name"
 			@click="copyLinkButton.action">

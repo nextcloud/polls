@@ -404,6 +404,21 @@ class PublicController extends BaseController {
 	}
 
 	/**
+	 * Validate it the user name is reserved
+	 * return false, if this username already exists as a user or as a participant of the poll
+	 * @param string $token Share token
+	 */
+	#[PublicPage]
+	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'POST', url: '/randomname')]
+	public function getRandomUserName(string $token): JSONResponse {
+		return $this->response(fn () => [
+			'name' => $this->systemService->getRandomDisplayName($token)
+		]);
+	}
+
+	/**
 	 * Validate email address (simple validation)
 	 * @param string $emailAddress Email address string to check for validation
 	 */
