@@ -7,7 +7,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { t } from '@nextcloud/l10n'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-import NcModal from '@nextcloud/vue/components/NcModal'
+import NcModal from '../Base/modules/CustomNcModal.vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'

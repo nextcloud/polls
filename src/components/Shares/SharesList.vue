@@ -8,7 +8,7 @@ import { ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
 
-import NcModal from '@nextcloud/vue/components/NcModal'
+import NcModal from '../Base/modules/CustomNcModal.vue'
 
 import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 
