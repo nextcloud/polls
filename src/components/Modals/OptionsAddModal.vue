@@ -34,7 +34,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<NcModal v-model:show="showModal" :name="caption" size="large">
+	<NcModal v-model:show="showModal" :name="caption" size="large" class="add-date">
 		<div class="screen-container">
 			<div v-if="!pollStore.isClosed" class="edit-container">
 				<OptionsDateAddDialog />
@@ -56,10 +56,6 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-.modal-container__content {
-	padding: 3rem 1.6rem 1rem;
-}
-
 .screen-container {
 	display: flex;
 	flex-wrap: wrap;

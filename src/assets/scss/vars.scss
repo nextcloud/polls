@@ -8,6 +8,7 @@
 	--cap-width: 49rem;
 	--shadow-height: 0.7rem;
 	--shadow-height-inverted: -0.7rem;
+	--scroll-fade-shadow: rgba(0, 0, 0, 0.1);
 	--color-polls-foreground-yes: #2d7b41;
 	--color-polls-foreground-no: #db0606;
 	--color-polls-foreground-maybe: #a37200;
@@ -26,6 +27,7 @@
 		--color-polls-background-no: #451c1c;
 		--color-polls-background-maybe: #2e2914;
 		--container-background-light: #14262e;
+		--scroll-fade-shadow: rgba(255, 255, 255, 0.15);
 	}
 }
 
@@ -37,4 +39,5 @@
 	--color-polls-background-no: #451c1c;
 	--color-polls-background-maybe: #2e2914;
 	--container-background-light: #14262e;
+	--scroll-fade-shadow: rgba(255, 255, 255, 0.15);
 }

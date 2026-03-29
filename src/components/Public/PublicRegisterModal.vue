@@ -16,6 +16,7 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 
 import InputDiv from '../Base/modules/InputDiv.vue'
 import { SimpleLink } from '../../helpers/modules/SimpleLink'
+import { InlineLink } from '../../helpers/modules/InlineLink'
 import { setCookie } from '../../helpers/modules/cookieHelper'
 import { ValidatorAPI, PublicAPI } from '../../Api'
 import { useSessionStore } from '../../stores/session'
@@ -23,6 +24,7 @@ import { usePollStore } from '../../stores/poll'
 
 import type { AxiosError } from '@nextcloud/axios'
 import type { SignalingType } from '../../Types'
+import MarkDownDescription from '../Poll/MarkDownDescription.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -58,15 +60,6 @@ function updateCookie(value: string): void {
  */
 function closeModal(): void {
 	emit('close')
-}
-
-/**
- *
- */
-function login(): void {
-	window.location.assign(
-		`${window.location.protocol}//${window.location.host}${loginLink.value}`,
-	)
 }
 
 const checkStatus = ref<{
@@ -255,142 +248,100 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="modal__content">
-		<div class="modal__registration">
-			<div class="registration__registration">
-				<h2>{{ t('polls', 'Guest participants') }}</h2>
-				<InputDiv
-					v-model="userName"
-					class="section__username"
-					:signaling-class="checkStatus.userName"
-					:placeholder="t('polls', 'Enter your name or a nickname')"
-					:helper-text="userNameHint"
-					focus
-					@input="validatePublicUsername()"
-					@submit="submitRegistration()" />
+	<MarkDownDescription />
+	<div class="registration__registration">
+		<h5>{{ t('polls', 'Register to this poll') }}</h5>
+		<InputDiv
+			v-model="userName"
+			class="section__username"
+			:signaling-class="checkStatus.userName"
+			:placeholder="t('polls', 'Enter your name or a nickname')"
+			:helper-text="userNameHint"
+			focus
+			@input="validatePublicUsername()"
+			@submit="submitRegistration()" />
 
-				<InputDiv
-					v-if="sessionStore.share.publicPollEmail !== 'disabled'"
-					v-model="emailAddress"
-					class="section__email"
-					:signaling-class="checkStatus.email"
-					:placeholder="
-						sessionStore.share.publicPollEmail === 'mandatory'
-							? t('polls', 'Email address (mandatory)')
-							: t('polls', 'Email address (optional)')
-					"
-					:helper-text="emailAddressHint"
-					type="email"
-					inputmode="email"
-					@input="validateEmailAddress()"
-					@submit="submitRegistration()" />
+		<InputDiv
+			v-if="sessionStore.share.publicPollEmail !== 'disabled'"
+			v-model="emailAddress"
+			class="section__email"
+			:signaling-class="checkStatus.email"
+			:placeholder="
+				sessionStore.share.publicPollEmail === 'mandatory'
+					? t('polls', 'Email address (mandatory)')
+					: t('polls', 'Email address (optional)')
+			"
+			:helper-text="emailAddressHint"
+			type="email"
+			inputmode="email"
+			@input="validateEmailAddress()"
+			@submit="submitRegistration()" />
 
-				<NcCheckboxRadioSwitch v-if="offerCookies" v-model="saveCookie">
-					{{ t('polls', 'Remember me for 30 days') }}
-				</NcCheckboxRadioSwitch>
+		<NcCheckboxRadioSwitch v-if="offerCookies" v-model="saveCookie">
+			{{ t('polls', 'Remember me for 30 days') }}
+		</NcCheckboxRadioSwitch>
 
-				<div class="modal__buttons">
-					<div class="left">
-						<div class="legal_links">
-							<SimpleLink
-								v-if="sessionStore.appSettings.finalImprintUrl"
-								:href="sessionStore.appSettings.finalImprintUrl"
-								target="_blank"
-								:name="t('polls', 'Legal Notice')" />
-							<SimpleLink
-								v-if="sessionStore.appSettings.finalPrivacyUrl"
-								:href="sessionStore.appSettings.finalPrivacyUrl"
-								target="_blank"
-								:name="t('polls', 'Privacy policy')" />
-						</div>
-					</div>
-					<div class="right">
-						<NcButton @click="closeModal">
-							<template #default>
-								{{ t('polls', 'Cancel') }}
-							</template>
-						</NcButton>
-
-						<NcButton
-							:variant="'primary'"
-							:disabled="disableSubmit"
-							@click="submitRegistration()">
-							<template #default>
-								{{ t('polls', 'OK') }}
-							</template>
-						</NcButton>
-					</div>
+		<div class="modal__buttons">
+			<div class="left">
+				<div class="legal_links">
+					<SimpleLink
+						v-if="sessionStore.appSettings.finalImprintUrl"
+						:href="sessionStore.appSettings.finalImprintUrl"
+						target="_blank"
+						:name="t('polls', 'Legal Notice')" />
+					<SimpleLink
+						v-if="sessionStore.appSettings.finalPrivacyUrl"
+						:href="sessionStore.appSettings.finalPrivacyUrl"
+						target="_blank"
+						:name="t('polls', 'Privacy policy')" />
 				</div>
 			</div>
-
-			<div
-				v-if="sessionStore.appSettings.showLogin"
-				class="registration__login">
-				<h2>{{ t('polls', 'Registered accounts') }}</h2>
-				<NcButton wide @click="login()">
+			<div class="right">
+				<NcButton @click="closeModal">
 					<template #default>
-						{{ t('polls', 'Login') }}
+						{{ t('polls', 'Cancel') }}
 					</template>
 				</NcButton>
-				<div>
-					{{
-						t(
-							'polls',
-							'You can also log in and participate with your regular account.',
-						)
-					}}
-				</div>
-				<div>
-					{{ t('polls', 'Otherwise participate as a guest participant.') }}
-				</div>
+
+				<NcButton
+					:variant="'primary'"
+					:disabled="disableSubmit"
+					@click="submitRegistration()">
+					<template #default>
+						{{ t('polls', 'OK') }}
+					</template>
+				</NcButton>
 			</div>
 		</div>
+	</div>
+
+	<div v-if="sessionStore.appSettings.showLogin" class="registration__login">
+		<!-- TRANSLATORS Position [link]...[/link] around the word to link. Will be replaced with <a href="..."> and </a> -->
+		<InlineLink
+			:text="
+				t('polls', 'Or [link]login[/link] if you are a member of this site.')
+			"
+			:href="loginLink" />
 	</div>
 </template>
 
 <style lang="scss">
-.section__optin {
-	a {
-		text-decoration: underline;
-	}
-}
-
-.modal__registration {
-	display: flex;
-	flex-wrap: wrap;
-	overflow: hidden;
-	& > div {
-		display: flex;
-		flex-direction: column;
-		flex: 1 auto;
-		min-width: 140px;
-		padding: 24px;
-		border-top: 1px solid;
-		border-inline-end: 1px solid;
-		margin-top: -2px;
-		margin-inline-end: -2px;
-		> button {
-			margin: 8px 0;
-		}
+.modal-container__content {
+	display: grid;
+	.enter__name,
+	.enter__email {
+		margin-bottom: 12px;
 	}
 
-	.registration__login {
-		flex: 1 180px;
-	}
-	.registration__registration {
-		flex: 1 480px;
+	.markdown-description {
+		--markdown-description-bg: var(--container-background-light);
+		border-radius: var(--border-radius-container);
+		padding: 0.3rem 1rem;
 	}
 }
 
 [class*='section__'] {
 	margin: 4px 0;
-}
-
-.modal__content {
-	.enter__name,
-	.enter__email {
-		margin-bottom: 12px;
-	}
 }
 
 .legal_links {
@@ -418,5 +369,8 @@ onMounted(() => {
 			content: '';
 		}
 	}
+}
+.registration__login {
+	margin: 1rem 0 0.5rem;
 }
 </style>

@@ -8,13 +8,15 @@ import { ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 
 import NcButton from '@nextcloud/vue/components/NcButton'
-import NcModal from '@nextcloud/vue/components/NcModal'
 
+import NcModal from '../../Base/modules/CustomNcModal.vue'
 import PublicRegisterModal from '../../Public/PublicRegisterModal.vue'
+import { usePollStore } from '@/stores/poll'
 
 const caption = t('polls', 'Register')
-const showRegistration = ref(false)
+const showRegistration = ref(true)
 const registerModalSize = 'large'
+const pollStore = usePollStore()
 </script>
 
 <template>
@@ -27,7 +29,7 @@ const registerModalSize = 'large'
 		</NcButton>
 		<NcModal
 			v-model:show="showRegistration"
-			:name="caption"
+			:name="pollStore.configuration.title"
 			:size="registerModalSize"
 			close-on-click-outside
 			@close="showRegistration = false">

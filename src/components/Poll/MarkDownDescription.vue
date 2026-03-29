@@ -20,6 +20,22 @@ const pollStore = usePollStore()
 <style lang="scss">
 .markdown-description {
 	overflow: auto;
+	background:
+		linear-gradient(
+				var(--markdown-description-bg, var(--color-main-background)) 30%,
+				transparent
+			)
+			top / 100% 40px local,
+		linear-gradient(
+				transparent,
+				var(--markdown-description-bg, var(--color-main-background)) 70%
+			)
+			bottom / 100% 40px local,
+		linear-gradient(var(--scroll-fade-shadow), transparent) top / 100% 16px
+			scroll,
+		linear-gradient(transparent, var(--scroll-fade-shadow)) bottom / 100% 16px
+			scroll var(--markdown-description-bg, var(--color-main-background));
+	background-repeat: no-repeat;
 
 	* {
 		margin: revert;

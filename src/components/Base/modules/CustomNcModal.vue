@@ -17,11 +17,50 @@ defineOptions({ inheritAttrs: false })
 	</NcModal>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.modal-wrapper .modal-container {
+	overflow: scroll !important;
+}
+
 .custom-nc-modal {
+	.modal-container__content {
+		padding: 3rem 1.6rem 1rem;
+	}
 	.modal__content {
 		padding: 14px;
 		color: var(--color-main-text);
+	}
+	.modal__buttons__spacer {
+		flex: 1;
+	}
+	.modal__buttons {
+		display: flex;
+		gap: 8px;
+		justify-content: flex-end;
+		flex-wrap: wrap-reverse;
+		align-items: center;
+		margin-top: 1.5rem;
+
+		.left {
+			display: flex;
+			flex: 1;
+			gap: 8px;
+		}
+
+		.right {
+			display: flex;
+			flex: 0;
+			justify-content: flex-end;
+			gap: 8px;
+		}
+
+		.button {
+			margin-inline: 10px 0;
+		}
+	}
+
+	.modal__buttons__link {
+		text-decoration: underline;
 	}
 }
 </style>
