@@ -491,7 +491,7 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/register')]
 	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->register($token, $displayName, $emailAddress, $timeZone),
+			'share' => $this->shareService->registerGuest($token, $displayName, $emailAddress, $timeZone),
 		], Http::STATUS_CREATED);
 	}
 
