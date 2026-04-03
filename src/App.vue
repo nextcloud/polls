@@ -140,9 +140,4 @@ onUnmounted(() => {
 #public-page-user-menu {
 	display: none;
 }
-
-// .app-content {
-// 	display: flex;
-// 	flex-direction: column;
-// }
 </style>
