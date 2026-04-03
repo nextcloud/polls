@@ -11,25 +11,26 @@ import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { t } from '@nextcloud/l10n'
 
-import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcButton from '@nextcloud/vue/components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcModal from '../components/Base/modules/CustomNcModal.vue'
 
-import InputDiv from '../Base/modules/InputDiv.vue'
-import { SimpleLink } from '../../helpers/modules/SimpleLink'
-import { InlineLink } from '../../helpers/modules/InlineLink'
-import { setCookie } from '../../helpers/modules/cookieHelper'
-import { ValidatorAPI, PublicAPI } from '../../Api'
-import { useSessionStore } from '../../stores/session'
-import { usePollStore } from '../../stores/poll'
+import InputDiv from '../components/Base/modules/InputDiv.vue'
+import MarkDownDescription from '../components/Poll/MarkDownDescription.vue'
+import PollInfoLine from '../components/Poll/PollInfoLine.vue'
+import { InlineLink } from '../helpers/modules/InlineLink'
+import { SimpleLink } from '../helpers/modules/SimpleLink'
+import { setCookie } from '../helpers/modules/cookieHelper'
+import { ValidatorAPI, PublicAPI } from '../Api'
+import { useSessionStore } from '../stores/session'
+import { usePollStore } from '../stores/poll'
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { SignalingType } from '../../Types'
-import MarkDownDescription from '../Poll/MarkDownDescription.vue'
+import type { SignalingType } from '../Types'
 
 const route = useRoute()
 const router = useRouter()
-
-const emit = defineEmits(['close'])
 
 const sessionStore = useSessionStore()
 const pollStore = usePollStore()
@@ -38,6 +39,7 @@ const COOKIE_LIFETIME = 30
 
 const sendRegistration = ref(false)
 const saveCookie = ref(true)
+const descriptionExpanded = ref(false)
 
 const loginLink = computed(() => {
 	const redirectUrl = router.resolve({
@@ -53,13 +55,6 @@ const offerCookies = computed(() => sessionStore.share.type === 'public')
 function updateCookie(value: string): void {
 	const cookieExpiration = COOKIE_LIFETIME * 24 * 60 * 1000
 	setCookie(route.params.token.toString(), value, cookieExpiration)
-}
-
-/**
- *
- */
-function closeModal(): void {
-	emit('close')
 }
 
 const checkStatus = ref<{
@@ -171,21 +166,11 @@ const registrationIsValid = computed(
 )
 
 function routeToPersonalShare(token: string): void {
-	if (route.params.token === token) {
-		// if share was not a public share, but a personal share
-		// (i.e. email shares allow to change personal data by fist entering of the poll),
-		// just refresh the session and load the poll
-		sessionStore.loadSession()
-		pollStore.load()
-	} else {
-		// in case of a public share, redirect to the generated share
-		router.push({
-			name: 'publicVote',
-			params: { token },
-			replace: true,
-		})
-	}
-	closeModal()
+	router.push({
+		name: 'publicVote',
+		params: { token },
+		replace: true,
+	})
 }
 
 async function submitRegistration(): Promise<void> {
@@ -202,7 +187,7 @@ async function submitRegistration(): Promise<void> {
 			emailAddress.value,
 		)
 
-		if (saveCookie.value && route.name === 'publicVote') {
+		if (saveCookie.value) {
 			updateCookie(response.data.share.token)
 		}
 
@@ -237,52 +222,57 @@ const disableSubmit = computed(
 )
 
 onMounted(() => {
-	// pre-fill input field with existing data
 	userName.value = sessionStore.currentUser.displayName
 	validatePublicUsername()
 
-	// pre-fill input field with existing data
 	emailAddress.value = sessionStore.currentUser.emailAddress
 	validateEmailAddress()
 })
 </script>
 
 <template>
-	<MarkDownDescription />
-	<div class="registration__registration">
-		<h5>{{ t('polls', 'Register to this poll') }}</h5>
-		<InputDiv
-			v-model="userName"
-			class="section__username"
-			:signaling-class="checkStatus.userName"
-			:placeholder="t('polls', 'Enter your name or a nickname')"
-			:helper-text="userNameHint"
-			focus
-			@input="validatePublicUsername()"
-			@submit="submitRegistration()" />
+	<NcAppContent class="register-view">
+		<div class="register-view__header">
+			<h2 class="register-view__title">
+				{{ pollStore.configuration.title }}
+			</h2>
+			<PollInfoLine />
+		</div>
 
-		<InputDiv
-			v-if="sessionStore.share.publicPollEmail !== 'disabled'"
-			v-model="emailAddress"
-			class="section__email"
-			:signaling-class="checkStatus.email"
-			:placeholder="
-				sessionStore.share.publicPollEmail === 'mandatory'
-					? t('polls', 'Email address (mandatory)')
-					: t('polls', 'Email address (optional)')
-			"
-			:helper-text="emailAddressHint"
-			type="email"
-			inputmode="email"
-			@input="validateEmailAddress()"
-			@submit="submitRegistration()" />
+		<div class="register-view__form">
+			<h3>{{ t('polls', 'Register to this poll') }}</h3>
 
-		<NcCheckboxRadioSwitch v-if="offerCookies" v-model="saveCookie">
-			{{ t('polls', 'Remember me for 30 days') }}
-		</NcCheckboxRadioSwitch>
+			<InputDiv
+				v-model="userName"
+				class="section__username"
+				:signaling-class="checkStatus.userName"
+				:placeholder="t('polls', 'Enter your name or a nickname')"
+				:helper-text="userNameHint"
+				focus
+				@input="validatePublicUsername()"
+				@submit="submitRegistration()" />
 
-		<div class="modal__buttons">
-			<div class="left">
+			<InputDiv
+				v-if="sessionStore.share.publicPollEmail !== 'disabled'"
+				v-model="emailAddress"
+				class="section__email"
+				:signaling-class="checkStatus.email"
+				:placeholder="
+					sessionStore.share.publicPollEmail === 'mandatory'
+						? t('polls', 'Email address (mandatory)')
+						: t('polls', 'Email address (optional)')
+				"
+				:helper-text="emailAddressHint"
+				type="email"
+				inputmode="email"
+				@input="validateEmailAddress()"
+				@submit="submitRegistration()" />
+
+			<NcCheckboxRadioSwitch v-if="offerCookies" v-model="saveCookie">
+				{{ t('polls', 'Remember me for 30 days') }}
+			</NcCheckboxRadioSwitch>
+
+			<div class="register-view__actions">
 				<div class="legal_links">
 					<SimpleLink
 						v-if="sessionStore.appSettings.finalImprintUrl"
@@ -295,13 +285,6 @@ onMounted(() => {
 						target="_blank"
 						:name="t('polls', 'Privacy policy')" />
 				</div>
-			</div>
-			<div class="right">
-				<NcButton @click="closeModal">
-					<template #default>
-						{{ t('polls', 'Cancel') }}
-					</template>
-				</NcButton>
 
 				<NcButton
 					:variant="'primary'"
@@ -313,64 +296,167 @@ onMounted(() => {
 				</NcButton>
 			</div>
 		</div>
-	</div>
 
-	<div v-if="sessionStore.appSettings.showLogin" class="registration__login">
-		<!-- TRANSLATORS Position [link]...[/link] around the word to link. Will be replaced with <a href="..."> and </a> -->
-		<InlineLink
-			:text="
-				t('polls', 'Or [link]login[/link] if you are a member of this site.')
-			"
-			:href="loginLink" />
-	</div>
+		<div v-if="sessionStore.appSettings.showLogin" class="register-view__login">
+			<!-- TRANSLATORS Position [link]...[/link] around the word to link. Will be replaced with <a href="..."> and </a> -->
+			<InlineLink
+				:text="
+					t(
+						'polls',
+						'Or [link]login[/link] if you are a member of this site.',
+					)
+				"
+				:href="loginLink" />
+		</div>
+		<div
+			v-if="pollStore.configuration.description"
+			class="register-view__description"
+			role="button"
+			:aria-label="t('polls', 'Expand description')"
+			@click="descriptionExpanded = true">
+			<MarkDownDescription />
+		</div>
+	</NcAppContent>
+
+	<NcModal
+		v-if="descriptionExpanded"
+		:name="pollStore.configuration.title"
+		size="large"
+		close-on-click-outside
+		@close="descriptionExpanded = false">
+		<MarkDownDescription />
+	</NcModal>
 </template>
 
 <style lang="scss">
-.modal-container__content {
+.app-content.register-view {
+	--bg-glass: rgb(from var(--color-background-assistant) r g b / 0.7);
+	margin: auto !important;
+	background: none !important;
+}
+
+.register-view {
 	display: grid;
-	.enter__name,
-	.enter__email {
-		margin-bottom: 12px;
+	grid-template-columns: repeat(
+		auto-fit,
+		minmax(calc((var(--cap-width) / 2) - 2rem), 1fr)
+	);
+	// Define 5 rows for properly description expanding
+	grid-template-rows: auto auto auto auto 1fr;
+	grid-auto-flow: column;
+	gap: 1rem;
+	width: 100%;
+	max-width: var(--cap-width);
+	padding: 1.5rem 1rem;
+
+	> * {
+		border-radius: 16px;
+		box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+		backdrop-filter: blur(5px);
+		-webkit-backdrop-filter: blur(5px);
+		border: 1px solid rgb(from var(--color-border) r g b / 0.6);
+		padding: 0.5rem;
+		background-color: var(--bg-glass);
 	}
 
-	.markdown-description {
-		--markdown-description-bg: var(--container-background-light);
-		border-radius: var(--border-radius-container);
-		padding: 0.3rem 1rem;
+	.register-view__header {
+		grid-column-start: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
 	}
-}
 
-[class*='section__'] {
-	margin: 4px 0;
-}
-
-.legal_links {
-	a {
-		color: var(--color-text-maxcontrast);
+	.register-view__title {
+		font-size: 1.5rem;
 		font-weight: bold;
-		white-space: nowrap;
-		padding: 10px;
-		margin: -10px;
+		margin: 0;
+	}
 
-		&:hover,
-		&:active {
-			color: var(--color-main-text);
-			&::after {
-				color: var(--color-text-maxcontrast);
+	.register-view__form {
+		grid-column-start: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+
+		h3 {
+			margin: 0 0 0.5rem;
+		}
+
+		[class*='section__'] {
+			margin: 4px 0;
+		}
+	}
+
+	.register-view__login {
+		grid-column-start: 1;
+		margin-top: 0.5rem;
+	}
+
+	.register-view__description {
+		grid-column-end: -1;
+		grid-row: span 4;
+		position: relative;
+		min-height: 8rem;
+		overflow: hidden;
+		cursor: zoom-in;
+
+		.markdown-description {
+			height: 100%;
+			overflow: hidden;
+			background: none;
+		}
+
+		// Gradient hint that more content exists — opaque overlay div,
+		// no transparency stacking issues.
+		&::after {
+			content: '';
+			position: absolute;
+			inset: auto 0 0 0;
+			height: 3rem;
+			background: linear-gradient(
+				rgb(from var(--color-background-assistant) r g b / 0),
+				var(--color-background-assistant)
+			);
+			pointer-events: none;
+		}
+	}
+
+	.register-view__actions {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 0.5rem;
+	}
+
+	.legal_links {
+		a {
+			color: var(--color-text-maxcontrast);
+			font-weight: bold;
+			white-space: nowrap;
+			padding: 10px;
+			margin: -10px;
+
+			&:hover,
+			&:active {
+				color: var(--color-main-text);
+				&::after {
+					color: var(--color-text-maxcontrast);
+				}
+			}
+
+			&:after {
+				content: '·';
+				padding: 0 4px;
+			}
+
+			&:last-child:after {
+				content: '';
 			}
 		}
-
-		&:after {
-			content: '·';
-			padding: 0 4px;
-		}
-
-		&:last-child:after {
-			content: '';
-		}
 	}
 }
-.registration__login {
-	margin: 1rem 0 0.5rem;
+
+.modal-container__content .markdown-description {
+	--markdown-description-bg: var(--color-main-background);
 }
 </style>

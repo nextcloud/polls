@@ -141,8 +141,8 @@ onUnmounted(() => {
 	display: none;
 }
 
-.app-content {
-	display: flex;
-	flex-direction: column;
-}
+// .app-content {
+// 	display: flex;
+// 	flex-direction: column;
+// }
 </style>

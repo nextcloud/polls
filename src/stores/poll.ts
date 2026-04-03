@@ -266,7 +266,7 @@ export const usePollStore = defineStore('poll', {
 
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
+					if (sessionStore.route.name === 'publicVote' || sessionStore.route.name === 'publicRegister') {
 						return PublicAPI.getPoll(sessionStore.route.params.token)
 					}
 					if (sessionStore.route.name === 'vote') {

@@ -261,7 +261,7 @@ export const useSessionStore = defineStore('session', {
 
 			try {
 				const response = await (() => {
-					if (this.route.name === 'publicVote') {
+					if (this.route.name === 'publicVote' || this.route.name === 'publicRegister') {
 						return PublicAPI.getSession(this.publicToken)
 					}
 					return SessionAPI.getSession()

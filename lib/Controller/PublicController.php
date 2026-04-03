@@ -74,6 +74,7 @@ class PublicController extends BaseController {
 	#[ShareTokenRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}')]
+	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/register')]
 	public function votePage() {
 		Util::addScript(Application::APP_ID, AssetLoader::getScript('main'));
 		if ($this->userSession->getIsLoggedIn()) {
