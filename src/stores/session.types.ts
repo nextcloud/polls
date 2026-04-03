@@ -5,7 +5,6 @@
 
 import { RouteRecordNameGeneric } from 'vue-router'
 
-import { AppSettingsStore } from './appSettings.types'
 import { ViewMode } from './preferences.types'
 
 import type { Share } from './shares.types'
@@ -63,9 +62,20 @@ export type AppPermissions = {
 	unrestrictedOwner: boolean
 }
 
+type AppSettings = {
+	finalImprintUrl: string
+	finalPrivacyUrl: string
+	navigationPollsInList: boolean
+	useLogin: boolean
+	useSiteLegalTerms: boolean
+	useActivity: boolean
+	updateType: string
+	currentVersion: string
+}
+
 export type Session = {
 	appPermissions: AppPermissions
-	appSettings: AppSettingsStore
+	appSettings: AppSettings
 	currentUser: User
 	route: Route
 	sessionSettings: SessionSettings
