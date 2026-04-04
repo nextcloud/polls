@@ -259,9 +259,10 @@ router.beforeResolve(async (to: RouteLocationNormalized) => {
 
 	if (to.meta.registerPage) {
 		const pollStore = usePollStore()
+		const optionsStore = useOptionsStore()
 
 		try {
-			await pollStore.load()
+			await Promise.all([pollStore.load(), optionsStore.load()])
 		} catch {
 			return { name: 'notfound' }
 		}

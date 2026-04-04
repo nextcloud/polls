@@ -57,7 +57,6 @@ export const useSessionStore = defineStore('session', {
 			finalPrivacyUrl: '',
 			navigationPollsInList: false,
 			useLogin: false,
-			useSiteLegalTerms: true,
 			useActivity: false,
 			updateType: 'noPolling',
 			currentVersion: '',

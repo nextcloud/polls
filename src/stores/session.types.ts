@@ -67,7 +67,6 @@ type AppSettings = {
 	finalPrivacyUrl: string
 	navigationPollsInList: boolean
 	useLogin: boolean
-	useSiteLegalTerms: boolean
 	useActivity: boolean
 	updateType: string
 	currentVersion: string

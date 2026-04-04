@@ -140,4 +140,8 @@ onUnmounted(() => {
 #public-page-user-menu {
 	display: none;
 }
+
+#body-public a {
+	font-weight: 600;
+}
 </style>

@@ -115,7 +115,10 @@ export const useOptionsStore = defineStore('options', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
+					if (
+						sessionStore.route.name === 'publicVote'
+						|| sessionStore.route.name === 'publicRegister'
+					) {
 						return PublicAPI.getOptions(
 							sessionStore.route.params.token as string,
 						)

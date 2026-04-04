@@ -51,7 +51,7 @@ const InlineLink = {
 				before,
 				h(
 					'a',
-					{ href: props.href, target: props.target, style: 'text-decoration: revert', ...attrs },
+					{ href: props.href, target: props.target, ...attrs },
 					linkText,
 				),
 				after,

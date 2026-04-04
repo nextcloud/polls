@@ -99,7 +99,6 @@ class AppSettings implements JsonSerializable {
 			'finalPrivacyUrl' => '',
 			'finalImprintUrl' => '',
 			'useLogin' => true,
-			'useSiteLegalTerms' => true,
 			'useActivity' => false,
 			'navigationPollsInList' => false,
 			'updateType' => $this->getUpdateType(),
@@ -121,7 +120,6 @@ class AppSettings implements JsonSerializable {
 			'finalPrivacyUrl' => $this->getFinalPrivacyUrl(),
 			'finalImprintUrl' => $this->getFinalImprintUrl(),
 			'useLogin' => $this->getShowLogin(),
-			'useSiteLegalTerms' => $this->getBooleanSetting(self::SETTING_USE_SITE_LEGAL),
 		];
 	}
 
