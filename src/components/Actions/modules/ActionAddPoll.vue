@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useSessionStore } from '../../../stores/session'
@@ -35,7 +35,7 @@ const {
 const router = useRouter()
 const sessionStore = useSessionStore()
 
-const newPoll = ref({
+const newPoll = shallowRef({
 	id: 0,
 	title: '',
 })

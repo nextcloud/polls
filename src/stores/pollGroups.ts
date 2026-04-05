@@ -4,7 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 
 import orderBy from 'lodash/orderBy'
 
@@ -21,7 +21,7 @@ import type { Poll } from './poll.types'
 import type { PollGroup } from './pollGroups.types'
 
 export const usePollGroupsStore = defineStore('pollGroups', () => {
-	const pollGroups = ref<PollGroup[]>([])
+	const pollGroups = shallowRef<PollGroup[]>([])
 	const updating = ref(false)
 
 	/**
