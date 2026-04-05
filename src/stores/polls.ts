@@ -225,7 +225,6 @@ export const usePollsStore = defineStore('polls', {
 		 * polls list, filtered by current category and sorted
 		 */
 		pollsFilteredSorted(state: PollsStore): Poll[] {
-			const sessionStore = useSessionStore()
 			const pollGroupsStore = usePollGroupsStore()
 
 			// if we are in a group route, return the polls of the current group
