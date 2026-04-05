@@ -53,42 +53,13 @@ export const useSessionStore = defineStore('session', {
 			timezoneName: 'local',
 		},
 		appSettings: {
-			allAccessGroups: [],
-			allowCombo: true,
-			allowPublicShares: true,
-			allowAllAccess: true,
-			allowPollCreation: true,
-			allowPollDownload: true,
-			autoArchive: false,
-			autoArchiveOffset: 30,
-			autoDelete: false,
-			autoDeleteOffset: 30,
-			defaultPrivacyUrl: '',
-			defaultImprintUrl: '',
-			disclaimer: '',
-			imprintUrl: '',
-			legalTermsInEmail: false,
-			privacyUrl: '',
-			showMailAddresses: false,
-			showLogin: true,
-			updateType: 'noPolling',
-			useActivity: false,
-			useCollaboration: true,
-			useSiteLegalTerms: true,
-			navigationPollsInList: true,
-			finalPrivacyUrl: '',
 			finalImprintUrl: '',
-			comboGroups: [],
-			publicSharesGroups: [],
-			pollCreationGroups: [],
-			pollDownloadGroups: [],
-			showMailAddressesGroups: [],
-			unrestrictedOwner: false,
-			unrestrictedOwnerGroups: [],
-			groups: [],
-			status: {
-				loadingGroups: false,
-			},
+			finalPrivacyUrl: '',
+			navigationPollsInList: false,
+			useLogin: false,
+			useActivity: false,
+			updateType: 'noPolling',
+			currentVersion: '',
 		},
 		route: {
 			currentRoute: '',
@@ -261,7 +232,10 @@ export const useSessionStore = defineStore('session', {
 
 			try {
 				const response = await (() => {
-					if (this.route.name === 'publicVote') {
+					if (
+						this.route.name === 'publicVote'
+						|| this.route.name === 'publicRegister'
+					) {
 						return PublicAPI.getSession(this.publicToken)
 					}
 					return SessionAPI.getSession()

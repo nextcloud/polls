@@ -136,8 +136,12 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-.app-content {
-	display: flex;
-	flex-direction: column;
+// remove public user menu from header
+#public-page-user-menu {
+	display: none;
+}
+
+#body-public a {
+	font-weight: 600;
 }
 </style>

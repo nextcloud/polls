@@ -321,7 +321,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 			);
 		} elseif ($this->token) {
 			return $this->urlGenerator->linkToRouteAbsolute(
-				Application::APP_ID . '.public.votePage',
+				Application::APP_ID . '.public.votePagepublic',
 				['token' => $this->token]
 			);
 		} else {

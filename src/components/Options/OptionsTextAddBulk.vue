@@ -8,7 +8,7 @@ import { ref } from 'vue'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
-import NcModal from '@nextcloud/vue/components/NcModal'
+import NcModal from '../Base/modules/CustomNcModal.vue'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcButton from '@nextcloud/vue/components/NcButton'

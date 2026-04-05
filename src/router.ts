@@ -67,6 +67,7 @@ const Forbidden = () => import('./views/Forbidden.vue')
 const List = () => import('./views/PollList.vue')
 const NotFound = () => import('./views/NotFound.vue')
 const Vote = () => import('./views/Vote.vue')
+const PublicRegisterView = () => import('./views/PublicRegisterView.vue')
 
 const SideBar = () => import('./views/SideBar.vue')
 const SideBarPollGroup = () => import('./views/SideBarPollGroup.vue')
@@ -161,6 +162,19 @@ const routes: RouteRecordRaw[] = [
 		},
 	},
 	{
+		name: 'publicRegister',
+		path: '/s/:token/register',
+		components: {
+			default: PublicRegisterView,
+		},
+		beforeEnter: validateToken,
+		props: true,
+		meta: {
+			publicPage: true,
+			registerPage: true,
+		},
+	},
+	{
 		name: 'root',
 		path: '/',
 		redirect: {
@@ -243,6 +257,31 @@ router.beforeResolve(async (to: RouteLocationNormalized) => {
 		await pollsStore.load(!watcherActive)
 	}
 
+	if (to.meta.registerPage) {
+		const pollStore = usePollStore()
+		const optionsStore = useOptionsStore()
+
+		try {
+			await Promise.all([pollStore.load(), optionsStore.load()])
+		} catch {
+			return { name: 'notfound' }
+		}
+
+		// If the user no longer needs to register, redirect to the vote page
+		const needsRegistration =
+			pollStore.currentUserStatus.userRole === 'public'
+			&& !pollStore.isClosed
+			&& !pollStore.currentUserStatus.isLocked
+
+		if (!needsRegistration) {
+			return {
+				name: 'publicVote',
+				params: { token: to.params.token },
+				replace: true,
+			}
+		}
+	}
+
 	if (to.meta.votePage) {
 		const pollStore = usePollStore()
 		const votesStore = useVotesStore()
@@ -253,6 +292,21 @@ router.beforeResolve(async (to: RouteLocationNormalized) => {
 			await pollStore.load()
 		} catch {
 			return { name: 'notfound' }
+		}
+
+		// Redirect unregistered public users to the registration page
+		if (to.name === 'publicVote') {
+			const needsRegistration =
+				pollStore.currentUserStatus.userRole === 'public'
+				&& !pollStore.isClosed
+				&& !pollStore.currentUserStatus.isLocked
+
+			if (needsRegistration) {
+				return {
+					name: 'publicRegister',
+					params: { token: to.params.token },
+				}
+			}
 		}
 
 		await Promise.allSettled([

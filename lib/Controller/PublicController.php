@@ -73,7 +73,8 @@ class PublicController extends BaseController {
 	#[NoCSRFRequired]
 	#[ShareTokenRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
-	#[FrontpageRoute(verb: 'GET', url: '/s/{token}')]
+	#[FrontpageRoute(verb: 'GET', url: '/s/{token}', postfix: 'public')]
+	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/register', postfix: 'register')]
 	public function votePage() {
 		Util::addScript(Application::APP_ID, AssetLoader::getScript('main'));
 		if ($this->userSession->getIsLoggedIn()) {
@@ -491,7 +492,7 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/register')]
 	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->register($token, $displayName, $emailAddress, $timeZone),
+			'share' => $this->shareService->registerGuest($token, $displayName, $emailAddress, $timeZone),
 		], Http::STATUS_CREATED);
 	}
 

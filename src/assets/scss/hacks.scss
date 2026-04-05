@@ -21,18 +21,9 @@
 	height: var(--avatar-size);
 }
 
-// h2 in notecard gets a margin-top of -6px instead of 24px for better alignment
-.notecard h2 {
-	margin-top: -6px;
-}
-
 // relative position to be able to get sticky toolbar
 .app-content {
 	position: relative !important;
-}
-
-.app-sidebar {
-	top: 0 !important;
 }
 
 .action-item.action-item--single.app-navigation-toggle.undefined.has-tooltip {
@@ -55,8 +46,4 @@
 	.trigger {
 		display: inline !important;
 	}
-}
-
-.modal-wrapper .modal-container {
-	overflow: scroll !important;
 }
