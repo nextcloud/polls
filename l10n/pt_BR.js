@@ -220,7 +220,7 @@ OC.L10N.register(
     "You have restored the share for team {sharee} from poll {pollTitle}" : "Você restaurou o compartilhamento para a equipe {sharee} da enquete {pollTitle}",
     "{actor} has restored the share for team {sharee} from poll {pollTitle}" : "{actor} restaurou o compartilhamento para a equipe {sharee} da enquete {pollTitle}",
     "You have restored the share for team {sharee}" : "Você restaurou o compartilhamento para a equipe {sharee}",
-    "{actor} has restored the share for team {sharee}" : "{actor}ê restaurou o compartilhamento para a equipe {sharee}",
+    "{actor} has restored the share for team {sharee}" : "{actor} restaurou o compartilhamento para a equipe {sharee}",
     "You have restored the share for contact group {sharee} from poll {pollTitle}" : "Você restaurou o compartilhamento para o grupo de contatos {sharee} da enquete {pollTitle}",
     "{actor} has restored the share for contact group {sharee} from poll {pollTitle}" : "{actor} restaurou o compartilhamento para o grupo de contatos {sharee} da enquete {pollTitle}",
     "You have restored the share for contact group {sharee}" : "Você restaurou o compartilhamento para o grupo de contatos {sharee}",

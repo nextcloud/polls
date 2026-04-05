@@ -9,6 +9,8 @@ updates:
       time: '03:00'
       timezone: Europe/Paris
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: composer
     directory: '/'
@@ -17,6 +19,8 @@ updates:
       time: '03:00'
       timezone: Europe/Paris
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: 'github-actions'
     directory: '/'
@@ -26,8 +30,10 @@ updates:
       time: '04:00'
       timezone: Europe/Paris
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
 
-  # master-7
+  # stable-7
   - package-ecosystem: npm
     directory: '/'
     target-branch: stable-7
@@ -39,6 +45,8 @@ updates:
     commit-message:
       prefix: '[stable-7] '
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
     ignore:
       - dependency-name: '*'
         update-types: ['version-update:semver-major']
@@ -53,6 +61,8 @@ updates:
     commit-message:
       prefix: '[stable-7] '
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: github-actions
     directory: '/'
@@ -65,3 +75,5 @@ updates:
     commit-message:
       prefix: '[stable-7] '
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
