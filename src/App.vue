@@ -10,7 +10,7 @@ import {
 	defineAsyncComponent,
 	onMounted,
 	onUnmounted,
-	watchEffect,
+	watch,
 } from 'vue'
 import { useRoute } from 'vue-router'
 import debounce from 'lodash/debounce'
@@ -107,9 +107,9 @@ function onTransitionsOn() {
 	transitionsOn()
 }
 
-watchEffect(() => {
-	document.title = sessionStore.windowTitle
-})
+watch(() => sessionStore.windowTitle, (title) => {
+	document.title = title
+}, { immediate: true })
 
 onMounted(() => {
 	subscribe(Event.TransitionsOff, onTransitionsOff)
