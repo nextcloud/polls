@@ -129,6 +129,7 @@ OC.L10N.register(
     "Clone poll" : "Dubliuoti apklausą",
     "Clone to option sequence" : "Dubliuoti į variantų seką",
     "Create a sequence of date options starting with {dateOption}." : "Sukurti datų variantų seką pradedant nuo {dateOption}.",
+    "Amount" : "Kiekis",
     "Delete option" : "Ištrinti variantą",
     "{displayName}'s proposal" : "Pasiūlė {displayName}",
     "Clone option" : "Dubliuoti variantą",
