@@ -5,6 +5,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 import debounce from 'lodash/debounce'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
@@ -15,6 +16,8 @@ import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
 import { ValidatorAPI } from '../../Api'
 import { StatusResults } from '../../Types'
 import { useSessionStore } from '../../stores/session'
+
+const route = useRoute()
 
 type InputProps = {
 	success: boolean
@@ -88,7 +91,7 @@ async function submit() {
 
 <template>
 	<NcActionInput
-		v-if="sessionStore.route.name === 'publicVote'"
+		v-if="route.meta.publicVotePage"
 		v-bind="inputProps"
 		v-model="sessionStore.share.user.emailAddress"
 		@update:model-value="validate"

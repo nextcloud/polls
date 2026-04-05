@@ -8,12 +8,12 @@ import {
 	createWebHistory,
 	createRouter,
 } from 'vue-router'
+import { shallowRef } from 'vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { getCookieValue, setCookie } from './helpers/modules/cookieHelper'
 import { Logger } from './helpers/modules/logger'
-import { loadContext } from './composables/context'
 import { emit } from '@nextcloud/event-bus'
 import { Event } from './Types'
 
@@ -25,41 +25,21 @@ import { usePollsStore } from './stores/polls'
 import { useVotesStore } from './stores/votes'
 import { useOptionsStore } from './stores/options'
 import { useSubscriptionStore } from './stores/subscription'
+import { Settings } from 'luxon'
+import { usePreferencesStore } from './stores/preferences'
 
-async function validateToken(to: RouteLocationNormalized) {
-	const sessionStore = useSessionStore()
-
-	// if the user is logged in, reroute to the vote page
-	if (getCurrentUser()) {
-		return {
-			name: 'vote',
-			params: {
-				id: sessionStore.share.pollId,
-			},
-		}
+declare module 'vue-router' {
+	interface RouteMeta {
+		comboPage?: boolean
+		errorPage?: boolean
+		groupPage?: boolean
+		internalVotePage?: boolean
+		listPage?: boolean
+		publicPage?: boolean
+		publicVotePage?: boolean
+		registerPage?: boolean
+		votePage?: boolean
 	}
-
-	// Check, if user has a personal token from the user's client stored cookie
-	// matching the public token
-	if (sessionStore.share.type === 'public') {
-		const personalToken = getCookieValue(to.params.token as string)
-
-		if (personalToken) {
-			// extend expiry time for 30 days after successful access
-			const cookieExpiration = 30 * 24 * 60 * 1000
-			setCookie(to.params.token as string, personalToken, cookieExpiration)
-			// participant has already access to the poll and a private token
-			// reroute to the public vote page using the personal token
-			return {
-				name: 'publicVote',
-				params: {
-					token: personalToken,
-				},
-			}
-		}
-	}
-
-	return true
 }
 
 const Combo = () => import('./views/Combo.vue')
@@ -145,6 +125,7 @@ const routes: RouteRecordRaw[] = [
 		props: true,
 		meta: {
 			votePage: true,
+			internalVotePage: true,
 		},
 	},
 	{
@@ -158,6 +139,7 @@ const routes: RouteRecordRaw[] = [
 		props: true,
 		meta: {
 			publicPage: true,
+			publicVotePage: true,
 			votePage: true,
 		},
 	},
@@ -195,19 +177,64 @@ const routes: RouteRecordRaw[] = [
 	},
 ]
 
+async function validateToken(to: RouteLocationNormalized) {
+	const sessionStore = useSessionStore()
+
+	// if the user is logged in, reroute to the vote page
+	if (getCurrentUser()) {
+		return {
+			name: 'vote',
+			params: {
+				id: sessionStore.share.pollId,
+			},
+		}
+	}
+
+	// Check, if user has a personal token from the user's client stored cookie
+	// matching the public token
+	if (sessionStore.share.type === 'public') {
+		const personalToken = getCookieValue(to.params.token as string)
+
+		if (personalToken) {
+			// extend expiry time for 30 days after successful access
+			const cookieExpiration = 30 * 24 * 60 * 1000
+			setCookie(to.params.token as string, personalToken, cookieExpiration)
+			// participant has already access to the poll and a private token
+			// reroute to the public vote page using the personal token
+			return {
+				name: 'publicVote',
+				params: {
+					token: personalToken,
+				},
+			}
+		}
+	}
+
+	return true
+}
+
 const router = createRouter({
 	history: createWebHistory(generateUrl('/apps/polls')),
 	routes,
 	linkActiveClass: 'active',
 })
 
+// Reflects the navigation target during guards (router.currentRoute is only
+// updated after navigation commits, so stores must read this ref instead).
+export const activeRoute = shallowRef<RouteLocationNormalized>(
+	router.currentRoute.value,
+)
+
 router.beforeEach(
 	async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+		activeRoute.value = to
+
 		const sessionStore = useSessionStore()
 		const pollStore = usePollStore()
 		const votesStore = useVotesStore()
 		const optionsStore = useOptionsStore()
 		const subscriptionStore = useSubscriptionStore()
+		const preferencesStore = usePreferencesStore()
 
 		sessionStore.navigationStatus = 'loading'
 		emit(Event.TransitionsOff, 0)
@@ -221,14 +248,27 @@ router.beforeEach(
 
 		// if the previous and the requested routes have the same name and
 		// the watcher is active, we can do a cheap loading
-		const cheapLoading =
+		if (
 			to.name === from.name
 			&& sessionStore.watcher.mode !== 'noPolling'
 			&& sessionStore.watcher.status !== 'stopped'
+		) {
+			// first load app context -> session and preferences
+			Logger.info('Context loading skipped (cheap loading)')
+			return
+		}
 
-		// first load app context -> session and preferences
 		try {
-			await loadContext(to, cheapLoading)
+			await sessionStore.loadSession()
+
+			Settings.defaultLocale =
+				sessionStore.currentUser.localeCodeIntl
+				|| sessionStore.currentUser.languageCodeIntl
+
+			if (sessionStore.userStatus.isLoggedin) {
+				await preferencesStore.load()
+			}
+			Logger.info('Context loaded')
 		} catch (error) {
 			Logger.error('Could not load context', { error })
 
@@ -295,7 +335,7 @@ router.beforeResolve(async (to: RouteLocationNormalized) => {
 		}
 
 		// Redirect unregistered public users to the registration page
-		if (to.name === 'publicVote') {
+		if (to.meta.publicVotePage) {
 			const needsRegistration =
 				pollStore.currentUserStatus.userRole === 'public'
 				&& !pollStore.isClosed

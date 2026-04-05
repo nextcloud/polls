@@ -3,29 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { RouteRecordNameGeneric } from 'vue-router'
-
 import { ViewMode } from './preferences.types'
 
 import type { Share } from './shares.types'
-import type { FilterType } from './polls.types'
 import type { User } from '../Types'
 import { WatcherMode, WatcherStatus } from '../composables/usePollWatcher.types'
 import { TimeZoneTypes } from '@/Types/dateTime'
-
-interface RouteParams {
-	id: number
-	token: string
-	type: FilterType
-	slug: string
-}
-
-export type Route = {
-	currentRoute: string
-	name: RouteRecordNameGeneric
-	path: string
-	params: RouteParams
-}
 
 export type UserStatus = {
 	isLoggedin: boolean
@@ -76,7 +59,6 @@ export type Session = {
 	appPermissions: AppPermissions
 	appSettings: AppSettings
 	currentUser: User
-	route: Route
 	sessionSettings: SessionSettings
 	share: Share
 	token: string | null

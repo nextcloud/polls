@@ -7,6 +7,7 @@ import { defineStore } from 'pinia'
 import orderBy from 'lodash/orderBy'
 
 import { PublicAPI, OptionsAPI } from '../Api'
+import { activeRoute } from '../router'
 import { Logger } from '../helpers/modules/logger'
 
 import { usePollStore } from './poll'
@@ -115,12 +116,9 @@ export const useOptionsStore = defineStore('options', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
-					if (
-						sessionStore.route.name === 'publicVote'
-						|| sessionStore.route.name === 'publicRegister'
-					) {
+					if (activeRoute.value.meta.publicPage) {
 						return PublicAPI.getOptions(
-							sessionStore.route.params.token as string,
+							sessionStore.publicToken,
 						)
 					}
 					if (sessionStore.currentPollId) {
@@ -171,9 +169,9 @@ export const useOptionsStore = defineStore('options', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
+					if (activeRoute.value.meta.publicVotePage) {
 						return PublicAPI.addOption(
-							sessionStore.route.params.token,
+							sessionStore.publicToken,
 							simpleOption,
 							sequence,
 							voteYes,
@@ -223,9 +221,9 @@ export const useOptionsStore = defineStore('options', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
+					if (activeRoute.value.meta.publicVotePage) {
 						return PublicAPI.deleteOption(
-							sessionStore.route.params.token,
+							sessionStore.publicToken,
 							payload.option.id,
 						)
 					}
@@ -249,9 +247,9 @@ export const useOptionsStore = defineStore('options', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
+					if (activeRoute.value.meta.publicVotePage) {
 						return PublicAPI.restoreOption(
-							sessionStore.route.params.token,
+							sessionStore.publicToken,
 							payload.option.id,
 						)
 					}

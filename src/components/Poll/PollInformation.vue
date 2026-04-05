@@ -272,7 +272,7 @@ const countUsedVotes = computed(
 		</BadgeDiv>
 		<BadgeDiv
 			v-if="
-				$route.name === 'publicVote' && sessionStore.currentUser.emailAddress
+				$route.meta.publicVotePage && sessionStore.currentUser.emailAddress
 			">
 			<template #icon>
 				<EmailIcon />
