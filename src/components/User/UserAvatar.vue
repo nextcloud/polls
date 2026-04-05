@@ -30,7 +30,7 @@ const {
 } = defineProps<Props>()
 
 const computedIsGuest = computed(
-	() => route.name === 'publicVote' || user.isNoUser !== false,
+	() => route.meta.publicVotePage || user.isNoUser !== false,
 )
 
 const avatarUserId = computed(() => {

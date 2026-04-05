@@ -12,6 +12,7 @@ import {
 	onUnmounted,
 	watchEffect,
 } from 'vue'
+import { useRoute } from 'vue-router'
 import debounce from 'lodash/debounce'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
@@ -39,6 +40,7 @@ import './assets/scss/globals.scss'
 
 usePollWatcher()
 
+const route = useRoute()
 const sessionStore = useSessionStore()
 const pollStore = usePollStore()
 const pollGroupsStore = usePollGroupsStore()
@@ -61,8 +63,8 @@ const useSidebar = computed(
 	() =>
 		pollStore.permissions.edit
 		|| pollStore.permissions.comment
-		|| sessionStore.route.name === 'combo'
-		|| (sessionStore.route.name === 'group'
+		|| route.meta.comboPage
+		|| (route.meta.groupPage
 			&& pollGroupsStore.currentPollGroup?.owner.id
 				=== sessionStore.currentUser.id),
 )

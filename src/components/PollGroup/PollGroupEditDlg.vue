@@ -29,7 +29,7 @@ async function updatePollGroup() {
 		pollGroupsStore.updating = true
 		const pollGroup = await pollGroupsStore.writeCurrentPollGroup()
 		if (pollGroup) {
-			if (route.name === 'group' && pollGroup.slug !== route.params.slug) {
+			if (route.meta.groupPage && pollGroup.slug !== route.params.slug) {
 				// if the slug has changed, we need to reroute
 				router.push({
 					name: 'group',

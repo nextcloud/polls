@@ -9,8 +9,8 @@ import { computed, ref } from 'vue'
 import orderBy from 'lodash/orderBy'
 
 import { t } from '@nextcloud/l10n'
-import { useSessionStore } from './session'
 import { usePollsStore } from './polls'
+import { activeRoute } from '../router'
 
 import { PollGroupsAPI } from '../Api'
 
@@ -29,10 +29,10 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 	 * @return {PollGroup | undefined} The current poll group if in a group route, otherwise undefined
 	 */
 	const currentPollGroup = computed((): PollGroup | undefined => {
-		const sessionStore = useSessionStore()
-		if (sessionStore.route.name === 'group') {
+		const route = activeRoute.value
+		if (route.meta.groupPage) {
 			return pollGroups.value.find(
-				(group) => group.slug === sessionStore.route.params.slug,
+				(group) => group.slug === route.params.slug,
 			)
 		}
 		return undefined

@@ -5,6 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, VotesAPI } from '../Api'
+import { activeRoute } from '../router'
 import { Logger } from '../helpers/modules/logger'
 import { StoreHelper } from '../helpers/modules/StoreHelper'
 
@@ -268,10 +269,10 @@ export const useVotesStore = defineStore('votes', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
-						return PublicAPI.getVotes(sessionStore.route.params.token)
+					if (activeRoute.value.meta.publicVotePage) {
+						return PublicAPI.getVotes(sessionStore.publicToken)
 					}
-					if (sessionStore.route.name === 'vote') {
+					if (activeRoute.value.meta.internalVotePage) {
 						return VotesAPI.getVotes(sessionStore.currentPollId)
 					}
 
@@ -330,9 +331,9 @@ export const useVotesStore = defineStore('votes', {
 			const pollStore = usePollStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
+					if (activeRoute.value.meta.publicVotePage) {
 						return PublicAPI.setVote(
-							sessionStore.route.params.token,
+							sessionStore.publicToken,
 							payload.option.id,
 							payload.setTo,
 						)
@@ -378,8 +379,8 @@ export const useVotesStore = defineStore('votes', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
-						return PublicAPI.resetVotes(sessionStore.route.params.token)
+					if (activeRoute.value.meta.publicVotePage) {
+						return PublicAPI.resetVotes(sessionStore.publicToken)
 					}
 					return VotesAPI.resetVotes(sessionStore.currentPollId)
 				})()
@@ -418,9 +419,9 @@ export const useVotesStore = defineStore('votes', {
 			const sessionStore = useSessionStore()
 			const pollStore = usePollStore()
 			try {
-				if (sessionStore.route.name === 'publicVote') {
+				if (activeRoute.value.meta.publicVotePage) {
 					await PublicAPI.removeOrphanedVotes(
-						sessionStore.route.params.token,
+						sessionStore.publicToken,
 					)
 				} else {
 					await VotesAPI.removeOrphanedVotes(sessionStore.currentPollId)

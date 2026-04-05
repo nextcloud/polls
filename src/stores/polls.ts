@@ -10,6 +10,7 @@ import { t } from '@nextcloud/l10n'
 
 import { Logger } from '../helpers/modules/logger'
 import { PollsAPI } from '../Api'
+import { activeRoute } from '../router'
 
 import { useSessionStore } from './session'
 import { usePollGroupsStore } from './pollGroups'
@@ -213,13 +214,9 @@ export const usePollsStore = defineStore('polls', {
 				).slice(0, state.meta.maxPollsInNavigation),
 
 		currentCategory(state: PollsStore): PollCategory {
-			const sessionStore = useSessionStore()
-
-			if (
-				sessionStore.route.name === 'list'
-				&& sessionStore.route.params.type
-			) {
-				return state.categories[sessionStore.route.params.type as FilterType]
+			const route = activeRoute.value
+			if (route.meta.listPage && route.params.type) {
+				return state.categories[route.params.type as FilterType]
 			}
 			return state.categories.relevant
 		},
@@ -232,7 +229,7 @@ export const usePollsStore = defineStore('polls', {
 			const pollGroupsStore = usePollGroupsStore()
 
 			// if we are in a group route, return the polls of the current group
-			if (sessionStore.route.name === 'group') {
+			if (activeRoute.value.meta.groupPage) {
 				return pollGroupsStore.pollsInCurrendPollGroup
 			}
 

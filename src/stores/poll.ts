@@ -16,6 +16,7 @@ import { emit } from '@nextcloud/event-bus'
 
 import { Logger } from '../helpers/modules/logger'
 import { PublicAPI, PollsAPI } from '../Api'
+import { activeRoute } from '../router'
 import { defaultUser, Event } from '../Types'
 
 import { usePollsStore } from './polls'
@@ -266,10 +267,10 @@ export const usePollStore = defineStore('poll', {
 
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote' || sessionStore.route.name === 'publicRegister') {
-						return PublicAPI.getPoll(sessionStore.route.params.token)
+					if (activeRoute.value.meta.publicPage) {
+						return PublicAPI.getPoll(sessionStore.publicToken)
 					}
-					if (sessionStore.route.name === 'vote') {
+					if (activeRoute.value.meta.internalVotePage) {
 						return PollsAPI.getPoll(sessionStore.currentPollId)
 					}
 				})()

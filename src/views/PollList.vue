@@ -38,7 +38,7 @@ const router = useRouter()
 const route = useRoute()
 
 const title = computed(() => {
-	if (route.name === 'group') {
+	if (route.meta.groupPage) {
 		return (
 			pollGroupsStore.currentPollGroup?.titleExt
 			|| pollGroupsStore.currentPollGroup?.name
@@ -72,7 +72,7 @@ const infoLoaded = computed(() =>
 )
 
 const description = computed(() => {
-	if (route.name === 'group') {
+	if (route.meta.groupPage) {
 		return pollGroupsStore.currentPollGroup?.description || ''
 	}
 
