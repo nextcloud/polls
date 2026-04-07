@@ -64,6 +64,7 @@ OC.L10N.register(
     "never" : "מעולם לא",
     "Error cloning poll." : "שגיאה בשכפול סקר.",
     "Back" : "אחורה",
+    "Legal notice" : "הצהרה משפטית",
     "Privacy policy" : "מדיניות פרטיות",
     "Share label" : "שתף תווית",
     "Copy link to clipboard" : "העתקת קישור ללוח הגזירים",

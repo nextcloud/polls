@@ -383,6 +383,7 @@ OC.L10N.register(
     "Direction" : "الاتجاه",
     "Descending" : "تَنازُلي",
     "Ascending" : "تَصاعُدي",
+    "Legal notice" : "ملاحظة قانونية",
     "Privacy policy" : "سياسة الخصوصية",
     "Enable the tracking of activities with the Activities app" : "تمكين تتبع الأنشطة من خلال تطبيق الأنشطة",
     "Enable the automatic poll archiving" : "تمكين الأرشفة التلقائية للاستبيانات",

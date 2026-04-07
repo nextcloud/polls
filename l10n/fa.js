@@ -278,6 +278,7 @@ OC.L10N.register(
     "Sort by title" : "Sort by title",
     "Descending" : "Descending",
     "Ascending" : "Ascending",
+    "Legal notice" : "توصیهٔ حقوقی",
     "Privacy policy" : "سیاست محرمانگی",
     "Add terms links also to the email footer" : "Add terms links also to the email footer",
     "Additional email disclaimer" : "Additional email disclaimer",

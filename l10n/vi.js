@@ -41,6 +41,7 @@ OC.L10N.register(
     "Back" : "Trở lại",
     "Descending" : "Giảm dần",
     "Ascending" : "Tăng dần",
+    "Legal notice" : "Thông cáo pháp lý",
     "Privacy policy" : "Chính sách riêng tư",
     "Share label" : "Chia sẻ nhãn",
     "Delete share" : "Xóa chia sẻ",

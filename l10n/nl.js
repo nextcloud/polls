@@ -276,6 +276,7 @@ OC.L10N.register(
     "Direction" : "Richting",
     "Descending" : "Aflopend",
     "Ascending" : "Oplopend",
+    "Legal notice" : "Juridische bepalingen",
     "Privacy policy" : "Privacybeleid",
     "Privacy policy link:" : "Link naar privacybeleid",
     "Text polls default to list view" : "Tekstpeilingen standaard in lijstoverzicht",

@@ -173,6 +173,7 @@ OC.L10N.register(
     "Sort by owner name" : "Rikiuoti pagal savininko vardą",
     "Descending" : "Mažėjančia tvarka",
     "Ascending" : "Didėjančia tvarka",
+    "Legal notice" : "Teisinis pranešimas",
     "Privacy policy" : "Privatumo politika",
     "Styles" : "Stiliai",
     "Token: {token}" : "Prieigos raktas: {token}",

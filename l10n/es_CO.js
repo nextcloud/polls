@@ -38,6 +38,7 @@ OC.L10N.register(
     "Submit" : "Enviar",
     "Description" : "Descripción",
     "never" : "nunca",
+    "Legal notice" : "Aviso legal",
     "Shares" : "Elementos compartidos",
     "No activity yet" : "Aún no hay actividades",
     "Configuration" : "Configuración",

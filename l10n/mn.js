@@ -468,6 +468,7 @@ OC.L10N.register(
     "Direction" : "Чиглэл",
     "Descending" : "Буурах",
     "Ascending" : "Өсөх",
+    "Legal notice" : "Хуулийн мэдэгдэл",
     "Privacy policy" : "Нууцлалын бодлого",
     "Enable the tracking of activities with the Activities app" : "Үйл ажиллагааны апп-ээр үйл ажиллагааг хянах боломжийг идэвхжүүлэх",
     "Enable the automatic poll archiving" : "Санал асуулгыг автоматаар архивлах боломжийг идэвхжүүлэх",

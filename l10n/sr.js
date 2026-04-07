@@ -462,6 +462,7 @@ OC.L10N.register(
     "Direction" : "Смер",
     "Descending" : "опадајуће",
     "Ascending" : "растуће",
+    "Legal notice" : "Правно обавештење",
     "Privacy policy" : "Смернице приватности",
     "Enable the tracking of activities with the Activities app" : "Укључи праћење активности апликацијом Активности",
     "Enable the automatic poll archiving" : "Укључи аутоматско архивирање гласања",

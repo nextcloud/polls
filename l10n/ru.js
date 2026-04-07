@@ -267,6 +267,7 @@ OC.L10N.register(
     "Direction" : "Направление",
     "Descending" : "По убыванию",
     "Ascending" : "По возрастанию",
+    "Legal notice" : "Официальное уведомление",
     "Privacy policy" : "Политика конфиденциальности",
     "Enable the usage of the combo view globally" : "Включите глобальное использование комбинированного представления",
     "Add terms links also to the email footer" : "Добавлять в письмо ссылки на правила и условия",

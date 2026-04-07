@@ -276,6 +276,7 @@ OC.L10N.register(
     "Back" : "Regresar",
     "Take over" : "Tomar el control",
     "Sort by title" : "Ordenar por título",
+    "Legal notice" : "Aviso legal",
     "Privacy policy" : "Política de privacidad",
     "Add terms links also to the email footer" : "Agregar enlaces de términos también al pie de página del correo electrónico",
     "Additional email disclaimer" : "Descargo de responsabilidad de correo electrónico adicional",

@@ -346,6 +346,7 @@ OC.L10N.register(
     "Take over" : "Fer-se càrrec",
     "Sort by title" : "Ordenar per títol",
     "Ascending" : "Ascendent",
+    "Legal notice" : "Avís legal",
     "Privacy policy" : "Política de privadesa",
     "Enable the tracking of activities with the Activities app" : "Habiliteu el seguiment d'activitats amb l'aplicació Activitats",
     "Enable the automatic poll archiving" : "Activeu l'arxivament automàtic de l'enquesta",

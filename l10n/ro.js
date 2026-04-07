@@ -42,6 +42,7 @@ OC.L10N.register(
     "never" : "niciodată",
     "Back" : "Înapoi",
     "Create new group" : "Creaza grup nou",
+    "Legal notice" : "Aviz juridic",
     "Show QR code" : "Afișează codul QR",
     "Restore share" : "Restabilește partajarea",
     "Shares" : "Partajări",

@@ -462,6 +462,7 @@ OC.L10N.register(
     "Direction" : "Direction",
     "Descending" : "Descendant",
     "Ascending" : "Ascendant",
+    "Legal notice" : "Mentions légales",
     "Privacy policy" : "Politique de confidentialité",
     "Enable the tracking of activities with the Activities app" : "Activer le suivi des activités avec l’application Activités",
     "Enable the automatic poll archiving" : "Activer l’archivage automatique des sondages",

@@ -464,6 +464,7 @@ OC.L10N.register(
     "Direction" : "Suund",
     "Descending" : "Kahanevalt",
     "Ascending" : "Kasvavalt",
+    "Legal notice" : "Juriidiline teave",
     "Privacy policy" : "Privaatsustingimused",
     "Enable the tracking of activities with the Activities app" : "Lülita sisse tegevuste logimine Tegevuste rakenduses",
     "Enable the automatic poll archiving" : "Võta kasutusele küsitluste automaatne arhiveerimine",

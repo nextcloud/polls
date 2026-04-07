@@ -50,6 +50,7 @@ OC.L10N.register(
     "Back" : "Назад",
     "Descending" : "Опаѓачки",
     "Ascending" : "Растечки",
+    "Legal notice" : "Правно известување",
     "Privacy policy" : "Политика за приватност",
     "Share label" : "Ознака на споделувањето",
     "Link copied to clipboard" : "Линкот е копиран во клипборд",

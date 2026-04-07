@@ -464,6 +464,7 @@ OC.L10N.register(
     "Direction" : "ທິດທາງ",
     "Descending" : "ຈາກຫຼາຍໄປໜ້ອຍ",
     "Ascending" : "ຈາກໜ້ອຍໄປຫຼາຍ",
+    "Legal notice" : "ແຈ້ງການທາງກົດໝາຍ",
     "Privacy policy" : "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ",
     "Enable the tracking of activities with the Activities app" : "ເປີດໃຊ້ການຕິດຕາມກິດຈະກຳດ້ວຍແອັບກິດຈະກຳ",
     "Enable the automatic poll archiving" : "ເປີດໃຊ້ການເກັບການສຳຫຼວດແບບອັດຕະໂນມັດ",

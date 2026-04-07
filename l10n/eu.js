@@ -292,6 +292,7 @@ OC.L10N.register(
     "Sort by title" : "Ordenatu izenburuaren arabera",
     "Descending" : "Beheranzkoa",
     "Ascending" : "Goranzkoa",
+    "Legal notice" : "Ohar legala",
     "Privacy policy" : "Pribatutasun politika",
     "Add terms links also to the email footer" : "Gehitu terminoen estekak posta elektronikoko oinean ere",
     "Additional email disclaimer" : "Posta elektronikoaren erantzukizun-ukatze gehigarria",

@@ -487,6 +487,7 @@ OC.L10N.register(
     "Direction" : "方向",
     "Descending" : "遞減",
     "Ascending" : "遞增",
+    "Legal notice" : "法律聲明",
     "Privacy policy" : "隱私權政策",
     "Enable the tracking of activities with the Activities app" : "使用「活動」應用程式追蹤活動",
     "Enable the automatic poll archiving" : "啟用自動投票封存",

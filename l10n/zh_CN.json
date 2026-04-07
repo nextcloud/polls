@@ -262,6 +262,7 @@
     "Direction" : "方向",
     "Descending" : "降序",
     "Ascending" : "升序",
+    "Legal notice" : "法律声明",
     "Privacy policy" : "隐私政策",
     "Text polls default to list view" : "文本投票默认使用列表视图",
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "如果你更喜欢在垂直对齐的列表中而不是在网格视图中显示文本民意测验，请选中此选项。初始默认值是列表视图。",

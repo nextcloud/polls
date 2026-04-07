@@ -280,6 +280,7 @@ OC.L10N.register(
     "Direction" : "Kierunek",
     "Descending" : "Malejąco",
     "Ascending" : "Rosnąco",
+    "Legal notice" : "Nota prawna",
     "Privacy policy" : "Polityka prywatności",
     "Add terms links also to the email footer" : "Dodaj linki do warunków również w stopce e-maila",
     "Additional email disclaimer" : "Dodatkowe zastrzeżenie w e-mailu",

@@ -457,6 +457,7 @@ OC.L10N.register(
     "Direction" : "Напрям",
     "Descending" : "За спаданням",
     "Ascending" : "За зростанням",
+    "Legal notice" : "Правові застереження",
     "Privacy policy" : "Політика конфіденційності",
     "Enable the tracking of activities with the Activities app" : "Увімкнути відстеження змін за допомогою застосунку Події",
     "Enable the automatic poll archiving" : "Увімкнути автоматичне архівування опитування",

@@ -264,6 +264,7 @@ OC.L10N.register(
     "Direction" : "方向",
     "Descending" : "降順",
     "Ascending" : "昇順",
+    "Legal notice" : "法的通知",
     "Privacy policy" : "個人情報保護方針",
     "Group share" : "グループ共有",
     "Share label" : "共有ラベル",

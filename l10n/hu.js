@@ -314,6 +314,7 @@ OC.L10N.register(
     "Direction" : "Irány",
     "Descending" : "Csökkenő",
     "Ascending" : "Növekvő",
+    "Legal notice" : "Jogi nyilatkozat",
     "Privacy policy" : "Adatvédelmi irányelvek",
     "Add terms links also to the email footer" : "Feltételek hivatkozásainak hozzáadása az e-mail láblécéhez",
     "Additional email disclaimer" : "További nyilatkozatok az e-mailben",

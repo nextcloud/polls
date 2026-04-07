@@ -43,6 +43,7 @@ OC.L10N.register(
     "Back" : "Voltar",
     "Descending" : "Descending",
     "Ascending" : "Ascending",
+    "Legal notice" : "Informação legal",
     "Privacy policy" : "Política de privacidade",
     "Enable the spreadsheet download of polls globally" : "Pernitir a transferência de folha de cálculo de eleições globalmente",
     "Link copied to clipboard" : "Ligação copiada para a área de transferência",

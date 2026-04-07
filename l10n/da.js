@@ -57,6 +57,7 @@ OC.L10N.register(
     "Direction" : "Retning",
     "Descending" : "Faldende",
     "Ascending" : "Stigende",
+    "Legal notice" : "Juridisk notits",
     "Privacy policy" : "Fortrolighedspolitik",
     "Use calendar lookup for conflicting calendar events" : "Brug kalenderopslag til konfliktende kalenderbegivenheder",
     "Select the calendars to use for lookup." : "Vælg de kalendere, der skal bruges til opslag.",

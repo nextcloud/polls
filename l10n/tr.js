@@ -487,6 +487,7 @@ OC.L10N.register(
     "Direction" : "Yön",
     "Descending" : "Azalan",
     "Ascending" : "Artan",
+    "Legal notice" : "Yasal bildirim",
     "Privacy policy" : "Gizlilik ilkesi",
     "Enable the tracking of activities with the Activities app" : "Etkinlikler uygulamasıyla etkinlikleri izleyin",
     "Enable the automatic poll archiving" : "Anketler otomatik olarak arşivlensin",

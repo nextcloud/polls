@@ -466,6 +466,7 @@ OC.L10N.register(
     "Direction" : "Smer",
     "Descending" : "Zostupne",
     "Ascending" : "Vzostupne",
+    "Legal notice" : "Právne upozornenie",
     "Privacy policy" : "Zásady ochrany osobných údajov",
     "Enable the tracking of activities with the Activities app" : "Povoliť sledovanie aktivít pomocou aplikácie Aktivity",
     "Enable the automatic poll archiving" : "Povoľte automatické archivovanie ankiet",

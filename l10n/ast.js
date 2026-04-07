@@ -175,6 +175,7 @@ OC.L10N.register(
     "Take over" : "Tomar el control",
     "Descending" : "Descendente",
     "Ascending" : "Ascendente",
+    "Legal notice" : "Avisu llegal",
     "Privacy policy" : "Política de privacidá",
     "Enter the URL of your privacy policy" : "Introduz la URL de la política de privacidá",
     "Enter the URL of your legal notice" : "Introduz la URL del avisu llegal",

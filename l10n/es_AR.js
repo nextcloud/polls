@@ -29,6 +29,7 @@ OC.L10N.register(
     "Description" : "Descripción",
     "never" : "nunca",
     "Back" : "Volver",
+    "Legal notice" : "Aviso legal",
     "Privacy policy" : "Políticas de privacidad",
     "Link copied to clipboard" : "Enlace copiado al portapapeles",
     "Shares" : "Shares",

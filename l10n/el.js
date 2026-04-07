@@ -448,6 +448,7 @@ OC.L10N.register(
     "Direction" : "Κατεύθυνση",
     "Descending" : "Φθίνουσα",
     "Ascending" : "Αύξουσα",
+    "Legal notice" : "Νομική ειδοποίηση",
     "Privacy policy" : "Πολιτική Απορρήτου",
     "Enable the tracking of activities with the Activities app" : "Ενεργοποιήστε την παρακολούθηση δραστηριοτήτων με την εφαρμογή Δραστηριότητες",
     "Enable the automatic poll archiving" : "Ενεργοποιήστε την αυτόματη αρχειοθέτηση δημοσκοπήσεων",

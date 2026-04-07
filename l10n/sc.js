@@ -113,6 +113,7 @@ OC.L10N.register(
     "Back" : "In segus",
     "Take over" : "Rileva",
     "Sort by title" : "Assenta segundu tìtulu",
+    "Legal notice" : "Avisu legale",
     "Privacy policy" : "Critèriu de riservadesa",
     "Text polls default to list view" : "In modalidade predefinida, is sondàgios de testu si visualizant comente elencu",
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Marca inoghe, s'in casu preferis mustrare su sondàgiu de testu in lìnia verticale prus che in una bista de grìglia. Cussa predefinida est sa bista de elencu.",

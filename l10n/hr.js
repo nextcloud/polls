@@ -143,6 +143,7 @@ OC.L10N.register(
     "Back" : "Natrag",
     "Take over" : "Preuzmi",
     "Sort by title" : "Razvrstaj prema naslovu",
+    "Legal notice" : "Pravna obavijest",
     "Privacy policy" : "Pravila o privatnosti",
     "Text polls default to list view" : "Tekstne ankete zadano se prikazuju u obliku popisa",
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Označite ovo ako želite poravnati tekst ankete okomito, a ne u prikazu rešetke. Zadana vrijednost je prikaz u obliku popisa.",

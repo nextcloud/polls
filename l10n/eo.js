@@ -39,6 +39,7 @@ OC.L10N.register(
     "Submit" : "Sendi",
     "Description" : "Priskribo",
     "never" : "neniam",
+    "Legal notice" : "Leĝa regularo",
     "Privacy policy" : "Privateca regularo",
     "Link copied to clipboard" : "Ligilo kopiita al tondujo",
     "Restore share" : "Restaŭri kunhavon",

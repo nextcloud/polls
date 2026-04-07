@@ -487,6 +487,7 @@ OC.L10N.register(
     "Direction" : "Treo",
     "Descending" : "íslitheach",
     "Ascending" : "Ag dul suas",
+    "Legal notice" : "Fógra dlíthiúil",
     "Privacy policy" : "Beartas Príobháideachais",
     "Enable the tracking of activities with the Activities app" : "Cumasaigh rianú gníomhaíochtaí leis an aip Gníomhaíochtaí",
     "Enable the automatic poll archiving" : "Cumasaigh an chartlannú vótaíochta uathoibríoch",

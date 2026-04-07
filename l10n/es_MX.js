@@ -63,6 +63,7 @@ OC.L10N.register(
     "never" : "nunca",
     "Back" : "Atrás",
     "Sort by title" : "Ordenar por título",
+    "Legal notice" : "Aviso legal",
     "Privacy policy" : "Política de privacidad",
     "Share label" : "Etiqueta del recurso compartido",
     "Copy link to clipboard" : "Copiar enlace al portapapeles",

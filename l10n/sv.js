@@ -336,6 +336,7 @@ OC.L10N.register(
     "Direction" : "Riktning",
     "Descending" : "Fallande",
     "Ascending" : "Stigande",
+    "Legal notice" : "Rättsligt meddelande",
     "Privacy policy" : "Integritetspolicy",
     "Add terms links also to the email footer" : "Lägg även till länk till villkor i e-postsidfoten",
     "Additional email disclaimer" : "Ytterligare e-postfriskrivning",

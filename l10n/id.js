@@ -186,6 +186,7 @@ OC.L10N.register(
     "Direction" : "Arah",
     "Descending" : "Menurun",
     "Ascending" : "Naik",
+    "Legal notice" : "Pemberitahuan hukum",
     "Privacy policy" : "Kebijakan privasi",
     "Enable the tracking of activities with the Activities app" : "Aktifkan pelacakan aktivitas dengan aplikasi Activities",
     "Enable only for the following groups" : "Aktifkan hanya untuk grup berikut",

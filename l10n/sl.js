@@ -224,6 +224,7 @@ OC.L10N.register(
     "Sort by creation date" : "Razvrsti po datumu ustvarjanja",
     "Descending" : "Padajoče",
     "Ascending" : "Naraščajoče",
+    "Legal notice" : "Pravno obvestilo",
     "Privacy policy" : "Pravila zasebnosti",
     "Enter the URL of your privacy policy" : "Vpis naslova URL pravil zasebnosti",
     "Enter the URL of your legal notice" : "Vpis naslova URL pravnega obvestila",

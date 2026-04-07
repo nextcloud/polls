@@ -466,6 +466,7 @@ OC.L10N.register(
     "Direction" : "يۆنىلىش",
     "Descending" : "تۆۋەنلەش",
     "Ascending" : "ئۆرلەۋاتىدۇ",
+    "Legal notice" : "قانۇن ئۇقتۇرۇشى",
     "Privacy policy" : "مەخپىيەتلىك تۈزۈمى",
     "Enable the tracking of activities with the Activities app" : "پائالىيەت دېتالى ئارقىلىق پائالىيەتلەرنى ئىز قوغلاشنى قوزغىتىڭ",
     "Enable the automatic poll archiving" : "ئاپتوماتىك بېلەت تاشلاش ئارخىپىنى قوزغىتىڭ",

@@ -66,6 +66,7 @@ OC.L10N.register(
     "Error cloning poll." : "Villa við að klóna könnun.",
     "Back" : "Til baka",
     "Sort by title" : "Raða eftir titli",
+    "Legal notice" : "Lagaleg atriði",
     "Privacy policy" : "Meðferð persónulegra gagna",
     "Share label" : "Merking á sameign",
     "Resend invitation mail" : "Senda boðspóst aftur",

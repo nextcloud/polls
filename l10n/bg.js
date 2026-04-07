@@ -302,6 +302,7 @@ OC.L10N.register(
     "Direction" : "Посока",
     "Descending" : "Низходящо",
     "Ascending" : "Възходящо",
+    "Legal notice" : "Правна информация",
     "Privacy policy" : "Политика за поверителност",
     "Add terms links also to the email footer" : "Добавете връзки към термини и към долния колонтитул на имейла",
     "Additional email disclaimer" : "Допълнителен отказ от отговорност за имейл",

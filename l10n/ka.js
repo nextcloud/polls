@@ -183,6 +183,7 @@ OC.L10N.register(
     "Description" : "Description",
     "never" : "never",
     "Back" : "უკან",
+    "Legal notice" : "Legal notice",
     "Privacy policy" : "Privacy policy",
     "Share label" : "Share label",
     "Restore share" : "Restore share",

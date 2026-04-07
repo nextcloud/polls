@@ -206,6 +206,7 @@ OC.L10N.register(
     "Direction" : "Direction",
     "Descending" : "Descending",
     "Ascending" : "Ascending",
+    "Legal notice" : "Notisi ya kisheria",
     "Privacy policy" : "Sheria ya faragha",
     "Enable the tracking of activities with the Activities app" : "Enable the tracking of activities with the Activities app",
     "Enable the usage of the combo view globally" : "Enable the usage of the combo view globally",
