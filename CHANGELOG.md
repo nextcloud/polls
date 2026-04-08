@@ -5,7 +5,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [Unreleased]
 ### Fixed
  - Fixed broken share links for public polls
  - Fixed access issues for public users on shared polls
