@@ -1,7 +1,9 @@
 OC.L10N.register(
     "polls",
     {
+    "Contact group" : "Grupo de contactos",
     "Group" : "Grupo",
+    "Team" : "Grupo",
     "Legal Notice" : "Notícia de legalidade",
     "Privacy Policy" : "Política de Privacidade",
     "Contact" : "Contacto",
