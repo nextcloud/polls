@@ -1,5 +1,7 @@
 # SPDX-FileCopyrightText: 2020 Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Update configs must have a unique combination of 'package-ecosystem', 'directory', and 'target-branch'. Ecosystem 'composer' has overlapping directories.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -53,6 +55,7 @@ updates:
 
   - package-ecosystem: composer
     directory: '/'
+    target-branch: stable-8
     schedule:
       interval: weekly
       day: monday
@@ -98,6 +101,7 @@ updates:
 
   - package-ecosystem: composer
     directory: '/'
+    target-branch: stable-7
     schedule:
       interval: weekly
       day: monday
