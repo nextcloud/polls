@@ -33,6 +33,51 @@ updates:
     cooldown:
       default-days: 7
 
+  # stable-8
+  - package-ecosystem: npm
+    directory: '/'
+    target-branch: stable-8
+    schedule:
+      interval: weekly
+      day: monday
+      time: '02:00'
+      timezone: Europe/Paris
+    commit-message:
+      prefix: '[stable-8] '
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+
+  - package-ecosystem: composer
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: monday
+      time: '02:00'
+      timezone: Europe/Paris
+    commit-message:
+      prefix: '[stable-8] '
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    target-branch: stable-8
+    schedule:
+      interval: weekly
+      day: monday
+      time: '02:00'
+      timezone: Europe/Paris
+    commit-message:
+      prefix: '[stable-8] '
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
+
   # stable-7
   - package-ecosystem: npm
     directory: '/'
