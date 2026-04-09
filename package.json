@@ -14,13 +14,15 @@
   "license": "AGPL-3.0",
   "main": "src/js/main.js",
   "scripts": {
+    "build": "vite --mode production build",
+    "dev": "vite --mode development build",
+    "format": "prettier --debug-check .",
+    "format:fix": "prettier --write .",
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --ext .js,.vue src --fix",
     "stylelint": "stylelint src/**/*{.scss,.vue,.css}",
     "stylelint:fix": "stylelint src --fix",
     "version": "node update-app-version.mjs && git add ./appinfo/info.xml",
-    "build": "vite --mode production build",
-    "dev": "vite --mode development build",
     "watch": "vite --mode development build --watch"
   },
   "browserslist": [
