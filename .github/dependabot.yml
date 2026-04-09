@@ -1,5 +1,7 @@
 # SPDX-FileCopyrightText: 2020 Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Update configs must have a unique combination of 'package-ecosystem', 'directory', and 'target-branch'. Ecosystem 'composer' has overlapping directories.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -33,6 +35,52 @@ updates:
     cooldown:
       default-days: 7
 
+  # stable-8
+  - package-ecosystem: npm
+    directory: '/'
+    target-branch: stable-8
+    schedule:
+      interval: weekly
+      day: monday
+      time: '02:00'
+      timezone: Europe/Paris
+    commit-message:
+      prefix: '[stable-8] '
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+
+  - package-ecosystem: composer
+    directory: '/'
+    target-branch: stable-8
+    schedule:
+      interval: weekly
+      day: monday
+      time: '02:00'
+      timezone: Europe/Paris
+    commit-message:
+      prefix: '[stable-8] '
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    target-branch: stable-8
+    schedule:
+      interval: weekly
+      day: monday
+      time: '02:00'
+      timezone: Europe/Paris
+    commit-message:
+      prefix: '[stable-8] '
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
+
   # stable-7
   - package-ecosystem: npm
     directory: '/'
@@ -53,6 +101,7 @@ updates:
 
   - package-ecosystem: composer
     directory: '/'
+    target-branch: stable-7
     schedule:
       interval: weekly
       day: monday
