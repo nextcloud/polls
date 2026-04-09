@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 name: Publish pre-release
 
-on: 
+on:
   push:
     tags:
       - v*-beta*
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Beta release
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6.0.1
     - name: Check correct app version
       id: appinfo
       uses: ./.github/actions/get-polls-version
@@ -39,39 +39,30 @@ jobs:
 
     - name: rename packages to polls-${{ steps.appinfo.outputs.app-version }}
       if: success()
-      run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
+      run: mv build/artifacts/polls.tar.gz build/artifacts/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
 
     - name: create zip archive from sources
       if: success()
       run: |
         pushd build/source
-        zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip *
+        zip -r ../artifacts/polls-${{ steps.appinfo.outputs.app-version }}.zip *
         popd
 
     - name: Extract release notes
       if: success()
       id: extract-release-notes
-      uses: ffurrer2/extract-release-notes@v2
+      uses: ffurrer2/extract-release-notes@v3
+      with:
+        prerelease: true
 
     - name: Publish pre-release ${{ steps.appinfo.outputs.app-version }}
       if: success()
       uses: softprops/action-gh-release@v2
       with:
-        body: "# Changelog for the upcomming release (preview)\n ${{ steps.extract-release-notes.outputs.release_notes }} "
+        body: "# Changelog for the upcoming release (preview)\n ${{ steps.extract-release-notes.outputs.release_notes }} "
         prerelease: true
-        draft: false
+        draft: true
         generate_release_notes: true
         files: |
-          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
-          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip
-
-    - name: Create release notification issue
-      if: success()
-      uses: JasonEtco/create-an-issue@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        RELEASENOTES: ${{ steps.extract-release-notes.outputs.release_notes }}
-        VERSION: ${{ steps.appinfo.outputs.app-version }}
-        TAG: ${{ steps.appinfo.outputs.tag-version }}
-      with:
-        filename: .github/BETA_NOTIFICATION.md
+          build/artifacts/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
+          build/artifacts/polls-${{ steps.appinfo.outputs.app-version }}.zip

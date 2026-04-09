@@ -12,6 +12,9 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: write
+
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
@@ -32,9 +35,21 @@ jobs:
           echo "APP_VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
       - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
+          persist-credentials: false
           path: ${{ env.APP_NAME }}
+
+      - name: Get app version number
+        id: app-version
+        uses: skjnldsv/xpath-action@f5b036e9d973f42c86324833fd00be90665fbf77 # master
+        with:
+          filename: ${{ env.APP_NAME }}/appinfo/info.xml
+          expression: "//info//version/text()"
+
+      - name: Validate app version against tag
+        run: |
+          [ "${{ env.APP_VERSION }}" = "v${{ fromJSON(steps.app-version.outputs.result).version }}" ]
 
       - name: Get appinfo data
         id: appinfo
@@ -56,7 +71,7 @@ jobs:
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
         # Skip if no package.json
         if: ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
@@ -72,7 +87,7 @@ jobs:
           filename: ${{ env.APP_NAME }}/appinfo/info.xml
 
       - name: Set up php ${{ steps.php-versions.outputs.php-min }}
-        uses: shivammathur/setup-php@ec406be512d7077f68eed36e63f4d91bc006edc4 # v2.35.4
+        uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
         with:
           php-version: ${{ steps.php-versions.outputs.php-min }}
           coverage: none
@@ -134,9 +149,10 @@ jobs:
           unzip latest-$NCVERSION.zip
 
       - name: Checkout server master fallback
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         if: ${{ steps.server-checkout.outcome != 'success' }}
         with:
+          persist-credentials: false
           submodules: true
           repository: nextcloud/server
           path: nextcloud
@@ -144,24 +160,24 @@ jobs:
       - name: Sign app
         run: |
           # Extracting release
-          cd ${{ env.APP_NAME }}/build/artifacts/appstore
+          cd ${{ env.APP_NAME }}/build/artifacts
           tar -xvf ${{ env.APP_NAME }}.tar.gz
-          cd ../../../../
+          cd ../../../
           # Setting up keys
           echo '${{ secrets.APP_PRIVATE_KEY }}' > ${{ env.APP_NAME }}.key
           wget --quiet "https://github.com/nextcloud/app-certificate-requests/raw/master/${{ env.APP_NAME }}/${{ env.APP_NAME }}.crt"
           # Signing
-          php nextcloud/occ integrity:sign-app --privateKey=../${{ env.APP_NAME }}.key --certificate=../${{ env.APP_NAME }}.crt --path=../${{ env.APP_NAME }}/build/artifacts/appstore/${{ env.APP_NAME }}
+          php nextcloud/occ integrity:sign-app --privateKey=../${{ env.APP_NAME }}.key --certificate=../${{ env.APP_NAME }}.crt --path=../${{ env.APP_NAME }}/build/artifacts/${{ env.APP_NAME }}
           # Rebuilding archive
-          cd ${{ env.APP_NAME }}/build/artifacts/appstore
+          cd ${{ env.APP_NAME }}/build/artifacts
           tar -zcvf ${{ env.APP_NAME }}.tar.gz ${{ env.APP_NAME }}
 
       - name: Attach tarball to github release
-        uses: svenstaro/upload-release-action@81c65b7cd4de9b2570615ce3aad67a41de5b1a13 # v2
+        uses: svenstaro/upload-release-action@6b7fa9f267e90b50a19fef07b3596790bb941741 # v2
         id: attach_to_release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.APP_NAME }}/build/artifacts/appstore/${{ env.APP_NAME }}.tar.gz
+          file: ${{ env.APP_NAME }}/build/artifacts/${{ env.APP_NAME }}.tar.gz
           asset_name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}.tar.gz
           tag: ${{ github.ref }}
           overwrite: true
@@ -173,4 +189,3 @@ jobs:
           appstore_token: ${{ secrets.APPSTORE_TOKEN }}
           download_url: ${{ steps.attach_to_release.outputs.browser_download_url }}
           app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
-          nightly: ${{ github.event.release.prerelease }}

@@ -6,7 +6,8 @@ on:
   pull_request:
   push:
     branches:
-      - master-*
+      - main
+      - master*
       - next
       - stable*
 
@@ -16,7 +17,7 @@ jobs:
     name: Build app
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6.0.1
 
       - name: Setup node
         uses: ./.github/actions/setup-node
