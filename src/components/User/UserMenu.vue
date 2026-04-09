@@ -178,7 +178,7 @@ async function copyLink() {
 async function getAddresses() {
 	try {
 		const response = await PollsAPI.getParticipantsEmailAddresses(
-			sessionStore.route.params.id,
+			sessionStore.currentPollId,
 		)
 		await navigator.clipboard.writeText(
 			response.data.map((item) => item.combined).join(', '),
@@ -227,7 +227,7 @@ const validateDisplayName = debounce(async function () {
 
 	try {
 		await ValidatorAPI.validateName(
-			sessionStore.route.params.token,
+			sessionStore.publicToken,
 			sessionStore.share.user.displayName,
 		)
 		setDisplayNameStatus('success')

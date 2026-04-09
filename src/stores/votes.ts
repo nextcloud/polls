@@ -5,6 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, VotesAPI } from '../Api'
+import { activeRoute } from '../router'
 import { Logger } from '../helpers/modules/logger'
 import { StoreHelper } from '../helpers/modules/StoreHelper'
 
@@ -44,17 +45,15 @@ export const useVotesStore = defineStore('votes', {
 		 * @return
 		 */
 		participants(state): User[] {
-			const { localeCodeIntl } = useSessionStore().currentUser
+			const sessionStore = useSessionStore()
+
+			const { localeCodeIntl } = sessionStore.currentUser
+			const collator = new Intl.Collator(localeCodeIntl || navigator.language)
 			return Array.from(
 				new Map(
 					state.votes.map((vote) => [vote.user.id, vote.user]),
 				).values(),
-			).sort((a, b) =>
-				a.displayName.localeCompare(
-					b.displayName,
-					localeCodeIntl || navigator.language,
-				),
-			)
+			).sort((a, b) => collator.compare(a.displayName, b.displayName))
 		},
 
 		loadedParticipants(state: VotesStore): number {
@@ -137,24 +136,18 @@ export const useVotesStore = defineStore('votes', {
 			// sort participants by votes for the selected option if sortByOption is set
 			// TODO: Future usage: This is only valid for simple votes (not ranked)
 			if (state.sortByOption > 0 && pollStore.votingVariant === 'simple') {
+				// Build a lookup map once (O(n)) instead of calling .find() per comparison (O(n²))
+				const voteAnswerByUserId = new Map(
+					state.votes
+						.filter((vote) => vote.optionId === state.sortByOption)
+						.map((vote) => [vote.user.id, vote.answer]),
+				)
+
 				participants.sort((aUser, bUser) => {
-					// find the votes for the selected option and the users to compare
 					const aAnswer =
-						answerSortOrder[
-							state.votes.find(
-								(vote) =>
-									vote.user.id === aUser.id
-									&& vote.optionId === state.sortByOption,
-							)?.answer ?? ''
-						]
+						answerSortOrder[voteAnswerByUserId.get(aUser.id) ?? '']
 					const bAnswer =
-						answerSortOrder[
-							state.votes.find(
-								(vote) =>
-									vote.user.id === bUser.id
-									&& vote.optionId === state.sortByOption,
-							)?.answer ?? ''
-						]
+						answerSortOrder[voteAnswerByUserId.get(bUser.id) ?? '']
 
 					if (aAnswer < bAnswer) {
 						return -1
@@ -176,18 +169,13 @@ export const useVotesStore = defineStore('votes', {
 		 * Missing votes are filled with default values to get a complete set
 		 * Sort order is sortedParticipants and then options
 		 * This is to get a distinc list of votes to fill the table grid
-		 * @param state
-		 * @return
 		 */
-		sortedVotes(state): Vote[] {
+		sortedVotes(): Vote[] {
 			const optionsStore = useOptionsStore()
 			const virtualVotes: Vote[] = []
 			this.sortedParticipants.forEach((user) => {
 				optionsStore.options.forEach((option) => {
-					const found = state.votes.find(
-						(vote: Vote) =>
-							vote.optionId === option.id && vote.user.id === user.id,
-					)
+					const found = this.votesByKey.get(`${option.id}:${user.id}`)
 					if (found) {
 						virtualVotes.push(found)
 					} else {
@@ -207,6 +195,20 @@ export const useVotesStore = defineStore('votes', {
 			return virtualVotes
 		},
 
+		/**
+		 * Lookup map for votes keyed by `${optionId}:${userId}` — built once per
+		 * state change, used by sortedVotes and getVote to avoid repeated .find() calls.
+		 * @param state
+		 */
+		votesByKey(state): Map<string, Vote> {
+			return new Map(
+				state.votes.map((vote) => [
+					`${vote.optionId}:${vote.user.id}`,
+					vote,
+				]),
+			)
+		},
+
 		hasVotes: (state) => state.votes.length > 0,
 	},
 
@@ -223,6 +225,7 @@ export const useVotesStore = defineStore('votes', {
 			optionText: string
 			answer: Answer | null
 		}): User[] {
+			const sessionStore = useSessionStore()
 			const matchingAnswer = payload.answer
 				? [payload.answer]
 				: ['yes', 'maybe', 'no']
@@ -235,7 +238,7 @@ export const useVotesStore = defineStore('votes', {
 				)
 				.map((vote) => vote.user)
 				.sort((a, b) => {
-					const { localeCodeIntl } = useSessionStore().currentUser
+					const { localeCodeIntl } = sessionStore.currentUser
 					return a.displayName.localeCompare(
 						b.displayName,
 						localeCodeIntl || navigator.language,
@@ -244,13 +247,8 @@ export const useVotesStore = defineStore('votes', {
 		},
 
 		getVote(payload: { user: User; option: Option }): Vote {
-			const found = this.sortedVotes.find(
-				(vote: Vote) =>
-					vote.user.id === payload.user.id
-					&& vote.optionText === payload.option.text,
-			)
-			if (found === undefined) {
-				return {
+			return (
+				this.votesByKey.get(`${payload.option.id}:${payload.user.id}`) ?? {
 					answer: '',
 					optionText: payload.option.text,
 					user: payload.user,
@@ -260,18 +258,17 @@ export const useVotesStore = defineStore('votes', {
 					optionId: payload.option.id,
 					pollId: payload.option.pollId,
 				}
-			}
-			return found
+			)
 		},
 
 		async load() {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
-						return PublicAPI.getVotes(sessionStore.route.params.token)
+					if (activeRoute.value.meta.publicVotePage) {
+						return PublicAPI.getVotes(sessionStore.publicToken)
 					}
-					if (sessionStore.route.name === 'vote') {
+					if (activeRoute.value.meta.internalVotePage) {
 						return VotesAPI.getVotes(sessionStore.currentPollId)
 					}
 
@@ -301,19 +298,20 @@ export const useVotesStore = defineStore('votes', {
 					&& vote.optionText === payload.option.text,
 			)
 			if (index > -1) {
-				this.votes[index] = Object.assign(this.votes[index], payload.vote)
+				this.votes[index] = { ...this.votes[index], ...payload.vote }
 				return
 			}
 			this.votes.push(payload.vote)
 		},
 
 		setOptimistic(payload: { option: Option; setTo: Answer }) {
+			const sessionStore = useSessionStore()
 			this.setItem({
 				option: payload.option,
 				vote: {
 					answer: payload.setTo,
 					optionText: payload.option.text,
-					user: useSessionStore().currentUser,
+					user: sessionStore.currentUser,
 					answerSymbol: '',
 					deleted: 0,
 					id: 0,
@@ -330,9 +328,9 @@ export const useVotesStore = defineStore('votes', {
 			const pollStore = usePollStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
+					if (activeRoute.value.meta.publicVotePage) {
 						return PublicAPI.setVote(
-							sessionStore.route.params.token,
+							sessionStore.publicToken,
 							payload.option.id,
 							payload.setTo,
 						)
@@ -378,8 +376,8 @@ export const useVotesStore = defineStore('votes', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
-						return PublicAPI.resetVotes(sessionStore.route.params.token)
+					if (activeRoute.value.meta.publicVotePage) {
+						return PublicAPI.resetVotes(sessionStore.publicToken)
 					}
 					return VotesAPI.resetVotes(sessionStore.currentPollId)
 				})()
@@ -418,10 +416,8 @@ export const useVotesStore = defineStore('votes', {
 			const sessionStore = useSessionStore()
 			const pollStore = usePollStore()
 			try {
-				if (sessionStore.route.name === 'publicVote') {
-					await PublicAPI.removeOrphanedVotes(
-						sessionStore.route.params.token,
-					)
+				if (activeRoute.value.meta.publicVotePage) {
+					await PublicAPI.removeOrphanedVotes(sessionStore.publicToken)
 				} else {
 					await VotesAPI.removeOrphanedVotes(sessionStore.currentPollId)
 				}

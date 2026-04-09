@@ -30,7 +30,6 @@ OC.L10N.register(
     "Create new group" : "Snulfu-d agraw amaynut",
     "New group name" : "Isem n ugraw amaynut",
     "Privacy policy" : "Tasertit n tbaḍnit",
-    "Login" : "Aseqdac",
     "Styles" : "Iɣunab",
     "No activity yet" : "Ulac armud yakan",
     "Select users" : "Fren iseqdacen",

@@ -5,6 +5,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 import debounce from 'lodash/debounce'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
@@ -16,6 +17,9 @@ import { ValidatorAPI } from '../../Api'
 import { StatusResults } from '../../Types'
 import { useSessionStore } from '../../stores/session'
 
+const route = useRoute()
+const sessionStore = useSessionStore()
+
 type InputProps = {
 	success: boolean
 	error: boolean
@@ -23,8 +27,6 @@ type InputProps = {
 	labelOutside: boolean
 	label: string
 }
-
-const sessionStore = useSessionStore()
 
 const inputProps = ref<InputProps>({
 	success: false,
@@ -59,7 +61,7 @@ const validatePublicUsername = debounce(async function () {
 
 	try {
 		await ValidatorAPI.validateName(
-			sessionStore.route.params.token,
+			sessionStore.publicToken,
 			sessionStore.share.user.displayName,
 		)
 		setStatus('success')
@@ -87,7 +89,7 @@ async function submit() {
 
 <template>
 	<NcActionInput
-		v-if="sessionStore.route.name === 'publicVote'"
+		v-if="route.meta.publicVotePage"
 		v-bind="inputProps"
 		v-model="sessionStore.share.user.displayName"
 		@update:value="validatePublicUsername"

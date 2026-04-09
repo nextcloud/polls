@@ -67,7 +67,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[ApiRoute(verb: 'POST', url: 'api/v1.0/s/{token}/register')]
 	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): DataResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->register($token, $displayName, $emailAddress, $timeZone),
+			'share' => $this->shareService->registerGuest($token, $displayName, $emailAddress, $timeZone),
 		], Http::STATUS_CREATED);
 	}
 

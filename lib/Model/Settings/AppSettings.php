@@ -99,7 +99,6 @@ class AppSettings implements JsonSerializable {
 			'finalPrivacyUrl' => '',
 			'finalImprintUrl' => '',
 			'useLogin' => true,
-			'useSiteLegalTerms' => true,
 			'useActivity' => false,
 			'navigationPollsInList' => false,
 			'updateType' => $this->getUpdateType(),

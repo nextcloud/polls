@@ -35,12 +35,7 @@ const placeholder = computed(() => {
 			v-model="appSettingsStore.useSiteLegalTerms"
 			type="switch"
 			@update:model-value="appSettingsStore.write()">
-			{{
-				t(
-					'polls',
-					'Use the default terms for public polls and enable the default footer',
-				)
-			}}
+			{{ t('polls', 'Use the default terms for public polls') }}
 		</NcCheckboxRadioSwitch>
 	</div>
 	<div v-if="!appSettingsStore.useSiteLegalTerms" class="user_settings">

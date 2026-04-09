@@ -5,15 +5,15 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import CardDiv from '../Base/modules/CardDiv.vue'
 import { t } from '@nextcloud/l10n'
-import { useSessionStore } from '../../stores/session'
 
-const sessionStore = useSessionStore()
+const route = useRoute()
 const cardType = 'warning'
 
 const cardText = computed(() =>
-	sessionStore.route.name === 'publicVote'
+	route.meta.publicVotePage
 		? t(
 				'polls',
 				'This share is locked and allows only read access. Registering is not possible.',

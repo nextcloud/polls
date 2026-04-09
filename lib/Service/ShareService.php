@@ -361,18 +361,6 @@ class ShareService {
 	}
 
 	/**
-	 * @deprecated Use registerGuest() instead
-	 */
-	public function register(
-		string $publicShareToken,
-		string $displayName,
-		string $emailAddress = '',
-		string $timeZone = '',
-	): Share {
-		return $this->registerGuest($publicShareToken, $displayName, $emailAddress, $timeZone);
-	}
-
-	/**
 	 * Delete or restore share by Token
 	 * @param string $token Share of token to delete
 	 * @param bool $restore Set true, if share is to be restored

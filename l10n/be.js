@@ -58,7 +58,6 @@ OC.L10N.register(
     "Descending" : "Па ўбыванні",
     "Ascending" : "Па ўзрастанні",
     "Privacy policy" : "Палітыка прыватнасці",
-    "Login" : "Лагін",
     "Additional email disclaimer" : "Дадатковая адмова ад адказнасці па электроннай пошце",
     "Token: {token}" : "Токен: {token}",
     "Public link: {token}" : "Публічная спасылка: {token}",
