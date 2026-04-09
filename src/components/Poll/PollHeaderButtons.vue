@@ -27,7 +27,7 @@ const ExportPoll = defineAsyncComponent(() => import('../Export/ExportPoll.vue')
 
 const showUserMenu = computed(
 	() =>
-		route.name !== 'publicVote'
+		!route.meta.publicVotePage
 		|| pollStore.permissions.vote
 		|| pollStore.permissions.subscribe,
 )

@@ -95,7 +95,7 @@ async function removePollFromGroup(pollId: number, pollGroupId: number) {
 					'The poll group was deleted by removing the last member.',
 				),
 			)
-			if (route.name === 'group') {
+			if (route.meta.groupPage) {
 				router.push({ name: 'root' })
 			}
 		}

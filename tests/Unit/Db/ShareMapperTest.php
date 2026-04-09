@@ -45,6 +45,46 @@ class ShareMapperTest extends UnitTestCase {
 		unset($poll);
 	}
 
+	public function testGetURLWithNoPollId(): void {
+		$share = new Share();
+		$this->assertEmpty($share->getURL(), 'URL must be empty when no poll ID is set');
+	}
+
+	public function testGetURLForInternalShare(): void {
+		foreach ($this->shares as $share) {
+			// Factory creates TYPE_USER shares which use the internal vote route
+			$url = $share->getURL();
+			$this->assertNotEmpty($url, 'URL must not be empty for a share with a poll ID');
+			$this->assertStringContainsString(
+				'/apps/polls/vote/' . $share->getPollId(),
+				$url,
+				'Internal share URL must contain /apps/polls/vote/{pollId}',
+			);
+		}
+	}
+
+	public function testGetURLForPublicShare(): void {
+		foreach ($this->polls as $poll) {
+			$share = new Share();
+			$share->setType(Share::TYPE_EMAIL);
+			$share->setPollId($poll->getId());
+			$share->setToken(bin2hex(random_bytes(16)));
+			$share->setUserId('test@example.com');
+			$share->setEmailAddress('test@example.com');
+
+			$share = $this->shareMapper->insert($share);
+			array_push($this->shares, $share);
+
+			$url = $share->getURL();
+			$this->assertNotEmpty($url, 'URL must not be empty for a public share');
+			$this->assertStringContainsString(
+				'/apps/polls/s/' . $share->getToken(),
+				$url,
+				'Public share URL must contain /apps/polls/s/{token}',
+			);
+		}
+	}
+
 	public function testFindByPoll(): void {
 		foreach ($this->polls as $poll) {
 			$this->assertGreaterThan(0, count($this->shareMapper->findByPoll($poll->getId())));

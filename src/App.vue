@@ -10,8 +10,9 @@ import {
 	defineAsyncComponent,
 	onMounted,
 	onUnmounted,
-	watchEffect,
+	watch,
 } from 'vue'
+import { useRoute } from 'vue-router'
 import debounce from 'lodash/debounce'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
@@ -39,6 +40,7 @@ import './assets/scss/globals.scss'
 
 usePollWatcher()
 
+const route = useRoute()
 const sessionStore = useSessionStore()
 const pollStore = usePollStore()
 const pollGroupsStore = usePollGroupsStore()
@@ -61,8 +63,8 @@ const useSidebar = computed(
 	() =>
 		pollStore.permissions.edit
 		|| pollStore.permissions.comment
-		|| sessionStore.route.name === 'combo'
-		|| (sessionStore.route.name === 'group'
+		|| route.meta.comboPage
+		|| (route.meta.groupPage
 			&& pollGroupsStore.currentPollGroup?.owner.id
 				=== sessionStore.currentUser.id),
 )
@@ -105,9 +107,9 @@ function onTransitionsOn() {
 	transitionsOn()
 }
 
-watchEffect(() => {
-	document.title = sessionStore.windowTitle
-})
+watch(() => sessionStore.windowTitle, (title) => {
+	document.title = title
+}, { immediate: true })
 
 onMounted(() => {
 	subscribe(Event.TransitionsOff, onTransitionsOff)
@@ -136,8 +138,12 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-.app-content {
-	display: flex;
-	flex-direction: column;
+// remove public user menu from header
+#public-page-user-menu {
+	display: none;
+}
+
+#body-public a {
+	font-weight: 600;
 }
 </style>

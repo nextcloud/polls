@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, shallowRef } from 'vue'
 import debounce from 'lodash/debounce'
 import { t } from '@nextcloud/l10n'
 
@@ -31,7 +31,7 @@ const {
 	closeOnSelect = false,
 } = defineProps<Props>()
 
-const users = ref<User[]>([])
+const users = shallowRef<User[]>([])
 const isLoading = ref(false)
 
 const loadUsersAsync = debounce(async function (query: string) {

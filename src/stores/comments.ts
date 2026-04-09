@@ -6,6 +6,7 @@
 import { defineStore } from 'pinia'
 
 import { CommentsAPI, PublicAPI } from '../Api'
+import { activeRoute } from '../router'
 import { groupComments } from '../helpers/modules/comments'
 import { Logger } from '../helpers/modules/logger'
 
@@ -28,12 +29,12 @@ export const useCommentsStore = defineStore('comments', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
+					if (activeRoute.value.meta.publicVotePage) {
 						return PublicAPI.getComments(
-							sessionStore.route.params.token as string,
+							sessionStore.publicToken,
 						)
 					}
-					if (sessionStore.route.name === 'vote') {
+					if (activeRoute.value.meta.internalVotePage) {
 						return CommentsAPI.getComments(sessionStore.currentPollId)
 					}
 
@@ -58,14 +59,14 @@ export const useCommentsStore = defineStore('comments', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
+					if (activeRoute.value.meta.publicVotePage) {
 						return PublicAPI.addComment(
 							sessionStore.publicToken,
 							payload.message,
 							payload.confidential,
 						)
 					}
-					if (sessionStore.route.name === 'vote') {
+					if (activeRoute.value.meta.internalVotePage) {
 						return CommentsAPI.addComment(
 							sessionStore.currentPollId,
 							payload.message,
@@ -112,7 +113,7 @@ export const useCommentsStore = defineStore('comments', {
 
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
+					if (activeRoute.value.meta.publicVotePage) {
 						return PublicAPI.deleteComment(
 							sessionStore.publicToken,
 							payload.comment.id,
@@ -138,7 +139,7 @@ export const useCommentsStore = defineStore('comments', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
-					if (sessionStore.route.name === 'publicVote') {
+					if (activeRoute.value.meta.publicVotePage) {
 						return PublicAPI.restoreComment(
 							sessionStore.publicToken,
 							payload.comment.id,

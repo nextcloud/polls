@@ -51,7 +51,6 @@ OC.L10N.register(
     "never" : "nekad",
     "Sort by last interaction" : "Kārtot pēc pēdējās mijiedarbības",
     "Privacy policy" : "Privātuma politika",
-    "Login" : "Pieteikumvārds",
     "Days after which polls should be archived after closing" : "Dienu skaits pēc aizvēršanas, pēc kurām aptaujas vajadzētu arhivēt",
     "Enable the automatic deletion of archived polls" : "Iespējot arhivētu aptauju automātisku izdzēšanu",
     "Privacy policy link:" : "Privātuma politikas saite:",

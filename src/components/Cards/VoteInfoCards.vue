@@ -9,7 +9,6 @@ import CardAddProposals from './CardAddProposals.vue'
 import CardClosedPoll from './CardClosedPoll.vue'
 import CardLimitedVotes from './CardLimitedVotes.vue'
 import CardLocked from './CardLocked.vue'
-import CardRegister from './CardRegister.vue'
 import CardSendConfirmations from './CardSendConfirmations.vue'
 import CardTimezone from './CardTimezone.vue'
 import CardUnpublishedPoll from './CardUnpublishedPoll.vue'
@@ -17,12 +16,10 @@ import CardUnpublishedPoll from './CardUnpublishedPoll.vue'
 import { usePollStore } from '../../stores/poll'
 import { useOptionsStore } from '../../stores/options'
 import { useSharesStore } from '../../stores/shares'
-import { useSessionStore } from '../../stores/session'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const sharesStore = useSharesStore()
-const sessionStore = useSessionStore()
 
 const showTimezoneHint = computed(
 	() =>
@@ -60,16 +57,6 @@ const showLimitCard = computed(
 		&& (pollStore.configuration.maxVotesPerOption
 			|| pollStore.configuration.maxVotesPerUser),
 )
-const showRegisterCard = computed(
-	() =>
-		sessionStore.route.name === 'publicVote'
-		&& ['public', 'email', 'contact'].includes(
-			pollStore.currentUserStatus.userRole,
-		)
-		&& !pollStore.isClosed
-		&& !pollStore.currentUserStatus.isLocked
-		&& !!pollStore.id,
-)
 </script>
 
 <template>
@@ -81,7 +68,6 @@ const showRegisterCard = computed(
 		<CardLocked v-if="pollStore.currentUserStatus.isLocked" :key="5" />
 		<CardAddProposals v-if="showAddProposalsCard" :key="1" />
 		<CardSendConfirmations v-if="showSendConfirmationsCard" :key="4" />
-		<CardRegister v-if="showRegisterCard" :key="6" />
 	</TransitionGroup>
 </template>
 

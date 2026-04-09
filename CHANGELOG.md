@@ -5,24 +5,24 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [Unreleased]
 ### Fixed
- - Fixing some bugs around share access
+ - Fixed broken share links for public polls
+ - Fixed access issues for public users on shared polls
+ - Fixed page not found redirect in some navigation cases
 
 ### Added
- - Timezone support for polls and options
-   - Set default timezone for any poll
-   - Choose timezone to display, if the poll's original timezone differs from the user's one
-   - Choose timezone, when adding options in case of different timezones between poll and user
+ - Timezone support: set a default timezone per poll, choose how dates are displayed, and pick a timezone when adding options
  - Option to disable poll download per poll
+ - Public registration opens in a dedicated page instead of a modal
+ - Noticeably faster voting in large polls with many participants and options
 
 ### Changed
- - Use ISO formatted timestamps and durations
- - Drop support for Nexcloud Hub 10
- - Added some more backend tests
- - Optimized API-usage
- - Centralized Backend calls to the router
- - A lot of refactoring
+ - Drop support for Nextcloud Hub 10
+ - Use ISO formatted timestamps and durations for date options
+ - Circles renamed to Teams
+ - Data loading centralized to router guards
+ - Significant internal performance optimizations for large polls
 
 ## [8.6.3] - 2026-01-18
 ### Fixed

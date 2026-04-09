@@ -9,7 +9,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-import NcModal from '@nextcloud/vue/components/NcModal'
+import NcModal from '../Base/modules/CustomNcModal.vue'
 import NcActionText from '@nextcloud/vue/components/NcActionText'
 
 import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'

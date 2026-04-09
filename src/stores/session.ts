@@ -4,12 +4,12 @@
  */
 
 import { defineStore } from 'pinia'
-import { RouteLocationNormalized } from 'vue-router'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 
 import { Logger } from '../helpers/modules/logger'
+import { activeRoute } from '../router'
 import { PublicAPI, SessionAPI } from '../Api'
 
 import { useSubscriptionStore } from './subscription'
@@ -53,53 +53,13 @@ export const useSessionStore = defineStore('session', {
 			timezoneName: 'local',
 		},
 		appSettings: {
-			allAccessGroups: [],
-			allowCombo: true,
-			allowPublicShares: true,
-			allowAllAccess: true,
-			allowPollCreation: true,
-			allowPollDownload: true,
-			autoArchive: false,
-			autoArchiveOffset: 30,
-			autoDelete: false,
-			autoDeleteOffset: 30,
-			defaultPrivacyUrl: '',
-			defaultImprintUrl: '',
-			disclaimer: '',
-			imprintUrl: '',
-			legalTermsInEmail: false,
-			privacyUrl: '',
-			showMailAddresses: false,
-			showLogin: true,
-			updateType: 'noPolling',
-			useActivity: false,
-			useCollaboration: true,
-			useSiteLegalTerms: true,
-			navigationPollsInList: true,
-			finalPrivacyUrl: '',
 			finalImprintUrl: '',
-			comboGroups: [],
-			publicSharesGroups: [],
-			pollCreationGroups: [],
-			pollDownloadGroups: [],
-			showMailAddressesGroups: [],
-			unrestrictedOwner: false,
-			unrestrictedOwnerGroups: [],
-			groups: [],
-			status: {
-				loadingGroups: false,
-			},
-		},
-		route: {
-			currentRoute: '',
-			name: '',
-			path: '',
-			params: {
-				id: 0,
-				token: '',
-				type: 'relevant',
-				slug: '',
-			},
+			finalPrivacyUrl: '',
+			navigationPollsInList: false,
+			useLogin: false,
+			useActivity: false,
+			updateType: 'noPolling',
+			currentVersion: '',
 		},
 		userStatus: {
 			isLoggedin: !!getCurrentUser(),
@@ -118,16 +78,13 @@ export const useSessionStore = defineStore('session', {
 	}),
 
 	getters: {
-		publicToken(state): string {
-			if (state.route.params.token) {
-				return state.route.params.token as string
-			}
-			return ''
+		publicToken(): string {
+			return activeRoute.value.params.token as string || ''
 		},
 
-		currentPollId(state): number {
-			if (state.route.name === 'vote') {
-				return state.route.params.id
+		currentPollId(): number {
+			if (activeRoute.value.meta.internalVotePage) {
+				return Number(activeRoute.value.params.id)
 			}
 			return 0
 		},
@@ -156,29 +113,30 @@ export const useSessionStore = defineStore('session', {
 			return 'list-view'
 		},
 
-		windowTitle(state): string {
+		windowTitle(): string {
 			const pollStore = usePollStore()
+			const route = activeRoute.value
 
 			const windowTitle = {
 				prefix: `${t('polls', 'Polls')}`,
 				name: 'Nextcloud',
 			}
 
-			if (state.route.name === 'list') {
+			if (route.meta.listPage && route.params.type) {
 				const pollsStore = usePollsStore()
 				windowTitle.name =
 					pollsStore.categories[
-						this.route.params.type as FilterType
+						route.params.type as FilterType
 					].titleExt
-			} else if (state.route.name === 'group') {
+			} else if (route.meta.groupPage) {
 				const pollGroupsStore = usePollGroupsStore()
 				windowTitle.name =
 					pollGroupsStore.currentPollGroup?.titleExt
 					|| pollGroupsStore.currentPollGroup?.name
 					|| ''
-			} else if (state.route.name === 'publicVote') {
+			} else if (route.meta.publicVotePage) {
 				windowTitle.name = pollStore.configuration.title
-			} else if (state.route.name === 'vote') {
+			} else if (route.meta.votePage) {
 				windowTitle.name =
 					pollStore.configuration.title ?? t('polls', 'Enter title')
 			}
@@ -261,7 +219,7 @@ export const useSessionStore = defineStore('session', {
 
 			try {
 				const response = await (() => {
-					if (this.route.name === 'publicVote') {
+					if (activeRoute.value.meta.publicPage) {
 						return PublicAPI.getSession(this.publicToken)
 					}
 					return SessionAPI.getSession()
@@ -287,22 +245,12 @@ export const useSessionStore = defineStore('session', {
 			this.sessionSettings.viewModeTextPoll = viewMode
 		},
 
-		async setRouter(setRoute: RouteLocationNormalized) {
-			this.route.currentRoute = setRoute.fullPath
-			this.route.name = setRoute.name
-			this.route.path = setRoute.path
-			this.route.params.id = setRoute.params.id as unknown as number
-			this.route.params.token = setRoute.params.token as string
-			this.route.params.type = setRoute.params.type as FilterType
-			this.route.params.slug = setRoute.params.slug as string
-		},
-
 		loadAppSettings(): void {},
 
 		async updateEmailAddress(payload: { emailAddress: string }): Promise<void> {
 			const pollStore = usePollStore()
 
-			if (this.route.name !== 'publicVote') {
+			if (!activeRoute.value.meta.publicVotePage) {
 				return
 			}
 
@@ -328,7 +276,7 @@ export const useSessionStore = defineStore('session', {
 		async updateDisplayName(payload: { displayName: string }): Promise<void> {
 			const pollStore = usePollStore()
 
-			if (this.route.name !== 'publicVote') {
+			if (!activeRoute.value.meta.publicVotePage) {
 				return
 			}
 
@@ -355,7 +303,7 @@ export const useSessionStore = defineStore('session', {
 			const pollStore = usePollStore()
 			const subscriptionStore = useSubscriptionStore()
 
-			if (this.route.name !== 'publicVote') {
+			if (!activeRoute.value.meta.publicVotePage) {
 				return
 			}
 
@@ -375,7 +323,7 @@ export const useSessionStore = defineStore('session', {
 		},
 
 		async resendInvitation() {
-			if (this.route.name !== 'publicVote') {
+			if (!activeRoute.value.meta.publicVotePage) {
 				throw new Error('Not on public vote page')
 			}
 
@@ -387,7 +335,7 @@ export const useSessionStore = defineStore('session', {
 				}
 				Logger.error('Error sending invitation', {
 					error,
-					token: this.route.params.token,
+					token: this.publicToken,
 				})
 				throw error
 			}

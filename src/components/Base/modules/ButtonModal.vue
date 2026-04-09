@@ -7,7 +7,7 @@
 import { t } from '@nextcloud/l10n'
 
 import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
-import NcModal from '@nextcloud/vue/components/NcModal'
+import NcModal from '../../Base/modules/CustomNcModal.vue'
 
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcAppNavigationNew from '@nextcloud/vue/components/NcAppNavigationNew'

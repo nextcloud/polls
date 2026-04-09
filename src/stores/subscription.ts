@@ -7,6 +7,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 import { PublicAPI, PollsAPI } from '../Api'
+import { activeRoute } from '../router'
 import { Logger } from '../helpers/modules/logger'
 
 import { useSessionStore } from './session'
@@ -24,10 +25,10 @@ export const useSubscriptionStore = defineStore('subscription', () => {
 		const sessionStore = useSessionStore()
 		try {
 			const response = await (() => {
-				if (sessionStore.route.name === 'publicVote') {
-					return PublicAPI.getSubscription(sessionStore.route.params.token)
+				if (activeRoute.value.meta.publicVotePage) {
+					return PublicAPI.getSubscription(sessionStore.publicToken)
 				}
-				if (sessionStore.route.name === 'vote') {
+				if (activeRoute.value.meta.internalVotePage) {
 					return PollsAPI.getSubscription(sessionStore.currentPollId)
 				}
 
@@ -53,13 +54,13 @@ export const useSubscriptionStore = defineStore('subscription', () => {
 		const sessionStore = useSessionStore()
 		try {
 			const response = await (() => {
-				if (sessionStore.route.name === 'publicVote') {
+				if (activeRoute.value.meta.publicVotePage) {
 					return PublicAPI.setSubscription(
-						sessionStore.route.params.token,
+						sessionStore.publicToken,
 						!subscribed.value,
 					)
 				}
-				if (sessionStore.route.name === 'vote') {
+				if (activeRoute.value.meta.internalVotePage) {
 					return PollsAPI.setSubscription(
 						sessionStore.currentPollId,
 						!subscribed.value,

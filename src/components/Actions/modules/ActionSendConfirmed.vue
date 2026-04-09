@@ -8,7 +8,7 @@ import { useRoute } from 'vue-router'
 import { ref } from 'vue'
 import { t, n } from '@nextcloud/l10n'
 
-import NcModal from '@nextcloud/vue/components/NcModal'
+import NcModal from '../../Base/modules/CustomNcModal.vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
 import EmailCheckIcon from 'vue-material-design-icons/EmailCheckOutline.vue' // view-comfy-outline

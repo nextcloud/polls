@@ -171,7 +171,7 @@ const validateDisplayName = debounce(async function () {
 
 	try {
 		await ValidatorAPI.validateName(
-			sessionStore.route.params.token,
+			sessionStore.publicToken,
 			sessionStore.share.user.displayName,
 		)
 		setDisplayNameStatus('success')

@@ -7,7 +7,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { t } from '@nextcloud/l10n'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-import NcModal from '@nextcloud/vue/components/NcModal'
+import NcModal from '../Base/modules/CustomNcModal.vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
@@ -34,7 +34,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<NcModal v-model:show="showModal" :name="caption" size="large">
+	<NcModal v-model:show="showModal" :name="caption" size="large" class="add-date">
 		<div class="screen-container">
 			<div v-if="!pollStore.isClosed" class="edit-container">
 				<OptionsDateAddDialog />
@@ -56,10 +56,6 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-.modal-container__content {
-	padding: 3rem 1.6rem 1rem;
-}
-
 .screen-container {
 	display: flex;
 	flex-wrap: wrap;

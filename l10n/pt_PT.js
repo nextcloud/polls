@@ -1,7 +1,9 @@
 OC.L10N.register(
     "polls",
     {
+    "Contact group" : "Grupo de contactos",
     "Group" : "Grupo",
+    "Team" : "Grupo",
     "Legal Notice" : "Notícia de legalidade",
     "Privacy Policy" : "Política de Privacidade",
     "Contact" : "Contacto",
@@ -9,7 +11,6 @@ OC.L10N.register(
     "Access denied" : "Acesso proibido",
     "Loading…" : "A carregar…",
     "Delete" : "Apagar",
-    "Register" : "Registar",
     "Unknown error" : "Erro desconhecido",
     "Maybe" : "Talvez",
     "Previous day" : "Dia anterior",
@@ -44,8 +45,8 @@ OC.L10N.register(
     "Back" : "Voltar",
     "Descending" : "Descending",
     "Ascending" : "Ascending",
+    "Legal notice" : "Informação legal",
     "Privacy policy" : "Política de privacidade",
-    "Login" : "Iniciar sessão",
     "Enable the spreadsheet download of polls globally" : "Pernitir a transferência de folha de cálculo de eleições globalmente",
     "Link copied to clipboard" : "Ligação copiada para a área de transferência",
     "Shares" : "Partilhas",
