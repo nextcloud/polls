@@ -262,7 +262,7 @@ OC.L10N.register(
     "Next day" : "Nächster Tag",
     "minus" : "Minus",
     "plus" : "Plus",
-    "Please wait…" : "Bitte warten …",
+    "Please wait…" : "Bitte warten …",
     "Possibly affected calendar events" : "Möglicherweise betroffene Kalenderereignisse",
     "Add" : "Hinzufügen",
     "You are asked to propose more options." : "Sie dürfen weitere Optionen vorschlagen.",
