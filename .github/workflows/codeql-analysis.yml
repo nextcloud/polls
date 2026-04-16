@@ -6,7 +6,7 @@ on:
   push:
     branches: [ "main", "master*", "next", "stable-*" ]
   pull_request:
-    branches: [ "main", "master*", "next" ]
+    branches: [ "main", "master*", "next", "stable-*" ]
   schedule:
     - cron: '26 15 * * 4'
 
