@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Migration;
 
+use OCA\Polls\Db\V6\IndexManager;
 use OCA\Polls\Db\V6\TableManager;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
@@ -22,12 +23,13 @@ use OCP\Migration\SimpleMigrationStep;
  *
  * @psalm-suppress UnusedClass
  */
-class Version090000Date20260302211900 extends SimpleMigrationStep {
+class Version090000Date20260302212000 extends SimpleMigrationStep {
 	private ISchemaWrapper $schema;
 	private ?IOutput $output = null;
 
 	public function __construct(
 		private TableManager $tableManager,
+		private IndexManager $indexManager,
 		private IDBConnection $connection,
 	) {
 	}
@@ -92,7 +94,13 @@ class Version090000Date20260302211900 extends SimpleMigrationStep {
 		$this->output = $output;
 		$this->logInfo('Post migration steps- no operation needed');
 
-		// Clean up tables before creating indices and foreign keys
+		$this->indexManager->createSchema();
+		// Create unique indices for all tables and remove all duplicates which have to be unique
+		$message = $this->indexManager->createUniqueIndices();
+		$this->logInfo($message, 'postMigration:  ');
+
+		// skip creating optional indices and leave it to 'occ db:add-missing-indices'
+		$this->indexManager->migrateToSchema();
 
 	}
 
