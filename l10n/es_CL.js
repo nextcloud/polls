@@ -32,6 +32,7 @@ OC.L10N.register(
     "Description" : "Descripción",
     "never" : "nunca",
     "Legal notice" : "Aviso legal",
+    "Privacy policy" : "Política de privacidad",
     "Shares" : "Elementos compartidos",
     "No activity yet" : "Aún no tiene actividad",
     "Configuration" : "Configuración",

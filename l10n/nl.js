@@ -63,6 +63,8 @@ OC.L10N.register(
     "{actor} has deleted a comment from poll {pollTitle}" : "{actor} heefbt een reactie verwijderd bij peiling {pollTitle}",
     "You have deleted a comment" : "Je hebt een reactie verwijderd",
     "{actor} has deleted a comment" : "{actor} heeft een reactie verwijderd",
+    "You have restored a comment" : "Je hebt een reactie hersteld",
+    "{actor} has restored a comment" : "{actor} heeft een reactie hersteld",
     "You have added an option to poll {pollTitle}" : "Je hebt een optie toegevoegd bij peiling {pollTitle}",
     "{actor} has added an option to poll {pollTitle}" : "{actor} heeft een optie toegevoegd bij peiling {pollTitle}",
     "You have added an option" : "Je hebt een optie toegevoegd",
