@@ -4,8 +4,10 @@
 -->
 # Changelog
 All notable changes to this project will be documented in this file.
-
 ## [Unreleased]
+ - none so far
+
+## [9.0.0] - 2026-04-16
 ### Fixed
  - Fixed broken share links for public polls
  - Fixed access issues for public users on shared polls
