@@ -416,6 +416,11 @@ class TableManager extends DbManager {
 		$i = 0;
 
 		foreach ($columns as $column) {
+			if (!$this->schema->getTable($this->dbPrefix . $table)->hasColumn($column)) {
+				$this->logger->warning('Column {column} does not exist in table {table} - cannot check for duplicates based on this column', ['column' => $column, 'table' => $this->dbPrefix . $table]);
+				return 0;
+			}
+
 			if ($i > 0) {
 				$selection->andWhere($qb->expr()->eq('t1.' . $column, 't2.' . $column));
 			} else {
