@@ -161,6 +161,7 @@ OC.L10N.register(
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["„Taip“: %n balsas","„Taip“: %n balsai","„Taip“: %n balsų","„Taip“: %n balsas"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["„Galbūt“: %n balsas","„Galbūt“: %n balsai","„Galbūt“: %n balsų","„Galbūt“: %n balsas"],
     "Description" : "Aprašas",
+    "Archived {relativeTime}" : "Archyvuota {relativeTime}",
     "never" : "niekada",
     "Error archiving/restoring poll." : "Klaida archyvuojant/atkuriant apklausą.",
     "Error cloning poll." : "Klaida dubliuojant apklausą.",
