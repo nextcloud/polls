@@ -39,6 +39,14 @@ class IndexManager extends DbManager {
 
 		foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
 			foreach ($uniqueIndices as $name => $definition) {
+
+				// skip if the unique index exists
+				if ($this->schema->hasTable($this->getTableName($tableName))) {
+					$table = $this->schema->getTable($this->getTableName($tableName));
+					if ($table->hasIndex($name)) {
+						continue;
+					}
+				}
 				$messages[] = $this->createIndex($tableName, $name, $definition['columns'], true);
 			}
 		}
