@@ -7,6 +7,28 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
  - none so far
 
+## [9.0.1] - 2026-04-18
+### Fixed (9.0.0)
+ - Fixed a migration error on attempts to create an existing index (strict database settings affected)
+
+### Fixed (9.0.0)
+ - Fixed broken share links for public polls
+ - Fixed access issues for public users on shared polls
+ - Fixed page not found redirect in some navigation cases
+
+### Added (9.0.0)
+ - Timezone support: set a default timezone per poll, choose how dates are displayed, and pick a timezone when adding options
+ - Option to disable poll download per poll
+ - Public registration opens in a dedicated page instead of a modal
+ - Noticeably faster voting in large polls with many participants and options
+
+### Changed (9.0.0)
+ - Drop support for Nextcloud Hub 10
+ - Use ISO formatted timestamps and durations for date options
+ - Circles renamed to Teams
+ - Data loading centralized to router guards
+ - Significant internal performance optimizations for large polls
+
 ## [9.0.0] - 2026-04-16
 ### Fixed
  - Fixed broken share links for public polls
