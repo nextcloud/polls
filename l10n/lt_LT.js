@@ -178,6 +178,7 @@ OC.L10N.register(
     "Privacy policy" : "Privatumo politika",
     "Styles" : "Stiliai",
     "Token: {token}" : "Prieigos raktas: {token}",
+    "Group share" : "Grupės bendrinimas",
     "Share label" : "Viešinio etiketė",
     "Internal access" : "Vidinė prieiga",
     "This poll is private" : "Ši apklausa yra privati",
