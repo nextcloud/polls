@@ -6,7 +6,7 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\Polls\Db\V6;
+namespace OCA\Polls\Db\V7;
 
 use Doctrine\DBAL\Types\Type;
 use Exception;
@@ -20,7 +20,7 @@ use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Exceptions\PreconditionException;
 use OCA\Polls\Helper\Hash;
-use OCA\Polls\Migration\V6\TableSchema;
+use OCA\Polls\Migration\V7\TableSchema;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -416,6 +416,11 @@ class TableManager extends DbManager {
 		$i = 0;
 
 		foreach ($columns as $column) {
+			if (!$this->schema->getTable($this->dbPrefix . $table)->hasColumn($column)) {
+				$this->logger->warning('Column {column} does not exist in table {table} - cannot check for duplicates based on this column', ['column' => $column, 'table' => $this->dbPrefix . $table]);
+				return 0;
+			}
+
 			if ($i > 0) {
 				$selection->andWhere($qb->expr()->eq('t1.' . $column, 't2.' . $column));
 			} else {
