@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.
  - Noticeably faster voting in large polls with many participants and options
 
 ### Changed (9.0.0)
- - Drop support for Nextcloud Hub 10
+ - Drop support for Nextcloud 31
  - Use ISO formatted timestamps and durations for date options
  - Circles renamed to Teams
  - Data loading centralized to router guards
