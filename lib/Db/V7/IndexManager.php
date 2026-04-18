@@ -6,11 +6,11 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\Polls\Db\V6;
+namespace OCA\Polls\Db\V7;
 
 use Doctrine\DBAL\Schema\Exception\IndexDoesNotExist;
 use Exception;
-use OCA\Polls\Migration\V6\TableSchema;
+use OCA\Polls\Migration\V7\TableSchema;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
@@ -27,6 +27,12 @@ class IndexManager extends DbManager {
 		parent::__construct($config, $connection, $logger);
 	}
 
+	private function columnsMatch(array $existing, array $expected): bool {
+		sort($existing);
+		sort($expected);
+		return $existing === $expected;
+	}
+
 	/**
 	 * Create unique indices
 	 * Unique indices are crucial for the correct operation of the polls app.
@@ -36,18 +42,44 @@ class IndexManager extends DbManager {
 	 */
 	public function createUniqueIndices(): array {
 		$messages = [];
+		$this->needsSchema();
 
 		foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
-			foreach ($uniqueIndices as $name => $definition) {
+			$prefixedTable = $this->getTableName($tableName);
 
-				// skip if the unique index exists
-				if ($this->schema->hasTable($this->getTableName($tableName))) {
-					$table = $this->schema->getTable($this->getTableName($tableName));
-					if ($table->hasIndex($name)) {
-						continue;
+			if (!$this->schema->hasTable($prefixedTable)) {
+				continue;
+			}
+
+			$table = $this->schema->getTable($prefixedTable);
+
+			foreach ($uniqueIndices as $name => $definition) {
+				$targetColumns = $definition['columns'];
+				$existsByName = $table->hasIndex($name);
+				$definitionMatches = $existsByName && $this->columnsMatch($table->getIndex($name)->getColumns(), $targetColumns);
+
+				// 1+2: correct name, correct columns → skip
+				if ($existsByName && $definitionMatches) {
+					$messages[] = 'Unique index ' . $name . ' already exists in ' . $tableName;
+					continue;
+				}
+
+				// 1 true, 2 false: correct name, wrong columns → drop and recreate
+				if ($existsByName) {
+					$table->dropIndex($name);
+					$messages[] = 'Dropped unique index ' . $name . ' from ' . $tableName . ' (definition mismatch)';
+				} else {
+					// 1 false, 3: different name, same columns → drop and recreate with correct name
+					foreach ($table->getIndexes() as $index) {
+						if ($index->isUnique() && $this->columnsMatch($index->getColumns(), $targetColumns)) {
+							$messages[] = 'Dropped unique index ' . $index->getName() . ' from ' . $tableName . ' (renamed to ' . $name . ')';
+							$table->dropIndex($index->getName());
+							break;
+						}
 					}
 				}
-				$messages[] = $this->createIndex($tableName, $name, $definition['columns'], true);
+
+				$messages[] = $this->createIndex($tableName, $name, $targetColumns, true);
 			}
 		}
 		return $messages;
@@ -105,6 +137,15 @@ class IndexManager extends DbManager {
 
 		$parentTable = $this->schema->getTable($parentTableName);
 		$childTable = $this->schema->getTable($childTableName);
+
+		foreach ($childTable->getForeignKeys() as $fk) {
+			if ($fk->getForeignTableName() === $parentTableName
+				&& $fk->getLocalColumns() === [$constraintColumn]
+				&& $fk->getForeignColumns() === ['id']
+			) {
+				return 'Foreign key ' . $childTableName . '[' . $constraintColumn . '] -> ' . $parentTableName . '[id] already exists';
+			}
+		}
 
 		$childTable->addForeignKeyConstraint($parentTable, [$constraintColumn], ['id'], ['onDelete' => 'CASCADE']);
 		return 'Added ' . $parentTableName . '[' . $constraintColumn . '] <- ' . $childTableName . '[id]';
