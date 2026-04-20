@@ -70,7 +70,7 @@ jobs:
     strategy:
       matrix:
         php-versions: ['8.1', '8.2', '8.3']
-        server-versions: ['27', '28', '29', '30', '31']
+        server-versions: ['stable27', 'stable29', 'stable30', 'stable31']
         mysql-versions: ['8.4']
 
     name: MySQL ${{ matrix.mysql-versions }} PHP ${{ matrix.php-versions }} Nextcloud ${{ matrix.server-versions }}
