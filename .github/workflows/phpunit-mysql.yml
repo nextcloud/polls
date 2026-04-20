@@ -69,7 +69,7 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['8.1', '8.2', '8.3']
+        php-versions: ['8.1', '8.2']
         server-versions: ['stable27', 'stable29', 'stable30', 'stable31']
         mysql-versions: ['8.4']
 
