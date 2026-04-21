@@ -29,14 +29,10 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Get php version
-        id: versions
-        uses: icewind1991/nextcloud-version-matrix@58becf3b4bb6dc6cef677b15e2fd8e7d48c0908f # v1.3.1
-
-      - name: Set up php${{ steps.versions.outputs.php-min }}
+      - name: Set up php 8.1
         uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
         with:
-          php-version: ${{ steps.versions.outputs.php-min }}
+          php-version: 8.1
           extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite
           coverage: none
           ini-file: development
