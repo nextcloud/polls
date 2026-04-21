@@ -168,6 +168,7 @@ OC.L10N.register(
     "See result" : "Bekijk resultaat",
     "No valid email address" : "Geen geldig e-mailadres",
     "Unknown error" : "Onbekende fout",
+    "Maybe" : "Misschien",
     "Loading …" : "Laden …",
     "Previous day" : "Vorige dag",
     "Next day" : "Volgende dag",
