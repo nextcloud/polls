@@ -48,7 +48,7 @@ class BaseController extends Controller {
 
 			/** @var HttpStatusCode $status */
 			$status = $e->getStatus();
-			return new JSONResponse(['message' => $e->getMessage()], $status);
+			return new JSONResponse(['message' => 'Request failed'], $status);
 		}
 	}
 
