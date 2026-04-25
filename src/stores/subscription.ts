@@ -7,7 +7,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 import { PublicAPI, PollsAPI } from '../Api'
-import { activeRoute } from '../router'
+import { activeRoute } from '../routerState'
 import { Logger } from '../helpers/modules/logger'
 
 import { useSessionStore } from './session'

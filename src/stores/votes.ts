@@ -5,7 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, VotesAPI } from '../Api'
-import { activeRoute } from '../router'
+import { activeRoute } from '../routerState'
 import { Logger } from '../helpers/modules/logger'
 import { StoreHelper } from '../helpers/modules/StoreHelper'
 

@@ -8,7 +8,6 @@ import {
 	createWebHistory,
 	createRouter,
 } from 'vue-router'
-import { shallowRef } from 'vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
@@ -19,6 +18,7 @@ import { Event } from './Types'
 
 import Navigation from './views/Navigation.vue'
 
+import { activeRoute } from './routerState'
 import { useSessionStore } from './stores/session'
 import { usePollStore } from './stores/poll'
 import { usePollsStore } from './stores/polls'
@@ -219,11 +219,8 @@ const router = createRouter({
 	linkActiveClass: 'active',
 })
 
-// Reflects the navigation target during guards (router.currentRoute is only
-// updated after navigation commits, so stores must read this ref instead).
-export const activeRoute = shallowRef<RouteLocationNormalized>(
-	router.currentRoute.value,
-)
+// Initialize activeRoute with the router's starting location.
+activeRoute.value = router.currentRoute.value
 
 router.beforeEach(
 	async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
