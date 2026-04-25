@@ -16,7 +16,7 @@ import { emit } from '@nextcloud/event-bus'
 
 import { Logger } from '../helpers/modules/logger'
 import { PublicAPI, PollsAPI } from '../Api'
-import { activeRoute } from '../router'
+import { activeRoute } from '../routerState'
 import { defaultUser, Event } from '../Types'
 
 import { usePollsStore } from './polls'

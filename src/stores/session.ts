@@ -9,7 +9,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 
 import { Logger } from '../helpers/modules/logger'
-import { activeRoute } from '../router'
+import { activeRoute } from '../routerState'
 import { PublicAPI, SessionAPI } from '../Api'
 
 import { useSubscriptionStore } from './subscription'
