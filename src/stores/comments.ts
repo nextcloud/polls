@@ -6,7 +6,7 @@
 import { defineStore } from 'pinia'
 
 import { CommentsAPI, PublicAPI } from '../Api'
-import { activeRoute } from '../router'
+import { activeRoute } from '../routerState'
 import { groupComments } from '../helpers/modules/comments'
 import { Logger } from '../helpers/modules/logger'
 

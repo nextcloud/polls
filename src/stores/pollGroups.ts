@@ -10,7 +10,7 @@ import orderBy from 'lodash/orderBy'
 
 import { t } from '@nextcloud/l10n'
 import { usePollsStore } from './polls'
-import { activeRoute } from '../router'
+import { activeRoute } from '../routerState'
 
 import { PollGroupsAPI } from '../Api'
 

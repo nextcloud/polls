@@ -7,7 +7,7 @@ import { defineStore } from 'pinia'
 import orderBy from 'lodash/orderBy'
 
 import { PublicAPI, OptionsAPI } from '../Api'
-import { activeRoute } from '../router'
+import { activeRoute } from '../routerState'
 import { Logger } from '../helpers/modules/logger'
 
 import { usePollStore } from './poll'
