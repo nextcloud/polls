@@ -10,7 +10,7 @@ import { t } from '@nextcloud/l10n'
 
 import { Logger } from '../helpers/modules/logger'
 import { PollsAPI } from '../Api'
-import { activeRoute } from '../router'
+import { activeRoute } from '../routerState'
 
 import { useSessionStore } from './session'
 import { usePollGroupsStore } from './pollGroups'
