@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Migration;
 
-use OCA\Polls\Db\V7\IndexManager;
 use OCA\Polls\Db\V7\TableManager;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
@@ -29,7 +28,6 @@ class Version090000Date20260302212000 extends SimpleMigrationStep {
 
 	public function __construct(
 		private TableManager $tableManager,
-		private IndexManager $indexManager,
 		private IDBConnection $connection,
 	) {
 	}
