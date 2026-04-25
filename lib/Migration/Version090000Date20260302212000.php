@@ -43,19 +43,6 @@ class Version090000Date20260302212000 extends SimpleMigrationStep {
 	}
 
 	/**
-	 * This method is called before the schema change.
-	 *
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure
-	 * @param array $options
-	 * @return void
-	 */
-	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options): void {
-		$this->output = $output;
-		$this->logInfo('Prepare migration- no operation needed');
-	}
-
-	/**
 	 * This method is executing the actual schema change based on the definition of TableSchema
 	 * $schemaClosure The `\Closure` returns an `ISchemaWrapper`
 	 * @param IOutput $output
@@ -77,31 +64,6 @@ class Version090000Date20260302212000 extends SimpleMigrationStep {
 		}
 
 		return $this->schema;
-	}
-
-	/**
-	 * This method is called after the schema change.
-	 * It is used to perform any post-migration steps, such as migrating options to a hash.
-	 * Main steps:
-	 * 1. Ensure that option hashes are created correctly for options and votes
-	 *
-	 * @param IOutput $output
-	 * @param \Closure $schemaClosure
-	 * @param array $options
-	 * @return void
-	 */
-	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options): void {
-		$this->output = $output;
-		$this->logInfo('Post migration steps- no operation needed');
-
-		$this->indexManager->createSchema();
-		// Create unique indices for all tables and remove all duplicates which have to be unique
-		$message = $this->indexManager->createUniqueIndices();
-		$this->logInfo($message, 'postMigration:  ');
-
-		// skip creating optional indices and leave it to 'occ db:add-missing-indices'
-		$this->indexManager->migrateToSchema();
-
 	}
 
 	/**

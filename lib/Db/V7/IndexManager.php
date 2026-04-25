@@ -60,7 +60,7 @@ class IndexManager extends DbManager {
 
 				// 1+2: correct name, correct columns → skip
 				if ($existsByName && $definitionMatches) {
-					$messages[] = 'Unique index ' . $name . ' already exists in ' . $tableName;
+					$messages[] = 'Unique index ' . $name . ' already exists in ' . $tableName .'. skip creation.';
 					continue;
 				}
 
