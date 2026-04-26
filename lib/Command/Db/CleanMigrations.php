@@ -10,7 +10,7 @@ namespace OCA\Polls\Command\Db;
 
 use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Command\Command;
-use OCA\Polls\Db\V7\TableManager;
+use OCA\Polls\Db\V8\TableManager;
 use OCP\IDBConnection;
 
 /**
