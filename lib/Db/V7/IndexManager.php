@@ -27,62 +27,16 @@ class IndexManager extends DbManager {
 		parent::__construct($config, $connection, $logger);
 	}
 
+	/**
+	 * Check if two column lists match, ignoring order.
+	 * @param string[] $existing list of columns in existing index
+	 * @param string[] $expected list of columns in expected index definition
+	 * @return bool true if the lists match, false otherwise
+	 */
 	private function columnsMatch(array $existing, array $expected): bool {
 		sort($existing);
 		sort($expected);
 		return $existing === $expected;
-	}
-
-	/**
-	 * Create unique indices
-	 * Unique indices are crucial for the correct operation of the polls app.
-	 * This for they have to be updated on every update.
-	 *
-	 * @return string[] logged messages
-	 */
-	public function createUniqueIndices(): array {
-		$messages = [];
-		$this->needsSchema();
-
-		foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
-			$prefixedTable = $this->getTableName($tableName);
-
-			if (!$this->schema->hasTable($prefixedTable)) {
-				continue;
-			}
-
-			$table = $this->schema->getTable($prefixedTable);
-
-			foreach ($uniqueIndices as $name => $definition) {
-				$targetColumns = $definition['columns'];
-				$existsByName = $table->hasIndex($name);
-				$definitionMatches = $existsByName && $this->columnsMatch($table->getIndex($name)->getColumns(), $targetColumns);
-
-				// 1+2: correct name, correct columns → skip
-				if ($existsByName && $definitionMatches) {
-					$messages[] = 'Unique index ' . $name . ' already exists in ' . $tableName . '. skip creation.';
-					continue;
-				}
-
-				// 1 true, 2 false: correct name, wrong columns → drop and recreate
-				if ($existsByName) {
-					$table->dropIndex($name);
-					$messages[] = 'Dropped unique index ' . $name . ' from ' . $tableName . ' (definition mismatch)';
-				} else {
-					// 1 false, 3: different name, same columns → drop and recreate with correct name
-					foreach ($table->getIndexes() as $index) {
-						if ($index->isUnique() && $this->columnsMatch($index->getColumns(), $targetColumns)) {
-							$messages[] = 'Dropped unique index ' . $index->getName() . ' from ' . $tableName . ' (renamed to ' . $name . ')';
-							$table->dropIndex($index->getName());
-							break;
-						}
-					}
-				}
-
-				$messages[] = $this->createIndex($tableName, $name, $targetColumns, true);
-			}
-		}
-		return $messages;
 	}
 
 	/**
@@ -172,37 +126,6 @@ class IndexManager extends DbManager {
 			}
 		}
 		return $messages;
-	}
-
-	/**
-	 * Create one named index for table
-	 *
-	 * @param string $tableName name of table to add the index to
-	 * @param string $indexName index name
-	 * @param string[] $columns columns to inclue to the index
-	 * @param bool $unique create a unique index
-	 * @return string log message
-	 */
-	public function createIndex(string $tableName, string $indexName, array $columns, bool $unique = false): string {
-		$this->needsSchema();
-		$tableName = $this->getTableName($tableName);
-
-		if ($this->schema->hasTable($tableName)) {
-
-			$table = $this->schema->getTable($tableName);
-
-			if (!$table->hasIndex($indexName)) {
-				if ($unique) {
-					$table->addUniqueIndex($columns, $indexName);
-					return 'Added unique index ' . $indexName . ' for ' . json_encode($columns) . ' to ' . $tableName;
-				} else {
-					$table->addIndex($columns, $indexName);
-					return 'Added index ' . $indexName . ' for ' . json_encode($columns) . ' to ' . $tableName;
-				}
-			}
-			return 'Index ' . $indexName . ' already exists in ' . $tableName;
-		}
-		return 'Table ' . $tableName . ' does not exist';
 	}
 
 	/**
@@ -378,5 +301,124 @@ class IndexManager extends DbManager {
 			// common index does not exist, skip it
 		}
 		return $message;
+	}
+
+	/**
+	 * Create one index for a table, replacing any conflicting index by name or columns.
+	 *
+	 * If $indexName is empty, only the columns are checked (Doctrine auto-generates the name).
+	 *
+	 * @param string $tableName name of table to add the index to
+	 * @param string $indexName index name, or empty string to let Doctrine auto-generate
+	 * @param string[] $columns columns to include in the index
+	 * @param bool $unique create a unique index
+	 * @return string message
+	 */
+	public function createIndex(string $tableName, string $indexName, array $columns, bool $unique = false): string {
+		$this->needsSchema();
+		$prefixedTable = $this->getTableName($tableName);
+
+		// Skip creation, if table does not exist
+		if (!$this->schema->hasTable($prefixedTable)) {
+			return 'Table ' . $prefixedTable . ' does not exist';
+		}
+
+		$table = $this->schema->getTable($prefixedTable);
+		$hasName = $indexName !== '';
+		$type = $unique ? 'unique index' : 'index';
+		$message = [];
+
+		// Check by name: if a named index already exists, verify its columns
+		if ($hasName && $table->hasIndex($indexName)) {
+			if ($this->columnsMatch($table->getIndex($indexName)->getColumns(), $columns)) {
+				// Named index with same columns already exists, skip creation and return success message
+				return ucfirst($type) . ' ' . $indexName . ' with correkt configuration already exists in ' . $tableName . '. Skip creation.';
+			}
+			// Drop if named index with same name but different columns exists
+			$table->dropIndex($indexName);
+			$message[] = 'Dropped ' . $type . ' ' . $indexName . ' from ' . $tableName . ' (definition mismatch)';
+		}
+
+		// Check by columns: look further for any existing index with same uniqueness and same columns
+		foreach ($table->getIndexes() as $index) {
+			if ($index->isUnique() === $unique && $this->columnsMatch($index->getColumns(), $columns)) {
+				if (!$hasName) {
+					// If index is unnamed and index with matching configuraton is found, skip creation and return success message
+					return ucfirst($type) . ' for ' . json_encode($columns) . ' already exists as ' . $index->getName() . ' in ' . $tableName;
+				}
+				// An index with same columns and uniqueness but different name exists, drop it
+				$message[] = 'Dropped ' . $type . ' ' . $index->getName() . ' from ' . $tableName . ' (renamed to ' . $indexName . ')';
+				$table->dropIndex($index->getName());
+				break;
+			}
+		}
+
+		// now create the new index, either, because it did not exist at all, or because the existing one(s) were dropped due to mismatch
+		if ($unique) {
+			$table->addUniqueIndex($columns, $hasName ? $indexName : null);
+		} else {
+			$table->addIndex($columns, $hasName ? $indexName : null);
+		}
+		$message[] = 'Added ' . $type . ' ' . ($hasName ? $indexName : '(auto)') . ' for ' . json_encode($columns) . ' to ' . $tableName;
+
+		return implode('; ', $message);
+	}
+	
+	/**
+	 * Create unique indices
+	 * Unique indices are crucial for the correct operation of the polls app.
+	 * This for they have to be updated on every update.
+	 *
+	 * Falls back to dropping all unique indices and recreating them on error.
+	 *
+	 * @return string[] logged messages
+	 */
+	public function createUniqueIndices(): array {
+		$messages = [];
+		$this->needsSchema();
+
+		try {
+			foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
+				$prefixedTable = $this->getTableName($tableName);
+
+				if (!$this->schema->hasTable($prefixedTable)) {
+					$messages[] = 'Table ' . $prefixedTable . ' does not exist, skip unique index creation';
+					continue;
+				}
+
+				foreach ($uniqueIndices as $name => $definition) {
+					$messages[] = $this->createIndex($tableName, $name, $definition['columns'], true);
+				}
+			}
+		} catch (Exception $e) {
+			// If any exception was thrown, run a fallbach by dropping all unique indices and recreating them.
+			// The app relies on the unique indices for correct operation.
+			$messages[] = 'Failed creating unique indices (' . $e->getMessage() . '), falling back to complete recreation';
+
+			foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
+				$prefixedTable = $this->getTableName($tableName);
+
+				if (!$this->schema->hasTable($prefixedTable)) {
+					$messages[] = 'Table ' . $prefixedTable . ' does not exist, skip unique index recreation';
+					continue;
+				}
+
+				$table = $this->schema->getTable($prefixedTable);
+
+				foreach ($table->getIndexes() as $index) {
+					if ($index->isUnique()) {
+						$table->dropIndex($index->getName());
+						$messages[] = 'Dropped unique index ' . $index->getName() . ' from ' . $tableName;
+					}
+				}
+
+				foreach ($uniqueIndices as $name => $definition) {
+					$table->addUniqueIndex($definition['columns'], $name);
+					$messages[] = 'Recreated unique index ' . $name . ' in ' . $tableName;
+				}
+			}
+		}
+
+		return $messages;
 	}
 }
