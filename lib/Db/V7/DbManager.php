@@ -116,17 +116,17 @@ abstract class DbManager {
 
 		if ($allowSchemaClass && $allowISchemWrapperClass) {
 			// If the schema is not set or not an instance of Schema or ISchemaWrapper, throw an exception
-			throw new SchemaMissmatchException('Schema is not set or not an instance of Schema or ISchemaWrapper (caller: ' . self::formatCaller() . ')');
+			throw new SchemaMissmatchException('Schema is not set or not an instance of Doctrine\DBAL\Schema\Schema or OCP\DB\ISchemaWrapper (caller: ' . self::formatCaller() . ')');
 		}
 		if ($allowSchemaClass) {
 			// If the schema is not set or not an instance of Schema, throw an exception
-			throw new SchemaMissmatchException('Schema is not set or not an instance of Schema (caller: ' . self::formatCaller() . ')');
+			throw new SchemaMissmatchException('Schema is not set or not an instance of Doctrine\DBAL\Schema\Schema (caller: ' . self::formatCaller() . ')');
 		}
 		if ($allowISchemWrapperClass) {
 			// If the schema is not set or not an instance of ISchemaWrapper, throw an exception
-			throw new SchemaMissmatchException('Schema is not set or not an instance of ISchemaWrapper(caller: ' . self::formatCaller() . ')');
+			throw new SchemaMissmatchException('Schema is not set or not an instance of OCP\DB\ISchemaWrapper (caller: ' . self::formatCaller() . ')');
 		}
-		throw new SchemaMissmatchException('Unexpected. Schema is an instance of ' . get_class($this->schema) . '(caller: ' . self::formatCaller() . ')');
+		throw new SchemaMissmatchException('Unexpected. Schema is an instance of ' . get_class($this->schema) . ' (caller: ' . self::formatCaller() . ')');
 	}
 
 	/**

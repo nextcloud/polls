@@ -47,15 +47,6 @@ abstract class TableSchema {
 	];
 
 	/**
-	 * define useful common indices, which are not unique
-	 * table => ['name' => 'indexName', 'unique' => false, 'columns' => ['column1', 'column2']]
-	 * @deprecated since 8.3.0, use OPTIONAL_INDICES instead
-	 */
-	public const COMMON_INDICES = [
-		'polls_polls_owners_non_deleted' => ['table' => Poll::TABLE, 'name' => 'polls_polls_owners_non_deleted', 'unique' => false, 'columns' => ['owner', 'deleted']],
-	];
-
-	/**
 	 * define useful optional indices, which are not unique
 	 * tableName => [
 	 * 	indexName => ['columns' => [column1, column2, ...]],
@@ -65,7 +56,6 @@ abstract class TableSchema {
 		Poll::TABLE => [
 			'polls_polls_owners_non_deleted' => ['columns' => ['owner', 'deleted']],
 			'polls_polls_deleted' => ['columns' => ['deleted']],
-			'polls_polls_owners' => ['columns' => ['owner']],
 		],
 		Option::TABLE => [
 			'polls_options_non_deleted' => ['columns' => ['poll_id', 'deleted']],
@@ -78,9 +68,21 @@ abstract class TableSchema {
 			'polls_group_shares_user' => ['columns' => ['group_id', 'user_id', 'deleted']],
 		],
 		Vote::TABLE => [
-			'polls_votes_answers' => ['columns' => ['poll_id', 'user_id']],
 			'polls_votes_user' => ['columns' => ['poll_id', 'vote_answer', 'user_id']],
 			'polls_votes_hash' => ['columns' => ['poll_id', 'vote_option_hash', 'deleted']],
+		],
+	];
+
+	/**
+	 * define obsolete indices to drop
+	 * tableName => [indexName, ...]
+	 */
+	public const GONE_INDICES = [
+		Poll::TABLE => [
+			'polls_polls_owners', // redundant: leftmost prefix of polls_polls_owners_non_deleted (owner, deleted)
+		],
+		Vote::TABLE => [
+			'polls_votes_answers', // redundant: leftmost prefix of UNIQ_votes (poll_id, user_id, vote_option_hash)
 		],
 	];
 
