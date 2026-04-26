@@ -6,7 +6,7 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\Polls\Db\V7;
+namespace OCA\Polls\Db\V8;
 
 use Doctrine\DBAL\Schema\Schema;
 use Exception;

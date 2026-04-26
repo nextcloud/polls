@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace OCA\Polls\Command\Db;
 
 use Doctrine\DBAL\Schema\Schema;
-use OCA\Polls\Db\V7\TableManager;
-use OCA\Polls\Db\V7\IndexManager;
+use OCA\Polls\Db\V8\TableManager;
+use OCA\Polls\Db\V8\IndexManager;
 use OCA\Polls\Command\Command;
 use OCP\IDBConnection;
 
