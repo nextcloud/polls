@@ -59,7 +59,7 @@ class IndexManager extends DbManager {
 	}
 
 	/**
-	 * add on delete fk contraints to all tables referencing the main polls table
+	 * add 'on delete' fk contraints to all tables referencing the main polls table
 	 * Foreign key constraints are crucial for the correct operation of the polls app.
 	 * This for they have to be updated on every update.
 	 *
@@ -78,13 +78,13 @@ class IndexManager extends DbManager {
 	}
 
 	/**
-	 * add one on delete fk contraint
+	 * add one 'on delete' fk contraint
 	 *
 	 * @param string $parentTableName name of referred table
 	 * @param string $childTableName name of referring table
 	 * @return string log message
 	 */
-	public function createForeignKeyConstraint(string $parentTableName, string $childTableName, string $constraintColumn): string {
+	private function createForeignKeyConstraint(string $parentTableName, string $childTableName, string $constraintColumn): string {
 		$this->needsSchema();
 		$parentTableName = $this->getTableName($parentTableName);
 		$childTableName = $this->getTableName($childTableName);
@@ -180,6 +180,33 @@ class IndexManager extends DbManager {
 	}
 
 	/**
+	 * Remove indices listed in TableSchema::GONE_INDICES
+	 *
+	 * @return string[] logged messages
+	 */
+	public function removeObsoleteIndices(): array {
+		$this->needsSchema();
+		$messages = [];
+		$dropped = false;
+
+		foreach (TableSchema::GONE_INDICES as $tableName => $indexNames) {
+			foreach ($indexNames as $indexName) {
+				$message = $this->removeNamedIndexFromTable($tableName, $indexName);
+				if ($message !== null) {
+					$dropped = true;
+					$messages[] = $message;
+				}
+			}
+		}
+
+		if (!$dropped) {
+			$messages[] = 'No obsolete indices found';
+		}
+
+		return $messages;
+	}
+
+	/**
 	 * remove all unique indices
 	 *
 	 * @return string[] logged messages
@@ -261,7 +288,7 @@ class IndexManager extends DbManager {
 			foreach ($table->getIndexes() as $index) {
 				if (strpos($index->getName(), 'IDX_') === 0) {
 					try {
-						$messages[] = 'Removes ' . $index->getName() . ' from ' . $tableName;
+						$messages[] = 'Remove ' . $index->getName() . ' from ' . $tableName;
 						$table->dropIndex($index->getName());
 					} catch (Exception $e) {
 						/**
@@ -278,6 +305,7 @@ class IndexManager extends DbManager {
 		}
 		return $messages;
 	}
+
 	/**
 	 * remove all generic indices from $table
 	 *
@@ -299,6 +327,7 @@ class IndexManager extends DbManager {
 			}
 		} catch (IndexDoesNotExist $e) {
 			// common index does not exist, skip it
+			$message = 'Skipped - Index ' . $indexName . ' does not exist in ' . $tableName;
 		}
 		return $message;
 	}
@@ -332,7 +361,7 @@ class IndexManager extends DbManager {
 		if ($hasName && $table->hasIndex($indexName)) {
 			if ($this->columnsMatch($table->getIndex($indexName)->getColumns(), $columns)) {
 				// Named index with same columns already exists, skip creation and return success message
-				return ucfirst($type) . ' ' . $indexName . ' with correkt configuration already exists in ' . $tableName . '. Skip creation.';
+				return ucfirst($type) . ' ' . $indexName . ' with correct configuration already exists in ' . $tableName . '. Skip creation.';
 			}
 			// Drop if named index with same name but different columns exists
 			$table->dropIndex($indexName);
@@ -363,7 +392,7 @@ class IndexManager extends DbManager {
 
 		return implode('; ', $message);
 	}
-	
+
 	/**
 	 * Create unique indices
 	 * Unique indices are crucial for the correct operation of the polls app.

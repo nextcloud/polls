@@ -34,6 +34,7 @@
   </background-jobs>
   <repair-steps>
     <post-migration>
+      <step>OCA\Polls\Migration\RepairSteps\DropOrphanedIndices</step>
       <step>OCA\Polls\Migration\RepairSteps\CreateUniqueIndices</step>
       <step>OCA\Polls\Migration\RepairSteps\UpdateHashes</step>
       <step>OCA\Polls\Migration\RepairSteps\MigratePublicToOpen</step>
