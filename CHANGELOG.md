@@ -7,6 +7,11 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
  - none so far
 
+## [9.0.2] - 2026-04-26
+### Fixed
+ - Again fix to avoid index recreation on already existing indices
+ - Fixed dashboard widget changing dashboard url
+
 ## [9.0.1] - 2026-04-18
 ### Fixed (9.0.1)
  - Fixed a migration error on attempts to create an existing index (strict database settings affected)

@@ -11,7 +11,7 @@ namespace OCA\Polls\Migration\RepairSteps;
 
 use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\Share;
-use OCA\Polls\Db\V7\IndexManager;
+use OCA\Polls\Db\V8\IndexManager;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
