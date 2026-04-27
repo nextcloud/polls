@@ -47,6 +47,7 @@ class CreateUniqueIndices implements IRepairStep {
 				$output->warning('Polls - Index conflict detected, rebuilding unique indices: ' . $e->getMessage());
 				$this->schema = $this->connection->createSchema();
 				$this->indexManager->setSchema($this->schema);
+				$messages = array_merge($messages, $this->indexManager->repairPrimaryKeys());
 				$messages = array_merge($messages, $this->indexManager->removeAllUniqueIndices());
 				$this->connection->migrateToSchema($this->schema);
 
