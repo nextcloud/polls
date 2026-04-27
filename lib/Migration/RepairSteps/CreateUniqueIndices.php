@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Migration\RepairSteps;
 
-use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\V8\IndexManager;
 use OCP\IDBConnection;
@@ -38,7 +37,7 @@ class CreateUniqueIndices implements IRepairStep {
 
 		try {
 			$this->connection->migrateToSchema($this->schema);
-		} catch (DBALException $e) {
+		} catch (\Exception $e) {
 			// Hard fallback!
 			// Recreating indices can affect system performance on some db engines with large datasets.
 			// But the app relies on these indices to function properly, so we have to ensure they are created.
@@ -48,6 +47,7 @@ class CreateUniqueIndices implements IRepairStep {
 				$output->warning('Polls - Index conflict detected, rebuilding unique indices: ' . $e->getMessage());
 				$this->schema = $this->connection->createSchema();
 				$this->indexManager->setSchema($this->schema);
+				$messages = array_merge($messages, $this->indexManager->repairPrimaryKeys());
 				$messages = array_merge($messages, $this->indexManager->removeAllUniqueIndices());
 				$this->connection->migrateToSchema($this->schema);
 

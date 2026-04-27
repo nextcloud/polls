@@ -59,6 +59,39 @@ class IndexManager extends DbManager {
 	}
 
 	/**
+	 * Ensure all tables have their primary key on 'id'.
+	 * All PKs in this app are autoincrement 'id' columns — if one is missing
+	 * (e.g. after a failed migration on a non-transactional DB engine), restore it.
+	 *
+	 * @return string[] logged messages
+	 */
+	public function repairPrimaryKeys(): array {
+		$this->needsSchema();
+		$messages = [];
+
+		foreach (array_keys(TableSchema::TABLES) as $tableName) {
+			$prefixedTable = $this->getTableName($tableName);
+
+			if (!$this->schema->hasTable($prefixedTable)) {
+				continue;
+			}
+
+			$table = $this->schema->getTable($prefixedTable);
+
+			if ($table->getPrimaryKey() === null) {
+				$table->setPrimaryKey(['id']);
+				$messages[] = 'Restored missing primary key for ' . $tableName;
+			}
+		}
+
+		if (empty($messages)) {
+			$messages[] = 'All primary keys intact';
+		}
+
+		return $messages;
+	}
+
+	/**
 	 * add 'on delete' fk contraints to all tables referencing the main polls table
 	 * Foreign key constraints are crucial for the correct operation of the polls app.
 	 * This for they have to be updated on every update.
@@ -261,7 +294,7 @@ class IndexManager extends DbManager {
 			$table = $this->schema->getTable($tableName);
 
 			foreach ($table->getIndexes() as $index) {
-				if (strpos($index->getName(), 'UNIQ_') === 0) {
+				if (stripos($index->getName(), 'UNIQ_') === 0) {
 					$table->dropIndex($index->getName());
 					$messages[] = 'Removed ' . $index->getName() . ' from ' . $tableName;
 				}
@@ -435,7 +468,7 @@ class IndexManager extends DbManager {
 				$table = $this->schema->getTable($prefixedTable);
 
 				foreach ($table->getIndexes() as $index) {
-					if ($index->isUnique()) {
+					if ($index->isUnique() && !$index->isPrimary()) {
 						$table->dropIndex($index->getName());
 						$messages[] = 'Dropped unique index ' . $index->getName() . ' from ' . $tableName;
 					}
