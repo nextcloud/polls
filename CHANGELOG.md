@@ -7,8 +7,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
  - none so far
 
-## [9.0.3] - 2026-04-27
-### Fixed
+## [9.0.4] - 2026-04-27
+### Fixed (recreated on missing version update in info.xml)
  - Another fix to get index creation working
  - Check for existing unique indices case insensitive for PostgreSQL
  - Catch \Exception instead ...\DBAL\Exception in index creation fallback
