@@ -43,8 +43,10 @@ class CreateUniqueIndices implements IRepairStep {
 			// But the app relies on these indices to function properly, so we have to ensure they are created.
 			// If for any reasons the unique indices cannot be created, we remove all unique indices and create them again.
 			// This is a workaround for index conflicts that might occur during migration.
+			$output->warning('Polls - Exception during index migration: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+
 			if (str_contains($e->getMessage(), 'already exists') || str_contains($e->getMessage(), '42P07')) {
-				$output->warning('Polls - Index conflict detected, rebuilding unique indices: ' . $e->getMessage());
+				$output->warning('Polls - Index conflict detected, rebuilding unique indices.');
 				if ($this->connection->inTransaction()) {
 					$this->connection->rollBack();
 				}
