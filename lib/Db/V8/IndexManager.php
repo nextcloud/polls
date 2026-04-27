@@ -435,7 +435,7 @@ class IndexManager extends DbManager {
 				$table = $this->schema->getTable($prefixedTable);
 
 				foreach ($table->getIndexes() as $index) {
-					if ($index->isUnique()) {
+					if ($index->isUnique() && !$index->isPrimary()) {
 						$table->dropIndex($index->getName());
 						$messages[] = 'Dropped unique index ' . $index->getName() . ' from ' . $tableName;
 					}
