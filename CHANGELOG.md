@@ -7,6 +7,14 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
  - none so far
 
+## [9.0.3] - 2026-04-27
+### Fixed
+ - Another fix to get index creation working
+ - Check for existing unique indices case insensitive for PostgreSQL
+ - Catch \Exception instead ...\DBAL\Exception in index creation fallback
+ - Avoid dropping primary keys when trying to recreate unique indices
+ - Added a repair step to restore PK on accidentially drop
+
 ## [9.0.2] - 2026-04-26
 ### Fixed
  - Again fix to avoid index recreation on already existing indices
