@@ -6,11 +6,11 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\Polls\Db\V8;
+namespace OCA\Polls\Db\V9;
 
 use Doctrine\DBAL\Schema\Exception\IndexDoesNotExist;
 use Exception;
-use OCA\Polls\Migration\V8\TableSchema;
+use OCA\Polls\Migration\V9\TableSchema;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
