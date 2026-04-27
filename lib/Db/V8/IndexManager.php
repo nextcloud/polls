@@ -261,7 +261,7 @@ class IndexManager extends DbManager {
 			$table = $this->schema->getTable($tableName);
 
 			foreach ($table->getIndexes() as $index) {
-				if (strpos($index->getName(), 'UNIQ_') === 0) {
+				if (stripos($index->getName(), 'UNIQ_') === 0) {
 					$table->dropIndex($index->getName());
 					$messages[] = 'Removed ' . $index->getName() . ' from ' . $tableName;
 				}
