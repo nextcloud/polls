@@ -45,6 +45,9 @@ class CreateUniqueIndices implements IRepairStep {
 			// This is a workaround for index conflicts that might occur during migration.
 			if (str_contains($e->getMessage(), 'already exists') || str_contains($e->getMessage(), '42P07')) {
 				$output->warning('Polls - Index conflict detected, rebuilding unique indices: ' . $e->getMessage());
+				if ($this->connection->inTransaction()) {
+					$this->connection->rollBack();
+				}
 				$this->schema = $this->connection->createSchema();
 				$this->indexManager->setSchema($this->schema);
 				$messages = array_merge($messages, $this->indexManager->repairPrimaryKeys());
