@@ -55,6 +55,7 @@ use OCP\IURLGenerator;
  * @method ?int getAnonymizedVotes()
  * @method int getDeleted()
  * @method void setDeleted(int $value)
+ * @psalm-import-type PollsShare from \OCA\Polls\ResponseDefinitions
  */
 class Share extends EntityWithUser implements JsonSerializable {
 	/** @var string */
@@ -160,6 +161,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 	 *
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
+	/** @return PollsShare */
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->getId(),

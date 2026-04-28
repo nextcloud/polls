@@ -438,50 +438,14 @@ class PollService {
 		return $list;
 	}
 
-	/**
-	 * Get valid values for configuration options
-	 *
-	 * @return array
-	 *
-	 * @psalm-return array{pollType: mixed, access: mixed, showResults: mixed}
-	 */
-	public function getValidEnum(): array {
-		return [
-			'pollType' => $this->getValidPollType(),
-			'access' => $this->getValidAccess(),
-			'showResults' => $this->getValidShowResults()
-		];
-	}
-
-	/**
-	 * Get valid values for pollType
-	 *
-	 * @return string[]
-	 *
-	 * @psalm-return array{0: string, 1: string}
-	 */
 	private function getValidPollType(): array {
 		return [Poll::TYPE_DATE, Poll::TYPE_TEXT];
 	}
 
-	/**
-	 * Get valid values for access
-	 *
-	 * @return string[]
-	 *
-	 * @psalm-return array{0: string, 1: string}
-	 */
 	private function getValidAccess(): array {
 		return [Poll::ACCESS_PRIVATE, Poll::ACCESS_OPEN];
 	}
 
-	/**
-	 * Get valid values for showResult
-	 *
-	 * @return string[]
-	 *
-	 * @psalm-return array{0: string, 1: string, 2: string}
-	 */
 	private function getValidShowResults(): array {
 		return [Poll::SHOW_RESULTS_ALWAYS, Poll::SHOW_RESULTS_CLOSED, Poll::SHOW_RESULTS_NEVER];
 	}

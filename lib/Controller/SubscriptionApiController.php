@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\SubscriptionService;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -19,7 +20,7 @@ use OCP\IRequest;
 /**
  * @psalm-api
  */
-class SubscriptionApiController extends BaseApiV2Controller {
+class SubscriptionApiController extends BaseApiV2OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -29,13 +30,16 @@ class SubscriptionApiController extends BaseApiV2Controller {
 	}
 
 	/**
-	 * Get subscription status
-	 * @param int $pollId poll id
+	 * Get subscription status for a poll
+	 * 200: Returns subscription status
+	 * @param int $pollId Poll id
+	 * @return DataResponse<Http::STATUS_OK, array{pollId: int, subscribed: bool}, array{}>
+	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/subscription', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/subscription')]
 	public function get(int $pollId): DataResponse {
 		return $this->response(fn () => [
 			'pollId' => $pollId,
@@ -45,12 +49,15 @@ class SubscriptionApiController extends BaseApiV2Controller {
 
 	/**
 	 * Subscribe to poll
-	 * @param int $pollId poll id
+	 * 200: Subscribed to poll
+	 * @param int $pollId Poll id
+	 * @return DataResponse<Http::STATUS_OK, array{pollId: int, subscribed: bool}, array{}>
+	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/subscription', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/subscription')]
 	public function subscribe(int $pollId): DataResponse {
 		return $this->response(fn () => [
 			'pollId' => $pollId,
@@ -60,12 +67,15 @@ class SubscriptionApiController extends BaseApiV2Controller {
 
 	/**
 	 * Unsubscribe from poll
-	 * @param int $pollId poll id
+	 * 200: Unsubscribed from poll
+	 * @param int $pollId Poll id
+	 * @return DataResponse<Http::STATUS_OK, array{pollId: int, subscribed: bool}, array{}>
+	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/poll/{pollId}/subscription', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/poll/{pollId}/subscription')]
 	public function unsubscribe(int $pollId): DataResponse {
 		return $this->response(fn () => [
 			'pollId' => $pollId,

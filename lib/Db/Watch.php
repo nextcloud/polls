@@ -24,6 +24,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setUpdated(int $value)
  * @method string getSessionId()
  * @method void setSessionId(string $value)
+ * @psalm-import-type PollsWatch from \OCA\Polls\ResponseDefinitions
  */
 class Watch extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_watch';
@@ -50,6 +51,7 @@ class Watch extends Entity implements JsonSerializable {
 	 *
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
+	/** @return PollsWatch */
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->getId(),

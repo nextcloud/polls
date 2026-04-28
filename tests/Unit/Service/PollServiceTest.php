@@ -178,15 +178,4 @@ class PollServiceTest extends UnitTestCase {
 		$this->expectException(AlreadyDeletedException::class);
 		$this->pollService->delete(PHP_INT_MAX);
 	}
-
-	// --- getValidEnum ---
-
-	public function testGetValidEnumReturnsExpectedKeys(): void {
-		$enum = $this->pollService->getValidEnum();
-		$this->assertArrayHasKey('pollType', $enum);
-		$this->assertArrayHasKey('access', $enum);
-		$this->assertArrayHasKey('showResults', $enum);
-		$this->assertContains(Poll::TYPE_TEXT, $enum['pollType']);
-		$this->assertContains(Poll::TYPE_DATE, $enum['pollType']);
-	}
 }
