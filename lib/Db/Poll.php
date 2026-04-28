@@ -20,6 +20,11 @@ use OCP\IURLGenerator;
 
 /**
  * @psalm-api
+ * @psalm-import-type PollsPoll from \OCA\Polls\ResponseDefinitions
+ * @psalm-import-type PollsPollConfiguration from \OCA\Polls\ResponseDefinitions
+ * @psalm-import-type PollsPollsStatus from \OCA\Polls\ResponseDefinitions
+ * @psalm-import-type PollsCurrentUserStatus from \OCA\Polls\ResponseDefinitions
+ * @psalm-import-type PollsPollPermissions from \OCA\Polls\ResponseDefinitions
  * @method int getId()
  * @method void setId(int $value)
  * @method string getType()
@@ -255,16 +260,15 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 *
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
+	/** @return PollsPoll */
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->getId(),
 			'type' => $this->getType(),
 			'votingVariant' => $this->getVotingVariant(),
-			// editable settings
 			'configuration' => $this->getConfigurationArray(),
-			// read only properties
 			'descriptionSafe' => $this->getDescriptionSafe(),
-			'owner' => $this->getUser(),
+			'owner' => $this->getUser()->jsonSerialize(),
 			'status' => $this->getStatusArray(),
 			'currentUserStatus' => $this->getCurrentUserStatus(),
 			'permissions' => $this->getPermissionsArray(),
@@ -272,6 +276,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		];
 	}
 
+	/** @return PollsPollsStatus */
 	public function getStatusArray(): array {
 		return [
 			'lastInteraction' => $this->getLastInteraction(),
@@ -289,6 +294,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'forcedViewMode' => $this->getForcedDisplayMode() === 'user-pref' ? null : $this->getForcedDisplayMode(),
 		];
 	}
+	/** @return PollsPollConfiguration */
 	public function getConfigurationArray(): array {
 		return [
 			'access' => $this->getAccess(),
@@ -314,6 +320,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		];
 	}
 
+	/** @return PollsCurrentUserStatus */
 	public function getCurrentUserStatus(): array {
 		return [
 			'groupInvitations' => $this->getGroupShares(),
@@ -333,6 +340,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'pollGroupUserShares' => $this->getPollGroupUserShares(),
 		];
 	}
+	/** @return PollsPollPermissions */
 	public function getPermissionsArray(): array {
 		return [
 			'addOptions' => $this->getIsAllowed(self::PERMISSION_OPTION_ADD),
@@ -528,10 +536,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setOwner($userId);
 	}
 
+	/** @return list<string> */
 	private function getGroupShares(): array {
 		if ($this->groupShares !== null && $this->groupShares !== '') {
-			// explode with separator and remove empty elements
-			return array_filter(explode(PollMapper::CONCAT_SEPARATOR, PollMapper::CONCAT_SEPARATOR . $this->groupShares));
+			return array_values(array_filter(explode(PollMapper::CONCAT_SEPARATOR, PollMapper::CONCAT_SEPARATOR . $this->groupShares)));
 		}
 
 		return [];

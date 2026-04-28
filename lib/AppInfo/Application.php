@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\AppInfo;
 
+use OCA\Polls\Capabilities;
 use OCA\Polls\Dashboard\PollWidget;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\LogMapper;
@@ -99,6 +100,7 @@ class Application extends App implements IBootstrap {
 		include_once __DIR__ . '/../../vendor/autoload.php';
 		$this->registerServices($context);
 
+		$context->registerCapability(Capabilities::class);
 		$context->registerEventListener(AddMissingIndicesEvent::class, AddMissingIndicesListener::class);
 		$context->registerEventListener(RenderReferenceEvent::class, PollsReferenceListener::class);
 		$context->registerMiddleWare(RequestAttributesMiddleware::class);

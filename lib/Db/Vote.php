@@ -13,6 +13,7 @@ use OCA\Polls\Helper\Hash;
 
 /**
  * @psalm-suppress UnusedProperty
+ * @psalm-import-type PollsVote from \OCA\Polls\ResponseDefinitions
  * @method int getId()
  * @method void setId(int $value)
  * @method int getPollId()
@@ -31,7 +32,7 @@ use OCA\Polls\Helper\Hash;
  * @method void setDeleted(int $value)
  *
  * Joined Attributes
- * @method string getOptionId()
+ * @method ?int getOptionId()
  */
 class Vote extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_votes';
@@ -106,6 +107,7 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	 *
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
+	/** @return PollsVote */
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->getId(),
@@ -114,7 +116,7 @@ class Vote extends EntityWithUser implements JsonSerializable {
 			'answer' => $this->getVoteAnswer(),
 			'deleted' => $this->getDeleted(),
 			'optionId' => $this->getOptionId(),
-			'user' => $this->getUser(),
+			'user' => $this->getUser()->jsonSerialize(),
 			'answerSymbol' => $this->getAnswerSymbol(),
 		];
 	}

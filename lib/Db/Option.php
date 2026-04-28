@@ -19,6 +19,8 @@ use OCA\Polls\Model\UserBase;
 
 /**
  * @psalm-suppress UnusedProperty
+ * @psalm-import-type PollsOption from \OCA\Polls\ResponseDefinitions
+ * @psalm-import-type PollsOptionVotes from \OCA\Polls\ResponseDefinitions
  * @method int getId()
  * @method void setId(int $value)
  * @method int getConfirmed()
@@ -139,6 +141,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 *
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
+	/** @return PollsOption */
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->getId(),
@@ -155,7 +158,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'hash' => $this->getPollOptionHash(),
 			'isOwner' => $this->getCurrentUserIsEntityUser(),
 			'votes' => $this->getVotes(),
-			'owner' => $this->getOwnerUser(),
+			'owner' => $this->getOwnerUser()?->jsonSerialize(),
 		];
 	}
 
@@ -164,6 +167,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 *
 	 * @return array An associative array containing the counts of 'yes', 'no', 'maybe' votes, the total count of votes and the current user's vote answer.
 	 */
+	/** @return PollsOptionVotes */
 	private function getVotes(): array {
 		return [
 			'no' => $this->getVotesNo() * $this->getShowResults(),

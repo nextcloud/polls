@@ -53,6 +53,8 @@
 		"psalm:info": "psalm --no-diff --show-info=true",
 		"psalm:baseline": "psalm --set-baseline=psalm-baseline.xml",
 		"psalm:baseline:update": "psalm --update-baseline",
+		"openapi": "php vendor-bin/openapi-extractor/vendor/nextcloud/openapi-extractor/generate-spec.php",
+		"generate-spec": "@openapi",
 		"bin": "echo 'bin not installed'",
 		"post-install-cmd": [
 			"@composer bin all install --ansi",

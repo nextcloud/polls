@@ -24,10 +24,12 @@ use OCP\IRequest;
 
 /**
  * @psalm-api
- * @psalm-import-type SimpleOptionsArray from SimpleOption
- * @psalm-import-type SequenceArray from Sequence
+ * @psalm-import-type PollsOption from \OCA\Polls\ResponseDefinitions
+ * @psalm-import-type PollsVote from \OCA\Polls\ResponseDefinitions
+ * @psalm-import-type PollsSimpleOption from \OCA\Polls\ResponseDefinitions
+ * @psalm-import-type PollsSequence from \OCA\Polls\ResponseDefinitions
  */
-class OptionApiController extends BaseApiV2Controller {
+class OptionApiController extends BaseApiV2OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -38,29 +40,34 @@ class OptionApiController extends BaseApiV2Controller {
 	}
 
 	/**
-	 * Get all options of given poll
+	 * Get all options of a poll
+	 * 200: Returns list of options
 	 * @param int $pollId Poll id
+	 * @return DataResponse<Http::STATUS_OK, array{options: list<PollsOption>}, array{}>
+	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/options', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/options')]
 	public function list(int $pollId): DataResponse {
 		return $this->response(fn () => ['options' => $this->optionService->list($pollId)]);
 	}
 
 	/**
 	 * Add a new option
-	 *
-	 * @param int $pollId poll id
-	 * @param SimpleOptionsArray $option The array containing the option data
+	 * 201: Option added
+	 * @param int $pollId Poll id
+	 * @param PollsSimpleOption $option The array containing the option data
 	 * @param bool $voteYes Vote yes for this option and for all generated sequence
-	 * @param SequenceArray $sequence Sequence of the option
+	 * @param PollsSequence|null $sequence Sequence of the option
+	 * @return DataResponse<Http::STATUS_CREATED, array{option: PollsOption, repetitions: list<PollsOption>, options: list<PollsOption>, votes: list<PollsVote>}, array{}>
+	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/option', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/option')]
 	public function add(
 		int $pollId,
 		array $option,
@@ -79,31 +86,38 @@ class OptionApiController extends BaseApiV2Controller {
 		), Http::STATUS_CREATED);
 	}
 
-
 	/**
-	 * Add mulitple new options
-	 * @param int $pollId poll id
-	 * @param string $text Options text for text poll
+	 * Add multiple new options from text
+	 * 201: Options added
+	 * @param int $pollId Poll id
+	 * @param string $text Options text (newline-separated) for text poll
+	 * @return DataResponse<Http::STATUS_CREATED, array{options: list<PollsOption>}, array{}>
+	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/options', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/options')]
 	public function addBulk(int $pollId, string $text = ''): DataResponse {
 		return $this->response(fn () => ['options' => $this->optionService->addBulk($pollId, $text)], Http::STATUS_CREATED);
 	}
 
 	/**
 	 * Update option
-	 * @param int $optionId Share token
-	 * @param int $timestamp timestamp for datepoll
+	 * 200: Option updated
+	 * @param int $optionId Option id
+	 * @param int $timestamp Unix timestamp for date poll
 	 * @param string $text Option text for text poll
-	 * @param int duration duration of option
+	 * @param int $duration Duration of option in seconds
+	 * @param string|null $isoTimestamo ISO 8601 timestamp
+	 * @param string|null $isoDuration ISO 8601 duration
+	 * @return DataResponse<Http::STATUS_OK, array{option: PollsOption}, array{}>
+	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}')]
 	public function update(int $optionId, int $timestamp = 0, string $text = '', int $duration = 0, ?string $isoTimestamo = null, ?string $isoDuration = null): DataResponse {
 		return $this->response(fn () => ['option' => $this->optionService->update(
 			$optionId,
@@ -115,49 +129,61 @@ class OptionApiController extends BaseApiV2Controller {
 
 	/**
 	 * Delete option
-	 * @param int $optionId option id
+	 * 200: Option deleted
+	 * @param int $optionId Option id
+	 * @return DataResponse<Http::STATUS_OK, array{option: PollsOption}, array{}>
+	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/option/{optionId}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/option/{optionId}')]
 	public function delete(int $optionId): DataResponse {
 		return $this->response(fn () => ['option' => $this->optionService->delete($optionId)]);
 	}
 
 	/**
 	 * Restore option
-	 * @param int $optionId option id
+	 * 200: Option restored
+	 * @param int $optionId Option id
+	 * @return DataResponse<Http::STATUS_OK, array{option: PollsOption}, array{}>
+	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/restore', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/restore')]
 	public function restore(int $optionId): DataResponse {
 		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, true)]);
 	}
 
 	/**
 	 * Switch option confirmation
-	 * @param int $optionId option id
+	 * 200: Option confirmation toggled
+	 * @param int $optionId Option id
+	 * @return DataResponse<Http::STATUS_OK, array{option: PollsOption}, array{}>
+	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/confirm', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/confirm')]
 	public function confirm(int $optionId): DataResponse {
 		return $this->response(fn () => ['option' => $this->optionService->confirm($optionId)]);
 	}
 
 	/**
 	 * Set order position for option
-	 * @param int $optionId option id
-	 * @param int $order option's new position
+	 * 200: Option order updated
+	 * @param int $optionId Option id
+	 * @param int $order Option's new position
+	 * @return DataResponse<Http::STATUS_OK, array{option: PollsOption}, array{}>
+	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/order/{order}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/order/{order}')]
 	public function setOrder(int $optionId, int $order): DataResponse {
 		return $this->response(fn () => ['option' => $this->optionService->setOrder($optionId, $order)]);
 	}

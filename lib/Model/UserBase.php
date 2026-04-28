@@ -29,6 +29,9 @@ use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\Share\IShare;
 
+/**
+ * @psalm-import-type PollsUser from \OCA\Polls\ResponseDefinitions
+ */
 class UserBase implements JsonSerializable {
 	/** @var string */
 	public const TYPE_GENERIC = 'generic';
@@ -213,13 +216,9 @@ class UserBase implements JsonSerializable {
 		]);
 	}
 
-	/**
-	 * @return string[]
-	 *
-	 * @psalm-return array<array-key, string>
-	 */
+	/** @return list<string> */
 	public function getCategories(): array {
-		return $this->categories;
+		return array_values($this->categories);
 	}
 
 	public function getIsNoUser(): bool {
@@ -290,6 +289,7 @@ class UserBase implements JsonSerializable {
 	}
 
 	/** @psalm-suppress PossiblyUnusedMethod */
+	/** @return PollsUser */
 	public function jsonSerialize(): array {
 		if ($this->getIsCurrentUser()) {
 			return $this->getRichUserArray();
@@ -301,7 +301,7 @@ class UserBase implements JsonSerializable {
 	 * Full user array for poll owners, delegated poll admins and the current user himself
 	 * without obfuscating/anonymizing
 	 *
-	 * @return (null|bool|string|string[])[]
+	 * @return PollsUser
 	 */
 	public function getRichUserArray(): array {
 		return	[
@@ -338,10 +338,11 @@ class UserBase implements JsonSerializable {
 	 *
 	 * @return (null|bool|null|string)[]
 	 */
+	/** @return PollsUser */
 	protected function getSimpleUserArray(): array {
 		return	[
 			'array' => 'simpleArray',
-			'categories' => '',
+			'categories' => [],
 			'desc' => '',
 			'displayName' => $this->getDisplayName(),
 			'emailAddress' => $this->getSafeEmailAddress(),

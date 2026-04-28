@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\WatchService;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -18,8 +19,9 @@ use OCP\IRequest;
 
 /**
  * @psalm-api
+ * @psalm-import-type PollsWatch from \OCA\Polls\ResponseDefinitions
  */
-class WatchApiController extends BaseApiV2Controller {
+class WatchApiController extends BaseApiV2OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -30,14 +32,17 @@ class WatchApiController extends BaseApiV2Controller {
 
 	/**
 	 * Watch poll for updates
-	 * @param int $pollId poll id of poll to watch
-	 * @param string $mode the mode of watching, e.g. 'longPolling'
-	 * @param int|null $offset only watch changes after this timestamp
+	 * 200: Returns poll updates
+	 * @param int $pollId Poll id of poll to watch
+	 * @param string $mode The mode of watching, e.g. 'longPolling'
+	 * @param int|null $offset Only watch changes after this timestamp
+	 * @return DataResponse<Http::STATUS_OK, array{updates: list<PollsWatch>}, array{}>
+	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/watch', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/watch')]
 	public function watchPoll(int $pollId, string $mode, ?int $offset): DataResponse {
 		return $this->response(fn () => ['updates' => $this->watchService->watchUpdates($pollId, $mode, $offset)]);
 	}

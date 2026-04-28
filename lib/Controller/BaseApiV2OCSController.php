@@ -22,7 +22,7 @@ use OCP\IRequest;
  * @psalm-api
  * @psalm-import-type HttpStatusCode from \OCA\Polls\Types
  */
-class BaseApiV2Controller extends OCSController {
+class BaseApiV2OCSController extends OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -34,7 +34,6 @@ class BaseApiV2Controller extends OCSController {
 	}
 
 	/**
-	 * response
 	 * @param Closure $callback Callback function
 	 * @psalm-param HttpStatusCode $successStatus HTTP status code for success
 	 */

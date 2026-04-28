@@ -15,6 +15,7 @@ use OCA\Polls\Model\UserBase;
 
 /**
  * @psalm-suppress UnusedProperty
+ * @psalm-import-type PollsComment from \OCA\Polls\ResponseDefinitions
  * @method int getId()
  * @method void setId(int $value)
  * @method int getPollId()
@@ -80,6 +81,7 @@ class Comment extends EntityWithUser implements JsonSerializable {
 	 *
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
+	/** @return PollsComment */
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->getId(),
@@ -89,8 +91,8 @@ class Comment extends EntityWithUser implements JsonSerializable {
 			'confidential' => $this->getConfidential(),
 			'parent' => $this->getParent(),
 			'deleted' => $this->getDeleted(),
-			'user' => $this->getUser(),
-			'recipient' => $this->getRecipientUser(),
+			'user' => $this->getUser()->jsonSerialize(),
+			'recipient' => $this->getRecipientUser()?->jsonSerialize(),
 		];
 	}
 
