@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2026
+  - SPDX-License-Identifier: AGP
+-->
 # Available occ Commands
 Note: In any case make sure you have a backup of your database and only use these commands if you know what you are doing. Although no data loss is reported until now caused from the usage of these commands (especially these from the `polls:db` namespace).
 
