@@ -31,7 +31,7 @@ _File → Import Collection → OpenAPI V3 → select `openapi.json`_
 All endpoints are served under:
 
 ```
-/index.php/apps/polls
+/ocs/v2.php/apps/polls
 ```
 
 ## Authentication
@@ -39,7 +39,7 @@ All endpoints are served under:
 Standard Nextcloud authentication applies (Basic Auth, App Passwords, session cookies).
 
 ```bash
-curl -u username:password https://nextcloud.example.com/index.php/apps/polls/api/v1.0/polls
+curl -u username:password https://nextcloud.example.com/ocs/v2.php/apps/polls/api/v1.0/polls
 ```
 
 ## Available enum values
