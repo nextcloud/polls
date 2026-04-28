@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Migration\RepairSteps;
 
-use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\V9\IndexManager;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
@@ -19,7 +18,6 @@ class Install implements IRepairStep {
 	public function __construct(
 		private IndexManager $indexManager,
 		private IDBConnection $connection,
-		private Schema $schema,
 	) {
 	}
 
@@ -28,20 +26,19 @@ class Install implements IRepairStep {
 	}
 
 	public function run(IOutput $output): void {
-		$messages = [];
-		$this->schema = $this->connection->createSchema();
-		$this->indexManager->setSchema($this->schema);
+		$schema = $this->connection->createSchema();
+		$this->indexManager->setSchema($schema);
 
-		$messages = array_merge($messages, $this->indexManager->createForeignKeyConstraints());
+		$messages = $this->indexManager->createForeignKeyConstraints();
 		$messages = array_merge($messages, $this->indexManager->createUniqueIndices());
+		$messages = array_merge($messages, $this->indexManager->createOptionalIndices());
 
-		$this->connection->migrateToSchema($this->schema);
+		$this->connection->migrateToSchema($schema);
 
 		foreach ($messages as $message) {
 			$output->info($message);
 		}
 
-		$output->info('Polls - Foreign key contraints created.');
 		$output->info('Polls - Indices created.');
 	}
 }
