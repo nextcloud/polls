@@ -59,39 +59,6 @@ class IndexManager extends DbManager {
 	}
 
 	/**
-	 * Ensure all tables have their primary key on 'id'.
-	 * All PKs in this app are autoincrement 'id' columns — if one is missing
-	 * (e.g. after a failed migration on a non-transactional DB engine), restore it.
-	 *
-	 * @return string[] logged messages
-	 */
-	public function repairPrimaryKeys(): array {
-		$this->needsSchema();
-		$messages = [];
-
-		foreach (array_keys(TableSchema::TABLES) as $tableName) {
-			$prefixedTable = $this->getTableName($tableName);
-
-			if (!$this->schema->hasTable($prefixedTable)) {
-				continue;
-			}
-
-			$table = $this->schema->getTable($prefixedTable);
-
-			if ($table->getPrimaryKey() === null) {
-				$table->setPrimaryKey(['id']);
-				$messages[] = 'Restored missing primary key for ' . $tableName;
-			}
-		}
-
-		if (empty($messages)) {
-			$messages[] = 'All primary keys intact';
-		}
-
-		return $messages;
-	}
-
-	/**
 	 * add 'on delete' fk contraints to all tables referencing the main polls table
 	 * Foreign key constraints are crucial for the correct operation of the polls app.
 	 * This for they have to be updated on every update.
@@ -294,7 +261,7 @@ class IndexManager extends DbManager {
 			$table = $this->schema->getTable($tableName);
 
 			foreach ($table->getIndexes() as $index) {
-				if (stripos($index->getName(), 'UNIQ_') === 0) {
+				if ($index->isUnique() && !$index->isPrimary()) {
 					$table->dropIndex($index->getName());
 					$messages[] = 'Removed ' . $index->getName() . ' from ' . $tableName;
 				}
@@ -435,49 +402,27 @@ class IndexManager extends DbManager {
 	 *
 	 * @return string[] logged messages
 	 */
-	public function createUniqueIndices(): array {
+	/**
+	 * @param bool $namedIndices
+	 *                           false (default) — column-based detection; an existing unique index on the
+	 *                           same columns is accepted regardless of its name.
+	 *                           true            — enforce the names from UNIQUE_INDICES; renames existing
+	 *                           indices with matching columns (used by polls:db:reset-unique-indices).
+	 */
+	public function createUniqueIndices(bool $namedIndices = false): array {
 		$messages = [];
 		$this->needsSchema();
 
-		try {
-			foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
-				$prefixedTable = $this->getTableName($tableName);
+		foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
+			$prefixedTable = $this->getTableName($tableName);
 
-				if (!$this->schema->hasTable($prefixedTable)) {
-					$messages[] = 'Table ' . $prefixedTable . ' does not exist, skip unique index creation';
-					continue;
-				}
-
-				foreach ($uniqueIndices as $name => $definition) {
-					$messages[] = $this->createIndex($tableName, $name, $definition['columns'], true);
-				}
+			if (!$this->schema->hasTable($prefixedTable)) {
+				$messages[] = 'Table ' . $prefixedTable . ' does not exist, skip unique index creation';
+				continue;
 			}
-		} catch (Exception $e) {
-			// If any exception was thrown, run a fallbach by dropping all unique indices and recreating them.
-			// The app relies on the unique indices for correct operation.
-			$messages[] = 'Failed creating unique indices (' . $e->getMessage() . '), falling back to complete recreation';
 
-			foreach (TableSchema::UNIQUE_INDICES as $tableName => $uniqueIndices) {
-				$prefixedTable = $this->getTableName($tableName);
-
-				if (!$this->schema->hasTable($prefixedTable)) {
-					$messages[] = 'Table ' . $prefixedTable . ' does not exist, skip unique index recreation';
-					continue;
-				}
-
-				$table = $this->schema->getTable($prefixedTable);
-
-				foreach ($table->getIndexes() as $index) {
-					if ($index->isUnique() && !$index->isPrimary()) {
-						$table->dropIndex($index->getName());
-						$messages[] = 'Dropped unique index ' . $index->getName() . ' from ' . $tableName;
-					}
-				}
-
-				foreach ($uniqueIndices as $name => $definition) {
-					$table->addUniqueIndex($definition['columns'], $name);
-					$messages[] = 'Recreated unique index ' . $name . ' in ' . $tableName;
-				}
+			foreach ($uniqueIndices as $name => $definition) {
+				$messages[] = $this->createIndex($tableName, $namedIndices ? $name : '', $definition['columns'], true);
 			}
 		}
 

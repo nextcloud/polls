@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Migration\RepairSteps;
 
-use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\V9\IndexManager;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
@@ -19,7 +18,6 @@ class CreateUniqueIndices implements IRepairStep {
 	public function __construct(
 		private IndexManager $indexManager,
 		private IDBConnection $connection,
-		private Schema $schema,
 	) {
 	}
 
@@ -28,42 +26,11 @@ class CreateUniqueIndices implements IRepairStep {
 	}
 
 	public function run(IOutput $output): void {
-		$messages = [];
+		$schema = $this->connection->createSchema();
+		$this->indexManager->setSchema($schema);
 
-		$this->schema = $this->connection->createSchema();
-		$this->indexManager->setSchema($this->schema);
-
-		$messages = array_merge($messages, $this->indexManager->createUniqueIndices());
-
-		try {
-			$this->connection->migrateToSchema($this->schema);
-		} catch (\Exception $e) {
-			// Hard fallback!
-			// Recreating indices can affect system performance on some db engines with large datasets.
-			// But the app relies on these indices to function properly, so we have to ensure they are created.
-			// If for any reasons the unique indices cannot be created, we remove all unique indices and create them again.
-			// This is a workaround for index conflicts that might occur during migration.
-			$output->warning('Polls - Exception during index migration: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
-
-			if (str_contains($e->getMessage(), 'already exists') || str_contains($e->getMessage(), '42P07')) {
-				$output->warning('Polls - Index conflict detected, rebuilding unique indices.');
-				if ($this->connection->inTransaction()) {
-					$this->connection->rollBack();
-				}
-				$this->schema = $this->connection->createSchema();
-				$this->indexManager->setSchema($this->schema);
-				$messages = array_merge($messages, $this->indexManager->repairPrimaryKeys());
-				$messages = array_merge($messages, $this->indexManager->removeAllUniqueIndices());
-				$this->connection->migrateToSchema($this->schema);
-
-				$this->schema = $this->connection->createSchema();
-				$this->indexManager->setSchema($this->schema);
-				$messages = array_merge($messages, $this->indexManager->createUniqueIndices());
-				$this->connection->migrateToSchema($this->schema);
-			} else {
-				throw $e;
-			}
-		}
+		$messages = $this->indexManager->createUniqueIndices();
+		$this->connection->migrateToSchema($schema);
 
 		foreach ($messages as $message) {
 			$output->info($message);

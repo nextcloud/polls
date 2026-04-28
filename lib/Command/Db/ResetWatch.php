@@ -47,8 +47,8 @@ class ResetWatch extends Command {
 
 		$messages = $this->tableManager->createTable($tableName);
 
-		foreach (TableSchema::UNIQUE_INDICES[$tableName] as $name => $definition) {
-			$messages[] = $this->indexManager->createIndex($tableName, $name, $definition['columns'], true);
+		foreach (TableSchema::UNIQUE_INDICES[$tableName] as $definition) {
+			$messages[] = $this->indexManager->createIndex($tableName, '', $definition['columns'], true);
 		}
 
 		$this->connection->migrateToSchema($this->schema);
