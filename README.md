@@ -50,7 +50,7 @@ For clarification: Polls is not maintained by Nextcloud, although it resides unt
 See [wiki](https://github.com/nextcloud/polls/wiki/Installation-help).
 
 ## Available occ commands
-See [wiki](https://github.com/nextcloud/polls/wiki/OCC-commands).
+See [wiki](https://github.com/nextcloud/polls/wiki/occ).
 
 ## Support
 - Report a bug or request a feature:  https://github.com/nextcloud/polls/issues
@@ -60,9 +60,6 @@ See [wiki](https://github.com/nextcloud/polls/wiki/OCC-commands).
 Manage your polls and create new ones | Many configuration options | Share your poll with other people | Vote on mobile
 :-:|:-:|:-:|:-:
 ![Manage Polls](screenshots/overview.png) | ![Vote](screenshots/edit-poll.png) | ![Edit poll](screenshots/share.png) | ![Share poll](screenshots/vote.png)
-
-### Installation help
-See [wiki](https://github.com/nextcloud/polls/wiki/Installation-help).
 
 ## Contribution Guidelines
 Please read the [Code of Conduct](https://nextcloud.com/community/code-of-conduct/). This document offers some guidance to ensure Nextcloud participants can cooperate effectively in a positive and inspiring atmosphere, and to explain how together we can strengthen and support each other.
