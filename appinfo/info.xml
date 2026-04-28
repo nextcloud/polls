@@ -50,6 +50,7 @@
     <command>OCA\Polls\Command\Db\RemoveOptionalIndices</command>
     <command>OCA\Polls\Command\Db\RemoveUniqueIndices</command>
     <command>OCA\Polls\Command\Db\ResetWatch</command>
+    <command>OCA\Polls\Command\Db\ResetUniqueIndices</command>
     <command>OCA\Polls\Command\Poll\TransferOwnership</command>
     <command>OCA\Polls\Command\Share\Add</command>
     <command>OCA\Polls\Command\Share\Remove</command>
