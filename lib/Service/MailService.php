@@ -144,7 +144,7 @@ class MailService {
 		$subscriptions = [];
 		$this->logs = $this->logMapper->findUnprocessed();
 
-		$pollIds = array_values(array_unique(array_map(fn($log) => $log->getPollId(), $this->logs)));
+		$pollIds = array_values(array_unique(array_map(fn ($log) => $log->getPollId(), $this->logs)));
 
 		// collect subscriptions for the polls to notify
 		foreach ($pollIds as $pollId) {
