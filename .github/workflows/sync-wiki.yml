@@ -5,9 +5,10 @@ name: Sync docs to Wiki
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'docs/**.md'
+  workflow_dispatch:
 
 jobs:
   sync:
