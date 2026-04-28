@@ -3,7 +3,9 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-# Polls API v1.0
+# Polls API v1.0 (final)
+
+Optional additions to the endpoints or its payload may occur.
 
 The Polls API is documented via the [OpenAPI](https://www.openapis.org/) specification.
 The generated spec files are located in the root of this repository:

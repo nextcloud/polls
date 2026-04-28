@@ -8,10 +8,15 @@ Note: In any case make sure you have a backup of your database and only use thes
 All commands require polls to be enabled and are not available after uninstall or while in maintenance mode.
 
 ## Overview
+### Nextcloud core commends that affect Polls
 |Command|Description|
 |-|-|
 |[`db:add-missing-indices`](#create-optional-indices)                                                     | Create optional indices (NC core command)    |
 |[`maintenance:repair`](#run-repair-steps)                                                                | Run Polls post-migration repair steps (NC core command) |
+
+### Polls only related commands
+|Command|Description|
+|-|-|
 |[`polls:index:remove:foreign-key-constraints`](#remove-foreign-key-constraints)                         | Remove foreign key constraints              |
 |[`polls:index:remove:unique-indices`](#remove-unique-indices)                                            | Remove unique indices                        |
 |[`polls:index:remove:optional`](#remove-optional-indices)                                                | Remove optional indices                      |

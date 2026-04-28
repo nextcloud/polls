@@ -3,7 +3,6 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 # Update Issues
-**This should be no issue anymore since v8.3.**
 
 When Polls gets updated and needs changed classes while updating a situation may occur which lets the migration fail. This is because Polls relies on its own declarative database definitions. On updates a situation now can occur where changed classes, which are used while updating, get not loaded properly and the old version of these classes are still cached and loaded.
 
@@ -20,6 +19,8 @@ After that the site should be up again and Polls updated to the latest version. 
 ## Polls stays disabled
 If Polls just did not get enabled and the update terminated with an error message, try to enable it again.
 After that Polls should be updated to the latest version. If Polls resumed back to disabled state again, keep polls disabled and please report that issue [here](https://github.com/nextcloud/polls/issues).
+
+**This should be no issue anymore since v8.3, because Polls uses versions for schema definitions wich force the updater to use the new/changed classes.**
 
 # Installation variants
 ## Install via Git
