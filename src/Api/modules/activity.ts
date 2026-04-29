@@ -16,10 +16,10 @@ const activity = {
 				object_type: 'poll',
 				object_id: pollId,
 			},
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.getActivities.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 		return response
 	},

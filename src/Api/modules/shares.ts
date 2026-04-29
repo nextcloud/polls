@@ -27,10 +27,10 @@ const shares = {
 			method: 'GET',
 			url: `${purpose.toLowerCase()}/${pollOrPollGroupId}/shares`,
 			params: { time: +new Date() },
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.getShares.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -44,10 +44,10 @@ const shares = {
 			method: 'POST',
 			url: `${purpose.toLowerCase()}/${pollOrPollGroupId}/share`,
 			data: user,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.addUserShare.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -55,10 +55,10 @@ const shares = {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/publicshare`,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.addPublicShare.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -72,10 +72,10 @@ const shares = {
 			data: {
 				label,
 			},
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.writeLabel.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -86,10 +86,10 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/${setTo}`,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.switchAdmin.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -100,10 +100,10 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/publicpollemail/${setTo}`,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.setEmailAddressConstraint.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -116,10 +116,10 @@ const shares = {
 		return httpInstance.request({
 			method: 'POST',
 			url: `share/${shareToken}/invite`,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.sendInvitation.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -128,10 +128,10 @@ const shares = {
 			method: 'GET',
 			url: `share/${shareToken}/resolve`,
 			params: { time: +new Date() },
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.resolveShare.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -139,10 +139,10 @@ const shares = {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `share/${shareToken}`,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.deleteShare.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -150,10 +150,10 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/restore`,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.restoreShare.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -161,10 +161,10 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/lock`,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.lockShare.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -172,10 +172,10 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/unlock`,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.unlockShare.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -185,10 +185,10 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/inviteAll`,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.inviteAll.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 }

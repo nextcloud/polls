@@ -13,10 +13,10 @@ const comments = {
 			method: 'GET',
 			url: `poll/${pollId}/comments`,
 			params: { time: +new Date() },
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.getComments.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 	addComment(
@@ -29,10 +29,10 @@ const comments = {
 			url: `poll/${pollId}/comment`,
 			data: { message, confidential },
 			params: { time: +new Date() },
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.addComment.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -42,10 +42,10 @@ const comments = {
 			url: `comment/${commentId}`,
 			params: { time: +new Date() },
 
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.deleteComment.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 	restoreComment(commentId: number): Promise<AxiosResponse<{ comment: Comment }>> {
@@ -54,10 +54,10 @@ const comments = {
 			url: `comment/${commentId}/restore`,
 			params: { time: +new Date() },
 
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.restoreComment.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 }
