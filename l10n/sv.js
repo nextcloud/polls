@@ -191,7 +191,7 @@ OC.L10N.register(
     "Loading …" : "Laddar ...",
     "Previous day" : "Föregående dag",
     "Next day" : "Nästa dag",
-    "Please wait…" : "Vänligen vänta…",
+    "Please wait…" : "Vänta…",
     "Possibly affected calendar events" : "Potentiellt påverkade kalenderhändelser",
     "Add" : "Lägg till",
     "Propose an option" : "Föreslå ett alternativ",
