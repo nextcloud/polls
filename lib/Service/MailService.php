@@ -144,9 +144,7 @@ class MailService {
 		$subscriptions = [];
 		$this->logs = $this->logMapper->findUnprocessed();
 
-		// Extract a unique array of pollIds from $this->logs
-		// TODO: can we achieve this a little more elegant?
-		$pollIds = array_values(array_unique(array_column(json_decode(json_encode($this->logs)), 'pollId')));
+		$pollIds = array_values(array_unique(array_map(fn ($log) => $log->getPollId(), $this->logs)));
 
 		// collect subscriptions for the polls to notify
 		foreach ($pollIds as $pollId) {
