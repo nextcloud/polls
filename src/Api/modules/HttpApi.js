@@ -22,7 +22,6 @@ const axiosOcsConfig = {
 	},
 }
 
-const CancelToken = axios.CancelToken
 const httpInstance = axios.create(axiosConfig)
 const ocsInstance = axios.create(axiosOcsConfig)
 
@@ -53,12 +52,12 @@ const createCancelTokenHandler = (apiObject) => {
 			handleRequestCancellation: (subKey) => {
 				const key = String(subKey ?? '__default__')
 				if (!handlers[key]) {
-					handlers[key] = { cancelToken: undefined }
+					handlers[key] = { controller: undefined }
 				}
 				const handler = handlers[key]
-				handler.cancelToken?.cancel(`${propertyName} canceled`)
-				handler.cancelToken = CancelToken.source()
-				return handler.cancelToken
+				handler.controller?.abort(`${propertyName} canceled`)
+				handler.controller = new AbortController()
+				return handler.controller
 			},
 		}
 	})

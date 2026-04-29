@@ -15,10 +15,10 @@ const options = {
 			method: 'GET',
 			url: `poll/${pollId}/options`,
 			params: { time: +new Date() },
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.getOptions.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -39,10 +39,10 @@ const options = {
 			url: `poll/${pollId}/option`,
 			// data: { ...option },
 			data: { option, sequence, voteYes },
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.addOption.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -51,10 +51,10 @@ const options = {
 			method: 'PUT',
 			url: `option/${option.id}`,
 			data: { ...option },
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.updateOption.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -63,10 +63,10 @@ const options = {
 			method: 'DELETE',
 			url: `option/${optionId}`,
 			params: { time: +new Date() },
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.deleteOption.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -76,10 +76,10 @@ const options = {
 			url: `option/${optionId}/restore`,
 			params: { time: +new Date() },
 
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.restoreOption.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -101,10 +101,10 @@ const options = {
 				pollId,
 				text: optionsBatch,
 			},
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.addOptions.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -112,10 +112,10 @@ const options = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `option/${optionId}/confirm`,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.confirmOption.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -130,10 +130,10 @@ const options = {
 			method: 'POST',
 			url: `poll/${pollId}/options/reorder`,
 			data: { options },
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.reorderOptions.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -147,10 +147,10 @@ const options = {
 			data: {
 				sequence,
 			},
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.addOptionsSequence.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -166,10 +166,10 @@ const options = {
 				step,
 				unit,
 			},
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.shiftOptions.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 }

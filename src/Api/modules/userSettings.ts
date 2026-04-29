@@ -13,10 +13,10 @@ const userSettings = {
 			method: 'GET',
 			url: 'preferences',
 			params: { time: +new Date() },
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.getUserSettings.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -27,10 +27,10 @@ const userSettings = {
 			method: 'POST',
 			url: 'preferences',
 			data: { preferences },
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.writeUserSettings.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 }

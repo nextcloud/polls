@@ -14,10 +14,10 @@ const votes = {
 			method: 'GET',
 			url: `poll/${pollId}/votes`,
 			params: { time: +new Date() },
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.getVotes.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -32,10 +32,10 @@ const votes = {
 				optionId,
 				setTo,
 			},
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.setVote.name
-				].handleRequestCancellation(optionId).token,
+				].handleRequestCancellation(optionId).signal,
 		})
 	},
 
@@ -46,10 +46,10 @@ const votes = {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: userId ? `poll/${pollId}/user/${userId}` : `poll/${pollId}/user`,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.resetVotes.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 
@@ -59,10 +59,10 @@ const votes = {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `poll/${pollId}/votes/orphaned`,
-			cancelToken:
+			signal:
 				cancelTokenHandlerObject[
 					this.removeOrphanedVotes.name
-				].handleRequestCancellation().token,
+				].handleRequestCancellation().signal,
 		})
 	},
 }
