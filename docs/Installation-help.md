@@ -44,15 +44,18 @@ Call `occ app:install polls` or `occ app:enable polls`
 # Install Paths of Nextcloud
 Depending on the installation variant different steps are executed. (This mainly for self documentation)
 
-## Enabling Polls (first install or re-enable)
-Every time the app is enabled — whether for the first time or after being disabled — Nextcloud executes:
-* unexecuted `migration classes` (not listed in the `*_migrations` table)
+## First Time Install
+On first installation Nextcloud executes:
+* all `migration classes`
 * `install` repair steps — none currently registered
 
-## Version Update
-After a version update (changed version attribute in appinfo/info.xml) Nextcloud executes:
+## Re-enabling Polls (same version, no update)
+Re-enabling a disabled app only sets the enabled flag — no migrations, no repair steps are executed.
+
+## Version Update via App Store
+After a version update Nextcloud executes:
 * `pre-migration` repair steps (none currently registered)
-* unexecuted `migration classes` (not listed in the `*_migrations` table)
+* unexecuted `migration classes`
 * `post-migration` repair steps:
   * **DropOrphanedIndices** — removes obsolete indices from previous versions
   * **CreateUniqueIndices** — creates or updates unique indices (column-based)
@@ -60,6 +63,13 @@ After a version update (changed version attribute in appinfo/info.xml) Nextcloud
   * **MigratePublicToOpen** — migrates access values from `public` to `open`
 
 Note: `post-migration` repair steps also run when executing `occ maintenance:repair`.
+
+## Version Update via File / Installer
+When updating by replacing the app files manually, Nextcloud additionally runs `install` repair steps after the `post-migration` steps:
+* `pre-migration` repair steps (none currently registered)
+* unexecuted `migration classes`
+* `post-migration` repair steps (see above)
+* `install` repair steps — none currently registered
 
 # Install via File Base
 Download the desired version from the [releases page](https://github.com/nextcloud/polls/releases) and extract it to your app folder where common apps reside. After extraction there should be a polls folder containing the Polls app.
@@ -72,4 +82,4 @@ Call `occ polls:db:purge` to remove Polls completely.
 * removes all Polls related migration records
 * removes all Polls related app config records (this also disables Polls)
 
-This does not remove Polls' files (call `occ app:remove polls` to remove it complete afterwards) but it resets Polls into an 'uninstalled' state. Enabling the app is then equivalent to a first time install and calls the migration and the install repair step (see above).
+This does not remove Polls' files (call `occ app:remove polls` to remove it complete afterwards) but it resets Polls into an 'uninstalled' state. Enabling the app afterwards is equivalent to a first time install and runs all migration classes and the `install` repair steps.
