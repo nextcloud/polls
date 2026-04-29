@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
  - none so far
 
+## [9.0.6] - 2026-04-29
+### Added
+ - OpenAPI specs for OCS endpoints
+
+### Changed
+ - Create unnamed unique indices to avoid name conflicts inside schema
+
 ## [9.0.4] - 2026-04-27
 ### Fixed (recreated on missing version update in info.xml)
  - Another fix to get index creation working
