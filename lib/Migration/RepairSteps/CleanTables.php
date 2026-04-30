@@ -34,6 +34,8 @@ class CleanTables implements IRepairStep {
 	}
 
 	public function run(IOutput $output):void {
+		$this->schema = $this->connection->createSchema();
+		$this->tableManager->setSchema($this->schema);
 		if ($this->connection->tableExists(Poll::TABLE)) {
 			try {
 				$this->tableManager->updateHashes();
