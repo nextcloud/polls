@@ -183,7 +183,7 @@ export const usePollsStore = defineStore('polls', {
 			status: '',
 		},
 		sort: {
-			by: 'created',
+			by: 'interaction',
 			reverse: true,
 		},
 		status: {
@@ -198,20 +198,6 @@ export const usePollsStore = defineStore('polls', {
 				category.showInNavigation(),
 			)
 		},
-
-		/*
-		 * Sliced filtered and sorted polls for navigation
-		 */
-		navigationList:
-			(state: PollsStore) =>
-			(filterId: FilterType): Poll[] =>
-				orderBy(
-					state.polls.filter((poll: Poll) =>
-						state.categories[filterId].filterCondition(poll),
-					) ?? [],
-					['created'],
-					['desc'],
-				).slice(0, state.meta.maxPollsInNavigation),
 
 		currentCategory(state: PollsStore): PollCategory {
 			const route = activeRoute.value
@@ -240,6 +226,20 @@ export const usePollsStore = defineStore('polls', {
 				[state.sort.reverse ? 'desc' : 'asc'],
 			)
 		},
+
+		/*
+		 * Sliced filtered and sorted polls for navigation
+		 */
+		navigationList:
+			(state: PollsStore) =>
+			(filterId: FilterType): Poll[] =>
+				orderBy(
+					state.polls.filter((poll: Poll) =>
+						state.categories[filterId].filterCondition(poll),
+					) ?? [],
+					[sortColumnsMapping.interaction],
+					['desc'],
+				).slice(0, state.meta.maxPollsInNavigation),
 
 		/*
 		 * Chunked filtered and sorted polls for main view
