@@ -13,9 +13,7 @@ import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import ArchivePollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import RestorePollIcon from 'vue-material-design-icons/RecycleVariant.vue'
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
-
+import { pollTypes } from '../../stores/poll'
 import { useSessionStore } from '../../stores/session'
 
 import type { Poll } from '../../stores/poll.types'
@@ -36,8 +34,7 @@ const sessionStore = useSessionStore()
 		"
 		:class="{ closed: poll.status.isExpired }">
 		<template #icon>
-			<TextPollIcon v-if="poll.type === 'textPoll'" />
-			<DatePollIcon v-else />
+			<component :is="pollTypes[poll.type].iconComponent" />
 		</template>
 		<template #actions>
 			<NcActionButton

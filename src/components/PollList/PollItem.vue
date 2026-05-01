@@ -10,8 +10,6 @@ import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
 
 // Icons
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
 import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
 import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
@@ -134,15 +132,15 @@ const pollDetails = computed(() => {
 const descriptionLine = computed(
 	() => poll.configuration.description || pollDetails.value.description,
 )
+
 </script>
 
 <template>
 	<div class="poll-item">
-		<TextPollIcon
-			v-if="poll.type === 'textPoll'"
+		<component
+			:is="pollTypes[poll.type].iconComponent"
 			class="item__type"
 			:title="pollTypes[poll.type].name" />
-		<DatePollIcon v-else class="item__type" :title="pollTypes[poll.type].name" />
 
 		<div
 			v-if="noLink || !poll.permissions.view"

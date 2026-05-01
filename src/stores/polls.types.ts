@@ -5,6 +5,7 @@
 
 import { Poll } from './poll.types'
 import { Chunking, StatusResults } from '../Types'
+import { Component } from 'vue'
 
 export type SortType =
 	| 'created'
@@ -37,9 +38,10 @@ export type FilterType =
 export type PollCategory = {
 	id: FilterType
 	name: string
-	titleExt: string
+	title: string
 	description: string
 	pinned: boolean
+	iconComponent: Component
 	showInNavigation(): boolean
 	filterCondition(poll: Poll): boolean
 }
@@ -63,5 +65,4 @@ export type PollsStore = {
 	status: {
 		loadingGroups: boolean
 	}
-	categories: PollCategoryList
 }

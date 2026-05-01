@@ -10,6 +10,9 @@ import { marked } from 'marked'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
 import { DateTime } from 'luxon'
 
+import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
+
 import { t } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
@@ -23,6 +26,7 @@ import { usePollsStore } from './polls'
 import { useSessionStore } from './session'
 
 import type { AxiosError } from '@nextcloud/axios'
+import type { Component } from 'vue'
 import type {
 	Poll,
 	PollType,
@@ -39,9 +43,11 @@ const markedPrefix = {
 export const pollTypes: Record<PollType, PollTypesType> = {
 	textPoll: {
 		name: t('polls', 'Text poll'),
+		iconComponent: TextPollIcon,
 	},
 	datePoll: {
 		name: t('polls', 'Date poll'),
+		iconComponent: DatePollIcon,
 	},
 }
 
@@ -141,6 +147,8 @@ export const usePollStore = defineStore('poll', {
 	}),
 
 	getters: {
+		iconComponent: (state): Component => pollTypes[state.type].iconComponent,
+		pollTypeName: (state): string => pollTypes[state.type].name,
 		getTimezoneName(state): string {
 			return (
 				state.configuration.timezoneName

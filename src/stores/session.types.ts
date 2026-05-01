@@ -51,7 +51,7 @@ type AppSettings = {
 	navigationPollsInList: boolean
 	useLogin: boolean
 	useActivity: boolean
-	updateType: string
+	updateType: WatcherMode
 	currentVersion: string
 }
 

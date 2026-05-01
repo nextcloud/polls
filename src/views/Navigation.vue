@@ -19,16 +19,7 @@ import NcCounterBubble from '@nextcloud/vue/components/NcCounterBubble'
 
 // Icons
 import ComboIcon from 'vue-material-design-icons/VectorCombine.vue'
-import AdministrationIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
 import SettingsIcon from 'vue-material-design-icons/CogOutline.vue'
-import RelevantIcon from 'vue-material-design-icons/ExclamationThick.vue'
-import MyPollsIcon from 'vue-material-design-icons/AccountOutline.vue'
-import PrivatePollsIcon from 'vue-material-design-icons/Key.vue'
-import ParticipatedIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
-import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
-import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
-import ClosedPollsIcon from 'vue-material-design-icons/LockOutline.vue'
-import ArchivedPollsIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
 import GroupIcon from 'vue-material-design-icons/CodeBraces.vue'
 
@@ -42,8 +33,6 @@ import { usePollGroupsStore } from '../stores/pollGroups'
 import { useSessionStore } from '../stores/session'
 import { usePreferencesStore } from '../stores/preferences'
 
-import type { FilterType } from '../stores/polls.types'
-
 const router = useRouter()
 
 const pollsStore = usePollsStore()
@@ -53,54 +42,7 @@ const preferencesStore = usePreferencesStore()
 
 const iconSize = 20
 
-const icons = {
-	relevant: {
-		id: 'relevant',
-		iconComponent: RelevantIcon,
-	},
-	my: {
-		id: 'my',
-		iconComponent: MyPollsIcon,
-	},
-	private: {
-		id: 'private',
-		iconComponent: PrivatePollsIcon,
-	},
-	participated: {
-		id: 'participated',
-		iconComponent: ParticipatedIcon,
-	},
-	open: {
-		id: 'open',
-		iconComponent: OpenPollIcon,
-	},
-	all: {
-		id: 'all',
-		iconComponent: AllPollsIcon,
-	},
-	closed: {
-		id: 'closed',
-		iconComponent: ClosedPollsIcon,
-	},
-	archived: {
-		id: 'archived',
-		iconComponent: ArchivedPollsIcon,
-	},
-	admin: {
-		id: 'admin',
-		iconComponent: AdministrationIcon,
-	},
-}
-
 const createDlgToggle = ref(false)
-
-/**
- *
- * @param iconId
- */
-function getIconComponent(iconId: FilterType) {
-	return icons[iconId].iconComponent
-}
 
 /**
  *
@@ -234,19 +176,15 @@ onMounted(() => {
 			<NcAppNavigationItem
 				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"
-				:name="pollCategory.name"
-				:title="pollCategory.titleExt"
+				v-bind="pollCategory"
 				:allow-collapse="sessionStore.appSettings.navigationPollsInList"
-				:pinned="pollCategory.pinned"
 				:to="{
 					name: 'list',
 					params: { type: pollCategory.id },
 				}"
 				:open="false">
 				<template #icon>
-					<Component
-						:is="getIconComponent(pollCategory.id)"
-						:size="iconSize" />
+					<Component :is="pollCategory.iconComponent" :size="iconSize" />
 				</template>
 				<template #counter>
 					<NcCounterBubble

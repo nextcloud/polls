@@ -12,6 +12,7 @@ import { uniqueOptions, uniqueParticipants } from '../helpers/modules/arrayHelpe
 
 import { usePreferencesStore } from './preferences'
 import { usePollsStore } from './polls'
+import { hydrateOption } from './options'
 
 import type { AxiosError } from '@nextcloud/axios'
 import type { Participant } from '../Types'
@@ -152,7 +153,7 @@ export const useComboStore = defineStore('combo', {
 		async addOptions(payload: { pollId: number }): Promise<void> {
 			try {
 				const response = await OptionsAPI.getOptions(payload.pollId)
-				this.options.push(...response.data.options)
+				this.options.push(...response.data.options.map(hydrateOption))
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return

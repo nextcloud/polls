@@ -21,7 +21,8 @@ import CreationIcon from 'vue-material-design-icons/ClockPlusOutline.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
 import AccountCircleOutlineIcon from 'vue-material-design-icons/AccountCircleOutline.vue'
 
-import { sortOption, usePollsStore } from '../../stores/polls'
+import { sortOption } from '../../stores/polls.constants'
+import { usePollsStore } from '../../stores/polls'
 
 import type { SortDirection, SortOption } from '../../stores/polls.types'
 
