@@ -14,6 +14,13 @@ export type SortType =
 	| 'expire'
 	| 'interaction'
 
+export type SortOption = {
+	id: SortType
+	sortProperty: string
+	name: string
+	ariaLabel: string
+}
+
 export type SortDirection = 'asc' | 'desc'
 
 export type FilterType =
@@ -29,7 +36,7 @@ export type FilterType =
 
 export type PollCategory = {
 	id: FilterType
-	title: string
+	name: string
 	titleExt: string
 	description: string
 	pinned: boolean
@@ -50,7 +57,7 @@ export type PollsStore = {
 	// pollGroups: PollGroup[]
 	meta: Meta
 	sort: {
-		by: SortType
+		by: SortOption
 		reverse: boolean
 	}
 	status: {

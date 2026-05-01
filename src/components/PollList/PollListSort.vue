@@ -21,9 +21,9 @@ import CreationIcon from 'vue-material-design-icons/ClockPlusOutline.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
 import AccountCircleOutlineIcon from 'vue-material-design-icons/AccountCircleOutline.vue'
 
-import { sortTitlesMapping, usePollsStore } from '../../stores/polls'
+import { sortOption, usePollsStore } from '../../stores/polls'
 
-import type { SortDirection, SortType } from '../../stores/polls.types'
+import type { SortDirection, SortOption } from '../../stores/polls.types'
 
 const pollsStore = usePollsStore()
 
@@ -44,7 +44,7 @@ const sortDirection = computed({
  * @param sort.by
  * @param sort.reverse
  */
-function setSort(sort: { by?: SortType; reverse?: boolean }) {
+function setSort(sort: { by?: SortOption; reverse?: boolean }) {
 	if (sort.by !== undefined) {
 		pollsStore.sort.by = sort.by
 	}
@@ -55,7 +55,7 @@ function setSort(sort: { by?: SortType; reverse?: boolean }) {
 </script>
 
 <template>
-	<NcActions primary :menu-name="sortTitlesMapping[pollsStore.sort.by]">
+	<NcActions primary :menu-name="pollsStore.sort.by.name">
 		<template #icon>
 			<SortDescendingIcon
 				v-if="pollsStore.sort.reverse"
@@ -65,45 +65,40 @@ function setSort(sort: { by?: SortType; reverse?: boolean }) {
 		</template>
 
 		<NcActionButton
-			:name="sortTitlesMapping['title']"
-			:aria-label="t('polls', 'Sort by title')"
-			@click="setSort({ by: 'title' })">
+			v-bind="sortOption.title"
+			@click="setSort({ by: sortOption.title })">
 			<template #icon>
 				<AlphabeticalIcon />
 			</template>
 		</NcActionButton>
 
 		<NcActionButton
-			:name="sortTitlesMapping['interaction']"
-			:aria-label="t('polls', 'Sort by last interaction')"
-			@click="setSort({ by: 'interaction' })">
+			v-bind="sortOption.interaction"
+			@click="setSort({ by: sortOption.interaction })">
 			<template #icon>
 				<GestureDoubleTapIcon />
 			</template>
 		</NcActionButton>
 
 		<NcActionButton
-			:name="sortTitlesMapping['created']"
-			:aria-label="t('polls', 'Sort by creation date')"
-			@click="setSort({ by: 'created' })">
+			v-bind="sortOption.created"
+			@click="setSort({ by: sortOption.created })">
 			<template #icon>
 				<CreationIcon />
 			</template>
 		</NcActionButton>
 
 		<NcActionButton
-			:name="sortTitlesMapping['expire']"
-			:aria-label="t('polls', 'Sort by expiration date')"
-			@click="setSort({ by: 'expire' })">
+			v-bind="sortOption.expire"
+			@click="setSort({ by: sortOption.expire })">
 			<template #icon>
 				<ExpirationIcon />
 			</template>
 		</NcActionButton>
 
 		<NcActionButton
-			:name="sortTitlesMapping['owner']"
-			:aria-label="t('polls', 'Sort by owner name')"
-			@click="setSort({ by: 'owner' })">
+			v-bind="sortOption.owner"
+			@click="setSort({ by: sortOption.owner })">
 			<template #icon>
 				<AccountCircleOutlineIcon />
 			</template>

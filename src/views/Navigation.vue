@@ -234,7 +234,7 @@ onMounted(() => {
 			<NcAppNavigationItem
 				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"
-				:name="pollCategory.title"
+				:name="pollCategory.name"
 				:title="pollCategory.titleExt"
 				:allow-collapse="sessionStore.appSettings.navigationPollsInList"
 				:pinned="pollCategory.pinned"

@@ -23,16 +23,49 @@ import type {
 	PollsStore,
 	FilterType,
 	SortType,
+	SortOption,
 } from './polls.types'
 import { NotAllowed } from '../Exceptions/Exceptions'
 
-export const sortColumnsMapping: { [key in SortType]: string } = {
-	created: 'status.created',
-	title: 'configuration.title',
-	access: 'configuration.access',
-	owner: 'owner.displayName',
-	expire: 'configuration.expire',
-	interaction: 'status.lastInteraction',
+export const sortOption: {
+	[key in SortType]: SortOption
+} = {
+	created: {
+		id: 'created',
+		sortProperty: 'status.created',
+		name: t('polls', 'Created'),
+		ariaLabel: t('polls', 'Sort by created date'),
+	},
+	title: {
+		id: 'title',
+		sortProperty: 'configuration.title',
+		name: t('polls', 'Title'),
+		ariaLabel: t('polls', 'Sort by title'),
+	},
+	access: {
+		id: 'access',
+		sortProperty: 'configuration.access',
+		name: t('polls', 'Access'),
+		ariaLabel: t('polls', 'Sort by access level'),
+	},
+	owner: {
+		id: 'owner',
+		sortProperty: 'owner.displayName',
+		name: t('polls', 'Owner'),
+		ariaLabel: t('polls', 'Sort by name of the owner'),
+	},
+	expire: {
+		id: 'expire',
+		sortProperty: 'configuration.expire',
+		name: t('polls', 'Expiration'),
+		ariaLabel: t('polls', 'Sort by expiration date'),
+	},
+	interaction: {
+		id: 'interaction',
+		sortProperty: 'status.lastInteraction',
+		name: t('polls', 'Activity'),
+		ariaLabel: t('polls', 'Sort by activity'),
+	},
 }
 
 export const sortTitlesMapping: { [key in SortType]: string } = {
@@ -47,11 +80,11 @@ export const sortTitlesMapping: { [key in SortType]: string } = {
 const pollCategories: PollCategoryList = {
 	relevant: {
 		id: 'relevant',
-		title: t('polls', 'Relevant'),
+		name: t('polls', 'Relevant'),
 		titleExt: t('polls', 'Relevant polls'),
 		description: t(
 			'polls',
-			'Relevant polls which are relevant to you, because you are a participant, the owner or you are invited. Only polls not older than 100 days compared to creation, last interaction, expiration or latest option (for date polls) are shown.',
+			'Relevant polls which are relevant to you, because you are a participant, the owner or you are invited. Only polls not older than 100 days compared to creation, last activity, expiration or latest option (for date polls) are shown.',
 		),
 		pinned: false,
 		showInNavigation: () => true,
@@ -64,7 +97,7 @@ const pollCategories: PollCategoryList = {
 	},
 	my: {
 		id: 'my',
-		title: t('polls', 'My polls'),
+		name: t('polls', 'My polls'),
 		titleExt: t('polls', 'My polls'),
 		description: t('polls', 'These are all polls where you are the owner.'),
 		pinned: false,
@@ -77,7 +110,7 @@ const pollCategories: PollCategoryList = {
 	},
 	private: {
 		id: 'private',
-		title: t('polls', 'Private polls'),
+		name: t('polls', 'Private polls'),
 		titleExt: t('polls', 'Private polls'),
 		description: t('polls', 'All private polls, to which you have access.'),
 		pinned: false,
@@ -92,7 +125,7 @@ const pollCategories: PollCategoryList = {
 	},
 	participated: {
 		id: 'participated',
-		title: t('polls', 'Participated'),
+		name: t('polls', 'Participated'),
 		titleExt: t('polls', 'Participated'),
 		description: t('polls', 'All polls in which you participated.'),
 		pinned: false,
@@ -102,7 +135,7 @@ const pollCategories: PollCategoryList = {
 	},
 	open: {
 		id: 'open',
-		title: t('polls', 'Openly accessible polls'),
+		name: t('polls', 'Openly accessible polls'),
 		titleExt: t('polls', 'Openly accessible polls'),
 		description: t(
 			'polls',
@@ -118,7 +151,7 @@ const pollCategories: PollCategoryList = {
 	},
 	all: {
 		id: 'all',
-		title: t('polls', 'All polls'),
+		name: t('polls', 'All polls'),
 		titleExt: t('polls', 'All polls'),
 		description: t('polls', 'All polls, where you have access to.'),
 		pinned: false,
@@ -128,7 +161,7 @@ const pollCategories: PollCategoryList = {
 	},
 	closed: {
 		id: 'closed',
-		title: t('polls', 'Closed polls'),
+		name: t('polls', 'Closed polls'),
 		titleExt: t('polls', 'Closed polls'),
 		description: t('polls', 'All closed polls, where voting is disabled.'),
 		pinned: false,
@@ -140,7 +173,7 @@ const pollCategories: PollCategoryList = {
 	},
 	archived: {
 		id: 'archived',
-		title: t('polls', 'Archive'),
+		name: t('polls', 'Archive'),
 		titleExt: t('polls', 'My archived polls'),
 		description: t('polls', 'Your archived polls are only accessible to you.'),
 		pinned: true,
@@ -153,7 +186,7 @@ const pollCategories: PollCategoryList = {
 	},
 	admin: {
 		id: 'admin',
-		title: t('polls', 'Administration'),
+		name: t('polls', 'Administration'),
 		titleExt: t('polls', 'Administrative access'),
 		description: t(
 			'polls',
@@ -183,7 +216,7 @@ export const usePollsStore = defineStore('polls', {
 			status: '',
 		},
 		sort: {
-			by: 'interaction',
+			by: sortOption.interaction,
 			reverse: true,
 		},
 		status: {
@@ -222,7 +255,7 @@ export const usePollsStore = defineStore('polls', {
 				state.polls.filter((poll: Poll) =>
 					this.currentCategory?.filterCondition(poll),
 				) ?? [],
-				[sortColumnsMapping[state.sort.by]],
+				[state.sort.by.sortProperty],
 				[state.sort.reverse ? 'desc' : 'asc'],
 			)
 		},
@@ -237,7 +270,7 @@ export const usePollsStore = defineStore('polls', {
 					state.polls.filter((poll: Poll) =>
 						state.categories[filterId].filterCondition(poll),
 					) ?? [],
-					[sortColumnsMapping.interaction],
+					[sortOption.interaction.sortProperty],
 					['desc'],
 				).slice(0, state.meta.maxPollsInNavigation),
 
