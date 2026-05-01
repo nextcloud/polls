@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import type { Component } from 'vue'
 import { Chunking, StatusResults, User, UserType } from '../Types'
 import { ViewMode } from './preferences.types'
 
@@ -10,6 +11,7 @@ export type PollType = 'textPoll' | 'datePoll'
 
 export type PollTypesType = {
 	name: string
+	iconComponent: Component
 }
 
 export type VoteVariant = 'simple'
@@ -118,6 +120,7 @@ export type Poll = {
 	sortParticipants: SortParticipants
 	meta: Meta
 }
+
 export type PollMandatory = Pick<Poll, 'type'>
 	& Pick<PollConfiguration, 'title' | 'timezoneName'>
 

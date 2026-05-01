@@ -69,8 +69,14 @@ cs-fix:
 	composer run cs:fix
 
 # build vue app
-build-js-production:
+dev:
+	npm run dev
+
+build:
 	npm run build
+
+build-js-production: build
+
 
 # install composer, if not installed
 .PHONY: composer

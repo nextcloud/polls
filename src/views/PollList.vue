@@ -25,6 +25,7 @@ import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 
 import { usePreferencesStore } from '../stores/preferences'
 import { useSessionStore } from '../stores/session'
+import { pollCategories } from '../stores/polls.constants'
 import { usePollsStore } from '../stores/polls'
 import { usePollGroupsStore } from '../stores/pollGroups'
 
@@ -45,7 +46,7 @@ const title = computed(() => {
 			|| ''
 		)
 	}
-	return pollsStore.categories[route.params.type as FilterType].titleExt
+	return pollCategories[route.params.type as FilterType].title
 })
 
 const showMore = computed(
@@ -76,7 +77,7 @@ const description = computed(() => {
 		return pollGroupsStore.currentPollGroup?.description || ''
 	}
 
-	return pollsStore.categories[route.params.type as FilterType].description
+	return pollCategories[route.params.type as FilterType].description
 })
 
 const emptyPollListnoPolls = computed(

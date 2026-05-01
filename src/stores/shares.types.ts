@@ -41,7 +41,7 @@ export type Share = {
 	deleted: boolean
 }
 
-export const defaultShare: Share = {
+export const defaultShare = {
 	displayName: '',
 	id: '',
 	invitationSent: false,
@@ -59,7 +59,7 @@ export const defaultShare: Share = {
 	URL: '',
 	voted: false,
 	deleted: false,
-}
+} satisfies Share
 
 export type SharesStore = {
 	shares: Share[]
