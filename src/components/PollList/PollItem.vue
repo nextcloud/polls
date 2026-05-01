@@ -10,11 +10,10 @@ import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
 
 // Icons
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
 import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
 import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
+import ActivityIcon from 'vue-material-design-icons/ChartTimelineVariantShimmer.vue'
 import ArchivedPollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import ClosedPollsIcon from 'vue-material-design-icons/LockOutline.vue'
 import LockPollIcon from 'vue-material-design-icons/Security.vue'
@@ -42,6 +41,26 @@ const preferencesStore = usePreferencesStore()
 
 const expirationDateTime = computed(() =>
 	DateTime.fromMillis(poll.configuration.expire * 1000),
+)
+
+const expirationTitle = computed(() =>
+	t('polls', poll.status.isExpired ? 'Expired {dateTime}' : 'Expires {dateTime}', {
+		dateTime: DateTime.fromMillis(
+			poll.configuration.expire * 1000,
+		).toLocaleString(DateTime.DATETIME_SHORT) as string,
+	}),
+)
+
+const lastInteractionDateTime = computed(() =>
+	DateTime.fromMillis(poll.status.lastInteraction * 1000),
+)
+
+const lastInteractionTitle = computed(() =>
+	t('polls', 'Last activity {dateTime}', {
+		dateTime: DateTime.fromMillis(
+			poll.status.lastInteraction * 1000,
+		).toLocaleString(DateTime.DATETIME_SHORT) as string,
+	}),
 )
 
 const archiveDateTime = computed(() =>
@@ -113,15 +132,15 @@ const pollDetails = computed(() => {
 const descriptionLine = computed(
 	() => poll.configuration.description || pollDetails.value.description,
 )
+
 </script>
 
 <template>
 	<div class="poll-item">
-		<TextPollIcon
-			v-if="poll.type === 'textPoll'"
+		<component
+			:is="pollTypes[poll.type].iconComponent"
 			class="item__type"
 			:title="pollTypes[poll.type].name" />
-		<DatePollIcon v-else class="item__type" :title="pollTypes[poll.type].name" />
 
 		<div
 			v-if="noLink || !poll.permissions.view"
@@ -248,32 +267,10 @@ const descriptionLine = computed(
 				</template>
 			</BadgeSmallDiv>
 
-			<UserBubble
-				v-if="preferencesStore.user.verbosePollsList"
-				:user="poll.owner"
-				:title="
-					t('polls', 'Poll owner: {ownerName}', {
-						ownerName: poll.owner.displayName,
-					})
-				" />
-
 			<BadgeSmallDiv
 				v-if="poll.configuration.expire"
 				:class="expiryClass"
-				:title="
-					t(
-						'polls',
-						poll.status.isExpired
-							? 'Expired {dateTime}'
-							: 'Expires {dateTime}',
-						{
-							dateTime: expirationDateTime.toLocaleString(
-								DateTime.DATETIME_SHORT,
-							) as string,
-						},
-					)
-				">
-				>
+				:title="expirationTitle">
 				<template #icon>
 					<ClosedPollsIcon v-if="poll.status.isExpired" :size="16" />
 					<ExpirationIcon v-else :size="16" />
@@ -284,6 +281,22 @@ const descriptionLine = computed(
 						: t('polls', 'never')
 				}}
 			</BadgeSmallDiv>
+
+			<BadgeSmallDiv v-else :title="lastInteractionTitle">
+				<template #icon>
+					<ActivityIcon :size="16" />
+				</template>
+				{{ lastInteractionDateTime.toRelativeCalendar() }}
+			</BadgeSmallDiv>
+
+			<UserBubble
+				v-if="preferencesStore.user.verbosePollsList"
+				:user="poll.owner"
+				:title="
+					t('polls', 'Poll owner: {ownerName}', {
+						ownerName: poll.owner.displayName,
+					})
+				" />
 		</div>
 
 		<div class="actions">

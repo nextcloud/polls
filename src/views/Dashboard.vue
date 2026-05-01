@@ -11,12 +11,11 @@ import { t } from '@nextcloud/l10n'
 
 import NcDashboardWidget from '@nextcloud/vue/components/NcDashboardWidget'
 
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
-
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 import { Logger } from '../helpers/modules/logger'
+import { pollTypes } from '../stores/poll'
 import { usePollsStore } from '../stores/polls'
+import type { Poll } from '../stores/poll.types'
 
 const dashboardWidgetProperties = {
 	emptyContentMessage: t('polls', 'No polls found for this category'),
@@ -53,12 +52,11 @@ onMounted(() => {
 				<PollsAppIcon />
 			</template>
 
-			<template #default="{ item }">
+			<template #default="{ item }: { item: Poll }">
 				<a :href="generateUrl(`/apps/polls/vote/${item.id}`)">
 					<div class="poll-item__item">
 						<div class="item__icon-spacer">
-							<TextPollIcon v-if="item.type === 'textPoll'" />
-							<DatePollIcon v-else />
+							<component :is="pollTypes[item.type].iconComponent" />
 						</div>
 
 						<div class="item__title">

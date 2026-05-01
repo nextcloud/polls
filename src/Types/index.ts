@@ -90,7 +90,7 @@ export type Participant = {
 	user: User
 }
 
-export const defaultUser: User = {
+export const defaultUser = {
 	id: '',
 	displayName: '',
 	emailAddress: '',
@@ -108,4 +108,4 @@ export const defaultUser: User = {
 	localeCodeIntl: null,
 	timeZone: null,
 	categories: null,
-}
+} satisfies User

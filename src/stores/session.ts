@@ -16,7 +16,7 @@ import { useSubscriptionStore } from './subscription'
 import { usePollGroupsStore } from './pollGroups'
 import { usePreferencesStore } from './preferences'
 import { usePollStore } from './poll'
-import { usePollsStore } from './polls'
+import { pollCategories } from './polls.constants'
 
 import { defaultUser } from '../Types'
 
@@ -79,7 +79,7 @@ export const useSessionStore = defineStore('session', {
 
 	getters: {
 		publicToken(): string {
-			return activeRoute.value.params.token as string || ''
+			return (activeRoute.value.params.token as string) || ''
 		},
 
 		currentPollId(): number {
@@ -123,11 +123,8 @@ export const useSessionStore = defineStore('session', {
 			}
 
 			if (route.meta.listPage && route.params.type) {
-				const pollsStore = usePollsStore()
 				windowTitle.name =
-					pollsStore.categories[
-						route.params.type as FilterType
-					].titleExt
+					pollCategories[route.params.type as FilterType].title
 			} else if (route.meta.groupPage) {
 				const pollGroupsStore = usePollGroupsStore()
 				windowTitle.name =

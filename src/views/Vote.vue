@@ -13,9 +13,6 @@ import { n, t } from '@nextcloud/l10n'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
-import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-
 import ActionAddOption from '../components/Actions/modules/ActionAddOption.vue'
 import ActionOpenOptionsSidebar from '../components/Actions/modules/ActionOpenOptionsSidebar.vue'
 import CardAnonymousPollHint from '../components/Cards/CardAnonymousPollHint.vue'
@@ -87,7 +84,7 @@ async function loadChunks() {
 	try {
 		chunksLoading.value = true
 		await nextTick()
-		await votesStore.addChunk()
+		votesStore.addChunk()
 	} catch {
 		showError(t('polls', 'Error loading more participants'))
 	} finally {
@@ -230,8 +227,7 @@ const appClass = computed(() => [
 				v-if="!optionsStore.options.length"
 				v-bind="emptyContentProps">
 				<template #icon>
-					<TextPollIcon v-if="pollStore.type === 'textPoll'" />
-					<DatePollIcon v-else />
+					<component :is="pollStore.iconComponent" />
 				</template>
 
 				<template v-if="pollStore.permissions.addOptions" #action>
