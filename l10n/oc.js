@@ -61,6 +61,7 @@ OC.L10N.register(
     "Month" : "Mes",
     "Year" : "Annada",
     "Owner" : "Owner",
+    "Expiration" : "Expiracion",
     "My polls" : "Mos sondatges",
     "Archive" : "Archiu",
     "Administration" : "Administracion"

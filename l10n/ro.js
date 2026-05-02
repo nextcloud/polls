@@ -66,6 +66,7 @@ OC.L10N.register(
     "Created" : "A fost creat",
     "Access" : "Acces",
     "Owner" : "Proprietar",
+    "Expiration" : "Expiră",
     "Archive" : "Arhivă",
     "Administration" : "Administrare"
 },

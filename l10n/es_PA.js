@@ -43,6 +43,7 @@ OC.L10N.register(
     "Created" : "Creado",
     "Access" : "Acceso",
     "Owner" : "Dueño",
+    "Expiration" : "Expiración",
     "Archive" : "Archivar",
     "Administration" : "Administración"
 },

@@ -40,6 +40,7 @@
     "Month" : "Muaj",
     "Created" : "U krijua",
     "Owner" : "Zotëruesi",
+    "Expiration" : "Skadim",
     "Archive" : "Arkiva"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -63,6 +63,7 @@ OC.L10N.register(
     "Year" : "Năm",
     "Created" : "Đã tạo",
     "Owner" : "Chủ",
+    "Expiration" : "Hết hạn",
     "Archive" : "Lưu trữ",
     "Administration" : "Quản trị viên"
 },

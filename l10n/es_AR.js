@@ -49,6 +49,7 @@ OC.L10N.register(
     "Year" : "Año",
     "Created" : "Creado",
     "Owner" : "Dueño",
+    "Expiration" : "Expiración",
     "Archive" : "Archivar",
     "Administration" : "Administración"
 },

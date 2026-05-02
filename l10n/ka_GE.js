@@ -46,6 +46,7 @@ OC.L10N.register(
     "Created" : "შექმნილია",
     "Access" : "წვდომა",
     "Owner" : "მფლობელი",
+    "Expiration" : "ვადის გასვლა",
     "Archive" : "არქივი",
     "Administration" : "ადმინისტრაცია"
 },

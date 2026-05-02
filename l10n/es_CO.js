@@ -58,6 +58,7 @@ OC.L10N.register(
     "Created" : "Creado",
     "Access" : "Acceso",
     "Owner" : "Dueño",
+    "Expiration" : "Expiración",
     "My polls" : "Mis encuestas",
     "Participated" : "Participó",
     "All polls" : "Todas las encuestas",

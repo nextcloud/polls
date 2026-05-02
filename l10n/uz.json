@@ -61,6 +61,7 @@
     "Month" : "Oy",
     "Year" : "Yil",
     "Owner" : "Owner",
+    "Expiration" : "Muddati",
     "Archive" : "Arxiv"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

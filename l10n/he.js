@@ -104,6 +104,7 @@ OC.L10N.register(
     "Created" : "יצירה",
     "Access" : "גישה",
     "Owner" : "בעלות",
+    "Expiration" : "תפוגה",
     "My polls" : "הסקרים שלי",
     "All polls" : "כל הסקרים",
     "All polls, where you have access to." : "כל הסקרים אליהם יש לך גישה.",

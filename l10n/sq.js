@@ -42,6 +42,7 @@ OC.L10N.register(
     "Month" : "Muaj",
     "Created" : "U krijua",
     "Owner" : "Zotëruesi",
+    "Expiration" : "Skadim",
     "Archive" : "Arkiva"
 },
 "nplurals=2; plural=(n != 1);");

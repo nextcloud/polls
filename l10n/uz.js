@@ -63,6 +63,7 @@ OC.L10N.register(
     "Month" : "Oy",
     "Year" : "Yil",
     "Owner" : "Owner",
+    "Expiration" : "Muddati",
     "Archive" : "Arxiv"
 },
 "nplurals=1; plural=0;");

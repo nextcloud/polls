@@ -60,7 +60,6 @@
     "Description" : "Descripción",
     "never" : "nunca",
     "Back" : "Atrás",
-    "Sort by title" : "Ordenar por título",
     "Legal notice" : "Aviso legal",
     "Privacy policy" : "Política de privacidad",
     "Share label" : "Etiqueta del recurso compartido",
@@ -90,8 +89,11 @@
     "Month" : "Mes",
     "Year" : "Año",
     "Created" : "Creado",
+    "Sort by created date" : "Ordenar por fecha de creación",
+    "Sort by title" : "Ordenar por título",
     "Access" : "Acceso",
     "Owner" : "Propietario",
+    "Expiration" : "Expiración",
     "Archive" : "Archivar",
     "Administration" : "Administración"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"

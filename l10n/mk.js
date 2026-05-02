@@ -79,6 +79,7 @@ OC.L10N.register(
     "Created" : "Креирано",
     "Access" : "Пристап",
     "Owner" : "Сопственик",
+    "Expiration" : "Рок на траење",
     "Archive" : "Архива",
     "Administration" : "Администрација"
 },

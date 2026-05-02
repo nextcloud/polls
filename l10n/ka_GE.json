@@ -44,6 +44,7 @@
     "Created" : "შექმნილია",
     "Access" : "წვდომა",
     "Owner" : "მფლობელი",
+    "Expiration" : "ვადის გასვლა",
     "Archive" : "არქივი",
     "Administration" : "ადმინისტრაცია"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"

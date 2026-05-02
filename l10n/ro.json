@@ -64,6 +64,7 @@
     "Created" : "A fost creat",
     "Access" : "Acces",
     "Owner" : "Proprietar",
+    "Expiration" : "Expiră",
     "Archive" : "Arhivă",
     "Administration" : "Administrare"
 },"pluralForm" :"nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));"
