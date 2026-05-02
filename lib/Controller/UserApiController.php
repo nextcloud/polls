@@ -39,14 +39,13 @@ class UserApiController extends BaseApiV2OCSController {
 	 * 200: Preferences saved
 	 * @param array<string, mixed> $preferences Preferences to save
 	 * @return DataResponse<Http::STATUS_OK, array{preferences: array<string, mixed>}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/preferences')]
 	public function writePreferences(array $preferences): DataResponse {
-		return $this->response(fn () => $this->preferencesService->write($preferences));
+		return $this->response(fn () => $this->preferencesService->write($preferences)->jsonSerialize());
 	}
 
 	/**
@@ -54,7 +53,6 @@ class UserApiController extends BaseApiV2OCSController {
 	 * 200: Returns session info
 	 * @param string|null $token Share token for public poll sessions
 	 * @return DataResponse<Http::STATUS_OK, PollsSession, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -63,7 +61,7 @@ class UserApiController extends BaseApiV2OCSController {
 	public function getSession(?string $token = null): DataResponse {
 		return $this->response(fn () => [
 			'token' => $token,
-			'currentUser' => $this->userSession->getCurrentUser(),
+			'currentUser' => $this->userSession->getCurrentUser()->jsonSerialize(),
 			'appPermissions' => $this->appSettings->getPermissionsArray(),
 			'appSettings' => $this->appSettings->getAppSettings(),
 		]);

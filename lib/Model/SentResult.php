@@ -8,11 +8,18 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Model;
 
+/**
+ * @psalm-import-type PollsSentMailInfo from \OCA\Polls\ResponseDefinitions
+ * @psalm-import-type PollsAbortedMailInfo from \OCA\Polls\ResponseDefinitions
+ * @psalm-import-type PollsSentResult from \OCA\Polls\ResponseDefinitions
+ */
 class SentResult implements \JsonSerializable {
 	public const INVALID_EMAIL_ADDRESS = 'InvalidMail';
 	public const UNHANDELED_REASON = 'UnknownError';
 
+	/** @var list<PollsSentMailInfo> */
 	private array $sentMails = [];
+	/** @var list<PollsAbortedMailInfo> */
 	private array $abortedMails = [];
 
 	public function AddSentMail(UserBase $recipient): void {
@@ -30,7 +37,7 @@ class SentResult implements \JsonSerializable {
 		]);
 	}
 
-	/** @psalm-suppress PossiblyUnusedMethod */
+	/** @return PollsSentResult */
 	public function jsonSerialize(): array {
 		return	[
 			'sentMails' => $this->sentMails,

@@ -41,14 +41,13 @@ class ShareApiController extends BaseApiV2OCSController {
 	 * 200: Returns list of shares
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_OK, array{shares: list<PollsShare>}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/shares')]
 	public function list(int $pollId): DataResponse {
-		return $this->response(fn () => ['shares' => $this->shareService->list($pollId)]);
+		return $this->response(fn () => ['shares' => array_values(array_map(fn ($s) => $s->jsonSerialize(), $this->shareService->list($pollId)))]);
 	}
 
 	/**
@@ -56,7 +55,6 @@ class ShareApiController extends BaseApiV2OCSController {
 	 * 200: Returns share
 	 * @param string $token Share token
 	 * @return DataResponse<Http::STATUS_OK, array{share: PollsShare}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[PublicPage]
@@ -64,7 +62,7 @@ class ShareApiController extends BaseApiV2OCSController {
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/share/{token}')]
 	public function get(string $token): DataResponse {
-		return $this->response(fn () => ['share' => $this->shareService->getEffectiveShare($token)]);
+		return $this->response(fn () => ['share' => $this->shareService->getEffectiveShare($token)->jsonSerialize()]);
 	}
 
 	/**
@@ -75,7 +73,6 @@ class ShareApiController extends BaseApiV2OCSController {
 	 * @param string $emailAddress Guest email address
 	 * @param string $timeZone Guest time zone
 	 * @return DataResponse<Http::STATUS_CREATED, array{share: PollsShare}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[PublicPage]
@@ -85,7 +82,7 @@ class ShareApiController extends BaseApiV2OCSController {
 	#[ApiRoute(verb: 'POST', url: 'api/v1.0/s/{token}/register')]
 	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): DataResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->registerGuest($token, $displayName, $emailAddress, $timeZone),
+			'share' => $this->shareService->registerGuest($token, $displayName, $emailAddress, $timeZone)->jsonSerialize(),
 		], Http::STATUS_CREATED);
 	}
 
@@ -95,7 +92,6 @@ class ShareApiController extends BaseApiV2OCSController {
 	 * @param string $token Share token
 	 * @param string $emailAddress New email address
 	 * @return DataResponse<Http::STATUS_OK, array{share: PollsShare}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[PublicPage]
@@ -105,7 +101,7 @@ class ShareApiController extends BaseApiV2OCSController {
 	#[ApiRoute(verb: 'PUT', url: 'api/v1.0/s/{token}/email/{emailAddress}')]
 	public function setEmailAddress(string $token, string $emailAddress = ''): DataResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->setEmailAddress($this->shareService->getEffectiveShare($token), $emailAddress)
+			'share' => $this->shareService->setEmailAddress($this->shareService->getEffectiveShare($token), $emailAddress)->jsonSerialize(),
 		]);
 	}
 
@@ -114,7 +110,6 @@ class ShareApiController extends BaseApiV2OCSController {
 	 * 200: Email address removed
 	 * @param string $token Share token
 	 * @return DataResponse<Http::STATUS_OK, array{share: PollsShare}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[PublicPage]
@@ -124,7 +119,7 @@ class ShareApiController extends BaseApiV2OCSController {
 	#[ApiRoute(verb: 'DELETE', url: 'api/v1.0/s/{token}/email')]
 	public function deleteEmailAddress(string $token): DataResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->deleteEmailAddress($this->shareService->getEffectiveShare($token))
+			'share' => $this->shareService->deleteEmailAddress($this->shareService->getEffectiveShare($token))->jsonSerialize(),
 		]);
 	}
 
@@ -137,14 +132,13 @@ class ShareApiController extends BaseApiV2OCSController {
 	 * @param string $displayName Display name of user
 	 * @param string $emailAddress Email address of user
 	 * @return DataResponse<Http::STATUS_CREATED, array{share: PollsShare}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/share/{type}')]
 	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): DataResponse {
-		return $this->response(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)], Http::STATUS_CREATED);
+		return $this->response(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)->jsonSerialize()], Http::STATUS_CREATED);
 	}
 
 	/**
@@ -152,14 +146,13 @@ class ShareApiController extends BaseApiV2OCSController {
 	 * 200: Share deleted
 	 * @param string $token Share token
 	 * @return DataResponse<Http::STATUS_OK, array{share: PollsShare}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/share/{token}')]
 	public function delete(string $token): DataResponse {
-		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token)]);
+		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token)->jsonSerialize()]);
 	}
 
 	/**
@@ -167,14 +160,13 @@ class ShareApiController extends BaseApiV2OCSController {
 	 * 200: Share restored
 	 * @param string $token Share token
 	 * @return DataResponse<Http::STATUS_OK, array{share: PollsShare}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/share/{token}/restore')]
 	public function restore(string $token): DataResponse {
-		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token, restore: true)]);
+		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token, restore: true)->jsonSerialize()]);
 	}
 
 	/**
@@ -182,14 +174,13 @@ class ShareApiController extends BaseApiV2OCSController {
 	 * 200: Share locked
 	 * @param string $token Share token
 	 * @return DataResponse<Http::STATUS_OK, array{share: PollsShare}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/share/{token}/lock')]
 	public function lock(string $token): DataResponse {
-		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token)]);
+		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token)->jsonSerialize()]);
 	}
 
 	/**
@@ -197,14 +188,13 @@ class ShareApiController extends BaseApiV2OCSController {
 	 * 200: Share unlocked
 	 * @param string $token Share token
 	 * @return DataResponse<Http::STATUS_OK, array{share: PollsShare}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/share/{token}/unlock')]
 	public function unlock(string $token): DataResponse {
-		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token, unlock: true)]);
+		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token, unlock: true)->jsonSerialize()]);
 	}
 
 	/**
@@ -212,7 +202,6 @@ class ShareApiController extends BaseApiV2OCSController {
 	 * 200: Invitation sent
 	 * @param string $token Share token
 	 * @return DataResponse<Http::STATUS_OK, array{share: PollsShare, sentResult: PollsSentResult}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -220,9 +209,12 @@ class ShareApiController extends BaseApiV2OCSController {
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/share/{token}/invite')]
 	public function sendInvitation(string $token): DataResponse {
 		$share = $this->shareService->get($token);
-		return $this->response(fn () => [
-			'share' => $share,
-			'sentResult' => $this->mailService->sendInvitation($share, new SentResult()),
-		]);
+		return $this->response(function () use ($share): array {
+			$sentResult = new SentResult();
+			return [
+				'share' => $share->jsonSerialize(),
+				'sentResult' => $this->mailService->sendInvitation($share, $sentResult)->jsonSerialize(),
+			];
+		});
 	}
 }
