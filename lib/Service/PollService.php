@@ -420,6 +420,7 @@ class PollService {
 
 	/**
 	 * Collect email addresses from particitipants
+	 * @return list<array{displayName: string, emailAddress: string, combined: string}>
 	 */
 	public function getParticipantsEmailAddresses(int $pollId): array {
 		$this->poll = $this->pollMapper->get($pollId)

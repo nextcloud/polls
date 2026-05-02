@@ -49,14 +49,13 @@ class PollApiController extends BaseApiV2OCSController {
 	 * Get list of polls
 	 * 200: Returns list of polls
 	 * @return DataResponse<Http::STATUS_OK, array{polls: list<PollsPoll>}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/polls')]
 	public function listPolls(): DataResponse {
-		return $this->response(fn () => ['polls' => $this->pollService->listPolls()]);
+		return $this->response(fn () => ['polls' => array_values(array_map(fn ($p) => $p->jsonSerialize(), $this->pollService->listPolls()))]);
 	}
 
 	/**
@@ -64,7 +63,6 @@ class PollApiController extends BaseApiV2OCSController {
 	 * 200: Returns complete poll data
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_OK, array{poll: PollsPoll, options: list<PollsOption>, votes: list<PollsVote>, comments: list<PollsComment>, shares: list<PollsShare>, subscribed: bool}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -72,11 +70,11 @@ class PollApiController extends BaseApiV2OCSController {
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}')]
 	public function get(int $pollId): DataResponse {
 		return $this->response(fn () => [
-			'poll' => $this->pollService->get($pollId),
-			'options' => $this->optionService->list($pollId),
-			'votes' => $this->voteService->list($pollId),
-			'comments' => $this->commentService->list($pollId),
-			'shares' => $this->shareService->list($pollId),
+			'poll' => $this->pollService->get($pollId)->jsonSerialize(),
+			'options' => array_values(array_map(fn ($o) => $o->jsonSerialize(), $this->optionService->list($pollId))),
+			'votes' => array_values(array_map(fn ($v) => $v->jsonSerialize(), $this->voteService->list($pollId))),
+			'comments' => array_values(array_map(fn ($c) => $c->jsonSerialize(), $this->commentService->list($pollId))),
+			'shares' => array_values(array_map(fn ($s) => $s->jsonSerialize(), $this->shareService->list($pollId))),
 			'subscribed' => $this->subscriptionService->get($pollId),
 		]);
 	}
@@ -88,14 +86,13 @@ class PollApiController extends BaseApiV2OCSController {
 	 * @param string $title Poll title
 	 * @param string $votingVariant Voting variant
 	 * @return DataResponse<Http::STATUS_CREATED, array{poll: PollsPoll}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll')]
 	public function add(string $type, string $title, string $votingVariant = Poll::VARIANT_SIMPLE): DataResponse {
-		return $this->response(fn () => ['poll' => $this->pollService->add($type, $title, $votingVariant)], Http::STATUS_CREATED);
+		return $this->response(fn () => ['poll' => $this->pollService->add($type, $title, $votingVariant)->jsonSerialize()], Http::STATUS_CREATED);
 	}
 
 	/**
@@ -104,14 +101,20 @@ class PollApiController extends BaseApiV2OCSController {
 	 * @param int $pollId Poll id
 	 * @param array<string, mixed> $pollConfiguration Poll configuration
 	 * @return DataResponse<Http::STATUS_OK, array{poll: PollsPoll, diff: array<string, mixed>, changes: array<string, mixed>}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}')]
 	public function update(int $pollId, array $pollConfiguration): DataResponse {
-		return $this->response(fn () => $this->pollService->update($pollId, $pollConfiguration));
+		return $this->response(function () use ($pollId, $pollConfiguration): array {
+			$result = $this->pollService->update($pollId, $pollConfiguration);
+			return [
+				'poll' => $result['poll']->jsonSerialize(),
+				'diff' => $result['diff'],
+				'changes' => $result['changes'],
+			];
+		});
 	}
 
 	/**
@@ -119,14 +122,13 @@ class PollApiController extends BaseApiV2OCSController {
 	 * 200: Archive status toggled
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_OK, array{poll: PollsPoll}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/archive/toggle')]
 	public function toggleArchive(int $pollId): DataResponse {
-		return $this->response(fn () => ['poll' => $this->pollService->toggleArchive($pollId)]);
+		return $this->response(fn () => ['poll' => $this->pollService->toggleArchive($pollId)->jsonSerialize()]);
 	}
 
 	/**
@@ -134,14 +136,13 @@ class PollApiController extends BaseApiV2OCSController {
 	 * 200: Poll closed
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_OK, array{poll: PollsPoll}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/close')]
 	public function close(int $pollId): DataResponse {
-		return $this->response(fn () => ['poll' => $this->pollService->close($pollId)]);
+		return $this->response(fn () => ['poll' => $this->pollService->close($pollId)->jsonSerialize()]);
 	}
 
 	/**
@@ -149,14 +150,13 @@ class PollApiController extends BaseApiV2OCSController {
 	 * 200: Poll reopened
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_OK, array{poll: PollsPoll}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/reopen')]
 	public function reopen(int $pollId): DataResponse {
-		return $this->response(fn () => ['poll' => $this->pollService->reopen($pollId)]);
+		return $this->response(fn () => ['poll' => $this->pollService->reopen($pollId)->jsonSerialize()]);
 	}
 
 	/**
@@ -164,14 +164,13 @@ class PollApiController extends BaseApiV2OCSController {
 	 * 200: Poll deleted
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_OK, array{poll: PollsPoll}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/poll/{pollId}')]
 	public function delete(int $pollId): DataResponse {
-		return $this->response(fn () => ['poll' => $this->pollService->delete($pollId)]);
+		return $this->response(fn () => ['poll' => $this->pollService->delete($pollId)->jsonSerialize()]);
 	}
 
 	/**
@@ -179,14 +178,13 @@ class PollApiController extends BaseApiV2OCSController {
 	 * 201: Poll cloned
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_CREATED, array{poll: PollsPoll}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/clone')]
 	public function clone(int $pollId): DataResponse {
-		return $this->response(fn () => ['poll' => $this->pollService->clone($pollId)], Http::STATUS_CREATED);
+		return $this->response(fn () => ['poll' => $this->pollService->clone($pollId)->jsonSerialize()], Http::STATUS_CREATED);
 	}
 
 	/**
@@ -195,13 +193,12 @@ class PollApiController extends BaseApiV2OCSController {
 	 * @param string $sourceUserId User id to transfer polls from
 	 * @param string $targetUserId User id to transfer polls to
 	 * @return DataResponse<Http::STATUS_OK, array{transferred: list<PollsPoll>}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/transfer/{sourceUserId}/{targetUserId}')]
 	public function transferPolls(string $sourceUserId, string $targetUserId): DataResponse {
-		return $this->response(fn () => ['transferred' => $this->pollService->transferPolls($sourceUserId, $targetUserId)]);
+		return $this->response(fn () => ['transferred' => array_values(array_map(fn ($p) => $p->jsonSerialize(), $this->pollService->transferPolls($sourceUserId, $targetUserId)))]);
 	}
 
 	/**
@@ -210,13 +207,12 @@ class PollApiController extends BaseApiV2OCSController {
 	 * @param int $pollId Poll to transfer
 	 * @param string $targetUserId User id to transfer the poll to
 	 * @return DataResponse<Http::STATUS_OK, array{transferred: PollsPoll}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/transfer/{targetUserId}')]
 	public function transferPoll(int $pollId, string $targetUserId): DataResponse {
-		return $this->response(fn () => ['transferred' => $this->pollService->transferPoll($pollId, $targetUserId)]);
+		return $this->response(fn () => ['transferred' => $this->pollService->transferPoll($pollId, $targetUserId)->jsonSerialize()]);
 	}
 
 	/**
@@ -224,7 +220,6 @@ class PollApiController extends BaseApiV2OCSController {
 	 * 200: Returns participant email addresses
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_OK, array{addresses: list<array{displayName: string, emailAddress: string, combined: string}>}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -233,5 +228,4 @@ class PollApiController extends BaseApiV2OCSController {
 	public function getParticipantsEmailAddresses(int $pollId): DataResponse {
 		return $this->response(fn () => ['addresses' => $this->pollService->getParticipantsEmailAddresses($pollId)]);
 	}
-
 }

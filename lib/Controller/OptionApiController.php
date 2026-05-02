@@ -44,14 +44,13 @@ class OptionApiController extends BaseApiV2OCSController {
 	 * 200: Returns list of options
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_OK, array{options: list<PollsOption>}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/options')]
 	public function list(int $pollId): DataResponse {
-		return $this->response(fn () => ['options' => $this->optionService->list($pollId)]);
+		return $this->response(fn () => ['options' => array_values(array_map(fn ($o) => $o->jsonSerialize(), $this->optionService->list($pollId)))]);
 	}
 
 	/**
@@ -62,7 +61,6 @@ class OptionApiController extends BaseApiV2OCSController {
 	 * @param bool $voteYes Vote yes for this option and for all generated sequence
 	 * @param PollsSequence|null $sequence Sequence of the option
 	 * @return DataResponse<Http::STATUS_CREATED, array{option: PollsOption, repetitions: list<PollsOption>, options: list<PollsOption>, votes: list<PollsVote>}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -74,16 +72,20 @@ class OptionApiController extends BaseApiV2OCSController {
 		bool $voteYes = false,
 		?array $sequence = null,
 	): DataResponse {
-		return $this->response(fn () => array_merge(
-			$this->optionService->addWithSequenceAndAutoVote(
+		return $this->response(function () use ($pollId, $option, $voteYes, $sequence): array {
+			$result = $this->optionService->addWithSequenceAndAutoVote(
 				$pollId,
 				SimpleOption::fromArray($option),
 				$voteYes,
 				Sequence::fromArray($sequence),
-			),
-			['options' => $this->optionService->list($pollId)],
-			['votes' => $this->voteService->list($pollId)],
-		), Http::STATUS_CREATED);
+			);
+			return [
+				'option' => $result['option']->jsonSerialize(),
+				'repetitions' => array_map(fn ($o) => $o->jsonSerialize(), $result['repetitions']),
+				'options' => array_values(array_map(fn ($o) => $o->jsonSerialize(), $this->optionService->list($pollId))),
+				'votes' => array_values(array_map(fn ($v) => $v->jsonSerialize(), $this->voteService->list($pollId))),
+			];
+		}, Http::STATUS_CREATED);
 	}
 
 	/**
@@ -92,14 +94,13 @@ class OptionApiController extends BaseApiV2OCSController {
 	 * @param int $pollId Poll id
 	 * @param string $text Options text (newline-separated) for text poll
 	 * @return DataResponse<Http::STATUS_CREATED, array{options: list<PollsOption>}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/options')]
 	public function addBulk(int $pollId, string $text = ''): DataResponse {
-		return $this->response(fn () => ['options' => $this->optionService->addBulk($pollId, $text)], Http::STATUS_CREATED);
+		return $this->response(fn () => ['options' => array_values(array_map(fn ($o) => $o->jsonSerialize(), $this->optionService->addBulk($pollId, $text)))], Http::STATUS_CREATED);
 	}
 
 	/**
@@ -112,7 +113,6 @@ class OptionApiController extends BaseApiV2OCSController {
 	 * @param string|null $isoTimestamo ISO 8601 timestamp
 	 * @param string|null $isoDuration ISO 8601 duration
 	 * @return DataResponse<Http::STATUS_OK, array{option: PollsOption}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -124,7 +124,7 @@ class OptionApiController extends BaseApiV2OCSController {
 			$text,
 			new DateTimeImmutable($isoTimestamo ?? $timestamp),
 			new DateInterval($isoDuration ?? $duration),
-		)]);
+		)->jsonSerialize()]);
 	}
 
 	/**
@@ -132,14 +132,13 @@ class OptionApiController extends BaseApiV2OCSController {
 	 * 200: Option deleted
 	 * @param int $optionId Option id
 	 * @return DataResponse<Http::STATUS_OK, array{option: PollsOption}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/option/{optionId}')]
 	public function delete(int $optionId): DataResponse {
-		return $this->response(fn () => ['option' => $this->optionService->delete($optionId)]);
+		return $this->response(fn () => ['option' => $this->optionService->delete($optionId)->jsonSerialize()]);
 	}
 
 	/**
@@ -147,14 +146,13 @@ class OptionApiController extends BaseApiV2OCSController {
 	 * 200: Option restored
 	 * @param int $optionId Option id
 	 * @return DataResponse<Http::STATUS_OK, array{option: PollsOption}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/restore')]
 	public function restore(int $optionId): DataResponse {
-		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, true)]);
+		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, true)->jsonSerialize()]);
 	}
 
 	/**
@@ -162,14 +160,13 @@ class OptionApiController extends BaseApiV2OCSController {
 	 * 200: Option confirmation toggled
 	 * @param int $optionId Option id
 	 * @return DataResponse<Http::STATUS_OK, array{option: PollsOption}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/confirm')]
 	public function confirm(int $optionId): DataResponse {
-		return $this->response(fn () => ['option' => $this->optionService->confirm($optionId)]);
+		return $this->response(fn () => ['option' => $this->optionService->confirm($optionId)->jsonSerialize()]);
 	}
 
 	/**
@@ -177,14 +174,13 @@ class OptionApiController extends BaseApiV2OCSController {
 	 * 200: Option order updated
 	 * @param int $optionId Option id
 	 * @param int $order Option's new position
-	 * @return DataResponse<Http::STATUS_OK, array{option: PollsOption}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
+	 * @return DataResponse<Http::STATUS_OK, array{options: list<PollsOption>}, array{}>
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/order/{order}')]
 	public function setOrder(int $optionId, int $order): DataResponse {
-		return $this->response(fn () => ['option' => $this->optionService->setOrder($optionId, $order)]);
+		return $this->response(fn () => ['options' => array_map(fn ($o) => $o->jsonSerialize(), $this->optionService->setOrder($optionId, $order))]);
 	}
 }

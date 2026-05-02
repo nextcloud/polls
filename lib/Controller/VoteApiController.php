@@ -35,14 +35,13 @@ class VoteApiController extends BaseApiV2OCSController {
 	 * 200: Returns list of votes
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_OK, array{votes: list<PollsVote>}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/votes')]
 	public function list(int $pollId): DataResponse {
-		return $this->response(fn () => ['votes' => $this->voteService->list($pollId)]);
+		return $this->response(fn () => ['votes' => array_values(array_map(fn ($v) => $v->jsonSerialize(), $this->voteService->list($pollId)))]);
 	}
 
 	/**
@@ -50,15 +49,14 @@ class VoteApiController extends BaseApiV2OCSController {
 	 * 200: Vote answer set
 	 * @param int $optionId Option id
 	 * @param string $answer Answer string ('yes', 'no', 'maybe')
-	 * @return DataResponse<Http::STATUS_OK, array{vote: PollsVote}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
+	 * @return DataResponse<Http::STATUS_OK, array{vote: PollsVote|null}, array{}>
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/vote/{answer}')]
 	public function set(int $optionId, string $answer): DataResponse {
-		return $this->response(fn () => ['vote' => $this->voteService->set($optionId, $answer)]);
+		return $this->response(fn () => ['vote' => $this->voteService->set($optionId, $answer)?->jsonSerialize()]);
 	}
 
 	/**
@@ -67,7 +65,6 @@ class VoteApiController extends BaseApiV2OCSController {
 	 * @param int $pollId Poll id
 	 * @param string $userId User to remove
 	 * @return DataResponse<Http::STATUS_OK, array{deleted: string}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -83,7 +80,6 @@ class VoteApiController extends BaseApiV2OCSController {
 	 * @param int $pollId Poll id
 	 * @param string $userId User to delete orphan votes from
 	 * @return DataResponse<Http::STATUS_OK, array{deleted: string}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]

@@ -14,6 +14,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSBadRequestException;
+use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
@@ -34,8 +35,11 @@ class BaseApiV2OCSController extends OCSController {
 	}
 
 	/**
-	 * @param Closure $callback Callback function
-	 * @psalm-param HttpStatusCode $successStatus HTTP status code for success
+	 * @template TData of array
+	 * @template TStatus of Http::STATUS_*
+	 * @param Closure(): TData $callback
+	 * @param TStatus $successStatus
+	 * @return DataResponse<TStatus, TData, array{}>
 	 */
 	#[NoAdminRequired]
 	protected function response(Closure $callback, int $successStatus = Http::STATUS_OK): DataResponse {
@@ -46,12 +50,10 @@ class BaseApiV2OCSController extends OCSController {
 			throw new OCSNotFoundException($e->getMessage());
 
 		} catch (Exception $e) {
-
-			if ($e->getStatus() === Http::STATUS_NOT_MODIFIED) {
-				return new DataResponse(statusCode: Http::STATUS_NOT_MODIFIED);
-			}
-
-			throw new OCSBadRequestException($e->getMessage());
+			throw match ($e->getStatus()) {
+				Http::STATUS_NOT_MODIFIED => new OCSException($e->getMessage(), Http::STATUS_NOT_MODIFIED),
+				default => new OCSBadRequestException($e->getMessage()),
+			};
 		}
 	}
 }

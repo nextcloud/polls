@@ -78,6 +78,7 @@ class OptionService {
 
 	/**
 	 * Intermediate step to avoid code duplication
+	 * @return array{option: Option, repetitions: list<Option>}
 	 */
 	public function addWithSequenceAndAutoVote(
 		int $pollId,
@@ -95,7 +96,7 @@ class OptionService {
 
 		return [
 			'option' => $newOption,
-			'repetitions' => $repetitions,
+			'repetitions' => array_values($repetitions),
 		];
 	}
 
@@ -415,9 +416,7 @@ class OptionService {
 	/**
 	 * Change order for $optionId and reorder the options
 	 *
-	 * @return Option[]
-	 *
-	 * @psalm-return array<array-key, Option>
+	 * @return list<Option>
 	 */
 	public function setOrder(int $optionId, int $newOrder): array {
 		$option = $this->optionMapper->find($optionId);
@@ -437,7 +436,7 @@ class OptionService {
 
 		$this->eventDispatcher->dispatchTyped(new PollOptionReorderedEvent($this->poll));
 
-		return $this->optionMapper->findByPoll($this->poll->getId());
+		return array_values($this->optionMapper->findByPoll($this->poll->getId()));
 	}
 
 	/**
