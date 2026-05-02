@@ -37,13 +37,12 @@ class WatchApiController extends BaseApiV2OCSController {
 	 * @param string $mode The mode of watching, e.g. 'longPolling'
 	 * @param int|null $offset Only watch changes after this timestamp
 	 * @return DataResponse<Http::STATUS_OK, array{updates: list<PollsWatch>}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/watch')]
 	public function watchPoll(int $pollId, string $mode, ?int $offset): DataResponse {
-		return $this->response(fn () => ['updates' => $this->watchService->watchUpdates($pollId, $mode, $offset)]);
+		return $this->response(fn () => ['updates' => array_map(fn ($w) => $w->jsonSerialize(), $this->watchService->watchUpdates($pollId, $mode, $offset))]);
 	}
 }

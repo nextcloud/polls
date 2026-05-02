@@ -2432,11 +2432,14 @@
                                                 "data": {
                                                     "type": "object",
                                                     "required": [
-                                                        "option"
+                                                        "options"
                                                     ],
                                                     "properties": {
-                                                        "option": {
-                                                            "$ref": "#/components/schemas/Option"
+                                                        "options": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/components/schemas/Option"
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -5463,7 +5466,12 @@
                                                     ],
                                                     "properties": {
                                                         "vote": {
-                                                            "$ref": "#/components/schemas/Vote"
+                                                            "nullable": true,
+                                                            "allOf": [
+                                                                {
+                                                                    "$ref": "#/components/schemas/Vote"
+                                                                }
+                                                            ]
                                                         }
                                                     }
                                                 }

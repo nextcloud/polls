@@ -34,7 +34,6 @@ class SubscriptionApiController extends BaseApiV2OCSController {
 	 * 200: Returns subscription status
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_OK, array{pollId: int, subscribed: bool}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -52,7 +51,6 @@ class SubscriptionApiController extends BaseApiV2OCSController {
 	 * 200: Subscribed to poll
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_OK, array{pollId: int, subscribed: bool}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -70,7 +68,6 @@ class SubscriptionApiController extends BaseApiV2OCSController {
 	 * 200: Unsubscribed from poll
 	 * @param int $pollId Poll id
 	 * @return DataResponse<Http::STATUS_OK, array{pollId: int, subscribed: bool}, array{}>
-	 * @psalm-suppress InvalidReturnType InvalidReturnStatement
 	 */
 	#[CORS]
 	#[NoAdminRequired]

@@ -33,6 +33,7 @@ class WatchService {
 
 	/**
 	 * Watch poll for updates
+	 * @return list<Watch>
 	 */
 	public function watchUpdates(int $pollId, string $mode, ?int $offset = null): array {
 		if ($pollId) {
