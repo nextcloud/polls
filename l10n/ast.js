@@ -247,6 +247,7 @@ OC.L10N.register(
     "Error writing poll" : "Hebo un error al escribir la encuesta",
     "Access" : "Accesu",
     "Owner" : "Propietariu",
+    "Expiration" : "Caducidá",
     "Private polls" : "Encuestes privaes",
     "All polls" : "Toles encuestes",
     "Closed polls" : "Encuestes zarraes",

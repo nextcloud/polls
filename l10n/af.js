@@ -40,6 +40,7 @@ OC.L10N.register(
     "Month" : "Maand",
     "Created" : "Geskep",
     "Owner" : "Eienaar",
+    "Expiration" : "Verval",
     "Archive" : "Argief"
 },
 "nplurals=2; plural=(n != 1);");

@@ -760,6 +760,7 @@ OC.L10N.register(
     "Sort by title" : "Řadit podle nadpisu",
     "Access" : "Přístup",
     "Owner" : "Vlastník",
+    "Expiration" : "Konec platnosti",
     "Sort by expiration date" : "Seřadit podle data skončení platnosti",
     "Relevant" : "Relevantní",
     "My polls" : "Moje ankety",

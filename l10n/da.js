@@ -97,9 +97,11 @@ OC.L10N.register(
     "Year" : "År",
     "Title must not be empty!" : "Overskriften må ikke være tom!",
     "Created" : "Oprettet",
+    "Sort by created date" : "Sorter efter oprettelsesdato",
     "Sort by title" : "Sortér efter titel",
     "Access" : "Adgang",
     "Owner" : "Ejer",
+    "Expiration" : "Udløb",
     "Archive" : "Arkiver",
     "Administration" : "Administration"
 },
