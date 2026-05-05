@@ -216,6 +216,7 @@ OC.L10N.register(
     "Switch to list view" : "목록 보기로 전환",
     "Vote saved" : "투표 저장됨",
     "Error saving vote" : "투표 저장하는 중 오류 발생",
+    "more" : "더 보기",
     "Other settings" : "다른 설정",
     "Email options" : "이메일 옵션",
     "No polls selected" : "투표가 선택되지 않음",
