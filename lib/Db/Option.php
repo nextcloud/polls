@@ -36,7 +36,6 @@ use OCA\Polls\Model\UserBase;
  * @method void setCreated(int $value)
  * @method ?string getDescription()
  * @method void setDescription(?string $value)
-
  *
  * No magic getters, getters are overwritten for special handling of timestamp and option text
  * @method void setOrder(int $value)
@@ -157,13 +156,11 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'text' => $this->getPollOptionText(),
 			'timestamp' => $this->getTimestamp(),
 			'duration' => $this->getDuration(),
-			'description' => $this->getDescription() ?? 'No description',
 			'isoTimestamp' => $this->getIsoTimestamp(),
 			'isoDuration' => $this->getIsoDuration(),
 			'deleted' => $this->getDeleted(),
 			'order' => $this->getOrder(),
 			'confirmed' => $this->getConfirmed(),
-			'created' => time(),
 			'locked' => $this->getIsLocked(),
 			'hash' => $this->getPollOptionHash(),
 			'isOwner' => $this->getCurrentUserIsEntityUser(),
