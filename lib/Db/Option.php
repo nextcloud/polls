@@ -32,6 +32,11 @@ use OCA\Polls\Model\UserBase;
  * @method void setReleased(int $value)
  * @method int getDeleted()
  * @method void setDeleted(int $value)
+ * @method int getCreated()
+ * @method void setCreated(int $value)
+ * @method ?string getDescription()
+ * @method void setDescription(?string $value)
+ *
  *
  * No magic getters, getters are overwritten for special handling of timestamp and option text
  * @method void setOrder(int $value)
@@ -70,6 +75,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected int $pollId = 0;
 	protected string $pollOptionText = '';
 	protected string $pollOptionHash = '';
+	protected ?string $description = '';
 	protected int $timestamp = 0;
 	protected int $duration = 0;
 	protected int $order = 0;
@@ -79,6 +85,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected string $owner = '';
 	protected int $released = 0;
 	protected int $deleted = 0;
+	protected int $created = 0;
 
 	// joined columns
 	protected ?string $userVoteAnswer = '';
@@ -104,6 +111,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 		$this->addType('duration', 'integer');
 		$this->addType('confirmed', 'integer');
 		$this->addType('deleted', 'integer');
+		$this->addType('created', 'integer');
 
 		// joined Attributes
 		$this->addType('optionLimit', 'integer');
