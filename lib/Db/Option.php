@@ -36,7 +36,7 @@ use OCA\Polls\Model\UserBase;
  * @method void setCreated(int $value)
  * @method ?string getDescription()
  * @method void setDescription(?string $value)
-
+ *
  *
  * No magic getters, getters are overwritten for special handling of timestamp and option text
  * @method void setOrder(int $value)
