@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Command\Db;
 
 use OCA\Polls\Command\Command;
-use OCA\Polls\Db\V9\TableManager;
+use OCA\Polls\Db\V10\TableManager;
 use OCP\IDBConnection;
 
 /**
