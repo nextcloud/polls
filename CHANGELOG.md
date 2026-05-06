@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
  - Set default sort to last activity (renamed from last interaction) for poll list, navigation and dashboard
  - reorder poll badges in verbose poll list and add last activity
 
-# Maintenance
+### Maintenance
  - centralize poll type icon and consume from store
  - extract huge constants from store to import file
  - some minor bugs
