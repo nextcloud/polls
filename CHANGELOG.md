@@ -7,6 +7,21 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
  - none so far
 
+## [9.1.0] - 2026-05-06
+### Fixed
+ - Fix repairstep which deleted the display names from shares
+
+### Changed
+ - Set default sort to last activity (renamed from last interaction) for poll list, navigation and dashboard
+ - reorder poll badges in verbose poll list and add last activity
+
+# Maintenance
+ - centralize poll type icon and consume from store
+ - extract huge constants from store to import file
+ - some minor bugs
+ - code maintenance
+ - type corrections
+
 ## [9.0.7] - 2026-04-30
 ### Fixed
  - Clean tables before creating unique indices
