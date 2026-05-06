@@ -769,8 +769,9 @@ class TableManager extends DbManager {
 
 		$qb->update($tableName)
 			->set('display_name', $affectedColumn)
+			->where($qb->expr()->eq($prefixedTableName . '.' . 'type', $qb->expr()->literal(Share::TYPE_PUBLIC)))
 			->andWhere($qb->expr()->isNotNull($prefixedTableName . '.' . $affectedColumn))
-			->andWhere($qb->expr()->eq($prefixedTableName . '.' . $affectedColumn, $qb->expr()->literal('')));
+			->andWhere($qb->expr()->neq($prefixedTableName . '.' . $affectedColumn, $qb->expr()->literal('')));
 		$updated = $qb->executeStatement();
 
 		if ($updated === 0) {
