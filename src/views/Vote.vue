@@ -34,6 +34,7 @@ import { usePreferencesStore } from '../stores/preferences'
 import { useVotesStore } from '../stores/votes'
 import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
 import { Event } from '../Types'
+import VoteTableText from '@/components/VoteTable/VoteTableText.vue'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -202,7 +203,12 @@ const appClass = computed(() => [
 				v-model="tableObserverVisible" />
 
 			<VoteTable
-				v-show="optionsStore.options.length"
+				v-show="pollStore.type === 'datePoll' && optionsStore.options.length"
+				class="area__vote"
+				:down-page="tableObserverVisible" />
+
+			<VoteTableText
+				v-show="pollStore.type === 'textPoll' && optionsStore.options.length"
 				class="area__vote"
 				:down-page="tableObserverVisible" />
 

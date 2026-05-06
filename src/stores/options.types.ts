@@ -32,7 +32,9 @@ export type OptionDto = {
 	id: number
 	pollId: number
 	text: string
+	description: string
 	isoTimestamp: string | null | undefined
+	created: number
 	deleted: number
 	order: number
 	confirmed: number
