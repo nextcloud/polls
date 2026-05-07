@@ -5,9 +5,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ## [Unreleased]
- - none so far
+ - Support Nextcloud 34 (Hub 26 Spring)
 
-## [9.1.0] - 2026-05-06
+## [9.1.1] - 2026-05-06
 ### Fixed
  - Fix repairstep which deleted the display names from shares
 
