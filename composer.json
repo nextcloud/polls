@@ -31,8 +31,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"OCA\\Polls\\Tests\\": "tests/",
-			"OCP\\": "vendor/nextcloud/ocp/OCP/"
+			"OCA\\Polls\\Tests\\": "tests/"
 		}
 	},
 	"require-dev": {
