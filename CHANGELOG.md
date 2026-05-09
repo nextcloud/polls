@@ -6,12 +6,12 @@
 All notable changes to this project will be documented in this file.
 ## [Unreleased]
  - Support Nextcloud 34 (Hub 26 Spring)
+ - Make modal for sending out confirmations closeable
+ - Apply time zone to confirmation mail
 
 ## [9.1.1] - 2026-05-06
 ### Fixed
  - Fix repairstep which deleted the display names from shares
- - Make modal for sending out confirmations closeable
- - Apply time zone to confirmation mail
 
 ### Changed
  - Set default sort to last activity (renamed from last interaction) for poll list, navigation and dashboard
