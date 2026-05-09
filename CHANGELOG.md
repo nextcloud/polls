@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
  - Fix repairstep which deleted the display names from shares
  - Make modal for sending out confirmations closeable
+ - Apply time zone to confirmation mail
 
 ### Changed
  - Set default sort to last activity (renamed from last interaction) for poll list, navigation and dashboard
