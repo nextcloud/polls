@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Model\Mail;
 
+use DateTimeZone;
 use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Poll;
@@ -47,18 +48,21 @@ class ConfirmationMail extends MailBase {
 			$this->l10n->n('Confirmed option:', 'Confirmed options:', count($this->confirmedOptions))
 		);
 
+		$useTimeZoneName = $this->poll->getTimezoneName() ?? $this->recipient->getTimeZoneName();
+		$useTimeZone = new DateTimeZone($useTimeZoneName);
+
 		$localizedDateSpan = new DateTimeIntervalText($this->l10n);
 
 		foreach ($this->confirmedOptions as $option) {
 			if ($this->poll->getType() === Poll::TYPE_DATE) {
-				$dateTime = $option->getDateTime();
+				$dateTime = $option->getDateTime()->setTimeZone($useTimeZone);
 
 				if ($dateTime->getISO() === null) {
 					continue;
 				}
 
 				$localizedDateSpan
-					->setStartDateTime($option->getDateTime())
+					->setStartDateTime($dateTime)
 					->setInterval($option->getInterval());
 
 				$this->emailTemplate->addBodyListItem(
@@ -72,7 +76,7 @@ class ConfirmationMail extends MailBase {
 
 		if ($this->poll->getType() === Poll::TYPE_DATE) {
 			$this->emailTemplate->addBodyText(
-				$this->l10n->t('The used time zone is "%s", based on the detected time zone at your registration time. To view the times in your current time zone, enter the poll by clicking the button below.', $this->recipient->getTimeZoneName())
+				$this->l10n->t('The used time zone is "%s". To view the times in your current time zone, enter the poll by clicking the button below.', $useTimeZoneName)
 			);
 		}
 

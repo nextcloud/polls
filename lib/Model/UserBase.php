@@ -24,7 +24,6 @@ use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\User\User;
 use OCA\Polls\UserSession;
 use OCP\Collaboration\Collaborators\ISearch;
-use OCP\IDateTimeZone;
 use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\Share\IShare;
@@ -69,7 +68,6 @@ class UserBase implements JsonSerializable {
 	protected string $description = '';
 	protected string $richObjectType = self::TYPE_USER;
 	protected string $organisation = '';
-	protected IDateTimeZone $timeZone;
 	protected IGroupManager $groupManager;
 	protected IL10N $l10n;
 	protected UserSession $userSession;
@@ -86,7 +84,6 @@ class UserBase implements JsonSerializable {
 	) {
 		$this->l10n = Container::getL10N();
 		$this->groupManager = Container::queryClass(IGroupManager::class);
-		$this->timeZone = Container::queryClass(IDateTimeZone::class);
 		$this->userSession = Container::queryClass(UserSession::class);
 		$this->appSettings = Container::queryClass(AppSettings::class);
 	}
@@ -172,14 +169,14 @@ class UserBase implements JsonSerializable {
 	}
 
 	public function getTimeZone(): DateTimeZone {
-		if ($this->timeZoneName) {
-			return new DateTimeZone($this->timeZoneName);
-		}
-		return new DateTimeZone($this->timeZone->getTimeZone()->getName());
+		return new DateTimeZone($this->timeZoneName);
 	}
 
 	public function getTimeZoneName(): string {
-		return $this->timeZoneName;
+		if ($this->timeZoneName) {
+			return $this->timeZoneName;
+		}
+		return date_default_timezone_get();
 	}
 
 	public function getDisplayName(): string {
