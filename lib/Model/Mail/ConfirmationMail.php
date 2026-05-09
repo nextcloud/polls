@@ -48,7 +48,7 @@ class ConfirmationMail extends MailBase {
 			$this->l10n->n('Confirmed option:', 'Confirmed options:', count($this->confirmedOptions))
 		);
 
-		$useTimeZoneName = $this->poll->getTimezoneName() ?? $this->recipient->getTimeZoneName() ?? date_default_timezone_get();
+		$useTimeZoneName = $this->poll->getTimezoneName() ?? $this->recipient->getTimeZoneName();
 		$useTimeZone = new DateTimeZone($useTimeZoneName);
 
 		$localizedDateSpan = new DateTimeIntervalText($this->l10n);
