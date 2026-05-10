@@ -67,7 +67,7 @@ const descriptionExpanded = ref(false)
 	.poll_description_expand {
 		position: absolute;
 		top: 0.25rem;
-		right: 0.25rem;
+		inset-inline-end: 0.25rem;
 		z-index: 1;
 		display: flex;
 		align-items: center;

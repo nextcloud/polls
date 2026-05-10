@@ -136,7 +136,7 @@ function optionLabel(option: (typeof optionsStore.options)[0]): string {
 	.options_preview__expand {
 		position: absolute;
 		top: 0.25rem;
-		right: 0.25rem;
+		inset-inline-end: 0.25rem;
 		z-index: 1;
 		display: flex;
 		align-items: center;

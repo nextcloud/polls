@@ -116,8 +116,6 @@ const loginLink = computed(() => {
 		display: inline-block;
 		-webkit-backdrop-filter: var(--filter-background-blur);
 		backdrop-filter: var(--filter-background-blur);
-		padding: 0.5rem;
-		// 	border: 1px solid rgb(from var(--color-border) r g b / 0.6);
 	}
 
 	.register-view__header {

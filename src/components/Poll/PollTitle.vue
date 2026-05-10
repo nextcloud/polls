@@ -4,7 +4,6 @@
 -->
 
 <script setup lang="ts">
-import PollInfoLine from '@/components/Poll/PollInfoLine.vue'
 import { usePollStore } from '@/stores/poll'
 
 const pollStore = usePollStore()
