@@ -13,6 +13,10 @@ import MagnifyExpandIcon from 'vue-material-design-icons/MagnifyExpand.vue'
 import MarkDownDescription from '@/components/Poll/MarkDownDescription.vue'
 import { usePollStore } from '@/stores/poll'
 
+defineOptions({
+	inheritAttrs: false,
+})
+
 const pollStore = usePollStore()
 
 const descriptionExpanded = ref(false)
@@ -21,6 +25,7 @@ const descriptionExpanded = ref(false)
 <template>
 	<div
 		v-if="pollStore.configuration.description"
+		v-bind="$attrs"
 		class="poll_description"
 		role="button"
 		:aria-label="t('polls', 'Expand description')"

@@ -43,18 +43,16 @@ const loginLink = computed(() => {
 <template>
 	<NcAppContent class="register-view">
 		<div class="register-view__col">
-			<div class="register-view__header">
+			<div class="guest-box">
 				<PollTitle />
 				<PollInfoLine />
 			</div>
 
-			<div class="register-view__form">
+			<div class="guest-box">
 				<RegistrationForm />
 			</div>
 
-			<div
-				v-if="sessionStore.appSettings.useLogin"
-				class="register-view__login">
+			<div v-if="sessionStore.appSettings.useLogin" class="guest-box">
 				<!-- TRANSLATORS Position [link]...[/link] around the word to link. Will be replaced with <a href="..."> and </a> -->
 				<InlineLink
 					:text="
@@ -68,14 +66,19 @@ const loginLink = computed(() => {
 		</div>
 
 		<div class="register-view__col">
-			<PollDescription />
-			<OptionPreview />
+			<PollDescription class="guest-box" />
+			<OptionPreview class="guest-box" />
 		</div>
 		<PublicFooter />
 	</NcAppContent>
 </template>
 
 <style lang="scss">
+#content-vue.app-polls {
+	background-color: revert;
+	backdrop-filter: revert;
+}
+
 .app-content.register-view {
 	--bg-glass: rgb(from var(--color-background-assistant) r g b / 0.7);
 	background: none !important;
@@ -100,14 +103,21 @@ const loginLink = computed(() => {
 		min-width: 0;
 	}
 
-	.register-view__col > * {
-		border-radius: 16px;
-		box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-		backdrop-filter: blur(5px);
-		-webkit-backdrop-filter: blur(5px);
-		border: 1px solid rgb(from var(--color-border) r g b / 0.6);
+	.guest-box {
+		--color-text-maxcontrast: var(
+			--color-text-maxcontrast-background-blur,
+			var(--color-main-text)
+		);
+		color: var(--color-main-text);
+		background-color: var(--color-main-background-blur);
+		padding: calc(3 * var(--default-grid-baseline));
+		border-radius: var(--border-radius-container);
+		box-shadow: 0 0 10px var(--color-box-shadow);
+		display: inline-block;
+		-webkit-backdrop-filter: var(--filter-background-blur);
+		backdrop-filter: var(--filter-background-blur);
 		padding: 0.5rem;
-		background-color: var(--bg-glass);
+		// 	border: 1px solid rgb(from var(--color-border) r g b / 0.6);
 	}
 
 	.register-view__header {

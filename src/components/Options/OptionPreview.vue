@@ -18,6 +18,10 @@ import OptionItem from '@/components/Options/OptionItem.vue'
 import { useOptionsStore } from '@/stores/options'
 import { usePollStore } from '@/stores/poll'
 
+defineOptions({
+	inheritAttrs: false,
+})
+
 const optionsStore = useOptionsStore()
 const pollStore = usePollStore()
 
@@ -43,6 +47,7 @@ function optionLabel(option: (typeof optionsStore.options)[0]): string {
 <template>
 	<div
 		v-if="optionsStore.options.length"
+		v-bind="$attrs"
 		class="options_preview"
 		role="button"
 		:aria-label="t('polls', 'Expand options')"
