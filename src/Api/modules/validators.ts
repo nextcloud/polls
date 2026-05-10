@@ -13,10 +13,9 @@ const validators = {
 		return httpInstance.request({
 			method: 'GET',
 			url: `check/emailaddress/${emailAddress}`,
-			signal:
-				cancelTokenHandlerObject[
-					this.validateEmailAddress.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.validateEmailAddress.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -27,10 +26,9 @@ const validators = {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'check/username',
-			signal:
-				cancelTokenHandlerObject[
-					this.validateName.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.validateName.name
+			].handleRequestCancellation().signal,
 			data: {
 				displayName: name,
 				token: pollToken,

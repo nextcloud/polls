@@ -14,10 +14,9 @@ const calendar = {
 			method: 'GET',
 			url: 'calendars',
 			params: { time: +new Date() },
-			signal:
-				cancelTokenHandlerObject[
-					this.getCalendars.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.getCalendars.name
+			].handleRequestCancellation().signal,
 		})
 	},
 	getEvents(

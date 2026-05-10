@@ -107,9 +107,13 @@ function onTransitionsOn() {
 	transitionsOn()
 }
 
-watch(() => sessionStore.windowTitle, (title) => {
-	document.title = title
-}, { immediate: true })
+watch(
+	() => sessionStore.windowTitle,
+	(title) => {
+		document.title = title
+	},
+	{ immediate: true },
+)
 
 onMounted(() => {
 	subscribe(Event.TransitionsOff, onTransitionsOff)

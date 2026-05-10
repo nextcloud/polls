@@ -132,7 +132,6 @@ const pollDetails = computed(() => {
 const descriptionLine = computed(
 	() => poll.configuration.description || pollDetails.value.description,
 )
-
 </script>
 
 <template>
