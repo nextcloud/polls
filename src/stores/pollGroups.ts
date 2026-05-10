@@ -31,9 +31,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 	const currentPollGroup = computed((): PollGroup | undefined => {
 		const route = activeRoute.value
 		if (route.meta.groupPage) {
-			return pollGroups.value.find(
-				(group) => group.slug === route.params.slug,
-			)
+			return pollGroups.value.find((group) => group.slug === route.params.slug)
 		}
 		return undefined
 	})

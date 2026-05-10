@@ -30,9 +30,7 @@ export const useCommentsStore = defineStore('comments', {
 			try {
 				const response = await (() => {
 					if (activeRoute.value.meta.publicVotePage) {
-						return PublicAPI.getComments(
-							sessionStore.publicToken,
-						)
+						return PublicAPI.getComments(sessionStore.publicToken)
 					}
 					if (activeRoute.value.meta.internalVotePage) {
 						return CommentsAPI.getComments(sessionStore.currentPollId)

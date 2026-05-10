@@ -27,10 +27,9 @@ const shares = {
 			method: 'GET',
 			url: `${purpose.toLowerCase()}/${pollOrPollGroupId}/shares`,
 			params: { time: +new Date() },
-			signal:
-				cancelTokenHandlerObject[
-					this.getShares.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.getShares.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -44,10 +43,9 @@ const shares = {
 			method: 'POST',
 			url: `${purpose.toLowerCase()}/${pollOrPollGroupId}/share`,
 			data: user,
-			signal:
-				cancelTokenHandlerObject[
-					this.addUserShare.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.addUserShare.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -55,10 +53,9 @@ const shares = {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/publicshare`,
-			signal:
-				cancelTokenHandlerObject[
-					this.addPublicShare.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.addPublicShare.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -72,10 +69,9 @@ const shares = {
 			data: {
 				label,
 			},
-			signal:
-				cancelTokenHandlerObject[
-					this.writeLabel.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.writeLabel.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -86,10 +82,9 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/${setTo}`,
-			signal:
-				cancelTokenHandlerObject[
-					this.switchAdmin.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.switchAdmin.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -100,10 +95,9 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/publicpollemail/${setTo}`,
-			signal:
-				cancelTokenHandlerObject[
-					this.setEmailAddressConstraint.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.setEmailAddressConstraint.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -116,10 +110,9 @@ const shares = {
 		return httpInstance.request({
 			method: 'POST',
 			url: `share/${shareToken}/invite`,
-			signal:
-				cancelTokenHandlerObject[
-					this.sendInvitation.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.sendInvitation.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -128,10 +121,9 @@ const shares = {
 			method: 'GET',
 			url: `share/${shareToken}/resolve`,
 			params: { time: +new Date() },
-			signal:
-				cancelTokenHandlerObject[
-					this.resolveShare.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.resolveShare.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -139,10 +131,9 @@ const shares = {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `share/${shareToken}`,
-			signal:
-				cancelTokenHandlerObject[
-					this.deleteShare.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.deleteShare.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -150,10 +141,9 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/restore`,
-			signal:
-				cancelTokenHandlerObject[
-					this.restoreShare.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.restoreShare.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -161,10 +151,9 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/lock`,
-			signal:
-				cancelTokenHandlerObject[
-					this.lockShare.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.lockShare.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -172,10 +161,9 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/unlock`,
-			signal:
-				cancelTokenHandlerObject[
-					this.unlockShare.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.unlockShare.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -185,10 +173,9 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/inviteAll`,
-			signal:
-				cancelTokenHandlerObject[
-					this.inviteAll.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.inviteAll.name
+			].handleRequestCancellation().signal,
 		})
 	},
 }

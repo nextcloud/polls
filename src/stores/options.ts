@@ -117,9 +117,7 @@ export const useOptionsStore = defineStore('options', {
 			try {
 				const response = await (() => {
 					if (activeRoute.value.meta.publicPage) {
-						return PublicAPI.getOptions(
-							sessionStore.publicToken,
-						)
+						return PublicAPI.getOptions(sessionStore.publicToken)
 					}
 					if (sessionStore.currentPollId) {
 						return OptionsAPI.getOptions(sessionStore.currentPollId)

@@ -54,12 +54,15 @@ clean-dev: clean
 lint:
 	npm run lint
 	npm run stylelint
+	npm run format
 	composer run cs:check
+	composer run psalm
 
 # lint fix js, css and php
 lint-fix:
 	npm run lint:fix
 	npm run stylelint:fix
+	npm run format
 	composer run cs:fix
 
 cs:

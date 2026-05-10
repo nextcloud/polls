@@ -14,10 +14,9 @@ const pollGroups = {
 			method: 'GET',
 			url: 'pollgroups',
 			params: { time: +new Date() },
-			signal:
-				cancelTokenHandlerObject[
-					this.getPollGroups.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.getPollGroups.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -46,10 +45,9 @@ const pollGroups = {
 			method: verb,
 			url,
 			data,
-			signal:
-				cancelTokenHandlerObject[
-					this.addPollToGroup.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.addPollToGroup.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -60,10 +58,9 @@ const pollGroups = {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `pollgroup/${pollGroupId}/poll/${pollId}`,
-			signal:
-				cancelTokenHandlerObject[
-					this.removePollFromGroup.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.removePollFromGroup.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -81,10 +78,9 @@ const pollGroups = {
 				titleExt: payload.titleExt,
 				description: payload.description,
 			},
-			signal:
-				cancelTokenHandlerObject[
-					this.updatePollGroup.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.updatePollGroup.name
+			].handleRequestCancellation().signal,
 		})
 	},
 }

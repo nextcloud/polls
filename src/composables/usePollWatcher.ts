@@ -117,7 +117,10 @@ export const usePollWatcher = (interval = 30000) => {
 
 					if (status === 'modeChanged') {
 						sessionStore.loadSession().catch((error) => {
-							Logger.error("[PollWatcher] Error reloading session after mode change", { error })
+							Logger.error(
+								'[PollWatcher] Error reloading session after mode change',
+								{ error },
+							)
 						})
 					}
 
@@ -197,7 +200,10 @@ export const usePollWatcher = (interval = 30000) => {
 							try {
 								await sessionStore.loadSession()
 							} catch (loadError) {
-								Logger.error('[PollWatcher] Error reloading session after share change', { error: loadError })
+								Logger.error(
+									'[PollWatcher] Error reloading session after share change',
+									{ error: loadError },
+								)
 							}
 							return
 						}

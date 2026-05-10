@@ -32,7 +32,7 @@ function toggleArchive() {
 		showError(
 			pollStore.status.isArchived
 				? t('polls', 'Error restoring poll.')
-				: t('polls', 'Error archiving poll.'),			
+				: t('polls', 'Error archiving poll.'),
 		)
 	}
 }

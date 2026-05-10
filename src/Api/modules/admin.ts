@@ -12,10 +12,9 @@ const adminJobs = {
 		return httpInstance.request({
 			method: 'GET',
 			url: 'administration/jobs',
-			signal:
-				cancelTokenHandlerObject[
-					this.getJobsList.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.getJobsList.name
+			].handleRequestCancellation().signal,
 		})
 	},
 
@@ -27,10 +26,9 @@ const adminJobs = {
 				job: job.className,
 			},
 
-			signal:
-				cancelTokenHandlerObject[
-					this.runJob.name
-				].handleRequestCancellation().signal,
+			signal: cancelTokenHandlerObject[
+				this.runJob.name
+			].handleRequestCancellation().signal,
 		})
 	},
 }

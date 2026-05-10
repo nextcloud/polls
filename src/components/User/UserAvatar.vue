@@ -23,11 +23,7 @@ interface Props {
 	virtualUserType?: VirtualUserItemType
 	user: User
 }
-const {
-	mdIconSize = 20,
-	virtualUserType,
-	user = defaultUser,
-} = defineProps<Props>()
+const { mdIconSize = 20, virtualUserType, user = defaultUser } = defineProps<Props>()
 
 const computedIsGuest = computed(
 	() => route.meta.publicVotePage || user.isNoUser !== false,
