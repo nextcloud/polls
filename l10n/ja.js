@@ -10,7 +10,6 @@ OC.L10N.register(
     "This email is sent to you to inform you about the result of a poll you participated in. At least your name or your email address was recorded in this poll. If you want to be removed from this poll, contact the site administrator or the poll initiator, where the mail is sent from." : "このメールは、参加した投票の結果をお知らせするために送信されます。少なくともあなたの名前かメールアドレスはこの投票に記録されています。この投票から削除する場合は、メールの送信元であるサイト管理者または投票の開始者に連絡してください。",
     "{owner} wants to inform you about the final result of the poll \"{title}\"" : "{owner} があなたに投票「{title}」の最終結果についてお知らせしたいそうです。",
     "_Confirmed option:_::_Confirmed options:_" : ["確認されたオプション:"],
-    "The used time zone is \"%s\", based on the detected time zone at your registration time. To view the times in your current time zone, enter the poll by clicking the button below." : "使用されるタイムゾーンは、登録時に検出されたタイムゾーンに基づく\"%s\"です。現在のタイムゾーンの時間を表示するには、下のボタンをクリックして投票に参加してください。",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "このリンクをクリックすると、上の投票に個人的にアクセスすることができます。上のボタンを押すか、下のリンクをコピーしてブラウザのロケーションバーに追加してください。",
     "Do not share this link with other people, because it is connected to your votes." : "このリンクはあなたの投票に関連しているため、他の人と共有しないでください。",
     "Poll invitation \"%s\"" : "投票への招待 \"%s\"",

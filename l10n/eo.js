@@ -66,6 +66,7 @@ OC.L10N.register(
     "Created" : "Kreita",
     "Access" : "Aliro",
     "Owner" : "Posedanto",
+    "Expiration" : "Eksvalidiĝo",
     "Archive" : "Arĥivujo",
     "Administration" : "Administrado"
 },
