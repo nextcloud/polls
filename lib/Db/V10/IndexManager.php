@@ -360,7 +360,7 @@ class IndexManager extends DbManager {
 
 		// Check by name: if a named index already exists, verify its columns
 		if ($hasName && $table->hasIndex($indexName)) {
-			if ($this->columnsMatch($table->getIndex($indexName)->getColumns(), $columns)) {
+			if ($this->columnsMatch($table->getIndex($indexName)->getUnquotedColumns(), $columns)) {
 				// Named index with same columns already exists, skip creation and return success message
 				return ucfirst($type) . ' ' . $indexName . ' with correct configuration already exists in ' . $tableName . '. Skip creation.';
 			}
@@ -371,7 +371,7 @@ class IndexManager extends DbManager {
 
 		// Check by columns: look further for any existing index with same uniqueness and same columns
 		foreach ($table->getIndexes() as $index) {
-			if ($index->isUnique() === $unique && $this->columnsMatch($index->getColumns(), $columns)) {
+			if ($index->isUnique() === $unique && $this->columnsMatch($index->getUnquotedColumns(), $columns)) {
 				if (!$hasName) {
 					// If index is unnamed and index with matching configuraton is found, skip creation and return success message
 					return ucfirst($type) . ' for ' . json_encode($columns) . ' already exists as ' . $index->getName() . ' in ' . $tableName;
@@ -383,7 +383,8 @@ class IndexManager extends DbManager {
 			}
 		}
 
-		// now create the new index, either, because it did not exist at all, or because the existing one(s) were dropped due to mismatch
+		// now create the new index, either, because it did not exist at all, or
+		// because the existing one(s) were dropped due to mismatch
 		try {
 			if ($unique) {
 				$table->addUniqueIndex($columns, $hasName ? $indexName : null);
@@ -392,7 +393,25 @@ class IndexManager extends DbManager {
 			}
 		} catch (IndexAlreadyExists) {
 			// Catch Exception and treat the index as existing
-			// Especially catches pgsql error in situations, where the prior check did not detect the existing index
+			// Especially catches pgsql error in situations, where the prior
+			// check did not detect the existing index
+
+			// Let's add some details about the existing indices to the log
+			// collect expected and actual index configurations
+			$indexDump = [];
+			foreach ($table->getIndexes() as $idx) {
+				$indexDump[] = $idx->getName() . '[' . implode(',', $idx->getColumns()) . ']' . ($idx->isUnique() ? ' UNIQUE' : '');
+			}
+
+			// Log the exception with details about the existing indices as a warning log entry
+			$this->logger->warning(
+				'IndexAlreadyExists caught for {table}: expected columns {expected}, existing indices: {indices}',
+				[
+					'table' => $prefixedTable,
+					'expected' => json_encode($columns),
+					'indices' => implode(' | ', $indexDump),
+				]
+			);
 			return ucfirst($type) . ' for ' . json_encode($columns) . ' already exists in ' . $tableName . ' (detected via exception). Skip creation.';
 		}
 		$message[] = 'Added ' . $type . ' ' . ($hasName ? $indexName : '(auto)') . ' for ' . json_encode($columns) . ' to ' . $tableName;
