@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db\V10;
 
+use Doctrine\DBAL\Schema\Exception\IndexAlreadyExists;
 use Doctrine\DBAL\Schema\Exception\IndexDoesNotExist;
 use Exception;
 use OCA\Polls\Migration\V10\TableSchema;
@@ -383,10 +384,16 @@ class IndexManager extends DbManager {
 		}
 
 		// now create the new index, either, because it did not exist at all, or because the existing one(s) were dropped due to mismatch
-		if ($unique) {
-			$table->addUniqueIndex($columns, $hasName ? $indexName : null);
-		} else {
-			$table->addIndex($columns, $hasName ? $indexName : null);
+		try {
+			if ($unique) {
+				$table->addUniqueIndex($columns, $hasName ? $indexName : null);
+			} else {
+				$table->addIndex($columns, $hasName ? $indexName : null);
+			}
+		} catch (IndexAlreadyExists) {
+			// Catch Exception and treat the index as existing
+			// Especially catches pgsql error in situations, where the prior check did not detect the existing index
+			return ucfirst($type) . ' for ' . json_encode($columns) . ' already exists in ' . $tableName . ' (detected via exception). Skip creation.';
 		}
 		$message[] = 'Added ' . $type . ' ' . ($hasName ? $indexName : '(auto)') . ' for ' . json_encode($columns) . ' to ' . $tableName;
 
