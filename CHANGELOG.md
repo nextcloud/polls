@@ -5,9 +5,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ## [Unreleased]
- - Support Nextcloud 34 (Hub 26 Spring)
+ - none so far
+
+## [9.1.2] - 2026-05-11
+### Fixed
  - Make modal for sending out confirmations closeable
- - Apply time zone to confirmation mail
+ - Apply correct time zone to confirmation mail
+ - Fixed index creation for PostgeSQL
+
+### Changed
+ - Support Nextcloud 34 (Hub 26 Spring)
 
 ## [9.1.1] - 2026-05-06
 ### Fixed
