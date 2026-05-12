@@ -10,6 +10,7 @@ OC.L10N.register(
     "This email is sent to you to inform you about the result of a poll you participated in. At least your name or your email address was recorded in this poll. If you want to be removed from this poll, contact the site administrator or the poll initiator, where the mail is sent from." : "此電子郵件已傳送給您，用來通知您參與過的投票結果。此投票至少會紀錄您的名字與電子郵件地址。若您想要從此投票中移除，請聯絡站台管理員或此投票的發起者（亦即傳送郵件給您的人）。",
     "{owner} wants to inform you about the final result of the poll \"{title}\"" : "{owner} 想通知您投票「{title}」的最終結果",
     "_Confirmed option:_::_Confirmed options:_" : ["已確認的選項："],
+    "The used time zone is \"%s\". To view the times in your current time zone, enter the poll by clicking the button below." : "使用的時區為「%s」。要檢視您目前時區的時間，請點擊下方的按鈕進入投票。",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "此連結給您個人存取上面提到的投票。按上方的按鈕或複製以下的連結，然後將其貼到您瀏覽器的網址列：",
     "Do not share this link with other people, because it is connected to your votes." : "不要與其他人分享此連結，因為其與您的投票息息相關。",
     "Poll invitation \"%s\"" : "投票邀請「%s」",
