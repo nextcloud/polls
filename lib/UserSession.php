@@ -197,7 +197,7 @@ class UserSession {
 		return $this->session->get(self::CLIENT_LANG);
 	}
 
-/**
+	/**
 	 * Get client time zone from session or return default time zone
 	 * @return DateTimeZone
 	 */
