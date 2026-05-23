@@ -46,7 +46,7 @@
     "core-js": "^3.49.0",
     "dompurify": "^3.4.3",
     "file-saver": "^2.0.5",
-    "linkify-string": "^4.3.1",
+    "linkify-string": "^4.3.3",
     "linkify-urls": "^5.2.0",
     "lodash": "^4.17.23",
     "luxon": "^3.7.2",
