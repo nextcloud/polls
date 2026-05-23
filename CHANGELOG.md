@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
  - none so far
 
+## [9.1.3] - 2026-05-11
+### Fixed
+ - Fix time zone gets set to UTC for external shares
+
 ## [9.1.2] - 2026-05-11
 ### Fixed
  - Make modal for sending out confirmations closeable
