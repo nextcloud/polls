@@ -163,7 +163,8 @@ class ShareService {
 		if ($effectiveShare->getType() === Share::TYPE_EXTERNAL) {
 			$needsUpdate = false;
 
-			if (!$effectiveShare->getTimeZoneName()) {
+			// TODO: Remove UTC check after migration period — patches shares incorrectly saved with UTC default
+			if (!$effectiveShare->getTimeZoneName() || $effectiveShare->getTimeZoneName() === 'UTC') {
 				$clientTz = $this->userSession->getClientTimeZoneName();
 				if ($clientTz) {
 					$effectiveShare->setTimeZoneName($clientTz);
