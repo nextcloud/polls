@@ -98,7 +98,6 @@ class PollGroupMapper extends QBMapper {
 		$pollGroup->setCreated(time());
 		$pollGroup->setOwner($this->userSession->getCurrentUserId());
 		return $this->insert($pollGroup);
-
 	}
 
 	/**
