@@ -4,6 +4,7 @@
  */
 import axios from '@nextcloud/axios'
 import { generateUrl, generateOcsUrl } from '@nextcloud/router'
+import { getLanguage } from '@nextcloud/l10n'
 import { useSessionStore } from '../../stores/session.ts'
 
 const axiosConfig = {
@@ -12,6 +13,7 @@ const axiosConfig = {
 		Accept: 'application/json',
 		'Nc-Polls-Client-Time-Zone':
 			Intl.DateTimeFormat().resolvedOptions().timeZone,
+		'Nc-Polls-Client-Language': getLanguage(),
 	},
 }
 

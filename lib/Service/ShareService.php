@@ -141,7 +141,7 @@ class ShareService {
 			$this->share->setDisplayName('');
 		}
 
-		return match (true) {
+		$effectiveShare = match (true) {
 			// User is already involved: return their personal share or the accessed share
 			$poll->getIsInvolved()
 				=> $poll->getShareToken()
@@ -159,6 +159,33 @@ class ShareService {
 			// Default: return validated share as-is
 			default => $this->share,
 		};
+
+		if ($effectiveShare->getType() === Share::TYPE_EXTERNAL) {
+			$needsUpdate = false;
+
+			// TODO: Remove UTC check after migration period — patches shares incorrectly saved with UTC default
+			if (!$effectiveShare->getTimeZoneName() || $effectiveShare->getTimeZoneName() === 'UTC') {
+				$clientTz = $this->userSession->getClientTimeZoneName();
+				if ($clientTz) {
+					$effectiveShare->setTimeZoneName($clientTz);
+					$needsUpdate = true;
+				}
+			}
+
+			if (!$effectiveShare->getLanguage()) {
+				$clientLang = $this->userSession->getClientLanguageName();
+				if ($clientLang) {
+					$effectiveShare->setLanguage($clientLang);
+					$needsUpdate = true;
+				}
+			}
+
+			if ($needsUpdate) {
+				$this->shareMapper->update($effectiveShare);
+			}
+		}
+
+		return $effectiveShare;
 	}
 
 	/**
@@ -332,7 +359,6 @@ class ShareService {
 		}
 		$this->share->setEmailAddress($emailAddress ?? $this->share->getEmailAddress());
 
-
 		// convert to type external
 		$this->share->setType(Share::TYPE_EXTERNAL);
 
@@ -450,7 +476,6 @@ class ShareService {
 	public function resolveGroupByToken(string $token): array {
 		$share = $this->get($token);
 		return $this->resolveGroup($share);
-
 	}
 
 	/**
@@ -601,7 +626,7 @@ class ShareService {
 
 		$language = $this->systemService->getGenericLanguage();
 		$userId = $this->generatePublicUserId();
-		$user = UserMapper::createUserObject(Share::TYPE_EXTERNAL, $userId, $displayName, $emailAddress, $language, $language, $timeZone);
+		$user = UserMapper::createUserObject(Share::TYPE_EXTERNAL, $userId, $displayName, $emailAddress, $language, $language, $timeZone ?: $this->userSession->getClientTimeZone()->getName());
 
 		$this->createNewShare(
 			$this->share->getPollIdOrFail(),

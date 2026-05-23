@@ -4,6 +4,7 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\Polls\Middleware;
 
 use OCA\Polls\Attributes\ShareTokenRequired;
@@ -17,6 +18,7 @@ use ReflectionMethod;
 class RequestAttributesMiddleware extends Middleware {
 	private const CLIENT_ID_KEY = 'Nc-Polls-Client-Id';
 	private const TIME_ZONE_KEY = 'Nc-Polls-Client-Time-Zone';
+	private const LANGUAGE_KEY = 'Nc-Polls-Client-Language';
 	private const SHARE_TOKEN = 'Nc-Polls-Share-Token';
 
 	/** @psalm-suppress PossiblyUnusedMethod */
@@ -31,6 +33,7 @@ class RequestAttributesMiddleware extends Middleware {
 		$reflectionMethod = new ReflectionMethod($controller, $methodName);
 		$clientId = $this->request->getHeader(self::CLIENT_ID_KEY);
 		$clientTimeZone = $this->request->getHeader(self::TIME_ZONE_KEY);
+		$clientLanguage = $this->request->getHeader(self::LANGUAGE_KEY);
 
 		$this->userSession->cleanSession();
 
@@ -46,6 +49,9 @@ class RequestAttributesMiddleware extends Middleware {
 			$this->userSession->setClientTimeZone($clientTimeZone);
 		}
 
+		if ($clientLanguage) {
+			$this->userSession->setClientLanguage($clientLanguage);
+		}
 
 		if ($this->hasAttribute($reflectionMethod, ShareTokenRequired::class)) {
 			$this->userSession->setShareToken($this->getShareTokenFromURI());
