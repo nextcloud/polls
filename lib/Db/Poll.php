@@ -611,7 +611,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return $this->maxDate;
 	}
 
-
 	private function setMiscSettingsArray(array $value): void {
 		$this->setMiscSettings(json_encode($value));
 	}
@@ -926,7 +925,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return ($this->getUserRole() === Poll::ROLE_OWNER);
 	}
 
-
 	/**
 	 * Permission checks
 	 */
@@ -1043,6 +1041,5 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		// return poll settings
 		return $this->getShowResults() === Poll::SHOW_RESULTS_ALWAYS;
 	}
-
 
 }
