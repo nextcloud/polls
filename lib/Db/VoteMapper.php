@@ -60,6 +60,7 @@ class VoteMapper extends QBMapperWithUser {
 		return $this->findEntities($qb);
 	}
 
+
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Vote[]
@@ -233,6 +234,7 @@ class VoteMapper extends QBMapperWithUser {
 		}
 		$this->joinAnon($qb, self::TABLE);
 		$this->joinShareRole($qb, self::TABLE, $currentUserId);
+
 
 		return $qb;
 	}

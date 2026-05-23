@@ -8,6 +8,7 @@
 namespace OCA\Polls\Event;
 
 use OCA\Polls\Db\Poll;
+
 use OCA\Polls\Notification\Notifier;
 
 class PollDeletedEvent extends PollEvent {
@@ -17,6 +18,7 @@ class PollDeletedEvent extends PollEvent {
 		parent::__construct($poll);
 		$this->eventId = self::DELETE;
 	}
+
 
 	public function getNotification(): array {
 		if ($this->getActor() === $this->getPollOwner()) {

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 declare(strict_types=1);
 
+
 namespace OCA\Polls\Provider;
 
 use OCA\Polls\AppInfo\Application;

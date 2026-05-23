@@ -602,6 +602,7 @@ class TableManager extends DbManager {
 
 		$this->logger->info('No polls needed to get updated with last interaction info');
 		return 'Last interaction all set';
+
 	}
 
 	/**
@@ -648,8 +649,10 @@ class TableManager extends DbManager {
 					$vote->setVoteOptionHash(Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()));
 					$vote = $this->voteMapper->update($vote);
 
+
 					$updated++;
 				}
+
 
 				$count++;
 
@@ -709,6 +712,7 @@ class TableManager extends DbManager {
 
 					$option->setText($option->getPollOptionText());
 					$option = $this->optionMapper->update($option);
+
 
 					$updated++;
 				}

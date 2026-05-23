@@ -5,7 +5,6 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-
 namespace OCA\Polls\Controller;
 
 use Closure;
@@ -46,8 +45,10 @@ class BaseApiV2OCSController extends OCSController {
 	protected function response(Closure $callback, int $successStatus = Http::STATUS_OK): DataResponse {
 		try {
 			return new DataResponse($callback(), $successStatus);
+
 		} catch (DoesNotExistException $e) {
 			throw new OCSNotFoundException($e->getMessage());
+
 		} catch (Exception $e) {
 			throw match ($e->getStatus()) {
 				Http::STATUS_NOT_MODIFIED => new OCSException($e->getMessage(), Http::STATUS_NOT_MODIFIED),

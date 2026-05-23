@@ -94,6 +94,7 @@ class CommentMapper extends QBMapperWithUser {
 		$query->setMaxResults(999);
 
 		return $query->executeStatement();
+
 	}
 
 	/**

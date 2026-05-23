@@ -60,6 +60,7 @@ class MailService {
 	private static function isValidEmail(string $eMailAddress): bool {
 		# Rely on PHP's filter
 		return (bool)filter_var($eMailAddress, FILTER_VALIDATE_EMAIL);
+
 		// Alternative
 		// return (bool) preg_match(self::REGEX_VALID_MAIL, $eMailAddress);
 	}
@@ -112,6 +113,7 @@ class MailService {
 		}
 
 		throw new NoEmailAddress($eMailString);
+
 	}
 
 	/** @psalm-suppress PossiblyUnusedMethod */

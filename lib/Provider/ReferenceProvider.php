@@ -54,6 +54,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
 		return 0;
 	}
 
+
 	/**
 	 * @inheritDoc
 	 */
@@ -63,6 +64,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
 			$expired = false;
 			$expiry = 0;
 			$participated = false;
+
 
 			if ($pollId) {
 				try {

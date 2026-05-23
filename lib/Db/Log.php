@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
+
 use OCP\AppFramework\Db\Entity;
 
 /**
