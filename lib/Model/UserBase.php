@@ -176,7 +176,11 @@ class UserBase implements JsonSerializable {
 		if ($this->timeZoneName) {
 			return $this->timeZoneName;
 		}
-		return date_default_timezone_get();
+		return '';
+	}
+
+	public function setTimeZoneName(string $timeZoneName): void {
+		$this->timeZoneName = $timeZoneName;
 	}
 
 	public function getDisplayName(): string {

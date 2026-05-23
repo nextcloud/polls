@@ -141,7 +141,7 @@ class ShareService {
 			$this->share->setDisplayName('');
 		}
 
-		return match (true) {
+		$effectiveShare = match (true) {
 			// User is already involved: return their personal share or the accessed share
 			$poll->getIsInvolved()
 				=> $poll->getShareToken()
@@ -159,6 +159,16 @@ class ShareService {
 			// Default: return validated share as-is
 			default => $this->share,
 		};
+
+		if ($effectiveShare->getType() === Share::TYPE_EXTERNAL && !$effectiveShare->getTimeZoneName()) {
+			$clientTz = $this->userSession->getClientTimeZoneName();
+			if ($clientTz) {
+				$effectiveShare->setTimeZoneName($clientTz);
+				$this->shareMapper->update($effectiveShare);
+			}
+		}
+
+		return $effectiveShare;
 	}
 
 	/**
@@ -601,7 +611,7 @@ class ShareService {
 
 		$language = $this->systemService->getGenericLanguage();
 		$userId = $this->generatePublicUserId();
-		$user = UserMapper::createUserObject(Share::TYPE_EXTERNAL, $userId, $displayName, $emailAddress, $language, $language, $timeZone);
+		$user = UserMapper::createUserObject(Share::TYPE_EXTERNAL, $userId, $displayName, $emailAddress, $language, $language, $timeZone ?: $this->userSession->getClientTimeZone()->getName());
 
 		$this->createNewShare(
 			$this->share->getPollIdOrFail(),

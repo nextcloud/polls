@@ -62,7 +62,15 @@ class UserSession {
 				} elseif ($this->session->get(self::SESSION_KEY_CRON_JOB)) {
 					$this->currentUser = new Cron();
 				} else {
-					$this->currentUser = $this->userMapper->getUserFromShareToken($this->getShareToken());
+					$share = $this->shareMapper->findByToken($this->getShareToken());
+
+					$this->currentUser = $share->resolveUser();
+					if (!$share->getTimeZoneName()) {
+						$clientTz = $this->session->get(self::CLIENT_TZ);
+						if ($clientTz) {
+							$this->currentUser->setTimeZoneName($clientTz);
+						}
+					}
 				}
 			} catch (Exception $e) {
 				// In case of system jobs, we do not get a valid user, so we return a Ghost user
@@ -171,6 +179,10 @@ class UserSession {
 
 	public function setClientId(string $clientId): void {
 		$this->session->set(self::CLIENT_ID, $clientId);
+	}
+
+	public function getClientTimeZoneName(): ?string {
+		return $this->session->get(self::CLIENT_TZ);
 	}
 
 	/**

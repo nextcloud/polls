@@ -507,9 +507,10 @@ class PublicController extends BaseController {
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/resend')]
 	public function resendInvitation(string $token): JSONResponse {
 		$share = $this->shareService->getEffectiveShare($token);
+		$sentResult = new SentResult();
 		return $this->response(fn () => [
 			'share' => $share,
-			'sentResult' => $this->mailService->sendInvitation($share, new SentResult()),
+			'sentResult' => $this->mailService->sendInvitation($share, $sentResult),
 		]);
 	}
 }
