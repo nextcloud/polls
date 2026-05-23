@@ -10,6 +10,7 @@ declare(strict_types=1);
  * Abstract class with functions to ensure for the different use cases
  * generating identical hashes
  */
+
 namespace OCA\Polls\Helper;
 
 /**

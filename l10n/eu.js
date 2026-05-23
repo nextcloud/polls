@@ -283,6 +283,7 @@ OC.L10N.register(
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["\"Bai\" boto %n","%n \"Bai\" boto"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["\"Agian\" boto %n","%n \"Agian\" boto"],
     "Description" : "Deskripzioa",
+    "Archived {relativeTime}" : "{relativeTime} artxibatuta",
     "never" : "inoiz ez",
     "Error archiving/restoring poll." : "Errorea galdeketa artxibatzen/berreskuratzen.",
     "Error cloning poll." : "Errorea galdeketa klonatzean.",

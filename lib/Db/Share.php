@@ -82,7 +82,6 @@ class Share extends EntityWithUser implements JsonSerializable {
 	public const TYPE_TEAM = 'circle';
 	public const TYPE_CONTACTGROUP = 'contactGroup';
 
-
 	public const CONVERATABLE_PUBLIC_SHARES = [
 		self::TYPE_EMAIL,
 		self::TYPE_CONTACT,
@@ -288,7 +287,6 @@ class Share extends EntityWithUser implements JsonSerializable {
 			}
 		}
 	}
-
 
 	public function getTimeZoneName(): string {
 		return $this->getMiscSettingsArray()['timeZone'] ?? '';
