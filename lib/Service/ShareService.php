@@ -332,7 +332,6 @@ class ShareService {
 		}
 		$this->share->setEmailAddress($emailAddress ?? $this->share->getEmailAddress());
 
-
 		// convert to type external
 		$this->share->setType(Share::TYPE_EXTERNAL);
 
@@ -450,7 +449,6 @@ class ShareService {
 	public function resolveGroupByToken(string $token): array {
 		$share = $this->get($token);
 		return $this->resolveGroup($share);
-
 	}
 
 	/**

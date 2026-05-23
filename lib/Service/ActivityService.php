@@ -266,28 +266,24 @@ class ActivityService {
 					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has added a public share to poll {pollTitle}'),
 					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have added a public share'),
 					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has added a public share'),
-
 				],
 				Share::TYPE_GROUP => [
 					self::FIRST_PERSON_FULL => $this->l10n->t('You have shared poll {pollTitle} with group {sharee}'),
 					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has shared poll {pollTitle} with group {sharee}'),
 					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have shared this poll with group {sharee}'),
 					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has shared this poll with group {sharee}'),
-
 				],
 				Share::TYPE_TEAM => [
 					self::FIRST_PERSON_FULL => $this->l10n->t('You have shared poll {pollTitle} with team {sharee}'),
 					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has shared poll {pollTitle} with team {sharee}'),
 					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have shared this poll with team {sharee}'),
 					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has shared this poll with team {sharee}'),
-
 				],
 				Share::TYPE_CONTACTGROUP => [
 					self::FIRST_PERSON_FULL => $this->l10n->t('You have shared poll {pollTitle} with contact group {sharee}'),
 					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has shared poll {pollTitle} with contact group {sharee}'),
 					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have shared this poll with contact group {sharee}'),
 					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has shared this poll with contact group {sharee}'),
-
 				],
 				default => [
 					self::FIRST_PERSON_FULL => $this->l10n->t('You have shared poll {pollTitle} with {sharee}'),

@@ -130,7 +130,6 @@ class UserMapper extends QBMapper {
 		throw new UserNotFoundException('User not found in cache');
 	}
 
-
 	public function getUserFromShareToken(string $token): UserBase {
 		$share = $this->getShareByToken($token);
 
