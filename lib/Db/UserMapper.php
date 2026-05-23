@@ -130,23 +130,6 @@ class UserMapper extends QBMapper {
 		throw new UserNotFoundException('User not found in cache');
 	}
 
-
-	public function getUserFromShareToken(string $token): UserBase {
-		$share = $this->getShareByToken($token);
-
-		return $share->resolveUser();
-	}
-
-	private function getShareByToken(string $token): Share {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-			->from($this->getTableName())
-			->where($qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR)));
-
-		return $this->findEntity($qb);
-	}
-
 	/**
 	 * @param string $userId
 	 * @param int $pollId
