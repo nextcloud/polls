@@ -30,6 +30,8 @@ class UserSession {
 	/** @var string */
 	public const CLIENT_TZ = 'ncPollsClientTimeZone';
 	/** @var string */
+	public const CLIENT_LANG = 'ncPollsClientLanguage';
+	/** @var string */
 	public const TABLE = Share::TABLE;
 
 	protected ?UserBase $currentUser = null;
@@ -69,6 +71,12 @@ class UserSession {
 						$clientTz = $this->session->get(self::CLIENT_TZ);
 						if ($clientTz) {
 							$this->currentUser->setTimeZoneName($clientTz);
+						}
+					}
+					if (!$share->getLanguage()) {
+						$clientLang = $this->session->get(self::CLIENT_LANG);
+						if ($clientLang) {
+							$this->currentUser->setLanguageCode($clientLang);
 						}
 					}
 				}
@@ -185,7 +193,11 @@ class UserSession {
 		return $this->session->get(self::CLIENT_TZ);
 	}
 
-	/**
+	public function getClientLanguageName(): ?string {
+		return $this->session->get(self::CLIENT_LANG);
+	}
+
+/**
 	 * Get client time zone from session or return default time zone
 	 * @return DateTimeZone
 	 */
@@ -197,4 +209,9 @@ class UserSession {
 	public function setClientTimeZone(string $clientTimeZone): void {
 		$this->session->set(self::CLIENT_TZ, $clientTimeZone);
 	}
+
+	public function setClientLanguage(string $clientLanguage): void {
+		$this->session->set(self::CLIENT_LANG, $clientLanguage);
+	}
+
 }

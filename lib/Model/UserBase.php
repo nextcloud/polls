@@ -157,11 +157,7 @@ class UserBase implements JsonSerializable {
 	}
 
 	public function getLocaleCode(): string {
-		if (!$this->localeCode) {
-			return $this->languageCode;
-		}
-
-		return $this->localeCode;
+		return $this->localeCode ?: $this->languageCode;
 	}
 
 	public function getLocaleCodeIntl(): string {
@@ -173,10 +169,11 @@ class UserBase implements JsonSerializable {
 	}
 
 	public function getTimeZoneName(): string {
-		if ($this->timeZoneName) {
-			return $this->timeZoneName;
-		}
-		return '';
+		return $this->timeZoneName ?: '';
+	}
+
+	public function setLanguageCode(string $languageCode): void {
+		$this->languageCode = $languageCode;
 	}
 
 	public function setTimeZoneName(string $timeZoneName): void {

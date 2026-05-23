@@ -160,10 +160,26 @@ class ShareService {
 			default => $this->share,
 		};
 
-		if ($effectiveShare->getType() === Share::TYPE_EXTERNAL && !$effectiveShare->getTimeZoneName()) {
-			$clientTz = $this->userSession->getClientTimeZoneName();
-			if ($clientTz) {
-				$effectiveShare->setTimeZoneName($clientTz);
+		if ($effectiveShare->getType() === Share::TYPE_EXTERNAL) {
+			$needsUpdate = false;
+
+			if (!$effectiveShare->getTimeZoneName()) {
+				$clientTz = $this->userSession->getClientTimeZoneName();
+				if ($clientTz) {
+					$effectiveShare->setTimeZoneName($clientTz);
+					$needsUpdate = true;
+				}
+			}
+
+			if (!$effectiveShare->getLanguage()) {
+				$clientLang = $this->userSession->getClientLanguageName();
+				if ($clientLang) {
+					$effectiveShare->setLanguage($clientLang);
+					$needsUpdate = true;
+				}
+			}
+
+			if ($needsUpdate) {
 				$this->shareMapper->update($effectiveShare);
 			}
 		}

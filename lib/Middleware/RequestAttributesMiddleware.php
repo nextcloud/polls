@@ -17,6 +17,7 @@ use ReflectionMethod;
 class RequestAttributesMiddleware extends Middleware {
 	private const CLIENT_ID_KEY = 'Nc-Polls-Client-Id';
 	private const TIME_ZONE_KEY = 'Nc-Polls-Client-Time-Zone';
+	private const LANGUAGE_KEY = 'Nc-Polls-Client-Language';
 	private const SHARE_TOKEN = 'Nc-Polls-Share-Token';
 
 	/** @psalm-suppress PossiblyUnusedMethod */
@@ -31,6 +32,7 @@ class RequestAttributesMiddleware extends Middleware {
 		$reflectionMethod = new ReflectionMethod($controller, $methodName);
 		$clientId = $this->request->getHeader(self::CLIENT_ID_KEY);
 		$clientTimeZone = $this->request->getHeader(self::TIME_ZONE_KEY);
+		$clientLanguage = $this->request->getHeader(self::LANGUAGE_KEY);
 
 		$this->userSession->cleanSession();
 
@@ -44,6 +46,10 @@ class RequestAttributesMiddleware extends Middleware {
 
 		if ($clientTimeZone) {
 			$this->userSession->setClientTimeZone($clientTimeZone);
+		}
+
+		if ($clientLanguage) {
+			$this->userSession->setClientLanguage($clientLanguage);
 		}
 
 
