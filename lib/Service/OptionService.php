@@ -152,7 +152,6 @@ class OptionService {
 			}
 		}
 
-
 		if ($voteYes) {
 			// Set the vote for the new option on request
 			$this->voteService->set($newOption, Vote::VOTE_YES);
