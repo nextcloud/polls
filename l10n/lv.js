@@ -50,6 +50,7 @@ OC.L10N.register(
     "{count} participants" : "{count}dalībnieki",
     "never" : "nekad",
     "Privacy policy" : "Privātuma politika",
+    "Remember me for 30 days" : "Atcerēties mani 30 dienas",
     "Days after which polls should be archived after closing" : "Dienu skaits pēc aizvēršanas, pēc kurām aptaujas vajadzētu arhivēt",
     "Enable the automatic deletion of archived polls" : "Iespējot arhivētu aptauju automātisku izdzēšanu",
     "Privacy policy link:" : "Privātuma politikas saite:",
