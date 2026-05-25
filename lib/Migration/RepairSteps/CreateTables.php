@@ -6,7 +6,6 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 namespace OCA\Polls\Migration\RepairSteps;
 
 use Doctrine\DBAL\Schema\Schema;
@@ -43,7 +42,7 @@ class CreateTables implements IRepairStep {
 		$messages = $this->tableManager->createTables();
 
 		$this->connection->migrateToSchema($this->schema);
-		
+
 		foreach ($messages as $message) {
 			$output->info($message);
 		}

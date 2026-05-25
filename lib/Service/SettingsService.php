@@ -11,7 +11,7 @@ namespace OCA\Polls\Service;
 use OCA\Polls\Model\Settings\AppSettings;
 
 class SettingsService {
-	
+
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
@@ -49,7 +49,7 @@ class SettingsService {
 		$this->appSettings->setGroupSetting(AppSettings::SETTING_COMBO_GROUPS, array_column($settingsArray[AppSettings::SETTING_COMBO_GROUPS], 'id'));
 		$this->appSettings->setGroupSetting(AppSettings::SETTING_POLL_CREATION_GROUPS, array_column($settingsArray[AppSettings::SETTING_POLL_CREATION_GROUPS], 'id'));
 		$this->appSettings->setGroupSetting(AppSettings::SETTING_POLL_DOWNLOAD_GROUPS, array_column($settingsArray[AppSettings::SETTING_POLL_DOWNLOAD_GROUPS], 'id'));
-		
+
 		$this->appSettings->setStringSetting(AppSettings::SETTING_AUTO_ARCHIVE_OFFSET, strval($settingsArray[AppSettings::SETTING_AUTO_ARCHIVE_OFFSET]));
 		$this->appSettings->setStringSetting(AppSettings::SETTING_UPDATE_TYPE, $settingsArray[AppSettings::SETTING_UPDATE_TYPE]);
 		$this->appSettings->setStringSetting(AppSettings::SETTING_PRIVACY_URL, $settingsArray[AppSettings::SETTING_PRIVACY_URL]);

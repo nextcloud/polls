@@ -62,7 +62,7 @@ class CommentMapper extends QBMapperWithUser {
 		if ($pollId !== null) {
 			$query->andWhere($query->expr()->eq('poll_id', $query->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 		}
-	
+
 		$query->executeStatement();
 	}
 
@@ -89,7 +89,7 @@ class CommentMapper extends QBMapperWithUser {
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id');
-		
+
 		$this->joinAnon($qb, self::TABLE);
 		return $qb;
 	}

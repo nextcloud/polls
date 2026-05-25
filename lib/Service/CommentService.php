@@ -90,7 +90,7 @@ class CommentService {
 		if (!$this->acl->matchUser($this->comment->getUserId())) {
 			$this->pollMapper->find($this->comment->getPollId())->request(Poll::PERMISSION_COMMENT_DELETE);
 		}
-	
+
 		$this->comment->setDeleted($restore ? 0 : time());
 		$this->commentMapper->update($this->comment);
 		$this->eventDispatcher->dispatchTyped(new CommentDeleteEvent($this->comment));

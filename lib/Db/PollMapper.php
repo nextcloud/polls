@@ -289,8 +289,6 @@ class PollMapper extends QBMapper {
 		);
 	}
 
-
-
 	/**
 	 * Subquery for votes count
 	 */
