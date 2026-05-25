@@ -254,6 +254,7 @@
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n голос «Да»","%n голоса «Да»","%n голосов «Да»","%n голоса «Да»"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n голос \"Возможно\"","%n голоса \"Возможно\"","%n голосов \"Возможно\"","%n голосов \"Возможно\""],
     "Description" : "Описание",
+    "Expired {dateTime}" : "Истекло {dateTime}",
     "Archived {relativeTime}" : "Архивировано {relativeTime}",
     "never" : "никогда",
     "Error archiving/restoring poll." : "Не удалось переместить опрос в архив или восстановить из архива.",
