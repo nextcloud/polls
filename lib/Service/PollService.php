@@ -159,7 +159,6 @@ class PollService {
 		$this->pollMapper->update($poll);
 		$this->eventDispatcher->dispatchTyped(new PollOwnerChangeEvent($poll));
 		return $poll;
-
 	}
 	/**
 	 * get poll configuration
@@ -258,7 +257,6 @@ class PollService {
 			$this->pollMapper->setLastInteraction($pollId);
 		}
 	}
-
 
 	/**
 	 * Move to archive or restore

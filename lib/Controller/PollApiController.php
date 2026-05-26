@@ -48,7 +48,7 @@ class PollApiController extends BaseApiController {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
-	
+
 	/**
 	 * get poll
 	 * @param $pollId Poll id

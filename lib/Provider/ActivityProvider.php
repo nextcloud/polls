@@ -41,7 +41,7 @@ class ActivityProvider implements IProvider {
 		if ($event->getApp() !== AppConstants::APP_ID) {
 			throw new \InvalidArgumentException();
 		}
-		
+
 		$this->l10n = $this->transFactory->get($event->getApp(), $language);
 		$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath($event->getApp(), 'polls-dark.svg')));
 		$subject = $this->activityService->getActivityMessage($event, $language, $this->activityManager->isFormattingFilteredObject());
@@ -54,7 +54,7 @@ class ActivityProvider implements IProvider {
 
 	protected function setSubjects(IEvent $event, string $subject): void {
 		$parameters = $event->getSubjectParameters();
-		
+
 		try {
 			$actor = $this->userMapper->getParticipant($event->getAuthor(), $event->getObjectId());
 			$parameters['actor'] = [
@@ -69,7 +69,6 @@ class ActivityProvider implements IProvider {
 				'name' => 'An unknown participant',
 			];
 		}
-
 
 		$placeholders = $replacements = [];
 		foreach ($parameters as $placeholder => $parameter) {

@@ -38,7 +38,7 @@ class UserApiController extends BaseApiController {
 	public function getPreferences(): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->get());
 	}
-	
+
 	/**
 	 * Get user preferences
 	 */
@@ -48,7 +48,7 @@ class UserApiController extends BaseApiController {
 	public function writePreferences(array $preferences): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->write($preferences));
 	}
-	
+
 	/**
 	 * get acl for poll
 	 * @param $pollId Poll id

@@ -31,7 +31,6 @@ class Subscription extends Entity implements JsonSerializable {
 	/** @var Log[] $logEntries */
 	protected array $logEntries = [];
 
-
 	public function __construct() {
 		$this->addType('pollId', 'integer');
 	}

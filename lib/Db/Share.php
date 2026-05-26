@@ -68,7 +68,6 @@ class Share extends EntityWithUser implements JsonSerializable {
 	public const TYPE_CIRCLE = 'circle';
 	public const TYPE_CONTACTGROUP = 'contactGroup';
 
-
 	public const CONVERATABLE_PUBLIC_SHARES = [
 		self::TYPE_EMAIL,
 		self::TYPE_CONTACT,

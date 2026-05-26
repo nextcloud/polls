@@ -59,7 +59,6 @@ class Version060100Date20240209073304 extends SimpleMigrationStep {
 		$query->executeStatement();
 	}
 
-
 	/**
 	 * @return string[]
 	 *

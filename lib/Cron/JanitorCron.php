@@ -50,10 +50,10 @@ class JanitorCron extends TimedJob {
 		$this->session->set(AppConstants::SESSION_KEY_CRON_JOB, true);
 		// delete processed log entries
 		$this->logMapper->deleteProcessedEntries();
-		
+
 		// delete entries older than 7 days
 		$this->logMapper->deleteOldEntries(time() - (86400 * 7));
-		
+
 		// delete entries older than 1 day
 		$this->watchMapper->deleteOldEntries(time() - 86400);
 

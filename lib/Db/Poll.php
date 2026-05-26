@@ -119,7 +119,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const PERMISSION_OPTION_DELETE = 'deleteOption';
 	public const PERMISSION_VOTE_EDIT = 'vote';
 
-
 	private IURLGenerator $urlGenerator;
 	protected UserSession $userSession;
 
@@ -155,7 +154,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected string $shareToken = '';
 	protected ?string $groupShares = '';
 	protected int $countOptions = 0;
-	
+
 	// subqueried columns
 	protected int $currentUserOrphanedVotes = 0;
 	protected int $currentUserVotes = 0;
@@ -175,7 +174,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('hideBookedUp', 'integer');
 		$this->addType('useNo', 'integer');
 		$this->addType('lastInteraction', 'integer');
-		
+
 		// joined columns
 		$this->addType('isCurrentUserLocked', 'integer');
 		$this->addType('maxDate', 'integer');
@@ -273,7 +272,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		];
 	}
 
-
 	/**
 	 * @return static
 	 */
@@ -320,7 +318,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 		return $this->userRole;
 	}
-	
+
 	public function getVoteUrl(): string {
 		return $this->urlGenerator->linkToRouteAbsolute(
 			AppConstants::APP_ID . '.page.vote',
@@ -389,7 +387,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public function getDescriptionSafe(): string {
 		return htmlspecialchars($this->getDescription());
 	}
-
 
 	private function setMiscSettingsArray(array $value): void {
 		$this->setMiscSettings(json_encode($value));
@@ -480,7 +477,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		}
 	}
 
-
 	/**
 	 * Check particular rights and inform via boolean value, if the right is granted or denied
 	 */
@@ -568,7 +564,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * The detailed checks - For the sake of readability, the queries and selections
 	 * were kept detailed and with low complexity
 	 */
-	
+
 	/**
 	 * Checks, if the user has delegated admin rights to edit poll settings via share
 	 */
@@ -674,7 +670,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		// Allow, if poll requests proposals
 		return $this->getAllowProposals() === Poll::PROPOSAL_ALLOW;
 	}
-	
+
 	/**
 	 * Is current user allowed to delete options from poll
 	 */
@@ -695,7 +691,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public function getIsPollOwner(): bool {
 		return ($this->getUserRole() === Poll::ROLE_OWNER);
 	}
-
 
 	/**
 	 * Permission checks
@@ -779,7 +774,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		if (!$this->getAllowAccessPoll()) {
 			return false;
 		}
-		
+
 		// show results, when poll is closed
 		if ($this->getShowResults() === Poll::SHOW_RESULTS_CLOSED && $this->getExpired()) {
 			return true;
@@ -787,6 +782,5 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		// return poll settings
 		return $this->getShowResults() === Poll::SHOW_RESULTS_ALWAYS;
 	}
-
 
 }

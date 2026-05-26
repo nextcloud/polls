@@ -6,7 +6,6 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 namespace OCA\Polls\Service;
 
 use DateInterval;
@@ -59,7 +58,6 @@ class CalendarService {
 			$this->calendars = [];
 		}
 	}
-
 
 	/**
 	 * getTimerange - set timeranges to search within based on the option's time information
@@ -129,7 +127,7 @@ class CalendarService {
 				$this->logger->warning('Skipping invalid calendar entry', ['calendarEvent' => json_encode($event)]);
 				continue;
 			}
-			
+
 			$calendarEvent = new CalendarEvent($event, $calendar, $timerange['from'], $timerange['to'], $timezone);
 
 			if ($calendarEvent->getOccurrences()) {

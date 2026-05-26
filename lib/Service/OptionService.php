@@ -101,7 +101,7 @@ class OptionService {
 		try {
 			$this->option = $this->optionMapper->insert($this->option);
 		} catch (Exception $e) {
-			
+
 			// TODO: Change exception catch to actual exception
 			// Currently OC\DB\Exceptions\DbalException is thrown instead of
 			// UniqueConstraintViolationException

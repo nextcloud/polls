@@ -19,7 +19,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 
 class WatchService {
-	
+
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
@@ -36,7 +36,7 @@ class WatchService {
 	 * Watch poll for updates
 	 */
 	public function watchUpdates(int $pollId, ?int $offset = null): array {
-		
+
 		if ($pollId !== 0) {
 			$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_VIEW);
 		}
