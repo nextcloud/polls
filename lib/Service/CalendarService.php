@@ -6,7 +6,6 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 namespace OCA\Polls\Service;
 
 use DateInterval;
@@ -60,7 +59,6 @@ class CalendarService {
 			$this->calendars = [];
 		}
 	}
-
 
 	/**
 	 * getTimerange - set timeranges to search within based on the option's time information

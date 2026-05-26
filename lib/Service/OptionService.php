@@ -84,7 +84,6 @@ class OptionService {
 
 		$newOption = $this->add($pollId, $option, $voteYes);
 
-
 		if ($sequence) {
 			$repetitions = $this->sequence($newOption, $sequence, $voteYes);
 		} else {
@@ -142,7 +141,6 @@ class OptionService {
 				throw $e;
 			}
 		}
-
 
 		if ($voteYes) {
 			// Set the vote for the new option on request

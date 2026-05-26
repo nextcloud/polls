@@ -326,7 +326,6 @@ class PollService {
 		}
 	}
 
-
 	/**
 	 * Move to archive or restore
 	 * @return Poll
