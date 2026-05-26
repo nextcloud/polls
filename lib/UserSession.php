@@ -169,7 +169,6 @@ class UserSession {
 		return hash('md5', $this->getClientId());
 	}
 
-
 	public function setClientId(string $clientId): void {
 		$this->session->set(self::CLIENT_ID, $clientId);
 	}

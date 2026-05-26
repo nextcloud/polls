@@ -13,7 +13,6 @@ use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
-
 use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
@@ -59,9 +58,9 @@ class UserDeletedJob extends QueuedJob {
 
 		$replacementName = 'deleted_' . $this->secureRandom->generate(
 			8,
-			ISecureRandom::CHAR_DIGITS .
-			ISecureRandom::CHAR_LOWER .
-			ISecureRandom::CHAR_UPPER
+			ISecureRandom::CHAR_DIGITS
+			. ISecureRandom::CHAR_LOWER
+			. ISecureRandom::CHAR_UPPER
 		);
 
 		$this->pollMapper->deleteByUserId($userId);

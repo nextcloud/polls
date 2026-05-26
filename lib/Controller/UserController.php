@@ -46,7 +46,7 @@ class UserController extends BaseController {
 	public function writePreferences(array $preferences): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->write($preferences));
 	}
-	
+
 	/**
 	 * get acl for user
 	 * @param $pollId Poll id
@@ -55,7 +55,6 @@ class UserController extends BaseController {
 	public function getAcl(): JSONResponse {
 		return new JSONResponse(['acl' => $this->acl], Http::STATUS_OK);
 	}
-
 
 	/**
 	 * Read all calendars

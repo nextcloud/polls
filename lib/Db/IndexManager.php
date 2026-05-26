@@ -6,7 +6,6 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-
 namespace OCA\Polls\Db;
 
 use Doctrine\DBAL\Schema\Exception\IndexDoesNotExist;
@@ -15,9 +14,9 @@ use OCA\Polls\Migration\TableSchema;
 use OCP\IConfig;
 
 class IndexManager {
-	
+
 	private string $dbPrefix;
-	
+
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
@@ -27,7 +26,7 @@ class IndexManager {
 	) {
 		$this->setUp();
 	}
-	
+
 	private function setUp(): void {
 		$this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 	}
@@ -62,11 +61,11 @@ class IndexManager {
 	 */
 	public function createForeignKeyConstraints(): array {
 		$messages = [];
-		
+
 		foreach (TableSchema::FK_CHILD_TABLES as $childTable) {
 			$messages[] = $this->createForeignKeyConstraint(TableSchema::FK_PARENT_TABLE, $childTable);
 		}
-		
+
 		return $messages;
 	}
 

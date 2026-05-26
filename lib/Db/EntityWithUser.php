@@ -63,7 +63,7 @@ abstract class EntityWithUser extends Entity {
 		) {
 			return self::ANON_FULL;
 		}
-		
+
 		return self::ANON_PRIVACY;
 	}
 

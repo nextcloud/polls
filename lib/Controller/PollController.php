@@ -111,7 +111,6 @@ class PollController extends BaseController {
 	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
-
 	public function delete(int $pollId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));
 	}

@@ -56,7 +56,7 @@ return [
 		['name' => 'poll#add', 'url' => '/poll/add', 'verb' => 'POST'],
 		['name' => 'poll#update', 'url' => '/poll/{pollId}', 'verb' => 'PUT'],
 		['name' => 'poll#delete', 'url' => '/poll/{pollId}', 'verb' => 'DELETE'],
-		
+
 		['name' => 'poll#close', 'url' => '/poll/{pollId}/close', 'verb' => 'PUT'],
 		['name' => 'poll#reopen', 'url' => '/poll/{pollId}/reopen', 'verb' => 'PUT'],
 		['name' => 'poll#toggleArchive', 'url' => '/poll/{pollId}/toggleArchive', 'verb' => 'PUT'],
@@ -122,7 +122,6 @@ return [
 		['name' => 'user#write_preferences', 'url' => '/preferences', 'verb' => 'POST'],
 		['name' => 'user#get_preferences', 'url' => '/preferences', 'verb' => 'GET'],
 		['name' => 'user#get_calendars', 'url' => '/calendars', 'verb' => 'GET'],
-		
 
 		// REST-API calls
 		['name' => 'user_api#get_acl', 'url' => '/api/v1.0/acl', 'verb' => 'GET'],
@@ -172,6 +171,5 @@ return [
 		['name' => 'comment_api#add', 'url' => '/api/v1.0/poll/{pollId}/comment', 'verb' => 'POST'],
 		['name' => 'comment_api#delete', 'url' => '/api/v1.0/comment/{commentId}', 'verb' => 'DELETE'],
 		['name' => 'comment_api#restore', 'url' => '/api/v1.0/comment/{commentId}/restore', 'verb' => 'PUT'],
-
 	]
 ];

@@ -4,6 +4,7 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 namespace OCA\Polls\Middleware;
 
 use OCA\Polls\Attributes\ShareTokenRequired;
@@ -28,18 +29,18 @@ class RequestAttributesMiddleware extends Middleware {
 		protected UserSession $userSession,
 	) {
 	}
-	
+
 	public function beforeController(Controller $controller, string $methodName): void {
 		$reflectionMethod = new ReflectionMethod($controller, $methodName);
 		$clientId = $this->request->getHeader(self::CLIENT_ID_KEY);
 		$clientTimeZone = $this->request->getHeader(self::TIME_ZONE_KEY);
 
 		$this->userSession->cleanSession();
-		
+
 		if (!$clientId) {
 			$clientId = $this->session->getId();
 		}
-		
+
 		if ($clientId) {
 			$this->userSession->setClientId($clientId);
 		}
@@ -47,7 +48,6 @@ class RequestAttributesMiddleware extends Middleware {
 		if ($clientTimeZone) {
 			$this->userSession->setClientTimeZone($clientTimeZone);
 		}
-		
 
 		if ($this->hasAttribute($reflectionMethod, ShareTokenRequired::class)) {
 			$this->userSession->setShareToken($this->getShareTokenFromURI());
@@ -62,7 +62,7 @@ class RequestAttributesMiddleware extends Middleware {
 		if (isset($_SERVER['REQUEST_URI'])) {
 			$uri = "$_SERVER[REQUEST_URI]";
 			$pattern = '/\/s\/(.*?)(\/|$)/';
-			
+
 			if (preg_match($pattern, $uri, $matches)) {
 				return $matches[1];
 			}
@@ -86,7 +86,7 @@ class RequestAttributesMiddleware extends Middleware {
 		if (empty($reflectionMethod->getAttributes($attributeClass))) {
 			return false;
 		}
-		
+
 		return true;
 	}
 

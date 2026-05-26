@@ -91,7 +91,7 @@ class Application extends App implements IBootstrap {
 
 		$context->registerMiddleWare(RequestAttributesMiddleware::class);
 		$context->registerNotifierService(Notifier::class);
-		
+
 		$context->registerEventListener(CommentEvent::class, CommentListener::class);
 		$context->registerEventListener(CommentAddEvent::class, CommentListener::class);
 		$context->registerEventListener(CommentDeleteEvent::class, CommentListener::class);
@@ -100,7 +100,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(OptionConfirmedEvent::class, OptionListener::class);
 		$context->registerEventListener(OptionCreatedEvent::class, OptionListener::class);
 		$context->registerEventListener(OptionDeletedEvent::class, OptionListener::class);
-		
+
 		$context->registerEventListener(PollEvent::class, PollListener::class);
 		$context->registerEventListener(PollExpiredEvent::class, PollListener::class);
 		$context->registerEventListener(PollOptionReorderedEvent::class, PollListener::class);

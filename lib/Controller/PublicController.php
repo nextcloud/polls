@@ -97,7 +97,6 @@ class PublicController extends BasePublicController {
 		]);
 	}
 
-
 	/**
 	 * Watch poll for updates
 	 * @param ?int $offset only watch changes after this timestamp
@@ -343,7 +342,6 @@ class PublicController extends BasePublicController {
 			'share' => $this->shareService->setDisplayname($displayName, $token)
 		]);
 	}
-
 
 	/**
 	 * Set EmailAddress

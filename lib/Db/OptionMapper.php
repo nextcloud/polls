@@ -111,7 +111,6 @@ class OptionMapper extends QBMapperWithUser {
 		return $qb->executeQuery()->fetchAll()[0];
 	}
 
-
 	/**
 	 * @return Option[]
 	 */
@@ -167,13 +166,11 @@ class OptionMapper extends QBMapperWithUser {
 			->groupBy(self::TABLE . '.id')
 			->orderBy('order', 'ASC');
 
-
 		$this->joinVotesCount($qb, self::TABLE, $hideResults);
 		$this->joinPollForLimits($qb, self::TABLE);
 		$this->joinCurrentUserVote($qb, self::TABLE, $currentUserId);
 		$this->joinCurrentUserVoteCount($qb, self::TABLE, $currentUserId);
 		$this->joinAnon($qb, self::TABLE);
-
 
 		return $qb;
 	}

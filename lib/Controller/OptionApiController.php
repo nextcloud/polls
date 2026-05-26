@@ -52,7 +52,6 @@ class OptionApiController extends BaseApiController {
 		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText, $duration)]);
 	}
 
-
 	/**
 	 * Add mulitple new options
 	 * @param int $pollId poll id
