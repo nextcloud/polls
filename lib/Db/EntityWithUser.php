@@ -90,7 +90,6 @@ abstract class EntityWithUser extends Entity {
 		return false;
 	}
 
-
 	/**
 	 * @return UserBase Gets owner of the entity
 	 */

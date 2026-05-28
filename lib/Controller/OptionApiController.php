@@ -74,7 +74,6 @@ class OptionApiController extends BaseApiV2Controller {
 		), Http::STATUS_CREATED);
 	}
 
-
 	/**
 	 * Add mulitple new options
 	 * @param int $pollId poll id

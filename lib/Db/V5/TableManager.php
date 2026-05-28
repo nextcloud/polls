@@ -597,7 +597,6 @@ class TableManager extends DbManager {
 
 		$this->logger->info('No polls needed to get updated with last interaction info');
 		return 'Last interaction all set';
-
 	}
 
 	/**
