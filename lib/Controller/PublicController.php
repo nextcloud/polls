@@ -117,7 +117,6 @@ class PublicController extends BaseController {
 		]);
 	}
 
-
 	/**
 	 * Watch poll for updates
 	 * @param string $mode the mode of watching, e.g. 'longPolling'
@@ -422,7 +421,6 @@ class PublicController extends BaseController {
 			'share' => $this->shareService->setDisplayname($displayName, $token)
 		]);
 	}
-
 
 	/**
 	 * Set EmailAddress
