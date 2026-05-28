@@ -113,8 +113,6 @@ class Contact extends UserBase {
 		return count($description) ? implode(', ', $description) : $this->l10n->t('Contact');
 	}
 
-
-
 	public static function isEnabled(): bool {
 		return Container::isAppEnabled('contacts');
 	}
