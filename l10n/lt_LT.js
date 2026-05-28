@@ -274,7 +274,7 @@ OC.L10N.register(
     "Anonymization of this poll can be removed at any time by the owner and delegated poll administration." : "Šios apklausos anonimizavimą savininkas gali bet kada pašalinti ir deleguoti apklausos administravimą.",
     "This poll is closed." : "Ši apklausa yra baigta.",
     "No further action is possible." : "Neįmanoma atlikti jokių tolimesnių veiksmų.",
-    "_%n orphaned vote reduces your vote quota._::_%n orphaned votes reduce your vote quota._" : ["%n nesusietas balsas sumažina jūsų balsų kvotą.","%n nesusieti balsai sumažina jūsų balsų kvotą.","%n nesusietų balsų sumažina jūsų balsų kvotą.","%n nesusietų balsų sumažina jūsų balsų kvotą."],
+    "_%n orphaned vote reduces your vote quota._::_%n orphaned votes reduce your vote quota._" : ["%n „apleistas“ balsas sumažina jūsų balsų kvotą.","%n „apleisti“ balsai sumažina jūsų balsų kvotą.","%n „apleistų“ balsų sumažina jūsų balsų kvotą.","%n „apleistų“ balsų sumažina jūsų balsų kvotą."],
     "No more voting options are available." : "Daugiau balsavimo variantų nėra.",
     "_%n voting option is available._::_%n voting options are available._" : ["Galima rinktis iš %n balsavimo varianto.","Galima rinktis iš %n balsavimo variantų.","Galima rinktis iš %n balsavimo variantų.","Galima rinktis iš %n balsavimo variantų."],
     "You have no votes left." : "Jums nebeliko balsų.",
