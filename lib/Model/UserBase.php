@@ -483,5 +483,4 @@ class UserBase implements JsonSerializable {
 		return $this->getType();
 	}
 
-
 }
