@@ -42,7 +42,7 @@
     "@nextcloud/vue": "^9.8.0",
     "@vueuse/core": "^14.3.0",
     "@vueuse/integrations": "^14.3.0",
-    "axios": "^1.16.0",
+    "axios": "^1.16.1",
     "core-js": "^3.47.0",
     "dompurify": "^3.4.2",
     "file-saver": "^2.0.5",
@@ -76,7 +76,7 @@
     "eslint-plugin-prettier": "^5.5.5",
     "prettier": "^3.8.3",
     "vite": "^7.3.3",
-    "vite-plugin-node-polyfills": "^0.26.0",
+    "vite-plugin-node-polyfills": "^0.27.0",
     "xml2js": "^0.6.2"
   },
   "engines": {

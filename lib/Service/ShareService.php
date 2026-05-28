@@ -164,7 +164,6 @@ class ShareService {
 			$this->share->setDisplayName('');
 		}
 
-
 		if ($poll->getIsInvolved()) {
 			// user is already involved in the poll
 			if ($poll->getShareToken()) {
@@ -175,7 +174,6 @@ class ShareService {
 			return $this->share;
 		}
 
-
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			// Exception: logged in user, accesses the poll via public share link
 			if ($this->userSession->getIsLoggedIn()) {
@@ -183,7 +181,6 @@ class ShareService {
 			}
 			return $this->share;
 		}
-
 
 		// Exception for convertable (email and contact) shares
 		if (in_array($this->share->getType(), Share::CONVERATABLE_PUBLIC_SHARES, true)) {
@@ -350,7 +347,6 @@ class ShareService {
 			$this->share->setInvitationSent(0);
 		}
 		$this->share->setEmailAddress($emailAddress ?? $this->share->getEmailAddress());
-
 
 		// convert to type external
 		$this->share->setType(Share::TYPE_EXTERNAL);
@@ -524,7 +520,6 @@ class ShareService {
 	public function resolveGroupByToken(string $token): array {
 		$share = $this->get($token);
 		return $this->resolveGroup($share);
-
 	}
 
 	/**
