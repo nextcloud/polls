@@ -46,6 +46,7 @@ OC.L10N.register(
     "All day" : "Visas dienas",
     "Preview" : "Priekšskatīt",
     "Submit" : "Iesniegt",
+    "Poll owner:" : "Aptaujas īpašnieks",
     "Description" : "Apraksts",
     "{count} participants" : "{count}dalībnieki",
     "never" : "nekad",
