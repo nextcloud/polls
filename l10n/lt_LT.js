@@ -186,7 +186,7 @@ OC.L10N.register(
     "You have deleted the share for {sharee} from poll {pollTitle}" : "Ištrynėte bendrinimą su {sharee} iš apklausos {pollTitle}",
     "{actor} has deleted the share for {sharee} from poll {pollTitle}" : "{actor} ištrynė bendrinimą su {sharee} iš apklausos {pollTitle}",
     "You have deleted share of {sharee}" : "Jūs ištrynėte {sharee} bendrinimą",
-    "{actor} has deleted a share" : "{actor} ištrynė viešinį",
+    "{actor} has deleted a share" : "{actor} ištrynė bendrinimą",
     "You have deleted a public share from poll {pollTitle}" : "Ištrynėte viešą bendrinimą iš {pollTitle} apklausos",
     "{actor} has deleted a public share from poll {pollTitle}" : "{actor} ištrynė viešą bendrinimą iš {pollTitle} apklausos",
     "You have deleted a public share" : "Jūs ištrynėte viešą bendrinimą",
