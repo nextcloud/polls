@@ -222,6 +222,7 @@ OC.L10N.register(
     "Clone poll" : "Скопировать опрос",
     "Clone to option sequence" : "Копировать в последовательность вариантов",
     "Create a sequence of date options starting with {dateOption}." : "Создать последовательность из вариантов дат с началом {dateOption}.",
+    "Amount" : " Количество",
     "Delete option" : "Удалить вариант",
     "{displayName}'s proposal" : "Заявка от {displayName}",
     "Clone option" : "Копировать вариант",

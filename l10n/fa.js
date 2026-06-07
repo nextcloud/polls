@@ -269,6 +269,7 @@ OC.L10N.register(
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n \"Yes\" vote","%n \"Yes\" votes"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n \"Maybe\" vote","%n \"Maybe\" votes"],
     "Description" : "توضیحات",
+    "{count} participants" : "{count} شرکت‌کننده",
     "never" : "never",
     "Error archiving/restoring poll." : "Error archiving/restoring poll.",
     "Error cloning poll." : "خطای کلون نظرسنجی",
