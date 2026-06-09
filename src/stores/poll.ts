@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+// fallow-ignore-file circular-dependency
 
 import { defineStore } from 'pinia'
 // eslint-disable-next-line import/no-named-as-default

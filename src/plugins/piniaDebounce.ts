@@ -9,6 +9,7 @@ import debounce from 'lodash/debounce'
 type AnyFunction = (...args: unknown[]) => unknown
 
 declare module 'pinia' {
+	// fallow-ignore-next-line unused-type
 	export interface PiniaCustomProperties {
 		$debounce: <T extends AnyFunction>(fn: T, wait: number) => T
 	}
