@@ -54,6 +54,7 @@ OC.L10N.register(
     "Configuration" : "Configuração",
     "Change name" : "Alterar nome",
     "Public link" : "Hiperligação Pública",
+    "Switch to list view" : "Mudar visualização para o modo lista",
     "Email options" : "Opções de e-mail",
     "Navigation" : "Navegação",
     "Show all" : "Mostrar tudo",
