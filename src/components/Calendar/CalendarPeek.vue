@@ -22,24 +22,7 @@ import { usePollStore } from '../../stores/poll'
 import type { AxiosError } from '@nextcloud/axios'
 import type { Option } from '../../stores/options.types'
 import { getDatesFromOption } from '@/composables/optionDateTime'
-
-export type CalendarEvent = {
-	id: number
-	UID: number
-	calendarUri: string
-	calendarKey: number
-	calendarName: string
-	displayColor: string
-	allDay: boolean
-	description: string
-	start: number
-	location: string
-	end: number
-	status: string
-	summary: string
-	type: 'date' | 'dateTime'
-	busy: boolean
-}
+import type { CalendarEvent } from './calendar.types'
 
 const { option } = defineProps<{ option: Option }>()
 
