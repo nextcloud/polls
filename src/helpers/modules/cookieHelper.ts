@@ -69,11 +69,4 @@ function deleteCookieByValue(searchValue: string): string | void {
 	}
 }
 
-export {
-	getCookieValue,
-	findCookie,
-	setCookie,
-	deleteCookie,
-	deleteCookieByValue,
-	findCookieByValue,
-}
+export { getCookieValue, setCookie, deleteCookieByValue, findCookieByValue }

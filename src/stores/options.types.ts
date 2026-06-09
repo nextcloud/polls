@@ -63,8 +63,6 @@ export type SimpleOption = SimpleOptionDto
 	& OptionDurationMethod
 	& OptionTimestampMethod
 
-export type DateOptionFinder = Pick<SimpleOption, 'isoTimestamp' | 'isoDuration'>
-
 export type OptionsStore = {
 	options: Option[]
 	ranked: RankedType

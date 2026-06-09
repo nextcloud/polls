@@ -7,14 +7,10 @@ export enum Event {
 	TransitionsOff = 'polls:transitions:off',
 	TransitionsOn = 'polls:transitions:on',
 	UpdatePoll = 'polls:poll:update',
-	LoadPoll = 'polls:poll:load',
 	SidebarChangeTab = 'polls:sidebar:changeTab',
 	SidebarToggle = 'polls:sidebar:toggle',
-	ChangeShares = 'polls:change:shares',
 	UpdateOptions = 'polls:options:update',
 	AddDate = 'polls:options:add-date',
-	UpdateComments = 'polls:comments:update',
-	UpdateActivity = 'polls:activity:update',
 	ShowSettings = 'polls:settings:show',
 }
 
