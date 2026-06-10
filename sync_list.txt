@@ -4,11 +4,12 @@
 /js
 /l10n
 /lib
-/templates
-/vendor
-/COPYING
-/README.md
-/CHANGELOG.md
 /openapi.json
 /openapi-administration.json
 /openapi-full.json
+/templates
+/vendor
+/CHANGELOG.md
+/COPYING
+/LICENSES
+/README.md
