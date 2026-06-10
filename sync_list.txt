@@ -9,3 +9,6 @@
 /COPYING
 /README.md
 /CHANGELOG.md
+/openapi.json
+/openapi-administration.json
+/openapi-full.json
