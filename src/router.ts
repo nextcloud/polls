@@ -213,6 +213,96 @@ async function validateToken(to: RouteLocationNormalized) {
 	return true
 }
 
+/**
+ * Check if a registration is needed.
+ * Registration is needed for public shares as long as the poll is not closed and the user is not locked.
+ *
+ * @param pollStore
+ * @return boolean
+ */
+function needsRegistration(pollStore: ReturnType<typeof usePollStore>): boolean {
+	return (
+		pollStore.currentUserStatus.userRole === 'public'
+		&& !pollStore.isClosed
+		&& !pollStore.currentUserStatus.isLocked
+	)
+}
+
+/**
+ * Load poll list for the list page. If the watcher is active, we can skip
+ * loading the list as it will be updated by the watcher.
+ * @param watcherActive Whether the watcher is active or not
+ */
+async function handleListPage(watcherActive: boolean): Promise<void> {
+	await usePollsStore().load(!watcherActive)
+}
+
+/**
+ * Load poll and options for the register page. If the poll doesn't exist or can't be loaded, redirect to not found page.
+ * If the user doesn't need to register, redirect to the public vote page.
+ *
+ * @param to Requested route
+ * @return RouteLocationNormalized | void
+ */
+async function handleRegisterPage(to: RouteLocationNormalized) {
+	const pollStore = usePollStore()
+	const optionsStore = useOptionsStore()
+
+	try {
+		await Promise.all([pollStore.load(), optionsStore.load()])
+	} catch {
+		return { name: 'notfound' }
+	}
+
+	// if the user doesn't need to register, directly redirect to the public vote page
+	if (!needsRegistration(pollStore)) {
+		return {
+			name: 'publicVote',
+			params: { token: to.params.token },
+			replace: true,
+		}
+	}
+}
+
+/**
+ * Load poll, options, votes and subscription for the vote page. If the poll
+ * doesn't exist or can't be loaded, redirect to not found page.
+ * If the user needs to register, redirect to the public register page.
+ *
+ * @param to Requested route
+ * @return RouteLocationNormalized | void
+ */
+async function handleVotePage(to: RouteLocationNormalized) {
+	const sessionStore = useSessionStore()
+	const pollStore = usePollStore()
+	const votesStore = useVotesStore()
+	const optionsStore = useOptionsStore()
+	const subscriptionStore = useSubscriptionStore()
+
+	try {
+		await pollStore.load()
+	} catch {
+		return { name: 'notfound' }
+	}
+
+	if (to.meta.publicVotePage && needsRegistration(pollStore)) {
+		return { name: 'publicRegister', params: { token: to.params.token } }
+	}
+
+	await Promise.allSettled([
+		votesStore.load(),
+		optionsStore.load(),
+		subscriptionStore.load(),
+	])
+
+	Logger.debug('Vote page data loaded', {
+		session: sessionStore.currentUser,
+		poll: pollStore,
+		votes: votesStore.votes,
+		options: optionsStore.options,
+	})
+}
+
 const router = createRouter({
 	history: createWebHistory(generateUrl('/apps/polls')),
 	routes,
@@ -265,6 +355,7 @@ router.beforeEach(
 			if (sessionStore.userStatus.isLoggedin) {
 				await preferencesStore.load()
 			}
+
 			Logger.info('Context loaded')
 		} catch (error) {
 			Logger.error('Could not load context', { error })
@@ -290,73 +381,13 @@ router.beforeResolve(async (to: RouteLocationNormalized) => {
 		&& sessionStore.watcher.status !== 'stopped'
 
 	if (to.meta.listPage) {
-		const pollsStore = usePollsStore()
-		await pollsStore.load(!watcherActive)
+		return handleListPage(watcherActive)
 	}
-
 	if (to.meta.registerPage) {
-		const pollStore = usePollStore()
-		const optionsStore = useOptionsStore()
-
-		try {
-			await Promise.all([pollStore.load(), optionsStore.load()])
-		} catch {
-			return { name: 'notfound' }
-		}
-
-		// If the user no longer needs to register, redirect to the vote page
-		const needsRegistration =
-			pollStore.currentUserStatus.userRole === 'public'
-			&& !pollStore.isClosed
-			&& !pollStore.currentUserStatus.isLocked
-
-		if (!needsRegistration) {
-			return {
-				name: 'publicVote',
-				params: { token: to.params.token },
-				replace: true,
-			}
-		}
+		return handleRegisterPage(to)
 	}
-
 	if (to.meta.votePage) {
-		const pollStore = usePollStore()
-		const votesStore = useVotesStore()
-		const optionsStore = useOptionsStore()
-		const subscriptionStore = useSubscriptionStore()
-
-		try {
-			await pollStore.load()
-		} catch {
-			return { name: 'notfound' }
-		}
-
-		// Redirect unregistered public users to the registration page
-		if (to.meta.publicVotePage) {
-			const needsRegistration =
-				pollStore.currentUserStatus.userRole === 'public'
-				&& !pollStore.isClosed
-				&& !pollStore.currentUserStatus.isLocked
-
-			if (needsRegistration) {
-				return {
-					name: 'publicRegister',
-					params: { token: to.params.token },
-				}
-			}
-		}
-
-		await Promise.allSettled([
-			votesStore.load(),
-			optionsStore.load(),
-			subscriptionStore.load(),
-		])
-		Logger.debug('Vote page data loaded', {
-			session: sessionStore.currentUser,
-			poll: pollStore,
-			votes: votesStore.votes,
-			options: optionsStore.options,
-		})
+		return handleVotePage(to)
 	}
 })
 

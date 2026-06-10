@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { httpInstance, createCancelTokenHandler } from './HttpApi'
-import { CalendarEvent } from '../../components/Calendar/CalendarPeek.vue'
+import type { CalendarEvent } from '../../components/Calendar/calendar.types'
 
 import type { AxiosResponse } from '@nextcloud/axios'
 import type { Calendar } from '../../stores/preferences.types'

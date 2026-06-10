@@ -26,5 +26,3 @@ export type DurationType = {
 	unit: DateTimeUnitType
 	amount: number
 }
-
-export type DateFormats = 'dateTime' | 'dateShort'

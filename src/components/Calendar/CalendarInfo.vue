@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { DateTime } from 'luxon'
-import { CalendarEvent } from '../../components/Calendar/CalendarPeek.vue'
+import type { CalendarEvent } from './calendar.types'
 
 import type { Option } from '../../stores/options.types'
 import { getDatesFromOption } from '@/composables/optionDateTime'

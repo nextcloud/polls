@@ -1,0 +1,43 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "entry": [
+    "src/main.ts",
+    "src/userSettings.ts",
+    "src/adminSettings.ts",
+    "src/dashboard.ts",
+    "src/polls-reference.ts"
+  ],
+  "ignoreDependencies": [
+    "@nextcloud/initial-state",
+    "@vueuse/core",
+    "core-js",
+    "linkify-urls",
+    "sortablejs"
+  ],
+  "ignorePatterns": [
+    "l10n/**"
+  ],
+  "duplicates": {
+    // Hide pair-only clones; focus on widespread copy-paste
+    // worth refactoring. Lower to 2 to report every duplicate pair.
+    "minOccurrences": 3
+    // Common additions (uncomment to enable):
+    // "ignore": [
+    //   "**/lib/**",          // for repos that publish transpiled output to lib/
+    //   "**/legacy/**",       // for repos with legacy-build artifacts
+    //   "**/__generated__/**", // Relay, GraphQL Code Generator
+    //   "**/generated/**"     // OpenAPI, Protobuf codegen
+    // ]
+  },
+  "rules": {},
+  "ignoreExports": [
+    {
+      "file": "src/Api/index.ts",
+      "exports": ["*"]
+    },
+    {
+      "file": "src/Api/modules/api.types.ts",
+      "exports": ["*"]
+    }
+  ]
+}

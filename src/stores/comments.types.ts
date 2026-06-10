@@ -17,12 +17,6 @@ export type Comment = {
 	recipient: User | null
 }
 
-export type ShortComment = {
-	comment: string
-	deleted: number
-	id: number
-}
-
 export interface CommentsGrouped extends Comment {
 	comments: Comment[]
 }
