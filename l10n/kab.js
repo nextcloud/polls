@@ -25,6 +25,7 @@ OC.L10N.register(
     "Participants" : "Imttekkiyen",
     "Email address" : "Tansa imayl",
     "OK" : "IH",
+    "Submit" : "Azen",
     "Description" : "Aglam",
     "Back" : "Retour",
     "Create new group" : "Snulfu-d agraw amaynut",
