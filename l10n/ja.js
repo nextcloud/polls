@@ -249,6 +249,7 @@ OC.L10N.register(
     "Enter a description" : "説明を入力してください",
     "Extended title" : "拡張タイトル",
     "Description" : "説明",
+    "Expired {dateTime}" : " {dateTime}に期限が切れました",
     "never" : "なし",
     "Take over poll?" : "投票を引き継ぎますか?",
     "Error cloning poll." : "投票のクローン中にエラーが発生しました",
