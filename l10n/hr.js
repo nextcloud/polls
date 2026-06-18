@@ -154,6 +154,7 @@ OC.L10N.register(
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Označite ovo ako želite prikazati datum ankete okomito, a ne u prikazu rešetke. Zadana vrijednost je prikaz rešetke.",
     "The style settings are still experimental!" : "Postavke stila još uvijek su eksperimentalne!",
     "Styles" : "Stilovi",
+    "Group share" : "Group share",
     "Share label" : "oznaka za dijeljenje",
     "Has voted" : "Glasao je",
     "Has not voted" : "Nije glasao",

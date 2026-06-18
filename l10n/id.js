@@ -214,6 +214,7 @@ OC.L10N.register(
     "Public link: {token}" : "Tautan publik: {token}",
     "(deleted)" : "(dihapus)",
     "(locked)" : "(terkunci)",
+    "Group share" : "Group share",
     "Share label" : "Label berbagi",
     "Internal access" : "Akses internal",
     "Resend invitation mail" : "Kirim ulang email undangan",

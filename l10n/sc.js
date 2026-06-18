@@ -124,6 +124,7 @@ OC.L10N.register(
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Marca inoghe, s'in casu preferis mustrare su sondàgiu de datas in una bista verticale prus che in una bista de grìglia. Cussa predefinida est sa bista de elencu.",
     "The style settings are still experimental!" : "Sa cunfiguratzione de istile est ancora isperimentale!",
     "Styles" : "Istiles",
+    "Group share" : "Group share",
     "Share label" : "Cumpartzi eticheta",
     "Resend invitation mail" : "Torra a imbiare su messàgiu de invitu",
     "Send invitation mail" : "Imbia messàgiu de invitu",

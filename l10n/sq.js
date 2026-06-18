@@ -29,6 +29,8 @@ OC.L10N.register(
     "Description" : "Përshkrim",
     "never" : "asnjëherë",
     "Back" : "Mbrapsht",
+    "Group share" : "Group share",
+    "Share label" : "Share label",
     "Shares" : "Shpërndarje",
     "No activity yet" : "Akoma asnjë aktivitet",
     "Configuration" : "Formësim",

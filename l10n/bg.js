@@ -331,6 +331,7 @@ OC.L10N.register(
     "Calendar check" : "Проверка на календар",
     "Styles" : "Стилове",
     "Token: {token}" : "Токен: {token}",
+    "Group share" : "Group share",
     "Share label" : " Споделяне на етикет",
     "Has voted" : "Е гласувал.",
     "Has not voted" : "Не е гласувал",

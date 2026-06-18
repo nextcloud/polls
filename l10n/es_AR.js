@@ -31,6 +31,8 @@ OC.L10N.register(
     "Back" : "Volver",
     "Legal notice" : "Aviso legal",
     "Privacy policy" : "Políticas de privacidad",
+    "Group share" : "Group share",
+    "Share label" : "Share label",
     "Link copied to clipboard" : "Enlace copiado al portapapeles",
     "Shares" : "Shares",
     "No activity yet" : "Aún no hay actividades",

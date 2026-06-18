@@ -442,6 +442,7 @@ OC.L10N.register(
     "Public link: {token}" : "رابط عمومي: {token}",
     "(deleted)" : "(محذوف)",
     "(locked)" : "(مٌقفل)",
+    "Group share" : "Group share",
     "Share label" : "علامة رابط المشاركة",
     "Has voted" : "قام بالتصويت",
     "Has not voted" : "لم بقم بالتصوت",

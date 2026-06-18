@@ -64,6 +64,7 @@ OC.L10N.register(
     "Back" : "Atrás",
     "Legal notice" : "Aviso legal",
     "Privacy policy" : "Política de privacidad",
+    "Group share" : "Group share",
     "Share label" : "Etiqueta del recurso compartido",
     "Copy link to clipboard" : "Copiar enlace al portapapeles",
     "Link copied to clipboard" : "Enlace copiado al portapapeles",

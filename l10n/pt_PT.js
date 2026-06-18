@@ -48,6 +48,8 @@ OC.L10N.register(
     "Legal notice" : "Informação legal",
     "Privacy policy" : "Política de privacidade",
     "Enable the spreadsheet download of polls globally" : "Pernitir a transferência de folha de cálculo de eleições globalmente",
+    "Group share" : "Group share",
+    "Share label" : "Share label",
     "Link copied to clipboard" : "Ligação copiada para a área de transferência",
     "Shares" : "Partilhas",
     "No activity yet" : "Ainda sem atividade",

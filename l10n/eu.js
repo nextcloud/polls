@@ -326,6 +326,7 @@ OC.L10N.register(
     "Token: {token}" : "Tokena: {token}",
     "(deleted)" : "(ezabatuta)",
     "(locked)" : "(blokeatuta)",
+    "Group share" : "Group share",
     "Share label" : "partekatu etiketa",
     "Has voted" : "Bozkatu du",
     "Has not voted" : "Ez du bozkatu",

@@ -30,6 +30,8 @@ OC.L10N.register(
     "Submit" : "გაგზავნა",
     "Description" : "აღწერილობა",
     "never" : "არასდროს",
+    "Group share" : "Group share",
+    "Share label" : "Share label",
     "Shares" : "გაზიარებები",
     "No activity yet" : "აქტოვობა ჯერ არაა",
     "Configuration" : "კონფიგურაცია",

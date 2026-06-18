@@ -69,6 +69,7 @@ OC.L10N.register(
     "Privacy policy" : "Meðferð persónulegra gagna",
     "Checking email address …" : "Yfirfer tölvupóstfang …",
     "Invalid email address." : "Ógilt tölvupóstfang.",
+    "Group share" : "Group share",
     "Share label" : "Merking á sameign",
     "Resend invitation mail" : "Senda boðspóst aftur",
     "Send invitation mail" : "Senda boðspóst",

@@ -57,6 +57,8 @@ OC.L10N.register(
     "Privacy policy" : "Tasertit n tbaḍnit",
     "Email address (optional)" : "Tansa email (axetṛan)",
     "Styles" : "Iɣunab",
+    "Group share" : "Group share",
+    "Share label" : "Share label",
     "Error sending invitation" : "Tuccḍa di tuzna n tinubga",
     "No activity yet" : "Ulac armud yakan",
     "No comments" : "Ulac iwenniten.",

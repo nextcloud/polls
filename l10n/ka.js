@@ -184,6 +184,7 @@ OC.L10N.register(
     "Back" : "უკან",
     "Legal notice" : "Legal notice",
     "Privacy policy" : "Privacy policy",
+    "Group share" : "Group share",
     "Share label" : "Share label",
     "Restore share" : "Restore share",
     "Delete share" : "Delete share",

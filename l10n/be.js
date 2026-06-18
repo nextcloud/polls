@@ -61,6 +61,8 @@ OC.L10N.register(
     "Additional email disclaimer" : "Дадатковая адмова ад адказнасці па электроннай пошце",
     "Token: {token}" : "Токен: {token}",
     "Public link: {token}" : "Публічная спасылка: {token}",
+    "Group share" : "Group share",
+    "Share label" : "Share label",
     "Invitation sent to {displayName} ({emailAddress})" : "Запрашэнне апраўлена {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "Памалка пры адпраўцы запрашэння {displayName} ({emailAddress})",
     "Copy link to clipboard" : "Скапіяваць спасылку ў буфер абмену",

@@ -251,6 +251,7 @@ OC.L10N.register(
     "Public link: {token}" : "Javna povezava: {token}",
     "(deleted)" : "(izbrisano)",
     "(locked)" : "(zaklenjeno)",
+    "Group share" : "Group share",
     "Share label" : "Naziv mesta souporabe",
     "Has voted" : "Glas je že oddan",
     "Has not voted" : "Glas še ni oddan",

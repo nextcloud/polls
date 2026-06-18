@@ -308,6 +308,7 @@ OC.L10N.register(
     "Calendar check" : "Verificación de calendario",
     "Styles" : "Estilos",
     "Token: {token}" : "Token: {token}",
+    "Group share" : "Group share",
     "Share label" : "Etiqueta de compartición",
     "Has voted" : "Ha votado",
     "Has not voted" : "No ha votado",

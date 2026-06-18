@@ -183,6 +183,7 @@ OC.L10N.register(
     "Privacy policy link:" : "프라이버시 정책 링크:",
     "Calendar check" : "달력 확인",
     "Styles" : "스타일",
+    "Group share" : "Group share",
     "Share label" : "공유 이름",
     "Has voted" : "투표함",
     "Has not voted" : "투표하지 않음",

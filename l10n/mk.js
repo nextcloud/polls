@@ -53,6 +53,7 @@ OC.L10N.register(
     "Ascending" : "Растечки",
     "Legal notice" : "Правно известување",
     "Privacy policy" : "Политика за приватност",
+    "Group share" : "Group share",
     "Share label" : "Ознака на споделувањето",
     "Link copied to clipboard" : "Линкот е копиран во клипборд",
     "Restore share" : "Врати споделување",

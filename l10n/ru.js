@@ -295,6 +295,7 @@ OC.L10N.register(
     "Styles" : "Оформления",
     "Token: {token}" : "Токен: {token}",
     "(deleted)" : "(удалено)",
+    "Group share" : "Group share",
     "Share label" : "Метка общего доступа",
     "Has voted" : "Проголосовал(а)",
     "Has not voted" : "Не проголосовал(а)",

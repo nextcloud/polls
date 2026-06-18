@@ -406,6 +406,7 @@ OC.L10N.register(
     "Public link: {token}" : "Enllaç públic: {token}",
     "(deleted)" : "(suprimit)",
     "(locked)" : "(blocat)",
+    "Group share" : "Group share",
     "Share label" : "Etiqueta d'ús compartit",
     "Has voted" : "Ha votat",
     "Has not voted" : "No ha votat",

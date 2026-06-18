@@ -53,6 +53,8 @@
     "Days after which polls should be archived after closing" : "Dienu skaits pēc aizvēršanas, pēc kurām aptaujas vajadzētu arhivēt",
     "Enable the automatic deletion of archived polls" : "Iespējot arhivētu aptauju automātisku izdzēšanu",
     "Privacy policy link:" : "Privātuma politikas saite:",
+    "Group share" : "Group share",
+    "Share label" : "Share label",
     "Copy link to clipboard" : "Ievietot saiti starpliktuvē",
     "Show QR code" : "Parādīt kvadrātkodu",
     "Restore share" : "Atjaunot koplietojumu",

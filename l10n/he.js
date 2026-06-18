@@ -66,6 +66,7 @@ OC.L10N.register(
     "Back" : "אחורה",
     "Legal notice" : "הצהרה משפטית",
     "Privacy policy" : "מדיניות פרטיות",
+    "Group share" : "Group share",
     "Share label" : "שתף תווית",
     "Copy link to clipboard" : "העתקת קישור ללוח הגזירים",
     "Link copied to clipboard" : "הקישור הועתק ללוח הגזירים",

@@ -41,6 +41,8 @@ OC.L10N.register(
     "never" : "neniam",
     "Legal notice" : "Leĝa regularo",
     "Privacy policy" : "Privateca regularo",
+    "Group share" : "Group share",
+    "Share label" : "Share label",
     "Link copied to clipboard" : "Ligilo kopiita al tondujo",
     "Restore share" : "Restaŭri kunhavon",
     "Delete share" : "Forigi kunhavigon",

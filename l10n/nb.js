@@ -410,6 +410,7 @@ OC.L10N.register(
     "Public link: {token}" : "Offentlig kobling: {token}",
     "(deleted)" : "(slettet)",
     "(locked)" : "(låst)",
+    "Group share" : "Group share",
     "Share label" : "Delingsmerkelapper",
     "Has voted" : "Har stemt",
     "Has not voted" : "Har ikke stemt",

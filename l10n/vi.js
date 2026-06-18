@@ -43,6 +43,7 @@ OC.L10N.register(
     "Ascending" : "Tăng dần",
     "Legal notice" : "Thông cáo pháp lý",
     "Privacy policy" : "Chính sách riêng tư",
+    "Group share" : "Group share",
     "Share label" : "Chia sẻ nhãn",
     "Delete share" : "Xóa chia sẻ",
     "Shares" : "Chia sẻ",

@@ -28,6 +28,8 @@ OC.L10N.register(
     "Submit" : "Enviar",
     "Description" : "Descripción",
     "never" : "nunca",
+    "Group share" : "Group share",
+    "Share label" : "Share label",
     "Shares" : "Elementos compartidos",
     "No activity yet" : "Aún no tiene actividad",
     "Configuration" : "Configuración",

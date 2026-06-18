@@ -33,6 +33,8 @@ OC.L10N.register(
     "never" : "nunca",
     "Legal notice" : "Aviso legal",
     "Privacy policy" : "Política de privacidad",
+    "Group share" : "Group share",
+    "Share label" : "Share label",
     "Shares" : "Elementos compartidos",
     "No activity yet" : "Aún no tiene actividad",
     "Configuration" : "Configuración",

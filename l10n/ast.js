@@ -188,6 +188,7 @@ OC.L10N.register(
     "Token: {token}" : "Pase: {token}",
     "Public link: {token}" : "Enllaz públicu: {token}",
     "(deleted)" : "(desanicióse)",
+    "Group share" : "Group share",
     "Share label" : "Etiqueta d'usu compartíu",
     "Has voted" : "Votó",
     "Has not voted" : "Nun votó",

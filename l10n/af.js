@@ -29,6 +29,8 @@ OC.L10N.register(
     "never" : "nooit",
     "Legal notice" : "Regskennisgewing",
     "Privacy policy" : "Privaatheidsbeleid",
+    "Group share" : "Group share",
+    "Share label" : "Share label",
     "No activity yet" : "Nog geen aktiwiteit",
     "Public link" : "Openbare skakel",
     "Comments" : "Kommentare",

@@ -296,6 +296,7 @@ OC.L10N.register(
     "Token: {token}" : "令牌：{token}",
     "(deleted)" : "(已删除)",
     "(locked)" : "(已锁定)",
+    "Group share" : "Group share",
     "Share label" : "共享标签",
     "Has voted" : "已投票",
     "Has not voted" : "尚未投票",

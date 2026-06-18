@@ -365,6 +365,7 @@ OC.L10N.register(
     "Public link: {token}" : "Nyilvános hivatkozás: {token}",
     "(deleted)" : "(törölt)",
     "(locked)" : "(zárolt)",
+    "Group share" : "Group share",
     "Share label" : "Megosztás címkéje",
     "Has voted" : "Szavazott",
     "Has not voted" : "Nem szavazott",

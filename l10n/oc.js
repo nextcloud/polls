@@ -38,6 +38,8 @@ OC.L10N.register(
     "Private poll" : "Sondatge privat",
     "Description" : "Descripcion",
     "never" : "pas jamai",
+    "Group share" : "Group share",
+    "Share label" : "Share label",
     "Shares" : "Partatges",
     "No activity yet" : "Cap d’activitat pel moment",
     "No comments" : "Cap de comentari",
