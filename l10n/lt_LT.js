@@ -569,7 +569,7 @@ OC.L10N.register(
     "Calendar check" : "Kalendoriaus patikrinimas",
     "Personal preferences" : "Asmeniniai pageidavimai",
     "Styles" : "Stiliai",
-    "Token: {token}" : "Prieigos raktas: {token}",
+    "Token: {token}" : "Žymuo: {token}",
     "Public link: {token}" : "Viešoji nuoroda: {token}",
     "Poll group access" : "Apklausos grupės prieiga",
     "(deleted)" : "(ištrinta)",
