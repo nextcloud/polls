@@ -24,6 +24,7 @@ use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\User\User;
 use OCA\Polls\UserSession;
 use OCP\Collaboration\Collaborators\ISearch;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\Share\IShare;
@@ -72,6 +73,7 @@ class UserBase implements JsonSerializable {
 	protected IL10N $l10n;
 	protected UserSession $userSession;
 	protected AppSettings $appSettings;
+	protected IConfig $config;
 
 	public function __construct(
 		protected string $id,
@@ -86,6 +88,7 @@ class UserBase implements JsonSerializable {
 		$this->groupManager = Container::queryClass(IGroupManager::class);
 		$this->userSession = Container::queryClass(UserSession::class);
 		$this->appSettings = Container::queryClass(AppSettings::class);
+		$this->config = Container::queryClass(IConfig::class);
 	}
 
 	public function getId(): string {
@@ -111,7 +114,10 @@ class UserBase implements JsonSerializable {
 	 * hash the real userId to obfuscate the real userId
 	 */
 	public function getHashedUserId(): string {
-		return Hash::getUserIdHash($this->id);
+		$instanceId = $this->config->getSystemValue('instanceid');
+		$instanceSecret = $this->config->getSystemValue('secret');
+		$salt = hash('md5', $instanceId . $instanceSecret);
+		return Hash::getUserIdHash($this->id, $salt);
 	}
 
 	/**
