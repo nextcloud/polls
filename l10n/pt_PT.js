@@ -163,6 +163,7 @@ OC.L10N.register(
     "Experimental styles" : "Estilos experimentais",
     "This seems to be a huge poll, please be patient…" : "Esta parece ser uma enquete enorme, por favor, seja paciente…",
     "Error loading more participants" : "Erro ao carregar mais participantes",
+    "Add options" : "Adicionar opções",
     "Minute" : "Minute",
     "Hour" : "Hora",
     "Day" : "Dia",
