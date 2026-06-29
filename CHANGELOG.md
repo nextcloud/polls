@@ -5,7 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ## [Unreleased]
- - none so far
+### Added
+ - OpenAPI spec
+
+### Changes
+ - Added salt to user name obfuscation
+ - Support Nextcloud 31
 
 ## [9.1.4] - 2026-05-23
 ### Fixed
