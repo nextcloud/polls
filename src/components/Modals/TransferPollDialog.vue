@@ -4,25 +4,21 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { t } from '@nextcloud/l10n'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-
-import NcDialog from '@nextcloud/vue/components/NcDialog'
-
-import UserSearch from '../User/UserSearch.vue'
-
-import { usePollsStore } from '../../stores/polls'
-import { usePollStore } from '../../stores/poll'
-
 import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
-import type { User } from '../../Types'
 import type { Poll } from '../../stores/poll.types'
+import type { User } from '../../Types'
 
-const emit = defineEmits(['accessDenied'])
-const { poll } = defineProps<{ poll: Poll }>()
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import { computed, ref } from 'vue'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
+import UserSearch from '../User/UserSearch.vue'
+import { usePollStore } from '../../stores/poll'
+import { usePollsStore } from '../../stores/polls'
+
 const model = defineModel<boolean>({ required: true })
-
+const { poll } = defineProps<{ poll: Poll }>()
+const emit = defineEmits(['accessDenied'])
 const pollsStore = usePollsStore()
 const pollStore = usePollStore()
 const newUser = ref<User | undefined>(undefined)
@@ -110,11 +106,11 @@ const dialogProps = computed(() => ({
 	<NcDialog v-model:open="model" v-bind="dialogProps">
 		<UserSearch
 			v-model="newUser"
-			:search-types="[0]"
-			:input-label="t('polls', 'Select the user to transfer the ownership to')"
-			user-select
-			close-on-select
-			@user-selected="(user: User) => (newUser = user)" />
+			:searchTypes="[0]"
+			:inputLabel="t('polls', 'Select the user to transfer the ownership to')"
+			userSelect
+			closeOnSelect
+			@userSelected="(user: User) => (newUser = user)" />
 		<span>
 			{{ dialogText }}
 		</span>

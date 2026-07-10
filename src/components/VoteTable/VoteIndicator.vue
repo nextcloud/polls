@@ -4,16 +4,17 @@
 -->
 
 <script setup lang="ts">
+import type { Answer } from '../../stores/votes.types'
+
+import CancelIcon from 'vue-material-design-icons/Cancel.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
-import CancelIcon from 'vue-material-design-icons/Cancel.vue'
 import MaybeIcon from 'vue-material-design-icons/Tilde.vue'
 
-import { Answer } from '../../stores/votes.types'
+const { answer } = defineProps<{ answer: Answer | 'locked' }>()
 
 const ICON_SIZE = 26
 
-const { answer } = defineProps<{ answer: Answer | 'locked' }>()
 </script>
 
 <template>

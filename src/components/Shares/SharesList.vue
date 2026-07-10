@@ -4,28 +4,24 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { t } from '@nextcloud/l10n'
-import { showError } from '@nextcloud/dialogs'
-
-import NcModal from '../Base/modules/CustomNcModal.vue'
-
-import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
-
-import QrModal from '../Base/modules/QrModal.vue'
-import ConfigBox from '../Base/modules/ConfigBox.vue'
-import ShareItem from './ShareItem.vue'
-import UserSearch from '../User/UserSearch.vue'
-import SharePublicAdd from './SharePublicAdd.vue'
-import ShareItemAllUsers from './ShareItemAllUsers.vue'
-import MarkDownDescription from '../Poll/MarkDownDescription.vue'
-
-import { usePollStore } from '../../stores/poll'
-import { useSharesStore } from '../../stores/shares'
-import { useSessionStore } from '../../stores/session'
-
-import type { User } from '../../Types'
 import type { Share } from '../../stores/shares.types'
+import type { User } from '../../Types'
+
+import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import { ref } from 'vue'
+import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
+import ConfigBox from '../Base/modules/ConfigBox.vue'
+import NcModal from '../Base/modules/CustomNcModal.vue'
+import QrModal from '../Base/modules/QrModal.vue'
+import MarkDownDescription from '../Poll/MarkDownDescription.vue'
+import UserSearch from '../User/UserSearch.vue'
+import ShareItem from './ShareItem.vue'
+import ShareItemAllUsers from './ShareItemAllUsers.vue'
+import SharePublicAdd from './SharePublicAdd.vue'
+import { usePollStore } from '../../stores/poll'
+import { useSessionStore } from '../../stores/session'
+import { useSharesStore } from '../../stores/shares'
 
 const pollStore = usePollStore()
 const sharesStore = useSharesStore()
@@ -68,7 +64,7 @@ async function addShare(user: User) {
 			class="add-share"
 			:aria-label="t('polls', 'Add shares')"
 			:placeholder="t('polls', 'Type to add an individual share')"
-			@user-selected="(user: User) => addShare(user)" />
+			@userSelected="(user: User) => addShare(user)" />
 
 		<!-- <template v-if="sharesStore.active.length"> -->
 		<TransitionGroup tag="ul" name="list">
@@ -89,7 +85,7 @@ async function addShare(user: User) {
 				:key="share.id"
 				:share="share"
 				tag="li"
-				@show-qr-code="openQrModal(share)" />
+				@showQrCode="openQrModal(share)" />
 		</TransitionGroup>
 		<!-- </template> -->
 
@@ -97,7 +93,7 @@ async function addShare(user: User) {
 			<QrModal
 				:name="pollStore.configuration.title"
 				:description="pollStore.configuration.description"
-				:encode-text="qrText"
+				:encodeText="qrText"
 				class="modal__content">
 				<template #description>
 					<MarkDownDescription />

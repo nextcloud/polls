@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { AxiosResponse } from 'axios'
-import { httpInstance, createCancelTokenHandler } from './HttpApi'
+import type { AxiosResponse } from 'axios'
 import type { Job, JobsList } from './api.types'
+
+import { createCancelTokenHandler, httpInstance } from './HttpApi'
 
 const adminJobs = {
 	getJobsList(): Promise<AxiosResponse<{ jobs: JobsList }>> {

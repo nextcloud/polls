@@ -4,18 +4,16 @@
 -->
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { t } from '@nextcloud/l10n'
-
+import { onMounted } from 'vue'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
-
 import FlexSettings from '../components/Base/modules/FlexSettings.vue'
 import CalendarSettings from '../components/Settings/UserSettings/CalendarSettings.vue'
 import FeatureSettings from '../components/Settings/UserSettings/FeatureSettings.vue'
 import StyleSettings from '../components/Settings/UserSettings/StyleSettings.vue'
-import '../assets/scss/vars.scss'
-
 import { usePreferencesStore } from '../stores/preferences'
+
+import '../assets/scss/vars.scss'
 
 const preferencesStore = usePreferencesStore()
 

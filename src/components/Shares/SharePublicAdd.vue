@@ -4,18 +4,15 @@
 -->
 
 <script setup lang="ts">
+import type { VirtualUserItemType } from '../../Types'
+
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-
-import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-
+import NcActions from '@nextcloud/vue/components/NcActions'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
-
 import UserItem from '../User/UserItem.vue'
 import { useSharesStore } from '../../stores/shares'
-
-import type { VirtualUserItemType } from '../../Types'
 
 const { tag = 'div' } = defineProps<{ tag?: string }>()
 const sharesStore = useSharesStore()

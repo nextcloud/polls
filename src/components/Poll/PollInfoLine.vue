@@ -4,19 +4,17 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { t } from '@nextcloud/l10n'
-
-import { usePollStore } from '../../stores/poll'
-import { useSharesStore } from '../../stores/shares'
-
-import UnpublishedIcon from 'vue-material-design-icons/PublishOff.vue'
+import { DateTime } from 'luxon'
+import { computed } from 'vue'
 import ArchivedPollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-import ClosedPollIcon from 'vue-material-design-icons/LockOutline.vue'
+import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
 import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
 import ProposalsIcon from 'vue-material-design-icons/HandExtendedOutline.vue'
-import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
-import { DateTime } from 'luxon'
+import ClosedPollIcon from 'vue-material-design-icons/LockOutline.vue'
+import UnpublishedIcon from 'vue-material-design-icons/PublishOff.vue'
+import { usePollStore } from '../../stores/poll'
+import { useSharesStore } from '../../stores/shares'
 
 const pollStore = usePollStore()
 const sharesStore = useSharesStore()
@@ -165,7 +163,7 @@ const closeToClosing = computed(
 			v-for="subText in subTexts"
 			:key="subText.id"
 			:title="subText.title"
-			:class="['sub-text', subText.class]">
+			class="sub-text" :class="[subText.class]">
 			<Component :is="subText.iconComponent" :size="16" />
 			<span class="sub-text">{{ subText.text }}</span>
 		</span>

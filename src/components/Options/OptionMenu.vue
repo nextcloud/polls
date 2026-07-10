@@ -4,27 +4,24 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import type { Option } from '../../stores/options.types'
+
 import { t } from '@nextcloud/l10n'
-
-import NcActions from '@nextcloud/vue/components/NcActions'
+import { computed, ref } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-import NcModal from '../Base/modules/CustomNcModal.vue'
+import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionText from '@nextcloud/vue/components/NcActionText'
-
 import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
-import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import RestoreIcon from 'vue-material-design-icons/RecycleVariant.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+import RestoreIcon from 'vue-material-design-icons/RecycleVariant.vue'
 import OptionSortIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
-
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import NcModal from '../Base/modules/CustomNcModal.vue'
 import OptionCloneDate from './OptionCloneDate.vue'
-import { usePollStore } from '../../stores/poll'
 import { useOptionsStore } from '../../stores/options'
+import { usePollStore } from '../../stores/poll'
 import { useVotesStore } from '../../stores/votes'
-
-import type { Option } from '../../stores/options.types'
 
 interface Props {
 	option: Option
@@ -40,8 +37,7 @@ const votesStore = useVotesStore()
 const cloneModal = ref(false)
 
 const deleteOrRestoreStaticText = computed(() =>
-	option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option'),
-)
+	option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option'),)
 
 const deleteAllowed = computed(
 	() => (option.isOwner || pollStore.permissions.edit) && !pollStore.isClosed,
@@ -101,7 +97,7 @@ function confirmOption() {
 		<NcActionButton
 			v-if="deleteAllowed"
 			:name="deleteOrRestoreStaticText"
-			close-after-click
+			closeAfterClick
 			@click="deleteRestoreOption()">
 			<template #icon>
 				<DeleteIcon v-if="!option.deleted" />
@@ -112,7 +108,7 @@ function confirmOption() {
 		<NcActionButton
 			v-if="cloneAllowed"
 			:name="t('polls', 'Clone option')"
-			close-after-click
+			closeAfterClick
 			@click="cloneOptionModal()">
 			<template #icon>
 				<CloneDateIcon />
@@ -126,7 +122,7 @@ function confirmOption() {
 					? t('polls', 'Unconfirm option')
 					: t('polls', 'Confirm option')
 			"
-			close-after-click
+			closeAfterClick
 			@click="confirmOption()">
 			<template #icon>
 				<UnconfirmIcon v-if="option.confirmed" />
@@ -141,7 +137,7 @@ function confirmOption() {
 
 		<NcActionButton
 			v-if="useSort && pollStore.permissions.edit"
-			close-after-click
+			closeAfterClick
 			:name="t('polls', 'Sort by answers of this option')"
 			@click="votesStore.setSort({ optionId: option.id })">
 			<template #icon>
@@ -150,7 +146,7 @@ function confirmOption() {
 		</NcActionButton>
 	</NcActions>
 
-	<NcModal v-if="cloneModal" size="small" no-close>
+	<NcModal v-if="cloneModal" size="small" noClose>
 		<OptionCloneDate
 			:option="option"
 			class="modal__content"

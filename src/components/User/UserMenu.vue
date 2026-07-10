@@ -4,52 +4,48 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import debounce from 'lodash/debounce'
-import { showSuccess, showError } from '@nextcloud/dialogs'
+import type { AxiosError } from '@nextcloud/axios'
+import type { ViewMode } from '../../stores/preferences.types'
+import type { StatusResults } from '../../Types'
+import type { TimeZoneOption } from '@/Types/dateTime'
+
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-
-import NcActions from '@nextcloud/vue/components/NcActions'
+import { NcActionRadio } from '@nextcloud/vue'
+import debounce from 'lodash/debounce'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionButtonGroup from '@nextcloud/vue/components/NcActionButtonGroup'
 import NcActionCheckbox from '@nextcloud/vue/components/NcActionCheckbox'
 import NcActionInput from '@nextcloud/vue/components/NcActionInput'
+import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
-
-import SettingsIcon from 'vue-material-design-icons/CogOutline.vue'
-import SendLinkPerEmailIcon from 'vue-material-design-icons/Link.vue'
-import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
-import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
 import EditAccountIcon from 'vue-material-design-icons/AccountEditOutline.vue'
-import LogoutIcon from 'vue-material-design-icons/Logout.vue'
+import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
+import SettingsIcon from 'vue-material-design-icons/CogOutline.vue'
 import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
-import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue'
-import TableViewIcon from 'vue-material-design-icons/Table.vue'
 import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
+import SendLinkPerEmailIcon from 'vue-material-design-icons/Link.vue'
+import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
-
+import TableViewIcon from 'vue-material-design-icons/Table.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
+import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue'
 import { PollsAPI, ValidatorAPI } from '../../Api'
+import {
+	deleteCookieByValue,
+	findCookieByValue,
+} from '../../helpers/modules/cookieHelper'
 import { useOptionsStore } from '../../stores/options'
 import { usePollStore } from '../../stores/poll'
 import { useSessionStore } from '../../stores/session'
 import { useSubscriptionStore } from '../../stores/subscription'
 import { useVotesStore } from '../../stores/votes'
-
-import {
-	deleteCookieByValue,
-	findCookieByValue,
-} from '../../helpers/modules/cookieHelper'
-
 import { Event } from '../../Types'
-import type { StatusResults } from '../../Types'
-import type { ViewMode } from '../../stores/preferences.types'
-import type { AxiosError } from '@nextcloud/axios'
-import { NcActionRadio } from '@nextcloud/vue'
-import { TimeZoneOption } from '@/Types/dateTime'
 
 type InputProps = {
 	success: boolean
@@ -330,7 +326,7 @@ async function submitEmail() {
 		<NcActionButtonGroup name="View mode">
 			<NcActionButton
 				v-model="viewMode"
-				:value="'table-view'"
+				value="table-view"
 				type="radio"
 				:aria-label="t('polls', 'Switch to table view')">
 				<template #icon>
@@ -340,7 +336,7 @@ async function submitEmail() {
 
 			<NcActionButton
 				v-model="viewMode"
-				:value="'list-view'"
+				value="list-view"
 				type="radio"
 				:aria-label="t('polls', 'Switch to list view')">
 				<template #icon>
@@ -403,7 +399,7 @@ async function submitEmail() {
 			v-if="sessionStore.share?.type === 'external'"
 			v-bind="displayNameInputProps"
 			v-model="sessionStore.share.user.displayName"
-			@update:model-value="validateDisplayName"
+			@update:modelValue="validateDisplayName"
 			@submit="submitDisplayName">
 			<template #icon>
 				<EditAccountIcon />
@@ -415,7 +411,7 @@ async function submitEmail() {
 			v-if="sessionStore.share?.type === 'external'"
 			v-bind="eMailInputProps"
 			v-model="sessionStore.share.user.emailAddress"
-			@update:model-value="validateEMail"
+			@update:modelValue="validateEMail"
 			@submit="submitEmail">
 			<template #icon>
 				<EditEmailIcon />
@@ -435,7 +431,7 @@ async function submitEmail() {
 		</NcActionButton>
 
 		<NcActionCheckbox
-			:model-value="subscriptionStore.subscribed"
+			:modelValue="subscriptionStore.subscribed"
 			:disabled="!pollStore.permissions.subscribe"
 			title="check"
 			@change="writeSubscription">

@@ -1,23 +1,22 @@
-/**
- * SPDX-FileCopyrightText: 2022 Nextcloud contributors
- * SPDX-License-Identifier: AGPL-3.0-or-later
- */
-import { httpInstance, createCancelTokenHandler } from './HttpApi'
-
-import type { SentResults } from './shares'
 import type { AxiosResponse } from '@nextcloud/axios'
-import type { Session } from '../../stores/session.types'
 import type { Comment } from '../../stores/comments.types'
-import type { Share } from '../../stores/shares.types'
 import type { OptionDto, Sequence, SimpleOption } from '../../stores/options.types'
+import type { Session } from '../../stores/session.types'
+import type { Share } from '../../stores/shares.types'
 import type { Answer, Vote } from '../../stores/votes.types'
-
 import type {
 	AddOptionResponse,
 	FullPollResponse,
 	RemoveVotesResponse,
 	setVoteResponse,
 } from './api.types'
+import type { SentResults } from './shares'
+
+/**
+ * SPDX-FileCopyrightText: 2022 Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+import { createCancelTokenHandler, httpInstance } from './HttpApi'
 
 const publicPoll = {
 	getPoll(shareToken: string): Promise<AxiosResponse<FullPollResponse>> {

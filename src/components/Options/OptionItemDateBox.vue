@@ -22,7 +22,7 @@ const duration = Duration.fromMillis(durationSeconds * 1000)
 
 <template>
 	<div class="option-item__option--datebox">
-		<DateBox :start-date="from" :duration="duration" />
+		<DateBox :startDate="from" :duration="duration" />
 	</div>
 </template>
 

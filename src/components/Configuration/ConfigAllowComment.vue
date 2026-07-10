@@ -5,9 +5,8 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll'
-
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import { usePollStore } from '../../stores/poll'
 
 const emit = defineEmits(['change'])
 
@@ -18,7 +17,7 @@ const pollStore = usePollStore()
 	<NcCheckboxRadioSwitch
 		v-model="pollStore.configuration.allowComment"
 		type="switch"
-		@update:model-value="emit('change')">
+		@update:modelValue="emit('change')">
 		{{ t('polls', 'Allow Comments') }}
 	</NcCheckboxRadioSwitch>
 </template>

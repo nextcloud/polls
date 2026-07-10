@@ -1,12 +1,12 @@
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { CalendarEvent } from '../../components/Calendar/calendar.types'
+import type { Calendar } from '../../stores/preferences.types'
+
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { httpInstance, createCancelTokenHandler } from './HttpApi'
-import type { CalendarEvent } from '../../components/Calendar/calendar.types'
-
-import type { AxiosResponse } from '@nextcloud/axios'
-import type { Calendar } from '../../stores/preferences.types'
+import { createCancelTokenHandler, httpInstance } from './HttpApi'
 
 const calendar = {
 	getCalendars(): Promise<AxiosResponse<{ calendars: Calendar[] }>> {

@@ -4,27 +4,23 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import type { SortDirection, SortOption } from '../../stores/polls.types'
 
 import { t } from '@nextcloud/l10n'
-
+import { computed } from 'vue'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionButtonGroup from '@nextcloud/vue/components/NcActionButtonGroup'
 import NcActions from '@nextcloud/vue/components/NcActions'
-import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
-
+import AccountCircleOutlineIcon from 'vue-material-design-icons/AccountCircleOutline.vue'
+import AlphabeticalIcon from 'vue-material-design-icons/Alphabetical.vue'
+import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
+import CreationIcon from 'vue-material-design-icons/ClockPlusOutline.vue'
+import GestureDoubleTapIcon from 'vue-material-design-icons/GestureDoubleTap.vue'
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
 import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue'
-import AlphabeticalIcon from 'vue-material-design-icons/Alphabetical.vue'
-import GestureDoubleTapIcon from 'vue-material-design-icons/GestureDoubleTap.vue'
-import CreationIcon from 'vue-material-design-icons/ClockPlusOutline.vue'
-import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
-import AccountCircleOutlineIcon from 'vue-material-design-icons/AccountCircleOutline.vue'
-
-import { sortOption } from '../../stores/polls.constants'
 import { usePollsStore } from '../../stores/polls'
-
-import type { SortDirection, SortOption } from '../../stores/polls.types'
+import { sortOption } from '../../stores/polls.constants'
 
 const pollsStore = usePollsStore()
 
@@ -56,7 +52,7 @@ function setSort(sort: { by?: SortOption; reverse?: boolean }) {
 </script>
 
 <template>
-	<NcActions primary :menu-name="pollsStore.sort.by.name">
+	<NcActions primary :menuName="pollsStore.sort.by.name">
 		<template #icon>
 			<SortDescendingIcon
 				v-if="pollsStore.sort.reverse"
@@ -110,7 +106,7 @@ function setSort(sort: { by?: SortOption; reverse?: boolean }) {
 		<NcActionButtonGroup :name="t('polls', 'Direction')">
 			<NcActionButton
 				v-model="sortDirection"
-				:value="'desc'"
+				value="desc"
 				type="radio"
 				:aria-label="t('polls', 'Descending')">
 				<template #icon>
@@ -120,7 +116,7 @@ function setSort(sort: { by?: SortOption; reverse?: boolean }) {
 
 			<NcActionButton
 				v-model="sortDirection"
-				:value="'asc'"
+				value="asc"
 				type="radio"
 				:aria-label="t('polls', 'Ascending')">
 				<template #icon>

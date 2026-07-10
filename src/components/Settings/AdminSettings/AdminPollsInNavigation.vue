@@ -16,7 +16,7 @@ const appSettingsStore = useAppSettingsStore()
 		<NcCheckboxRadioSwitch
 			v-model="appSettingsStore.navigationPollsInList"
 			type="switch"
-			@update:model-value="appSettingsStore.write()">
+			@update:modelValue="appSettingsStore.write()">
 			{{ t('polls', 'Load polls into the navigation.') }}
 		</NcCheckboxRadioSwitch>
 	</div>

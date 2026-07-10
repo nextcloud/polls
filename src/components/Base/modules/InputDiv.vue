@@ -4,21 +4,20 @@
 -->
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import MinusIcon from 'vue-material-design-icons/Minus.vue'
-import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
-import AlertIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
-import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
-import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
-import Spinner from '../../AppIcons/Spinner.vue'
-import { Logger } from '../../../helpers/modules/logger'
-
-import { SignalingType } from '../../../Types'
-import NcButton from '@nextcloud/vue/components/NcButton'
+import type { SignalingType } from '../../../Types'
 
 import { t } from '@nextcloud/l10n'
+import { computed, onMounted } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import AlertIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
+import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
+import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
+import MinusIcon from 'vue-material-design-icons/Minus.vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import Spinner from '../../AppIcons/Spinner.vue'
+import { Logger } from '../../../helpers/modules/logger'
 
 interface Props {
 	signalingClass?: SignalingType
@@ -38,14 +37,6 @@ interface Props {
 	disabled?: boolean
 }
 const model = defineModel<string | number>({ required: true })
-
-const vInputFocus = {
-	mounted: (el: { focus: () => void }) => {
-		if (focus) {
-			el.focus()
-		}
-	},
-}
 
 const {
 	signalingClass = '',
@@ -67,9 +58,16 @@ const {
 
 const emit = defineEmits(['input', 'change', 'submit'])
 
+const vInputFocus = {
+	mounted: (el: { focus: () => void }) => {
+		if (focus) {
+			el.focus()
+		}
+	},
+}
+
 const numericModelValue = computed(() =>
-	typeof model.value === 'number' ? model.value : parseInt(model.value),
-)
+	typeof model.value === 'number' ? model.value : parseInt(model.value),)
 
 const computedSignalingClass = computed(() => {
 	if (signalingClass === 'valid') {
@@ -210,7 +208,7 @@ const inputClass = computed(() => [
 			<NcButton
 				v-if="useNumModifiers && !useNumericVariant"
 				:title="t('polls', 'minus')"
-				:variant="'tertiary-no-background'"
+				variant="tertiary-no-background"
 				@click="subtract">
 				<template #icon>
 					<ChevronLeftIcon />
@@ -239,7 +237,7 @@ const inputClass = computed(() => [
 			<NcButton
 				v-if="useNumModifiers && !useNumericVariant"
 				:title="t('polls', 'plus')"
-				:variant="'tertiary-no-background'"
+				variant="tertiary-no-background"
 				@click="add">
 				<template #icon>
 					<ChevronRightIcon />
@@ -255,7 +253,7 @@ const inputClass = computed(() => [
 				@click="add()" />
 		</div>
 
-		<div v-if="helperText !== null" :class="['helper', computedSignalingClass]">
+		<div v-if="helperText !== null" class="helper" :class="[computedSignalingClass]">
 			{{ helperText }}
 		</div>
 	</div>

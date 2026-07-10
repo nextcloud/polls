@@ -12,9 +12,8 @@ import CardLocked from './CardLocked.vue'
 import CardSendConfirmations from './CardSendConfirmations.vue'
 import CardTimezone from './CardTimezone.vue'
 import CardUnpublishedPoll from './CardUnpublishedPoll.vue'
-
-import { usePollStore } from '../../stores/poll'
 import { useOptionsStore } from '../../stores/options'
+import { usePollStore } from '../../stores/poll'
 import { useSharesStore } from '../../stores/shares'
 
 const pollStore = usePollStore()

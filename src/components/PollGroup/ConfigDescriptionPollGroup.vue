@@ -4,8 +4,8 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { t } from '@nextcloud/l10n'
+import { computed } from 'vue'
 import { usePollGroupsStore } from '../../stores/pollGroups'
 
 const emit = defineEmits(['change'])

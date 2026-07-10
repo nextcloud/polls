@@ -4,11 +4,11 @@
 -->
 
 <script setup lang="ts">
-import QRCode from 'qrcode'
-import { Logger } from '../../../helpers/modules/logger'
-import { onMounted, ref } from 'vue'
-
 import type { AxiosError } from '@nextcloud/axios'
+
+import QRCode from 'qrcode'
+import { onMounted, ref } from 'vue'
+import { Logger } from '../../../helpers/modules/logger'
 
 interface Props {
 	name?: string

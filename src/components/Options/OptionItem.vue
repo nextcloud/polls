@@ -4,13 +4,13 @@
 -->
 
 <script setup lang="ts">
+import type { Option } from '../../stores/options.types'
+
 import linkifyStr from 'linkify-string'
 import DragIcon from 'vue-material-design-icons/DotsVertical.vue'
 import DateBox from '../Base/modules/DateBox.vue'
-import { usePollStore } from '../../stores/poll'
 import OptionItemOwner from './OptionItemOwner.vue'
-
-import type { Option } from '../../stores/options.types'
+import { usePollStore } from '../../stores/poll'
 
 interface Props {
 	option: Option
@@ -41,7 +41,7 @@ const pollStore = usePollStore()
 
 		<OptionItemOwner
 			v-if="pollStore.permissions.addOptions && showOwner"
-			:avatar-size="24"
+			:avatarSize="24"
 			:option="option"
 			class="grid-area-owner" />
 
@@ -56,7 +56,7 @@ const pollStore = usePollStore()
 		<DateBox
 			v-else
 			class="option-item__option--date"
-			:start-date="option.getDateTime()"
+			:startDate="option.getDateTime()"
 			:duration="option.getDuration()" />
 
 		<slot name="actions" />

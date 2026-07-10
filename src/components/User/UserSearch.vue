@@ -4,16 +4,15 @@
 -->
 
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue'
-import debounce from 'lodash/debounce'
+import type { AxiosError } from '@nextcloud/axios'
+import type { ISearchType, User } from '../../Types'
+
 import { t } from '@nextcloud/l10n'
-
+import debounce from 'lodash/debounce'
+import { ref, shallowRef } from 'vue'
 import NcSelectUsers from '@nextcloud/vue/components/NcSelectUsers'
-
 import { AppSettingsAPI } from '../../Api'
 import { Logger } from '../../helpers/modules/logger'
-import { ISearchType, User } from '../../Types'
-import type { AxiosError } from '@nextcloud/axios'
 
 interface Props {
 	placeholder?: string
@@ -22,14 +21,14 @@ interface Props {
 	closeOnSelect?: boolean
 }
 
-const emit = defineEmits(['userSelected'])
-
 const {
-	placeholder = t('polls', 'Type to start searching …'),
+	placeholder = t('polls', 'Type to start searching …'),
 	ariaLabel = t('polls', 'Select users'),
 	searchTypes = [99],
 	closeOnSelect = false,
 } = defineProps<Props>()
+
+const emit = defineEmits(['userSelected'])
 
 const users = shallowRef<User[]>([])
 const isLoading = ref(false)

@@ -4,13 +4,13 @@
  */
 // fallow-ignore-file circular-dependency
 
-import { useVotesStore } from '../../stores/votes'
-import { usePollStore } from '../../stores/poll'
-import { useOptionsStore } from '../../stores/options'
-
-import type { Poll } from '../../stores/poll.types'
 import type { OptionDto } from '../../stores/options.types'
+import type { Poll } from '../../stores/poll.types'
 import type { Vote } from '../../stores/votes.types'
+
+import { useOptionsStore } from '../../stores/options'
+import { usePollStore } from '../../stores/poll'
+import { useVotesStore } from '../../stores/votes'
 
 const StoreHelper = {
 	updateStores(data: { poll?: Poll; votes?: Vote[]; options?: OptionDto[] }) {

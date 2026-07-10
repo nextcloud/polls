@@ -4,22 +4,18 @@
  */
 // fallow-ignore-file circular-dependency
 
-import { defineStore } from 'pinia'
-import { computed, ref, shallowRef } from 'vue'
-
-import orderBy from 'lodash/orderBy'
-
-import { t } from '@nextcloud/l10n'
-import { usePollsStore } from './polls'
-import { activeRoute } from '../routerState'
-
-import { PollGroupsAPI } from '../Api'
-
-import { Logger } from '../helpers/modules/logger'
-
 import type { AxiosError } from '@nextcloud/axios'
 import type { Poll } from './poll.types'
 import type { PollGroup } from './pollGroups.types'
+
+import { t } from '@nextcloud/l10n'
+import orderBy from 'lodash/orderBy'
+import { defineStore } from 'pinia'
+import { computed, ref, shallowRef } from 'vue'
+import { PollGroupsAPI } from '../Api'
+import { Logger } from '../helpers/modules/logger'
+import { activeRoute } from '../routerState'
+import { usePollsStore } from './polls'
 
 export const usePollGroupsStore = defineStore('pollGroups', () => {
 	const pollGroups = shallowRef<PollGroup[]>([])
@@ -27,6 +23,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 
 	/**
 	 * Currently selected pollsgroup or undefined if not in a pollsgroup route
+	 *
 	 * @return {PollGroup | undefined} The current poll group if in a group route, otherwise undefined
 	 */
 	const currentPollGroup = computed((): PollGroup | undefined => {
@@ -39,6 +36,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 
 	/**
 	 * Sort poll groups by title in ascending order
+	 *
 	 * @return {PollGroup[]} Sorted poll groups, sorted by title in ascending order
 	 */
 	const pollGroupsSorted = computed((): PollGroup[] =>
@@ -48,8 +46,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 			),
 			['title'],
 			['asc'],
-		),
-	)
+		),)
 
 	const pollsInCurrendPollGroup = computed((): Poll[] => {
 		const pollsStore = usePollsStore()
@@ -57,13 +54,13 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 			return []
 		}
 		return pollsStore.polls.filter((poll) =>
-			currentPollGroup.value?.pollIds.includes(poll.id),
-		)
+			currentPollGroup.value?.pollIds.includes(poll.id),)
 	})
 
 	/**
 	 * Count of polls in each poll group and return pollgroupid and count as list
 	 * with the pollgroupid as key and the count as value
+	 *
 	 * @return {Record<number, number>} An object where the keys are poll group IDs and the values are the counts of polls in those groups
 	 */
 	const countPollsInPollGroups = computed((): Record<number, number> => {
@@ -71,8 +68,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 		const pollsStore = usePollsStore()
 		pollGroups.value.forEach((group) => {
 			counts[group.id] = pollsStore.polls.filter((poll) =>
-				group.pollIds.includes(poll.id),
-			).length
+				group.pollIds.includes(poll.id),).length
 		})
 		return counts
 	})
@@ -81,7 +77,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 	 * Returns a list of poll groups the poll can be added to.
 	 *
 	 * @param pollId - The ID of the poll to check.
-	 * @return {PollGroup[]} List of poll groups that do not include the given pollId.
+	 * @return List of poll groups that do not include the given pollId.
 	 */
 	function addablePollGroups(pollId: number): PollGroup[] {
 		return pollGroups.value.filter((group) => !group.pollIds.includes(pollId))
@@ -91,6 +87,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 	 * Sets the current poll group attributes with the given payload.
 	 * This function updates the current poll group in the store without saving it to the API
 	 * as a temporary state.
+	 *
 	 * @param payload
 	 * @param payload.name
 	 * @param payload.titleExt

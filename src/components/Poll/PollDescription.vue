@@ -4,12 +4,10 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { t } from '@nextcloud/l10n'
-
-import NcModal from '@/components/Base/modules/CustomNcModal.vue'
+import { ref } from 'vue'
 import MagnifyExpandIcon from 'vue-material-design-icons/MagnifyExpand.vue'
-
+import NcModal from '@/components/Base/modules/CustomNcModal.vue'
 import MarkDownDescription from '@/components/Poll/MarkDownDescription.vue'
 import { usePollStore } from '@/stores/poll'
 
@@ -40,7 +38,7 @@ const descriptionExpanded = ref(false)
 		v-if="descriptionExpanded"
 		:name="pollStore.configuration.title"
 		size="large"
-		close-on-click-outside
+		closeOnClickOutside
 		@close="descriptionExpanded = false">
 		<MarkDownDescription />
 	</NcModal>

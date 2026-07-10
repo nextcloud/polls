@@ -3,22 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineStore } from 'pinia'
-import orderBy from 'lodash/orderBy'
-
-import { Logger } from '../helpers/modules/logger'
-import { PollsAPI } from '../Api'
-import { activeRoute } from '../routerState'
-
-import { useSessionStore } from './session'
-import { usePollGroupsStore } from './pollGroups'
-import { sortOption, pollCategories } from './polls.constants'
-
 import type { AxiosError } from '@nextcloud/axios'
 import type { Poll } from './poll.types'
-import type { PollCategory, PollsStore, FilterType } from './polls.types'
+import type { FilterType, PollCategory, PollsStore } from './polls.types'
 
+import orderBy from 'lodash/orderBy'
+import { defineStore } from 'pinia'
+import { PollsAPI } from '../Api'
 import { NotAllowed } from '../Exceptions/Exceptions'
+import { Logger } from '../helpers/modules/logger'
+import { activeRoute } from '../routerState'
+import { usePollGroupsStore } from './pollGroups'
+import { pollCategories, sortOption } from './polls.constants'
+import { useSessionStore } from './session'
 
 export const usePollsStore = defineStore('polls', {
 	state: (): PollsStore => ({
@@ -43,8 +40,7 @@ export const usePollsStore = defineStore('polls', {
 	getters: {
 		navigationCategories(): PollCategory[] {
 			return Object.values(pollCategories).filter((category) =>
-				category.showInNavigation(),
-			)
+				category.showInNavigation(),)
 		},
 
 		currentCategory(): PollCategory {
@@ -68,8 +64,7 @@ export const usePollsStore = defineStore('polls', {
 
 			return orderBy(
 				state.polls.filter((poll: Poll) =>
-					this.currentCategory?.filterCondition(poll),
-				) ?? [],
+					this.currentCategory?.filterCondition(poll),) ?? [],
 				[state.sort.by.sortProperty],
 				[state.sort.reverse ? 'desc' : 'asc'],
 			)
@@ -83,8 +78,7 @@ export const usePollsStore = defineStore('polls', {
 			(filterId: FilterType): Poll[] =>
 				orderBy(
 					state.polls.filter((poll: Poll) =>
-						pollCategories[filterId].filterCondition(poll),
-					) ?? [],
+						pollCategories[filterId].filterCondition(poll),) ?? [],
 					[sortOption.interaction.sortProperty],
 					['desc'],
 				).slice(0, state.meta.maxPollsInNavigation),
@@ -104,8 +98,7 @@ export const usePollsStore = defineStore('polls', {
 
 			for (const [key, category] of Object.entries(pollCategories)) {
 				count[key as FilterType] = state.polls.filter((poll: Poll) =>
-					category.filterCondition(poll),
-				).length
+					category.filterCondition(poll),).length
 			}
 
 			return count
@@ -117,8 +110,7 @@ export const usePollsStore = defineStore('polls', {
 		dashboardList(state: PollsStore): Poll[] {
 			return orderBy(
 				state.polls.filter((poll: Poll) =>
-					pollCategories.relevant.filterCondition(poll),
-				),
+					pollCategories.relevant.filterCondition(poll),),
 				['created'],
 				['desc'],
 			).slice(0, 7)
@@ -140,8 +132,7 @@ export const usePollsStore = defineStore('polls', {
 
 		countByCategory: (state: PollsStore) => (filterId: FilterType) =>
 			state.polls.filter((poll: Poll) =>
-				pollCategories[filterId].filterCondition(poll),
-			).length,
+				pollCategories[filterId].filterCondition(poll),).length,
 	},
 
 	actions: {
@@ -152,9 +143,9 @@ export const usePollsStore = defineStore('polls', {
 		 * This will also set the `meta.status` to `Loading` while the request is in progress,
 		 * and to `Loaded` or `Error` when the request is finished.
 		 *
-		 * @param {boolean} forced - If false, loading polls will only be done, when the status is not `Loaded`.
+		 * @param forced - If false, loading polls will only be done, when the status is not `Loaded`.
 		 * @throws {Error} If the request fails and is not canceled.
-		 * @return {Promise<void>}
+		 * @return
 		 */
 		async load(forced: boolean = true): Promise<void> {
 			const sessionStore = useSessionStore()
@@ -197,6 +188,7 @@ export const usePollsStore = defineStore('polls', {
 
 		/**
 		 * Sliced filtered and sorted polls for navigation
+		 *
 		 * @param filterList - List of poll IDs to filter by
 		 */
 		groupList(filterList: number[]): Poll[] {

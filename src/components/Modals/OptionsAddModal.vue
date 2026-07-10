@@ -4,17 +4,14 @@
 -->
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { t } from '@nextcloud/l10n'
-import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-import NcModal from '../Base/modules/CustomNcModal.vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-
+import { t } from '@nextcloud/l10n'
+import { onMounted, onUnmounted, ref } from 'vue'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
-
-import OptionsDateAddDialog from '../Options/OptionsDateAddDialog.vue'
+import NcModal from '../Base/modules/CustomNcModal.vue'
 import OptionsDate from '../Options/OptionsDate.vue'
-
+import OptionsDateAddDialog from '../Options/OptionsDateAddDialog.vue'
 import { usePollStore } from '../../stores/poll'
 import { Event } from '../../Types'
 

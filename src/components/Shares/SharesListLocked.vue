@@ -4,10 +4,10 @@
 -->
 
 <script setup lang="ts">
-import ConfigBox from '../Base/modules/ConfigBox.vue'
-import LockedIcon from 'vue-material-design-icons/LockOutline.vue'
-import ShareItem from './ShareItem.vue'
 import { t } from '@nextcloud/l10n'
+import LockedIcon from 'vue-material-design-icons/LockOutline.vue'
+import ConfigBox from '../Base/modules/ConfigBox.vue'
+import ShareItem from './ShareItem.vue'
 import { useSharesStore } from '../../stores/shares'
 
 const sharesStore = useSharesStore()

@@ -4,17 +4,14 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-
-import NcModal from '../Base/modules/CustomNcModal.vue'
-import NcActions from '@nextcloud/vue/components/NcActions'
+import { ref } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
-
 import PasteIcon from 'vue-material-design-icons/ClipboardTextMultipleOutline.vue'
-
+import NcModal from '../Base/modules/CustomNcModal.vue'
 import { useOptionsStore } from '../../stores/options'
 
 interface Props {
@@ -22,15 +19,15 @@ interface Props {
 	caption?: string
 }
 
-const optionsStore = useOptionsStore()
-
-const newPollTexts = ref('')
-const showModal = ref(false)
-
 const {
 	placeholder = t('polls', 'Add options list (one option per line)'),
 	caption = t('polls', 'Paste option list'),
 } = defineProps<Props>()
+
+const optionsStore = useOptionsStore()
+
+const newPollTexts = ref('')
+const showModal = ref(false)
 
 /**
  *
@@ -65,7 +62,7 @@ async function addOptionsList() {
 			</NcActionButton>
 		</NcActions>
 
-		<NcModal v-if="showModal" size="small" :can-close="false">
+		<NcModal v-if="showModal" size="small" :canClose="false">
 			<div class="option-clone-date modal__content">
 				<h2>{{ t('polls', 'Create multiple options at once') }}</h2>
 				<p>
@@ -89,7 +86,7 @@ async function addOptionsList() {
 						</template>
 					</NcButton>
 
-					<NcButton :variant="'primary'" @click="addOptionsList()">
+					<NcButton variant="primary" @click="addOptionsList()">
 						<template #default>
 							{{ t('polls', 'OK') }}
 						</template>

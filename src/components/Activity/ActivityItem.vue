@@ -4,12 +4,10 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { DateTime } from 'luxon'
-
-import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
+import { computed } from 'vue'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
-
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import { GuestBubble } from '../../helpers/modules/GuestBubble'
 import { SimpleLink } from '../../helpers/modules/SimpleLink'
 

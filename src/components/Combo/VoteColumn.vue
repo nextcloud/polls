@@ -22,11 +22,11 @@
 </template>
 
 <script setup lang="ts">
-import VoteItem from './VoteItem.vue'
-import OptionItem from '../Options/OptionItem.vue'
-import { useComboStore } from '../../stores/combo'
-
 import type { Option } from '../../stores/options.types'
+
+import OptionItem from '../Options/OptionItem.vue'
+import VoteItem from './VoteItem.vue'
+import { useComboStore } from '../../stores/combo'
 
 const { option } = defineProps<{ option: Option }>()
 

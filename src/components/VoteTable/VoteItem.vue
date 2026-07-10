@@ -4,15 +4,13 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import type { Option } from '../../stores/options.types'
+import type { User } from '../../Types'
 
+import { computed } from 'vue'
+import VoteIndicator from './VoteIndicator.vue'
 import { usePollStore } from '../../stores/poll'
 import { useVotesStore } from '../../stores/votes'
-
-import type { User } from '../../Types'
-import type { Option } from '../../stores/options.types'
-
-import VoteIndicator from './VoteIndicator.vue'
 
 interface Props {
 	option: Option
@@ -28,8 +26,7 @@ const vote = computed(() =>
 	votesStore.getVote({
 		option,
 		user,
-	}),
-)
+	}),)
 
 const iconAnswer = computed(() => {
 	if (option.locked && currentUser && !pollStore.isClosed) {

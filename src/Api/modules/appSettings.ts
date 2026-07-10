@@ -1,12 +1,12 @@
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { AppSettingsStore, Group } from '../../stores/appSettings.types'
+import type { ISearchType, User } from '../../Types'
+
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { httpInstance, createCancelTokenHandler } from './HttpApi'
-import { ISearchType, User } from '../../Types'
-
-import type { AxiosResponse } from '@nextcloud/axios'
-import type { AppSettingsStore, Group } from '../../stores/appSettings.types'
+import { createCancelTokenHandler, httpInstance } from './HttpApi'
 
 const appSettings = {
 	getAppSettings(): Promise<AxiosResponse<{ appSettings: AppSettingsStore }>> {

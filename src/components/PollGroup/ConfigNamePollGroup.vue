@@ -4,10 +4,10 @@
 -->
 
 <script setup lang="ts">
-import InputDiv from '../Base/modules/InputDiv.vue'
 import { t } from '@nextcloud/l10n'
-import { usePollGroupsStore } from '../../stores/pollGroups'
 import { computed } from 'vue'
+import InputDiv from '../Base/modules/InputDiv.vue'
+import { usePollGroupsStore } from '../../stores/pollGroups'
 
 const emit = defineEmits(['change'])
 
@@ -25,8 +25,7 @@ const pollGroupName = computed({
 	},
 })
 const checkName = computed(() =>
-	pollGroupsStore.currentPollGroup?.name ? '' : 'error',
-)
+	pollGroupsStore.currentPollGroup?.name ? '' : 'error',)
 
 const inputProps = {
 	placeholder: t('polls', 'Enter title'),
@@ -41,7 +40,7 @@ const inputProps = {
 	<InputDiv
 		v-model="pollGroupName"
 		v-bind="inputProps"
-		:signaling-class="checkName"
+		:signalingClass="checkName"
 		type="text"
 		@change="emit('change')" />
 </template>

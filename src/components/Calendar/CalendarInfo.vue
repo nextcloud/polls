@@ -4,11 +4,11 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { DateTime } from 'luxon'
+import type { Option } from '../../stores/options.types'
 import type { CalendarEvent } from './calendar.types'
 
-import type { Option } from '../../stores/options.types'
+import { DateTime } from 'luxon'
+import { computed } from 'vue'
 import { getDatesFromOption } from '@/composables/optionDateTime'
 
 interface Props {

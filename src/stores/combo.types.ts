@@ -4,9 +4,9 @@
  */
 
 import type { Participant } from '../Types'
+import type { Option } from './options.types'
 import type { Poll } from './poll.types'
 import type { Vote } from './votes.types'
-import type { Option } from './options.types'
 
 export type ComboStore = {
 	id: number

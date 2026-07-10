@@ -4,36 +4,34 @@
 -->
 
 <script setup lang="ts">
+import { n, t } from '@nextcloud/l10n'
+import { DateTime } from 'luxon'
 import { computed } from 'vue'
-import { t, n } from '@nextcloud/l10n'
-
-import OwnerIcon from 'vue-material-design-icons/CrownOutline.vue'
-import SubscribedIcon from 'vue-material-design-icons/BellOutline.vue'
-import ProposalsAllowedIcon from 'vue-material-design-icons/HandExtendedOutline.vue'
-import TimezoneIcon from 'vue-material-design-icons/MapClockOutline.vue'
-import OptionsIcon from 'vue-material-design-icons/FormatListCheckbox.vue'
 import ParticipantsIcon from 'vue-material-design-icons/AccountGroupOutline.vue'
+import SubscribedIcon from 'vue-material-design-icons/BellOutline.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
+import OwnerIcon from 'vue-material-design-icons/CrownOutline.vue'
+import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
+import EmailIcon from 'vue-material-design-icons/EmailOutline.vue'
+import OptionsIcon from 'vue-material-design-icons/FormatListCheckbox.vue'
+import ProposalsAllowedIcon from 'vue-material-design-icons/HandExtendedOutline.vue'
+import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
+import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
+import ClosedIcon from 'vue-material-design-icons/LockOutline.vue'
+import TimezoneIcon from 'vue-material-design-icons/MapClockOutline.vue'
 import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
 import ShowResultsOnClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
 import HideResultsIcon from 'vue-material-design-icons/MonitorOff.vue'
-import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
-import ClosedIcon from 'vue-material-design-icons/LockOutline.vue'
-import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
-import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
-import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
-import CloseIcon from 'vue-material-design-icons/Close.vue'
-import EmailIcon from 'vue-material-design-icons/EmailOutline.vue'
 import MaybeIcon from 'vue-material-design-icons/Tilde.vue'
-
 import BadgeDiv from '../Base/modules/BadgeDiv.vue'
 import UserBubble from '../User/UserBubble.vue'
-import { useSessionStore } from '../../stores/session'
-import { usePollStore } from '../../stores/poll'
-import { useSubscriptionStore } from '../../stores/subscription'
 import { useOptionsStore } from '../../stores/options'
+import { usePollStore } from '../../stores/poll'
+import { useSessionStore } from '../../stores/session'
+import { useSubscriptionStore } from '../../stores/subscription'
 import { useVotesStore } from '../../stores/votes'
-import { DateTime } from 'luxon'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
@@ -76,8 +74,7 @@ const resultsCaption = computed(() => {
 const accessCaption = computed(() =>
 	pollStore.configuration.access === 'private'
 		? t('polls', 'Private poll')
-		: t('polls', 'Openly accessible poll'),
-)
+		: t('polls', 'Openly accessible poll'),)
 
 const currentTimeZone = sessionStore.currentTimezoneName
 const countAllYesVotes = computed(() => votesStore.countAllVotesByAnswer('yes'))
@@ -192,13 +189,13 @@ const countUsedVotes = computed(
 		</BadgeDiv>
 		<BadgeDiv v-if="countAllYesVotes">
 			<template #icon>
-				<CheckIcon fill-color="var(--color-polls-foreground-yes)" />
+				<CheckIcon fillColor="var(--color-polls-foreground-yes)" />
 			</template>
 			{{ n('polls', '%n "Yes" vote', '%n "Yes" votes', countAllYesVotes) }}
 		</BadgeDiv>
 		<BadgeDiv v-if="countAllNoVotes">
 			<template #icon>
-				<CloseIcon fill-color="var(--color-polls-foreground-no)" />
+				<CloseIcon fillColor="var(--color-polls-foreground-no)" />
 			</template>
 			{{
 				n(
@@ -211,7 +208,7 @@ const countUsedVotes = computed(
 		</BadgeDiv>
 		<BadgeDiv v-if="countAllMaybeVotes">
 			<template #icon>
-				<MaybeIcon fill-color="var(--color-polls-foreground-maybe)" />
+				<MaybeIcon fillColor="var(--color-polls-foreground-maybe)" />
 			</template>
 			{{
 				n('polls', '%n "Maybe" vote', '%n "Maybe" votes', countAllMaybeVotes)

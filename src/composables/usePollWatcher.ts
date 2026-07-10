@@ -3,30 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { watch, onBeforeUnmount, onMounted } from 'vue'
-import { usePollStore } from '../stores/poll'
-import { generateUrl } from '@nextcloud/router'
-
-// eslint-disable-next-line import/default
-import PollWatcherWorker from '../workers/pollWatcher.worker?worker'
-import { Logger } from '../helpers/modules/logger'
-
-import { useCommentsStore } from '../stores/comments'
-import { useOptionsStore } from '../stores/options'
-import { usePollsStore } from '../stores/polls'
-import { useSessionStore } from '../stores/session'
-import { useVotesStore } from '../stores/votes'
-import { useSharesStore } from '../stores/shares'
-
+import type { NotAllowed } from '../Exceptions/Exceptions'
+import type { Watcher } from '../stores/session.types'
 import type {
+	WatcherData,
 	WatcherMode,
 	WatcherProps,
-	WatcherData,
 	WorkerResponse,
 } from './usePollWatcher.types'
 
-import type { Watcher } from '../stores/session.types'
-import { NotAllowed } from '../Exceptions/Exceptions'
+import { generateUrl } from '@nextcloud/router'
+import { onBeforeUnmount, onMounted, watch } from 'vue'
+import { Logger } from '../helpers/modules/logger'
+import { useCommentsStore } from '../stores/comments'
+import { useOptionsStore } from '../stores/options'
+import { usePollStore } from '../stores/poll'
+import { usePollsStore } from '../stores/polls'
+import { useSessionStore } from '../stores/session'
+import { useSharesStore } from '../stores/shares'
+import { useVotesStore } from '../stores/votes'
+// eslint-disable-next-line import/default
+import PollWatcherWorker from '../workers/pollWatcher.worker?worker'
 
 /**
  * poll watcher to keep polls collection and the current poll
@@ -35,7 +32,7 @@ import { NotAllowed } from '../Exceptions/Exceptions'
  *
  * @param interval - polling interval in milliseconds (default: 30000)
  */
-export const usePollWatcher = (interval = 30000) => {
+export function usePollWatcher (interval = 30000) {
 	const sessionStore = useSessionStore()
 	const pollStore = usePollStore()
 	const pollsStore = usePollsStore()

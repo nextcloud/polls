@@ -4,32 +4,28 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import type { FilterType } from '../stores/polls.types'
 
 import { showError } from '@nextcloud/dialogs'
-import { t, n } from '@nextcloud/l10n'
-
+import { n, t } from '@nextcloud/l10n'
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-
-import HeaderBar from '../components/Base/modules/HeaderBar.vue'
-import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
-import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
-import PollItem from '../components/PollList/PollItem.vue'
-import PollListSort from '../components/PollList/PollListSort.vue'
-import PollItemActions from '../components/PollList/PollItemActions.vue'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
 import ActionToggleSidebar from '../components/Actions/modules/ActionToggleSidebar.vue'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
+import HeaderBar from '../components/Base/modules/HeaderBar.vue'
+import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
-
+import PollItem from '../components/PollList/PollItem.vue'
+import PollItemActions from '../components/PollList/PollItemActions.vue'
+import PollListSort from '../components/PollList/PollListSort.vue'
+import { usePollGroupsStore } from '../stores/pollGroups'
+import { usePollsStore } from '../stores/polls'
+import { pollCategories } from '../stores/polls.constants'
 import { usePreferencesStore } from '../stores/preferences'
 import { useSessionStore } from '../stores/session'
-import { pollCategories } from '../stores/polls.constants'
-import { usePollsStore } from '../stores/polls'
-import { usePollGroupsStore } from '../stores/pollGroups'
-
-import type { FilterType } from '../stores/polls.types'
 
 const pollsStore = usePollsStore()
 const pollGroupsStore = usePollGroupsStore()
@@ -56,8 +52,7 @@ const showMore = computed(
 )
 
 const countLoadedPolls = computed(() =>
-	Math.min(pollsStore.chunkedList.length, pollsStore.pollsFilteredSorted.length),
-)
+	Math.min(pollsStore.chunkedList.length, pollsStore.pollsFilteredSorted.length),)
 
 const infoLoaded = computed(() =>
 	n(
@@ -69,8 +64,7 @@ const infoLoaded = computed(() =>
 			loadedPolls: countLoadedPolls.value,
 			countPolls: pollsStore.pollsFilteredSorted.length,
 		},
-	),
-)
+	),)
 
 const description = computed(() => {
 	if (route.meta.groupPage) {
@@ -152,7 +146,7 @@ async function loadMore() {
 					v-for="poll in pollsStore.chunkedList"
 					:key="poll.id"
 					:poll="poll"
-					@goto-poll="gotoPoll(poll.id)">
+					@gotoPoll="gotoPoll(poll.id)">
 					<template #actions>
 						<PollItemActions
 							v-if="

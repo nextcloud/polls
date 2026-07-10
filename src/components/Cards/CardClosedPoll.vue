@@ -4,8 +4,8 @@
 -->
 
 <script setup lang="ts">
-import CardDiv from '../Base/modules/CardDiv.vue'
 import { t } from '@nextcloud/l10n'
+import CardDiv from '../Base/modules/CardDiv.vue'
 import { usePollStore } from '../../stores/poll'
 
 const pollStore = usePollStore()

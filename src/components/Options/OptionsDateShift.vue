@@ -4,20 +4,16 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { t } from '@nextcloud/l10n'
+import type { TimeUnitsType } from '@/Types/dateTime'
 
+import { t } from '@nextcloud/l10n'
+import { ref } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
-
 import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
-
 import InputDiv from '../Base/modules/InputDiv.vue'
 import { dateTimeUnitsKeyed } from '@/helpers/modules/dateHelpers'
-
 import { useOptionsStore } from '@/stores/options'
-
-import type { TimeUnitsType } from '@/Types/dateTime'
 
 const optionsStore = useOptionsStore()
 
@@ -55,11 +51,11 @@ function shiftDates(shift: TimeUnitsType) {
 				v-model="shift.value"
 				class="shift-step"
 				:label="t('polls', 'Step width')"
-				use-num-modifiers />
+				useNumModifiers />
 			<div class="unit-select">
 				<NcSelect
 					v-model="shift.unit"
-					:input-label="t('polls', 'Step unit')"
+					:inputLabel="t('polls', 'Step unit')"
 					:clearable="false"
 					:filterable="false"
 					:options="dateTimeOptions"
@@ -67,7 +63,7 @@ function shiftDates(shift: TimeUnitsType) {
 				<NcButton
 					class="submit"
 					:aria-label="t('polls', 'Submit')"
-					:variant="'tertiary'"
+					variant="tertiary"
 					@click="shiftDates(shift)">
 					<template #icon>
 						<SubmitIcon />

@@ -4,8 +4,8 @@
  */
 // fallow-ignore-file circular-dependency
 import axios from '@nextcloud/axios'
-import { generateUrl, generateOcsUrl } from '@nextcloud/router'
 import { getLanguage } from '@nextcloud/l10n'
+import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { useSessionStore } from '../../stores/session.ts'
 
 const axiosConfig = {
@@ -46,7 +46,7 @@ httpInstance.interceptors.request.use((config) => {
  * @param {any} apiObject apiObject
  * @return {any}
  */
-const createCancelTokenHandler = (apiObject) => {
+function createCancelTokenHandler (apiObject) {
 	const cancelTokenHandler = {}
 	Object.getOwnPropertyNames(apiObject).forEach((propertyName) => {
 		const handlers = {}
@@ -68,4 +68,4 @@ const createCancelTokenHandler = (apiObject) => {
 	return cancelTokenHandler
 }
 
-export { ocsInstance, httpInstance, createCancelTokenHandler }
+export { createCancelTokenHandler, httpInstance, ocsInstance }

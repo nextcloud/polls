@@ -2,31 +2,31 @@
  * SPDX-FileCopyrightText: 2019 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import {
+import type {
 	RouteLocationNormalized,
-	RouteRecordRaw,
-	createWebHistory,
-	createRouter,
-} from 'vue-router'
+	RouteRecordRaw
+} from 'vue-router';
 
 import { getCurrentUser } from '@nextcloud/auth'
+import { emit } from '@nextcloud/event-bus'
 import { generateUrl } from '@nextcloud/router'
+import { Settings } from 'luxon'
+import {
+	createRouter,
+	createWebHistory,
+} from 'vue-router'
+import Navigation from './views/Navigation.vue'
 import { getCookieValue, setCookie } from './helpers/modules/cookieHelper'
 import { Logger } from './helpers/modules/logger'
-import { emit } from '@nextcloud/event-bus'
-import { Event } from './Types'
-
-import Navigation from './views/Navigation.vue'
-
 import { activeRoute } from './routerState'
-import { useSessionStore } from './stores/session'
+import { useOptionsStore } from './stores/options'
 import { usePollStore } from './stores/poll'
 import { usePollsStore } from './stores/polls'
-import { useVotesStore } from './stores/votes'
-import { useOptionsStore } from './stores/options'
-import { useSubscriptionStore } from './stores/subscription'
-import { Settings } from 'luxon'
 import { usePreferencesStore } from './stores/preferences'
+import { useSessionStore } from './stores/session'
+import { useSubscriptionStore } from './stores/subscription'
+import { useVotesStore } from './stores/votes'
+import { Event } from './Types'
 
 declare module 'vue-router' {
 	interface RouteMeta {
@@ -231,6 +231,7 @@ function needsRegistration(pollStore: ReturnType<typeof usePollStore>): boolean 
 /**
  * Load poll list for the list page. If the watcher is active, we can skip
  * loading the list as it will be updated by the watcher.
+ *
  * @param watcherActive Whether the watcher is active or not
  */
 async function handleListPage(watcherActive: boolean): Promise<void> {

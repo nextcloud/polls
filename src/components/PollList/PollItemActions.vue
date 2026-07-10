@@ -4,36 +4,30 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import type { Poll } from '../../stores/poll.types'
 
-import { t } from '@nextcloud/l10n'
 import { showError, showInfo } from '@nextcloud/dialogs'
-
-import NcDialog from '@nextcloud/vue/components/NcDialog'
-import NcActionInput from '@nextcloud/vue/components/NcActionInput'
-
-import NcActions from '@nextcloud/vue/components/NcActions'
+import { t } from '@nextcloud/l10n'
+import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-
+import NcActionInput from '@nextcloud/vue/components/NcActionInput'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
+import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue'
 import ArchivePollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
-import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import IconArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
+import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import RestorePollIcon from 'vue-material-design-icons/RecycleVariant.vue'
-import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue'
-
+import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import DeletePollDialog from '../Modals/DeletePollDialog.vue'
 import TransferPollDialog from '../Modals/TransferPollDialog.vue'
-
-import { usePollsStore } from '../../stores/polls'
 import { usePollGroupsStore } from '../../stores/pollGroups'
+import { usePollsStore } from '../../stores/polls'
 import { useSessionStore } from '../../stores/session'
-
-import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
-import type { Poll } from '../../stores/poll.types'
 
 const { poll } = defineProps<{ poll: Poll }>()
 
@@ -159,7 +153,7 @@ async function takeOverPoll(): Promise<void> {
 </script>
 
 <template>
-	<NcActions force-menu>
+	<NcActions forceMenu>
 		<template v-if="subMenu">
 			<NcActionButton
 				:aria-label="t('polls', 'Back')"
@@ -178,7 +172,7 @@ async function takeOverPoll(): Promise<void> {
 				"
 				:name="t('polls', 'Clone poll')"
 				:aria-label="t('polls', 'Clone poll')"
-				close-after-click
+				closeAfterClick
 				@click="clonePoll()">
 				<template #icon>
 					<ClonePollIcon />
@@ -191,7 +185,7 @@ async function takeOverPoll(): Promise<void> {
 				"
 				:name="t('polls', 'Archive poll')"
 				:aria-label="t('polls', 'Archive poll')"
-				close-after-click
+				closeAfterClick
 				@click="toggleArchive()">
 				<template #icon>
 					<ArchivePollIcon />
@@ -204,7 +198,7 @@ async function takeOverPoll(): Promise<void> {
 				"
 				:name="t('polls', 'Restore poll')"
 				:aria-label="t('polls', 'Restore poll')"
-				close-after-click
+				closeAfterClick
 				@click="toggleArchive()">
 				<template #icon>
 					<RestorePollIcon />
@@ -215,7 +209,7 @@ async function takeOverPoll(): Promise<void> {
 				v-show="adminAccess"
 				:name="t('polls', 'Take over')"
 				:aria-label="t('polls', 'Take over')"
-				close-after-click
+				closeAfterClick
 				@click="showTakeOverDialog = true">
 				<template #icon>
 					<PlusIcon />
@@ -227,7 +221,7 @@ async function takeOverPoll(): Promise<void> {
 				class="danger"
 				:name="t('polls', 'Delete poll')"
 				:aria-label="t('polls', 'Delete poll')"
-				close-after-click
+				closeAfterClick
 				@click="showDeleteDialog = true">
 				<template #icon>
 					<DeletePollIcon />
@@ -239,7 +233,7 @@ async function takeOverPoll(): Promise<void> {
 				class="danger"
 				:name="t('polls', 'Transfer poll ownership')"
 				:aria-label="t('polls', 'Transfer poll ownership')"
-				close-after-click
+				closeAfterClick
 				@click="showTransferDialog = true">
 				<template #icon>
 					<TransferPollIcon />
@@ -248,7 +242,7 @@ async function takeOverPoll(): Promise<void> {
 
 			<NcActionButton
 				v-show="poll.permissions.edit"
-				is-menu
+				isMenu
 				name="Add to group"
 				@click="toggleSubMenu('addToGroup')">
 				<template #icon>
@@ -258,7 +252,7 @@ async function takeOverPoll(): Promise<void> {
 
 			<NcActionButton
 				v-show="poll.permissions.edit && poll.pollGroups.length > 0"
-				is-menu
+				isMenu
 				name="Remove from group"
 				@click="toggleSubMenu('removeFromGroup')">
 				<template #icon>

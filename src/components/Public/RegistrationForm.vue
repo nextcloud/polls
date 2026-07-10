@@ -4,22 +4,20 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import debounce from 'lodash/debounce'
-import { showError } from '@nextcloud/dialogs'
-import { t } from '@nextcloud/l10n'
-
-import NcButton from '@nextcloud/vue/components/NcButton'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-
-import InputDiv from '@/components/Base/modules/InputDiv.vue'
-import { setCookie } from '@/helpers/modules/cookieHelper'
-import { ValidatorAPI, PublicAPI } from '@/Api'
-import { useSessionStore } from '@/stores/session'
-
 import type { AxiosError } from '@nextcloud/axios'
 import type { SignalingType } from '@/Types'
+
+import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import debounce from 'lodash/debounce'
+import { computed, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import InputDiv from '@/components/Base/modules/InputDiv.vue'
+import { PublicAPI, ValidatorAPI } from '@/Api'
+import { setCookie } from '@/helpers/modules/cookieHelper'
+import { useSessionStore } from '@/stores/session'
 
 const route = useRoute()
 const router = useRouter()
@@ -49,7 +47,7 @@ const checkStatus = ref<{
 const userName = ref('')
 const userNameHint = computed(() => {
 	if (checkStatus.value.userName === 'checking') {
-		return t('polls', 'Checking name …')
+		return t('polls', 'Checking name …')
 	}
 	if (checkStatus.value.userName === 'missing') {
 		return t('polls', 'A name is required.')
@@ -91,7 +89,7 @@ const emailAddress = ref('')
 
 const emailAddressHint = computed(() => {
 	if (checkStatus.value.email === 'checking') {
-		return t('polls', 'Checking email address …')
+		return t('polls', 'Checking email address …')
 	}
 	if (checkStatus.value.email === 'missing') {
 		return t('polls', 'An email address is required.')
@@ -217,9 +215,9 @@ onMounted(() => {
 	<InputDiv
 		v-model="userName"
 		class="section__username"
-		:signaling-class="checkStatus.userName"
+		:signalingClass="checkStatus.userName"
 		:placeholder="t('polls', 'Enter your name or a nickname')"
-		:helper-text="userNameHint"
+		:helperText="userNameHint"
 		focus
 		@input="validatePublicUsername()"
 		@submit="submitRegistration()" />
@@ -228,13 +226,13 @@ onMounted(() => {
 		v-if="sessionStore.share.publicPollEmail !== 'disabled'"
 		v-model="emailAddress"
 		class="section__email"
-		:signaling-class="checkStatus.email"
+		:signalingClass="checkStatus.email"
 		:placeholder="
 			sessionStore.share.publicPollEmail === 'mandatory'
 				? t('polls', 'Email address (mandatory)')
 				: t('polls', 'Email address (optional)')
 		"
-		:helper-text="emailAddressHint"
+		:helperText="emailAddressHint"
 		type="email"
 		inputmode="email"
 		@input="validateEmailAddress()"
@@ -246,7 +244,7 @@ onMounted(() => {
 
 	<div class="register_actions">
 		<NcButton
-			:variant="'primary'"
+			variant="primary"
 			:disabled="disableSubmit"
 			@click="submitRegistration()">
 			<template #default>

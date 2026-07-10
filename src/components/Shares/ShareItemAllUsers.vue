@@ -4,14 +4,13 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import type { VirtualUserItemType } from '../../Types'
+
 import { t } from '@nextcloud/l10n'
-
+import { computed } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-
 import UserItem from '../User/UserItem.vue'
 import { usePollStore } from '../../stores/poll'
-import { VirtualUserItemType } from '../../Types'
 
 const { tag = 'div' } = defineProps<{ tag?: string }>()
 

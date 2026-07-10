@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { OptionDto } from '../../stores/options.types'
-import type { Vote } from '../../stores/votes.types'
-import type { Poll } from '../../stores/poll.types'
 import type { Comment } from '../../stores/comments.types'
+import type { OptionDto } from '../../stores/options.types'
+import type { Poll } from '../../stores/poll.types'
 import type { Share } from '../../stores/shares.types'
+import type { Vote } from '../../stores/votes.types'
 
 export type Job = {
 	id: string

@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { createApp } from 'vue'
-import { pinia } from './stores'
-import { Settings } from 'luxon'
 import { getLanguage } from '@nextcloud/l10n'
-
+import { Settings } from 'luxon'
+import { createApp } from 'vue'
 import UserSettingsPage from './views/UserSettingsPage.vue'
+import { pinia } from './stores'
 
 Settings.defaultLocale = getLanguage()
 

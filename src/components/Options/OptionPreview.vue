@@ -4,17 +4,15 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { n, t } from '@nextcloud/l10n'
 import { DateTime } from 'luxon'
-import { t, n } from '@nextcloud/l10n'
-import { getDatesFromOption } from '@/composables/optionDateTime'
-
-import NcModal from '@/components/Base/modules/CustomNcModal.vue'
-import MagnifyExpandIcon from 'vue-material-design-icons/MagnifyExpand.vue'
+import { computed, ref } from 'vue'
 import CalendarBlankOutlineIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 import FormatListBulletedSquareIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-
+import MagnifyExpandIcon from 'vue-material-design-icons/MagnifyExpand.vue'
+import NcModal from '@/components/Base/modules/CustomNcModal.vue'
 import OptionItem from '@/components/Options/OptionItem.vue'
+import { getDatesFromOption } from '@/composables/optionDateTime'
 import { useOptionsStore } from '@/stores/options'
 import { usePollStore } from '@/stores/poll'
 
@@ -86,7 +84,7 @@ function optionLabel(option: (typeof optionsStore.options)[0]): string {
 		v-if="optionsExpanded"
 		:name="t('polls', 'Available options')"
 		size="normal"
-		close-on-click-outside
+		closeOnClickOutside
 		@close="optionsExpanded = false">
 		<ul class="options_preview__modal">
 			<OptionItem

@@ -4,17 +4,16 @@
 -->
 
 <script setup lang="ts">
+import type { StatusResults } from '../../Types'
+
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import debounce from 'lodash/debounce'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import debounce from 'lodash/debounce'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import { t } from '@nextcloud/l10n'
-
 import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
-
 import { ValidatorAPI } from '../../Api'
-import { StatusResults } from '../../Types'
 import { useSessionStore } from '../../stores/session'
 
 const route = useRoute()
@@ -94,7 +93,7 @@ async function submit() {
 		v-if="route.meta.publicVotePage"
 		v-bind="inputProps"
 		v-model="sessionStore.share.user.emailAddress"
-		@update:model-value="validate"
+		@update:modelValue="validate"
 		@submit="submit">
 		<template #icon>
 			<EditEmailIcon />

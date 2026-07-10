@@ -4,23 +4,20 @@
 -->
 
 <script setup lang="ts">
+import { t } from '@nextcloud/l10n'
 import { computed, onMounted, watch } from 'vue'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
-import { t } from '@nextcloud/l10n'
-
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-
-import CommentAdd from '../Comments/CommentAdd.vue'
-import Comments from '../Comments/Comments.vue'
 import CommentsIcon from 'vue-material-design-icons/CommentProcessingOutline.vue'
-
-import { usePollStore } from '../../stores/poll'
-import { useCommentsStore } from '../../stores/comments'
-import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
-import ConfigForceConfidentialComments from '../Configuration/ConfigForceConfidentialComments.vue'
-import ConfigBox from '../Base/modules/ConfigBox.vue'
 import PollConfigIcon from 'vue-material-design-icons/WrenchOutline.vue'
 import CardDiv from '../Base/modules/CardDiv.vue'
+import ConfigBox from '../Base/modules/ConfigBox.vue'
+import CommentAdd from '../Comments/CommentAdd.vue'
+import Comments from '../Comments/Comments.vue'
+import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
+import ConfigForceConfidentialComments from '../Configuration/ConfigForceConfidentialComments.vue'
+import { useCommentsStore } from '../../stores/comments'
+import { usePollStore } from '../../stores/poll'
 
 const pollStore = usePollStore()
 const commentsStore = useCommentsStore()

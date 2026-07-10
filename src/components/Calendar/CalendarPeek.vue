@@ -4,25 +4,21 @@
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import type { AxiosError } from '@nextcloud/axios'
+import type { Option } from '../../stores/options.types'
+import type { CalendarEvent } from './calendar.types'
+
 import { t } from '@nextcloud/l10n'
 import orderBy from 'lodash/orderBy'
-
-import NcPopover from '@nextcloud/vue/components/NcPopover'
+import { computed, onMounted, ref } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
-
+import NcPopover from '@nextcloud/vue/components/NcPopover'
 import CalendarIcon from 'vue-material-design-icons/CalendarOutline.vue'
-
 import CalendarInfo from './CalendarInfo.vue'
 import { CalendarAPI } from '../../Api'
 import { Logger } from '../../helpers/modules/logger'
-
 import { usePollStore } from '../../stores/poll'
-
-import type { AxiosError } from '@nextcloud/axios'
-import type { Option } from '../../stores/options.types'
 import { getDatesFromOption } from '@/composables/optionDateTime'
-import type { CalendarEvent } from './calendar.types'
 
 const { option } = defineProps<{ option: Option }>()
 
@@ -75,7 +71,7 @@ onMounted(async () => {
 		v-if="events.length"
 		v-bind="$attrs"
 		class="calendar-peek"
-		close-on-click-outside>
+		closeOnClickOutside>
 		<template #trigger>
 			<NcButton variant="tertiary-no-background">
 				<template #icon>
@@ -89,7 +85,7 @@ onMounted(async () => {
 			<CalendarInfo
 				v-for="eventItem in sortedEvents"
 				:key="eventItem.UID"
-				:calendar-event="eventItem"
+				:calendarEvent="eventItem"
 				:option="option" />
 		</div>
 	</NcPopover>

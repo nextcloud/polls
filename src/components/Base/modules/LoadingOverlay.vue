@@ -5,14 +5,12 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-import Spinner from '../../AppIcons/Spinner.vue'
 import { onMounted, ref, watch } from 'vue'
-
-const description = ref(t('polls', 'Please wait…'))
+import Spinner from '../../AppIcons/Spinner.vue'
 
 const {
 	show = false,
-	name = t('polls', 'Loading …'),
+	name = t('polls', 'Loading …'),
 	loadingTexts = '',
 	teleportTo = '#content-vue',
 } = defineProps<{
@@ -22,7 +20,9 @@ const {
 	teleportTo?: string
 }>()
 
-const sequentialDescriptionOutput = () => {
+const description = ref(t('polls', 'Please wait…'))
+
+function sequentialDescriptionOutput () {
 	if (loadingTexts instanceof String) {
 		description.value = loadingTexts as string
 		return

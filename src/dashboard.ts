@@ -4,9 +4,9 @@
  */
 
 import { createApp } from 'vue'
+import Dashboard from './views/Dashboard.vue'
 import { pinia } from './stores'
 
-import Dashboard from './views/Dashboard.vue'
 import './assets/scss/polls-icon.scss'
 
 /** global: OCA */

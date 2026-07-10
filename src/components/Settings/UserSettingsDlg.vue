@@ -3,17 +3,14 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-
+import { onMounted, onUnmounted, ref } from 'vue'
 import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
 import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
-
 import CalendarSettings from './UserSettings/CalendarSettings.vue'
 import FeatureSettings from './UserSettings/FeatureSettings.vue'
 import StyleSettings from './UserSettings/StyleSettings.vue'
-
 import { usePreferencesStore } from '../../stores/preferences'
 import { Event } from '../../Types'
 
@@ -41,7 +38,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<NcAppSettingsDialog v-model:open="show" show-navigation>
+	<NcAppSettingsDialog v-model:open="show" showNavigation>
 		<NcAppSettingsSection id="calendar" :name="t('polls', 'Calendar check')">
 			<CalendarSettings />
 		</NcAppSettingsSection>

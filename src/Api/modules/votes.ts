@@ -1,12 +1,12 @@
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { Answer, Vote } from '../../stores/votes.types'
+import type { RemoveVotesResponse, setVoteResponse } from './api.types'
+
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { httpInstance, createCancelTokenHandler } from './HttpApi'
-
-import type { RemoveVotesResponse, setVoteResponse } from './api.types'
-import type { AxiosResponse } from '@nextcloud/axios'
-import type { Answer, Vote } from '../../stores/votes.types'
+import { createCancelTokenHandler, httpInstance } from './HttpApi'
 
 const votes = {
 	getVotes(pollId: number): Promise<AxiosResponse<{ votes: Vote[] }>> {

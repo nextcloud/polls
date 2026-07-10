@@ -4,28 +4,26 @@
 -->
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-
-import { useOptionsStore } from '../../stores/options'
-import { usePollStore } from '../../stores/poll'
-
+import { NcEmptyContent } from '@nextcloud/vue'
+import { onMounted, onUnmounted } from 'vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
+import DateOptionsIcon from 'vue-material-design-icons/CalendarMonthOutline.vue'
+import AddDateIcon from 'vue-material-design-icons/CalendarPlusOutline.vue'
+import ShiftDateIcon from 'vue-material-design-icons/CalendarStartOutline.vue'
+import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import ActionAddOption from '../Actions/modules/ActionAddOption.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'
+import ConfigProposals from '../Configuration/ConfigProposals.vue'
 import OptionsDate from '../Options/OptionsDate.vue'
 import OptionsDateShift from '../Options/OptionsDateShift.vue'
 import OptionsText from '../Options/OptionsText.vue'
-import ConfigProposals from '../Configuration/ConfigProposals.vue'
-import AddDateIcon from 'vue-material-design-icons/CalendarPlusOutline.vue'
-import DateOptionsIcon from 'vue-material-design-icons/CalendarMonthOutline.vue'
-import ShiftDateIcon from 'vue-material-design-icons/CalendarStartOutline.vue'
-import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
-import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
-import ActionAddOption from '../Actions/modules/ActionAddOption.vue'
-import { Event } from '../../Types'
 import OptionsTextAdd from '../Options/OptionsTextAdd.vue'
-import { NcEmptyContent } from '@nextcloud/vue'
+import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
+import { useOptionsStore } from '../../stores/options'
+import { usePollStore } from '../../stores/poll'
+import { Event } from '../../Types'
 
 const optionsStore = useOptionsStore()
 const pollStore = usePollStore()

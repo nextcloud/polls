@@ -5,7 +5,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 export type CheckboxOption = {
@@ -18,16 +17,16 @@ interface Props {
 	options: CheckboxOption[]
 }
 
-const { id, options } = defineProps<Props>()
 const model = defineModel<string>({ required: true })
+const { id, options } = defineProps<Props>()
+const emit = defineEmits(['update'])
 
-const RandId = () =>
-	Math.random()
+function RandId () {
+  return Math.random()
 		.toString(36)
 		.replace(/[^a-z]+/g, '')
 		.slice(2, 12)
-
-const emit = defineEmits(['update'])
+}
 
 const elementId = computed(() => id ?? `rg-${RandId()}`)
 </script>
@@ -41,7 +40,7 @@ const elementId = computed(() => id ?? `rg-${RandId()}`)
 			:value="option.value"
 			:name="elementId + index"
 			type="radio"
-			@update:model-value="emit('update')">
+			@update:modelValue="emit('update')">
 			{{ option.label }}
 		</NcCheckboxRadioSwitch>
 	</div>

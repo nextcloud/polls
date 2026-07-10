@@ -5,10 +5,8 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-
 import SearchIcon from 'vue-material-design-icons/Magnify.vue'
 
 const emptyContentProps = {

@@ -3,23 +3,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineStore } from 'pinia'
-import sortBy from 'lodash/sortBy'
-
-import { VotesAPI, OptionsAPI, PollsAPI } from '../Api'
-import { Logger } from '../helpers/modules/logger'
-import { uniqueOptions, uniqueParticipants } from '../helpers/modules/arrayHelper'
-
-import { usePreferencesStore } from './preferences'
-import { usePollsStore } from './polls'
-import { hydrateOption } from './options'
-
 import type { AxiosError } from '@nextcloud/axios'
 import type { Participant } from '../Types'
-import type { Vote } from './votes.types'
+import type { ComboStore } from './combo.types'
 import type { Option } from './options.types'
 import type { Poll } from './poll.types'
-import type { ComboStore } from './combo.types'
+import type { Vote } from './votes.types'
+
+import sortBy from 'lodash/sortBy'
+import { defineStore } from 'pinia'
+import { OptionsAPI, PollsAPI, VotesAPI } from '../Api'
+import { uniqueOptions, uniqueParticipants } from '../helpers/modules/arrayHelper'
+import { Logger } from '../helpers/modules/logger'
+import { hydrateOption } from './options'
+import { usePollsStore } from './polls'
+import { usePreferencesStore } from './preferences'
 
 export const useComboStore = defineStore('combo', {
 	state: (): ComboStore => ({

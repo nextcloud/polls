@@ -1,17 +1,17 @@
+import type { AxiosResponse } from '@nextcloud/axios'
+import type {
+	PublicPollEmailConditions,
+	Share,
+	SharePurpose,
+	ShareType,
+} from '../../stores/shares.types'
+import type { User } from '../../Types'
+
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { httpInstance, createCancelTokenHandler } from './HttpApi'
-
-import type { AxiosResponse } from '@nextcloud/axios'
-import type { User } from '../../Types'
-import type {
-	PublicPollEmailConditions,
-	SharePurpose,
-	Share,
-	ShareType,
-} from '../../stores/shares.types'
+import { createCancelTokenHandler, httpInstance } from './HttpApi'
 
 export type SentResults = {
 	sentMails: { emailAddress: string; displayName: string }[]

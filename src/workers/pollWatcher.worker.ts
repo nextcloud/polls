@@ -2,13 +2,15 @@
  * SPDX-FileCopyrightText: 2025 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
-import {
-	WatcherMode,
+import type { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import type {
 	WatcherData,
-	WorkerResponse,
+	WatcherMode,
 	WatcherProps,
+	WorkerResponse,
 } from '../composables/usePollWatcher.types'
+
+import axios from 'axios'
 
 const MAX_ERRORS = 5
 const SLEEP_TIMEOUT_DEFAULT = 30000
@@ -18,7 +20,7 @@ let http: AxiosInstance
 let consecutiveErrors = 0
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-const sendMessage = (message: WorkerResponse) => {
+function sendMessage (message: WorkerResponse) {
 	self.postMessage(message)
 }
 self.onmessage = async (props: MessageEvent<WatcherProps>) => {

@@ -5,10 +5,8 @@
 
 <script setup>
 import { t } from '@nextcloud/l10n'
-
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
-
 import { useAppSettingsStore } from '../../../stores/appSettings'
 
 const appSettingsStore = useAppSettingsStore()
@@ -19,20 +17,20 @@ const appSettingsStore = useAppSettingsStore()
 		<NcCheckboxRadioSwitch
 			v-model="appSettingsStore.allowCombo"
 			type="switch"
-			@update:model-value="appSettingsStore.write()">
+			@update:modelValue="appSettingsStore.write()">
 			{{ t('polls', 'Enable the usage of the combo view globally') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="!appSettingsStore.allowCombo" class="settings_details">
 			<NcSelect
 				v-model="appSettingsStore.comboGroups"
-				:input-label="t('polls', 'Enable only for the following groups')"
+				:inputLabel="t('polls', 'Enable only for the following groups')"
 				label="displayName"
 				:options="appSettingsStore.groups"
-				:user-select="true"
+				:userSelect="true"
 				:multiple="true"
 				:loading="appSettingsStore.status.loadingGroups"
 				:placeholder="t('polls', 'Leave empty to disable globally')"
-				@update:model-value="appSettingsStore.write()"
+				@update:modelValue="appSettingsStore.write()"
 				@search="appSettingsStore.loadGroups" />
 		</div>
 	</div>

@@ -4,23 +4,20 @@
 -->
 
 <script setup lang="ts">
-import { t } from '@nextcloud/l10n'
-
-import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
-
-import ConfigBox from '../Base/modules/ConfigBox.vue'
-import ShareItem from './ShareItem.vue'
-import UserSearch from '../User/UserSearch.vue'
-
-import { useSharesStore } from '../../stores/shares'
-import { showError } from '@nextcloud/dialogs'
 import type { User } from '../../Types'
 
-const sharesStore = useSharesStore()
+import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
+import ConfigBox from '../Base/modules/ConfigBox.vue'
+import UserSearch from '../User/UserSearch.vue'
+import ShareItem from './ShareItem.vue'
+import { useSharesStore } from '../../stores/shares'
+
 const { info } = defineProps<{
 	info?: string
 }>()
-
+const sharesStore = useSharesStore()
 const configBoxProps = {
 	sharesList: {
 		name: t('polls', 'Shares'),
@@ -46,8 +43,8 @@ async function addShare(user: User) {
 			class="add-share"
 			:aria-label="t('polls', 'Add shares')"
 			:placeholder="t('polls', 'Type to add an individual share')"
-			:search-types="[0]"
-			@user-selected="(user: User) => addShare(user)" />
+			:searchTypes="[0]"
+			@userSelected="(user: User) => addShare(user)" />
 
 		<template v-if="sharesStore.shares">
 			<TransitionGroup tag="ul" name="list">

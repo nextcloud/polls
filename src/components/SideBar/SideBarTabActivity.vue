@@ -4,16 +4,13 @@
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue'
 import { t } from '@nextcloud/l10n'
-
+import { computed, onMounted, onUnmounted } from 'vue'
+import { onBeforeRouteUpdate } from 'vue-router'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-
 import ActivityIcon from 'vue-material-design-icons/LightningBoltOutline.vue'
-
 import Activities from '../Activity/Activities.vue'
 import { useActivityStore } from '../../stores/activity'
-import { onBeforeRouteUpdate } from 'vue-router'
 
 const activityStore = useActivityStore()
 const emptyContentProps = {

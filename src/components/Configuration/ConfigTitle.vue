@@ -17,7 +17,7 @@ const checkTitle = computed(() => (pollStore.configuration.title ? '' : 'error')
 <template>
 	<InputDiv
 		v-model="pollStore.configuration.title"
-		:signaling-class="checkTitle"
+		:signalingClass="checkTitle"
 		type="text"
 		@change="emit('change')" />
 </template>

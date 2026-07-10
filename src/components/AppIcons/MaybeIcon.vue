@@ -4,8 +4,9 @@
 -->
 
 <script setup lang="ts">
+import type { IconProps } from './types'
+
 import { t } from '@nextcloud/l10n'
-import { IconProps } from './types'
 
 const {
 	title = t('polls', 'Maybe'),

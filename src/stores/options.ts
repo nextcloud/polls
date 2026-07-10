@@ -4,36 +4,33 @@
  */
 // fallow-ignore-file circular-dependency
 
-import { defineStore } from 'pinia'
+import type { AxiosError } from '@nextcloud/axios'
+import type { TimeUnitsType } from '../Types/dateTime'
+import type {
+	HasIsoFields,
+	Option,
+	OptionDto,
+	OptionDurationMethod,
+	OptionsStore,
+	OptionTimestampMethod,
+	Sequence,
+	SimpleOption,
+} from './options.types'
+
 import orderBy from 'lodash/orderBy'
-
-import { PublicAPI, OptionsAPI } from '../Api'
-import { activeRoute } from '../routerState'
+import { DateTime, Duration } from 'luxon'
+import { defineStore } from 'pinia'
+import { OptionsAPI, PublicAPI } from '../Api'
 import { Logger } from '../helpers/modules/logger'
-
+import { activeRoute } from '../routerState'
 import { usePollStore } from './poll'
 import { useSessionStore } from './session'
 import { useVotesStore } from './votes'
 
-import type { AxiosError } from '@nextcloud/axios'
-import type { TimeUnitsType } from '../Types/dateTime'
-import type {
-	Sequence,
-	SimpleOption,
-	OptionDto,
-	Option,
-	OptionsStore,
-	HasIsoFields,
-	OptionDurationMethod,
-	OptionTimestampMethod,
-} from './options.types'
-import { DateTime, Duration } from 'luxon'
-
 export const hydrateOption = (dto: OptionDto): Option => withLuxon(dto)
 
-const withLuxon = <T extends HasIsoFields>(
-	dto: T,
-): T & OptionDurationMethod & OptionTimestampMethod => ({
+function withLuxon <T extends HasIsoFields>(dto: T): T & OptionDurationMethod & OptionTimestampMethod {
+  return {
 	...dto,
 
 	getDuration() {
@@ -43,7 +40,8 @@ const withLuxon = <T extends HasIsoFields>(
 	getDateTime() {
 		return DateTime.fromISO(this.isoTimestamp ?? new Date().toISOString())
 	},
-})
+}
+}
 
 export const useOptionsStore = defineStore('options', {
 	state: (): OptionsStore => ({
@@ -156,8 +154,7 @@ export const useOptionsStore = defineStore('options', {
 				this.options.splice(index, 1, hydrated)
 			}
 			this.options.sort((a, b) =>
-				a.order < b.order ? -1 : a.order > b.order ? 1 : 0,
-			)
+				a.order < b.order ? -1 : a.order > b.order ? 1 : 0,)
 		},
 
 		async add(

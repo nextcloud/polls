@@ -12,15 +12,15 @@ interface Props {
 	orientation?: 'horizontal' | 'vertical'
 	loading?: boolean
 }
+const model = defineModel<boolean>()
+
 const { orientation = 'horizontal', loading = false } = defineProps<Props>()
 
-const model = defineModel<boolean>()
+const emit = defineEmits(['visible', 'invisible'])
 
 const observer = ref<null | IntersectionObserver>(null)
 
 const observerTarget = ref<null | Element>(null)
-const emit = defineEmits(['visible', 'invisible'])
-
 onMounted(() => {
 	const observer = new IntersectionObserver((entries) => {
 		entries.forEach((entry) => {
@@ -52,7 +52,7 @@ onBeforeUnmount(() => {
 			'vertical-fixed': orientation === 'vertical',
 		}">
 		<NcLoadingIcon v-if="loading" :size="15" />
-		<slot v-else :in-viewport="model" />
+		<slot v-else :inViewport="model" />
 	</div>
 </template>
 

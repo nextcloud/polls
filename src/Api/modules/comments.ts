@@ -2,10 +2,10 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { AxiosResponse } from '@nextcloud/axios'
-import { httpInstance, createCancelTokenHandler } from './HttpApi'
-
+import type { AxiosResponse } from '@nextcloud/axios'
 import type { Comment } from '../../stores/comments.types'
+
+import { createCancelTokenHandler, httpInstance } from './HttpApi'
 
 const comments = {
 	getComments(pollId: number): Promise<AxiosResponse<{ comments: Comment[] }>> {

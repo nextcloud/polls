@@ -5,9 +5,7 @@
 
 <script setup>
 import { t } from '@nextcloud/l10n'
-
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-
 import { usePreferencesStore } from '../../../stores/preferences'
 const preferencesStore = usePreferencesStore()
 </script>
@@ -20,7 +18,7 @@ const preferencesStore = usePreferencesStore()
 			<NcCheckboxRadioSwitch
 				v-model="preferencesStore.user.useNewPollDialogInNavigation"
 				type="switch"
-				@update:model-value="preferencesStore.write()">
+				@update:modelValue="preferencesStore.write()">
 				{{
 					t(
 						'polls',
@@ -34,7 +32,7 @@ const preferencesStore = usePreferencesStore()
 			<NcCheckboxRadioSwitch
 				v-model="preferencesStore.user.useNewPollInPollist"
 				type="switch"
-				@update:model-value="preferencesStore.write()">
+				@update:modelValue="preferencesStore.write()">
 				{{
 					t(
 						'polls',
@@ -48,7 +46,7 @@ const preferencesStore = usePreferencesStore()
 			<NcCheckboxRadioSwitch
 				v-model="preferencesStore.user.useCommentsAlternativeStyling"
 				type="switch"
-				@update:model-value="preferencesStore.write()">
+				@update:modelValue="preferencesStore.write()">
 				{{ t('polls', 'Use alternative styling for the comments sidebar') }}
 			</NcCheckboxRadioSwitch>
 		</div>
@@ -56,7 +54,7 @@ const preferencesStore = usePreferencesStore()
 			<NcCheckboxRadioSwitch
 				v-model="preferencesStore.user.useAlternativeStyling"
 				type="switch"
-				@update:model-value="preferencesStore.write()">
+				@update:modelValue="preferencesStore.write()">
 				{{ t('polls', 'Use alternative vote page styling') }}
 			</NcCheckboxRadioSwitch>
 		</div>

@@ -4,18 +4,16 @@
 -->
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { t } from '@nextcloud/l10n'
-
+import { onMounted, ref } from 'vue'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-
-import ComboTable from '../components/Combo/ComboTable.vue'
-import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 import ActionToggleSidebar from '../components/Actions/modules/ActionToggleSidebar.vue'
-import HeaderBar from '../components/Base/modules/HeaderBar.vue'
-import { useComboStore } from '../stores/combo'
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
+import HeaderBar from '../components/Base/modules/HeaderBar.vue'
+import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
+import ComboTable from '../components/Combo/ComboTable.vue'
+import { useComboStore } from '../stores/combo'
 
 const comboStore = useComboStore()
 const isLoading = ref(false)
@@ -59,6 +57,6 @@ onMounted(() => {
 			</NcEmptyContent>
 		</div>
 
-		<LoadingOverlay :name="t('polls', 'Loading …')" :show="isLoading" />
+		<LoadingOverlay :name="t('polls', 'Loading …')" :show="isLoading" />
 	</NcAppContent>
 </template>

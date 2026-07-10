@@ -4,21 +4,17 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref, shallowRef } from 'vue'
-import { useRouter } from 'vue-router'
-
-import { useSessionStore } from '../../../stores/session'
+import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import type { ButtonMode } from '../../../Types'
 
 import { t } from '@nextcloud/l10n'
-
-import ButtonModal from '../../Base/modules/ButtonModal.vue'
-import { ButtonMode } from '../../../Types'
-import PollCreateDlg from '../../Create/PollCreateDlg.vue'
-
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import { computed, ref, shallowRef } from 'vue'
+import { useRouter } from 'vue-router'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
-
-import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import ButtonModal from '../../Base/modules/ButtonModal.vue'
+import PollCreateDlg from '../../Create/PollCreateDlg.vue'
+import { useSessionStore } from '../../../stores/session'
 
 interface Props {
 	caption?: string
@@ -59,8 +55,7 @@ function addedPoll(payLoad: { id: number; title: string }) {
 const confirmationDialogMessage = computed(() =>
 	t('polls', '"{pollTitle}" has been successfully created.', {
 		pollTitle: newPoll.value.title,
-	}),
-)
+	}),)
 const confirmationDialogName = t('polls', 'Poll created')
 const showConfirmationDialog = ref(false)
 const confirmationDialogProps = {
@@ -96,13 +91,13 @@ function addAnotherPoll() {
 <template>
 	<ButtonModal
 		v-if="sessionStore.appPermissions.pollCreation"
-		v-model:show-modal="showModal"
-		:button-caption="
+		v-model:showModal="showModal"
+		:buttonCaption="
 			buttonMode === 'navigation' ? t('polls', 'New poll') : caption
 		"
-		:modal-size="modalSize"
-		:button-mode="buttonMode"
-		:button-variant="'primary'">
+		:modalSize="modalSize"
+		:buttonMode="buttonMode"
+		buttonVariant="primary">
 		<template #icon>
 			<PlusIcon :size="20" decorative />
 		</template>

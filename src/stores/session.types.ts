@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { ViewMode } from './preferences.types'
-
-import type { Share } from './shares.types'
+import type { WatcherMode, WatcherStatus } from '../composables/usePollWatcher.types'
 import type { User } from '../Types'
-import { WatcherMode, WatcherStatus } from '../composables/usePollWatcher.types'
-import { TimeZoneTypes } from '@/Types/dateTime'
+import type { ViewMode } from './preferences.types'
+import type { Share } from './shares.types'
+import type { TimeZoneTypes } from '@/Types/dateTime'
 
 export type UserStatus = {
 	isLoggedin: boolean

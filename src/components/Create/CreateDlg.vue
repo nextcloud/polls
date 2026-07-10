@@ -4,24 +4,21 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { showSuccess, showError } from '@nextcloud/dialogs'
+import type { PollType } from '../../stores/poll.types'
+
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import NcButton from '@nextcloud/vue/components/NcButton'
-
 import SpeakerIcon from 'vue-material-design-icons/BullhornOutline.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
-
+import ConfigBox from '../Base/modules/ConfigBox.vue'
 import InputDiv from '../Base/modules/InputDiv.vue'
 import RadioGroupDiv from '../Base/modules/RadioGroupDiv.vue'
-import ConfigBox from '../Base/modules/ConfigBox.vue'
+import { pollTypes, usePollStore } from '../../stores/poll'
 
-import { usePollStore, pollTypes } from '../../stores/poll'
-
-import { PollType } from '../../stores/poll.types'
-
+const emit = defineEmits(['cancel', 'add'])
 const pollStore = usePollStore()
 const router = useRouter()
 
@@ -36,8 +33,6 @@ const pollTypeOptions = Object.entries(pollTypes).map(([key, value]) => ({
 
 const titleEmpty = computed(() => title.value === '')
 const disableConfirm = computed(() => titleEmpty.value || adding.value)
-
-const emit = defineEmits(['cancel', 'add'])
 
 /**
  *
@@ -112,7 +107,7 @@ async function add() {
 					{{ t('polls', 'Cancel') }}
 				</template>
 			</NcButton>
-			<NcButton :disabled="disableConfirm" :variant="'primary'" @click="add()">
+			<NcButton :disabled="disableConfirm" variant="primary" @click="add()">
 				<template #default>
 					{{ t('polls', 'Add') }}
 				</template>

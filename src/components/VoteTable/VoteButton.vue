@@ -4,21 +4,18 @@
 -->
 
 <script setup lang="ts">
-import { computed, onUnmounted } from 'vue'
-import debounce from 'lodash/debounce'
-
-import { t } from '@nextcloud/l10n'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-
-import VoteIndicator from './VoteIndicator.vue'
-
-import { usePollStore } from '../../stores/poll'
-import { useVotesStore } from '../../stores/votes'
-
 import type { AxiosError } from '@nextcloud/axios'
-import type { User } from '../../Types'
 import type { Option } from '../../stores/options.types'
 import type { Answer } from '../../stores/votes.types'
+import type { User } from '../../Types'
+
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import debounce from 'lodash/debounce'
+import { computed, onUnmounted } from 'vue'
+import VoteIndicator from './VoteIndicator.vue'
+import { usePollStore } from '../../stores/poll'
+import { useVotesStore } from '../../stores/votes'
 
 interface Props {
 	option: Option
@@ -30,14 +27,14 @@ export type richAnswer = {
 	translated: string
 }
 
+const { option, user } = defineProps<Props>()
+
 const richAnswers: { [key in Answer]: richAnswer } = {
 	yes: { name: 'yes', translated: t('polls', 'Yes') },
 	maybe: { name: 'maybe', translated: t('polls', 'Maybe') },
 	no: { name: 'no', translated: t('polls', 'No') },
 	'': { name: '', translated: t('polls', 'No answer') },
 }
-
-const { option, user } = defineProps<Props>()
 
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
@@ -46,8 +43,7 @@ const vote = computed(() =>
 	votesStore.getVote({
 		option,
 		user,
-	}),
-)
+	}),)
 
 const nextAnswer = computed<richAnswer>(() => {
 	if (['no', ''].includes(vote.value.answer)) {

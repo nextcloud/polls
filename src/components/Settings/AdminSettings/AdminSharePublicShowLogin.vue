@@ -5,9 +5,7 @@
 
 <script setup>
 import { t } from '@nextcloud/l10n'
-
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-
 import { useAppSettingsStore } from '../../../stores/appSettings'
 
 const appSettingsStore = useAppSettingsStore()
@@ -18,7 +16,7 @@ const appSettingsStore = useAppSettingsStore()
 		<NcCheckboxRadioSwitch
 			v-model="appSettingsStore.showLogin"
 			type="switch"
-			@update:model-value="appSettingsStore.write()">
+			@update:modelValue="appSettingsStore.write()">
 			{{
 				t(
 					'polls',

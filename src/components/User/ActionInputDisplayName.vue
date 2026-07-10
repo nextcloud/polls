@@ -4,17 +4,16 @@
 -->
 
 <script setup lang="ts">
+import type { StatusResults } from '../../Types'
+
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import debounce from 'lodash/debounce'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import debounce from 'lodash/debounce'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import { t } from '@nextcloud/l10n'
-
 import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 import EditAccountIcon from 'vue-material-design-icons/AccountEditOutline.vue'
-
 import { ValidatorAPI } from '../../Api'
-import { StatusResults } from '../../Types'
 import { useSessionStore } from '../../stores/session'
 
 const route = useRoute()

@@ -3,20 +3,19 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineStore } from 'pinia'
-import { PublicAPI, VotesAPI } from '../Api'
-import { activeRoute } from '../routerState'
-import { Logger } from '../helpers/modules/logger'
-import { StoreHelper } from '../helpers/modules/StoreHelper'
-
-import { usePollStore } from './poll'
-import { useSessionStore } from './session'
-import { useOptionsStore } from './options'
-
 import type { AxiosError } from '@nextcloud/axios'
 import type { User } from '../Types'
 import type { Option } from './options.types'
 import type { Answer, Vote, VotesStore } from './votes.types'
+
+import { defineStore } from 'pinia'
+import { PublicAPI, VotesAPI } from '../Api'
+import { Logger } from '../helpers/modules/logger'
+import { StoreHelper } from '../helpers/modules/StoreHelper'
+import { activeRoute } from '../routerState'
+import { useOptionsStore } from './options'
+import { usePollStore } from './poll'
+import { useSessionStore } from './session'
 
 const answerSortOrder: { [key in Answer]: number } = {
 	yes: 1,
@@ -41,6 +40,7 @@ export const useVotesStore = defineStore('votes', {
 		/**
 		 * Returns a unique list of actual participants (which actually have voted)
 		 * sorted by display name
+		 *
 		 * @param state
 		 * @return
 		 */
@@ -70,6 +70,7 @@ export const useVotesStore = defineStore('votes', {
 		/**
 		 * Returns a chunked list of participants, limited by the performance threshold
 		 * If the number of participants is greater than the performance threshold, only return the loaded chunks
+		 *
 		 * @param state
 		 * @return
 		 */
@@ -102,6 +103,7 @@ export const useVotesStore = defineStore('votes', {
 		/**
 		 * Returns a sorted list of participants including the current user, even if not voted
 		 * Sorting is done by display name (default) or by votes for the selected option (if sortByOption is set)
+		 *
 		 * @param state
 		 * @return
 		 */
@@ -198,6 +200,7 @@ export const useVotesStore = defineStore('votes', {
 		/**
 		 * Lookup map for votes keyed by `${optionId}:${userId}` — built once per
 		 * state change, used by sortedVotes and getVote to avoid repeated .find() calls.
+		 *
 		 * @param state
 		 */
 		votesByKey(state): Map<string, Vote> {

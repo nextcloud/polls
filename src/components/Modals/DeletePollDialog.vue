@@ -4,17 +4,15 @@
 -->
 
 <script setup lang="ts">
-import { t } from '@nextcloud/l10n'
-
-import { useSessionStore } from '../../stores/session'
-import { computed } from 'vue'
-
-import NcDialog from '@nextcloud/vue/components/NcDialog'
-import { showError } from '@nextcloud/dialogs'
-import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
-import { usePollsStore } from '../../stores/polls'
-
+import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import type { Poll } from '../../stores/poll.types'
+
+import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import { computed } from 'vue'
+import NcDialog from '@nextcloud/vue/components/NcDialog'
+import { usePollsStore } from '../../stores/polls'
+import { useSessionStore } from '../../stores/session'
 
 const model = defineModel<boolean>({ required: true })
 const { poll } = defineProps<{ poll: Poll }>()

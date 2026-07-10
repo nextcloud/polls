@@ -3,12 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { t } from '@nextcloud/l10n'
+import type { DateTime } from 'luxon'
 import type { DateTimeUnits, DateTimeUnitType } from '../../Types/dateTime'
-import { DateTime } from 'luxon'
+
+import { t } from '@nextcloud/l10n'
 
 /**
  * Set time to next timeStep
+ *
  * @param dateTime DateTime
  * @param timeStep in minutes
  * @return DateTime

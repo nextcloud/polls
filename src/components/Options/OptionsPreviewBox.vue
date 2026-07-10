@@ -4,14 +4,12 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { DateTime, Duration } from 'luxon'
+import type { Option, Sequence, SimpleOption } from '../../stores/options.types'
 
 import { n } from '@nextcloud/l10n'
-
+import { DateTime, Duration } from 'luxon'
+import { computed } from 'vue'
 import DateBox from '../Base/modules/DateBox.vue'
-
-import type { Option, Sequence, SimpleOption } from '../../stores/options.types'
 import { getDates } from '@/composables/optionDateTime'
 
 interface Props {
@@ -32,22 +30,19 @@ const {
 
 // computed last from dateTime repetition
 const lastRepetitionDateTime = computed(() =>
-	option.getDateTime().plus(sequenceDuration.value),
-)
+	option.getDateTime().plus(sequenceDuration.value),)
 
 const sequenceDuration = computed(() =>
 	sequence?.repetitions
 		? Duration.fromObject({
 				[sequence.unit.id]: sequence.stepWidth * sequence.repetitions,
 			})
-		: Duration.fromObject({ millisecond: 0 }),
-)
+		: Duration.fromObject({ millisecond: 0 }),)
 
 const repetitionCaption = computed(() =>
 	sequence?.repetitions
 		? n('polls', '%n repetition', 'Last of %n repetitions', sequence.repetitions)
-		: '',
-)
+		: '',)
 
 const simpleDate = computed(() => {
 	const dates = getDates(option.getDateTime(), option.getDuration(), otherTimeZone)
@@ -59,12 +54,12 @@ const simpleDate = computed(() => {
 	<div class="preview-box">
 		<div
 			v-if="title"
-			:class="['preview-title', { 'span-2': sequence?.repetitions }]">
+			class="preview-title" :class="[{ 'span-2': sequence?.repetitions }]">
 			{{ title }}
 		</div>
 		<div class="preview-date">
 			<DateBox
-				:start-date="option.getDateTime()"
+				:startDate="option.getDateTime()"
 				:duration="option.getDuration()"
 				:timezone="timezone" />
 		</div>
@@ -72,13 +67,13 @@ const simpleDate = computed(() => {
 		<div v-if="sequence?.repetitions" class="preview-repetitions">
 			<span>{{ repetitionCaption }}</span>
 			<DateBox
-				:start-date="lastRepetitionDateTime"
+				:startDate="lastRepetitionDateTime"
 				:duration="option.getDuration()"
 				:timezone="timezone" />
 		</div>
 		<div
 			v-if="otherTimeZone"
-			:class="['timezone-information', { 'span-2': sequence?.repetitions }]">
+			class="timezone-information" :class="[{ 'span-2': sequence?.repetitions }]">
 			<div>{{ otherTimeZone }}:</div>
 			<div>{{ simpleDate }}</div>
 		</div>

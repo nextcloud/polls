@@ -4,12 +4,12 @@
 -->
 
 <script setup lang="ts">
+import { n, t } from '@nextcloud/l10n'
 import { computed } from 'vue'
-import CardDiv from '../Base/modules/CardDiv.vue'
 import ActionDeleteOrphanedVotes from '../Actions/modules/ActionDeleteOrphanedVotes.vue'
-import { t, n } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll'
+import CardDiv from '../Base/modules/CardDiv.vue'
 import { useOptionsStore } from '../../stores/options'
+import { usePollStore } from '../../stores/poll'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -20,16 +20,14 @@ const orphanedVotesText = computed(() =>
 		'%n orphaned vote reduces your vote quota.',
 		'%n orphaned votes reduce your vote quota.',
 		pollStore.currentUserStatus.orphanedVotes,
-	),
-)
+	),)
 
 const votesLeft = computed(() =>
 	pollStore.configuration.maxVotesPerUser - pollStore.currentUserStatus.yesVotes
 	> 0
 		? pollStore.configuration.maxVotesPerUser
 			- pollStore.currentUserStatus.yesVotes
-		: 0,
-)
+		: 0,)
 
 const optionsAvailableText = computed(() => {
 	if (optionsStore.countOptionsLeft === 0) {
@@ -62,8 +60,7 @@ const votesLeftText = computed(() => {
 const cardType = computed(() =>
 	pollStore.configuration.maxVotesPerUser && votesLeft.value < 1
 		? 'error'
-		: 'info',
-)
+		: 'info',)
 </script>
 
 <template>

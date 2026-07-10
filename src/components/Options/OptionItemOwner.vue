@@ -4,15 +4,15 @@
 -->
 
 <script setup lang="ts">
+import type { Option } from '../../stores/options.types'
+
+import { t } from '@nextcloud/l10n'
 import { computed } from 'vue'
 import ActionDelete from '../Actions/modules/ActionDelete.vue'
 import UserItem from '../User/UserItem.vue'
-import { t } from '@nextcloud/l10n'
+import { useOptionsStore } from '../../stores/options'
 import { usePollStore } from '../../stores/poll'
 import { useSessionStore } from '../../stores/session'
-import { useOptionsStore } from '../../stores/options'
-
-import type { Option } from '../../stores/options.types'
 
 interface Props {
 	option: Option
@@ -49,10 +49,10 @@ const showDelete = computed(
 		<UserItem
 			v-else-if="option.owner"
 			:user="option.owner"
-			:icon-size="avatarSize"
+			:iconSize="avatarSize"
 			condensed
-			hide-names
-			:tooltip-message="
+			hideNames
+			:tooltipMessage="
 				t('polls', '{displayName}\'s proposal', {
 					displayName: option.owner?.displayName ?? '',
 				})

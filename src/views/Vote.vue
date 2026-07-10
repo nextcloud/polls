@@ -4,35 +4,32 @@
 -->
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
 
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { n, t } from '@nextcloud/l10n'
-
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-
 import ActionAddOption from '../components/Actions/modules/ActionAddOption.vue'
 import ActionOpenOptionsSidebar from '../components/Actions/modules/ActionOpenOptionsSidebar.vue'
-import CardAnonymousPollHint from '../components/Cards/CardAnonymousPollHint.vue'
 import Collapsible from '../components/Base/modules/Collapsible.vue'
 import HeaderBar from '../components/Base/modules/HeaderBar.vue'
 import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
-import MarkDownDescription from '../components/Poll/MarkDownDescription.vue'
-import OptionsAddModal from '../components/Modals/OptionsAddModal.vue'
-import PollInfoLine from '../components/Poll/PollInfoLine.vue'
-import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
 import StickyDiv from '../components/Base/modules/StickyDiv.vue'
-import VoteTable from '../components/VoteTable/VoteTable.vue'
+import CardAnonymousPollHint from '../components/Cards/CardAnonymousPollHint.vue'
 import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
-
-import { usePollStore } from '../stores/poll'
+import OptionsAddModal from '../components/Modals/OptionsAddModal.vue'
+import MarkDownDescription from '../components/Poll/MarkDownDescription.vue'
+import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
+import PollInfoLine from '../components/Poll/PollInfoLine.vue'
+import VoteTable from '../components/VoteTable/VoteTable.vue'
 import { useOptionsStore } from '../stores/options'
+import { usePollStore } from '../stores/poll'
 import { usePreferencesStore } from '../stores/preferences'
 import { useVotesStore } from '../stores/votes'
-import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
 import { Event } from '../Types'
 
 const pollStore = usePollStore()
@@ -169,7 +166,7 @@ const appClass = computed(() => [
 
 <template>
 	<NcAppContent :class="appClass">
-		<StickyDiv :z-index="9" sticky-top :activate-bottom-shadow="scrolled">
+		<StickyDiv :zIndex="9" stickyTop :activateBottomShadow="scrolled">
 			<HeaderBar>
 				<template #title>
 					{{ pollStore.configuration.title }}
@@ -185,7 +182,7 @@ const appClass = computed(() => [
 
 		<div class="vote-main">
 			<IntersectionObserver id="top-observer" v-model="topObserverVisible" />
-			<StickyDiv sticky-left>
+			<StickyDiv stickyLeft>
 				<Collapsible
 					v-if="pollStore.configuration.description"
 					class="area__top"
@@ -204,7 +201,7 @@ const appClass = computed(() => [
 			<VoteTable
 				v-show="optionsStore.options.length"
 				class="area__vote"
-				:down-page="tableObserverVisible" />
+				:downPage="tableObserverVisible" />
 
 			<IntersectionObserver
 				v-if="showBottomObserver"

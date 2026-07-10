@@ -4,18 +4,17 @@
 -->
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { generateUrl } from '@nextcloud/router'
+import type { Poll } from '../stores/poll.types'
+
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-
+import { generateUrl } from '@nextcloud/router'
+import { onMounted } from 'vue'
 import NcDashboardWidget from '@nextcloud/vue/components/NcDashboardWidget'
-
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 import { Logger } from '../helpers/modules/logger'
 import { pollTypes } from '../stores/poll'
 import { usePollsStore } from '../stores/polls'
-import type { Poll } from '../stores/poll.types'
 
 const dashboardWidgetProperties = {
 	emptyContentMessage: t('polls', 'No polls found for this category'),
@@ -45,8 +44,8 @@ onMounted(() => {
 	<div>
 		<NcDashboardWidget
 			:items="pollsStore.dashboardList"
-			:empty-content-message="dashboardWidgetProperties.emptyContentMessage"
-			:show-more-text="dashboardWidgetProperties.showMoreText"
+			:emptyContentMessage="dashboardWidgetProperties.emptyContentMessage"
+			:showMoreText="dashboardWidgetProperties.showMoreText"
 			:loading="pollsStore.pollsLoading">
 			<template #emptyContentIcon>
 				<PollsAppIcon />

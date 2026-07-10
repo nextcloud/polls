@@ -4,32 +4,26 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { DateTime, Duration } from 'luxon'
+import type { AxiosError } from '@nextcloud/axios'
+import type { DurationType, TimeZoneOption } from '../../Types/dateTime'
+import type { Sequence, SimpleOption } from '@/stores/options.types'
 
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-
-import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import { DateTime, Duration } from 'luxon'
+import { computed, ref } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
-
-import { dateTimeUnitsKeyed, ceilDate } from '@/helpers/modules/dateHelpers'
-import { useResizeObserver } from '../../composables/elementWidth'
-
 import CheckIcon from 'vue-material-design-icons/Check.vue'
-
 import InputDiv from '../Base/modules/InputDiv.vue'
 import LuxonPicker from '../Base/modules/LuxonPicker.vue'
 import OptionsPreviewBox from './OptionsPreviewBox.vue'
-
-import type { DurationType, TimeZoneOption } from '../../Types/dateTime'
-import type { AxiosError } from '@nextcloud/axios'
-import type { Sequence, SimpleOption } from '@/stores/options.types'
-
+import { useResizeObserver } from '../../composables/elementWidth'
+import { ceilDate, dateTimeUnitsKeyed } from '@/helpers/modules/dateHelpers'
 import { useOptionsStore } from '@/stores/options'
-import { useSessionStore } from '@/stores/session'
 import { usePollStore } from '@/stores/poll'
+import { useSessionStore } from '@/stores/session'
 
 const { isBelowWidthOffset } = useResizeObserver('add-date-options-container', 355)
 
@@ -81,6 +75,7 @@ const dateTimeOptionsFiltered = computed(() => {
 /**
  * The actual start dateTime used for the input
  * Initially set to the next quarter hour in the current timezone
+ *
  * @return ref DateTime
  */
 const startDateTime = ref(
@@ -109,6 +104,7 @@ const newOption = computed<SimpleOption>(() => {
 /**
  * The duration input used for the input fields
  * Initially set to 0 Days, which currently is equal to 1 Day if allDay is true
+ *
  * @return ref DurationType
  */
 const durationInput = ref<DurationType>({
@@ -155,8 +151,7 @@ const duration = computed(() =>
 		? Duration.fromObject({ day: 1 })
 		: Duration.fromObject({
 				[durationInput.value.unit.id]: durationInput.value.amount,
-			}).rescale(),
-)
+			}).rescale(),)
 
 /**
  * Computed as boolean if the option is blocked by an existing option
@@ -168,6 +163,7 @@ const isBlockedOption = computed(() => {
 
 /**
  * Computed to find an existing option with the same dateTime and duration
+ *
  * @return found option or undefined
  */
 const duplicateOption = computed(() => optionsStore.find(newOption.value))
@@ -186,6 +182,7 @@ const voteYes = ref(true)
  * Computed boolean if the option is addable
  * An option is addable if it is not blocked and the result is not loading
  * Used to enable/disable the add button
+ *
  * @return computed boolean
  */
 const addable = computed(() => !isBlockedOption.value && result.value !== 'loading')
@@ -287,7 +284,7 @@ const SequenceUnitSelectProps = computed(() => ({
 		<h2>{{ t('polls', 'Add times') }}</h2>
 		<NcCheckboxRadioSwitch
 			v-model="allDay"
-			@update:model-value="resetduratonUnits">
+			@update:modelValue="resetduratonUnits">
 			{{ t('polls', 'All day') }}
 		</NcCheckboxRadioSwitch>
 	</div>
@@ -298,7 +295,7 @@ const SequenceUnitSelectProps = computed(() => ({
 			v-if="differentTimezones"
 			v-model="sessionStore.sessionSettings.timezoneName"
 			v-bind="TimeZoneSelectProps"
-			@update:model-value="setZone()" />
+			@update:modelValue="setZone()" />
 
 		<InputDiv
 			v-model="durationInput.amount"
@@ -347,7 +344,7 @@ const SequenceUnitSelectProps = computed(() => ({
 				:option="newOption"
 				:sequence="sequenceInput"
 				:timezone="sessionStore.currentTimezoneName"
-				:other-time-zone="otherTimeZoneName">
+				:otherTimeZone="otherTimeZoneName">
 			</OptionsPreviewBox>
 
 			<div class="bottom-line">
@@ -361,13 +358,13 @@ const SequenceUnitSelectProps = computed(() => ({
 					v-if="result === 'success' && isBlockedOption"
 					class="date-added"
 					:title="t('polls', 'Added')"
-					:fill-color="successColor"
+					:fillColor="successColor"
 					:size="26" />
 
 				<NcButton
 					v-else
 					class="date-add-button"
-					:variant="'primary'"
+					variant="primary"
 					:disabled="!addable"
 					@click="addOption">
 					{{ t('polls', 'Add') }}

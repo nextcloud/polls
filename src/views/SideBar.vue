@@ -4,26 +4,24 @@
 -->
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-
+import { onMounted, onUnmounted, ref } from 'vue'
 import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
 import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
-import { Event } from '../Types'
-
-import { usePollStore } from '../stores/poll'
-import { useSessionStore } from '../stores/session'
-import SideBarTabConfiguration from '../components/SideBar/SideBarTabConfiguration.vue'
+import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessingOutline.vue'
+import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
+import SidebarActivityIcon from 'vue-material-design-icons/LightningBoltOutline.vue'
+import SidebarShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
+import SidebarConfigurationIcon from 'vue-material-design-icons/WrenchOutline.vue'
+import SideBarTabActivity from '../components/SideBar/SideBarTabActivity.vue'
 import SideBarTabComments from '../components/SideBar/SideBarTabComments.vue'
+import SideBarTabConfiguration from '../components/SideBar/SideBarTabConfiguration.vue'
 import SideBarTabOptions from '../components/SideBar/SideBarTabOptions.vue'
 import SideBarTabShare from '../components/SideBar/SideBarTabShare.vue'
-import SideBarTabActivity from '../components/SideBar/SideBarTabActivity.vue'
-import SidebarConfigurationIcon from 'vue-material-design-icons/WrenchOutline.vue'
-import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
-import SidebarShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
-import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessingOutline.vue'
-import SidebarActivityIcon from 'vue-material-design-icons/LightningBoltOutline.vue'
+import { usePollStore } from '../stores/poll'
+import { useSessionStore } from '../stores/session'
+import { Event } from '../Types'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
