@@ -13,8 +13,8 @@ import ArchivePollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import RestorePollIcon from 'vue-material-design-icons/RecycleVariant.vue'
 import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import { pollTypes } from '../../stores/poll'
-import { useSessionStore } from '../../stores/session'
+import { pollTypes } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
 const { poll } = defineProps<{ poll: Poll }>()
 const emit = defineEmits(['clonePoll', 'toggleArchive', 'deletePoll'])

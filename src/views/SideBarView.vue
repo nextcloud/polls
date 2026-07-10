@@ -19,9 +19,9 @@ import SideBarTabComments from '../components/SideBar/SideBarTabComments.vue'
 import SideBarTabConfiguration from '../components/SideBar/SideBarTabConfiguration.vue'
 import SideBarTabOptions from '../components/SideBar/SideBarTabOptions.vue'
 import SideBarTabShare from '../components/SideBar/SideBarTabShare.vue'
-import { usePollStore } from '../stores/poll'
-import { useSessionStore } from '../stores/session'
-import { Event } from '../Types'
+import { usePollStore } from '../stores/poll.ts'
+import { useSessionStore } from '../stores/session.ts'
+import { Event } from '../Types/index.ts'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()

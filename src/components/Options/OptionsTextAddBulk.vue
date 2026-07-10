@@ -12,7 +12,7 @@ import NcActions from '@nextcloud/vue/components/NcActions'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import PasteIcon from 'vue-material-design-icons/ClipboardTextMultipleOutline.vue'
 import NcModal from '../Base/modules/CustomNcModal.vue'
-import { useOptionsStore } from '../../stores/options'
+import { useOptionsStore } from '../../stores/options.ts'
 
 interface Props {
 	placeholder?: string
@@ -38,7 +38,7 @@ async function addOptionsList() {
 			await optionsStore.addBulk({ text: newPollTexts.value })
 			showSuccess(t('polls', 'Options added'))
 			newPollTexts.value = ''
-		} catch (error) {
+		} catch {
 			showError(
 				t('polls', 'Error adding options', {
 					optionText: newPollTexts.value,
@@ -62,7 +62,7 @@ async function addOptionsList() {
 			</NcActionButton>
 		</NcActions>
 
-		<NcModal v-if="showModal" size="small" :canClose="false">
+		<NcModal v-if="showModal" size="small" noClose>
 			<div class="option-clone-date modal__content">
 				<h2>{{ t('polls', 'Create multiple options at once') }}</h2>
 				<p>

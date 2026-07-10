@@ -1,12 +1,15 @@
 import type { AxiosResponse } from '@nextcloud/axios'
 import type { AppSettingsStore, Group } from '../../stores/appSettings.types'
-import type { ISearchType, User } from '../../Types'
+import type { ISearchType, User } from '../../Types/index.ts'
 
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { createCancelTokenHandler, httpInstance } from './HttpApi'
+import { createCancelTokenHandler, httpInstance } from './HttpApi.js'
+
+// eslint-disable-next-line prefer-const -- assigned below, after `appSettings` is fully defined
+let cancelTokenHandlerObject: ReturnType<typeof createCancelTokenHandler>
 
 const appSettings = {
 	getAppSettings(): Promise<AxiosResponse<{ appSettings: AppSettingsStore }>> {
@@ -58,6 +61,6 @@ const appSettings = {
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(appSettings)
+cancelTokenHandlerObject = createCancelTokenHandler(appSettings)
 
 export default appSettings

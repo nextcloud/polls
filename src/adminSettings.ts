@@ -6,10 +6,10 @@
 import { getLanguage } from '@nextcloud/l10n'
 import { Settings } from 'luxon'
 import { createApp } from 'vue'
-import AdminSettingsPage from './views/AdminSettingsPage.vue'
-import { pinia } from './stores'
+import AdminSettingsView from './views/AdminSettingsView.vue'
+import { pinia } from './stores/index.ts'
 
 Settings.defaultLocale = getLanguage()
 
-const Polls = createApp(AdminSettingsPage).use(pinia)
+const Polls = createApp(AdminSettingsView).use(pinia)
 Polls.mount('#content_polls')

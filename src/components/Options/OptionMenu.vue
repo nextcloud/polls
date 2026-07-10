@@ -19,9 +19,9 @@ import OptionSortIcon from 'vue-material-design-icons/SortBoolAscendingVariant.v
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import NcModal from '../Base/modules/CustomNcModal.vue'
 import OptionCloneDate from './OptionCloneDate.vue'
-import { useOptionsStore } from '../../stores/options'
-import { usePollStore } from '../../stores/poll'
-import { useVotesStore } from '../../stores/votes'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 interface Props {
 	option: Option

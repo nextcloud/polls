@@ -12,9 +12,9 @@ import { generateUrl } from '@nextcloud/router'
 import { onMounted } from 'vue'
 import NcDashboardWidget from '@nextcloud/vue/components/NcDashboardWidget'
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
-import { Logger } from '../helpers/modules/logger'
-import { pollTypes } from '../stores/poll'
-import { usePollsStore } from '../stores/polls'
+import { Logger } from '../helpers/modules/logger.ts'
+import { pollTypes } from '../stores/poll.ts'
+import { usePollsStore } from '../stores/polls.ts'
 
 const dashboardWidgetProperties = {
 	emptyContentMessage: t('polls', 'No polls found for this category'),
@@ -26,11 +26,12 @@ const pollsStore = usePollsStore()
 /**
  * Load the polls
  */
-function loadPolls(): void {
+async function loadPolls(): Promise<void> {
 	Logger.debug('Loading polls in dashboard widget')
 	try {
-		pollsStore.load()
+		await pollsStore.load()
 	} catch (error) {
+		Logger.error('Error setting dashboard list', { error })
 		showError(t('polls', 'Error setting dashboard list'))
 	}
 }

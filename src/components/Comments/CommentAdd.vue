@@ -10,9 +10,9 @@ import { ref } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import InputDiv from '../Base/modules/InputDiv.vue'
 import UserItem from '../User/UserItem.vue'
-import { useCommentsStore } from '../../stores/comments'
-import { usePollStore } from '../../stores/poll'
-import { useSessionStore } from '../../stores/session'
+import { useCommentsStore } from '../../stores/comments.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
 const commentsStore = useCommentsStore()
 const sessionStore = useSessionStore()

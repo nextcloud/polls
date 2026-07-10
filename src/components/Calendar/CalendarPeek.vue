@@ -15,9 +15,9 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcPopover from '@nextcloud/vue/components/NcPopover'
 import CalendarIcon from 'vue-material-design-icons/CalendarOutline.vue'
 import CalendarInfo from './CalendarInfo.vue'
-import { CalendarAPI } from '../../Api'
-import { Logger } from '../../helpers/modules/logger'
-import { usePollStore } from '../../stores/poll'
+import { CalendarAPI } from '../../Api/index.ts'
+import { Logger } from '../../helpers/modules/logger.ts'
+import { usePollStore } from '../../stores/poll.ts'
 import { getDatesFromOption } from '@/composables/optionDateTime'
 
 const { option } = defineProps<{ option: Option }>()
@@ -27,31 +27,29 @@ const events = ref<CalendarEvent[]>([])
 const pollStore = usePollStore()
 const optionDates = getDatesFromOption(option)
 
+const currentEvent = computed((): CalendarEvent => ({
+	id: option.id,
+	UID: option.id,
+	calendarUri: '',
+	calendarKey: 0,
+	calendarName: 'Polls',
+	displayColor: 'transparent',
+	allDay: optionDates.isFullDays,
+	description: pollStore.configuration.description,
+	start: optionDates.optionStart.toSeconds(),
+	location: '',
+	end: optionDates.optionEnd.toSeconds(),
+	status: 'self',
+	summary: pollStore.configuration.title,
+	type: optionDates.isFullDays ? 'date' : 'dateTime',
+	busy: false,
+}))
+
 const sortedEvents = computed(() => {
 	const sortedEvents = [...events.value]
 	sortedEvents.push(currentEvent.value)
 	return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
 })
-
-const currentEvent = computed(
-	(): CalendarEvent => ({
-		id: option.id,
-		UID: option.id,
-		calendarUri: '',
-		calendarKey: 0,
-		calendarName: 'Polls',
-		displayColor: 'transparent',
-		allDay: optionDates.isFullDays,
-		description: pollStore.configuration.description,
-		start: optionDates.optionStart.toSeconds(),
-		location: '',
-		end: optionDates.optionEnd.toSeconds(),
-		status: 'self',
-		summary: pollStore.configuration.title,
-		type: optionDates.isFullDays ? 'date' : 'dateTime',
-		busy: false,
-	}),
-)
 
 onMounted(async () => {
 	try {
@@ -67,11 +65,7 @@ onMounted(async () => {
 </script>
 
 <template>
-	<NcPopover
-		v-if="events.length"
-		v-bind="$attrs"
-		class="calendar-peek"
-		closeOnClickOutside>
+	<NcPopover v-if="events.length" v-bind="$attrs" class="calendar-peek">
 		<template #trigger>
 			<NcButton variant="tertiary-no-background">
 				<template #icon>

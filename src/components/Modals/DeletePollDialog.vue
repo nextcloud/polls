@@ -11,8 +11,8 @@ import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { computed } from 'vue'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
-import { usePollsStore } from '../../stores/polls'
-import { useSessionStore } from '../../stores/session'
+import { usePollsStore } from '../../stores/polls.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
 const model = defineModel<boolean>({ required: true })
 const { poll } = defineProps<{ poll: Poll }>()

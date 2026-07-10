@@ -11,9 +11,11 @@ import { computed, ref } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits(['change'])
+
+const pollStore = usePollStore()
 
 const showAnonDialog = ref(false)
 const anonDialog = {
@@ -67,7 +69,6 @@ function lockAnonymous() {
 	emit('change')
 }
 
-const pollStore = usePollStore()
 const disabledState = computed(
 	() =>
 		(pollStore.status.isAnonymous && !pollStore.permissions.deanonymize)

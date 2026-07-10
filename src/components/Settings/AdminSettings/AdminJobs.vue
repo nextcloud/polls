@@ -13,8 +13,8 @@ import { onMounted, ref } from 'vue'
 import JobExecutedIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
 import NotSupportedIcon from 'vue-material-design-icons/MinusCircleOutline.vue'
 import PlayIcon from 'vue-material-design-icons/Play.vue'
-import { AdminAPI } from '../../../Api'
-import { Logger } from '../../../helpers/modules/logger'
+import { AdminAPI } from '../../../Api/index.ts'
+import { Logger } from '../../../helpers/modules/logger.ts'
 
 const jobsList = ref<JobsList>({})
 const executedJobs = ref(new Set<string>())

@@ -13,7 +13,7 @@ import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vu
 import ActionToggleSidebar from '../Actions/modules/ActionToggleSidebar.vue'
 import PollInformation from '../Poll/PollInformation.vue'
 import UserMenu from '../User/UserMenu.vue'
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 
 const route = useRoute()
 const pollStore = usePollStore()
@@ -36,12 +36,9 @@ onBeforeUnmount(() => {
 <template>
 	<div class="poll-header-buttons">
 		<UserMenu v-if="showUserMenu" />
-		<NcPopover closeOnClickOutside noFocusTrap>
+		<NcPopover noFocusTrap>
 			<template #trigger>
-				<NcButton
-					:title="caption"
-					:aria-label="caption"
-					variant="tertiary">
+				<NcButton :title="caption" :aria-label="caption" variant="tertiary">
 					<template #icon>
 						<PollInformationIcon />
 					</template>

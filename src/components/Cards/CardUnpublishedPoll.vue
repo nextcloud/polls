@@ -7,7 +7,7 @@
 import { t } from '@nextcloud/l10n'
 import ActionOpenSharesSidebar from '../Actions/modules/ActionOpenSharesSidebar.vue'
 import CardDiv from '../Base/modules/CardDiv.vue'
-import { useVotesStore } from '../../stores/votes'
+import { useVotesStore } from '../../stores/votes.ts'
 
 const votesStore = useVotesStore()
 const cardType = 'warning'

@@ -8,7 +8,7 @@ import { t } from '@nextcloud/l10n'
 import { computed } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import InputDiv from '../../Base/modules/InputDiv.vue'
-import { useAppSettingsStore } from '../../../stores/appSettings'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 const appSettingsStore = useAppSettingsStore()
 const placeholder = computed(() => {

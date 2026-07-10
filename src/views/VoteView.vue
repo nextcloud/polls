@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
+import type { CollapsibleProps } from '../components/Base/modules/CollapsibleArea.vue'
 
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
@@ -14,7 +14,7 @@ import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import ActionAddOption from '../components/Actions/modules/ActionAddOption.vue'
 import ActionOpenOptionsSidebar from '../components/Actions/modules/ActionOpenOptionsSidebar.vue'
-import Collapsible from '../components/Base/modules/Collapsible.vue'
+import CollapsibleArea from '../components/Base/modules/CollapsibleArea.vue'
 import HeaderBar from '../components/Base/modules/HeaderBar.vue'
 import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
@@ -26,11 +26,11 @@ import MarkDownDescription from '../components/Poll/MarkDownDescription.vue'
 import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
 import VoteTable from '../components/VoteTable/VoteTable.vue'
-import { useOptionsStore } from '../stores/options'
-import { usePollStore } from '../stores/poll'
-import { usePreferencesStore } from '../stores/preferences'
-import { useVotesStore } from '../stores/votes'
-import { Event } from '../Types'
+import { useOptionsStore } from '../stores/options.ts'
+import { usePollStore } from '../stores/poll.ts'
+import { usePreferencesStore } from '../stores/preferences.ts'
+import { useVotesStore } from '../stores/votes.ts'
+import { Event } from '../Types/index.ts'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -183,12 +183,12 @@ const appClass = computed(() => [
 		<div class="vote-main">
 			<IntersectionObserver id="top-observer" v-model="topObserverVisible" />
 			<StickyDiv stickyLeft>
-				<Collapsible
+				<CollapsibleArea
 					v-if="pollStore.configuration.description"
 					class="area__top"
 					v-bind="collapsibleProps">
 					<MarkDownDescription />
-				</Collapsible>
+				</CollapsibleArea>
 			</StickyDiv>
 
 			<VoteInfoCards class="sticky-left area__top" />

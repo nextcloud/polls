@@ -4,16 +4,13 @@
 -->
 
 <script setup lang="ts">
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 const pollStore = usePollStore()
 </script>
 
 <template>
 	<!-- eslint-disable vue/no-v-html -->
-	<div
-		ref="desc"
-		class="markdown-description"
-		v-html="pollStore.descriptionMarkDown" />
+	<div class="markdown-description" v-html="pollStore.descriptionMarkDown" />
 	<!-- eslint-enable vue/no-v-html -->
 </template>
 

@@ -15,18 +15,18 @@ import {
 	createRouter,
 	createWebHistory,
 } from 'vue-router'
-import Navigation from './views/Navigation.vue'
-import { getCookieValue, setCookie } from './helpers/modules/cookieHelper'
-import { Logger } from './helpers/modules/logger'
-import { activeRoute } from './routerState'
-import { useOptionsStore } from './stores/options'
-import { usePollStore } from './stores/poll'
-import { usePollsStore } from './stores/polls'
-import { usePreferencesStore } from './stores/preferences'
-import { useSessionStore } from './stores/session'
-import { useSubscriptionStore } from './stores/subscription'
-import { useVotesStore } from './stores/votes'
-import { Event } from './Types'
+import NavigationView from './views/NavigationView.vue'
+import { getCookieValue, setCookie } from './helpers/modules/cookieHelper.ts'
+import { Logger } from './helpers/modules/logger.ts'
+import { activeRoute } from './routerState.ts'
+import { useOptionsStore } from './stores/options.ts'
+import { usePollStore } from './stores/poll.ts'
+import { usePollsStore } from './stores/polls.ts'
+import { usePreferencesStore } from './stores/preferences.ts'
+import { useSessionStore } from './stores/session.ts'
+import { useSubscriptionStore } from './stores/subscription.ts'
+import { useVotesStore } from './stores/votes.ts'
+import { Event } from './Types/index.ts'
 
 declare module 'vue-router' {
 	interface RouteMeta {
@@ -42,16 +42,16 @@ declare module 'vue-router' {
 	}
 }
 
-const Combo = () => import('./views/Combo.vue')
-const Forbidden = () => import('./views/Forbidden.vue')
-const List = () => import('./views/PollList.vue')
-const NotFound = () => import('./views/NotFound.vue')
-const Vote = () => import('./views/Vote.vue')
+const ComboView = () => import('./views/ComboView.vue')
+const ForbiddenView = () => import('./views/ForbiddenView.vue')
+const List = () => import('./views/PollListView.vue')
+const NotFoundView = () => import('./views/NotFoundView.vue')
+const VoteView = () => import('./views/VoteView.vue')
 const PublicRegisterView = () => import('./views/PublicRegisterView.vue')
 
-const SideBar = () => import('./views/SideBar.vue')
-const SideBarPollGroup = () => import('./views/SideBarPollGroup.vue')
-const SideBarCombo = () => import('./views/SideBarCombo.vue')
+const SideBarView = () => import('./views/SideBarView.vue')
+const SideBarPollGroupView = () => import('./views/SideBarPollGroupView.vue')
+const SideBarComboView = () => import('./views/SideBarComboView.vue')
 
 const routes: RouteRecordRaw[] = [
 	{
@@ -59,7 +59,7 @@ const routes: RouteRecordRaw[] = [
 		path: '/list/:type?',
 		components: {
 			default: List,
-			navigation: Navigation,
+			navigation: NavigationView,
 		},
 		props: true,
 		meta: {
@@ -71,8 +71,8 @@ const routes: RouteRecordRaw[] = [
 		path: '/group/:slug',
 		components: {
 			default: List,
-			navigation: Navigation,
-			sidebar: SideBarPollGroup,
+			navigation: NavigationView,
+			sidebar: SideBarPollGroupView,
 		},
 		props: true,
 		meta: {
@@ -84,9 +84,9 @@ const routes: RouteRecordRaw[] = [
 		name: 'combo',
 		path: '/combo',
 		components: {
-			default: Combo,
-			navigation: Navigation,
-			sidebar: SideBarCombo,
+			default: ComboView,
+			navigation: NavigationView,
+			sidebar: SideBarComboView,
 		},
 		meta: {
 			comboPage: true,
@@ -96,8 +96,8 @@ const routes: RouteRecordRaw[] = [
 		name: 'notfound',
 		path: '/not-found',
 		components: {
-			default: NotFound,
-			navigation: Navigation,
+			default: NotFoundView,
+			navigation: NavigationView,
 		},
 		meta: {
 			errorPage: true,
@@ -107,8 +107,8 @@ const routes: RouteRecordRaw[] = [
 		name: 'forbidden',
 		path: '/forbidden',
 		components: {
-			default: Forbidden,
-			navigation: Navigation,
+			default: ForbiddenView,
+			navigation: NavigationView,
 		},
 		meta: {
 			errorPage: true,
@@ -118,9 +118,9 @@ const routes: RouteRecordRaw[] = [
 		name: 'vote',
 		path: '/vote/:id',
 		components: {
-			default: Vote,
-			navigation: Navigation,
-			sidebar: SideBar,
+			default: VoteView,
+			navigation: NavigationView,
+			sidebar: SideBarView,
 		},
 		props: true,
 		meta: {
@@ -132,8 +132,8 @@ const routes: RouteRecordRaw[] = [
 		name: 'publicVote',
 		path: '/s/:token',
 		components: {
-			default: Vote,
-			sidebar: SideBar,
+			default: VoteView,
+			sidebar: SideBarView,
 		},
 		beforeEnter: validateToken,
 		props: true,

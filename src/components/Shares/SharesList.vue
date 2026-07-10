@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import type { Share } from '../../stores/shares.types'
-import type { User } from '../../Types'
+import type { User } from '../../Types/index.ts'
 
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
@@ -19,9 +19,9 @@ import UserSearch from '../User/UserSearch.vue'
 import ShareItem from './ShareItem.vue'
 import ShareItemAllUsers from './ShareItemAllUsers.vue'
 import SharePublicAdd from './SharePublicAdd.vue'
-import { usePollStore } from '../../stores/poll'
-import { useSessionStore } from '../../stores/session'
-import { useSharesStore } from '../../stores/shares'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useSharesStore } from '../../stores/shares.ts'
 
 const pollStore = usePollStore()
 const sharesStore = useSharesStore()

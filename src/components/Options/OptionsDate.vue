@@ -7,8 +7,8 @@
 import { t } from '@nextcloud/l10n'
 import OptionItem from './OptionItem.vue'
 import OptionMenu from './OptionMenu.vue'
-import { useOptionsStore } from '../../stores/options'
-import { usePollStore } from '../../stores/poll'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()

@@ -7,7 +7,7 @@
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import NcButton from '@nextcloud/vue/components/NcButton'
-import { Event } from '../../../Types'
+import { Event } from '../../../Types/index.ts'
 
 const caption = t('polls', 'Edit access')
 

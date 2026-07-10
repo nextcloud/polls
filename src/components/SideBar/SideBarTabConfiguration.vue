@@ -34,9 +34,9 @@ import ConfigTimezone from '../Configuration/ConfigTimezone.vue'
 import ConfigTitle from '../Configuration/ConfigTitle.vue'
 import ConfigUseNo from '../Configuration/ConfigUseNo.vue'
 import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
-import { usePollStore } from '../../stores/poll'
-import { useSessionStore } from '../../stores/session'
-import { useVotesStore } from '../../stores/votes'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()

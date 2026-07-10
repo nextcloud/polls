@@ -12,9 +12,9 @@ import CardLocked from './CardLocked.vue'
 import CardSendConfirmations from './CardSendConfirmations.vue'
 import CardTimezone from './CardTimezone.vue'
 import CardUnpublishedPoll from './CardUnpublishedPoll.vue'
-import { useOptionsStore } from '../../stores/options'
-import { usePollStore } from '../../stores/poll'
-import { useSharesStore } from '../../stores/shares'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSharesStore } from '../../stores/shares.ts'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -40,14 +40,14 @@ const showAddProposalsCard = computed(
 		&& pollStore.isProposalOpen
 		&& !pollStore.isClosed,
 )
-const showClosedCard = computed(
-	() => pollStore.isClosed && !showSendConfirmationsCard.value,
-)
 const showSendConfirmationsCard = computed(
 	() =>
 		pollStore.permissions.edit
 		&& pollStore.isClosed
 		&& optionsStore.confirmed.length > 0,
+)
+const showClosedCard = computed(
+	() => pollStore.isClosed && !showSendConfirmationsCard.value,
 )
 const showLimitCard = computed(
 	() =>

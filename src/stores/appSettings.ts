@@ -7,8 +7,8 @@ import type { AxiosError } from '@nextcloud/axios'
 import type { AppSettingsStore } from './appSettings.types'
 
 import { defineStore } from 'pinia'
-import { AppSettingsAPI } from '../Api'
-import { Logger } from '../helpers/modules/logger'
+import { AppSettingsAPI } from '../Api/index.ts'
+import { Logger } from '../helpers/modules/logger.ts'
 
 export const useAppSettingsStore = defineStore('appSettings', {
 	state: (): AppSettingsStore => ({

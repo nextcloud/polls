@@ -4,7 +4,7 @@
  */
 
 import type { Component } from 'vue'
-import type { Chunking, StatusResults, User, UserType } from '../Types'
+import type { Chunking, StatusResults, User, UserType } from '../Types/index.ts'
 import type { ViewMode } from './preferences.types'
 
 export type PollType = 'textPoll' | 'datePoll'

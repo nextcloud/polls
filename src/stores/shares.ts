@@ -4,8 +4,8 @@
  */
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { SentResults } from '../Api/modules/shares'
-import type { User } from '../Types'
+import type { SentResults } from '../Api/modules/shares.ts'
+import type { User } from '../Types/index.ts'
 import type {
 	PublicPollEmailConditions,
 	Share,
@@ -14,12 +14,12 @@ import type {
 } from './shares.types'
 
 import { defineStore } from 'pinia'
-import { SharesAPI } from '../Api'
-import { NotAllowed } from '../Exceptions/Exceptions'
-import { Logger } from '../helpers/modules/logger'
-import { usePollStore } from './poll'
-import { usePollGroupsStore } from './pollGroups'
-import { useSessionStore } from './session'
+import { SharesAPI } from '../Api/index.ts'
+import { NotAllowed } from '../Exceptions/Exceptions.ts'
+import { Logger } from '../helpers/modules/logger.ts'
+import { usePollStore } from './poll.ts'
+import { usePollGroupsStore } from './pollGroups.ts'
+import { useSessionStore } from './session.ts'
 
 export const useSharesStore = defineStore('shares', {
 	state: (): SharesStore => ({
@@ -65,7 +65,7 @@ export const useSharesStore = defineStore('shares', {
 
 	actions: {
 		async load(purpose: SharePurpose = 'poll'): Promise<void> {
-			let pollOrPollGroupId: number = 0
+			let pollOrPollGroupId: number
 
 			if (purpose === 'pollGroup') {
 				const pollGroupsStore = usePollGroupsStore()
@@ -113,7 +113,7 @@ export const useSharesStore = defineStore('shares', {
 		},
 
 		async add(user: User, purpose: SharePurpose = 'poll'): Promise<void> {
-			let pollOrPollGroupId: number = 0
+			let pollOrPollGroupId: number
 
 			if (purpose === 'pollGroup') {
 				const pollGroupsStore = usePollGroupsStore()

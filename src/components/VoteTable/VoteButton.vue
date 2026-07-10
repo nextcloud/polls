@@ -7,15 +7,15 @@
 import type { AxiosError } from '@nextcloud/axios'
 import type { Option } from '../../stores/options.types'
 import type { Answer } from '../../stores/votes.types'
-import type { User } from '../../Types'
+import type { User } from '../../Types/index.ts'
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import debounce from 'lodash/debounce'
 import { computed, onUnmounted } from 'vue'
 import VoteIndicator from './VoteIndicator.vue'
-import { usePollStore } from '../../stores/poll'
-import { useVotesStore } from '../../stores/votes'
+import { usePollStore } from '../../stores/poll.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 interface Props {
 	option: Option

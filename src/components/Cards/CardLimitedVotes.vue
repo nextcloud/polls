@@ -8,8 +8,8 @@ import { n, t } from '@nextcloud/l10n'
 import { computed } from 'vue'
 import ActionDeleteOrphanedVotes from '../Actions/modules/ActionDeleteOrphanedVotes.vue'
 import CardDiv from '../Base/modules/CardDiv.vue'
-import { useOptionsStore } from '../../stores/options'
-import { usePollStore } from '../../stores/poll'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()

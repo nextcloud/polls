@@ -18,11 +18,6 @@ interface Props {
 
 const { calendarEvent, option } = defineProps<Props>()
 
-const calendarStyle = computed(() => ({
-	backgroundColor: calendarEvent.displayColor,
-	color: fontColor.value,
-}))
-
 const fontColor = computed(() => {
 	if (calendarEvent.displayColor === 'transparent') {
 		return 'var(--color-main-text)'
@@ -37,6 +32,11 @@ const fontColor = computed(() => {
 
 	return l > 0.5 ? '#222' : '#ddd'
 })
+
+const calendarStyle = computed(() => ({
+	backgroundColor: calendarEvent.displayColor,
+	color: fontColor.value,
+}))
 
 const eventStart = computed(() => DateTime.fromSeconds(calendarEvent.start))
 const eventEnd = computed(() => DateTime.fromSeconds(calendarEvent.end))

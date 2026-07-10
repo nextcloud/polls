@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-import { useSessionStore } from '../../stores/session'
+import { useSessionStore } from '../../stores/session.ts'
 
 const sessionStore = useSessionStore()
 </script>

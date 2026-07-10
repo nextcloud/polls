@@ -8,7 +8,7 @@ import { t } from '@nextcloud/l10n'
 import { computed } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import InputDiv from '../../Base/modules/InputDiv.vue'
-import { usePreferencesStore } from '../../../stores/preferences'
+import { usePreferencesStore } from '../../../stores/preferences.ts'
 
 const preferencesStore = usePreferencesStore()
 

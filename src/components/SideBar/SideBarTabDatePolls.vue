@@ -5,8 +5,8 @@
 
 <script setup lang="ts">
 import UserItem from '../User/UserItem.vue'
-import { useComboStore } from '../../stores/combo'
-import { usePollsStore } from '../../stores/polls'
+import { useComboStore } from '../../stores/combo.ts'
+import { usePollsStore } from '../../stores/polls.ts'
 
 const pollsStore = usePollsStore()
 const comboStore = useComboStore()

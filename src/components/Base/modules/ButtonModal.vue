@@ -4,8 +4,8 @@
 -->
 
 <script setup lang="ts">
-import type { ButtonVariant } from '@nextcloud/vue/components/NcButton';
-import type { ButtonMode } from '../../../Types'
+import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import type { ButtonMode } from '../../../Types/index.ts'
 
 import { t } from '@nextcloud/l10n'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -66,7 +66,7 @@ const {
 			:noClose="noClose"
 			@close="showModal = false">
 			<h2>{{ buttonCaption }}</h2>
-			<slot name="modal-content" />
+			<slot name="modalContent" />
 		</NcModal>
 	</div>
 </template>

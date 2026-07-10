@@ -4,18 +4,18 @@
  */
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { User } from '../Types'
+import type { User } from '../Types/index.ts'
 import type { Option } from './options.types'
 import type { Answer, Vote, VotesStore } from './votes.types'
 
 import { defineStore } from 'pinia'
-import { PublicAPI, VotesAPI } from '../Api'
-import { Logger } from '../helpers/modules/logger'
-import { StoreHelper } from '../helpers/modules/StoreHelper'
-import { activeRoute } from '../routerState'
-import { useOptionsStore } from './options'
-import { usePollStore } from './poll'
-import { useSessionStore } from './session'
+import { PublicAPI, VotesAPI } from '../Api/index.ts'
+import { Logger } from '../helpers/modules/logger.ts'
+import { StoreHelper } from '../helpers/modules/StoreHelper.ts'
+import { activeRoute } from '../routerState.ts'
+import { useOptionsStore } from './options.ts'
+import { usePollStore } from './poll.ts'
+import { useSessionStore } from './session.ts'
 
 const answerSortOrder: { [key in Answer]: number } = {
 	yes: 1,

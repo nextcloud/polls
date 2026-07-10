@@ -5,9 +5,8 @@
 
 <script setup lang="ts">
 import type { AxiosError } from '@nextcloud/axios'
-// eslint-disable-next-line import/named
-import type { Sheet, WorkBook } from 'xlsx';
-import type { ApiEmailAdressList } from '../../Api';
+import type { Sheet, WorkBook } from 'xlsx'
+import type { ApiEmailAdressList } from '../../Api/index.ts'
 import type { Answer } from '../../stores/votes.types'
 
 import { showError } from '@nextcloud/dialogs'
@@ -25,10 +24,10 @@ import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
 import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
 import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
 import XmlIcon from 'vue-material-design-icons/Xml.vue'
-import { PollsAPI } from '../../Api'
-import { useOptionsStore } from '../../stores/options'
-import { usePollStore } from '../../stores/poll'
-import { useVotesStore } from '../../stores/votes'
+import { PollsAPI } from '../../Api/index.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 import { getDatesFromOption } from '@/composables/optionDateTime'
 import { Logger } from '@/helpers/modules/logger'
 
@@ -46,7 +45,8 @@ const workBook = ref<null | WorkBook>(null)
 const sheetData = ref<Sheet>([])
 const emailAddresses = ref<ApiEmailAdressList[]>([])
 const sheetName = computed(() =>
-	pollStore.configuration.title.replaceAll(regex, '').slice(0, 31),)
+	pollStore.configuration.title.replaceAll(regex, '').slice(0, 31),
+)
 
 function s2ab(s: string) {
 	const buf = new ArrayBuffer(s.length) // convert s to arrayBuffer
@@ -122,7 +122,8 @@ async function exportFile(exportFormat: ExportFormat) {
 		sheetData.value.push([
 			...participantsHeader,
 			...optionsStore.options.map((option) =>
-				getDatesFromOption(option).interval.toISO(),),
+				getDatesFromOption(option).interval.toISO(),
+			),
 		])
 	} else if (['html'].includes(exportFormat)) {
 		sheetData.value.push([
@@ -130,7 +131,8 @@ async function exportFile(exportFormat: ExportFormat) {
 			...optionsStore.options.map((option) =>
 				getDatesFromOption(option).interval.toLocaleString(
 					DateTime.DATETIME_MED_WITH_WEEKDAY,
-				),),
+				),
+			),
 		])
 	} else {
 		sheetData.value.push([
@@ -138,14 +140,16 @@ async function exportFile(exportFormat: ExportFormat) {
 			...optionsStore.options.map((option) =>
 				getDatesFromOption(option).optionStart.toLocaleString(
 					DateTime.DATETIME_MED_WITH_WEEKDAY,
-				),),
+				),
+			),
 		])
 		sheetData.value.push([
 			...toHeader,
 			...optionsStore.options.map((option) =>
 				getDatesFromOption(option).optionEnd.toLocaleString(
 					DateTime.DATETIME_MED_WITH_WEEKDAY,
-				),),
+				),
+			),
 		])
 	}
 
@@ -219,7 +223,7 @@ function addVotesArray(style: ArrayStyle) {
 			})
 
 			sheetData.value.push(votesLine)
-		} catch (error) {
+		} catch {
 			// just skip this participant
 		}
 	})

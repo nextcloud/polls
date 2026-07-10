@@ -4,12 +4,12 @@
 -->
 
 <script setup lang="ts">
-import type { User, UserType, VirtualUserItemType } from '../../Types';
+import type { User, UserType, VirtualUserItemType } from '../../Types/index.ts'
 
 import { t } from '@nextcloud/l10n'
 import { computed } from 'vue'
 import UserAvatar from './UserAvatar.vue'
-import { defaultUser } from '../../Types'
+import { defaultUser } from '../../Types/index.ts'
 
 defineOptions({ inheritAttrs: false })
 
@@ -42,6 +42,18 @@ interface Props {
 const computedRoleType = computed<UserType | VirtualUserItemType>(
 	() => user.type ?? virtualUserType,
 )
+const emailAddressComputed = computed(() => {
+	if (
+		showEmail
+		&& user.emailAddress !== user.displayName
+		&& (computedRoleType.value === 'external'
+			|| computedRoleType.value === 'email')
+	) {
+		return user.emailAddress
+	}
+
+	return ''
+})
 
 const computedDescription = computed(() => {
 	if (condensed) {
@@ -76,19 +88,6 @@ const computedLabel = computed(() => {
 		return `${user.displayName} (${t('polls', 'Deleted participant')})`
 	}
 	return user.displayName ?? user.id
-})
-
-const emailAddressComputed = computed(() => {
-	if (
-		showEmail
-		&& user.emailAddress !== user.displayName
-		&& (computedRoleType.value === 'external'
-			|| computedRoleType.value === 'email')
-	) {
-		return user.emailAddress
-	}
-
-	return ''
 })
 
 /**

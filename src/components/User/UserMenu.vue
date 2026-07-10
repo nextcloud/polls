@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import type { AxiosError } from '@nextcloud/axios'
 import type { ViewMode } from '../../stores/preferences.types'
-import type { StatusResults } from '../../Types'
+import type { StatusResults } from '../../Types/index.ts'
 import type { TimeZoneOption } from '@/Types/dateTime'
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
@@ -35,17 +35,17 @@ import TableViewIcon from 'vue-material-design-icons/Table.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
 import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue'
-import { PollsAPI, ValidatorAPI } from '../../Api'
+import { PollsAPI, ValidatorAPI } from '../../Api/index.ts'
 import {
 	deleteCookieByValue,
 	findCookieByValue,
-} from '../../helpers/modules/cookieHelper'
-import { useOptionsStore } from '../../stores/options'
-import { usePollStore } from '../../stores/poll'
-import { useSessionStore } from '../../stores/session'
-import { useSubscriptionStore } from '../../stores/subscription'
-import { useVotesStore } from '../../stores/votes'
-import { Event } from '../../Types'
+} from '../../helpers/modules/cookieHelper.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useSubscriptionStore } from '../../stores/subscription.ts'
+import { useVotesStore } from '../../stores/votes.ts'
+import { Event } from '../../Types/index.ts'
 
 type InputProps = {
 	success: boolean

@@ -8,7 +8,7 @@ import type { ViewMode } from '../../stores/preferences.types'
 
 import UserItem from '../User/UserItem.vue'
 import VoteColumn from './VoteColumn.vue'
-import { useComboStore } from '../../stores/combo'
+import { useComboStore } from '../../stores/combo.ts'
 
 const { viewMode = 'table-view' } = defineProps<{ viewMode?: ViewMode }>()
 

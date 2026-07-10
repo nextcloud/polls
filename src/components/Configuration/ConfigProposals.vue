@@ -9,7 +9,7 @@ import { DateTime } from 'luxon'
 import { computed } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import DateTimePicker from '../../components/Base/modules/DateTimePicker.vue'
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 
 const pollStore = usePollStore()
 

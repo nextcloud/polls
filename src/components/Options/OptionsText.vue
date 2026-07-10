@@ -9,8 +9,8 @@ import { useSortable } from '@vueuse/integrations/useSortable'
 import { nextTick, useTemplateRef } from 'vue'
 import OptionItem from './OptionItem.vue'
 import OptionMenu from './OptionMenu.vue'
-import { useOptionsStore } from '../../stores/options'
-import { usePollStore } from '../../stores/poll'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()

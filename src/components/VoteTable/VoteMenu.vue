@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import type { StatusResults } from '../../Types'
+import type { StatusResults } from '../../Types/index.ts'
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
@@ -24,15 +24,15 @@ import SendLinkPerEmailIcon from 'vue-material-design-icons/Link.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
-import { ValidatorAPI } from '../../Api'
+import { ValidatorAPI } from '../../Api/index.ts'
 import {
 	deleteCookieByValue,
 	findCookieByValue,
-} from '../../helpers/modules/cookieHelper'
-import { usePollStore } from '../../stores/poll'
-import { useSessionStore } from '../../stores/session'
-import { useSubscriptionStore } from '../../stores/subscription'
-import { useVotesStore } from '../../stores/votes'
+} from '../../helpers/modules/cookieHelper.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useSubscriptionStore } from '../../stores/subscription.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 interface Props {
 	noMenuIcon: boolean

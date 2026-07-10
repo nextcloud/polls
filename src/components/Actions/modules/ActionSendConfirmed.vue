@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import type { Confirmations } from '../../../Api/modules/polls'
+import type { Confirmations } from '../../../Api/modules/polls.ts'
 
 import { n, t } from '@nextcloud/l10n'
 import { ref } from 'vue'
@@ -12,8 +12,8 @@ import { useRoute } from 'vue-router'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import EmailCheckIcon from 'vue-material-design-icons/EmailCheckOutline.vue' // view-comfy-outline
 import NcModal from '../../Base/modules/CustomNcModal.vue'
-import { PollsAPI } from '../../../Api'
-import { Logger } from '../../../helpers/modules/logger'
+import { PollsAPI } from '../../../Api/index.ts'
+import { Logger } from '../../../helpers/modules/logger.ts'
 
 const emit = defineEmits(['success', 'error'])
 const route = useRoute()

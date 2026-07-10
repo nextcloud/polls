@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import NcTimezonePicker from '@nextcloud/vue/components/NcTimezonePicker'
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits(['change'])
 

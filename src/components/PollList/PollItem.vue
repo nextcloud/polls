@@ -23,8 +23,8 @@ import LockPollIcon from 'vue-material-design-icons/Security.vue'
 import AdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
 import BadgeSmallDiv from '../Base/modules/BadgeSmallDiv.vue'
 import UserBubble from '../User/UserBubble.vue'
-import { pollTypes, usePollStore } from '../../stores/poll'
-import { usePreferencesStore } from '../../stores/preferences'
+import { pollTypes, usePollStore } from '../../stores/poll.ts'
+import { usePreferencesStore } from '../../stores/preferences.ts'
 
 interface Props {
 	poll: Poll

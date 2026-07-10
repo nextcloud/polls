@@ -9,8 +9,8 @@ import { computed, onMounted, onUnmounted } from 'vue'
 import { onBeforeRouteUpdate } from 'vue-router'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import ActivityIcon from 'vue-material-design-icons/LightningBoltOutline.vue'
-import Activities from '../Activity/Activities.vue'
-import { useActivityStore } from '../../stores/activity'
+import ActivitiesList from '../Activity/ActivitiesList.vue'
+import { useActivityStore } from '../../stores/activity.ts'
 
 const activityStore = useActivityStore()
 const emptyContentProps = {
@@ -35,7 +35,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<Activities v-if="!showEmptyContent" />
+	<ActivitiesList v-if="!showEmptyContent" />
 	<NcEmptyContent v-else v-bind="emptyContentProps">
 		<template #icon>
 			<ActivityIcon />

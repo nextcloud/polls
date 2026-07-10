@@ -11,7 +11,7 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { ref } from 'vue'
 import InputDiv from '../Base/modules/InputDiv.vue'
-import { useOptionsStore } from '../../stores/options'
+import { useOptionsStore } from '../../stores/options.ts'
 
 const { placeholder = t('polls', 'Add option') } = defineProps<{
 	placeholder?: string

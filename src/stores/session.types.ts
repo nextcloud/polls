@@ -4,7 +4,7 @@
  */
 
 import type { WatcherMode, WatcherStatus } from '../composables/usePollWatcher.types'
-import type { User } from '../Types'
+import type { User } from '../Types/index.ts'
 import type { ViewMode } from './preferences.types'
 import type { Share } from './shares.types'
 import type { TimeZoneTypes } from '@/Types/dateTime'

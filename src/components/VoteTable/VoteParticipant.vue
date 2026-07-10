@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import type { User } from '../../Types'
+import type { User } from '../../Types/index.ts'
 
 import { showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
@@ -15,9 +15,9 @@ import NcActionText from '@nextcloud/vue/components/NcActionText'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import UserItem from '../User/UserItem.vue'
 import VoteMenu from './VoteMenu.vue'
-import { usePollStore } from '../../stores/poll'
-import { useSessionStore } from '../../stores/session'
-import { useVotesStore } from '../../stores/votes'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 const { user } = defineProps<{ user: User }>()
 const pollStore = usePollStore()

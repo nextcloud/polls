@@ -5,7 +5,7 @@
 
 import type { Option } from '../../stores/options.types'
 import type { Vote } from '../../stores/votes.types'
-import type { Participant } from '../../Types'
+import type { Participant } from '../../Types/index.ts'
 
 function uniqueArrayOfObjects (array: unknown[]) {
   return [...new Set(array.map((obj) => JSON.stringify(obj)))].map((string) =>

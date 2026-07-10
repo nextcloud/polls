@@ -10,7 +10,7 @@ import linkifyStr from 'linkify-string'
 import DragIcon from 'vue-material-design-icons/DotsVertical.vue'
 import DateBox from '../Base/modules/DateBox.vue'
 import OptionItemOwner from './OptionItemOwner.vue'
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 
 interface Props {
 	option: Option

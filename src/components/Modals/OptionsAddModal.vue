@@ -12,8 +12,8 @@ import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
 import NcModal from '../Base/modules/CustomNcModal.vue'
 import OptionsDate from '../Options/OptionsDate.vue'
 import OptionsDateAddDialog from '../Options/OptionsDateAddDialog.vue'
-import { usePollStore } from '../../stores/poll'
-import { Event } from '../../Types'
+import { usePollStore } from '../../stores/poll.ts'
+import { Event } from '../../Types/index.ts'
 
 const pollStore = usePollStore()
 const showModal = ref(false)

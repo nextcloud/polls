@@ -9,13 +9,13 @@ import type { FilterType, PollCategory, PollsStore } from './polls.types'
 
 import orderBy from 'lodash/orderBy'
 import { defineStore } from 'pinia'
-import { PollsAPI } from '../Api'
-import { NotAllowed } from '../Exceptions/Exceptions'
-import { Logger } from '../helpers/modules/logger'
-import { activeRoute } from '../routerState'
-import { usePollGroupsStore } from './pollGroups'
+import { PollsAPI } from '../Api/index.ts'
+import { NotAllowed } from '../Exceptions/Exceptions.ts'
+import { Logger } from '../helpers/modules/logger.ts'
+import { activeRoute } from '../routerState.ts'
+import { usePollGroupsStore } from './pollGroups.ts'
 import { pollCategories, sortOption } from './polls.constants'
-import { useSessionStore } from './session'
+import { useSessionStore } from './session.ts'
 
 export const usePollsStore = defineStore('polls', {
 	state: (): PollsStore => ({

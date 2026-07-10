@@ -4,7 +4,7 @@
  */
 
 import type { DateTime } from 'luxon'
-import type { DateTimeUnits, DateTimeUnitType } from '../../Types/dateTime'
+import type { DateTimeUnits, DateTimeUnitType } from '../../Types/dateTime.ts'
 
 import { t } from '@nextcloud/l10n'
 

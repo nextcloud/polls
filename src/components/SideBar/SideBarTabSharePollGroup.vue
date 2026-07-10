@@ -8,7 +8,7 @@ import { t } from '@nextcloud/l10n'
 import { onMounted } from 'vue'
 import { onBeforeRouteUpdate } from 'vue-router'
 import SharesList from '../Shares/SharesListPollGroup.vue'
-import { useSharesStore } from '../../stores/shares'
+import { useSharesStore } from '../../stores/shares.ts'
 
 const sharesStore = useSharesStore()
 const infoText = t(

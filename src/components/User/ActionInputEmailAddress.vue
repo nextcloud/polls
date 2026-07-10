@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import type { StatusResults } from '../../Types'
+import type { StatusResults } from '../../Types/index.ts'
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
@@ -13,8 +13,8 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
-import { ValidatorAPI } from '../../Api'
-import { useSessionStore } from '../../stores/session'
+import { ValidatorAPI } from '../../Api/index.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
 const route = useRoute()
 

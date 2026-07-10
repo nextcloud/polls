@@ -6,7 +6,6 @@
 <script setup lang="ts">
 import { showSuccess } from '@nextcloud/dialogs'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { t } from '@nextcloud/l10n'
 import debounce from 'lodash/debounce'
 import {
 	computed,
@@ -20,11 +19,11 @@ import { useRoute } from 'vue-router'
 // import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import NcContent from '@nextcloud/vue/components/NcContent'
 import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
-import { usePollWatcher } from './composables/usePollWatcher'
-import { usePollStore } from './stores/poll'
-import { usePollGroupsStore } from './stores/pollGroups'
-import { useSessionStore } from './stores/session'
-import { Event } from './Types'
+import { usePollWatcher } from './composables/usePollWatcher.ts'
+import { usePollStore } from './stores/poll.ts'
+import { usePollGroupsStore } from './stores/pollGroups.ts'
+import { useSessionStore } from './stores/session.ts'
+import { Event } from './Types/index.ts'
 
 import '@nextcloud/dialogs/style.css'
 import './assets/scss/vars.scss'
@@ -132,7 +131,6 @@ onUnmounted(() => {
 		<UserSettingsDlg />
 		<LoadingOverlay
 			:show="sessionStore.navigationStatus === 'loading'"
-			:name="t('polls', 'Loading…')"
 			teleportTo="#content" />
 	</NcContent>
 </template>

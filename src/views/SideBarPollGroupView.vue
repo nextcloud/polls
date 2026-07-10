@@ -13,7 +13,7 @@ import SidebarShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 import SidebarConfigurationIcon from 'vue-material-design-icons/WrenchOutline.vue'
 import SideBarTabConfigurationPollGroup from '../components/SideBar/SideBarTabConfigurationPollGroup.vue'
 import SideBarTabPollGroup from '../components/SideBar/SideBarTabSharePollGroup.vue'
-import { Event } from '../Types'
+import { Event } from '../Types/index.ts'
 
 const showSidebar = ref(window.innerWidth > 920)
 const activeTab = ref(t('polls', 'Shares').toLowerCase())

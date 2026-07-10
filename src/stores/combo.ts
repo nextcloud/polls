@@ -4,7 +4,7 @@
  */
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { Participant } from '../Types'
+import type { Participant } from '../Types/index.ts'
 import type { ComboStore } from './combo.types'
 import type { Option } from './options.types'
 import type { Poll } from './poll.types'
@@ -12,12 +12,12 @@ import type { Vote } from './votes.types'
 
 import sortBy from 'lodash/sortBy'
 import { defineStore } from 'pinia'
-import { OptionsAPI, PollsAPI, VotesAPI } from '../Api'
-import { uniqueOptions, uniqueParticipants } from '../helpers/modules/arrayHelper'
-import { Logger } from '../helpers/modules/logger'
-import { hydrateOption } from './options'
-import { usePollsStore } from './polls'
-import { usePreferencesStore } from './preferences'
+import { OptionsAPI, PollsAPI, VotesAPI } from '../Api/index.ts'
+import { uniqueOptions, uniqueParticipants } from '../helpers/modules/arrayHelper.ts'
+import { Logger } from '../helpers/modules/logger.ts'
+import { hydrateOption } from './options.ts'
+import { usePollsStore } from './polls.ts'
+import { usePreferencesStore } from './preferences.ts'
 
 export const useComboStore = defineStore('combo', {
 	state: (): ComboStore => ({

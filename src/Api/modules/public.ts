@@ -10,13 +10,16 @@ import type {
 	RemoveVotesResponse,
 	setVoteResponse,
 } from './api.types'
-import type { SentResults } from './shares'
+import type { SentResults } from './shares.ts'
 
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { createCancelTokenHandler, httpInstance } from './HttpApi'
+import { createCancelTokenHandler, httpInstance } from './HttpApi.js'
+
+// eslint-disable-next-line prefer-const -- assigned below, after `publicPoll` is fully defined
+let cancelTokenHandlerObject: ReturnType<typeof createCancelTokenHandler>
 
 const publicPoll = {
 	getPoll(shareToken: string): Promise<AxiosResponse<FullPollResponse>> {
@@ -321,6 +324,6 @@ const publicPoll = {
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(publicPoll)
+cancelTokenHandlerObject = createCancelTokenHandler(publicPoll)
 
 export default publicPoll

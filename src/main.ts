@@ -4,8 +4,8 @@
  */
 import { createApp } from 'vue'
 import App from './App.vue'
-import { router } from './router'
-import { pinia } from './stores'
+import { router } from './router.ts'
+import { pinia } from './stores/index.ts'
 
 // TODO: FInd a way to use the devtools in the browser
 // Vue.config.devtools = import.meta.env.MODE !== 'production'

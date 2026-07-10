@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import type { User, VirtualUserItemType } from '../../Types'
+import type { User, VirtualUserItemType } from '../../Types/index.ts'
 
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -16,8 +16,7 @@ import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
 import CircleIcon from 'vue-material-design-icons/GoogleCirclesExtended.vue'
 import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
 import LinkIcon from 'vue-material-design-icons/Link.vue'
-import { defaultUser } from '../../Types'
-const { mdIconSize = 20, virtualUserType, user = defaultUser } = defineProps<Props>()
+const { mdIconSize = 20, virtualUserType = undefined, user } = defineProps<Props>()
 
 const route = useRoute()
 

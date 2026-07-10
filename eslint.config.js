@@ -10,6 +10,8 @@ export default [
 	{
 		rules: {
 			'arrow-body-style': 'error',
+			'@nextcloud/no-deprecated-library-props': 'warn',
+			'@stylistic/exp-list-style': 'off',
 			'jsdoc/require-jsdoc': [
 				'warn',
 				{

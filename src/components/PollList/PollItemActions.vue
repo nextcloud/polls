@@ -25,9 +25,9 @@ import RestorePollIcon from 'vue-material-design-icons/RecycleVariant.vue'
 import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import DeletePollDialog from '../Modals/DeletePollDialog.vue'
 import TransferPollDialog from '../Modals/TransferPollDialog.vue'
-import { usePollGroupsStore } from '../../stores/pollGroups'
-import { usePollsStore } from '../../stores/polls'
-import { useSessionStore } from '../../stores/session'
+import { usePollGroupsStore } from '../../stores/pollGroups.ts'
+import { usePollsStore } from '../../stores/polls.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
 const { poll } = defineProps<{ poll: Poll }>()
 
@@ -118,7 +118,7 @@ async function addPollToNewPollGroup(pollId: number) {
 		})
 		newGroupTitle.value = ''
 		subMenu.value = null
-	} catch (error) {
+	} catch {
 		showError(t('polls', 'Error creating new poll group.'))
 	}
 }

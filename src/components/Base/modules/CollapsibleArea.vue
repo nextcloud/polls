@@ -9,7 +9,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 export interface CollapsibleProps {
 	initialState?: 'min' | 'max'
 	minHeight?: number
-	noCollapse: boolean
+	noCollapse?: boolean
 	maxHeightVh?: number
 }
 
@@ -31,7 +31,8 @@ const height = ref(minHeight)
 
 // Max height is either the content height or capped by maxHeightVh
 const maxHeight = computed(() =>
-	Math.min(contentHeight.value, window.innerHeight * (maxHeightVh / 100)),)
+	Math.min(contentHeight.value, window.innerHeight * (maxHeightVh / 100)),
+)
 
 // Effective minimum height: either minHeight or capped by maxHeight
 const effectiveMinHeight = computed(() => Math.min(minHeight, maxHeight.value))

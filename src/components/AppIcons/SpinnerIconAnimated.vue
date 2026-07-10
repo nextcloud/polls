@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <script setup lang="ts">
-import type { IconProps } from './types'
+import type { IconProps } from './types.ts'
 
 import { t } from '@nextcloud/l10n'
 

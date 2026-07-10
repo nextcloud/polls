@@ -6,7 +6,10 @@
 import type { AxiosResponse } from 'axios'
 import type { Job, JobsList } from './api.types'
 
-import { createCancelTokenHandler, httpInstance } from './HttpApi'
+import { createCancelTokenHandler, httpInstance } from './HttpApi.js'
+
+// eslint-disable-next-line prefer-const -- assigned below, after `adminJobs` is fully defined
+let cancelTokenHandlerObject: ReturnType<typeof createCancelTokenHandler>
 
 const adminJobs = {
 	getJobsList(): Promise<AxiosResponse<{ jobs: JobsList }>> {
@@ -34,6 +37,6 @@ const adminJobs = {
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(adminJobs)
+cancelTokenHandlerObject = createCancelTokenHandler(adminJobs)
 
 export default adminJobs

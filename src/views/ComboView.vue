@@ -13,7 +13,7 @@ import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 import HeaderBar from '../components/Base/modules/HeaderBar.vue'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 import ComboTable from '../components/Combo/ComboTable.vue'
-import { useComboStore } from '../stores/combo'
+import { useComboStore } from '../stores/combo.ts'
 
 const comboStore = useComboStore()
 const isLoading = ref(false)
@@ -57,6 +57,6 @@ onMounted(() => {
 			</NcEmptyContent>
 		</div>
 
-		<LoadingOverlay :name="t('polls', 'Loading …')" :show="isLoading" />
+		<LoadingOverlay :show="isLoading" />
 	</NcAppContent>
 </template>

@@ -27,7 +27,7 @@ type RichObject = {
 }
 
 interface Props {
-	richObject?: RichObject
+	richObject: RichObject
 }
 
 const { richObject } = defineProps<Props>()

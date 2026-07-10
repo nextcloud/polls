@@ -6,7 +6,7 @@
 <script setup>
 import { t } from '@nextcloud/l10n'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-import { usePreferencesStore } from '../../../stores/preferences'
+import { usePreferencesStore } from '../../../stores/preferences.ts'
 const preferencesStore = usePreferencesStore()
 </script>
 

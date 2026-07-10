@@ -11,7 +11,7 @@ import YesCounterIcon from 'vue-material-design-icons/Check.vue'
 import CheckboxMarkedOutlinedIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import MaybeCounterIcon from 'vue-material-design-icons/Tilde.vue'
 import VotersList from '../VoteTable/VotersList.vue'
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 
 const { option, showMaybe = false } = defineProps<Props>()
 const pollStore = usePollStore()

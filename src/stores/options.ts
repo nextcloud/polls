@@ -5,7 +5,7 @@
 // fallow-ignore-file circular-dependency
 
 import type { AxiosError } from '@nextcloud/axios'
-import type { TimeUnitsType } from '../Types/dateTime'
+import type { TimeUnitsType } from '../Types/dateTime.ts'
 import type {
 	HasIsoFields,
 	Option,
@@ -20,12 +20,12 @@ import type {
 import orderBy from 'lodash/orderBy'
 import { DateTime, Duration } from 'luxon'
 import { defineStore } from 'pinia'
-import { OptionsAPI, PublicAPI } from '../Api'
-import { Logger } from '../helpers/modules/logger'
-import { activeRoute } from '../routerState'
-import { usePollStore } from './poll'
-import { useSessionStore } from './session'
-import { useVotesStore } from './votes'
+import { OptionsAPI, PublicAPI } from '../Api/index.ts'
+import { Logger } from '../helpers/modules/logger.ts'
+import { activeRoute } from '../routerState.ts'
+import { usePollStore } from './poll.ts'
+import { useSessionStore } from './session.ts'
+import { useVotesStore } from './votes.ts'
 
 export const hydrateOption = (dto: OptionDto): Option => withLuxon(dto)
 

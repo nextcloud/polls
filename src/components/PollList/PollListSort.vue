@@ -19,8 +19,8 @@ import CreationIcon from 'vue-material-design-icons/ClockPlusOutline.vue'
 import GestureDoubleTapIcon from 'vue-material-design-icons/GestureDoubleTap.vue'
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
 import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue'
-import { usePollsStore } from '../../stores/polls'
 import { sortOption } from '../../stores/polls.constants'
+import { usePollsStore } from '../../stores/polls.ts'
 
 const pollsStore = usePollsStore()
 
@@ -29,9 +29,7 @@ const sortDirection = computed({
 		return pollsStore.sort.reverse ? 'desc' : 'asc'
 	},
 	set(direction: SortDirection) {
-		direction === 'asc'
-			? (pollsStore.sort.reverse = false)
-			: (pollsStore.sort.reverse = true)
+		pollsStore.sort.reverse = direction !== 'asc'
 	},
 })
 

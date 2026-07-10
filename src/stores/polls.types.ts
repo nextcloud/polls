@@ -4,7 +4,7 @@
  */
 
 import type { Component } from 'vue'
-import type { Chunking, StatusResults } from '../Types'
+import type { Chunking, StatusResults } from '../Types/index.ts'
 import type { Poll } from './poll.types'
 
 export type SortType =

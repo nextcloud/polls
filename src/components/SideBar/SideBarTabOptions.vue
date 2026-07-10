@@ -21,9 +21,9 @@ import OptionsDateShift from '../Options/OptionsDateShift.vue'
 import OptionsText from '../Options/OptionsText.vue'
 import OptionsTextAdd from '../Options/OptionsTextAdd.vue'
 import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
-import { useOptionsStore } from '../../stores/options'
-import { usePollStore } from '../../stores/poll'
-import { Event } from '../../Types'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { Event } from '../../Types/index.ts'
 
 const optionsStore = useOptionsStore()
 const pollStore = usePollStore()

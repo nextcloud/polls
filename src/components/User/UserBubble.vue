@@ -4,18 +4,17 @@
 -->
 
 <script setup lang="ts">
-import type { User } from '../../Types';
+import type { User } from '../../Types/index.ts'
 
 import { t } from '@nextcloud/l10n'
 import { computed } from 'vue'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
-import { defaultUser } from '../../Types'
 
 interface Props {
 	user: User
 }
 
-const { user = defaultUser } = defineProps<Props>()
+const { user } = defineProps<Props>()
 
 const bubbleProps = computed(() => ({
 	user: user.isNoUser || user.isGuest ? undefined : user.id,

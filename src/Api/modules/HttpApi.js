@@ -41,10 +41,15 @@ httpInstance.interceptors.request.use((config) => {
 	return config
 })
 /**
- * Description
+ * @typedef {{ handleRequestCancellation: (subKey?: string) => AbortController }} CancelTokenHandlerEntry
+ */
+
+/**
+ * Creates a cancel token handler for each method of the given API object,
+ * keyed by method name.
  *
- * @param {any} apiObject apiObject
- * @return {any}
+ * @param {Record<string, unknown>} apiObject apiObject
+ * @return {Record<string, CancelTokenHandlerEntry>}
  */
 function createCancelTokenHandler (apiObject) {
 	const cancelTokenHandler = {}

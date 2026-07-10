@@ -6,13 +6,16 @@ import type {
 	SimpleOption,
 } from '../../stores/options.types'
 import type { Vote } from '../../stores/votes.types'
-import type { DateTimeUnits } from '../../Types/dateTime'
+import type { DateTimeUnits } from '../../Types/dateTime.ts'
 
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { createCancelTokenHandler, httpInstance } from './HttpApi'
+import { createCancelTokenHandler, httpInstance } from './HttpApi.js'
+
+// eslint-disable-next-line prefer-const -- assigned below, after `options` is fully defined
+let cancelTokenHandlerObject: ReturnType<typeof createCancelTokenHandler>
 
 const options = {
 	getOptions(pollId: number): Promise<AxiosResponse<{ options: OptionDto[] }>> {
@@ -169,6 +172,6 @@ const options = {
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(options)
+cancelTokenHandlerObject = createCancelTokenHandler(options)
 
 export default options

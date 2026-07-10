@@ -9,14 +9,14 @@ import type { Option } from '../../stores/options.types'
 import { t } from '@nextcloud/l10n'
 import { computed } from 'vue'
 import UserItem from '../User/UserItem.vue'
-import { useVotesStore } from '../../stores/votes'
+import { useVotesStore } from '../../stores/votes.ts'
 
 interface Props {
 	option: Option
-	answerFilter: 'yes' | 'maybe' | 'no' | '' | null
+	answerFilter: 'yes' | 'maybe' | 'no' | ''
 }
 
-const { option, answerFilter = null } = defineProps<Props>()
+const { option, answerFilter } = defineProps<Props>()
 
 const votesStore = useVotesStore()
 
@@ -24,7 +24,8 @@ const voters = computed(() =>
 	votesStore.getVotersByOptionAndAnswer({
 		optionText: option.text,
 		answer: answerFilter,
-	}),)
+	}),
+)
 </script>
 
 <template>

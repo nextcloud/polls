@@ -16,8 +16,8 @@ defineOptions({ inheritAttrs: false })
 
 const model = defineModel<DateTime>({ required: true })
 
-const { useDayButtons = false, label = '' } = defineProps<{
-	useDayButtons?: boolean
+const { useDayButtons, label } = defineProps<{
+	useDayButtons: boolean
 	label: string
 }>()
 

@@ -11,7 +11,7 @@ import FlexSettings from '../components/Base/modules/FlexSettings.vue'
 import CalendarSettings from '../components/Settings/UserSettings/CalendarSettings.vue'
 import FeatureSettings from '../components/Settings/UserSettings/FeatureSettings.vue'
 import StyleSettings from '../components/Settings/UserSettings/StyleSettings.vue'
-import { usePreferencesStore } from '../stores/preferences'
+import { usePreferencesStore } from '../stores/preferences.ts'
 
 import '../assets/scss/vars.scss'
 

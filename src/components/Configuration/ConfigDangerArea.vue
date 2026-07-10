@@ -15,7 +15,7 @@ import RestorePollIcon from 'vue-material-design-icons/RecycleVariant.vue'
 import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import DeletePollDialog from '../Modals/DeletePollDialog.vue'
 import TransferPollDialog from '../Modals/TransferPollDialog.vue'
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 
 const router = useRouter()
 const pollStore = usePollStore()

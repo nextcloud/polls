@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import type { SignalingType } from '../../../Types'
+import type { SignalingType } from '../../../Types/index.ts'
 
 import { t } from '@nextcloud/l10n'
 import { computed, onMounted } from 'vue'
@@ -16,8 +16,8 @@ import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import Spinner from '../../AppIcons/Spinner.vue'
-import { Logger } from '../../../helpers/modules/logger'
+import SpinnerIconAnimated from '../../AppIcons/SpinnerIconAnimated.vue'
+import { Logger } from '../../../helpers/modules/logger.ts'
 
 interface Props {
 	signalingClass?: SignalingType
@@ -26,8 +26,8 @@ interface Props {
 	inputmode?: 'text' | 'none' | 'numeric' | 'email' | 'url'
 	useNumModifiers?: boolean
 	modifierStepValue?: number
-	numMax?: number
-	numMin?: number
+	numMax?: number | undefined
+	numMin?: number | undefined
 	numWrap?: boolean
 	focus?: boolean
 	submit?: boolean
@@ -42,11 +42,11 @@ const {
 	signalingClass = '',
 	placeholder = '',
 	type = 'text',
-	inputmode,
+	inputmode = 'text',
 	useNumModifiers = false,
 	modifierStepValue = 1,
-	numMax,
-	numMin,
+	numMax = undefined,
+	numMin = undefined,
 	numWrap = false,
 	focus = false,
 	submit = false,
@@ -67,7 +67,8 @@ const vInputFocus = {
 }
 
 const numericModelValue = computed(() =>
-	typeof model.value === 'number' ? model.value : parseInt(model.value),)
+	typeof model.value === 'number' ? model.value : parseInt(model.value),
+)
 
 const computedSignalingClass = computed(() => {
 	if (signalingClass === 'valid') {
@@ -227,7 +228,7 @@ const inputClass = computed(() => [
 				@change="emit('change')"
 				@keyup.enter="emit('submit')" />
 
-			<Spinner v-if="checking" class="signaling-icon spinner" />
+			<SpinnerIconAnimated v-if="checking" class="signaling-icon spinner" />
 			<AlertIcon v-else-if="error" class="signaling-icon error" />
 			<CheckIcon v-else-if="success" class="signaling-icon success" />
 			<ArrowRightIcon
@@ -253,7 +254,10 @@ const inputClass = computed(() => [
 				@click="add()" />
 		</div>
 
-		<div v-if="helperText !== null" class="helper" :class="[computedSignalingClass]">
+		<div
+			v-if="helperText !== null"
+			class="helper"
+			:class="[computedSignalingClass]">
 			{{ helperText }}
 		</div>
 	</div>

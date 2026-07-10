@@ -7,10 +7,10 @@ import type { AxiosError } from '@nextcloud/axios'
 
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { PollsAPI, PublicAPI } from '../Api'
-import { Logger } from '../helpers/modules/logger'
-import { activeRoute } from '../routerState'
-import { useSessionStore } from './session'
+import { PollsAPI, PublicAPI } from '../Api/index.ts'
+import { Logger } from '../helpers/modules/logger.ts'
+import { activeRoute } from '../routerState.ts'
+import { useSessionStore } from './session.ts'
 
 export const useSubscriptionStore = defineStore('subscription', () => {
 	const subscribed = ref(false)

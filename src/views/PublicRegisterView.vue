@@ -15,8 +15,8 @@ import PollDescription from '@/components/Poll/PollDescription.vue'
 import PollInfoLine from '@/components/Poll/PollInfoLine.vue'
 import PollTitle from '@/components/Poll/PollTitle.vue'
 import RegistrationForm from '@/components/Public/RegistrationForm.vue'
-import { InlineLink } from '../helpers/modules/InlineLink'
-import { useSessionStore } from '../stores/session'
+import { InlineLink } from '../helpers/modules/InlineLink.ts'
+import { useSessionStore } from '../stores/session.ts'
 
 defineOptions({
 	inheritAttrs: false,

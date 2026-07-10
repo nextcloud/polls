@@ -8,8 +8,8 @@ import { DateTime } from 'luxon'
 import { computed } from 'vue'
 import NcRichText from '@nextcloud/vue/components/NcRichText'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
-import { GuestBubble } from '../../helpers/modules/GuestBubble'
-import { SimpleLink } from '../../helpers/modules/SimpleLink'
+import { GuestBubble } from '../../helpers/modules/GuestBubble.ts'
+import { SimpleLink } from '../../helpers/modules/SimpleLink.ts'
 
 const props = defineProps({
 	activity: {

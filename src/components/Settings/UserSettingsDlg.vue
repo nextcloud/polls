@@ -11,8 +11,8 @@ import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection
 import CalendarSettings from './UserSettings/CalendarSettings.vue'
 import FeatureSettings from './UserSettings/FeatureSettings.vue'
 import StyleSettings from './UserSettings/StyleSettings.vue'
-import { usePreferencesStore } from '../../stores/preferences'
-import { Event } from '../../Types'
+import { usePreferencesStore } from '../../stores/preferences.ts'
+import { Event } from '../../Types/index.ts'
 
 const preferencesStore = usePreferencesStore()
 const show = ref(false)

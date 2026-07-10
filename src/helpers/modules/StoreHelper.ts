@@ -8,9 +8,9 @@ import type { OptionDto } from '../../stores/options.types'
 import type { Poll } from '../../stores/poll.types'
 import type { Vote } from '../../stores/votes.types'
 
-import { useOptionsStore } from '../../stores/options'
-import { usePollStore } from '../../stores/poll'
-import { useVotesStore } from '../../stores/votes'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 const StoreHelper = {
 	updateStores(data: { poll?: Poll; votes?: Vote[]; options?: OptionDto[] }) {

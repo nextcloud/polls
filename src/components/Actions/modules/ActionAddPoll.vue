@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
-import type { ButtonMode } from '../../../Types'
+import type { ButtonMode } from '../../../Types/index.ts'
 
 import { t } from '@nextcloud/l10n'
 import { computed, ref, shallowRef } from 'vue'
@@ -14,7 +14,7 @@ import NcDialog from '@nextcloud/vue/components/NcDialog'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import ButtonModal from '../../Base/modules/ButtonModal.vue'
 import PollCreateDlg from '../../Create/PollCreateDlg.vue'
-import { useSessionStore } from '../../../stores/session'
+import { useSessionStore } from '../../../stores/session.ts'
 
 interface Props {
 	caption?: string
@@ -37,6 +37,7 @@ const newPoll = shallowRef({
 })
 
 const showModal = ref(false)
+const showConfirmationDialog = ref(false)
 
 /**
  *
@@ -57,7 +58,6 @@ const confirmationDialogMessage = computed(() =>
 		pollTitle: newPoll.value.title,
 	}),)
 const confirmationDialogName = t('polls', 'Poll created')
-const showConfirmationDialog = ref(false)
 const confirmationDialogProps = {
 	buttons: [
 		{

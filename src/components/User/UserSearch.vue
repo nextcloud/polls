@@ -5,14 +5,14 @@
 
 <script setup lang="ts">
 import type { AxiosError } from '@nextcloud/axios'
-import type { ISearchType, User } from '../../Types'
+import type { ISearchType, User } from '../../Types/index.ts'
 
 import { t } from '@nextcloud/l10n'
 import debounce from 'lodash/debounce'
 import { ref, shallowRef } from 'vue'
 import NcSelectUsers from '@nextcloud/vue/components/NcSelectUsers'
-import { AppSettingsAPI } from '../../Api'
-import { Logger } from '../../helpers/modules/logger'
+import { AppSettingsAPI } from '../../Api/index.ts'
+import { Logger } from '../../helpers/modules/logger.ts'
 
 interface Props {
 	placeholder?: string

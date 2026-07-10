@@ -7,8 +7,8 @@ import type { AxiosError } from '@nextcloud/axios'
 import type { Calendar, PreferencesStore } from './preferences.types'
 
 import { defineStore } from 'pinia'
-import { CalendarAPI, UserSettingsAPI } from '../Api'
-import { Logger } from '../helpers/modules/logger'
+import { CalendarAPI, UserSettingsAPI } from '../Api/index.ts'
+import { Logger } from '../helpers/modules/logger.ts'
 
 export const usePreferencesStore = defineStore('preferences', {
 	state: (): PreferencesStore => ({

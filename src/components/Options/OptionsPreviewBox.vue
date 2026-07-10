@@ -14,35 +14,31 @@ import { getDates } from '@/composables/optionDateTime'
 
 interface Props {
 	option: SimpleOption | Option
-	timezone?: string | undefined
-	otherTimeZone?: string | undefined
-	sequence?: Sequence | undefined
-	title?: string | undefined
+	timezone: string | undefined
+	otherTimeZone: string | undefined
+	sequence: Sequence | undefined
 }
 
-const {
-	option,
-	timezone = Intl.DateTimeFormat().resolvedOptions().timeZone,
-	otherTimeZone,
-	sequence,
-	title,
-} = defineProps<Props>()
-
-// computed last from dateTime repetition
-const lastRepetitionDateTime = computed(() =>
-	option.getDateTime().plus(sequenceDuration.value),)
+const { option, timezone, otherTimeZone, sequence } = defineProps<Props>()
 
 const sequenceDuration = computed(() =>
 	sequence?.repetitions
 		? Duration.fromObject({
 				[sequence.unit.id]: sequence.stepWidth * sequence.repetitions,
 			})
-		: Duration.fromObject({ millisecond: 0 }),)
+		: Duration.fromObject({ millisecond: 0 }),
+)
+
+// computed last from dateTime repetition
+const lastRepetitionDateTime = computed(() =>
+	option.getDateTime().plus(sequenceDuration.value),
+)
 
 const repetitionCaption = computed(() =>
 	sequence?.repetitions
 		? n('polls', '%n repetition', 'Last of %n repetitions', sequence.repetitions)
-		: '',)
+		: '',
+)
 
 const simpleDate = computed(() => {
 	const dates = getDates(option.getDateTime(), option.getDuration(), otherTimeZone)
@@ -52,11 +48,6 @@ const simpleDate = computed(() => {
 
 <template>
 	<div class="preview-box">
-		<div
-			v-if="title"
-			class="preview-title" :class="[{ 'span-2': sequence?.repetitions }]">
-			{{ title }}
-		</div>
 		<div class="preview-date">
 			<DateBox
 				:startDate="option.getDateTime()"
@@ -73,7 +64,8 @@ const simpleDate = computed(() => {
 		</div>
 		<div
 			v-if="otherTimeZone"
-			class="timezone-information" :class="[{ 'span-2': sequence?.repetitions }]">
+			class="timezone-information"
+			:class="[{ 'span-2': sequence?.repetitions }]">
 			<div>{{ otherTimeZone }}:</div>
 			<div>{{ simpleDate }}</div>
 		</div>

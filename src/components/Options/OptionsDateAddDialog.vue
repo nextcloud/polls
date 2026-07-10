@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import type { AxiosError } from '@nextcloud/axios'
-import type { DurationType, TimeZoneOption } from '../../Types/dateTime'
+import type { DurationType, TimeZoneOption } from '../../Types/dateTime.ts'
 import type { Sequence, SimpleOption } from '@/stores/options.types'
 
 import { showError } from '@nextcloud/dialogs'
@@ -19,7 +19,7 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import InputDiv from '../Base/modules/InputDiv.vue'
 import LuxonPicker from '../Base/modules/LuxonPicker.vue'
 import OptionsPreviewBox from './OptionsPreviewBox.vue'
-import { useResizeObserver } from '../../composables/elementWidth'
+import { useResizeObserver } from '../../composables/elementWidth.ts'
 import { ceilDate, dateTimeUnitsKeyed } from '@/helpers/modules/dateHelpers'
 import { useOptionsStore } from '@/stores/options'
 import { usePollStore } from '@/stores/poll'
@@ -39,6 +39,11 @@ const successColor = getComputedStyle(document.documentElement).getPropertyValue
  * Ref to store the result of adding an option
  */
 const result = ref('')
+
+/**
+ * Ref as boolean to toggle between all day and time based options
+ */
+const allDay = ref(true)
 
 // *** refs for the inputs
 
@@ -83,6 +88,28 @@ const startDateTime = ref(
 )
 
 /**
+ * The duration input used for the input fields
+ * Initially set to 0 Days, which currently is equal to 1 Day if allDay is true
+ *
+ * @return ref DurationType
+ */
+const durationInput = ref<DurationType>({
+	unit: dateTimeUnitsKeyed.day,
+	amount: 0,
+})
+
+/**
+ * Computed duration as Duration from Luxon
+ * Set duration to 1 Day if allDay is true and duration is 0
+ */
+const duration = computed(() =>
+	durationInput.value.amount < 1 && allDay.value
+		? Duration.fromObject({ day: 1 })
+		: Duration.fromObject({
+				[durationInput.value.unit.id]: durationInput.value.amount,
+			}).rescale(),)
+
+/**
  * Resulting option based on the inputs
  */
 const newOption = computed<SimpleOption>(() => {
@@ -102,15 +129,11 @@ const newOption = computed<SimpleOption>(() => {
 })
 
 /**
- * The duration input used for the input fields
- * Initially set to 0 Days, which currently is equal to 1 Day if allDay is true
+ * Computed to find an existing option with the same dateTime and duration
  *
- * @return ref DurationType
+ * @return found option or undefined
  */
-const durationInput = ref<DurationType>({
-	unit: dateTimeUnitsKeyed.day,
-	amount: 0,
-})
+const duplicateOption = computed(() => optionsStore.find(newOption.value))
 
 /**
  * Reset duration units when switching between all day and time based options
@@ -143,35 +166,12 @@ function setZone(): void {
 }
 
 /**
- * Computed duration as Duration from Luxon
- * Set duration to 1 Day if allDay is true and duration is 0
- */
-const duration = computed(() =>
-	durationInput.value.amount < 1 && allDay.value
-		? Duration.fromObject({ day: 1 })
-		: Duration.fromObject({
-				[durationInput.value.unit.id]: durationInput.value.amount,
-			}).rescale(),)
-
-/**
  * Computed as boolean if the option is blocked by an existing option
  */
 const isBlockedOption = computed(() => {
 	const option = duplicateOption.value
 	return option && !option.deleted
 })
-
-/**
- * Computed to find an existing option with the same dateTime and duration
- *
- * @return found option or undefined
- */
-const duplicateOption = computed(() => optionsStore.find(newOption.value))
-
-/**
- * Ref as boolean to toggle between all day and time based options
- */
-const allDay = ref(true)
 
 /**
  * Ref as boolean to automatically vote yes for the new option

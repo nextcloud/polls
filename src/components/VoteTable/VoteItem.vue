@@ -5,12 +5,12 @@
 
 <script setup lang="ts">
 import type { Option } from '../../stores/options.types'
-import type { User } from '../../Types'
+import type { User } from '../../Types/index.ts'
 
 import { computed } from 'vue'
 import VoteIndicator from './VoteIndicator.vue'
-import { usePollStore } from '../../stores/poll'
-import { useVotesStore } from '../../stores/votes'
+import { usePollStore } from '../../stores/poll.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 interface Props {
 	option: Option

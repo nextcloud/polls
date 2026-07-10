@@ -10,7 +10,7 @@ import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
 import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 import SideBarTabDatePolls from '../components/SideBar/SideBarTabDatePolls.vue'
-import { Event } from '../Types'
+import { Event } from '../Types/index.ts'
 
 /**
  *

@@ -7,7 +7,7 @@
 import { t } from '@nextcloud/l10n'
 import { NcCheckboxRadioSwitch, NcRadioGroup } from '@nextcloud/vue'
 import CardDiv from '../Base/modules/CardDiv.vue'
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 import { useSessionStore } from '@/stores/session'
 
 const pollStore = usePollStore()

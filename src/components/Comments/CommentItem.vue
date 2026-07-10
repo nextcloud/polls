@@ -14,10 +14,10 @@ import { computed } from 'vue'
 import ActionDelete from '../Actions/modules/ActionDelete.vue'
 import UserBubble from '../User/UserBubble.vue'
 import UserItem from '../User/UserItem.vue'
-import { useCommentsStore } from '../../stores/comments'
-import { usePollStore } from '../../stores/poll'
-import { usePreferencesStore } from '../../stores/preferences'
-import { useSessionStore } from '../../stores/session'
+import { useCommentsStore } from '../../stores/comments.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { usePreferencesStore } from '../../stores/preferences.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
 const { comment } = defineProps<{ comment: CommentsGrouped }>()
 const sessionStore = useSessionStore()

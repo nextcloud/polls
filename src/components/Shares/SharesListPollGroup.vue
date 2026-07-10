@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import type { User } from '../../Types'
+import type { User } from '../../Types/index.ts'
 
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
@@ -12,10 +12,10 @@ import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'
 import UserSearch from '../User/UserSearch.vue'
 import ShareItem from './ShareItem.vue'
-import { useSharesStore } from '../../stores/shares'
+import { useSharesStore } from '../../stores/shares.ts'
 
 const { info } = defineProps<{
-	info?: string
+	info: string
 }>()
 const sharesStore = useSharesStore()
 const configBoxProps = {

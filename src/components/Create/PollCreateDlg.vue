@@ -15,7 +15,7 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'
 import InputDiv from '../Base/modules/InputDiv.vue'
 import RadioGroupDiv from '../Base/modules/RadioGroupDiv.vue'
-import { pollTypes, usePollStore } from '../../stores/poll'
+import { pollTypes, usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits<{
 	(e: 'close'): void

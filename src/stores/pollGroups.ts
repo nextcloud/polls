@@ -12,10 +12,10 @@ import { t } from '@nextcloud/l10n'
 import orderBy from 'lodash/orderBy'
 import { defineStore } from 'pinia'
 import { computed, ref, shallowRef } from 'vue'
-import { PollGroupsAPI } from '../Api'
-import { Logger } from '../helpers/modules/logger'
-import { activeRoute } from '../routerState'
-import { usePollsStore } from './polls'
+import { PollGroupsAPI } from '../Api/index.ts'
+import { Logger } from '../helpers/modules/logger.ts'
+import { activeRoute } from '../routerState.ts'
+import { usePollsStore } from './polls.ts'
 
 export const usePollGroupsStore = defineStore('pollGroups', () => {
 	const pollGroups = shallowRef<PollGroup[]>([])
@@ -32,6 +32,22 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 			return pollGroups.value.find((group) => group.slug === route.params.slug)
 		}
 		return undefined
+	})
+
+	/**
+	 * Count of polls in each poll group and return pollgroupid and count as list
+	 * with the pollgroupid as key and the count as value
+	 *
+	 * @return {Record<number, number>} An object where the keys are poll group IDs and the values are the counts of polls in those groups
+	 */
+	const countPollsInPollGroups = computed((): Record<number, number> => {
+		const counts: Record<number, number> = {}
+		const pollsStore = usePollsStore()
+		pollGroups.value.forEach((group) => {
+			counts[group.id] = pollsStore.polls.filter((poll) =>
+				group.pollIds.includes(poll.id),).length
+		})
+		return counts
 	})
 
 	/**
@@ -55,22 +71,6 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 		}
 		return pollsStore.polls.filter((poll) =>
 			currentPollGroup.value?.pollIds.includes(poll.id),)
-	})
-
-	/**
-	 * Count of polls in each poll group and return pollgroupid and count as list
-	 * with the pollgroupid as key and the count as value
-	 *
-	 * @return {Record<number, number>} An object where the keys are poll group IDs and the values are the counts of polls in those groups
-	 */
-	const countPollsInPollGroups = computed((): Record<number, number> => {
-		const counts: Record<number, number> = {}
-		const pollsStore = usePollsStore()
-		pollGroups.value.forEach((group) => {
-			counts[group.id] = pollsStore.polls.filter((poll) =>
-				group.pollIds.includes(poll.id),).length
-		})
-		return counts
 	})
 
 	/**

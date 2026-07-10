@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import type { Option } from '../../stores/options.types'
-import type { User } from '../../Types'
+import type { User } from '../../Types/index.ts'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
@@ -14,19 +14,19 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import SortNameIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
 import SortOptionIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
 import StickyDiv from '../Base/modules/StickyDiv.vue'
-import Counter from '../Options/Counter.vue'
 import OptionItem from '../Options/OptionItem.vue'
 import OptionMenu from '../Options/OptionMenu.vue'
+import OptionVoteCounter from '../Options/OptionVoteCounter.vue'
 import VoteButton from './VoteButton.vue'
 import VoteItem from './VoteItem.vue'
 import VoteParticipant from './VoteParticipant.vue'
-import { useOptionsStore } from '../../stores/options'
-import { usePollStore } from '../../stores/poll'
-import { usePreferencesStore } from '../../stores/preferences'
-import { useSessionStore } from '../../stores/session'
-import { useVotesStore } from '../../stores/votes'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { usePreferencesStore } from '../../stores/preferences.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
-const { downPage = false } = defineProps<{ downPage: boolean }>()
+const { downPage } = defineProps<{ downPage: boolean }>()
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
@@ -145,7 +145,7 @@ function isVotable(participant: User, option: Option) {
 				<OptionItem :option="option" />
 			</StickyDiv>
 
-			<Counter
+			<OptionVoteCounter
 				v-if="pollStore.permissions.seeResults"
 				:id="`counter-${option.id}`"
 				:key="`counter-${option.id}`"

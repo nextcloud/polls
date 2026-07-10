@@ -13,8 +13,8 @@ import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
 import ProposalsIcon from 'vue-material-design-icons/HandExtendedOutline.vue'
 import ClosedPollIcon from 'vue-material-design-icons/LockOutline.vue'
 import UnpublishedIcon from 'vue-material-design-icons/PublishOff.vue'
-import { usePollStore } from '../../stores/poll'
-import { useSharesStore } from '../../stores/shares'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSharesStore } from '../../stores/shares.ts'
 
 const pollStore = usePollStore()
 const sharesStore = useSharesStore()
@@ -24,6 +24,13 @@ const isNoAccessSet = computed(
 		pollStore.configuration.access === 'private'
 		&& !sharesStore.hasShares
 		&& pollStore.permissions.edit,
+)
+
+const closeToClosing = computed(
+	() =>
+		!pollStore.isClosed
+		&& pollStore.configuration.expire
+		&& pollStore.getExpirationDateTime.diffNow().as('days') < 1,
 )
 
 const subTexts = computed(() => {
@@ -148,13 +155,6 @@ const subTexts = computed(() => {
 
 	return subTexts
 })
-
-const closeToClosing = computed(
-	() =>
-		!pollStore.isClosed
-		&& pollStore.configuration.expire
-		&& pollStore.getExpirationDateTime.diffNow().as('days') < 1,
-)
 </script>
 
 <template>

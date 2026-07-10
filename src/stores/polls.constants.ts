@@ -18,7 +18,7 @@ import PrivatePollsIcon from 'vue-material-design-icons/Key.vue'
 import ClosedPollsIcon from 'vue-material-design-icons/LockOutline.vue'
 import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
 import AdministrationIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
-import { useSessionStore } from './session'
+import { useSessionStore } from './session.ts'
 
 export const sortOption: { [key in SortType]: SortOption } = {
 	created: {

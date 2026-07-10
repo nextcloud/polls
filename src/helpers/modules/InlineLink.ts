@@ -12,7 +12,7 @@ import { h } from 'vue'
  * Usage:
  *   <InlineLink :text="t('app', 'click [link]here[/link]')" href="/login" />
  *
- *   <InlineLink :text="t('app', 'click [link]here[/link]')" @click.prevent="fn()" />
+ *   <InlineLink :text="t('app', 'click [link]here[/link]')" \@click.prevent="fn()" />
  */
 const InlineLink = {
 	inheritAttrs: false,

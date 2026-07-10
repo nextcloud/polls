@@ -6,15 +6,15 @@
 <script setup lang="ts">
 import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import type { Poll } from '../../stores/poll.types'
-import type { User } from '../../Types'
+import type { User } from '../../Types/index.ts'
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 import { computed, ref } from 'vue'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
 import UserSearch from '../User/UserSearch.vue'
-import { usePollStore } from '../../stores/poll'
-import { usePollsStore } from '../../stores/polls'
+import { usePollStore } from '../../stores/poll.ts'
+import { usePollsStore } from '../../stores/polls.ts'
 
 const model = defineModel<boolean>({ required: true })
 const { poll } = defineProps<{ poll: Poll }>()
@@ -40,7 +40,7 @@ async function dialogOK() {
 		try {
 			// reload the poll to refresh the configuration
 			await pollStore.load()
-		} catch (error) {
+		} catch {
 			// if error occurs, we need to emit the accessDenied event
 			// since we assume the user has no access to the poll anymore
 			emit('accessDenied')

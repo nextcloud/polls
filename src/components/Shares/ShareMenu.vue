@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import type { AxiosError } from '@nextcloud/axios'
-import type { SentResults } from '../../Api/modules/shares'
+import type { SentResults } from '../../Api/modules/shares.ts'
 import type { Share } from '../../stores/shares.types'
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
@@ -26,9 +26,9 @@ import QrIcon from 'vue-material-design-icons/Qrcode.vue'
 import RestoreIcon from 'vue-material-design-icons/RecycleVariant.vue'
 import AdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import { usePollStore } from '../../stores/poll'
-import { usePollGroupsStore } from '../../stores/pollGroups'
-import { useSharesStore } from '../../stores/shares'
+import { usePollStore } from '../../stores/poll.ts'
+import { usePollGroupsStore } from '../../stores/pollGroups.ts'
+import { useSharesStore } from '../../stores/shares.ts'
 
 const { share } = defineProps<{ share: Share }>()
 
@@ -80,7 +80,7 @@ const resendInvitation = computed<ButtonProps>(() => ({
 			if (result?.sentResult) {
 				handleInvitationResults(result.sentResult)
 			}
-		} catch (error) {
+		} catch {
 			showError(t('polls', 'Error sending invitation'))
 		}
 	},
@@ -201,14 +201,14 @@ const showQrCodeButton = computed<ButtonProps>(() => ({
 const lockShareButton = computed<ButtonProps>(() => ({
 	activate: !share.groupId && !share.deleted,
 	name: share.locked ? t('polls', 'Unlock share') : t('polls', 'Lock share'),
-	action: () => {
+	action: async () => {
 		try {
 			if (share.locked) {
-				sharesStore.unlock({ share })
+				await sharesStore.unlock({ share })
 			} else {
-				sharesStore.lock({ share })
+				await sharesStore.lock({ share })
 			}
-		} catch (error) {
+		} catch {
 			showError(
 				t(
 					'polls',
@@ -225,14 +225,14 @@ const lockShareButton = computed<ButtonProps>(() => ({
 const deleteShareButton = computed<ButtonProps>(() => ({
 	activate: isDirectShare.value,
 	name: share.deleted ? t('polls', 'Restore share') : t('polls', 'Delete share'),
-	action: () => {
+	action: async () => {
 		try {
 			if (share.deleted) {
-				sharesStore.restore({ share })
+				await sharesStore.restore({ share })
 			} else {
-				sharesStore.delete({ share })
+				await sharesStore.delete({ share })
 			}
-		} catch (error) {
+		} catch {
 			showError(
 				t(
 					'polls',

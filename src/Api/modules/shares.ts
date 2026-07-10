@@ -5,18 +5,21 @@ import type {
 	SharePurpose,
 	ShareType,
 } from '../../stores/shares.types'
-import type { User } from '../../Types'
+import type { User } from '../../Types/index.ts'
 
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { createCancelTokenHandler, httpInstance } from './HttpApi'
+import { createCancelTokenHandler, httpInstance } from './HttpApi.js'
 
 export type SentResults = {
 	sentMails: { emailAddress: string; displayName: string }[]
 	abortedMails: { emailAddress: string; displayName: string }[]
 }
+
+// eslint-disable-next-line prefer-const -- assigned below, after `shares` is fully defined
+let cancelTokenHandlerObject: ReturnType<typeof createCancelTokenHandler>
 
 const shares = {
 	getShares(
@@ -180,6 +183,6 @@ const shares = {
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(shares)
+cancelTokenHandlerObject = createCancelTokenHandler(shares)
 
 export default shares

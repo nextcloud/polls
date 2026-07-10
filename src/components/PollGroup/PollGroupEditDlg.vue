@@ -14,7 +14,7 @@ import ConfigBox from '../Base/modules/ConfigBox.vue'
 import ConfigDescriptionPollGroup from './ConfigDescriptionPollGroup.vue'
 import ConfigTitlePollGroup from './ConfigNamePollGroup.vue'
 import ConfigTitleExtPollGroup from './ConfigTitleExtPollGroup.vue'
-import { usePollGroupsStore } from '../../stores/pollGroups'
+import { usePollGroupsStore } from '../../stores/pollGroups.ts'
 
 const router = useRouter()
 const route = useRoute()

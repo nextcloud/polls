@@ -27,11 +27,11 @@ import HideResultsIcon from 'vue-material-design-icons/MonitorOff.vue'
 import MaybeIcon from 'vue-material-design-icons/Tilde.vue'
 import BadgeDiv from '../Base/modules/BadgeDiv.vue'
 import UserBubble from '../User/UserBubble.vue'
-import { useOptionsStore } from '../../stores/options'
-import { usePollStore } from '../../stores/poll'
-import { useSessionStore } from '../../stores/session'
-import { useSubscriptionStore } from '../../stores/subscription'
-import { useVotesStore } from '../../stores/votes'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useSubscriptionStore } from '../../stores/subscription.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()

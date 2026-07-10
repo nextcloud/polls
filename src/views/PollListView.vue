@@ -21,11 +21,11 @@ import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 import PollItem from '../components/PollList/PollItem.vue'
 import PollItemActions from '../components/PollList/PollItemActions.vue'
 import PollListSort from '../components/PollList/PollListSort.vue'
-import { usePollGroupsStore } from '../stores/pollGroups'
-import { usePollsStore } from '../stores/polls'
+import { usePollGroupsStore } from '../stores/pollGroups.ts'
 import { pollCategories } from '../stores/polls.constants'
-import { usePreferencesStore } from '../stores/preferences'
-import { useSessionStore } from '../stores/session'
+import { usePollsStore } from '../stores/polls.ts'
+import { usePreferencesStore } from '../stores/preferences.ts'
+import { useSessionStore } from '../stores/session.ts'
 
 const pollsStore = usePollsStore()
 const pollGroupsStore = usePollGroupsStore()

@@ -22,11 +22,11 @@ import ComboIcon from 'vue-material-design-icons/VectorCombine.vue'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
 import PollCreateDlg from '../components/Create/PollCreateDlg.vue'
 import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'
-import { usePollGroupsStore } from '../stores/pollGroups'
-import { usePollsStore } from '../stores/polls'
-import { usePreferencesStore } from '../stores/preferences'
-import { useSessionStore } from '../stores/session'
-import { Event } from '../Types'
+import { usePollGroupsStore } from '../stores/pollGroups.ts'
+import { usePollsStore } from '../stores/polls.ts'
+import { usePreferencesStore } from '../stores/preferences.ts'
+import { useSessionStore } from '../stores/session.ts'
+import { Event } from '../Types/index.ts'
 
 const router = useRouter()
 

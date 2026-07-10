@@ -26,7 +26,7 @@ import type { Option } from '../../stores/options.types'
 
 import OptionItem from '../Options/OptionItem.vue'
 import VoteItem from './VoteItem.vue'
-import { useComboStore } from '../../stores/combo'
+import { useComboStore } from '../../stores/combo.ts'
 
 const { option } = defineProps<{ option: Option }>()
 

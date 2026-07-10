@@ -7,11 +7,11 @@ import type { AxiosError } from '@nextcloud/axios'
 import type { Comment, CommentsStore } from './comments.types'
 
 import { defineStore } from 'pinia'
-import { CommentsAPI, PublicAPI } from '../Api'
-import { groupComments } from '../helpers/modules/comments'
-import { Logger } from '../helpers/modules/logger'
-import { activeRoute } from '../routerState'
-import { useSessionStore } from './session'
+import { CommentsAPI, PublicAPI } from '../Api/index.ts'
+import { groupComments } from '../helpers/modules/comments.ts'
+import { Logger } from '../helpers/modules/logger.ts'
+import { activeRoute } from '../routerState.ts'
+import { useSessionStore } from './session.ts'
 
 export const useCommentsStore = defineStore('comments', {
 	state: (): CommentsStore => ({
