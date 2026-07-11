@@ -6,6 +6,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import { randomId } from '../../../helpers/modules/randomId.ts'
 
 export type CheckboxOption = {
 	value: string
@@ -18,15 +19,8 @@ interface Props {
 }
 
 const model = defineModel<string>({ required: true })
-const { id = `rg-${RandId()}`, options } = defineProps<Props>()
+const { id = `rg-${randomId()}`, options } = defineProps<Props>()
 const emit = defineEmits(['update'])
-
-function RandId() {
-	return Math.random()
-		.toString(36)
-		.replace(/[^a-z]+/g, '')
-		.slice(2, 12)
-}
 
 const elementId = computed(() => id)
 </script>
