@@ -3,6 +3,6 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { ShareType } from '@/stores/shares.types'
+import type { ShareType } from '@/stores/shares.types'
 
 export type AvatarTypeIcon = ShareType | 'pollGroupIcon'

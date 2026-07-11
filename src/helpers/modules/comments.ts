@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Comment } from '../../stores/comments.types'
+import type { Comment } from '../../stores/comments.types'
 
 function groupComments(inputArray: Comment[]) {
 	const idToElement: { [key: number]: Comment } = inputArray.reduce(
@@ -47,6 +47,7 @@ function groupComments(inputArray: Comment[]) {
 
 	/**
 	 * Get comments by parent ID
+	 *
 	 * @param parentId - Parent comment ID
 	 * @return Array of child comments
 	 */

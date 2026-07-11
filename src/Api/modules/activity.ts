@@ -2,7 +2,10 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { ocsInstance, createCancelTokenHandler } from './HttpApi'
+import { createCancelTokenHandler, ocsInstance } from './HttpApi.js'
+
+// eslint-disable-next-line prefer-const -- assigned below, after `activity` is fully defined
+let cancelTokenHandlerObject: ReturnType<typeof createCancelTokenHandler>
 
 const activity = {
 	getActivities(pollId: number) {
@@ -24,6 +27,6 @@ const activity = {
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(activity)
+cancelTokenHandlerObject = createCancelTokenHandler(activity)
 
 export default activity

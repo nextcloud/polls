@@ -4,13 +4,11 @@
 -->
 
 <script setup>
-import { computed } from 'vue'
 import { t } from '@nextcloud/l10n'
+import { computed } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-
 import InputDiv from '../../Base/modules/InputDiv.vue'
-
-import { useAppSettingsStore } from '../../../stores/appSettings'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 const appSettingsStore = useAppSettingsStore()
 const placeholder = computed(() => {
@@ -34,7 +32,7 @@ const placeholder = computed(() => {
 		<NcCheckboxRadioSwitch
 			v-model="appSettingsStore.useSiteLegalTerms"
 			type="switch"
-			@update:model-value="appSettingsStore.write()">
+			@update:modelValue="appSettingsStore.write()">
 			{{ t('polls', 'Use the default terms for public polls') }}
 		</NcCheckboxRadioSwitch>
 	</div>

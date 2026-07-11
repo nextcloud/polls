@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { DateTime, Duration } from 'luxon'
-import type { User } from '../Types'
-import type { DateTimeUnitType } from '../Types/dateTime'
+import type { DateTime, Duration } from 'luxon'
+import type { DateTimeUnitType } from '../Types/dateTime.ts'
+import type { User } from '../Types/index.ts'
 import type { Answer } from './votes.types'
 
 export type RankedType = 'yes' | 'no'

@@ -4,31 +4,29 @@
 -->
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, ref } from 'vue'
-import { t } from '@nextcloud/l10n'
+import type { Option } from '../../stores/options.types'
+import type { User } from '../../Types/index.ts'
+
 import { getCurrentUser } from '@nextcloud/auth'
+import { t } from '@nextcloud/l10n'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
-
-import SortOptionIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
 import SortNameIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
-
+import SortOptionIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
 import StickyDiv from '../Base/modules/StickyDiv.vue'
-import Counter from '../Options/Counter.vue'
 import OptionItem from '../Options/OptionItem.vue'
 import OptionMenu from '../Options/OptionMenu.vue'
+import OptionVoteCounter from '../Options/OptionVoteCounter.vue'
 import VoteButton from './VoteButton.vue'
 import VoteItem from './VoteItem.vue'
 import VoteParticipant from './VoteParticipant.vue'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { usePreferencesStore } from '../../stores/preferences.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
-import { usePollStore } from '../../stores/poll'
-import { useOptionsStore } from '../../stores/options'
-import { useVotesStore } from '../../stores/votes'
-import { usePreferencesStore } from '../../stores/preferences'
-import { useSessionStore } from '../../stores/session'
-
-import type { User } from '../../Types'
-import type { Option } from '../../stores/options.types'
-
+const { downPage } = defineProps<{ downPage: boolean }>()
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
@@ -37,8 +35,6 @@ const sessionStore = useSessionStore()
 const CalendarPeek = defineAsyncComponent(
 	() => import('../Calendar/CalendarPeek.vue'),
 )
-
-const { downPage = false } = defineProps<{ downPage: boolean }>()
 
 const chunksLoading = ref(false)
 
@@ -79,13 +75,13 @@ function isVotable(participant: User, option: Option) {
 		<StickyDiv
 			v-show="pollStore.viewMode === 'table-view'"
 			key="grid-info"
-			sticky-left
+			stickyLeft
 			class="grid-info">
 			<NcButton
 				v-show="votesStore.sortByOption > 0"
 				class="sort-indicator"
 				:title="t('polls', 'Click to sort by name')"
-				:button-variant="'tertiary-no-background'"
+				buttonVariant="tertiary-no-background"
 				@click="() => (votesStore.sortByOption = 0)">
 				<template #icon>
 					<SortNameIcon />
@@ -95,26 +91,26 @@ function isVotable(participant: User, option: Option) {
 
 		<StickyDiv
 			v-show="pollStore.viewMode === 'table-view'"
-			:id="`option-item-spacer`"
+			id="option-item-spacer"
 			key="option-item-spacer"
 			class="option-item-spacer"
-			sticky-top
-			sticky-left
-			:activate-bottom-shadow="!downPage">
+			stickyTop
+			stickyLeft
+			:activateBottomShadow="!downPage">
 		</StickyDiv>
 
 		<StickyDiv
 			v-if="pollStore.permissions.seeResults"
 			v-show="pollStore.viewMode === 'table-view'"
 			key="counter-spacer"
-			sticky-left
+			stickyLeft
 			class="counter-spacer" />
 
 		<StickyDiv
 			v-for="participant in votesStore.chunkedParticipants"
 			:key="participant.id"
 			class="participant"
-			sticky-left>
+			stickyLeft>
 			<VoteParticipant :user="participant" />
 		</StickyDiv>
 
@@ -125,10 +121,10 @@ function isVotable(participant: User, option: Option) {
 				<CalendarPeek
 					v-if="showCalendarPeek"
 					:id="`peek-${option.id}`"
-					no-focus-trap
+					noFocusTrap
 					:option="option" />
 
-				<OptionMenu :option="option" use-sort />
+				<OptionMenu :option="option" useSort />
 
 				<SortOptionIcon
 					v-show="votesStore.sortByOption === option.id && !chunksLoading"
@@ -142,21 +138,21 @@ function isVotable(participant: User, option: Option) {
 				:class="{
 					confirmed: option.confirmed && pollStore.status.isExpired,
 				}"
-				:sticky-top="pollStore.viewMode === 'table-view'"
-				:activate-bottom-shadow="
+				:stickyTop="pollStore.viewMode === 'table-view'"
+				:activateBottomShadow="
 					pollStore.viewMode === 'table-view' && !downPage
 				">
 				<OptionItem :option="option" />
 			</StickyDiv>
 
-			<Counter
+			<OptionVoteCounter
 				v-if="pollStore.permissions.seeResults"
 				:id="`counter-${option.id}`"
 				:key="`counter-${option.id}`"
 				:class="{
 					confirmed: option.confirmed && pollStore.status.isExpired,
 				}"
-				:show-maybe="pollStore.configuration.allowMaybe"
+				:showMaybe="pollStore.configuration.allowMaybe"
 				:option="option" />
 			<div
 				v-for="participant in votesStore.chunkedParticipants"
@@ -172,7 +168,7 @@ function isVotable(participant: User, option: Option) {
 					v-else
 					:key="`vote-${participant.id}-${option.id}`"
 					:user="participant"
-					:current-user="isCurrentUser(participant)"
+					:currentUser="isCurrentUser(participant)"
 					:option="option" />
 			</div>
 		</template>

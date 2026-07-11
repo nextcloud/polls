@@ -4,15 +4,13 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { t, n } from '@nextcloud/l10n'
-
+import { n, t } from '@nextcloud/l10n'
+import { computed, ref } from 'vue'
 import NcButton from '@nextcloud/vue/components/NcButton'
-
-import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import RestoreIcon from 'vue-material-design-icons/RecycleVariant.vue'
-import LockIcon from 'vue-material-design-icons/LockOutline.vue'
 import UndoIcon from 'vue-material-design-icons/ArrowULeftTop.vue'
+import LockIcon from 'vue-material-design-icons/LockOutline.vue'
+import RestoreIcon from 'vue-material-design-icons/RecycleVariant.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 
 interface Props {
 	timeout?: number
@@ -30,6 +28,7 @@ const {
 	lock = false,
 } = defineProps<Props>()
 
+const emit = defineEmits(['delete', 'restore'])
 const deleteInterval = ref<null | NodeJS.Timeout>(null)
 const deleteTimeout = ref<null | NodeJS.Timeout>(null)
 const countdown = ref(4)
@@ -41,14 +40,10 @@ const countdownTitle = computed(() =>
 		'Deleting in {countdown} seconds',
 		countdown.value,
 		{ countdown: countdown.value },
-	),
-)
+	),)
 
 const computedTitle = computed(() =>
-	deleteTimeout.value ? countdownTitle.value : name,
-)
-
-const emit = defineEmits(['delete', 'restore'])
+	deleteTimeout.value ? countdownTitle.value : name,)
 
 function deleteItem(): void {
 	// delete immediately
@@ -95,7 +90,7 @@ function restoreItem(): void {
 	<div class="">
 		<NcButton
 			:name="computedTitle"
-			:variant="'tertiary'"
+			variant="tertiary"
 			:aria-label="computedTitle">
 			<template #icon>
 				<RestoreIcon

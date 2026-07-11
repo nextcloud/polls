@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { WatcherMode } from '../composables/usePollWatcher.types'
+import type { WatcherMode } from '../composables/usePollWatcher.types'
 
 export type Group = {
 	id: string

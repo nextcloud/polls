@@ -4,20 +4,19 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
-import { useVotesStore } from '../../stores/votes'
-
 import type { Option } from '../../stores/options.types'
-import UserItem from '../User/UserItem.vue'
+
 import { t } from '@nextcloud/l10n'
+import { computed } from 'vue'
+import UserItem from '../User/UserItem.vue'
+import { useVotesStore } from '../../stores/votes.ts'
 
 interface Props {
 	option: Option
-	answerFilter: 'yes' | 'maybe' | 'no' | '' | null
+	answerFilter: 'yes' | 'maybe' | 'no' | ''
 }
 
-const { option, answerFilter = null } = defineProps<Props>()
+const { option, answerFilter } = defineProps<Props>()
 
 const votesStore = useVotesStore()
 
@@ -39,7 +38,7 @@ const voters = computed(() =>
 			:key="voter.id"
 			condensed
 			:user="voter"
-			:item-style="{ '--i': index }" />
+			:itemStyle="{ '--i': index }" />
 	</div>
 	<strong v-if="voters.length > 4" class="more-voters">
 		+{{ voters.length - 4 }} {{ t('polls', 'more') }}

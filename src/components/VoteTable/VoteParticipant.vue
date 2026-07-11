@@ -4,30 +4,25 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import type { User } from '../../Types/index.ts'
+
 import { showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-
-import NcActions from '@nextcloud/vue/components/NcActions'
+import { computed } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionText from '@nextcloud/vue/components/NcActionText'
-
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-
-import VoteMenu from './VoteMenu.vue'
 import UserItem from '../User/UserItem.vue'
+import VoteMenu from './VoteMenu.vue'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
-import { usePollStore } from '../../stores/poll'
-import { useSessionStore } from '../../stores/session'
-import { useVotesStore } from '../../stores/votes'
-
-import type { User } from '../../Types'
-
+const { user } = defineProps<{ user: User }>()
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 const votesStore = useVotesStore()
-
-const { user } = defineProps<{ user: User }>()
 
 /**
  *
@@ -61,8 +56,8 @@ const userItemClass = computed(() => ({
 				"
 				class="user-menu"
 				placement="right"
-				:variant="'tertiary-no-background'"
-				force-menu>
+				variant="tertiary-no-background"
+				forceMenu>
 				<NcActionText :name="user.displayName" />
 				<NcActionButton
 					:name="
@@ -80,9 +75,9 @@ const userItemClass = computed(() => ({
 				v-if="user.id === sessionStore.currentUser.id"
 				class="user-menu"
 				placement="right"
-				:variant="'tertiary-no-background'"
-				force-menu
-				no-menu-icon>
+				variant="tertiary-no-background"
+				forceMenu
+				noMenuIcon>
 			</VoteMenu>
 		</template>
 	</UserItem>

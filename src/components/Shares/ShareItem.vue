@@ -4,26 +4,24 @@
 -->
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import type { Share } from '../../stores/shares.types'
+import type { AvatarTypeIcon } from '../User/UserAvatar.types'
+
 import { t } from '@nextcloud/l10n'
-
+import { computed, onMounted, ref } from 'vue'
+import ContactIcon from 'vue-material-design-icons/CardAccountDetailsOutline.vue'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
+import PollGroupIcon from 'vue-material-design-icons/CodeBraces.vue'
+import EmailIcon from 'vue-material-design-icons/EmailOutline.vue'
 import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
-
+import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
+import AdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
 import UserItem from '../User/UserItem.vue'
 import ShareMenu from './ShareMenu.vue'
 
-import type { Share } from '../../stores/shares.types'
-import { AvatarTypeIcon } from '../User/UserAvatar.types'
-import AdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
-import ContactIcon from 'vue-material-design-icons/CardAccountDetailsOutline.vue'
-import EmailIcon from 'vue-material-design-icons/EmailOutline.vue'
-import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
-import PollGroupIcon from 'vue-material-design-icons/CodeBraces.vue'
+const { share, tag = 'div' } = defineProps<{ share: Share; tag?: string }>()
 
 const emit = defineEmits(['showQrCode'])
-
-const { share, tag = 'div' } = defineProps<{ share: Share; tag?: string }>()
 
 const publicShareDescription = computed(() => {
 	if (share.displayName === '') {
@@ -124,7 +122,7 @@ onMounted(() => {
 		:tag="tag"
 		:class="{ deleted: share.deleted }"
 		:user="share.user"
-		show-email
+		showEmail
 		:description="userDescription"
 		:label="share.label">
 		<template #typeIcon>
@@ -142,7 +140,7 @@ onMounted(() => {
 				:title="votedIndicator.name" />
 		</template>
 
-		<ShareMenu :share="share" @show-qr-code="emit('showQrCode')" />
+		<ShareMenu :share="share" @showQrCode="emit('showQrCode')" />
 	</UserItem>
 </template>
 

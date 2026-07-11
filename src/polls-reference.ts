@@ -4,15 +4,16 @@
  */
 
 import { createApp } from 'vue'
-import { pinia } from './stores'
 import { registerWidget } from '@nextcloud/vue/components/NcRichText'
-import Reference from './views/Reference.vue'
+import ReferenceView from './views/ReferenceView.vue'
+import { pinia } from './stores/index.ts'
+
 import './assets/scss/polls-icon.scss'
 
 registerWidget(
 	'polls_reference_widget',
 	async (el, { richObject }) => {
-		const PollsReference = createApp(Reference, {
+		const PollsReference = createApp(ReferenceView, {
 			richObject,
 		})
 			.use(pinia)

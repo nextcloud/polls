@@ -4,38 +4,33 @@
  */
 // fallow-ignore-file circular-dependency
 
-import { defineStore } from 'pinia'
-// eslint-disable-next-line import/no-named-as-default
-import DOMPurify from 'dompurify'
-import { marked } from 'marked'
-import { gfmHeadingId } from 'marked-gfm-heading-id'
-import { DateTime } from 'luxon'
-
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
-
-import { t } from '@nextcloud/l10n'
-import { showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
-
-import { Logger } from '../helpers/modules/logger'
-import { PublicAPI, PollsAPI } from '../Api'
-import { activeRoute } from '../routerState'
-import { defaultUser, Event } from '../Types'
-
-import { usePollsStore } from './polls'
-import { useSessionStore } from './session'
-
 import type { AxiosError } from '@nextcloud/axios'
 import type { Component } from 'vue'
 import type {
-	Poll,
-	PollType,
 	AllowProposals,
+	Poll,
 	PollStore,
+	PollType,
 	PollTypesType,
 } from './poll.types'
 import type { ViewMode } from './preferences.types'
+
+import { showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
+import DOMPurify from 'dompurify'
+import { DateTime } from 'luxon'
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import { defineStore } from 'pinia'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlankOutline.vue'
+import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import { PollsAPI, PublicAPI } from '../Api/index.ts'
+import { Logger } from '../helpers/modules/logger.ts'
+import { activeRoute } from '../routerState.ts'
+import { defaultUser, Event } from '../Types/index.ts'
+import { usePollsStore } from './polls.ts'
+import { useSessionStore } from './session.ts'
 
 const markedPrefix = {
 	prefix: 'desc-',

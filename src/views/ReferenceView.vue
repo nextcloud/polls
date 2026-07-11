@@ -4,12 +4,12 @@
 -->
 
 <script setup lang="ts">
-import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
-import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
-import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
-import BadgeSmallDiv from '../components/Base/modules/BadgeSmallDiv.vue'
 import { t } from '@nextcloud/l10n'
 import { DateTime } from 'luxon'
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
+import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
+import BadgeSmallDiv from '../components/Base/modules/BadgeSmallDiv.vue'
 
 type RichObject = {
 	id: number
@@ -27,7 +27,7 @@ type RichObject = {
 }
 
 interface Props {
-	richObject?: RichObject
+	richObject: RichObject
 }
 
 const { richObject } = defineProps<Props>()
@@ -79,7 +79,7 @@ const expiryClass = richObject?.poll?.expiry
 			<span>{{ t('polls', 'By:') }}</span>
 			<NcUserBubble
 				:user="richObject.poll.ownerId"
-				:display-name="richObject.poll.ownerDisplayName" />
+				:displayName="richObject.poll.ownerDisplayName" />
 		</div>
 	</div>
 </template>

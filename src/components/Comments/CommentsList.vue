@@ -5,11 +5,9 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-
 import CommentItem from './CommentItem.vue'
-
-import { usePreferencesStore } from '../../stores/preferences'
-import { useCommentsStore } from '../../stores/comments'
+import { useCommentsStore } from '../../stores/comments.ts'
+import { usePreferencesStore } from '../../stores/preferences.ts'
 
 const commentsStore = useCommentsStore()
 const preferencesStore = usePreferencesStore()
@@ -23,7 +21,7 @@ const alternativestyle = preferencesStore.user.useCommentsAlternativeStyling
 	<TransitionGroup
 		tag="ul"
 		name="list"
-		:class="['comments', { alternativestyle }]"
+		class="comments" :class="[{ alternativestyle }]"
 		:style="cssVar">
 		<CommentItem
 			v-for="comment in commentsStore.groupedComments"

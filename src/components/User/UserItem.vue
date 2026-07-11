@@ -4,26 +4,14 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { t } from '@nextcloud/l10n'
+import type { User, UserType, VirtualUserItemType } from '../../Types/index.ts'
 
-import { defaultUser, User, UserType, VirtualUserItemType } from '../../Types'
+import { t } from '@nextcloud/l10n'
+import { computed } from 'vue'
 import UserAvatar from './UserAvatar.vue'
+import { defaultUser } from '../../Types/index.ts'
 
 defineOptions({ inheritAttrs: false })
-
-interface Props {
-	condensed?: boolean
-	description?: string
-	disabled?: boolean
-	hideNames?: boolean
-	showEmail?: boolean
-	tag?: string
-	virtualUserType?: VirtualUserItemType
-	user?: User
-	itemStyle?: Record<string, string | number>
-	label?: string
-}
 
 const {
 	condensed = false,
@@ -38,9 +26,34 @@ const {
 	label,
 } = defineProps<Props>()
 
+interface Props {
+	condensed?: boolean
+	description?: string
+	disabled?: boolean
+	hideNames?: boolean
+	showEmail?: boolean
+	tag?: string
+	virtualUserType?: VirtualUserItemType
+	user?: User
+	itemStyle?: Record<string, string | number>
+	label?: string
+}
+
 const computedRoleType = computed<UserType | VirtualUserItemType>(
 	() => user.type ?? virtualUserType,
 )
+const emailAddressComputed = computed(() => {
+	if (
+		showEmail
+		&& user.emailAddress !== user.displayName
+		&& (computedRoleType.value === 'external'
+			|| computedRoleType.value === 'email')
+	) {
+		return user.emailAddress
+	}
+
+	return ''
+})
 
 const computedDescription = computed(() => {
 	if (condensed) {
@@ -77,19 +90,6 @@ const computedLabel = computed(() => {
 	return user.displayName ?? user.id
 })
 
-const emailAddressComputed = computed(() => {
-	if (
-		showEmail
-		&& user.emailAddress !== user.displayName
-		&& (computedRoleType.value === 'external'
-			|| computedRoleType.value === 'email')
-	) {
-		return user.emailAddress
-	}
-
-	return ''
-})
-
 /**
  *
  */
@@ -113,7 +113,7 @@ const componentClass = computed(() => [
 		<div class="avatar-wrapper">
 			<UserAvatar
 				v-bind="$attrs"
-				:virtual-user-type="virtualUserType"
+				:virtualUserType="virtualUserType"
 				:user="user"
 				:label="computedLabel"
 				@click="showMenu()" />

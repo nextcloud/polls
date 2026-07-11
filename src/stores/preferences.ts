@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineStore } from 'pinia'
-
-import { CalendarAPI, UserSettingsAPI } from '../Api'
-import { Logger } from '../helpers/modules/logger'
-
 import type { AxiosError } from '@nextcloud/axios'
-import type { PreferencesStore, Calendar } from './preferences.types'
+import type { Calendar, PreferencesStore } from './preferences.types'
+
+import { defineStore } from 'pinia'
+import { CalendarAPI, UserSettingsAPI } from '../Api/index.ts'
+import { Logger } from '../helpers/modules/logger.ts'
 
 export const usePreferencesStore = defineStore('preferences', {
 	state: (): PreferencesStore => ({

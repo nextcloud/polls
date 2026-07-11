@@ -4,22 +4,19 @@
 -->
 
 <script setup lang="ts">
+import { t } from '@nextcloud/l10n'
+import { generateUrl } from '@nextcloud/router'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { generateUrl } from '@nextcloud/router'
-import { t } from '@nextcloud/l10n'
-
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
-
 import PublicFooter from '../components/Public/PublicFooter.vue'
-import { InlineLink } from '../helpers/modules/InlineLink'
-import { useSessionStore } from '../stores/session'
-
-import PollTitle from '@/components/Poll/PollTitle.vue'
-import PollInfoLine from '@/components/Poll/PollInfoLine.vue'
-import RegistrationForm from '@/components/Public/RegistrationForm.vue'
-import PollDescription from '@/components/Poll/PollDescription.vue'
 import OptionPreview from '@/components/Options/OptionPreview.vue'
+import PollDescription from '@/components/Poll/PollDescription.vue'
+import PollInfoLine from '@/components/Poll/PollInfoLine.vue'
+import PollTitle from '@/components/Poll/PollTitle.vue'
+import RegistrationForm from '@/components/Public/RegistrationForm.vue'
+import { InlineLink } from '../helpers/modules/InlineLink.ts'
+import { useSessionStore } from '../stores/session.ts'
 
 defineOptions({
 	inheritAttrs: false,

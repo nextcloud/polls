@@ -4,13 +4,11 @@
 -->
 
 <script setup>
-import { computed } from 'vue'
-import InputDiv from '../../Base/modules/InputDiv.vue'
 import { t } from '@nextcloud/l10n'
-
+import { computed } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-
-import { usePreferencesStore } from '../../../stores/preferences'
+import InputDiv from '../../Base/modules/InputDiv.vue'
+import { usePreferencesStore } from '../../../stores/preferences.ts'
 
 const preferencesStore = usePreferencesStore()
 
@@ -43,7 +41,7 @@ const defaultViewDatePoll = computed({
 			<NcCheckboxRadioSwitch
 				v-model="defaultViewTextPoll"
 				type="switch"
-				@update:model-value="preferencesStore.write()">
+				@update:modelValue="preferencesStore.write()">
 				{{ t('polls', 'Text polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
@@ -60,7 +58,7 @@ const defaultViewDatePoll = computed({
 			<NcCheckboxRadioSwitch
 				v-model="defaultViewDatePoll"
 				type="switch"
-				@update:model-value="preferencesStore.write()">
+				@update:modelValue="preferencesStore.write()">
 				{{ t('polls', 'Date polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
@@ -77,7 +75,7 @@ const defaultViewDatePoll = computed({
 			<NcCheckboxRadioSwitch
 				v-model="preferencesStore.user.verbosePollsList"
 				type="switch"
-				@update:model-value="preferencesStore.write()">
+				@update:modelValue="preferencesStore.write()">
 				{{ t('polls', 'Verbose poll list') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
@@ -95,7 +93,7 @@ const defaultViewDatePoll = computed({
 				v-model="preferencesStore.user.relevantOffset"
 				type="number"
 				inputmode="numeric"
-				use-num-modifiers
+				useNumModifiers
 				:label="
 					t(
 						'polls',

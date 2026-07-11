@@ -4,18 +4,20 @@
 -->
 
 <script setup lang="ts">
-import NcAvatar from '@nextcloud/vue/components/NcAvatar'
+import type { User, VirtualUserItemType } from '../../Types/index.ts'
+
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { defaultUser } from '../../Types'
-import type { User, VirtualUserItemType } from '../../Types'
-import LinkIcon from 'vue-material-design-icons/Link.vue'
+import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 import ContactGroupIcon from 'vue-material-design-icons/AccountGroupOutline.vue'
 import GroupIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
-import CircleIcon from 'vue-material-design-icons/GoogleCirclesExtended.vue'
 import DeletedUserIcon from 'vue-material-design-icons/AccountOffOutline.vue'
-import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
 import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
+import CircleIcon from 'vue-material-design-icons/GoogleCirclesExtended.vue'
+import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
+import LinkIcon from 'vue-material-design-icons/Link.vue'
+const { mdIconSize = 20, virtualUserType = undefined, user } = defineProps<Props>()
+
 const route = useRoute()
 
 interface Props {
@@ -23,8 +25,6 @@ interface Props {
 	virtualUserType?: VirtualUserItemType
 	user: User
 }
-const { mdIconSize = 20, virtualUserType, user = defaultUser } = defineProps<Props>()
-
 const computedIsGuest = computed(
 	() => route.meta.publicVotePage || user.isNoUser !== false,
 )
@@ -70,9 +70,9 @@ const iconTypeComponent = computed(() => {
 <template>
 	<NcAvatar
 		v-bind="$attrs"
-		:is-guest="computedIsGuest"
-		:is-no-user="user.isNoUser"
-		:display-name="user.displayName"
+		:isGuest="computedIsGuest"
+		:isNoUser="user.isNoUser"
+		:displayName="user.displayName"
 		:user="avatarUserId"
 		class="user-item__avatar">
 		<template v-if="iconTypeComponent" #icon>

@@ -1,10 +1,13 @@
+import type { AxiosResponse } from '@nextcloud/axios'
+
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { httpInstance, createCancelTokenHandler } from './HttpApi'
+import { createCancelTokenHandler, httpInstance } from './HttpApi.js'
 
-import type { AxiosResponse } from '@nextcloud/axios'
+// eslint-disable-next-line prefer-const -- assigned below, after `validators` is fully defined
+let cancelTokenHandlerObject: ReturnType<typeof createCancelTokenHandler>
 
 const validators = {
 	validateEmailAddress(
@@ -40,6 +43,6 @@ const validators = {
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(validators)
+cancelTokenHandlerObject = createCancelTokenHandler(validators)
 
 export default validators

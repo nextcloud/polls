@@ -1,12 +1,15 @@
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { Poll } from '../../stores/poll.types'
+import type { PollGroup } from '../../stores/pollGroups.types'
+
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { httpInstance, createCancelTokenHandler } from './HttpApi'
+import { createCancelTokenHandler, httpInstance } from './HttpApi.js'
 
-import type { AxiosResponse } from '@nextcloud/axios'
-import type { Poll } from '../../stores/poll.types'
-import type { PollGroup } from '../../stores/pollGroups.types'
+// eslint-disable-next-line prefer-const -- assigned below, after `pollGroups` is fully defined
+let cancelTokenHandlerObject: ReturnType<typeof createCancelTokenHandler>
 
 const pollGroups = {
 	getPollGroups(): Promise<AxiosResponse<{ pollGroups: PollGroup[] }>> {
@@ -25,7 +28,7 @@ const pollGroups = {
 		pollGroupId?: number,
 		pollGroupName?: string,
 	): Promise<AxiosResponse<{ pollGroup: PollGroup; poll: Poll }>> {
-		let url = ''
+		let url
 		let verb = 'PUT'
 		let data = {}
 
@@ -85,6 +88,6 @@ const pollGroups = {
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(pollGroups)
+cancelTokenHandlerObject = createCancelTokenHandler(pollGroups)
 
 export default pollGroups

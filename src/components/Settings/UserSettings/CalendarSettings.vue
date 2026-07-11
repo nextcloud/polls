@@ -4,13 +4,11 @@
 -->
 
 <script setup>
-import { computed } from 'vue'
 import { t } from '@nextcloud/l10n'
-
+import { computed } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-
 import InputDiv from '../../Base/modules/InputDiv.vue'
-import { usePreferencesStore } from '../../../stores/preferences'
+import { usePreferencesStore } from '../../../stores/preferences.ts'
 const preferencesStore = usePreferencesStore()
 
 const calendarChoices = computed(() =>
@@ -21,10 +19,9 @@ const calendarChoices = computed(() =>
 		selected: preferencesStore.user.checkCalendarsUris.includes(
 			calendar.calendarUri,
 		),
-	})),
-)
+	})),)
 
-const clickedCalendar = (calendar) => {
+function clickedCalendar (calendar) {
 	if (preferencesStore.user.checkCalendarsUris.includes(calendar.calendarUri)) {
 		preferencesStore.removeCheckCalendar(calendar)
 	} else {
@@ -39,7 +36,7 @@ const clickedCalendar = (calendar) => {
 			<NcCheckboxRadioSwitch
 				v-model="preferencesStore.user.calendarPeek"
 				type="switch"
-				@update:model-value="preferencesStore.write()">
+				@update:modelValue="preferencesStore.write()">
 				{{
 					t('polls', 'Use calendar lookup for conflicting calendar events')
 				}}
@@ -55,9 +52,9 @@ const clickedCalendar = (calendar) => {
 					:key="calendar.calendarUri"
 					class="calendar-item">
 					<NcCheckboxRadioSwitch
-						:model-value="calendar.selected"
+						:modelValue="calendar.selected"
 						type="switch"
-						@update:model-value="clickedCalendar(calendar)">
+						@update:modelValue="clickedCalendar(calendar)">
 						<span
 							class="bully"
 							:style="{ backgroundColor: calendar.displayColor }" />
@@ -78,10 +75,10 @@ const clickedCalendar = (calendar) => {
 				"
 				type="number"
 				inputmode="numeric"
-				use-num-modifiers
-				:num-min="0"
-				:num-max="24"
-				num-wrap
+				useNumModifiers
+				:numMin="0"
+				:numMax="24"
+				numWrap
 				@change="preferencesStore.write()" />
 		</div>
 
@@ -96,10 +93,10 @@ const clickedCalendar = (calendar) => {
 				"
 				type="number"
 				inputmode="numeric"
-				:num-min="0"
-				:num-max="24"
-				num-wrap
-				use-num-modifiers
+				:numMin="0"
+				:numMax="24"
+				numWrap
+				useNumModifiers
 				@change="preferencesStore.write()" />
 		</div>
 	</div>

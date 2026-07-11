@@ -1,12 +1,15 @@
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { Answer, Vote } from '../../stores/votes.types'
+import type { RemoveVotesResponse, setVoteResponse } from './api.types'
+
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { httpInstance, createCancelTokenHandler } from './HttpApi'
+import { createCancelTokenHandler, httpInstance } from './HttpApi.js'
 
-import type { RemoveVotesResponse, setVoteResponse } from './api.types'
-import type { AxiosResponse } from '@nextcloud/axios'
-import type { Answer, Vote } from '../../stores/votes.types'
+// eslint-disable-next-line prefer-const -- assigned below, after `votes` is fully defined
+let cancelTokenHandlerObject: ReturnType<typeof createCancelTokenHandler>
 
 const votes = {
 	getVotes(pollId: number): Promise<AxiosResponse<{ votes: Vote[] }>> {
@@ -63,6 +66,6 @@ const votes = {
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(votes)
+cancelTokenHandlerObject = createCancelTokenHandler(votes)
 
 export default votes

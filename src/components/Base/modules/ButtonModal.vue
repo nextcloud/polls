@@ -4,15 +4,14 @@
 -->
 
 <script setup lang="ts">
+import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import type { ButtonMode } from '../../../Types/index.ts'
+
 import { t } from '@nextcloud/l10n'
-
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
-import NcModal from '../../Base/modules/CustomNcModal.vue'
-
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcAppNavigationNew from '@nextcloud/vue/components/NcAppNavigationNew'
-
-import type { ButtonMode } from '../../../Types'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcModal from '../../Base/modules/CustomNcModal.vue'
 
 interface Props {
 	buttonVariant?: ButtonVariant
@@ -39,12 +38,12 @@ const {
 			the navigation bar (Edge case for ActionAddPoll). -->
 		<NcAppNavigationNew
 			v-if="buttonMode === 'navigation'"
-			button-class="icon-add"
+			buttonClass="icon-add"
 			:text="buttonCaption"
 			@click="showModal = true" />
 		<NcActionButton
 			v-else-if="buttonMode === 'actionMenu'"
-			button-class="icon-add"
+			buttonClass="icon-add"
 			:text="buttonCaption"
 			@click="showModal = true" />
 		<NcButton
@@ -64,10 +63,10 @@ const {
 			v-model:show="showModal"
 			:name="buttonCaption"
 			:size="modalSize"
-			:no-close="noClose"
+			:noClose="noClose"
 			@close="showModal = false">
 			<h2>{{ buttonCaption }}</h2>
-			<slot name="modal-content" />
+			<slot name="modalContent" />
 		</NcModal>
 	</div>
 </template>

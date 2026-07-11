@@ -4,9 +4,11 @@
 -->
 
 <script setup lang="ts">
+import type { Duration } from 'luxon'
+
+import { DateTime } from 'luxon'
 import { computed } from 'vue'
-import { DateTime, Duration } from 'luxon'
-import { getDates } from '../../../composables/optionDateTime'
+import { getDates } from '../../../composables/optionDateTime.ts'
 import { useSessionStore } from '@/stores/session'
 
 interface Props {
@@ -15,13 +17,9 @@ interface Props {
 	timezone?: string | undefined
 }
 
-const sessionStore = useSessionStore()
+const { startDate, duration, timezone = undefined } = defineProps<Props>()
 
-const {
-	startDate,
-	duration = Duration.fromMillis(0),
-	timezone = undefined,
-} = defineProps<Props>()
+const sessionStore = useSessionStore()
 
 const useTimeZone = computed(
 	() =>

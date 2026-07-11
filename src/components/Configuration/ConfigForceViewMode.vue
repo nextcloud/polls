@@ -4,9 +4,9 @@
 -->
 
 <script setup lang="ts">
-import RadioGroupDiv from '../Base/modules/RadioGroupDiv.vue'
 import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll'
+import RadioGroupDiv from '../Base/modules/RadioGroupDiv.vue'
+import { usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits(['change'])
 

@@ -3,23 +3,23 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Participant } from '../../Types'
-
-import type { Vote } from '../../stores/votes.types'
 import type { Option } from '../../stores/options.types'
+import type { Vote } from '../../stores/votes.types'
+import type { Participant } from '../../Types/index.ts'
 
-const uniqueArrayOfObjects = (array: unknown[]) =>
-	[...new Set(array.map((obj) => JSON.stringify(obj)))].map((string) =>
-		JSON.parse(string),
-	)
+function uniqueArrayOfObjects (array: unknown[]) {
+  return [...new Set(array.map((obj) => JSON.stringify(obj)))].map((string) =>
+		JSON.parse(string),)
+}
 
-const uniqueOptions = (options: Option[]) =>
-	options.filter(
+function uniqueOptions (options: Option[]) {
+  return options.filter(
 		(option, index, array) =>
 			array.findIndex((compare) => compare.text === option.text) === index,
 	)
+}
 
-const uniqueParticipants = (votes: Vote[]): Participant[] => {
+function uniqueParticipants (votes: Vote[]): Participant[] {
 	const participants: Participant[] = votes.map((vote) => ({
 		user: vote.user,
 		pollId: vote.pollId,

@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineStore } from 'pinia'
-
-import { ActivityAPI } from '../Api'
-
-import { useSessionStore } from './session'
-
 import type { AxiosError } from '@nextcloud/axios'
-import type { Activity, ActivitiyStore } from './activity.types'
+import type { ActivitiyStore, Activity } from './activity.types'
+
+import { defineStore } from 'pinia'
+import { ActivityAPI } from '../Api/index.ts'
+import { useSessionStore } from './session.ts'
 
 export const useActivityStore = defineStore('activity', {
 	state: (): ActivitiyStore => ({

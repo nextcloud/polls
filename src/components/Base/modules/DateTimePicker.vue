@@ -8,7 +8,6 @@ import { t } from '@nextcloud/l10n'
 import { DateTime } from 'luxon'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcDateTimePickerNative from '@nextcloud/vue/components/NcDateTimePickerNative'
-
 import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 
@@ -32,7 +31,7 @@ function nextDay() {
 		<NcButton
 			v-if="useDayButtons"
 			:title="t('polls', 'Previous day')"
-			:variant="'tertiary-no-background'"
+			variant="tertiary-no-background"
 			@click="previousDay">
 			<template #icon>
 				<ChevronLeftIcon />
@@ -42,7 +41,7 @@ function nextDay() {
 		<NcButton
 			v-if="useDayButtons"
 			:title="t('polls', 'Next day')"
-			:variant="'tertiary-no-background'"
+			variant="tertiary-no-background"
 			@click="nextDay">
 			<template #icon>
 				<ChevronRightIcon />

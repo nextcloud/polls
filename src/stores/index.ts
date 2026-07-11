@@ -4,7 +4,7 @@
  */
 
 import { createPinia } from 'pinia'
-import { debouncePlugin } from '../plugins/piniaDebounce'
+import { debouncePlugin } from '../plugins/piniaDebounce.ts'
 
 export const pinia = createPinia()
 pinia.use(debouncePlugin)

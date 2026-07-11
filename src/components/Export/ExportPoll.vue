@@ -4,36 +4,32 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import type { AxiosError } from '@nextcloud/axios'
+import type { Sheet, WorkBook } from 'xlsx'
+import type { ApiEmailAdressList } from '../../Api/index.ts'
+import type { Answer } from '../../stores/votes.types'
 
-import { DateTime } from 'luxon'
-
-// eslint-disable-next-line import/named
-import { Sheet, WorkBook, utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
+import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import DOMPurify from 'dompurify'
 import { saveAs } from 'file-saver'
-import { t } from '@nextcloud/l10n'
-import { showError } from '@nextcloud/dialogs'
-
-import NcActions from '@nextcloud/vue/components/NcActions'
+import { DateTime } from 'luxon'
+import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-
-import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
-import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
+import NcActions from '@nextcloud/vue/components/NcActions'
 import CsvIcon from 'vue-material-design-icons/FileDelimitedOutline.vue'
-import XmlIcon from 'vue-material-design-icons/Xml.vue'
 import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
-
-import { ApiEmailAdressList, PollsAPI } from '../../Api'
-import { usePollStore } from '../../stores/poll'
-import { useVotesStore } from '../../stores/votes'
-import { useOptionsStore } from '../../stores/options'
-
-import type { AxiosError } from '@nextcloud/axios'
-import type { Answer } from '../../stores/votes.types'
-import { Logger } from '@/helpers/modules/logger'
+import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
+import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
+import XmlIcon from 'vue-material-design-icons/Xml.vue'
+import { PollsAPI } from '../../Api/index.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 import { getDatesFromOption } from '@/composables/optionDateTime'
+import { Logger } from '@/helpers/modules/logger'
 
 type ArrayStyle = 'symbols' | 'raw' | 'generic'
 type ExportFormat = 'html' | 'xlsx' | 'ods' | 'csv'
@@ -227,7 +223,7 @@ function addVotesArray(style: ArrayStyle) {
 			})
 
 			sheetData.value.push(votesLine)
-		} catch (error) {
+		} catch {
 			// just skip this participant
 		}
 	})
@@ -243,7 +239,7 @@ function addVotesArray(style: ArrayStyle) {
 			<ExportIcon />
 		</template>
 		<NcActionButton
-			close-after-click
+			closeAfterClick
 			:name="t('polls', 'Download Excel spreadsheet')"
 			:aria-label="t('polls', 'Download Excel spreadsheet')"
 			@click="exportFile('xlsx')">
@@ -253,7 +249,7 @@ function addVotesArray(style: ArrayStyle) {
 		</NcActionButton>
 
 		<NcActionButton
-			close-after-click
+			closeAfterClick
 			:name="t('polls', 'Download Open Document spreadsheet')"
 			:aria-label="t('polls', 'Download Open Document spreadsheet')"
 			@click="exportFile('ods')">
@@ -263,7 +259,7 @@ function addVotesArray(style: ArrayStyle) {
 		</NcActionButton>
 
 		<NcActionButton
-			close-after-click
+			closeAfterClick
 			:name="t('polls', 'Download CSV file')"
 			::aria-label="t('polls', 'Download CSV file')"
 			@click="exportFile('csv')">
@@ -273,7 +269,7 @@ function addVotesArray(style: ArrayStyle) {
 		</NcActionButton>
 
 		<NcActionButton
-			close-after-click
+			closeAfterClick
 			:name="t('polls', 'Download HTML file')"
 			:aria-label="t('polls', 'Download HTML file')"
 			@click="exportFile('html')">

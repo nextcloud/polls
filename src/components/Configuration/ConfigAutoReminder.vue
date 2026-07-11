@@ -5,15 +5,12 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-
+import NcButton from '@nextcloud/vue/components/NcButton'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcPopover from '@nextcloud/vue/components/NcPopover'
-import NcButton from '@nextcloud/vue/components/NcButton'
-
 import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
 import AutoReminderInformation from './AutoReminderInformation.vue'
-
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits(['change'])
 
@@ -25,10 +22,10 @@ const pollStore = usePollStore()
 		<NcCheckboxRadioSwitch
 			v-model="pollStore.configuration.autoReminder"
 			type="switch"
-			@update:model-value="emit('change')">
+			@update:modelValue="emit('change')">
 			{{ t('polls', 'Use Autoreminder') }}
 		</NcCheckboxRadioSwitch>
-		<NcPopover no-focus-trap close-on-click-outside>
+		<NcPopover noFocusTrap>
 			<template #trigger>
 				<NcButton
 					variant="tertiary-no-background"

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { User } from '../Types'
+import type { User } from '../Types/index.ts'
 
 export type Comment = {
 	comment: string

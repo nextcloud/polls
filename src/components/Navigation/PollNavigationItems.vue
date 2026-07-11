@@ -4,23 +4,20 @@
 -->
 
 <script setup lang="ts">
-import { t } from '@nextcloud/l10n'
-
-import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
-
-import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
-import ArchivePollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-import RestorePollIcon from 'vue-material-design-icons/RecycleVariant.vue'
-import { pollTypes } from '../../stores/poll'
-import { useSessionStore } from '../../stores/session'
-
 import type { Poll } from '../../stores/poll.types'
 
-const emit = defineEmits(['clonePoll', 'toggleArchive', 'deletePoll'])
-const { poll } = defineProps<{ poll: Poll }>()
+import { t } from '@nextcloud/l10n'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
+import ArchivePollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
+import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
+import RestorePollIcon from 'vue-material-design-icons/RecycleVariant.vue'
+import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import { pollTypes } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
+const { poll } = defineProps<{ poll: Poll }>()
+const emit = defineEmits(['clonePoll', 'toggleArchive', 'deletePoll'])
 const sessionStore = useSessionStore()
 </script>
 

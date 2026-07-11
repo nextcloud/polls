@@ -3,32 +3,27 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-// fallow-ignore-file circular-dependency
-import { defineStore } from 'pinia'
+import type { AxiosError } from '@nextcloud/axios'
+import type { PollType } from './poll.types'
+import type { FilterType } from './polls.types'
+import type { ViewMode } from './preferences.types'
+import type { SessionStore } from './session.types'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
-
-import { Logger } from '../helpers/modules/logger'
-import { activeRoute } from '../routerState'
-import { PublicAPI, SessionAPI } from '../Api'
-
-import { useSubscriptionStore } from './subscription'
-import { usePollGroupsStore } from './pollGroups'
-import { usePreferencesStore } from './preferences'
-import { usePollStore } from './poll'
-import { pollCategories } from './polls.constants'
-
-import { defaultUser } from '../Types'
-
-import type { AxiosError } from '@nextcloud/axios'
-import type { ViewMode } from './preferences.types'
-import { defaultShare } from './shares.types'
-import type { PollType } from './poll.types'
-import type { FilterType } from './polls.types'
-
-import type { SessionStore } from './session.types'
 import { IANAZone } from 'luxon'
+// fallow-ignore-file circular-dependency
+import { defineStore } from 'pinia'
+import { PublicAPI, SessionAPI } from '../Api/index.ts'
+import { Logger } from '../helpers/modules/logger.ts'
+import { activeRoute } from '../routerState.ts'
+import { defaultUser } from '../Types/index.ts'
+import { usePollStore } from './poll.ts'
+import { usePollGroupsStore } from './pollGroups.ts'
+import { pollCategories } from './polls.constants'
+import { usePreferencesStore } from './preferences.ts'
+import { defaultShare } from './shares.types'
+import { useSubscriptionStore } from './subscription.ts'
 
 const MOBILE_BREAKPOINT = 480
 

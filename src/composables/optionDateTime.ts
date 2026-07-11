@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Option } from '@/stores/options.types'
-import { DateTime, Duration, Interval } from 'luxon'
+import type { DateTime } from 'luxon';
+import type { Option } from '@/stores/options.types'
+
+import { Duration, Interval } from 'luxon'
 
 type OptionDateTime = {
 	optionStart: DateTime
@@ -17,6 +19,11 @@ type OptionDateTime = {
 	interval: Interval
 }
 
+/**
+ *
+ * @param option
+ * @param timezone
+ */
 export function getDatesFromOption(
 	option: Option,
 	timezone: string = Intl.DateTimeFormat().resolvedOptions().timeZone,

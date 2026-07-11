@@ -4,14 +4,11 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { t } from '@nextcloud/l10n'
-
+import { computed } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-
 import InputDiv from '../Base/modules/InputDiv.vue'
-
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits(['change'])
 
@@ -42,7 +39,7 @@ function validateLimit() {
 		<NcCheckboxRadioSwitch
 			v-model="useLimit"
 			type="switch"
-			@update:model-value="validateLimit()">
+			@update:modelValue="validateLimit()">
 			{{ t('polls', 'Limit "Yes" votes per option') }}
 		</NcCheckboxRadioSwitch>
 
@@ -52,8 +49,8 @@ function validateLimit() {
 			class="indented"
 			type="number"
 			inputmode="numeric"
-			:num-min="1"
-			use-num-modifiers
+			:numMin="1"
+			useNumModifiers
 			@change="emit('change')" />
 
 		<NcCheckboxRadioSwitch
@@ -61,7 +58,7 @@ function validateLimit() {
 			v-model="pollStore.configuration.hideBookedUp"
 			class="indented"
 			type="switch"
-			@update:model-value="emit('change')">
+			@update:modelValue="emit('change')">
 			{{ t('polls', 'Hide unavailable options') }}
 		</NcCheckboxRadioSwitch>
 	</div>

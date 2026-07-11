@@ -4,17 +4,17 @@
 -->
 
 <script setup lang="ts">
-import { Logger } from '../../../helpers/modules/logger'
-import { t } from '@nextcloud/l10n'
-
-import { AdminAPI } from '../../../Api'
-import { onMounted, ref } from 'vue'
 import type { Job, JobsList } from '../../../Api/modules/api.types'
+
+import { t } from '@nextcloud/l10n'
 import { NcActionButton, NcListItem } from '@nextcloud/vue'
 import { DateTime } from 'luxon'
-import PlayIcon from 'vue-material-design-icons/Play.vue'
-import NotSupportedIcon from 'vue-material-design-icons/MinusCircleOutline.vue'
+import { onMounted, ref } from 'vue'
 import JobExecutedIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
+import NotSupportedIcon from 'vue-material-design-icons/MinusCircleOutline.vue'
+import PlayIcon from 'vue-material-design-icons/Play.vue'
+import { AdminAPI } from '../../../Api/index.ts'
+import { Logger } from '../../../helpers/modules/logger.ts'
 
 const jobsList = ref<JobsList>({})
 const executedJobs = ref(new Set<string>())
@@ -166,13 +166,13 @@ onMounted(() => {
 				:details="getLastRun(job).text"
 				:title="getLastRun(job).title"
 				:active="!executedJobs.has(job.name) && job.manuallyRunnable"
-				force-display-actions>
+				forceDisplayActions>
 				<template #subname>
 					{{ getDescription(job) }}
 				</template>
 				<template #actions>
 					<NcActionButton
-						close-after-click
+						closeAfterClick
 						:disabled="
 							executedJobs.has(job.name) || !job.manuallyRunnable
 						"

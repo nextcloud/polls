@@ -4,11 +4,11 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { DateTime } from 'luxon'
+import type { Option } from '../../stores/options.types'
 import type { CalendarEvent } from './calendar.types'
 
-import type { Option } from '../../stores/options.types'
+import { DateTime } from 'luxon'
+import { computed } from 'vue'
 import { getDatesFromOption } from '@/composables/optionDateTime'
 
 interface Props {
@@ -17,11 +17,6 @@ interface Props {
 }
 
 const { calendarEvent, option } = defineProps<Props>()
-
-const calendarStyle = computed(() => ({
-	backgroundColor: calendarEvent.displayColor,
-	color: fontColor.value,
-}))
 
 const fontColor = computed(() => {
 	if (calendarEvent.displayColor === 'transparent') {
@@ -37,6 +32,11 @@ const fontColor = computed(() => {
 
 	return l > 0.5 ? '#222' : '#ddd'
 })
+
+const calendarStyle = computed(() => ({
+	backgroundColor: calendarEvent.displayColor,
+	color: fontColor.value,
+}))
 
 const eventStart = computed(() => DateTime.fromSeconds(calendarEvent.start))
 const eventEnd = computed(() => DateTime.fromSeconds(calendarEvent.end))

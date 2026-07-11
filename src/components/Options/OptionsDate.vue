@@ -5,12 +5,10 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-
 import OptionItem from './OptionItem.vue'
 import OptionMenu from './OptionMenu.vue'
-
-import { usePollStore } from '../../stores/poll'
-import { useOptionsStore } from '../../stores/options'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -27,7 +25,7 @@ const componentStyle = {
 			:key="option.id"
 			:option="option"
 			tag="li"
-			show-owner>
+			showOwner>
 			<template #actions>
 				<OptionMenu
 					v-if="pollStore.permissions.edit || option.isOwner"

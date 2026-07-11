@@ -4,18 +4,15 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { t } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
-
+import { t } from '@nextcloud/l10n'
+import { ref } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-
 import InputDiv from '../Base/modules/InputDiv.vue'
 import UserItem from '../User/UserItem.vue'
-
-import { useSessionStore } from '../../stores/session'
-import { useCommentsStore } from '../../stores/comments'
-import { usePollStore } from '../../stores/poll'
+import { useCommentsStore } from '../../stores/comments.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
 const commentsStore = useCommentsStore()
 const sessionStore = useSessionStore()
@@ -47,11 +44,11 @@ async function writeComment() {
 
 <template>
 	<div class="comment-add">
-		<UserItem :user="sessionStore.currentUser" hide-names />
+		<UserItem :user="sessionStore.currentUser" hideNames />
 		<div class="comment-add__input">
 			<InputDiv
 				v-model="comment"
-				:placeholder="t('polls', 'New comment …')"
+				:placeholder="t('polls', 'New comment …')"
 				submit
 				@submit="writeComment()" />
 			<NcCheckboxRadioSwitch

@@ -9,7 +9,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 export interface CollapsibleProps {
 	initialState?: 'min' | 'max'
 	minHeight?: number
-	noCollapse: boolean
+	noCollapse?: boolean
 	maxHeightVh?: number
 }
 

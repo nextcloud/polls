@@ -6,13 +6,11 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
-
-import { useSharesStore } from '../../stores/shares'
-import { useSessionStore } from '../../stores/session'
-
 import SharesList from '../Shares/SharesList.vue'
-import SharesListUnsent from '../Shares/SharesListUnsent.vue'
 import SharesListLocked from '../Shares/SharesListLocked.vue'
+import SharesListUnsent from '../Shares/SharesListUnsent.vue'
+import { useSessionStore } from '../../stores/session.ts'
+import { useSharesStore } from '../../stores/shares.ts'
 
 const sharesStore = useSharesStore()
 const sessionStore = useSessionStore()

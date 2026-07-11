@@ -4,20 +4,17 @@
 -->
 
 <script setup lang="ts">
+import { showError, showInfo } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-
+import { useRoute, useRouter } from 'vue-router'
 import SpeakerIcon from 'vue-material-design-icons/BullhornOutline.vue'
 import SpeakerBigIcon from 'vue-material-design-icons/BullhornVariantOutline.vue'
 import DescriptionIcon from 'vue-material-design-icons/TextBoxOutline.vue'
-
 import ConfigBox from '../Base/modules/ConfigBox.vue'
-
-import { usePollGroupsStore } from '../../stores/pollGroups'
-import { showError, showInfo } from '@nextcloud/dialogs'
-import { useRouter, useRoute } from 'vue-router'
+import ConfigDescriptionPollGroup from './ConfigDescriptionPollGroup.vue'
 import ConfigTitlePollGroup from './ConfigNamePollGroup.vue'
 import ConfigTitleExtPollGroup from './ConfigTitleExtPollGroup.vue'
-import ConfigDescriptionPollGroup from './ConfigDescriptionPollGroup.vue'
+import { usePollGroupsStore } from '../../stores/pollGroups.ts'
 
 const router = useRouter()
 const route = useRoute()

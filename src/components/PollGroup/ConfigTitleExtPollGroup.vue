@@ -4,10 +4,10 @@
 -->
 
 <script setup lang="ts">
+import { t } from '@nextcloud/l10n'
 import { computed } from 'vue'
 import InputDiv from '../Base/modules/InputDiv.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollGroupsStore } from '../../stores/pollGroups'
+import { usePollGroupsStore } from '../../stores/pollGroups.ts'
 
 const emit = defineEmits(['change'])
 

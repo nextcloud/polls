@@ -4,19 +4,16 @@
 -->
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-
+import { onMounted, onUnmounted, ref } from 'vue'
 import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
 import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
-import { Event } from '../Types'
-
 import SidebarShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 import SidebarConfigurationIcon from 'vue-material-design-icons/WrenchOutline.vue'
-
-import SideBarTabPollGroup from '../components/SideBar/SideBarTabSharePollGroup.vue'
 import SideBarTabConfigurationPollGroup from '../components/SideBar/SideBarTabConfigurationPollGroup.vue'
+import SideBarTabPollGroup from '../components/SideBar/SideBarTabSharePollGroup.vue'
+import { Event } from '../Types/index.ts'
 
 const showSidebar = ref(window.innerWidth > 920)
 const activeTab = ref(t('polls', 'Shares').toLowerCase())

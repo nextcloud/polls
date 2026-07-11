@@ -4,23 +4,22 @@
 -->
 
 <script setup lang="ts">
-import YesCounterIcon from 'vue-material-design-icons/Check.vue'
-import MaybeCounterIcon from 'vue-material-design-icons/Tilde.vue'
-import CheckboxMarkedOutlinedIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
-
-import { usePollStore } from '../../stores/poll'
-
 import type { Option } from '../../stores/options.types'
-import VotersList from '../VoteTable/VotersList.vue'
-import { NcPopover } from '@nextcloud/vue'
 
+import { NcPopover } from '@nextcloud/vue'
+import YesCounterIcon from 'vue-material-design-icons/Check.vue'
+import CheckboxMarkedOutlinedIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+import MaybeCounterIcon from 'vue-material-design-icons/Tilde.vue'
+import VotersList from '../VoteTable/VotersList.vue'
+import { usePollStore } from '../../stores/poll.ts'
+
+const { option, showMaybe = false } = defineProps<Props>()
 const pollStore = usePollStore()
 interface Props {
 	option: Option
 	showMaybe?: boolean
 }
 
-const { option, showMaybe = false } = defineProps<Props>()
 const showList =
 	pollStore.permissions.seeResults && pollStore.permissions.seeUsernames
 </script>
@@ -30,25 +29,25 @@ const showList =
 		<CheckboxMarkedOutlinedIcon :size="20" />
 	</div>
 	<div v-else class="counter">
-		<NcPopover no-focus-trap class="yes">
+		<NcPopover noFocusTrap class="yes">
 			<template #trigger="{ attrs }">
 				<YesCounterIcon
 					v-bind="attrs"
-					fill-color="var(--color-polls-foreground-yes)"
+					fillColor="var(--color-polls-foreground-yes)"
 					:size="20" />
 				<span>{{ option.votes.yes }}</span>
 			</template>
-			<VotersList v-if="showList" :option="option" answer-filter="yes" />
+			<VotersList v-if="showList" :option="option" answerFilter="yes" />
 		</NcPopover>
-		<NcPopover v-show="showMaybe" no-focus-trap class="maybe">
+		<NcPopover v-show="showMaybe" noFocusTrap class="maybe">
 			<template #trigger="{ attrs }">
 				<MaybeCounterIcon
 					v-bind="attrs"
-					fill-color="var(--color-polls-foreground-maybe)"
+					fillColor="var(--color-polls-foreground-maybe)"
 					:size="20" />
 				<span>{{ option.votes.maybe }}</span>
 			</template>
-			<VotersList v-if="showList" :option="option" answer-filter="maybe" />
+			<VotersList v-if="showList" :option="option" answerFilter="maybe" />
 		</NcPopover>
 	</div>
 </template>

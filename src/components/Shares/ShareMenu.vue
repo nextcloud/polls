@@ -4,38 +4,35 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import { t } from '@nextcloud/l10n'
+import type { AxiosError } from '@nextcloud/axios'
+import type { SentResults } from '../../Api/modules/shares.ts'
+import type { Share } from '../../stores/shares.types'
 
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import { computed, onMounted, ref } from 'vue'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionCaption from '@nextcloud/vue/components/NcActionCaption'
 import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
 import NcActions from '@nextcloud/vue/components/NcActions'
-import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-
 import ResolveGroupIcon from 'vue-material-design-icons/CallSplit.vue'
-import SendEmailIcon from 'vue-material-design-icons/EmailArrowRightOutline.vue'
-import EditIcon from 'vue-material-design-icons/PencilOutline.vue'
-import AdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
 import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
-import QrIcon from 'vue-material-design-icons/Qrcode.vue'
-import LockIcon from 'vue-material-design-icons/LockOutline.vue'
+import SendEmailIcon from 'vue-material-design-icons/EmailArrowRightOutline.vue'
 import UnlockIcon from 'vue-material-design-icons/LockOpenVariantOutline.vue'
-import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import LockIcon from 'vue-material-design-icons/LockOutline.vue'
+import EditIcon from 'vue-material-design-icons/PencilOutline.vue'
+import QrIcon from 'vue-material-design-icons/Qrcode.vue'
 import RestoreIcon from 'vue-material-design-icons/RecycleVariant.vue'
-
-import { useSharesStore } from '../../stores/shares'
-import { usePollGroupsStore } from '../../stores/pollGroups'
-import { usePollStore } from '../../stores/poll'
-
-import type { AxiosError } from '@nextcloud/axios'
-import type { Share } from '../../stores/shares.types'
-import type { SentResults } from '../../Api/modules/shares'
-
-const emit = defineEmits(['showQrCode'])
+import AdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import { usePollStore } from '../../stores/poll.ts'
+import { usePollGroupsStore } from '../../stores/pollGroups.ts'
+import { useSharesStore } from '../../stores/shares.ts'
 
 const { share } = defineProps<{ share: Share }>()
+
+const emit = defineEmits(['showQrCode'])
 
 const sharesStore = useSharesStore()
 const pollGroupsStore = usePollGroupsStore()
@@ -83,7 +80,7 @@ const resendInvitation = computed<ButtonProps>(() => ({
 			if (result?.sentResult) {
 				handleInvitationResults(result.sentResult)
 			}
-		} catch (error) {
+		} catch {
 			showError(t('polls', 'Error sending invitation'))
 		}
 	},
@@ -204,14 +201,14 @@ const showQrCodeButton = computed<ButtonProps>(() => ({
 const lockShareButton = computed<ButtonProps>(() => ({
 	activate: !share.groupId && !share.deleted,
 	name: share.locked ? t('polls', 'Unlock share') : t('polls', 'Lock share'),
-	action: () => {
+	action: async () => {
 		try {
 			if (share.locked) {
-				sharesStore.unlock({ share })
+				await sharesStore.unlock({ share })
 			} else {
-				sharesStore.lock({ share })
+				await sharesStore.lock({ share })
 			}
-		} catch (error) {
+		} catch {
 			showError(
 				t(
 					'polls',
@@ -228,14 +225,14 @@ const lockShareButton = computed<ButtonProps>(() => ({
 const deleteShareButton = computed<ButtonProps>(() => ({
 	activate: isDirectShare.value,
 	name: share.deleted ? t('polls', 'Restore share') : t('polls', 'Delete share'),
-	action: () => {
+	action: async () => {
 		try {
 			if (share.deleted) {
-				sharesStore.restore({ share })
+				await sharesStore.restore({ share })
 			} else {
-				sharesStore.delete({ share })
+				await sharesStore.delete({ share })
 			}
-		} catch (error) {
+		} catch {
 			showError(
 				t(
 					'polls',
@@ -278,7 +275,7 @@ async function submitLabel() {
 
 		<NcActionButton
 			v-if="resendInvitation.activate"
-			close-after-click
+			closeAfterClick
 			:name="resendInvitation.name"
 			:aria-label="resendInvitation.name"
 			@click="resendInvitation.action">
@@ -289,7 +286,7 @@ async function submitLabel() {
 
 		<NcActionButton
 			v-if="resolveGroups.activate"
-			close-after-click
+			closeAfterClick
 			:disabled="resolving"
 			:name="resolveGroups.name"
 			:aria-label="resolveGroups.name"
@@ -301,7 +298,7 @@ async function submitLabel() {
 
 		<NcActionButton
 			v-if="switchAdmin.activate"
-			close-after-click
+			closeAfterClick
 			:name="switchAdmin.name"
 			:aria-label="switchAdmin.name"
 			@click="switchAdmin.action">
@@ -322,7 +319,7 @@ async function submitLabel() {
 
 		<NcActionButton
 			v-if="showQrCodeButton.activate"
-			close-after-click
+			closeAfterClick
 			:name="showQrCodeButton.name"
 			:aria-label="showQrCodeButton.name"
 			@click="showQrCodeButton.action">
@@ -338,9 +335,9 @@ async function submitLabel() {
 		<NcActionRadio
 			v-if="isActivePublicShare"
 			name="publicPollEmail"
-			:value="'optional'"
-			:model-value="share.publicPollEmail"
-			@update:model-value="
+			value="optional"
+			:modelValue="share.publicPollEmail"
+			@update:modelValue="
 				sharesStore.setPublicPollEmail({
 					share,
 					value: 'optional',
@@ -352,9 +349,9 @@ async function submitLabel() {
 		<NcActionRadio
 			v-if="isActivePublicShare"
 			name="publicPollEmail"
-			:value="'mandatory'"
-			:model-value="share.publicPollEmail"
-			@update:model-value="
+			value="mandatory"
+			:modelValue="share.publicPollEmail"
+			@update:modelValue="
 				sharesStore.setPublicPollEmail({
 					share,
 					value: 'mandatory',
@@ -366,9 +363,9 @@ async function submitLabel() {
 		<NcActionRadio
 			v-if="isActivePublicShare"
 			name="publicPollEmail"
-			:value="'disabled'"
-			:model-value="share.publicPollEmail"
-			@update:model-value="
+			value="disabled"
+			:modelValue="share.publicPollEmail"
+			@update:modelValue="
 				sharesStore.setPublicPollEmail({
 					share,
 					value: 'disabled',
@@ -379,7 +376,7 @@ async function submitLabel() {
 
 		<NcActionButton
 			v-if="lockShareButton.activate"
-			close-after-click
+			closeAfterClick
 			:name="lockShareButton.name"
 			:aria-label="lockShareButton.name"
 			@click="lockShareButton.action">
@@ -391,7 +388,7 @@ async function submitLabel() {
 
 		<NcActionButton
 			v-if="deleteShareButton.activate"
-			close-after-click
+			closeAfterClick
 			:name="deleteShareButton.name"
 			:aria-label="deleteShareButton.name"
 			@click="deleteShareButton.action">

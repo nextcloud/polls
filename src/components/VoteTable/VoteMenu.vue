@@ -4,37 +4,35 @@
 -->
 
 <script setup lang="ts">
+import type { StatusResults } from '../../Types/index.ts'
+
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import debounce from 'lodash/debounce'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import debounce from 'lodash/debounce'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import { t } from '@nextcloud/l10n'
-
-import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActionCheckbox from '@nextcloud/vue/components/NcActionCheckbox'
 import NcActionInput from '@nextcloud/vue/components/NcActionInput'
+import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
-
-import SettingsIcon from 'vue-material-design-icons/CogOutline.vue'
-import SendLinkPerEmailIcon from 'vue-material-design-icons/Link.vue'
-import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
-import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
 import EditAccountIcon from 'vue-material-design-icons/AccountEditOutline.vue'
-import LogoutIcon from 'vue-material-design-icons/Logout.vue'
+import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
+import SettingsIcon from 'vue-material-design-icons/CogOutline.vue'
 import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
-
-import { ValidatorAPI } from '../../Api'
-import { usePollStore } from '../../stores/poll'
-import { useSessionStore } from '../../stores/session'
-import { useSubscriptionStore } from '../../stores/subscription'
-import { useVotesStore } from '../../stores/votes'
-import { StatusResults } from '../../Types'
+import SendLinkPerEmailIcon from 'vue-material-design-icons/Link.vue'
+import LogoutIcon from 'vue-material-design-icons/Logout.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
+import { ValidatorAPI } from '../../Api/index.ts'
 import {
 	deleteCookieByValue,
 	findCookieByValue,
-} from '../../helpers/modules/cookieHelper'
+} from '../../helpers/modules/cookieHelper.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useSubscriptionStore } from '../../stores/subscription.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 interface Props {
 	noMenuIcon: boolean
@@ -288,7 +286,7 @@ async function submitEmail() {
 			v-if="sessionStore.share?.type === 'external'"
 			v-bind="displayNameInputProps"
 			v-model="sessionStore.share.user.displayName"
-			@update:model-value="validateDisplayName"
+			@update:modelValue="validateDisplayName"
 			@submit="submitDisplayName">
 			<template #icon>
 				<EditAccountIcon />
@@ -300,7 +298,7 @@ async function submitEmail() {
 			v-if="sessionStore.share?.type === 'external'"
 			v-bind="eMailInputProps"
 			v-model="sessionStore.share.user.emailAddress"
-			@update:model-value="validateEMail"
+			@update:modelValue="validateEMail"
 			@submit="submitEmail">
 			<template #icon>
 				<EditEmailIcon />
@@ -320,7 +318,7 @@ async function submitEmail() {
 		</NcActionButton>
 
 		<NcActionCheckbox
-			:model-value="subscriptionStore.subscribed"
+			:modelValue="subscriptionStore.subscribed"
 			:disabled="!pollStore.permissions.subscribe"
 			title="check"
 			@change="writeSubscription">

@@ -4,36 +4,22 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { DateTime, Duration } from 'luxon'
+import type { Option, Sequence, SimpleOption } from '../../stores/options.types'
 
 import { n } from '@nextcloud/l10n'
-
+import { DateTime, Duration } from 'luxon'
+import { computed } from 'vue'
 import DateBox from '../Base/modules/DateBox.vue'
-
-import type { Option, Sequence, SimpleOption } from '../../stores/options.types'
 import { getDates } from '@/composables/optionDateTime'
 
 interface Props {
 	option: SimpleOption | Option
-	timezone?: string | undefined
-	otherTimeZone?: string | undefined
-	sequence?: Sequence | undefined
-	title?: string | undefined
+	timezone: string | undefined
+	otherTimeZone: string | undefined
+	sequence: Sequence | undefined
 }
 
-const {
-	option,
-	timezone = Intl.DateTimeFormat().resolvedOptions().timeZone,
-	otherTimeZone,
-	sequence,
-	title,
-} = defineProps<Props>()
-
-// computed last from dateTime repetition
-const lastRepetitionDateTime = computed(() =>
-	option.getDateTime().plus(sequenceDuration.value),
-)
+const { option, timezone, otherTimeZone, sequence } = defineProps<Props>()
 
 const sequenceDuration = computed(() =>
 	sequence?.repetitions
@@ -41,6 +27,11 @@ const sequenceDuration = computed(() =>
 				[sequence.unit.id]: sequence.stepWidth * sequence.repetitions,
 			})
 		: Duration.fromObject({ millisecond: 0 }),
+)
+
+// computed last from dateTime repetition
+const lastRepetitionDateTime = computed(() =>
+	option.getDateTime().plus(sequenceDuration.value),
 )
 
 const repetitionCaption = computed(() =>
@@ -57,14 +48,9 @@ const simpleDate = computed(() => {
 
 <template>
 	<div class="preview-box">
-		<div
-			v-if="title"
-			:class="['preview-title', { 'span-2': sequence?.repetitions }]">
-			{{ title }}
-		</div>
 		<div class="preview-date">
 			<DateBox
-				:start-date="option.getDateTime()"
+				:startDate="option.getDateTime()"
 				:duration="option.getDuration()"
 				:timezone="timezone" />
 		</div>
@@ -72,13 +58,14 @@ const simpleDate = computed(() => {
 		<div v-if="sequence?.repetitions" class="preview-repetitions">
 			<span>{{ repetitionCaption }}</span>
 			<DateBox
-				:start-date="lastRepetitionDateTime"
+				:startDate="lastRepetitionDateTime"
 				:duration="option.getDuration()"
 				:timezone="timezone" />
 		</div>
 		<div
 			v-if="otherTimeZone"
-			:class="['timezone-information', { 'span-2': sequence?.repetitions }]">
+			class="timezone-information"
+			:class="[{ 'span-2': sequence?.repetitions }]">
 			<div>{{ otherTimeZone }}:</div>
 			<div>{{ simpleDate }}</div>
 		</div>

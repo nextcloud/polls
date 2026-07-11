@@ -4,15 +4,13 @@
 -->
 
 <script setup lang="ts">
-import { nextTick, useTemplateRef } from 'vue'
-import { useSortable } from '@vueuse/integrations/useSortable'
-
 import { t } from '@nextcloud/l10n'
-
+import { useSortable } from '@vueuse/integrations/useSortable'
+import { nextTick, useTemplateRef } from 'vue'
 import OptionItem from './OptionItem.vue'
-import { usePollStore } from '../../stores/poll'
-import { useOptionsStore } from '../../stores/options'
 import OptionMenu from './OptionMenu.vue'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -57,7 +55,7 @@ function onSort(event: { oldIndex: number; newIndex: number }) {
 			:option="option"
 			:draggable="true"
 			tag="li"
-			show-owner>
+			showOwner>
 			<template #actions>
 				<OptionMenu
 					v-if="pollStore.permissions.edit || option.isOwner"

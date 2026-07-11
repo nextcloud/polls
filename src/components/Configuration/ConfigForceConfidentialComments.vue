@@ -5,10 +5,9 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll'
-
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-import { useSessionStore } from '../../stores/session'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
 const emit = defineEmits(['change'])
 
@@ -33,7 +32,7 @@ const description =
 	<NcCheckboxRadioSwitch
 		v-model="pollStore.configuration.forceConfidentialComments"
 		type="switch"
-		@update:model-value="emit('change')">
+		@update:modelValue="emit('change')">
 		{{ description }}
 	</NcCheckboxRadioSwitch>
 </template>

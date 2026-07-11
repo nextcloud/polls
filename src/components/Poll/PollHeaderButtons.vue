@@ -4,20 +4,16 @@
 -->
 
 <script setup lang="ts">
+import { t } from '@nextcloud/l10n'
 import { computed, defineAsyncComponent, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
-import { t } from '@nextcloud/l10n'
-
 import NcButton from '@nextcloud/vue/components/NcButton'
 import NcPopover from '@nextcloud/vue/components/NcPopover'
-
 import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
-
 import ActionToggleSidebar from '../Actions/modules/ActionToggleSidebar.vue'
 import PollInformation from '../Poll/PollInformation.vue'
 import UserMenu from '../User/UserMenu.vue'
-
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 
 const route = useRoute()
 const pollStore = usePollStore()
@@ -40,12 +36,9 @@ onBeforeUnmount(() => {
 <template>
 	<div class="poll-header-buttons">
 		<UserMenu v-if="showUserMenu" />
-		<NcPopover close-on-click-outside no-focus-trap>
+		<NcPopover noFocusTrap>
 			<template #trigger>
-				<NcButton
-					:title="caption"
-					:aria-label="caption"
-					:variant="'tertiary'">
+				<NcButton :title="caption" :aria-label="caption" variant="tertiary">
 					<template #icon>
 						<PollInformationIcon />
 					</template>

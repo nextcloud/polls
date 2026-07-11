@@ -4,34 +4,29 @@
 -->
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-
-import NcAppNavigationSpacer from '@nextcloud/vue/components/NcAppNavigationSpacer'
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
-import NcAppNavigationNew from '@nextcloud/vue/components/NcAppNavigationNew'
 import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
+import NcAppNavigationNew from '@nextcloud/vue/components/NcAppNavigationNew'
+import NcAppNavigationSpacer from '@nextcloud/vue/components/NcAppNavigationSpacer'
 import NcCounterBubble from '@nextcloud/vue/components/NcCounterBubble'
-
-// Icons
-import ComboIcon from 'vue-material-design-icons/VectorCombine.vue'
-import SettingsIcon from 'vue-material-design-icons/CogOutline.vue'
 import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
 import GroupIcon from 'vue-material-design-icons/CodeBraces.vue'
-
-import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'
-import PollCreateDlg from '../components/Create/PollCreateDlg.vue'
+import SettingsIcon from 'vue-material-design-icons/CogOutline.vue'
+// Icons
+import ComboIcon from 'vue-material-design-icons/VectorCombine.vue'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
-import { Event } from '../Types'
-
-import { usePollsStore } from '../stores/polls'
-import { usePollGroupsStore } from '../stores/pollGroups'
-import { useSessionStore } from '../stores/session'
-import { usePreferencesStore } from '../stores/preferences'
+import PollCreateDlg from '../components/Create/PollCreateDlg.vue'
+import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'
+import { usePollGroupsStore } from '../stores/pollGroups.ts'
+import { usePollsStore } from '../stores/polls.ts'
+import { usePreferencesStore } from '../stores/preferences.ts'
+import { useSessionStore } from '../stores/session.ts'
+import { Event } from '../Types/index.ts'
 
 const router = useRouter()
 
@@ -108,14 +103,14 @@ onMounted(() => {
 				preferencesStore.useActionAddPollInNavigation
 				&& sessionStore.appPermissions.pollCreation
 			"
-			:button-mode="'navigation'" />
+			buttonMode="navigation" />
 
 		<NcAppNavigationNew
 			v-else-if="
 				preferencesStore.useNcAppNavigationNew
 				&& sessionStore.appPermissions.pollCreation
 			"
-			button-class="icon-add"
+			buttonClass="icon-add"
 			:text="t('polls', 'New poll')"
 			@click="createDlgToggle = !createDlgToggle" />
 		<PollCreateDlg
@@ -129,7 +124,7 @@ onMounted(() => {
 				:key="pollGroup.id"
 				:name="pollGroup.name"
 				:title="pollGroup.titleExt"
-				allow-collapse
+				allowCollapse
 				:to="{
 					name: 'group',
 					params: { slug: pollGroup.slug },
@@ -149,9 +144,9 @@ onMounted(() => {
 						v-for="poll in pollsStore.groupList(pollGroup.pollIds)"
 						:key="poll.id"
 						:poll="poll"
-						@toggle-archive="toggleArchive(poll.id)"
-						@clone-poll="clonePoll(poll.id)"
-						@delete-poll="deletePoll(poll.id)" />
+						@toggleArchive="toggleArchive(poll.id)"
+						@clonePoll="clonePoll(poll.id)"
+						@deletePoll="deletePoll(poll.id)" />
 					<NcAppNavigationItem
 						v-if="pollsStore.groupList(pollGroup.pollIds).length === 0"
 						:name="t('polls', 'No polls found for this category')" />
@@ -177,7 +172,7 @@ onMounted(() => {
 				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"
 				v-bind="pollCategory"
-				:allow-collapse="sessionStore.appSettings.navigationPollsInList"
+				:allowCollapse="sessionStore.appSettings.navigationPollsInList"
 				:to="{
 					name: 'list',
 					params: { type: pollCategory.id },
@@ -195,9 +190,9 @@ onMounted(() => {
 						v-for="poll in pollsStore.navigationList(pollCategory.id)"
 						:key="poll.id"
 						:poll="poll"
-						@toggle-archive="toggleArchive(poll.id)"
-						@clone-poll="clonePoll(poll.id)"
-						@delete-poll="deletePoll(poll.id)" />
+						@toggleArchive="toggleArchive(poll.id)"
+						@clonePoll="clonePoll(poll.id)"
+						@deletePoll="deletePoll(poll.id)" />
 					<NcAppNavigationItem
 						v-if="
 							pollsStore.navigationList(pollCategory.id).length === 0

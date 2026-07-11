@@ -4,21 +4,20 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { DateTime } from 'luxon'
-import { t } from '@nextcloud/l10n'
-
-import NcSelect from '@nextcloud/vue/components/NcSelect'
-import NcButton from '@nextcloud/vue/components/NcButton'
-
-import InputDiv from '../Base/modules/InputDiv.vue'
-
-import { useOptionsStore } from '@/stores/options'
-
-import { dateTimeUnitsKeyed } from '@/helpers/modules/dateHelpers'
 import type { Option, Sequence } from '@/stores/options.types'
 
+import { t } from '@nextcloud/l10n'
+import { DateTime } from 'luxon'
+import { computed, ref } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcSelect from '@nextcloud/vue/components/NcSelect'
+import InputDiv from '../Base/modules/InputDiv.vue'
+import { dateTimeUnitsKeyed } from '@/helpers/modules/dateHelpers'
+import { useOptionsStore } from '@/stores/options'
+
 const { option } = defineProps<{ option: Option }>()
+
+const emit = defineEmits(['close'])
 
 const optionsStore = useOptionsStore()
 
@@ -27,8 +26,6 @@ const dateTimeOptions = Object.entries(dateTimeUnitsKeyed).map(([key, value]) =>
 	name: value.name,
 }))
 
-const emit = defineEmits(['close'])
-
 const sequence = ref<Sequence>({
 	unit: dateTimeUnitsKeyed.week,
 	stepWidth: 1,
@@ -36,8 +33,7 @@ const sequence = ref<Sequence>({
 })
 
 const dateBaseOptionString = computed(() =>
-	option.getDateTime().toLocaleString(DateTime.DATETIME_FULL),
-)
+	option.getDateTime().toLocaleString(DateTime.DATETIME_FULL),)
 
 /**
  *
@@ -66,7 +62,7 @@ function createSequence() {
 
 		<NcSelect
 			v-model="sequence.unit"
-			:input-label="t('polls', 'Step unit')"
+			:inputLabel="t('polls', 'Step unit')"
 			:clearable="false"
 			:filterable="false"
 			:options="dateTimeOptions"
@@ -78,14 +74,14 @@ function createSequence() {
 				:label="t('polls', 'Step width')"
 				type="number"
 				inputmode="numeric"
-				use-num-modifiers />
+				useNumModifiers />
 
 			<InputDiv
 				v-model="sequence.repetitions"
 				:label="t('polls', 'Amount')"
 				type="number"
 				inputmode="numeric"
-				use-num-modifiers />
+				useNumModifiers />
 		</div>
 
 		<div class="modal__buttons">
@@ -95,7 +91,7 @@ function createSequence() {
 				</template>
 			</NcButton>
 
-			<NcButton :variant="'primary'" @click="createSequence()">
+			<NcButton variant="primary" @click="createSequence()">
 				<template #default>
 					{{ t('polls', 'OK') }}
 				</template>

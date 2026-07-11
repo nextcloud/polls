@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defaultUser } from '../Types'
-import type { User } from '../Types'
+import type { User } from '../Types/index.ts'
+
+import { defaultUser } from '../Types/index.ts'
 
 export type ShareType =
 	| 'email'

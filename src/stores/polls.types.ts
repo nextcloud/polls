@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Poll } from './poll.types'
-import { Chunking, StatusResults } from '../Types'
-import { Component } from 'vue'
+import type { Component } from 'vue'
+import type { Chunking, StatusResults } from '../Types/index.ts'
+import type { Poll } from './poll.types'
 
 export type SortType =
 	| 'created'

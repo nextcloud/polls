@@ -3,14 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { createApp } from 'vue'
-import { pinia } from './stores'
-import { Settings } from 'luxon'
 import { getLanguage } from '@nextcloud/l10n'
-
-import AdminSettingsPage from './views/AdminSettingsPage.vue'
+import { Settings } from 'luxon'
+import { createApp } from 'vue'
+import AdminSettingsView from './views/AdminSettingsView.vue'
+import { pinia } from './stores/index.ts'
 
 Settings.defaultLocale = getLanguage()
 
-const Polls = createApp(AdminSettingsPage).use(pinia)
+const Polls = createApp(AdminSettingsView).use(pinia)
 Polls.mount('#content_polls')

@@ -5,24 +5,24 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-import Spinner from '../../AppIcons/Spinner.vue'
 import { onMounted, ref, watch } from 'vue'
-
-const description = ref(t('polls', 'Please wait…'))
+import SpinnerIconAnimated from '../../AppIcons/SpinnerIconAnimated.vue'
 
 const {
-	show = false,
-	name = t('polls', 'Loading …'),
+	show,
+	name = t('polls', 'Loading …'),
 	loadingTexts = '',
 	teleportTo = '#content-vue',
 } = defineProps<{
 	show: boolean
-	name: string
+	name?: string
 	loadingTexts?: string | string[]
 	teleportTo?: string
 }>()
 
-const sequentialDescriptionOutput = () => {
+const description = ref(t('polls', 'Please wait…'))
+
+function sequentialDescriptionOutput() {
 	if (loadingTexts instanceof String) {
 		description.value = loadingTexts as string
 		return
@@ -76,7 +76,7 @@ onMounted(() => {
 	<Teleport :to="teleportTo">
 		<div v-show="show" class="loading-overlay">
 			<div class="loading-overlay__inner">
-				<Spinner class="loading-overlay__spinner" :size="70" />
+				<SpinnerIconAnimated class="loading-overlay__spinner" :size="70" />
 				<span class="loading-overlay__name">
 					{{ name }}
 				</span>

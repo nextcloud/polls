@@ -4,24 +4,18 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { t } from '@nextcloud/l10n'
-
-import NcButton from '@nextcloud/vue/components/NcButton'
-
-import SpeakerIcon from 'vue-material-design-icons/BullhornOutline.vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
-
-import InputDiv from '../Base/modules/InputDiv.vue'
-import RadioGroupDiv from '../Base/modules/RadioGroupDiv.vue'
-import ConfigBox from '../Base/modules/ConfigBox.vue'
-
-import { pollTypes, usePollStore } from '../../stores/poll'
-import { showError, showSuccess } from '@nextcloud/dialogs'
-
 import type { PollType } from '../../stores/poll.types'
 
-const pollStore = usePollStore()
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import { computed, ref } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import SpeakerIcon from 'vue-material-design-icons/BullhornOutline.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import ConfigBox from '../Base/modules/ConfigBox.vue'
+import InputDiv from '../Base/modules/InputDiv.vue'
+import RadioGroupDiv from '../Base/modules/RadioGroupDiv.vue'
+import { pollTypes, usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits<{
 	(e: 'close'): void
@@ -33,6 +27,8 @@ const emit = defineEmits<{
 		},
 	): void
 }>()
+
+const pollStore = usePollStore()
 
 const pollTitle = ref('')
 const pollType = ref<PollType>('datePoll')
@@ -100,7 +96,7 @@ function resetPoll() {
 				focus
 				type="text"
 				:placeholder="t('polls', 'Enter title')"
-				:helper-text="t('polls', 'Choose a meaningful title for your poll')"
+				:helperText="t('polls', 'Choose a meaningful title for your poll')"
 				@submit="addPoll" />
 		</ConfigBox>
 
@@ -119,7 +115,7 @@ function resetPoll() {
 			</NcButton>
 			<NcButton
 				:disabled="disableAddButton"
-				:variant="'primary'"
+				variant="primary"
 				@click="addPoll">
 				<template #default>
 					{{ t('polls', 'Add') }}

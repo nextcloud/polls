@@ -4,15 +4,18 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll'
+import type { ButtonVariant } from '@nextcloud/vue/components/NcButton';
 
+import { t } from '@nextcloud/l10n'
+import { computed, ref } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcDialog from '@nextcloud/vue/components/NcDialog'
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import { usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits(['change'])
+
+const pollStore = usePollStore()
 
 const showAnonDialog = ref(false)
 const anonDialog = {
@@ -66,7 +69,6 @@ function lockAnonymous() {
 	emit('change')
 }
 
-const pollStore = usePollStore()
 const disabledState = computed(
 	() =>
 		(pollStore.status.isAnonymous && !pollStore.permissions.deanonymize)
@@ -79,7 +81,7 @@ const disabledState = computed(
 		v-model="pollStore.configuration.anonymous"
 		type="switch"
 		:disabled="disabledState"
-		@update:model-value="
+		@update:modelValue="
 			spawnConfirmationDialog(!pollStore.permissions.deanonymize)
 		">
 		{{ t('polls', 'Anonymous poll') }}

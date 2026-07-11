@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import InputDiv from '../Base/modules/InputDiv.vue'
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits(['change'])
 
@@ -17,7 +17,7 @@ const checkTitle = computed(() => (pollStore.configuration.title ? '' : 'error')
 <template>
 	<InputDiv
 		v-model="pollStore.configuration.title"
-		:signaling-class="checkTitle"
+		:signalingClass="checkTitle"
 		type="text"
 		@change="emit('change')" />
 </template>

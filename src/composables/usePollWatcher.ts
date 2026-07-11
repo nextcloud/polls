@@ -3,30 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { watch, onBeforeUnmount, onMounted } from 'vue'
-import { usePollStore } from '../stores/poll'
-import { generateUrl } from '@nextcloud/router'
-
-// eslint-disable-next-line import/default
-import PollWatcherWorker from '../workers/pollWatcher.worker?worker'
-import { Logger } from '../helpers/modules/logger'
-
-import { useCommentsStore } from '../stores/comments'
-import { useOptionsStore } from '../stores/options'
-import { usePollsStore } from '../stores/polls'
-import { useSessionStore } from '../stores/session'
-import { useVotesStore } from '../stores/votes'
-import { useSharesStore } from '../stores/shares'
-
+import type { NotAllowed } from '../Exceptions/Exceptions.ts'
+import type { Watcher } from '../stores/session.types'
 import type {
+	WatcherData,
 	WatcherMode,
 	WatcherProps,
-	WatcherData,
 	WorkerResponse,
 } from './usePollWatcher.types'
 
-import type { Watcher } from '../stores/session.types'
-import { NotAllowed } from '../Exceptions/Exceptions'
+import { generateUrl } from '@nextcloud/router'
+import { onBeforeUnmount, onMounted, watch } from 'vue'
+import { Logger } from '../helpers/modules/logger.ts'
+import { useCommentsStore } from '../stores/comments.ts'
+import { useOptionsStore } from '../stores/options.ts'
+import { usePollStore } from '../stores/poll.ts'
+import { usePollsStore } from '../stores/polls.ts'
+import { useSessionStore } from '../stores/session.ts'
+import { useSharesStore } from '../stores/shares.ts'
+import { useVotesStore } from '../stores/votes.ts'
+import PollWatcherWorker from '../workers/pollWatcher.worker?worker'
 
 /**
  * poll watcher to keep polls collection and the current poll
@@ -35,7 +31,7 @@ import { NotAllowed } from '../Exceptions/Exceptions'
  *
  * @param interval - polling interval in milliseconds (default: 30000)
  */
-export const usePollWatcher = (interval = 30000) => {
+export function usePollWatcher(interval = 30000) {
 	const sessionStore = useSessionStore()
 	const pollStore = usePollStore()
 	const pollsStore = usePollsStore()
@@ -47,6 +43,101 @@ export const usePollWatcher = (interval = 30000) => {
 	const baseUrl = generateUrl('apps/polls/')
 
 	let worker: Worker | null = null
+
+	/**
+	 * Determines which store modules to update based on incoming WatcherResponse objects
+	 *
+	 * @param updates - list of update events from the server
+	 * @param currentPollId - current poll ID to distinguish between own and external changes
+	 * @return list of update types to apply
+	 */
+	const getTasksFromUpdates = (
+		updates: WatcherData[],
+		currentPollId: number,
+	): string[] => {
+		// Use a Set to prevent duplicates
+		const tasks = new Set<string>()
+
+		for (const update of updates) {
+			if (update.pollId === currentPollId) {
+				tasks.add(update.table)
+			} else if (update.table === 'polls') {
+				if (update.pollId === currentPollId) {
+					tasks.add('poll')
+				}
+				tasks.add('polls')
+			}
+		}
+
+		// Return the Set as array
+		return Array.from(tasks)
+	}
+
+	/**
+	 * Handles the actions based on the tsaks received from the worker
+	 *
+	 * @param tasks - list of tasks to handle
+	 */
+	const handleWatcherTasks = (tasks: string[]) => {
+		Logger.info('[PollWatcher] Tasks to handle:', { tasks })
+
+		tasks.forEach(async (task: string) => {
+			switch (task) {
+				case 'shares':
+					try {
+						await sharesStore.load()
+					} catch (error) {
+						if ((error as NotAllowed).name === 'NotAllowed') {
+							// User is not allowed to load shares.
+							// instead assume a changed share affecting the user.
+							// Reload the session context to update the share
+							try {
+								await sessionStore.loadSession()
+							} catch (loadError) {
+								Logger.error(
+									'[PollWatcher] Error reloading session after share change',
+									{ error: loadError },
+								)
+							}
+							return
+						}
+						Logger.error('Error loading poll shares', { error })
+					}
+					break
+				case 'polls':
+					try {
+						await pollsStore.load()
+					} catch (error) {
+						if ((error as NotAllowed).name === 'NotAllowed') {
+							return
+						}
+						Logger.error('Error loading polls list', { error })
+					}
+					break
+				case 'votes':
+					votesStore.load()
+					optionsStore.load()
+					break
+				case 'options':
+					optionsStore.load()
+					break
+				case 'comments':
+					commentsStore.load()
+					break
+			}
+		})
+	}
+
+	/**
+	 * Dispatches updates to the relevant store modules based on change type.
+	 *
+	 * @param updates - update information from the worker
+	 */
+	const handleWatcherUpdates = (updates: WatcherData[]) => {
+		const tasks = getTasksFromUpdates(updates, pollStore.id)
+		Logger.info('[PollWatcher] Updates received:', { updates })
+		handleWatcherTasks(tasks)
+	}
 
 	/**
 	 * Starts a new Web Worker that watches for updates
@@ -148,101 +239,6 @@ export const usePollWatcher = (interval = 30000) => {
 			}
 			Logger.info('[PollWatcher] Worker stopped.')
 		}
-	}
-
-	/**
-	 * Determines which store modules to update based on incoming WatcherResponse objects
-	 *
-	 * @param updates - list of update events from the server
-	 * @param currentPollId - current poll ID to distinguish between own and external changes
-	 * @return list of update types to apply
-	 */
-	const getTasksFromUpdates = (
-		updates: WatcherData[],
-		currentPollId: number,
-	): string[] => {
-		// Use a Set to prevent duplicates
-		const tasks = new Set<string>()
-
-		for (const update of updates) {
-			if (update.pollId === currentPollId) {
-				tasks.add(update.table)
-			} else if (update.table === 'polls') {
-				if (update.pollId === currentPollId) {
-					tasks.add('poll')
-				}
-				tasks.add('polls')
-			}
-		}
-
-		// Return the Set as array
-		return Array.from(tasks)
-	}
-
-	/**
-	 * Handles the actions based on the tsaks received from the worker
-	 *
-	 * @param tasks - list of tasks to handle
-	 */
-	const handleWatcherTasks = (tasks: string[]) => {
-		Logger.info('[PollWatcher] Tasks to handle:', { tasks })
-
-		tasks.forEach(async (task: string) => {
-			switch (task) {
-				case 'shares':
-					try {
-						await sharesStore.load()
-					} catch (error) {
-						if ((error as NotAllowed).name === 'NotAllowed') {
-							// User is not allowed to load shares.
-							// instead assume a changed share affecting the user.
-							// Reload the session context to update the share
-							try {
-								await sessionStore.loadSession()
-							} catch (loadError) {
-								Logger.error(
-									'[PollWatcher] Error reloading session after share change',
-									{ error: loadError },
-								)
-							}
-							return
-						}
-						Logger.error('Error loading poll shares', { error })
-					}
-					break
-				case 'polls':
-					try {
-						await pollsStore.load()
-					} catch (error) {
-						if ((error as NotAllowed).name === 'NotAllowed') {
-							return
-						}
-						Logger.error('Error loading polls list', { error })
-					}
-					break
-				case 'votes':
-					votesStore.load()
-					optionsStore.load()
-					break
-				case 'options':
-					optionsStore.load()
-					break
-				case 'comments':
-					commentsStore.load()
-					break
-			}
-		})
-	}
-
-	/**
-	 * Dispatches updates to the relevant store modules based on change type.
-	 *
-	 * @param updates - update information from the worker
-	 */
-	const handleWatcherUpdates = (updates: WatcherData[]) => {
-		const tasks = getTasksFromUpdates(updates, pollStore.id)
-		Logger.info('[PollWatcher] Updates received:', { updates })
-		handleWatcherTasks(tasks)
 	}
 
 	/**

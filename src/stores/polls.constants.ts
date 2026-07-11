@@ -4,23 +4,21 @@
  */
 // fallow-ignore-file circular-dependency
 
-import { DateTime } from 'luxon'
-import { t } from '@nextcloud/l10n'
-
-import AdministrationIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
-import RelevantIcon from 'vue-material-design-icons/ExclamationThick.vue'
-import MyPollsIcon from 'vue-material-design-icons/AccountOutline.vue'
-import PrivatePollsIcon from 'vue-material-design-icons/Key.vue'
-import ParticipatedIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
-import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
-import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
-import ClosedPollsIcon from 'vue-material-design-icons/LockOutline.vue'
-import ArchivedPollsIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-
-import { useSessionStore } from './session'
-
 import type { Poll } from './poll.types'
 import type { PollCategoryList, SortOption, SortType } from './polls.types'
+
+import { t } from '@nextcloud/l10n'
+import { DateTime } from 'luxon'
+import ParticipatedIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
+import MyPollsIcon from 'vue-material-design-icons/AccountOutline.vue'
+import ArchivedPollsIcon from 'vue-material-design-icons/ArchiveOutline.vue'
+import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
+import RelevantIcon from 'vue-material-design-icons/ExclamationThick.vue'
+import PrivatePollsIcon from 'vue-material-design-icons/Key.vue'
+import ClosedPollsIcon from 'vue-material-design-icons/LockOutline.vue'
+import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
+import AdministrationIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
+import { useSessionStore } from './session.ts'
 
 export const sortOption: { [key in SortType]: SortOption } = {
 	created: {

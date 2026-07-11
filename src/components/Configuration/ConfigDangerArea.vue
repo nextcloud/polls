@@ -4,21 +4,18 @@
 -->
 
 <script setup lang="ts">
+import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-
-import { t } from '@nextcloud/l10n'
-import { showError } from '@nextcloud/dialogs'
 import NcButton from '@nextcloud/vue/components/NcButton'
-
-import { usePollStore } from '../../stores/poll'
-
-import DeletePollDialog from '../Modals/DeletePollDialog.vue'
-import RestorePollIcon from 'vue-material-design-icons/RecycleVariant.vue'
-import ArchivePollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
-import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue'
+import ArchivePollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
+import RestorePollIcon from 'vue-material-design-icons/RecycleVariant.vue'
+import DeletePollIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import DeletePollDialog from '../Modals/DeletePollDialog.vue'
 import TransferPollDialog from '../Modals/TransferPollDialog.vue'
+import { usePollStore } from '../../stores/poll.ts'
 
 const router = useRouter()
 const pollStore = usePollStore()
@@ -63,7 +60,7 @@ function routeAway() {
 			</template>
 		</NcButton>
 
-		<NcButton :variant="'error'" @click="showDeleteDialog = true">
+		<NcButton variant="error" @click="showDeleteDialog = true">
 			<template #icon>
 				<DeletePollIcon />
 			</template>
@@ -88,7 +85,7 @@ function routeAway() {
 	<TransferPollDialog
 		v-model="showTransferDialog"
 		:poll="pollStore"
-		@access-denied="routeAway"
+		@accessDenied="routeAway"
 		@close="showTransferDialog = false" />
 </template>
 

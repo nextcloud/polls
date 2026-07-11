@@ -5,10 +5,8 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-
 import NcButton from '@nextcloud/vue/components/NcButton'
-
-import { useVotesStore } from '../../../stores/votes'
+import { useVotesStore } from '../../../stores/votes.ts'
 
 const votesStore = useVotesStore()
 const caption = t('polls', 'Delete orphaned')
@@ -17,7 +15,7 @@ const caption = t('polls', 'Delete orphaned')
 <template>
 	<div class="action toggle-sidebar">
 		<NcButton
-			:variant="'primary'"
+			variant="primary"
 			:aria-label="caption"
 			@click="votesStore.removeOrphanedVotes()">
 			{{ caption }}

@@ -4,13 +4,11 @@
 -->
 
 <script setup lang="ts">
+import { t } from '@nextcloud/l10n'
 import { onMounted } from 'vue'
 import { onBeforeRouteUpdate } from 'vue-router'
-
-import { useSharesStore } from '../../stores/shares'
-
 import SharesList from '../Shares/SharesListPollGroup.vue'
-import { t } from '@nextcloud/l10n'
+import { useSharesStore } from '../../stores/shares.ts'
 
 const sharesStore = useSharesStore()
 const infoText = t(

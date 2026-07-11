@@ -4,31 +4,26 @@
 -->
 
 <script setup lang="ts">
+import { showSuccess } from '@nextcloud/dialogs'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import debounce from 'lodash/debounce'
 import {
-	ref,
 	computed,
 	defineAsyncComponent,
 	onMounted,
 	onUnmounted,
+	ref,
 	watch,
 } from 'vue'
 import { useRoute } from 'vue-router'
-import debounce from 'lodash/debounce'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { t } from '@nextcloud/l10n'
-
-import NcContent from '@nextcloud/vue/components/NcContent'
-
 // import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
-
+import NcContent from '@nextcloud/vue/components/NcContent'
 import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
-import { usePollWatcher } from './composables/usePollWatcher'
-
-import { useSessionStore } from './stores/session'
-import { usePollStore } from './stores/poll'
-import { usePollGroupsStore } from './stores/pollGroups'
-import { showSuccess } from '@nextcloud/dialogs'
-import { Event } from './Types'
+import { usePollWatcher } from './composables/usePollWatcher.ts'
+import { usePollStore } from './stores/poll.ts'
+import { usePollGroupsStore } from './stores/pollGroups.ts'
+import { useSessionStore } from './stores/session.ts'
+import { Event } from './Types/index.ts'
 
 import '@nextcloud/dialogs/style.css'
 import './assets/scss/vars.scss'
@@ -129,15 +124,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<NcContent app-name="polls" :class="appClass">
+	<NcContent appName="polls" :class="appClass">
 		<router-view v-if="useNavigation" name="navigation" />
 		<router-view />
 		<router-view v-if="useSidebar" name="sidebar" />
 		<UserSettingsDlg />
 		<LoadingOverlay
 			:show="sessionStore.navigationStatus === 'loading'"
-			:name="t('polls', 'Loading…')"
-			teleport-to="#content" />
+			teleportTo="#content" />
 	</NcContent>
 </template>
 

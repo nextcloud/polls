@@ -4,30 +4,27 @@
 -->
 
 <script setup lang="ts">
+import type { Poll } from '../../stores/poll.types'
+
+import { t } from '@nextcloud/l10n'
+import { DateTime } from 'luxon'
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
-import { DateTime } from 'luxon'
-import { t } from '@nextcloud/l10n'
-
+import ParticipatedIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
+import ParticipantsIcon from 'vue-material-design-icons/AccountMultipleCheckOutline.vue'
+import ArchivedPollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
 // Icons
 import ExpirationIcon from 'vue-material-design-icons/CalendarEndOutline.vue'
-import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
-import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
 import ActivityIcon from 'vue-material-design-icons/ChartTimelineVariantShimmer.vue'
-import ArchivedPollIcon from 'vue-material-design-icons/ArchiveOutline.vue'
+import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
+import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
 import ClosedPollsIcon from 'vue-material-design-icons/LockOutline.vue'
 import LockPollIcon from 'vue-material-design-icons/Security.vue'
-import ParticipantsIcon from 'vue-material-design-icons/AccountMultipleCheckOutline.vue'
-import ParticipatedIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
 import AdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
-import UserBubble from '../User/UserBubble.vue'
-
 import BadgeSmallDiv from '../Base/modules/BadgeSmallDiv.vue'
-
-import { usePollStore, pollTypes } from '../../stores/poll'
-import { usePreferencesStore } from '../../stores/preferences'
-
-import type { Poll } from '../../stores/poll.types'
+import UserBubble from '../User/UserBubble.vue'
+import { pollTypes, usePollStore } from '../../stores/poll.ts'
+import { usePreferencesStore } from '../../stores/preferences.ts'
 
 interface Props {
 	poll: Poll
@@ -40,32 +37,27 @@ const pollStore = usePollStore()
 const preferencesStore = usePreferencesStore()
 
 const expirationDateTime = computed(() =>
-	DateTime.fromMillis(poll.configuration.expire * 1000),
-)
+	DateTime.fromMillis(poll.configuration.expire * 1000),)
 
 const expirationTitle = computed(() =>
 	t('polls', poll.status.isExpired ? 'Expired {dateTime}' : 'Expires {dateTime}', {
 		dateTime: DateTime.fromMillis(
 			poll.configuration.expire * 1000,
 		).toLocaleString(DateTime.DATETIME_SHORT) as string,
-	}),
-)
+	}),)
 
 const lastInteractionDateTime = computed(() =>
-	DateTime.fromMillis(poll.status.lastInteraction * 1000),
-)
+	DateTime.fromMillis(poll.status.lastInteraction * 1000),)
 
 const lastInteractionTitle = computed(() =>
 	t('polls', 'Last activity {dateTime}', {
 		dateTime: DateTime.fromMillis(
 			poll.status.lastInteraction * 1000,
 		).toLocaleString(DateTime.DATETIME_SHORT) as string,
-	}),
-)
+	}),)
 
 const archiveDateTime = computed(() =>
-	DateTime.fromMillis(poll.status.archivedDate * 1000),
-)
+	DateTime.fromMillis(poll.status.archivedDate * 1000),)
 
 const closeToClosing = computed(
 	() =>

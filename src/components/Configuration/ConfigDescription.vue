@@ -6,11 +6,12 @@
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-import { usePollStore } from '../../stores/poll'
+import { usePollStore } from '../../stores/poll.ts'
+
+const emit = defineEmits(['change'])
 
 const pollStore = usePollStore()
 
-const emit = defineEmits(['change'])
 </script>
 
 <template>
@@ -21,7 +22,7 @@ const emit = defineEmits(['change'])
 	<NcCheckboxRadioSwitch
 		v-model="pollStore.configuration.collapseDescription"
 		type="switch"
-		@update:model-value="emit('change')">
+		@update:modelValue="emit('change')">
 		{{ t('polls', 'Collapse long descriptions') }}
 	</NcCheckboxRadioSwitch>
 </template>

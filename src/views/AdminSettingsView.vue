@@ -4,13 +4,10 @@
 -->
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { t } from '@nextcloud/l10n'
-
+import { onMounted } from 'vue'
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
-
 import FlexSettings from '../components/Base/modules/FlexSettings.vue'
-
 import AdminActivities from '../components/Settings/AdminSettings/AdminActivities.vue'
 import AdminArchivePolls from '../components/Settings/AdminSettings/AdminArchivePolls.vue'
 import AdminCombo from '../components/Settings/AdminSettings/AdminCombo.vue'
@@ -27,8 +24,8 @@ import AdminSharePublicCreate from '../components/Settings/AdminSettings/AdminSh
 import AdminSharePublicShowLogin from '../components/Settings/AdminSettings/AdminSharePublicShowLogin.vue'
 import AdminShowMailAddresses from '../components/Settings/AdminSettings/AdminShowMailAddresses.vue'
 import AdminUnrescrictedOwners from '../components/Settings/AdminSettings/AdminUnrescrictedOwners.vue'
+import { useAppSettingsStore } from '../stores/appSettings.ts'
 
-import { useAppSettingsStore } from '../stores/appSettings'
 import '../assets/scss/markdown.scss'
 import '../assets/scss/vars.scss'
 

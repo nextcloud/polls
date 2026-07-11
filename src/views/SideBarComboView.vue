@@ -6,13 +6,11 @@
 <script setup lang="ts">
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
-
 import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
 import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
-
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 import SideBarTabDatePolls from '../components/SideBar/SideBarTabDatePolls.vue'
-import { Event } from '../Types'
+import { Event } from '../Types/index.ts'
 
 /**
  *
@@ -26,7 +24,7 @@ function closeSideBar() {
 	<NcAppSidebar
 		:name="t('polls', 'Select polls to combine')"
 		@close="closeSideBar()">
-		<NcAppSidebarTab :id="'polls'" :order="1" :name="t('polls', 'Polls')">
+		<NcAppSidebarTab id="polls" :order="1" :name="t('polls', 'Polls')">
 			<template #icon>
 				<PollsAppIcon />
 			</template>

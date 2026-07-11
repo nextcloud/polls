@@ -4,19 +4,18 @@
 -->
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import type { Confirmations } from '../../../Api/modules/polls.ts'
+
+import { n, t } from '@nextcloud/l10n'
 import { ref } from 'vue'
-import { t, n } from '@nextcloud/l10n'
-
-import NcModal from '../../Base/modules/CustomNcModal.vue'
+import { useRoute } from 'vue-router'
 import NcButton from '@nextcloud/vue/components/NcButton'
-
 import EmailCheckIcon from 'vue-material-design-icons/EmailCheckOutline.vue' // view-comfy-outline
+import NcModal from '../../Base/modules/CustomNcModal.vue'
+import { PollsAPI } from '../../../Api/index.ts'
+import { Logger } from '../../../helpers/modules/logger.ts'
 
-import { PollsAPI } from '../../../Api'
-import { Logger } from '../../../helpers/modules/logger'
-import { Confirmations } from '../../../Api/modules/polls'
-
+const emit = defineEmits(['success', 'error'])
 const route = useRoute()
 const showModal = ref(false)
 const sendButtonCaption = ref(t('polls', 'Send confirmation mails'))
@@ -29,8 +28,6 @@ const confirmations = ref<Confirmations>({
 })
 const disableButton = ref(false)
 const sentStatus = ref('')
-const emit = defineEmits(['success', 'error'])
-
 /**
  *
  */
@@ -63,7 +60,7 @@ async function clickAction() {
 <template>
 	<div class="action send-confirmations">
 		<NcButton
-			:variant="'primary'"
+			variant="primary"
 			:aria-label="sendButtonCaption"
 			:disabled="disableButton"
 			@click="clickAction()">
@@ -75,7 +72,7 @@ async function clickAction() {
 
 		<NcModal
 			v-model:show="showModal"
-			close-on-click-outside
+			closeOnClickOutside
 			:name="t('polls', 'Result of sent confirmation mails')"
 			size="small">
 			<div class="modal-confirmation-result">

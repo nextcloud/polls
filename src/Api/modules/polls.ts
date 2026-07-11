@@ -1,13 +1,13 @@
+import type { AxiosResponse } from '@nextcloud/axios'
+import type { Poll, PollConfiguration, PollMandatory } from '../../stores/poll.types'
+import type { PollGroup } from '../../stores/pollGroups.types'
+import type { ApiEmailAdressList, FullPollResponse } from './api.types'
+
 /**
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { httpInstance, createCancelTokenHandler } from './HttpApi'
-
-import type { AxiosResponse } from '@nextcloud/axios'
-import type { ApiEmailAdressList, FullPollResponse } from './api.types'
-import type { PollGroup } from '../../stores/pollGroups.types'
-import type { Poll, PollConfiguration, PollMandatory } from '../../stores/poll.types'
+import { createCancelTokenHandler, httpInstance } from './HttpApi.js'
 
 export type Confirmations = {
 	sentMails: { emailAddress: string; displayName: string }[]
@@ -15,6 +15,9 @@ export type Confirmations = {
 	countSentMails: number
 	countAbortedMails: number
 }
+
+// eslint-disable-next-line prefer-const -- assigned below, after `polls` is fully defined
+let cancelTokenHandlerObject: ReturnType<typeof createCancelTokenHandler>
 
 const polls = {
 	getPolls(): Promise<
@@ -223,6 +226,6 @@ const polls = {
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(polls)
+cancelTokenHandlerObject = createCancelTokenHandler(polls)
 
 export default polls

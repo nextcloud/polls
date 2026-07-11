@@ -4,30 +4,26 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
-import linkifyStr from 'linkify-string'
-import { DateTime } from 'luxon'
-import { t } from '@nextcloud/l10n'
-import { showError } from '@nextcloud/dialogs'
-
-import ActionDelete from '../Actions/modules/ActionDelete.vue'
-import UserItem from '../User/UserItem.vue'
-import UserBubble from '../User/UserBubble.vue'
-
-import { useSessionStore } from '../../stores/session'
-import { usePollStore } from '../../stores/poll'
-import { useCommentsStore } from '../../stores/comments'
-import { usePreferencesStore } from '../../stores/preferences'
-
 import type { Comment, CommentsGrouped } from '../../stores/comments.types'
 
+import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import linkifyStr from 'linkify-string'
+import { DateTime } from 'luxon'
+import { computed } from 'vue'
+import ActionDelete from '../Actions/modules/ActionDelete.vue'
+import UserBubble from '../User/UserBubble.vue'
+import UserItem from '../User/UserItem.vue'
+import { useCommentsStore } from '../../stores/comments.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { usePreferencesStore } from '../../stores/preferences.ts'
+import { useSessionStore } from '../../stores/session.ts'
+
+const { comment } = defineProps<{ comment: CommentsGrouped }>()
 const sessionStore = useSessionStore()
 const pollStore = usePollStore()
 const commentsStore = useCommentsStore()
 const preferencesStore = usePreferencesStore()
-
-const { comment } = defineProps<{ comment: CommentsGrouped }>()
 
 const commentedDateTime = computed(() => DateTime.fromSeconds(comment.timestamp))
 
@@ -86,11 +82,11 @@ const deletable = computed(
 </script>
 
 <template>
-	<div :class="['comment-item', { 'current-user': isCurrentUser }, deletable]">
+	<div class="comment-item" :class="[{ 'current-user': isCurrentUser }, deletable]">
 		<UserItem
 			v-if="!preferencesStore.user.useCommentsAlternativeStyling"
 			:user="comment.user"
-			hide-names />
+			hideNames />
 
 		<div class="comment-item__content">
 			<span
@@ -114,8 +110,7 @@ const deletable = computed(
 			<div
 				v-for="subComment in comment.comments"
 				:key="subComment.id"
-				:class="[
-					'comment-item__sub-comment',
+				class="comment-item__sub-comment" :class="[
 					{ deletable },
 					{ deleted: subComment.deleted },
 				]">

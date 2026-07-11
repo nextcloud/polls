@@ -4,16 +4,14 @@
 -->
 
 <script setup>
-import { computed, ref } from 'vue'
+import { t } from '@nextcloud/l10n'
+import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
-import DOMPurify from 'dompurify'
-import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdownOutline.vue'
-import { t } from '@nextcloud/l10n'
-
+import { computed, ref } from 'vue'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-
-import { useAppSettingsStore } from '../../../stores/appSettings'
+import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdownOutline.vue'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 const appSettingsStore = useAppSettingsStore()
 
@@ -33,7 +31,7 @@ const markedDisclaimer = computed(() => {
 		<NcCheckboxRadioSwitch
 			v-model="appSettingsStore.legalTermsInEmail"
 			type="switch"
-			@update:model-value="appSettingsStore.write()">
+			@update:modelValue="appSettingsStore.write()">
 			{{ t('polls', 'Add terms links also to the email footer') }}
 		</NcCheckboxRadioSwitch>
 

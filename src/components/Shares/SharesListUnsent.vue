@@ -4,19 +4,16 @@
 -->
 
 <script setup lang="ts">
-import { showSuccess, showError } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-
 import NcButton from '@nextcloud/vue/components/NcButton'
-
 import EmailAlertIcon from 'vue-material-design-icons/EmailAlertOutline.vue'
-import ShareItem from './ShareItem.vue'
 import BulkMailIcon from 'vue-material-design-icons/EmailMultipleOutline.vue'
-
 import ConfigBox from '../Base/modules/ConfigBox.vue'
-import { Logger } from '../../helpers/modules/logger'
-import { usePollStore } from '../../stores/poll'
-import { useSharesStore } from '../../stores/shares'
+import ShareItem from './ShareItem.vue'
+import { Logger } from '../../helpers/modules/logger.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSharesStore } from '../../stores/shares.ts'
 
 const pollStore = usePollStore()
 const sharesStore = useSharesStore()
@@ -67,7 +64,7 @@ async function sendAllInvitations() {
 			<NcButton
 				:title="t('polls', 'Resolve and send all invitations')"
 				:aria-label="t('polls', 'Resolve and send all invitations')"
-				:variant="'tertiary'"
+				variant="tertiary"
 				@click="sendAllInvitations()">
 				<template #icon>
 					<BulkMailIcon />

@@ -4,25 +4,21 @@
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { t } from '@nextcloud/l10n'
-import orderBy from 'lodash/orderBy'
-
-import NcPopover from '@nextcloud/vue/components/NcPopover'
-import NcButton from '@nextcloud/vue/components/NcButton'
-
-import CalendarIcon from 'vue-material-design-icons/CalendarOutline.vue'
-
-import CalendarInfo from './CalendarInfo.vue'
-import { CalendarAPI } from '../../Api'
-import { Logger } from '../../helpers/modules/logger'
-
-import { usePollStore } from '../../stores/poll'
-
 import type { AxiosError } from '@nextcloud/axios'
 import type { Option } from '../../stores/options.types'
-import { getDatesFromOption } from '@/composables/optionDateTime'
 import type { CalendarEvent } from './calendar.types'
+
+import { t } from '@nextcloud/l10n'
+import orderBy from 'lodash/orderBy'
+import { computed, onMounted, ref } from 'vue'
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcPopover from '@nextcloud/vue/components/NcPopover'
+import CalendarIcon from 'vue-material-design-icons/CalendarOutline.vue'
+import CalendarInfo from './CalendarInfo.vue'
+import { CalendarAPI } from '../../Api/index.ts'
+import { Logger } from '../../helpers/modules/logger.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { getDatesFromOption } from '@/composables/optionDateTime'
 
 const { option } = defineProps<{ option: Option }>()
 
@@ -31,31 +27,29 @@ const events = ref<CalendarEvent[]>([])
 const pollStore = usePollStore()
 const optionDates = getDatesFromOption(option)
 
+const currentEvent = computed((): CalendarEvent => ({
+	id: option.id,
+	UID: option.id,
+	calendarUri: '',
+	calendarKey: 0,
+	calendarName: 'Polls',
+	displayColor: 'transparent',
+	allDay: optionDates.isFullDays,
+	description: pollStore.configuration.description,
+	start: optionDates.optionStart.toSeconds(),
+	location: '',
+	end: optionDates.optionEnd.toSeconds(),
+	status: 'self',
+	summary: pollStore.configuration.title,
+	type: optionDates.isFullDays ? 'date' : 'dateTime',
+	busy: false,
+}))
+
 const sortedEvents = computed(() => {
 	const sortedEvents = [...events.value]
 	sortedEvents.push(currentEvent.value)
 	return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
 })
-
-const currentEvent = computed(
-	(): CalendarEvent => ({
-		id: option.id,
-		UID: option.id,
-		calendarUri: '',
-		calendarKey: 0,
-		calendarName: 'Polls',
-		displayColor: 'transparent',
-		allDay: optionDates.isFullDays,
-		description: pollStore.configuration.description,
-		start: optionDates.optionStart.toSeconds(),
-		location: '',
-		end: optionDates.optionEnd.toSeconds(),
-		status: 'self',
-		summary: pollStore.configuration.title,
-		type: optionDates.isFullDays ? 'date' : 'dateTime',
-		busy: false,
-	}),
-)
 
 onMounted(async () => {
 	try {
@@ -71,11 +65,7 @@ onMounted(async () => {
 </script>
 
 <template>
-	<NcPopover
-		v-if="events.length"
-		v-bind="$attrs"
-		class="calendar-peek"
-		close-on-click-outside>
+	<NcPopover v-if="events.length" v-bind="$attrs" class="calendar-peek">
 		<template #trigger>
 			<NcButton variant="tertiary-no-background">
 				<template #icon>
@@ -89,7 +79,7 @@ onMounted(async () => {
 			<CalendarInfo
 				v-for="eventItem in sortedEvents"
 				:key="eventItem.UID"
-				:calendar-event="eventItem"
+				:calendarEvent="eventItem"
 				:option="option" />
 		</div>
 	</NcPopover>
