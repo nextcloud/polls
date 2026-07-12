@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Group" : "Stollad",
     "User" : "Implijer",
-    "Loading…" : "O kargañ...",
     "Delete" : "Dilemel",
     "Unknown error" : "Fazi dizanv",
     "Previous day" : "Deizioù kent",
@@ -31,9 +30,9 @@ OC.L10N.register(
     "Configuration" : "Stumm",
     "Change name" : "Cheñch env",
     "Public link" : "Liamm publik",
-    "Comments" : "Displegadennoù",
     "Details" : "Munudoù",
     "Sharing" : "Rannan",
+    "Comments" : "Displegadennoù",
     "Activity" : "Obererezh",
     "Day" : "Deiz",
     "Week" : "Sizun",
