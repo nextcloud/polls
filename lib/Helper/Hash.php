@@ -54,10 +54,10 @@ abstract class Hash {
 	 * This is used to create a unique identifier for users.
 	 *
 	 * @param string $userId
+	 * @param string $salt
 	 * @return string
 	 */
-	public static function getUserIdHash(string $userId): string {
-		// TODO: add a session salt
-		return hash('md5', $userId);
+	public static function getUserIdHash(string $userId, string $salt): string {
+		return hash('md5', $userId . $salt);
 	}
 }
