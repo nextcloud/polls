@@ -24,6 +24,7 @@ use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\User\User;
 use OCA\Polls\UserSession;
 use OCP\Collaboration\Collaborators\ISearch;
+use OCP\IConfig;
 use OCP\IDateTimeZone;
 use OCP\IGroupManager;
 use OCP\IL10N;
@@ -61,6 +62,7 @@ class UserBase implements JsonSerializable {
 	protected IL10N $l10n;
 	protected UserSession $userSession;
 	protected AppSettings $appSettings;
+	protected IConfig $config;
 
 	public function __construct(
 		protected string $id,
@@ -77,6 +79,7 @@ class UserBase implements JsonSerializable {
 		$this->timeZone = Server::get(IDateTimeZone::class);
 		$this->userSession = Server::get(UserSession::class);
 		$this->appSettings = Server::get(AppSettings::class);
+		$this->config = Server::get(IConfig::class);
 	}
 
 	public function getId(): string {
@@ -102,8 +105,10 @@ class UserBase implements JsonSerializable {
 	 * hash the real userId to obfuscate the real userId
 	 */
 	public function getHashedUserId(): string {
-		// TODO: add a session salt
-		return hash('md5', $this->getId());
+		$instanceId = $this->config->getSystemValue('instanceid');
+		$instanceSecret = $this->config->getSystemValue('secret');
+		$salt = hash('md5', $instanceId . $instanceSecret);
+		return hash('md5', $this->getId() . $salt);
 	}
 
 	/**
