@@ -11,7 +11,6 @@ namespace OCA\Polls\Model\User;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
-use OCP\IConfig;
 use OCP\IUser;
 use OCP\IUserManager;
 
@@ -21,7 +20,6 @@ class User extends UserBase {
 	/** @var string */
 	public const PRINCIPAL_PREFIX = 'principals/users/';
 
-	private IConfig $config;
 	private IUser $user;
 
 	public function __construct(
@@ -38,7 +36,6 @@ class User extends UserBase {
 	 * setUp
 	 */
 	private function setUp(): void {
-		$this->config = Container::queryClass(IConfig::class);
 		$this->user = Container::queryClass(IUserManager::class)->get($this->id);
 		// $this->appSettings = Container::queryClass(AppSettings::class);
 		$this->displayName = $this->user->getDisplayName();

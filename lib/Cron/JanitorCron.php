@@ -29,6 +29,9 @@ use Psr\Log\LoggerInterface;
  */
 #[ManuallyRunnableCronJob]
 class JanitorCron extends TimedJob {
+	// undo window for virtually deleted entries before they get purged (12 hours)
+	private const UNDO_WINDOW_SECONDS = 43200;
+
 	// private AppSettings $appSettings;
 
 	public function __construct(
@@ -70,11 +73,12 @@ class JanitorCron extends TimedJob {
 			// first make sure all options and votes have a correct hash
 			$this->tableManager->updateHashes();
 
-			// purge entries virtually deleted more than 12 hours ago
+			// purge entries virtually deleted before the undo window started
+			$purgeBefore = time() - self::UNDO_WINDOW_SECONDS;
 			$deleted = [];
-			$deleted['comments'] = $this->commentMapper->purgeDeletedComments(time() - 4320);
-			$deleted['options'] = $this->optionMapper->purgeDeletedOptions(time() - 4320);
-			$deleted['shares'] = $this->shareMapper->purgeDeletedShares(time() - 4320);
+			$deleted['comments'] = $this->commentMapper->purgeDeletedComments($purgeBefore);
+			$deleted['options'] = $this->optionMapper->purgeDeletedOptions($purgeBefore);
+			$deleted['shares'] = $this->shareMapper->purgeDeletedShares($purgeBefore);
 
 			// purge orphaned votes; Votes without any corresponding option
 			$deleted['orphaned votes'] = $this->voteMapper->removeOrphanedVotes();
