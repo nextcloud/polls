@@ -25,6 +25,7 @@ use OCA\Polls\Model\User\User;
 use OCA\Polls\UserSession;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\IDateTimeZone;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\Share\IShare;
