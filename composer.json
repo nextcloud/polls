@@ -65,6 +65,6 @@
 	},
 	"require": {
 		"league/commonmark": "^2.1",
-		"rlanvin/php-rrule": "^2.3"
+		"rlanvin/php-rrule": "^3.0"
 	}
 }
