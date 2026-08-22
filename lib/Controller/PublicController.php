@@ -309,6 +309,7 @@ class PublicController extends BaseController {
 	/**
 	 * Write a new comment to the db and returns the new comment as array
 	 * @param string $message Comment text to add
+	 * @param bool $confidential Whether the comment is only visible to the poll owner and the author
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
