@@ -6,7 +6,7 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\Polls\Migration\V10;
+namespace OCA\Polls\Migration\V11;
 
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\Log;

@@ -10,10 +10,10 @@ namespace OCA\Polls\Command\Db;
 
 use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Command\Command;
-use OCA\Polls\Db\V10\IndexManager;
-use OCA\Polls\Db\V10\TableManager;
+use OCA\Polls\Db\V11\IndexManager;
+use OCA\Polls\Db\V11\TableManager;
 use OCA\Polls\Db\Watch;
-use OCA\Polls\Migration\V10\TableSchema;
+use OCA\Polls\Migration\V11\TableSchema;
 use OCP\IDBConnection;
 
 /**

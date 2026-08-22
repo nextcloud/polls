@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Migration\RepairSteps;
 
-use OCA\Polls\Db\V10\IndexManager;
+use OCA\Polls\Db\V11\IndexManager;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
