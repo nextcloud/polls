@@ -47,6 +47,7 @@ class CleanTables implements IRepairStep {
 				$this->tableManager->tidyWatchTable(time());
 			} catch (Exception $e) {
 				// Simply skip repair, if it breaks and rely on the next run
+				$output->warning('Polls - CleanTables repair step failed: ' . $e->getMessage());
 			}
 		}
 	}
