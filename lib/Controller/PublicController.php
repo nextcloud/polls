@@ -314,9 +314,9 @@ class PublicController extends BaseController {
 	#[ShareTokenRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/comment')]
-	public function addComment(string $message): JSONResponse {
+	public function addComment(string $message, ?bool $confidential = false): JSONResponse {
 		return $this->response(fn () => [
-			'comment' => $this->commentService->add($message, $this->userSession->getShare()->getPollIdOrFail())
+			'comment' => $this->commentService->add($message, $this->userSession->getShare()->getPollIdOrFail(), $confidential)
 		]);
 	}
 
