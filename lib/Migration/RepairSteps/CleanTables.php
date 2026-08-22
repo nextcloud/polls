@@ -41,6 +41,8 @@ class CleanTables implements IRepairStep {
 				$this->tableManager->migratePublicToOpen();
 				$this->tableManager->migrateShareLabels();
 				$this->tableManager->removeOrphaned();
+				$this->tableManager->fixNullishShares();
+				$this->tableManager->fixNullishPollGroupRelations();
 				$this->tableManager->deleteAllDuplicates();
 				$this->tableManager->tidyWatchTable(time());
 			} catch (Exception $e) {
