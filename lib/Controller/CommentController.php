@@ -42,6 +42,7 @@ class CommentController extends BaseController {
 	 * Write a new comment to the db and returns the new comment as array
 	 * @param int $pollId Poll id
 	 * @param string $message Comment text to add
+	 * @param bool $confidential Whether the comment is only visible to the poll owner and the author
 	 */
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/comment')]

@@ -49,14 +49,15 @@ class CommentApiController extends BaseApiV2OCSController {
 	 * 200: Comment added
 	 * @param int $pollId Poll id
 	 * @param string $comment Comment text to add
+	 * @param bool $confidential Whether the comment is only visible to the poll owner and the author
 	 * @return DataResponse<Http::STATUS_OK, array{comment: PollsComment}, array{}>
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/comment')]
-	public function add(int $pollId, string $comment): DataResponse {
-		return $this->response(fn () => ['comment' => $this->commentService->add($comment, $pollId)->jsonSerialize()]);
+	public function add(int $pollId, string $comment, bool $confidential = false): DataResponse {
+		return $this->response(fn () => ['comment' => $this->commentService->add($comment, $pollId, $confidential)->jsonSerialize()]);
 	}
 
 	/**

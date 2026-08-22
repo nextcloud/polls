@@ -5,6 +5,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ## [Unreleased]
+### Fixed
+ - Public users could not add confidential comments
+
 ### Added
  - OpenAPI spec
 
