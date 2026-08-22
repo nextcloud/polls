@@ -421,10 +421,20 @@ class TableManager extends DbManager {
 				return 0;
 			}
 
+			// NULL-safe comparison: two NULLs count as equal, since a UNIQUE index
+			// never catches "duplicate" NULLs on its own
+			$columnsMatch = $qb->expr()->orX(
+				$qb->expr()->eq('t1.' . $column, 't2.' . $column),
+				$qb->expr()->andX(
+					$qb->expr()->isNull('t1.' . $column),
+					$qb->expr()->isNull('t2.' . $column)
+				)
+			);
+
 			if ($i > 0) {
-				$selection->andWhere($qb->expr()->eq('t1.' . $column, 't2.' . $column));
+				$selection->andWhere($columnsMatch);
 			} else {
-				$selection->where($qb->expr()->eq('t1.' . $column, 't2.' . $column));
+				$selection->where($columnsMatch);
 			}
 			$i++;
 		}
