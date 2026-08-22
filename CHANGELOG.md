@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 ### Added
  - OpenAPI spec
 
+### Fixed
+ - Fixed some code inconsitencies regarding nullish groupIds and pollIds.
+ - Added share repair fix to repair steps after updates.
+
 ### Changes
  - Added salt to user name obfuscation
  - Support Nextcloud 31
