@@ -55,8 +55,8 @@ class CommentApiController extends BaseApiV2OCSController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/comment')]
-	public function add(int $pollId, string $comment): DataResponse {
-		return $this->response(fn () => ['comment' => $this->commentService->add($comment, $pollId)->jsonSerialize()]);
+	public function add(int $pollId, string $comment, ?bool $confidential = false): DataResponse {
+		return $this->response(fn () => ['comment' => $this->commentService->add($comment, $pollId, $confidential)->jsonSerialize()]);
 	}
 
 	/**
