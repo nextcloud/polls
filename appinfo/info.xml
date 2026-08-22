@@ -24,8 +24,8 @@
   <screenshot>https://raw.githubusercontent.com/nextcloud/polls/main/screenshots/edit-poll.png</screenshot>
   <donation>https://buymeacoffee.com/dartcafe</donation>
   <dependencies>
-    <php min-version="8.1"/>
-    <nextcloud min-version="31" max-version="34"/>
+    <php min-version="8.2"/>
+    <nextcloud min-version="33" max-version="35"/>
   </dependencies>
   <background-jobs>
     <job>OCA\Polls\Cron\NotificationCron</job>
