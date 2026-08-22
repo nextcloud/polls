@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace OCA\Polls\Migration;
 
 use OCA\Polls\Db\Share;
-use OCA\Polls\Db\V10\IndexManager;
-use OCA\Polls\Db\V10\TableManager;
+use OCA\Polls\Db\V11\IndexManager;
+use OCA\Polls\Db\V11\TableManager;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
@@ -71,7 +71,7 @@ class Version080307Date20250826231102 extends SimpleMigrationStep {
 
 		// fix nullish values in poll_id and group_id and set 0 in case of null
 		$message = $this->tableManager->fixNullishShares();
-		$this->logInfo($message, 'postMigration:  ');
+		$this->logInfo($message, 'preMigration:  ');
 
 		$message = $this->tableManager->tidyWatchTable(time());
 		$this->logInfo($message, 'preMigration:  ');

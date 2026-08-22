@@ -404,10 +404,10 @@ class ShareService {
 	public function delete(Share $share, bool $restore = false): Share {
 		$pollId = $share->getPollId();
 		$groupId = $share->getGroupId();
-		if ($pollId === null && $groupId !== null) {
+		if (!$pollId && $groupId) {
 			$this->pollGroupMapper->find($groupId)
 				->request(PollGroup::PERMISSION_POLL_GROUP_EDIT);
-		} elseif ($pollId !== null && $groupId === null) {
+		} elseif ($pollId && !$groupId) {
 			$this->pollMapper->get($pollId)
 				->request(Poll::PERMISSION_POLL_EDIT);
 		}
@@ -416,7 +416,7 @@ class ShareService {
 		$this->shareMapper->update($share);
 
 		// skip event when deleting a poll group share
-		if ($pollId !== null) {
+		if ($pollId) {
 			$this->eventDispatcher->dispatchTyped(new ShareDeletedEvent($share));
 		}
 		return $share;
@@ -596,7 +596,7 @@ class ShareService {
 			$share = $e->getShare();
 		}
 
-		if ($share->getPollId() !== null) {
+		if ($share->getPollId()) {
 			$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
 		}
 		return $share;
@@ -783,9 +783,9 @@ class ShareService {
 
 		if ($purpose === 'poll') {
 			$this->share->setPollId($pollOrPollGroupId);
-			$this->share->setGroupId(null);
+			$this->share->setGroupId(0);
 		} else {
-			$this->share->setPollId(null);
+			$this->share->setPollId(0);
 			$this->share->setGroupId($pollOrPollGroupId);
 		}
 

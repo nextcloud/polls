@@ -11,7 +11,7 @@ namespace OCA\Polls\Migration\RepairSteps;
 use Doctrine\DBAL\Schema\Schema;
 use Exception;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\V10\TableManager;
+use OCA\Polls\Db\V11\TableManager;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
@@ -42,9 +42,12 @@ class CleanTables implements IRepairStep {
 				$this->tableManager->migrateShareLabels();
 				$this->tableManager->removeOrphaned();
 				$this->tableManager->deleteAllDuplicates();
+				$this->tableManager->fixNullishShares();
+				$this->tableManager->fixNullishPollGroupRelations();
 				$this->tableManager->tidyWatchTable(time());
 			} catch (Exception $e) {
 				// Simply skip repair, if it breaks and rely on the next run
+				$output->warning('Polls - CleanTables repair step failed: ' . $e->getMessage());
 			}
 		}
 	}

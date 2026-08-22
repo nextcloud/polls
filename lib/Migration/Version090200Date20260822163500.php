@@ -22,7 +22,7 @@ use OCP\Migration\SimpleMigrationStep;
  *
  * @psalm-suppress UnusedClass
  */
-class Version090000Date20260302212000 extends SimpleMigrationStep {
+class Version090200Date20260822163500 extends SimpleMigrationStep {
 	private ISchemaWrapper $schema;
 	private ?IOutput $output = null;
 
@@ -33,11 +33,45 @@ class Version090000Date20260302212000 extends SimpleMigrationStep {
 	}
 
 	public function name(): string {
-		return 'Polls migration to version 9.0.0';
+		return 'Polls migration to version 9.2.0';
 	}
 
 	public function description(): string {
 		return 'Migrates Polls\' tables to the current schema';
+	}
+
+	/**
+	 * This method is called before the schema change.
+	 * Removes share duplicates and fixes nullish poll_id/group_id values, so
+	 * the NOT NULL constraint can be applied safely in changeSchema() afterwards.
+	 * Without this, a still-nullish or duplicated row would make the following
+	 * ALTER TABLE ... NOT NULL fail (or silently be skipped) on some databases.
+	 *
+	 * @param IOutput $output
+	 * @param \Closure $schemaClosure
+	 * @param array $options
+	 * @return void
+	 */
+	public function preSchemaChange(IOutput $output, \Closure $schemaClosure, array $options): void {
+		$this->output = $output;
+		$this->logInfo('Prepare migration');
+
+		// Let the tableManager use its own live schema (not the target schema from
+		// $schemaClosure, which may not reflect the actual current DB state yet)
+		$this->tableManager->createSchema();
+
+		// remove duplicate shares (and other unique-constrained duplicates) first,
+		// while poll_id/group_id might still be nullish - NULL never blocks a
+		// duplicate insert, so this has to run before values get normalized to 0
+		$message = $this->tableManager->deleteAllDuplicates();
+		$this->logInfo($message, 'preMigration:  ');
+
+		// fix nullish values in poll_id and group_id and set 0 in case of null
+		$message = $this->tableManager->fixNullishShares();
+		$this->logInfo($message, 'preMigration:  ');
+
+		$message = $this->tableManager->fixNullishPollGroupRelations();
+		$this->logInfo($message, 'preMigration:  ');
 	}
 
 	/**
