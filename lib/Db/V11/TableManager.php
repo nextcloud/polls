@@ -154,8 +154,11 @@ class TableManager extends DbManager {
 		foreach ($columns as $columnName => $columnDefinition) {
 			if ($table->hasColumn($columnName)) {
 				$column = $table->getColumn($columnName);
-				if (Type::lookupName($column->getType()) !== $columnDefinition['type']) {
-					$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . Type::lookupName($column->getType()) . ' to ' . $columnDefinition['type'];
+				// Use $column->getType()->getName() instead of the static Type::lookupName():
+				// since Nextcloud 35, ISchemaWrapper no longer returns a raw
+				// Doctrine\DBAL\Types\Type but an OCP\DB\Schema wrapper - getName() works on both.
+				if ($column->getType()->getName() !== $columnDefinition['type']) {
+					$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'];
 					$column->setType(Type::getType($columnDefinition['type']));
 				}
 				$column->setOptions($columnDefinition['options']);
@@ -421,15 +424,29 @@ class TableManager extends DbManager {
 				return 0;
 			}
 
-			// NULL-safe comparison: two NULLs count as equal, since a UNIQUE index
-			// never catches "duplicate" NULLs on its own
-			$columnsMatch = $qb->expr()->orX(
-				$qb->expr()->eq('t1.' . $column, 't2.' . $column),
-				$qb->expr()->andX(
-					$qb->expr()->isNull('t1.' . $column),
-					$qb->expr()->isNull('t2.' . $column)
-				)
-			);
+			// NULL-safe comparison: a UNIQUE index never catches "duplicate" NULLs on
+			// its own. Where the schema declares a default, NULL and that default
+			// represent the same "unset" state (e.g. a nullish and an already
+			// normalized poll_id/group_id = 0 are the same logical value), so compare
+			// both sides through the declared default via COALESCE. Without a known
+			// default, fall back to treating two NULLs as equal.
+			$default = TableSchema::TABLES[$table][$column]['options']['default'] ?? null;
+
+			if ($default !== null) {
+				$defaultType = is_int($default) ? IQueryBuilder::PARAM_INT : IQueryBuilder::PARAM_STR;
+				$columnsMatch = $qb->expr()->eq(
+					$qb->createFunction('COALESCE(t1.' . $column . ', ' . $qb->createNamedParameter($default, $defaultType) . ')'),
+					$qb->createFunction('COALESCE(t2.' . $column . ', ' . $qb->createNamedParameter($default, $defaultType) . ')')
+				);
+			} else {
+				$columnsMatch = $qb->expr()->orX(
+					$qb->expr()->eq('t1.' . $column, 't2.' . $column),
+					$qb->expr()->andX(
+						$qb->expr()->isNull('t1.' . $column),
+						$qb->expr()->isNull('t2.' . $column)
+					)
+				);
+			}
 
 			if ($i > 0) {
 				$selection->andWhere($columnsMatch);
