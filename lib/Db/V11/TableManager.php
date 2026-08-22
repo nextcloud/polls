@@ -156,14 +156,20 @@ class TableManager extends DbManager {
 				$column = $table->getColumn($columnName);
 				// Use $column->getType()->getName() instead of the static Type::lookupName():
 				// since Nextcloud 35, ISchemaWrapper no longer returns a raw
-				// Doctrine\DBAL\Types\Type but an OCP\DB\Schema wrapper - getName() works on both.
+				// Doctrine\DBAL\Types\Type but an OCP\DB\Schema\IColumn wrapper - getName() works on both.
 				if ($column->getType()->getName() !== $columnDefinition['type']) {
 					$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'];
-					$column->setType(Type::getType($columnDefinition['type']));
+					if ($column instanceof \OCP\DB\Schema\IColumn) {
+						// IColumn::setType() takes the type name as string|ColumnType, not a Doctrine Type instance
+						$column->setType($columnDefinition['type']);
+					} else {
+						$column->setType(Type::getType($columnDefinition['type']));
+					}
 				}
-				$column->setOptions($columnDefinition['options']);
 
-				// force change to current options definition
+				// Column::setOptions() is gone since Nextcloud 35 (public API only allows typed
+				// setters now). Table::modifyColumn() is unaffected and still takes an options
+				// array, so it alone is enough to force the column's options to match the schema.
 				$table->modifyColumn($columnName, $columnDefinition['options']);
 			} else {
 				$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
