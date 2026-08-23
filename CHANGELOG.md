@@ -4,11 +4,12 @@
 -->
 # Changelog
 All notable changes to this project will be documented in this file.
-## [9.2.0] - 2026-08-22
+## [9.2.1] - 2026-08-23
 ### Added
  - OpenAPI spec
 
 ### Fixed
+ - [v9.2.1] Fixed access to columns which are named by reserved words during duplicate cleanup (e.g. failed migration on SQLite)
  - Public users could not add confidential comments
  - Fixed some code inconsitencies regarding nullish groupIds and pollIds.
  - Added share repair fix to repair steps after updates.
