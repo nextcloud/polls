@@ -108,7 +108,6 @@ const dialogProps = computed(() => ({
 			v-model="newUser"
 			:searchTypes="[0]"
 			:inputLabel="t('polls', 'Select the user to transfer the ownership to')"
-			userSelect
 			closeOnSelect
 			@userSelected="(user: User) => (newUser = user)" />
 		<span>
