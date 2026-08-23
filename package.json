@@ -1,6 +1,6 @@
 {
   "name": "polls",
-  "version": "9.1.4",
+  "version": "9.2.1",
   "private": true,
   "description": "Polls app for nextcloud",
   "homepage": "https://github.com/nextcloud/polls#readme",
@@ -55,7 +55,7 @@
     "pinia": "^3.0.4",
     "qrcode": "^1.5.3",
     "sortablejs": "^1.15.7",
-    "vue": "^3.5.40",
+    "vue": "^3.5.41",
     "vue-material-design-icons": "^5.3.0",
     "vue-router": "^5.2.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
@@ -68,7 +68,7 @@
     "@nextcloud/vite-config": "^2.5.4",
     "@types/file-saver": "^2.0.7",
     "@types/lodash": "^4.17.25",
-    "@types/luxon": "^3.7.3",
+    "@types/luxon": "^3.7.4",
     "@types/qrcode": "^1.5.6",
     "@vue/tsconfig": "^0.9.1",
     "eslint-config-prettier": "^10.1.5",

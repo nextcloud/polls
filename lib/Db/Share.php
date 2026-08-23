@@ -148,6 +148,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 
 	public function __construct() {
 		$this->addType('pollId', 'integer');
+		$this->addType('groupId', 'integer');
 		$this->addType('invitationSent', 'integer');
 		$this->addType('locked', 'integer');
 		$this->addType('reminderSent', 'integer');
@@ -204,7 +205,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 	 * @throws InvalidShareTypeException
 	 */
 	public function getPollIdOrFail(): int {
-		if ($this->pollId === null) {
+		if (!$this->pollId) {
 			throw new InvalidShareTypeException('Share is not associated with a poll');
 		}
 		return $this->pollId;
@@ -310,7 +311,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getURL(): string {
-		if ($this->getPollId() === null) {
+		if (!$this->getPollId()) {
 			return '';
 		}
 

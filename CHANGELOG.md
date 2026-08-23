@@ -4,13 +4,20 @@
 -->
 # Changelog
 All notable changes to this project will be documented in this file.
-## [Unreleased]
+## [9.2.1] - 2026-08-23
 ### Added
  - OpenAPI spec
 
+### Fixed
+ - [v9.2.1] Fixed access to columns which are named by reserved words during duplicate cleanup (e.g. failed migration on SQLite)
+ - Public users could not add confidential comments
+ - Fixed some code inconsitencies regarding nullish groupIds and pollIds.
+ - Added share repair fix to repair steps after updates.
+ - Purge soft-deleted entries after the documented 12 hour undo window
+
 ### Changes
  - Added salt to user name obfuscation
- - Support Nextcloud 31
+ - Support Nextcloud 31 (untested)
 
 ## [9.1.4] - 2026-05-23
 ### Fixed

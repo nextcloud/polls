@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Migration;
 
 use Doctrine\DBAL\Schema\Schema;
-use OCA\Polls\Db\V10\TableManager;
+use OCA\Polls\Db\V11\TableManager;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;

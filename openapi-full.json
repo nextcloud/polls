@@ -1205,6 +1205,11 @@
                                     "comment": {
                                         "type": "string",
                                         "description": "Comment text to add"
+                                    },
+                                    "confidential": {
+                                        "type": "boolean",
+                                        "default": false,
+                                        "description": "Whether the comment is only visible to the poll owner and the author"
                                     }
                                 }
                             }
