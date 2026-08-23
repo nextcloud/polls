@@ -433,12 +433,19 @@ class TableManager extends DbManager {
 			$default = TableSchema::TABLES[$table][$column]['options']['default'] ?? null;
 
 			if ($default !== null) {
+				// Create quoted columns to avoid conflict with reserved keywords
+				// like 'table' used as a column name in oc_polls_watch.
+				// createFunction() expects raw sql strings
+				$t1column = $qb->getColumnName($column, 't1');
+				$t2column = $qb->getColumnName($column, 't2');
+
 				$defaultType = is_int($default) ? IQueryBuilder::PARAM_INT : IQueryBuilder::PARAM_STR;
 				$columnsMatch = $qb->expr()->eq(
-					$qb->createFunction('COALESCE(t1.' . $column . ', ' . $qb->createNamedParameter($default, $defaultType) . ')'),
-					$qb->createFunction('COALESCE(t2.' . $column . ', ' . $qb->createNamedParameter($default, $defaultType) . ')')
+					$qb->createFunction('COALESCE(' . $t1column . ', ' . $qb->createNamedParameter($default, $defaultType) . ')'),
+					$qb->createFunction('COALESCE(' . $t2column . ', ' . $qb->createNamedParameter($default, $defaultType) . ')')
 				);
 			} else {
+				// expr()->eq()/isNull() quote their column name arguments themselves,
 				$columnsMatch = $qb->expr()->orX(
 					$qb->expr()->eq('t1.' . $column, 't2.' . $column),
 					$qb->expr()->andX(
