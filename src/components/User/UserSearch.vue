@@ -61,7 +61,6 @@ async function optionSelected(user: User) {
 const selectProps = {
 	ariaLabelCombobox: ariaLabel,
 	multiple: false,
-	userSelect: true,
 	tagWidth: 80,
 	loading: isLoading.value,
 	filterable: false,
