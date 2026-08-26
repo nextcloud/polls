@@ -157,8 +157,13 @@ class TableManager extends DbManager {
 				// Use $column->getType()->getName() instead of the static Type::lookupName():
 				// since Nextcloud 35, ISchemaWrapper no longer returns a raw
 				// Doctrine\DBAL\Types\Type but an OCP\DB\Schema\IColumn wrapper - getName() works on both.
+				// Psalm may complain, that TypeDoesNotContainType IColumn only exists since NC35,
+				// Suppress psalm messages for now.
 				if ($column->getType()->getName() !== $columnDefinition['type']) {
 					$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'];
+					/**
+					 * @psalm-suppress UndefinedClass
+					 */
 					if ($column instanceof \OCP\DB\Schema\IColumn) {
 						// IColumn::setType() takes the type name as string|ColumnType, not a Doctrine Type instance
 						$column->setType($columnDefinition['type']);
