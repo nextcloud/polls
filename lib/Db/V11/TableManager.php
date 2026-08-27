@@ -163,6 +163,7 @@ class TableManager extends DbManager {
 					$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'];
 					/**
 					 * @psalm-suppress UndefinedClass
+					 * @psalm-suppress TypeDoesNotContainType
 					 */
 					if ($column instanceof \OCP\DB\Schema\IColumn) {
 						// IColumn::setType() takes the type name as string|ColumnType, not a Doctrine Type instance
