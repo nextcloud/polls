@@ -156,14 +156,25 @@ class TableManager extends DbManager {
 				$column = $table->getColumn($columnName);
 				// Use $column->getType()->getName() instead of the static Type::lookupName():
 				// since Nextcloud 35, ISchemaWrapper no longer returns a raw
-				// Doctrine\DBAL\Types\Type but an OCP\DB\Schema wrapper - getName() works on both.
+				// Doctrine\DBAL\Types\Type but an OCP\DB\Schema\IColumn wrapper - getName() works on both.
+				// Psalm may complain, that TypeDoesNotContainType IColumn only exists since NC35,
+				// Suppress psalm messages for now.
 				if ($column->getType()->getName() !== $columnDefinition['type']) {
 					$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'];
-					$column->setType(Type::getType($columnDefinition['type']));
+					/**
+					 * @psalm-suppress UndefinedClass IColumn only exists since Nextcloud 35
+					 * @psalm-suppress TypeDoesNotContainType IColumn only exists since Nextcloud 35
+					 */
+					if ($column instanceof \OCP\DB\Schema\IColumn) {
+						$this->setColumnTypeOnIColumn($column, $columnDefinition['type']);
+					} else {
+						$this->setColumnTypeOnColumn($column, $columnDefinition['type']);
+					}
 				}
-				$column->setOptions($columnDefinition['options']);
 
-				// force change to current options definition
+				// Column::setOptions() is gone since Nextcloud 35 (public API only allows typed
+				// setters now). Table::modifyColumn() is unaffected and still takes an options
+				// array, so it alone is enough to force the column's options to match the schema.
 				$table->modifyColumn($columnName, $columnDefinition['options']);
 			} else {
 				$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
@@ -175,6 +186,24 @@ class TableManager extends DbManager {
 			$table->setPrimaryKey(['id']);
 		}
 		return $messages;
+	}
+
+	/**
+	 * Dedicated helper so Psalm resolves against OCP\DB\Schema\IColumn exclusively.
+	 * Calling setType() directly on a variable typed as
+	 * Doctrine\DBAL\Schema\Column|OCP\DB\Schema\IColumn makes Psalm consider a
+	 * hypothetical Column&IColumn hybrid (Column is not final), which it then
+	 * rejects against both signatures. A strictly-typed parameter sidesteps that.
+	 *
+	 * @psalm-suppress UndefinedClass IColumn only exists since Nextcloud 35
+	 */
+	private function setColumnTypeOnIColumn(\OCP\DB\Schema\IColumn $column, string $type): void {
+		$column->setType($type);
+	}
+
+	/** @see self::setColumnTypeOnIColumn() */
+	private function setColumnTypeOnColumn(\Doctrine\DBAL\Schema\Column $column, string $type): void {
+		$column->setType(Type::getType($type));
 	}
 
 	/**
