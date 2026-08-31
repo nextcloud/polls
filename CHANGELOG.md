@@ -4,6 +4,12 @@
 -->
 # Changelog
 All notable changes to this project will be documented in this file.
+
+## [Unreleased]
+
+### Changes
+ - Support Nextcloud 35
+
 ## [9.2.1] - 2026-08-23
 ### Added
  - OpenAPI spec
