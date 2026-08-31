@@ -102,8 +102,42 @@ class IndexManager extends DbManager {
 			}
 		}
 
-		$childTable->addForeignKeyConstraint($parentTable, [$constraintColumn], ['id'], ['onDelete' => 'CASCADE']);
+		// $parentTable is always of the same concrete type as $childTable, since both
+		// originate from the same schema instance ($this->schema).
+		/**
+		 * @psalm-suppress UndefinedClass ITable only exists since Nextcloud 35
+		 * @psalm-suppress TypeDoesNotContainType ITable only exists since Nextcloud 35
+		 */
+		if ($childTable instanceof \OCP\DB\Schema\ITable) {
+			/** @var \OCP\DB\Schema\ITable $parentTable */
+			$this->addForeignKeyConstraintOnITable($childTable, $parentTable, $constraintColumn);
+		} else {
+			/**
+			 * @var \Doctrine\DBAL\Schema\Table $parentTable
+			 * @psalm-suppress UnnecessaryVarAnnotation needed for NC35, where $parentTable is still Table|ITable here
+			 */
+			$this->addForeignKeyConstraintOnTable($childTable, $parentTable, $constraintColumn);
+		}
 		return 'Added ' . $parentTableName . '[' . $constraintColumn . '] <- ' . $childTableName . '[id]';
+	}
+
+	/**
+	 * Dedicated helper so Psalm resolves against OCP\DB\Schema\ITable exclusively.
+	 * Calling addForeignKeyConstraint() directly on a variable typed as
+	 * Doctrine\DBAL\Schema\Table|OCP\DB\Schema\ITable makes Psalm consider a
+	 * hypothetical Table&ITable hybrid (Table is not final), which it then
+	 * rejects against both signatures. A strictly-typed parameter sidesteps that.
+	 *
+	 * @psalm-suppress UndefinedClass ITable only exists since Nextcloud 35
+	 * @psalm-suppress UnusedMethod unreachable on NC < 35, where ITable does not exist
+	 */
+	private function addForeignKeyConstraintOnITable(\OCP\DB\Schema\ITable $childTable, \OCP\DB\Schema\ITable $parentTable, string $constraintColumn): void {
+		$childTable->addForeignKeyConstraint($parentTable, [$constraintColumn], ['id'], ['onDelete' => 'CASCADE']);
+	}
+
+	/** @see self::addForeignKeyConstraintOnITable() */
+	private function addForeignKeyConstraintOnTable(\Doctrine\DBAL\Schema\Table $childTable, \Doctrine\DBAL\Schema\Table $parentTable, string $constraintColumn): void {
+		$childTable->addForeignKeyConstraint($parentTable, [$constraintColumn], ['id'], ['onDelete' => 'CASCADE']);
 	}
 
 	/**

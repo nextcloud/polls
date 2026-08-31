@@ -162,14 +162,13 @@ class TableManager extends DbManager {
 				if ($column->getType()->getName() !== $columnDefinition['type']) {
 					$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'];
 					/**
-					 * @psalm-suppress UndefinedClass
-					 * @psalm-suppress TypeDoesNotContainType
+					 * @psalm-suppress UndefinedClass IColumn only exists since Nextcloud 35
+					 * @psalm-suppress TypeDoesNotContainType IColumn only exists since Nextcloud 35
 					 */
 					if ($column instanceof \OCP\DB\Schema\IColumn) {
-						// IColumn::setType() takes the type name as string|ColumnType, not a Doctrine Type instance
-						$column->setType($columnDefinition['type']);
+						$this->setColumnTypeOnIColumn($column, $columnDefinition['type']);
 					} else {
-						$column->setType(Type::getType($columnDefinition['type']));
+						$this->setColumnTypeOnColumn($column, $columnDefinition['type']);
 					}
 				}
 
@@ -187,6 +186,24 @@ class TableManager extends DbManager {
 			$table->setPrimaryKey(['id']);
 		}
 		return $messages;
+	}
+
+	/**
+	 * Dedicated helper so Psalm resolves against OCP\DB\Schema\IColumn exclusively.
+	 * Calling setType() directly on a variable typed as
+	 * Doctrine\DBAL\Schema\Column|OCP\DB\Schema\IColumn makes Psalm consider a
+	 * hypothetical Column&IColumn hybrid (Column is not final), which it then
+	 * rejects against both signatures. A strictly-typed parameter sidesteps that.
+	 *
+	 * @psalm-suppress UndefinedClass IColumn only exists since Nextcloud 35
+	 */
+	private function setColumnTypeOnIColumn(\OCP\DB\Schema\IColumn $column, string $type): void {
+		$column->setType($type);
+	}
+
+	/** @see self::setColumnTypeOnIColumn() */
+	private function setColumnTypeOnColumn(\Doctrine\DBAL\Schema\Column $column, string $type): void {
+		$column->setType(Type::getType($type));
 	}
 
 	/**
