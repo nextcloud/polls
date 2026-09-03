@@ -37,6 +37,7 @@ OC.L10N.register(
     "Email address" : "Е-пошта адреса",
     "OK" : "Добро",
     "Timezone" : "Временска зона",
+    "Duration" : "Времетраење",
     "All day" : "Цели денови",
     "Preview" : "Преглед",
     "Added" : "Додадено",
