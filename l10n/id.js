@@ -124,6 +124,7 @@ OC.L10N.register(
     "Once enabled, the anonymous setting cannot be reverted anymore." : "Setelah diaktifkan, pengaturan anonim tidak dapat dikembalikan lagi.",
     "Cancel" : "Membatalkan",
     "Ok" : "Oke",
+    "Anonymous poll" : "Jajak pendapat anonim",
     "Use Autoreminder" : "Gunakan pengingat otomatis",
     "Autoreminder information" : "Informasi pengingat otomatis",
     "Collapse long descriptions" : "Ciutkan deskripsi panjang",
