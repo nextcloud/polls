@@ -648,7 +648,7 @@ OC.L10N.register(
     "The participant got removed from this poll" : "Le participant a été supprimé de ce sondage",
     "Administrative rights granted" : "Droits d'administration accordés",
     "Anonymized participant" : "Participant anonymisé",
-    "Add public link" : "Ajouter un lien publique",
+    "Add public link" : "Ajouter un lien public",
     "Public link" : "Lien public",
     "Your timezone: ({timezone})" : "Votre fuseau horaire : ({timezone})",
     "Poll timezone: ({timezone})" : "Fuseau horaire du sondage : ({timezone})",
