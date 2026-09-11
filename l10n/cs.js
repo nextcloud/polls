@@ -454,6 +454,7 @@ OC.L10N.register(
     "Error updating poll group" : "Chyba při aktualizaci skupiny ankety",
     "Extended title" : "Rozšířený nadpis",
     "Description" : "Popis",
+    "Expired {dateTime}" : "Platnost skončila {dateTime}",
     "No access" : "Žádný přístup",
     "No access to this poll of {ownerName}." : "Žádný přístup k této anketě od {ownerName}.",
     "Archived poll" : "Archivovaná anketa",
