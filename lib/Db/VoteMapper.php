@@ -45,6 +45,15 @@ class VoteMapper extends QBMapperWithUser {
 	}
 
 	/**
+	 * Write the vote's hash without reloading the entity, for the maintenance jobs,
+	 * which have no use for the joined attributes
+	 */
+	public function updateHash(Vote $vote): void {
+		$vote->setVoteOptionHash(Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()));
+		parent::update($vote);
+	}
+
+	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Vote[]
 	 * @psalm-return array<array-key, Vote>
