@@ -241,7 +241,7 @@
     "Open poll now" : "Otvoriť anketu teraz",
     "New poll" : "Nová anketa",
     "Delete" : "Zmazať",
-    "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Odstraňuje sa za {countdown} sekundu","Odstraňuje sa za {countdown} sekúnd","Odstraňuje sa za {countdown} sekúnd","Odstraňuje sa za {countdown} sekúnd"],
+    "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Odstraňuje sa za {countdown} sekundu","Odstraňuje sa za {countdown} sekundy","Odstraňuje sa za {countdown} sekúnd","Odstraňuje sa za {countdown} sekúnd"],
     "Delete orphaned" : "Odstrániť opustené",
     "Add some!" : "Pridajte nejaké!",
     "Edit access" : "Upraviť prístup",
