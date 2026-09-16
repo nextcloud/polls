@@ -5,7 +5,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [9.3.0] - 2026-09-16
 
 ### Changes
  - Support Nextcloud 35
