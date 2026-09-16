@@ -11,11 +11,13 @@ namespace OCA\Polls\Db\V11;
 use Doctrine\DBAL\Types\Type;
 use Exception;
 use OCA\Polls\AppInfo\Application;
+use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollGroup;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
+use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Exceptions\PreconditionException;
@@ -29,6 +31,7 @@ use PDO;
 use Psr\Log\LoggerInterface;
 
 class TableManager extends DbManager {
+	private int $failedHashUpdates = 0;
 
 	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
@@ -679,9 +682,141 @@ class TableManager extends DbManager {
 		$this->checkPrecondition(OptionMapper::TABLE, ['poll_id', 'poll_option_text', 'poll_option_hash']);
 		$this->checkPrecondition(VoteMapper::TABLE, ['poll_id', 'vote_option_text', 'vote_option_hash']);
 
+		$this->failedHashUpdates = 0;
+
 		$messages = $this->updateOptionHashes();
 		$messages = array_merge($messages, $this->updateVoteHashes());
 		return $messages;
+	}
+
+	/**
+	 * Number of rows whose hash could not be written by the last updateHashes() run.
+	 * While this is greater than zero, option and vote hashes are known to be out of
+	 * sync and no caller may delete records based on hash comparison.
+	 */
+	public function getFailedHashUpdates(): int {
+		return $this->failedHashUpdates;
+	}
+
+	/**
+	 * Split off options which would collide on their recalculated hash
+	 *
+	 * Two rows can hold different stored hashes and still resolve to the same hash,
+	 * i.e. after an option text or duration change that never got the hash rewritten.
+	 * They describe the same option, but the unique index over poll_id,
+	 * poll_option_hash and timestamp rejects the second hash update, which would keep
+	 * the row out of sync with its votes for good. The redundant rows are removed
+	 * instead and updateVoteHashes() moves their votes over to the surviving option.
+	 *
+	 * @param Option[] $options
+	 * @return array{0: Option[], 1: string[]} Remaining options and messages
+	 */
+	private function dropDuplicateOptions(array $options): array {
+		$messages = [];
+		$grouped = [];
+
+		foreach ($options as $option) {
+			$key = implode("\0", [
+				$option->getPollId(),
+				Hash::getOptionHash($option->getPollId(), $option->getPollOptionText()),
+				$option->getTimestampInDB(),
+			]);
+			$grouped[$key][] = $option;
+		}
+
+		$remaining = [];
+
+		foreach ($grouped as $duplicates) {
+			// keep a live option over a deleted one and a confirmed one over an
+			// unconfirmed one, otherwise the lowest id
+			usort($duplicates, static fn (Option $a, Option $b): int
+				=> [$a->getDeleted() !== 0, $a->getConfirmed() === 0, (int)$a->getId()]
+				<=> [$b->getDeleted() !== 0, $b->getConfirmed() === 0, (int)$b->getId()]);
+
+			$survivor = array_shift($duplicates);
+			$remaining[] = $survivor;
+
+			foreach ($duplicates as $duplicate) {
+				try {
+					$this->optionMapper->delete($duplicate);
+				} catch (Exception $e) {
+					$this->failedHashUpdates++;
+					$messages[] = 'Skip duplicate removal - Error removing optionId ' . $duplicate->getId();
+					$this->logger->error('Error removing duplicate optionId {id}', [
+						'id' => $duplicate->getId(),
+						'message' => $e->getMessage()
+					]);
+					continue;
+				}
+
+				$messages[] = 'Removed duplicate optionId ' . $duplicate->getId()
+					. ' superseded by optionId ' . $survivor->getId();
+				$this->logger->warning('Removed duplicate optionId {id} in poll {pollId}, superseded by optionId {survivorId}', [
+					'id' => $duplicate->getId(),
+					'pollId' => $duplicate->getPollId(),
+					'survivorId' => $survivor->getId(),
+				]);
+			}
+		}
+
+		return [$remaining, $messages];
+	}
+
+	/**
+	 * Split off votes which would collide on their recalculated hash
+	 *
+	 * Counterpart of dropDuplicateOptions() for the unique index over poll_id,
+	 * user_id and vote_option_hash
+	 *
+	 * @param Vote[] $votes
+	 * @return array{0: Vote[], 1: string[]} Remaining votes and messages
+	 */
+	private function dropDuplicateVotes(array $votes): array {
+		$messages = [];
+		$grouped = [];
+
+		foreach ($votes as $vote) {
+			$key = implode("\0", [
+				$vote->getPollId(),
+				$vote->getUserId(),
+				Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()),
+			]);
+			$grouped[$key][] = $vote;
+		}
+
+		$remaining = [];
+
+		foreach ($grouped as $duplicates) {
+			usort($duplicates, static fn (Vote $a, Vote $b): int
+				=> [$a->getDeleted() !== 0, (int)$a->getId()] <=> [$b->getDeleted() !== 0, (int)$b->getId()]);
+
+			$survivor = array_shift($duplicates);
+			$remaining[] = $survivor;
+
+			foreach ($duplicates as $duplicate) {
+				try {
+					$this->voteMapper->delete($duplicate);
+				} catch (Exception $e) {
+					$this->failedHashUpdates++;
+					$messages[] = 'Skip duplicate removal - Error removing voteId ' . $duplicate->getId();
+					$this->logger->error('Error removing duplicate voteId {id}', [
+						'id' => $duplicate->getId(),
+						'message' => $e->getMessage()
+					]);
+					continue;
+				}
+
+				$messages[] = 'Removed duplicate voteId ' . $duplicate->getId()
+					. ' superseded by voteId ' . $survivor->getId();
+				$this->logger->warning('Removed duplicate voteId {id} in poll {pollId}, superseded by voteId {survivorId}', [
+					'id' => $duplicate->getId(),
+					'pollId' => $duplicate->getPollId(),
+					'survivorId' => $survivor->getId(),
+				]);
+			}
+		}
+
+		return [$remaining, $messages];
 	}
 
 	/**
@@ -691,15 +826,15 @@ class TableManager extends DbManager {
 	 * @return string[] Messages as array
 	 */
 	private function updateVoteHashes(): array {
-		$messages = [];
-
 		$tableName = VoteMapper::TABLE;
 		$prefixedTableName = $this->dbPrefix . $tableName;
 
 		$count = 0;
 		$updated = 0;
 
-		foreach ($this->voteMapper->getAll(includeNull: true) as $vote) {
+		[$votes, $messages] = $this->dropDuplicateVotes($this->voteMapper->getAll(includeNull: true));
+
+		foreach ($votes as $vote) {
 			try {
 				// if the hash of the vote differs from calculated hash update the vote hash
 				if ($vote->getVoteOptionHashInDB() !== Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText())) {
@@ -708,8 +843,7 @@ class TableManager extends DbManager {
 						. ':' . Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText())
 						. '\'' . $vote->getVoteOptionText() . '\'';
 
-					$vote->setVoteOptionHash(Hash::getOptionHash($vote->getPollId(), $vote->getVoteOptionText()));
-					$vote = $this->voteMapper->update($vote);
+					$this->voteMapper->updateHash($vote);
 
 					$updated++;
 				}
@@ -717,6 +851,7 @@ class TableManager extends DbManager {
 				$count++;
 
 			} catch (Exception $e) {
+				$this->failedHashUpdates++;
 				$messages[] = 'Skip hash update - Error updating option hash for voteId ' . $vote->getId();
 				$this->logger->error('Error updating option hash for voteId {id}', [
 					'id' => $vote->getId(),
@@ -752,15 +887,15 @@ class TableManager extends DbManager {
 	 * @return string[] Messages as array
 	 */
 	private function updateOptionHashes(): array {
-		$messages = [];
-
 		$tableName = OptionMapper::TABLE;
 		$prefixedTableName = $this->dbPrefix . $tableName;
 
 		$count = 0;
 		$updated = 0;
 
-		foreach ($this->optionMapper->getAll(includeNull: true) as $option) {
+		[$options, $messages] = $this->dropDuplicateOptions($this->optionMapper->getAll(includeNull: true));
+
+		foreach ($options as $option) {
 			try {
 				// if the option's hash differs from $actualHash update the option
 				if ($option->getPollOptionHashInDB() !== Hash::getOptionHash($option->getPollId(), $option->getPollOptionText())) {
@@ -779,6 +914,7 @@ class TableManager extends DbManager {
 				$count++;
 
 			} catch (Exception $e) {
+				$this->failedHashUpdates++;
 				$messages[] = 'Skip hash update - Error updating option hash for optionId ' . $option->getId();
 				$this->logger->error('Error updating option hash for optionId {id}', ['id' => $option->getId(), 'message' => $e->getMessage()]);
 			}
