@@ -103,6 +103,7 @@
     "Please wait…" : "Vent venligst...",
     "Add" : "Tilføj",
     "But be aware that your name is not stored in an encrypted or obfuscated way." : "Men vær opmærksom på, at dit navn ikke er gemt på en krypteret eller besværlig måde.",
+    "_%n voting option is available._::_%n voting options are available._" : ["%n stemme mulighed er tilgængelig.","%n stemme muligheder er tilgængelige."],
     "This share is locked and allows only read access. Registering is not possible." : "Denne andel er låst og tillader kun læse adgang. Det er ikke muligt at registrere.",
     "You have confirmed options. Inform your participants about the result via email." : "Du har bekræftet mulighederne. Informér dine deltagere om resultatet via e-mail.",
     "Some confirmation messages could not been sent." : "Nogle bekræftelsesmeddelelser kunne ikke sendes.",
