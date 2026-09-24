@@ -46,7 +46,7 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	protected string $userId = '';
 	protected int $voteOptionId = 0;
 	protected string $voteOptionText = '';
-	protected string $voteOptionHash = '';
+	protected ?string $voteOptionHash = '';
 	protected string $voteAnswer = '';
 	protected int $deleted = 0;
 
@@ -99,7 +99,8 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function getVoteOptionHashInDb(): string {
-		return $this->voteOptionHash;
+		// Oracle stores an empty string as null
+		return (string)$this->voteOptionHash;
 	}
 
 	/**
