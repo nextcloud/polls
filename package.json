@@ -41,7 +41,7 @@
     "@nextcloud/router": "^3.2.0",
     "@nextcloud/vue": "^9.11.0",
     "@vueuse/core": "^15.0.0",
-    "@vueuse/integrations": "^14.4.0",
+    "@vueuse/integrations": "^15.0.0",
     "axios": "^1.20.0",
     "core-js": "^3.50.0",
     "dompurify": "^3.4.15",
