@@ -407,8 +407,7 @@ class PublicController extends BaseController {
 	}
 
 	/**
-	 * Validate it the user name is reserved
-	 * return false, if this username already exists as a user or as a participant of the poll
+	 * Roll the dice to generate a random username
 	 * @param string $token Share token
 	 */
 	#[PublicPage]
