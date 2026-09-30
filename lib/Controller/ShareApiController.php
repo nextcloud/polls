@@ -61,6 +61,7 @@ class ShareApiController extends BaseApiV2OCSController {
 	#[CORS]
 	#[PublicPage]
 	#[NoAdminRequired]
+	#[ShareTokenRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/share/{token}')]
 	public function get(string $token): DataResponse {
