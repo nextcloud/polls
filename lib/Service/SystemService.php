@@ -274,7 +274,7 @@ class SystemService {
 				$this->validatePublicUsername($userName, $share);
 				return $userName;
 			} catch (InvalidUsernameException|TooShortException) {
-				$userName = '';
+				continue;
 			}
 		}
 		return '';
