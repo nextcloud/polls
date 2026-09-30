@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Attributes\ShareTokenRequired;
 use OCA\Polls\Model\SentResult;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\ShareService;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\AnonRateLimit;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -79,6 +81,7 @@ class ShareApiController extends BaseApiV2OCSController {
 	#[ShareTokenRequired]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[AnonRateLimit(limit: Application::PUBLIC_RATE_LIMIT, period: Application::PUBLIC_RATE_LIMIT_PERIOD)]
 	#[ApiRoute(verb: 'POST', url: 'api/v1.0/s/{token}/register')]
 	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): DataResponse {
 		return $this->response(fn () => [

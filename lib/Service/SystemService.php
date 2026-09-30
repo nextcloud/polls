@@ -265,6 +265,8 @@ class SystemService {
 
 	public function getRandomDisplayName(string $token): string {
 		$share = $this->shareMapper->findByToken($token);
+		$userName = '';
+
 		for ($i = 0; $i < 10; $i++) {
 			$userName = NameGenerator::generateRandom();
 			try {

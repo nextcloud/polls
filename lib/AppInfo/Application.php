@@ -87,6 +87,14 @@ class Application extends App implements IBootstrap {
 	public const CLIENT_TZ = 'ncPollsClientTimeZone';
 	/** @var string */
 	public const SESSION_KEY_CRON_JOB = 'ncPollsCronJob';
+	/**
+	 * Anonymous rate limit for public endpoints (requests per IP and period)
+	 * Admins can overwrite it per route via 'ratelimit_overwrite' (NC 33+)
+	 * @var int
+	 */
+	public const PUBLIC_RATE_LIMIT = 100;
+	/** @var int period in seconds */
+	public const PUBLIC_RATE_LIMIT_PERIOD = 300;
 
 	public function __construct(array $urlParams = []) {
 		parent::__construct(self::APP_ID, $urlParams);
