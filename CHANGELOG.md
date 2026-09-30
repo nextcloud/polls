@@ -5,6 +5,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - tbd
+
+### Fixed
+ - No invitation mail was sent after successful registration with email address
+
 ## [9.3.0] - 2026-09-16
 
 ### Changes

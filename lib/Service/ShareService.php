@@ -631,7 +631,7 @@ class ShareService {
 		$this->createNewShare(
 			$this->share->getPollIdOrFail(),
 			$user,
-			$user->getEmailAddress() !== '',
+			$user->getEmailAddress() === '',
 		);
 		$this->eventDispatcher->dispatchTyped(new ShareRegistrationEvent($this->share));
 
