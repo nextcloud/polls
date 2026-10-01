@@ -11,6 +11,7 @@ namespace OCA\Polls\Tests\Unit\Service;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Service\OptionService;
@@ -26,6 +27,7 @@ class OptionServiceTest extends UnitTestCase {
 
 	private Poll $textPoll;
 	private Poll $datePoll;
+	private Poll $foreignDatePoll;
 	private Option $textOption;
 
 	protected function setUp(): void {
@@ -52,6 +54,14 @@ class OptionServiceTest extends UnitTestCase {
 		$datePoll->setExpire(0);
 		$this->datePoll = $this->pollMapper->insert($datePoll);
 
+		// Date poll owned by another user, private, open, not shared with admin
+		$foreignDatePoll = $this->fm->instance('OCA\\Polls\\Db\\Poll');
+		$foreignDatePoll->setOwner('foreignUser');
+		$foreignDatePoll->setType(Poll::TYPE_DATE);
+		$foreignDatePoll->setAccess(Poll::ACCESS_PRIVATE);
+		$foreignDatePoll->setExpire(0);
+		$this->foreignDatePoll = $this->pollMapper->insert($foreignDatePoll);
+
 		// Pre-existing text option for update/delete/confirm/reorder tests
 		$this->textOption = $this->optionService->add(
 			$this->textPoll->getId(),
@@ -68,6 +78,10 @@ class OptionServiceTest extends UnitTestCase {
 		}
 		try {
 			$this->pollMapper->delete($this->datePoll);
+		} catch (\Exception) {
+		}
+		try {
+			$this->pollMapper->delete($this->foreignDatePoll);
 		} catch (\Exception) {
 		}
 	}
@@ -209,5 +223,25 @@ class OptionServiceTest extends UnitTestCase {
 		}
 		$this->assertSame(1, $orderById[$second->getId()]);
 		$this->assertSame(2, $orderById[$this->textOption->getId()]);
+	}
+
+	// --- shift ---
+
+	public function testShiftMovesDateOptions(): void {
+		$timestamp = strtotime('2027-06-15 12:00:00 UTC');
+		$this->optionService->add(
+			$this->datePoll->getId(),
+			(new SimpleOption())->setDateTime($timestamp)
+		);
+
+		$shifted = $this->optionService->shift($this->datePoll->getId(), 1, 'day');
+
+		$this->assertCount(1, $shifted);
+		$this->assertSame(strtotime('+1 day', $timestamp), reset($shifted)->getTimestamp());
+	}
+
+	public function testShiftDeniedWithoutEditPermission(): void {
+		$this->expectException(ForbiddenException::class);
+		$this->optionService->shift($this->foreignDatePoll->getId(), 1, 'day');
 	}
 }
