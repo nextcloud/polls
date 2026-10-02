@@ -603,7 +603,7 @@
     "Error while changing deleted status of share {displayName}" : "{displayName} paylaşımının silinme durumu değiştirilirken sorun çıktı",
     "Options for the registration dialog" : "Kayıt iletişim kutusu seçenekleri",
     "Email address is optional" : "E-posta adresinin yazılması isteğe bağlıdır",
-    "Email address is mandatory" : "E-posta adresinin yazılması zorunludur",
+    "Email address is mandatory" : "E-posta adresinin belirtilmesi zorunludur",
     "Do not ask for an email address" : "Bir e-posta adresi istenmesin",
     "Add a new public link" : "Yeni bir herkese açık bağlantı ekle",
     "Error adding public link" : "Herkese açık bağlantı eklenirken sorun çıktı",
