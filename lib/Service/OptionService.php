@@ -444,7 +444,7 @@ class OptionService {
 	 */
 	private function getPoll(int $pollId, string $permission = Poll::PERMISSION_POLL_ACCESS): void {
 		if ($this->poll->getId() !== $pollId) {
-			$this->poll = $this->pollMapper->get($pollId, true);
+			$this->poll = $this->pollMapper->get($pollId);
 		}
 		$this->poll->request($permission);
 	}
