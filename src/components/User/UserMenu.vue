@@ -40,6 +40,7 @@ import {
 	deleteCookieByValue,
 	findCookieByValue,
 } from '../../helpers/modules/cookieHelper.ts'
+import { isRateLimited, showRateLimitError } from '../../helpers/modules/rateLimit.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 import { usePollStore } from '../../stores/poll.ts'
 import { useSessionStore } from '../../stores/session.ts'
@@ -227,7 +228,10 @@ const validateDisplayName = debounce(async function () {
 			sessionStore.share.user.displayName,
 		)
 		setDisplayNameStatus('success')
-	} catch {
+	} catch (error) {
+		if (isRateLimited(error)) {
+			showRateLimitError()
+		}
 		setDisplayNameStatus('error')
 	}
 }, 500)

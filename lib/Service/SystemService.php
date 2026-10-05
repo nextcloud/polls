@@ -265,16 +265,19 @@ class SystemService {
 
 	public function getRandomDisplayName(string $token): string {
 		$share = $this->shareMapper->findByToken($token);
+
 		for ($i = 0; $i < 10; $i++) {
 			$userName = NameGenerator::generateRandom();
 			try {
+				// TODO: avoid exzessive checks, every call uses a complete
+				// db heavy roundtrip for username evaluation
 				$this->validatePublicUsername($userName, $share);
 				return $userName;
 			} catch (InvalidUsernameException|TooShortException) {
-				$userName = '';
+				continue;
 			}
 		}
-		return $userName;
+		return '';
 	}
 
 	/**
