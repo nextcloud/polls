@@ -11,6 +11,7 @@ namespace OCA\Polls\Db;
 use OCA\Polls\Helper\SqlHelper;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\QueryBuilder\ICompositeExpression;
 use OCP\DB\QueryBuilder\IParameter;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -60,14 +61,289 @@ class PollMapper extends QBMapper {
 	}
 
 	/**
+	 * Find the polls of the current user's poll list
+	 *
+	 * The optional filters only narrow down the candidates in SQL. They never
+	 * drop a poll, which could match. Poll::getCategories() stays the authority
+	 * and must still be evaluated by the caller.
+	 *
+	 * @param string|null $category one of Poll::CATEGORIES, ignored if $pollGroupId is set
+	 * @param int|null $pollGroupId only polls of this poll group
+	 * @param string|null $type only polls of this type
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Poll[]
 	 */
-	public function findForMe(string $userId): array {
+	public function findForMe(
+		string $userId,
+		?string $category = null,
+		?int $pollGroupId = null,
+		?string $type = null,
+	): array {
 		$qb = $this->buildQuery(detailed: false);
-		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)))
-			->orWhere($qb->expr()->eq(self::TABLE . '.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		$this->applyPollListFilter($qb, $userId, $category, $pollGroupId, $type);
 		return $this->findEntities($qb);
+	}
+
+	/**
+	 * One sorted page of findForMe()
+	 *
+	 * Unlike findForMe() this skips the entity side category check, so it may
+	 * only be used for the categories, whose SQL condition is exact. See
+	 * PollService::hasExactCategoryCondition().
+	 *
+	 * @param string $sortColumn a numeric column of the polls table
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Poll[]
+	 */
+	public function findPageForMe(
+		string $userId,
+		string $category,
+		?string $type,
+		string $sortColumn,
+		bool $descending,
+		int $offset,
+		int $limit,
+	): array {
+		$qb = $this->buildQuery(detailed: false);
+		$this->applyPollListFilter($qb, $userId, $category, null, $type);
+
+		$direction = $descending ? 'DESC' : 'ASC';
+		$qb->orderBy(self::TABLE . '.' . $sortColumn, $direction)
+			// tie breaker, so paging over equal sort values does not skip or repeat polls
+			->addOrderBy(self::TABLE . '.id', $direction)
+			->setFirstResult($offset)
+			->setMaxResults($limit);
+
+		return $this->findEntities($qb);
+	}
+
+	/**
+	 * Number of polls matching findForMe() without loading them
+	 *
+	 * Counts the candidates of the SQL conditions, so this is only exact for the
+	 * categories of PollService::hasExactCategoryCondition().
+	 */
+	public function countForMe(
+		string $userId,
+		?string $category = null,
+		?int $pollGroupId = null,
+		?string $type = null,
+	): int {
+		// no joins needed, all conditions are either on the polls table or EXISTS subqueries
+		$qb = $this->db->getQueryBuilder();
+		$qb->select($qb->func()->count(self::TABLE . '.id'))
+			->from($this->getTableName(), self::TABLE);
+		$this->applyPollListFilter($qb, $userId, $category, $pollGroupId, $type);
+
+		$result = $qb->executeQuery();
+		$count = (int)$result->fetchOne();
+		$result->closeCursor();
+
+		return $count;
+	}
+
+	/**
+	 * Add the poll list conditions of findForMe() to a query on the polls table
+	 */
+	private function applyPollListFilter(
+		IQueryBuilder $qb,
+		string $userId,
+		?string $category,
+		?int $pollGroupId,
+		?string $type,
+	): void {
+		$expr = $qb->expr();
+		$userParam = $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR);
+
+		$qb->where($expr->orX(
+			$expr->eq(self::TABLE . '.deleted', $expr->literal(0, IQueryBuilder::PARAM_INT)),
+			$expr->eq(self::TABLE . '.owner', $userParam),
+		));
+
+		if ($type !== null) {
+			$qb->andWhere($expr->eq(self::TABLE . '.type', $qb->createNamedParameter($type, IQueryBuilder::PARAM_STR)));
+		}
+
+		if ($pollGroupId !== null) {
+			// EXISTS instead of filtering the poll groups join, which would truncate the concatenated poll groups
+			$subQuery = $this->db->getQueryBuilder();
+			$subQuery->select($subQuery->expr()->literal(1))
+				->from(PollGroup::RELATION_TABLE, 'group_filter')
+				->where($subQuery->expr()->eq('group_filter.poll_id', self::TABLE . '.id'))
+				->andWhere($subQuery->expr()->eq('group_filter.group_id', $qb->createNamedParameter($pollGroupId, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere((string)$qb->createFunction('EXISTS (' . $subQuery->getSQL() . ')'));
+			return;
+		}
+
+		$condition = $category !== null
+			? $this->getCategoryCondition($qb, $category, $userParam)
+			: $this->anyCategoryCondition($qb, $userParam);
+
+		if ($condition !== null) {
+			$qb->andWhere($condition);
+		}
+	}
+
+	/**
+	 * SQL condition, which is a superset of the union of all categories of
+	 * Poll::getCategories(), i.e. of every poll, which shows up in any poll list
+	 *
+	 * Without it an unfiltered poll list would scan every poll of the instance.
+	 *
+	 * @return ICompositeExpression|null null, if no condition applies
+	 */
+	private function anyCategoryCondition(IQueryBuilder $qb, IParameter $userParam): ?ICompositeExpression {
+		// site admins have every poll they do not own in their admin category
+		if ($this->userSession->getCurrentUser()->getIsAdmin()) {
+			return null;
+		}
+
+		// every remaining category requires access to the poll, archived polls are
+		// already limited to the current user's own polls by the base condition
+		return $this->mayViewCondition($qb, $userParam);
+	}
+
+	/**
+	 * SQL condition, which is a superset of Poll::getCategories() for the category
+	 * Exact permission checks (group memberships, locked shares) are left to the entity
+	 *
+	 * @return ICompositeExpression|string|null null, if no condition applies
+	 */
+	private function getCategoryCondition(IQueryBuilder $qb, string $category, IParameter $userParam): ICompositeExpression|string|null {
+		$expr = $qb->expr();
+		$notDeleted = $expr->eq(self::TABLE . '.deleted', $expr->literal(0, IQueryBuilder::PARAM_INT));
+
+		return match ($category) {
+			Poll::CATEGORY_ALL => $expr->andX(
+				$notDeleted,
+				$this->mayViewCondition($qb, $userParam),
+			),
+			Poll::CATEGORY_MY => $expr->andX(
+				$notDeleted,
+				$expr->eq(self::TABLE . '.owner', $userParam),
+			),
+			// legacy access values are mapped by Poll::getAccess()
+			Poll::CATEGORY_PRIVATE => $expr->andX(
+				$notDeleted,
+				$expr->in(self::TABLE . '.access', $qb->createNamedParameter(['private', 'hidden'], IQueryBuilder::PARAM_STR_ARRAY)),
+				$this->mayViewCondition($qb, $userParam),
+			),
+			Poll::CATEGORY_OPEN => $expr->andX(
+				$notDeleted,
+				$expr->in(self::TABLE . '.access', $qb->createNamedParameter(['open', 'public'], IQueryBuilder::PARAM_STR_ARRAY)),
+			),
+			Poll::CATEGORY_CLOSED => $expr->andX(
+				$notDeleted,
+				$expr->gt(self::TABLE . '.expire', $expr->literal(0, IQueryBuilder::PARAM_INT)),
+				$expr->lt(self::TABLE . '.expire', $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT)),
+				$this->mayViewCondition($qb, $userParam),
+			),
+			// combined with the base condition, these are the current user's archived polls
+			Poll::CATEGORY_ARCHIVED => $expr->gt(self::TABLE . '.deleted', $expr->literal(0, IQueryBuilder::PARAM_INT)),
+			Poll::CATEGORY_PARTICIPATED => $expr->andX(
+				$notDeleted,
+				$this->existsSubQuery($qb, Vote::TABLE, 'vote_filter', $userParam),
+			),
+			// relevant = involved || (view && not open). Both are covered by the
+			// view superset without its open access branch
+			Poll::CATEGORY_RELEVANT => $expr->andX(
+				$notDeleted,
+				$this->relevantCondition($qb, time() - Poll::RELEVANT_PERIOD),
+				$this->mayViewCondition($qb, $userParam, includeOpenAccess: false),
+			),
+			// only site admins have the admin category
+			Poll::CATEGORY_ADMIN => $this->userSession->getCurrentUser()->getIsAdmin()
+				? $expr->neq(self::TABLE . '.owner', $userParam)
+				: $expr->eq($expr->literal(1, IQueryBuilder::PARAM_INT), $expr->literal(0, IQueryBuilder::PARAM_INT)),
+			default => null,
+		};
+	}
+
+	/**
+	 * Superset of Poll::getAllowAccessPoll() for logged in users
+	 *
+	 * Uses EXISTS subqueries instead of the joined share columns, because filtering
+	 * on joined rows would truncate the concatenated columns (poll groups, group shares)
+	 *
+	 * @param bool $includeOpenAccess false limits the superset to involved users and session shares
+	 */
+	private function mayViewCondition(IQueryBuilder $qb, IParameter $userParam, bool $includeOpenAccess = true): ICompositeExpression {
+		$expr = $qb->expr();
+		$conditions = [
+			$expr->eq(self::TABLE . '.owner', $userParam),
+			// participant
+			$this->existsSubQuery($qb, Vote::TABLE, 'vote_filter', $userParam),
+			// personal share of any type (user, admin, email, contact, external)
+			$this->existsSubQuery($qb, Share::TABLE, 'share_filter', $userParam),
+		];
+		if ($includeOpenAccess) {
+			$conditions[] = $expr->in(self::TABLE . '.access', $qb->createNamedParameter(['open', 'public'], IQueryBuilder::PARAM_STR_ARRAY));
+		}
+
+		// any group share, the group membership is checked by the entity
+		$groupShares = $this->db->getQueryBuilder();
+		$groupShares->select($groupShares->expr()->literal(1))
+			->from(Share::TABLE, 'group_share_filter')
+			->where($groupShares->expr()->eq('group_share_filter.poll_id', self::TABLE . '.id'))
+			->andWhere($groupShares->expr()->eq('group_share_filter.type', $qb->createNamedParameter(Share::TYPE_GROUP, IQueryBuilder::PARAM_STR)))
+			->andWhere($groupShares->expr()->eq('group_share_filter.deleted', $groupShares->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+		$conditions[] = (string)$qb->createFunction('EXISTS (' . $groupShares->getSQL() . ')');
+
+		// share of a poll group, the poll belongs to
+		$pollGroupShares = $this->db->getQueryBuilder();
+		$pollGroupShares->select($pollGroupShares->expr()->literal(1))
+			->from(PollGroup::RELATION_TABLE, 'poll_group_filter')
+			->innerJoin('poll_group_filter', Share::TABLE, 'poll_group_share_filter', $pollGroupShares->expr()->eq('poll_group_share_filter.group_id', 'poll_group_filter.group_id'))
+			->where($pollGroupShares->expr()->eq('poll_group_filter.poll_id', self::TABLE . '.id'))
+			->andWhere($pollGroupShares->expr()->eq('poll_group_share_filter.user_id', $userParam))
+			->andWhere($pollGroupShares->expr()->eq('poll_group_share_filter.deleted', $pollGroupShares->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+		$conditions[] = (string)$qb->createFunction('EXISTS (' . $pollGroupShares->getSQL() . ')');
+
+		// poll of the share the session was opened with
+		$sessionShare = $this->userSession->getShare();
+		if ($sessionShare->getId()) {
+			$conditions[] = $expr->eq(self::TABLE . '.id', $qb->createNamedParameter($sessionShare->getPollId(), IQueryBuilder::PARAM_INT));
+		}
+
+		return $expr->orX(...$conditions);
+	}
+
+	/**
+	 * EXISTS condition for a row of the current user in a table with poll_id and user_id
+	 * Deleted shares are excluded, votes have no deleted state
+	 */
+	private function existsSubQuery(IQueryBuilder $qb, string $table, string $alias, IParameter $userParam): string {
+		$subQuery = $this->db->getQueryBuilder();
+		$subQuery->select($subQuery->expr()->literal(1))
+			->from($table, $alias)
+			->where($subQuery->expr()->eq($alias . '.poll_id', self::TABLE . '.id'))
+			->andWhere($subQuery->expr()->eq($alias . '.user_id', $userParam));
+		if ($table === Share::TABLE) {
+			$subQuery->andWhere($subQuery->expr()->eq($alias . '.deleted', $subQuery->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+		}
+		return (string)$qb->createFunction('EXISTS (' . $subQuery->getSQL() . ')');
+	}
+
+	/**
+	 * Equivalent to Poll::getRelevantThreshold() > $threshold
+	 */
+	private function relevantCondition(IQueryBuilder $qb, int $threshold): ICompositeExpression {
+		$expr = $qb->expr();
+		$thresholdParam = $qb->createNamedParameter($threshold, IQueryBuilder::PARAM_INT);
+
+		$subQuery = $this->db->getQueryBuilder();
+		$subQuery->select($subQuery->expr()->literal(1))
+			->from(Option::TABLE, 'option_filter')
+			->where($subQuery->expr()->eq('option_filter.poll_id', self::TABLE . '.id'))
+			->andWhere($subQuery->expr()->eq('option_filter.deleted', $subQuery->expr()->literal(0, IQueryBuilder::PARAM_INT)))
+			->andWhere($subQuery->expr()->gt('option_filter.timestamp', $thresholdParam));
+
+		return $expr->orX(
+			$expr->gt(self::TABLE . '.created', $thresholdParam),
+			$expr->gt(self::TABLE . '.last_interaction', $thresholdParam),
+			$expr->gt(self::TABLE . '.expire', $thresholdParam),
+			(string)$qb->createFunction('EXISTS (' . $subQuery->getSQL() . ')'),
+		);
 	}
 
 	/**

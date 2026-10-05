@@ -4,6 +4,13 @@
 -->
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
+import { showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+
+import NcButton from '@nextcloud/vue/components/NcButton'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+
 import { usePollsStore } from '../../stores/polls'
 import { useComboStore } from '../../stores/combo'
 
@@ -11,18 +18,49 @@ import UserItem from '../User/UserItem.vue'
 
 const pollsStore = usePollsStore()
 const comboStore = useComboStore()
+
+/**
+ * Append the next page of date polls
+ */
+async function loadMore() {
+	try {
+		await pollsStore.loadMoreDatePolls()
+	} catch {
+		showError(t('polls', 'Error loading more polls'))
+	}
+}
+
+onMounted(async () => {
+	try {
+		await pollsStore.loadDatePolls()
+	} catch {
+		showError(t('polls', 'Error loading polls'))
+	}
+})
 </script>
 
 <template>
-	<div
-		v-for="poll in pollsStore.datePolls"
-		:key="poll.id"
-		:class="['poll-item', { listed: comboStore.pollIsListed(poll.id) }]"
-		@click="comboStore.togglePollItem(poll.id)">
-		<UserItem :user="poll.owner" condensed />
-		<div class="poll-title-box">
-			{{ poll.configuration.title }}
+	<div class="side-bar-tab-polls">
+		<div
+			v-for="poll in pollsStore.datePolls.polls"
+			:key="poll.id"
+			:class="['poll-item', { listed: comboStore.pollIsListed(poll.id) }]"
+			@click="comboStore.togglePollItem(poll.id)">
+			<UserItem :user="poll.owner" condensed />
+			<div class="poll-title-box">
+				{{ poll.configuration.title }}
+			</div>
 		</div>
+		<NcButton
+			v-if="pollsStore.hasMoreDatePolls"
+			wide
+			:disabled="pollsStore.datePolls.status === 'loading'"
+			@click="loadMore">
+			<template v-if="pollsStore.datePolls.status === 'loading'" #icon>
+				<NcLoadingIcon :size="20" />
+			</template>
+			{{ t('polls', 'Load more') }}
+		</NcButton>
 	</div>
 </template>
 

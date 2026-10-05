@@ -11,7 +11,6 @@ import { Logger } from '../helpers/modules/logger'
 import { uniqueOptions, uniqueParticipants } from '../helpers/modules/arrayHelper'
 
 import { usePreferencesStore } from './preferences'
-import { usePollsStore } from './polls'
 
 import type { AxiosError } from '@nextcloud/axios'
 import type { Participant } from '../Types'
@@ -111,20 +110,6 @@ export const useComboStore = defineStore('combo', {
 			preferencesStore.user.pollCombo.forEach((pollId) => {
 				if (!this.pollCombo.includes(pollId)) {
 					this.add(pollId)
-				}
-			})
-		},
-
-		async cleanUp() {
-			const pollsStore = usePollsStore()
-			this.polls.forEach((comboPoll: Poll) => {
-				if (
-					pollsStore.polls.findIndex(
-						(poll) =>
-							poll.id === comboPoll.id && !poll.status.isArchived,
-					) < 0
-				) {
-					this.removePoll({ pollId: comboPoll.id })
 				}
 			})
 		},
