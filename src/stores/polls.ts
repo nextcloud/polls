@@ -466,7 +466,9 @@ export const usePollsStore = defineStore('polls', {
 		async loadNavigationList(key: FilterType | number): Promise<void> {
 			try {
 				const response = await PollsAPI.getNavigationPolls({
-					...(typeof key === 'number' ? { pollGroup: key } : { category: key }),
+					...(typeof key === 'number'
+						? { pollGroup: key }
+						: { category: key }),
 					sortBy: 'created',
 					sortDirection: 'desc',
 					offset: 0,
@@ -495,7 +497,9 @@ export const usePollsStore = defineStore('polls', {
 			]
 			if (this.list.status !== '') {
 				requests.push(
-					this.loadList(Math.max(this.list.polls.length, this.meta.pageSize)),
+					this.loadList(
+						Math.max(this.list.polls.length, this.meta.pageSize),
+					),
 				)
 			}
 			if (this.datePolls.status !== '') {

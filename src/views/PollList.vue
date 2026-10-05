@@ -80,8 +80,7 @@ const description = computed(() => {
 })
 
 const emptyPollListnoPolls = computed(
-	() =>
-		pollsStore.list.status !== 'loading' && pollsStore.list.polls.length < 1,
+	() => pollsStore.list.status !== 'loading' && pollsStore.list.polls.length < 1,
 )
 
 const loadingOverlayProps = {

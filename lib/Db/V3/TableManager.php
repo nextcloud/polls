@@ -305,7 +305,6 @@ class TableManager extends DbManager {
 		);
 		$orphaned[PollGroup::RELATION_TABLE] = $query->executeStatement();
 
-
 		// finally delete all polls with id === null
 		$query = $this->connection->getQueryBuilder();
 		$query->delete(Poll::TABLE)
@@ -537,7 +536,6 @@ class TableManager extends DbManager {
 
 		$this->logger->info('No polls needed to get updated with last interaction info');
 		return 'Last interaction all set';
-
 	}
 
 	public function migrateOptionsToHash(): array {

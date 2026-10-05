@@ -113,7 +113,6 @@ class Notifier implements INotifier {
 
 		$l = $this->l10nFactory->get(AppConstants::APP_ID, $languageCode);
 
-
 		$notification->setIcon(
 			$this->urlGenerator->getAbsoluteURL(
 				$this->urlGenerator->imagePath(AppConstants::APP_ID, 'polls-dark.svg')

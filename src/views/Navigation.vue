@@ -227,7 +227,9 @@ onMounted(async () => {
 				</template>
 				<template #counter>
 					<NcCounterBubble
-						:count="pollsStore.listMeta.pollGroupCounts[pollGroup.id] ?? 0" />
+						:count="
+							pollsStore.listMeta.pollGroupCounts[pollGroup.id] ?? 0
+						" />
 				</template>
 				<ul v-if="sessionStore.appSettings.navigationPollsInList">
 					<PollNavigationItems
@@ -289,7 +291,9 @@ onMounted(async () => {
 						@clone-poll="clonePoll(poll.id)"
 						@delete-poll="deletePoll(poll.id)" />
 					<NcAppNavigationItem
-						v-if="pollsStore.navigationPolls[pollCategory.id]?.length === 0"
+						v-if="
+							pollsStore.navigationPolls[pollCategory.id]?.length === 0
+						"
 						:name="t('polls', 'No polls found for this category')" />
 					<NcAppNavigationItem
 						v-if="

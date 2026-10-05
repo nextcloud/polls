@@ -134,7 +134,6 @@ class OptionMapper extends QBMapperWithUser {
 		return $qb->executeQuery()->fetchOne();
 	}
 
-
 	/**
 	 * Get the maximum date of all options in a poll
 	 *
@@ -207,14 +206,12 @@ class OptionMapper extends QBMapperWithUser {
 			->groupBy(self::TABLE . '.id')
 			->orderBy('order', 'ASC');
 
-
 		$this->joinVotesCount($qb, self::TABLE, hideResults: $hideResults);
 		$this->joinPollForLimits($qb, self::TABLE);
 		$this->joinCurrentUserVote($qb, self::TABLE, $currentUserId);
 		$this->joinCurrentUserVoteCount($qb, self::TABLE, $currentUserId);
 		$this->joinAnon($qb, self::TABLE);
 		$this->joinShareRole($qb, self::TABLE, $currentUserId);
-
 
 		return $qb;
 	}
