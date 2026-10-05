@@ -100,6 +100,29 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const TWO_DAYS = 172800;
 	public const ONE_AND_HALF_DAY = 129600;
 
+	public const CATEGORY_RELEVANT = 'relevant';
+	public const CATEGORY_MY = 'my';
+	public const CATEGORY_PRIVATE = 'private';
+	public const CATEGORY_PARTICIPATED = 'participated';
+	public const CATEGORY_OPEN = 'open';
+	public const CATEGORY_ALL = 'all';
+	public const CATEGORY_CLOSED = 'closed';
+	public const CATEGORY_ARCHIVED = 'archived';
+	public const CATEGORY_ADMIN = 'admin';
+	public const CATEGORIES = [
+		self::CATEGORY_RELEVANT,
+		self::CATEGORY_MY,
+		self::CATEGORY_PRIVATE,
+		self::CATEGORY_PARTICIPATED,
+		self::CATEGORY_OPEN,
+		self::CATEGORY_ALL,
+		self::CATEGORY_CLOSED,
+		self::CATEGORY_ARCHIVED,
+		self::CATEGORY_ADMIN,
+	];
+	// polls are relevant, if the relevant threshold is not older than this
+	public const RELEVANT_PERIOD = 100 * 24 * 60 * 60;
+
 	public const ROLE_USER = Share::TYPE_USER;
 	public const ROLE_ADMIN = Share::TYPE_ADMIN;
 	public const ROLE_EMAIL = Share::TYPE_EMAIL;
@@ -348,6 +371,14 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return $this->getOwner();
 	}
 
+	/**
+	 * Uses the injected user session instead of a container lookup per call,
+	 * because this is evaluated multiple times per poll in permission checks
+	 */
+	public function getCurrentUserIsEntityUser(): bool {
+		return $this->userSession->getCurrentUserId() === $this->getOwner();
+	}
+
 	public function getUserRole(): string {
 		if ($this->getCurrentUserIsEntityUser()) {
 			return self::ROLE_OWNER;
@@ -480,7 +511,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return explode(PollGroup::CONCAT_SEPARATOR, $this->pollGroupUserShares);
 	}
 
-	private function getAccess(): string {
+	public function getAccess(): string {
 		if ($this->access === self::ACCESS_PUBLIC) {
 			return self::ACCESS_OPEN;
 		}
@@ -530,7 +561,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return [];
 	}
 
-	private function getRelevantThreshold(): int {
+	public function getRelevantThreshold(): int {
 		return max(
 			$this->getCreated(),
 			$this->getLastInteraction(),
@@ -607,6 +638,52 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			self::PERMISSION_DEANONYMIZE => $this->getAllowDeanonymize(),
 			default => false,
 		};
+	}
+
+	/**
+	 * Get the poll list categories, the poll belongs to for the current user
+	 * Permission checks are evaluated once per poll
+	 *
+	 * @return string[] subset of self::CATEGORIES
+	 */
+	public function getCategories(): array {
+		$isAdmin = $this->userSession->getCurrentUser()->getIsAdmin();
+		$categories = ($isAdmin && !$this->getCurrentUserIsEntityUser()) ? [self::CATEGORY_ADMIN] : [];
+		$canView = $this->getAllowAccessPoll();
+
+		if ($this->getDeleted()) {
+			if ($canView) {
+				$categories[] = self::CATEGORY_ARCHIVED;
+			}
+			return $categories;
+		}
+
+		$access = $this->getAccess();
+
+		if ($this->getRelevantThreshold() > time() - self::RELEVANT_PERIOD
+			&& ($this->getIsInvolved() || ($canView && $access !== self::ACCESS_OPEN))
+		) {
+			$categories[] = self::CATEGORY_RELEVANT;
+		}
+		if ($this->getIsPollOwner()) {
+			$categories[] = self::CATEGORY_MY;
+		}
+		if ($this->getIsParticipant()) {
+			$categories[] = self::CATEGORY_PARTICIPATED;
+		}
+		if ($access === self::ACCESS_OPEN) {
+			$categories[] = self::CATEGORY_OPEN;
+		}
+		if ($canView) {
+			$categories[] = self::CATEGORY_ALL;
+			if ($access === self::ACCESS_PRIVATE) {
+				$categories[] = self::CATEGORY_PRIVATE;
+			}
+			if ($this->getExpired()) {
+				$categories[] = self::CATEGORY_CLOSED;
+			}
+		}
+		return $categories;
 	}
 
 	/**

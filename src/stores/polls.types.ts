@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Poll } from './poll.types'
-import { Chunking, StatusResults } from '../Types'
+import { Poll, PollType } from './poll.types'
+import { StatusResults } from '../Types'
 
 export type SortType =
 	| 'created'
@@ -34,27 +34,53 @@ export type PollCategory = {
 	description: string
 	pinned: boolean
 	showInNavigation(): boolean
-	filterCondition(poll: Poll): boolean
 }
 
 export type PollCategoryList = Record<FilterType, PollCategory>
 
-export type Meta = {
-	chunks: Chunking
-	maxPollsInNavigation: number
+/**
+ * Query for one page of polls, filtering is done by the server.
+ * `pollGroup` takes precedence over `category`.
+ */
+export type PollListQuery = {
+	category?: FilterType
+	pollGroup?: number
+	type?: PollType
+	sortBy: SortType
+	sortDirection: SortDirection
+	offset: number
+	limit: number
+}
+
+/**
+ * Poll counts for the navigation, polls are loaded separately
+ */
+export type PollListMeta = {
+	counts: Record<FilterType, number>
+	pollGroupCounts: Record<number, number>
+}
+
+export type PaginatedPolls = {
+	polls: Poll[]
+	total: number
 	status: StatusResults
 }
 
 export type PollsStore = {
-	polls: Poll[]
-	// pollGroups: PollGroup[]
-	meta: Meta
+	// current list view (category or poll group), pages are appended
+	list: PaginatedPolls
+	// non archived date polls for the combo sidebar
+	datePolls: PaginatedPolls
+	listMeta: PollListMeta & { status: StatusResults }
+	// newest polls of expanded navigation entries, keyed by category id or poll group id
+	navigationPolls: Partial<Record<FilterType | number, Poll[]>>
+	meta: {
+		pageSize: number
+		maxPollsInNavigation: number
+	}
 	sort: {
 		by: SortType
 		reverse: boolean
-	}
-	status: {
-		loadingGroups: boolean
 	}
 	categories: PollCategoryList
 }
