@@ -728,7 +728,7 @@ OC.L10N.register(
     "participated" : "zúčastnený",
     "closed" : "uzavreté",
     "By:" : "Podľa:",
-    "Select polls to combine" : "Vyberte ankety ktoré chcete skombinovať",
+    "Select polls to combine" : "Vyberte ankety, ktoré chcete skombinovať",
     "Details" : "Podrobnosti",
     "Sharing" : "Zdieľanie",
     "Comments" : "Komentáre",
