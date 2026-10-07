@@ -93,7 +93,6 @@ class CommentMapper extends QBMapperWithUser {
 			);
 
 		return $query->executeStatement();
-
 	}
 
 	/**

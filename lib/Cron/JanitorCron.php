@@ -96,7 +96,6 @@ class JanitorCron extends TimedJob {
 				$this->logger->info('JanitorCron: ' . $message);
 			}
 
-
 			// archive polls after defined days after closing date
 			$autoArchiveOffset = $this->appSettings->getAutoArchiveOffsetDays();
 

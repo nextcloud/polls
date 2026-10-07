@@ -57,7 +57,6 @@ abstract class QBMapperWithUser extends QBMapper {
 			$qb->expr()->eq($joinAlias . '.id', $fromAlias . '.poll_id'),
 		);
 
-
 	}
 	/**
 	 * Joins share type for evaluating current user's role in a poll

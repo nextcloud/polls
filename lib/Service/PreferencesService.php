@@ -58,10 +58,8 @@ class PreferencesService {
 			return $this->preferencesMapper->update($this->preferences);
 		} else {
 			return $this->preferencesMapper->insert($this->preferences);
-
 		}
 	}
-
 
 	/**
 	 * Tidy preferences

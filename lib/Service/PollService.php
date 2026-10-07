@@ -24,6 +24,7 @@ use OCA\Polls\Exceptions\AlreadyDeletedException;
 use OCA\Polls\Exceptions\EmptyTitleException;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidAccessException;
+use OCA\Polls\Exceptions\InvalidPollListParameterException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\InvalidShowResultsException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
@@ -34,14 +35,46 @@ use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IUserManager;
 use OCP\Search\ISearchQuery;
 
 class PollService {
+	public const SORT_CREATED = 'created';
+	public const SORT_TITLE = 'title';
+	public const SORT_ACCESS = 'access';
+	public const SORT_OWNER = 'owner';
+	public const SORT_EXPIRE = 'expire';
+	public const SORT_INTERACTION = 'interaction';
+	public const SORT_COLUMNS = [
+		self::SORT_CREATED,
+		self::SORT_TITLE,
+		self::SORT_ACCESS,
+		self::SORT_OWNER,
+		self::SORT_EXPIRE,
+		self::SORT_INTERACTION,
+	];
+	public const SORT_ASCENDING = 'asc';
+	public const SORT_DESCENDING = 'desc';
+	public const SORT_DIRECTIONS = [
+		self::SORT_ASCENDING,
+		self::SORT_DESCENDING,
+	];
+	public const MAX_PAGE_SIZE = 100;
+	/**
+	 * Sort columns, which the database can sort equally to sortPolls()
+	 * Title, access and owner are sorted by their evaluated value in PHP
+	 */
+	private const SORT_SQL_COLUMNS = [
+		self::SORT_CREATED => 'created',
+		self::SORT_EXPIRE => 'expire',
+		self::SORT_INTERACTION => 'last_interaction',
+	];
 
 	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private AppSettings $appSettings,
 		private IEventDispatcher $eventDispatcher,
+		private IUserManager $userManager,
 		private Poll $poll,
 		private PollMapper $pollMapper,
 		private UserMapper $userMapper,
@@ -51,10 +84,16 @@ class PollService {
 	}
 
 	/**
-	 * Get list of polls including Threshold for "relevant polls"
+	 * Get the polls, the current user has access to
+	 * The optional filters narrow down the polls already in the database query
+	 *
+	 * @param string|null $category see PollMapper::findForMe()
+	 * @param int|null $pollGroupId see PollMapper::findForMe()
+	 * @param string|null $type see PollMapper::findForMe()
+	 * @return Poll[]
 	 */
-	public function listPolls(): array {
-		$pollList = $this->pollMapper->findForMe($this->userSession->getCurrentUserId());
+	public function listPolls(?string $category = null, ?int $pollGroupId = null, ?string $type = null): array {
+		$pollList = $this->pollMapper->findForMe($this->userSession->getCurrentUserId(), $category, $pollGroupId, $type);
 		if ($this->userSession->getCurrentUser()->getIsAdmin()) {
 			return $pollList;
 		}
@@ -62,6 +101,163 @@ class PollService {
 		return array_values(array_filter($pollList, function (Poll $poll): bool {
 			return $poll->getIsAllowed(Poll::PERMISSION_POLL_ACCESS);
 		}));
+	}
+
+	/**
+	 * Get one page of the current user's polls, filtered by category or poll group
+	 *
+	 * @param string $category one of Poll::CATEGORIES, ignored if $pollGroupId is set
+	 * @param int|null $pollGroupId limit the list to the polls of this poll group
+	 * @param string|null $type limit the list to Poll::TYPE_DATE or Poll::TYPE_TEXT
+	 * @param string $sortBy one of self::SORT_COLUMNS
+	 * @param string $sortDirection one of self::SORT_DIRECTIONS
+	 * @return array{polls: Poll[], total: int}
+	 * @throws InvalidPollListParameterException
+	 */
+	public function listPollsPaged(
+		string $category,
+		?int $pollGroupId,
+		?string $type,
+		string $sortBy,
+		string $sortDirection,
+		int $offset,
+		int $limit,
+	): array {
+		if ($pollGroupId === null && !in_array($category, Poll::CATEGORIES, true)) {
+			throw new InvalidPollListParameterException('Invalid category ' . $category);
+		}
+		if ($type !== null && !in_array($type, [Poll::TYPE_DATE, Poll::TYPE_TEXT], true)) {
+			throw new InvalidPollListParameterException('Invalid poll type ' . $type);
+		}
+		if (!in_array($sortBy, self::SORT_COLUMNS, true)) {
+			throw new InvalidPollListParameterException('Invalid sort column ' . $sortBy);
+		}
+		if (!in_array($sortDirection, self::SORT_DIRECTIONS, true)) {
+			throw new InvalidPollListParameterException('Invalid sort direction ' . $sortDirection);
+		}
+		if ($offset < 0 || $limit < 1 || $limit > self::MAX_PAGE_SIZE) {
+			throw new InvalidPollListParameterException('Invalid offset or limit');
+		}
+
+		$descending = $sortDirection === self::SORT_DESCENDING;
+
+		// the database can do the paging, if it filters the category exactly and
+		// sorts like sortPolls() would
+		if ($pollGroupId === null
+			&& $this->hasExactCategoryCondition($category)
+			&& isset(self::SORT_SQL_COLUMNS[$sortBy])
+		) {
+			$userId = $this->userSession->getCurrentUserId();
+			return [
+				'polls' => $this->pollMapper->findPageForMe(
+					$userId,
+					$category,
+					$type,
+					self::SORT_SQL_COLUMNS[$sortBy],
+					$descending,
+					$offset,
+					$limit,
+				),
+				'total' => $this->pollMapper->countForMe($userId, $category, null, $type),
+			];
+		}
+
+		// type and poll group are filtered exactly by the query,
+		// the category query is only a superset of the permission based categories
+		$polls = $this->listPolls($category, $pollGroupId, $type);
+		if ($pollGroupId === null) {
+			$polls = array_filter(
+				$polls,
+				fn (Poll $poll): bool => in_array($category, $poll->getCategories(), true),
+			);
+		}
+		$polls = $this->sortPolls($polls, $sortBy, $descending);
+
+		return [
+			'polls' => array_slice($polls, $offset, $limit),
+			'total' => count($polls),
+		];
+	}
+
+	/**
+	 * Whether PollMapper::getCategoryCondition() matches Poll::getCategories()
+	 * exactly for this category, so the entity check can be skipped
+	 *
+	 * All other categories depend on permissions, which are only evaluated by
+	 * the entity, like group memberships or locked shares.
+	 */
+	private function hasExactCategoryCondition(string $category): bool {
+		return match ($category) {
+			// the owner always has access to their own polls, archived polls are
+			// limited to the current user's polls by the query anyway
+			Poll::CATEGORY_MY, Poll::CATEGORY_ARCHIVED => true,
+			// open polls are only accessible for logged in users
+			Poll::CATEGORY_OPEN => $this->userSession->getIsLoggedIn(),
+			default => false,
+		};
+	}
+
+	/**
+	 * Count the polls per category and per poll group without serializing any poll
+	 *
+	 * The polls still have to be loaded, because the categories depend on
+	 * permissions, which are evaluated by the entity.
+	 *
+	 * @return array{counts: array<string, int>, pollGroupCounts: array<int, int>}
+	 */
+	public function getPollListCounts(): array {
+		$counts = array_fill_keys(Poll::CATEGORIES, 0);
+		$pollGroupCounts = [];
+
+		foreach ($this->listPolls() as $poll) {
+			foreach ($poll->getCategories() as $category) {
+				$counts[$category]++;
+			}
+			foreach ($poll->getPollGroups() as $pollGroupId) {
+				$pollGroupCounts[$pollGroupId] = ($pollGroupCounts[$pollGroupId] ?? 0) + 1;
+			}
+		}
+
+		return [
+			'counts' => $counts,
+			'pollGroupCounts' => $pollGroupCounts,
+		];
+	}
+
+	/**
+	 * Sort the polls deterministically, ties are broken by the poll id
+	 *
+	 * @param Poll[] $polls
+	 * @return Poll[]
+	 */
+	private function sortPolls(array $polls, string $sortBy, bool $descending): array {
+		$displayNames = [];
+		$sortValue = match ($sortBy) {
+			self::SORT_TITLE => fn (Poll $poll): string => $poll->getTitle(),
+			self::SORT_ACCESS => fn (Poll $poll): string => $poll->getAccess(),
+			self::SORT_OWNER => function (Poll $poll) use (&$displayNames): string {
+				$owner = (string)$poll->getOwner();
+				return $displayNames[$owner] ??= $this->userManager->getDisplayName($owner) ?? $owner;
+			},
+			self::SORT_EXPIRE => fn (Poll $poll): int => $poll->getExpire(),
+			self::SORT_INTERACTION => fn (Poll $poll): int => $poll->getLastInteraction(),
+			default => fn (Poll $poll): int => $poll->getCreated(),
+		};
+
+		$keyed = array_map(fn (Poll $poll): array => [$sortValue($poll), $poll], array_values($polls));
+		$direction = $descending ? -1 : 1;
+		usort($keyed, function (array $a, array $b) use ($direction): int {
+			$compare = is_string($a[0])
+				? strnatcasecmp($a[0], $b[0])
+				: $a[0] <=> $b[0];
+
+			// the database order of ties is undefined, so break them by id like
+			// PollMapper::findPageForMe() does, otherwise paging over equal sort
+			// values could skip or repeat polls
+			return $direction * ($compare !== 0 ? $compare : $a[1]->getId() <=> $b[1]->getId());
+		});
+
+		return array_column($keyed, 1);
 	}
 
 	/**
@@ -325,7 +521,6 @@ class PollService {
 			$this->pollMapper->setLastInteraction($pollId);
 		}
 	}
-
 
 	/**
 	 * Move to archive or restore

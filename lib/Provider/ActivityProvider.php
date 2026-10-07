@@ -84,7 +84,6 @@ class ActivityProvider implements IProvider {
 			];
 		}
 
-
 		$placeholders = $replacements = [];
 		foreach ($parameters as $placeholder => $parameter) {
 			$placeholders[] = '{' . $placeholder . '}';

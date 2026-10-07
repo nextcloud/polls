@@ -58,7 +58,6 @@ class ShareApiController extends BaseApiV2Controller {
 		return $this->response(fn () => ['share' => $this->shareService->request($token)]);
 	}
 
-
 	#[CORS]
 	#[PublicPage]
 	#[ShareTokenRequired]

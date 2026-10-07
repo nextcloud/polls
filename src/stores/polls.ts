@@ -4,8 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import orderBy from 'lodash/orderBy'
-import { DateTime } from 'luxon'
+import { toRaw } from 'vue'
 import { t } from '@nextcloud/l10n'
 
 import { Logger } from '../helpers'
@@ -17,21 +16,21 @@ import { usePollGroupsStore } from './pollGroups'
 import type { AxiosError } from '@nextcloud/axios'
 import type { Poll } from './poll.types'
 import type {
+	FilterType,
+	PaginatedPolls,
 	PollCategory,
 	PollCategoryList,
+	PollListQuery,
 	PollsStore,
-	FilterType,
 	SortType,
 } from './polls.types'
 
-export const sortColumnsMapping: { [key in SortType]: string } = {
-	created: 'status.created',
-	title: 'configuration.title',
-	access: 'configuration.access',
-	owner: 'owner.displayName',
-	expire: 'configuration.expire',
-	interaction: 'status.lastInteraction',
-}
+// Must match PollService::MAX_PAGE_SIZE
+const MAX_PAGE_SIZE = 100
+const DASHBOARD_POLLS = 7
+
+// running meta request, shared by callers that do not force a reload
+let metaRequest: Promise<void> | null = null
 
 export const sortTitlesMapping: { [key in SortType]: string } = {
 	created: t('polls', 'Created'),
@@ -53,12 +52,6 @@ const pollCategories: PollCategoryList = {
 		),
 		pinned: false,
 		showInNavigation: () => true,
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived
-			&& DateTime.fromSeconds(poll.status.relevantThreshold).diffNow('days')
-				.days > -100
-			&& (poll.currentUserStatus.isInvolved
-				|| (poll.permissions.view && poll.configuration.access !== 'open')),
 	},
 	my: {
 		id: 'my',
@@ -70,8 +63,6 @@ const pollCategories: PollCategoryList = {
 			const sessionStore = useSessionStore()
 			return sessionStore.appPermissions.pollCreation
 		},
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived && poll.currentUserStatus.isOwner,
 	},
 	private: {
 		id: 'private',
@@ -83,10 +74,6 @@ const pollCategories: PollCategoryList = {
 			const sessionStore = useSessionStore()
 			return sessionStore.appPermissions.pollCreation
 		},
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived
-			&& poll.permissions.view
-			&& poll.configuration.access === 'private',
 	},
 	participated: {
 		id: 'participated',
@@ -95,8 +82,6 @@ const pollCategories: PollCategoryList = {
 		description: t('polls', 'All polls in which you participated.'),
 		pinned: false,
 		showInNavigation: () => true,
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived && poll.currentUserStatus.countVotes > 0,
 	},
 	open: {
 		id: 'open',
@@ -111,8 +96,6 @@ const pollCategories: PollCategoryList = {
 			const sessionStore = useSessionStore()
 			return sessionStore.appPermissions.pollCreation
 		},
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived && poll.configuration.access === 'open',
 	},
 	all: {
 		id: 'all',
@@ -121,8 +104,6 @@ const pollCategories: PollCategoryList = {
 		description: t('polls', 'All polls, where you have access to.'),
 		pinned: false,
 		showInNavigation: () => true,
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived && poll.permissions.view,
 	},
 	closed: {
 		id: 'closed',
@@ -131,10 +112,6 @@ const pollCategories: PollCategoryList = {
 		description: t('polls', 'All closed polls, where voting is disabled.'),
 		pinned: false,
 		showInNavigation: () => true,
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived
-			&& poll.status.isExpired
-			&& poll.permissions.view,
 	},
 	archived: {
 		id: 'archived',
@@ -146,8 +123,6 @@ const pollCategories: PollCategoryList = {
 			const sessionStore = useSessionStore()
 			return sessionStore.appPermissions.pollCreation
 		},
-		filterCondition: (poll: Poll) =>
-			poll.status.isArchived && poll.permissions.view,
 	},
 	admin: {
 		id: 'admin',
@@ -162,30 +137,108 @@ const pollCategories: PollCategoryList = {
 			const sessionStore = useSessionStore()
 			return !!sessionStore.currentUser?.isAdmin
 		},
-		filterCondition: (poll: Poll) => {
-			const sessionStore = useSessionStore()
-			return sessionStore.currentUser.id !== poll.owner.id
-		},
 	},
+}
+
+// newest load per paginated list, superseded loads must not write their result
+const loadGenerations = new WeakMap<PaginatedPolls, number>()
+
+/**
+ * Fetch polls into a paginated list
+ *
+ * A limit bigger than MAX_PAGE_SIZE is requested in consecutive pages, so
+ * reloading a list, which was scrolled beyond the maximum page size, keeps
+ * all polls, which were loaded before.
+ *
+ * A newer load into the same list supersedes a running one, which then stops
+ * requesting pages and discards its result. The API methods share one cancel
+ * token per endpoint, so without this the next page of an outdated load would
+ * cancel the request of the newer one.
+ *
+ * @param target list to fill
+ * @param fetchPage request for one page, must not read mutable store state
+ * @param limit number of polls to load
+ * @param append append to the loaded polls instead of replacing them
+ */
+async function fetchInto(
+	target: PaginatedPolls,
+	fetchPage: (
+		offset: number,
+		limit: number,
+	) => Promise<{ data: { polls: Poll[]; total: number } }>,
+	limit: number,
+	append: boolean,
+): Promise<void> {
+	const rawTarget = toRaw(target)
+	const generation = (loadGenerations.get(rawTarget) ?? 0) + 1
+	loadGenerations.set(rawTarget, generation)
+
+	const offset = append ? target.polls.length : 0
+	target.status = 'loading'
+	try {
+		const polls: Poll[] = []
+		let total = 0
+
+		do {
+			const response = await fetchPage(
+				offset + polls.length,
+				Math.min(limit - polls.length, MAX_PAGE_SIZE),
+			)
+			if (loadGenerations.get(rawTarget) !== generation) {
+				// a newer load took over this list
+				return
+			}
+			total = response.data.total
+			if (response.data.polls.length === 0) {
+				// the list shrunk since the first page was requested
+				break
+			}
+			polls.push(...response.data.polls)
+		} while (polls.length < limit && offset + polls.length < total)
+
+		target.polls = append ? target.polls.concat(polls) : polls
+		target.total = total
+		target.status = 'loaded'
+	} catch (error) {
+		if (
+			(error as AxiosError)?.code === 'ERR_CANCELED'
+			|| loadGenerations.get(rawTarget) !== generation
+		) {
+			return
+		}
+		target.status = 'error'
+		Logger.error('Error loading polls', { error })
+		throw error
+	}
 }
 
 export const usePollsStore = defineStore('polls', {
 	state: (): PollsStore => ({
-		polls: [],
-		meta: {
-			chunks: {
-				size: 20,
-				loaded: 1,
+		list: { polls: [], total: 0, status: '' },
+		datePolls: { polls: [], total: 0, status: '' },
+		listMeta: {
+			counts: {
+				relevant: 0,
+				my: 0,
+				private: 0,
+				participated: 0,
+				open: 0,
+				all: 0,
+				closed: 0,
+				archived: 0,
+				admin: 0,
 			},
-			maxPollsInNavigation: 6,
+			pollGroupCounts: {},
 			status: '',
+		},
+		navigationPolls: {},
+		meta: {
+			pageSize: 20,
+			maxPollsInNavigation: 6,
 		},
 		sort: {
 			by: 'created',
 			reverse: true,
-		},
-		status: {
-			loadingGroups: false,
 		},
 		categories: pollCategories,
 	}),
@@ -198,18 +251,12 @@ export const usePollsStore = defineStore('polls', {
 		},
 
 		/*
-		 * Sliced filtered and sorted polls for navigation
+		 * Newest polls of a category or poll group, loaded on expanding the navigation entry
 		 */
 		navigationList:
 			(state: PollsStore) =>
-			(filterId: FilterType): Poll[] =>
-				orderBy(
-					state.polls.filter((poll: Poll) =>
-						state.categories[filterId].filterCondition(poll),
-					) ?? [],
-					['created'],
-					['desc'],
-				).slice(0, state.meta.maxPollsInNavigation),
+			(key: FilterType | number): Poll[] =>
+				state.navigationPolls[key] ?? [],
 
 		currentCategory(state: PollsStore): PollCategory {
 			const sessionStore = useSessionStore()
@@ -223,143 +270,260 @@ export const usePollsStore = defineStore('polls', {
 			return state.categories.relevant
 		},
 
+		pollsCount(state: PollsStore): Record<FilterType, number> {
+			return state.listMeta.counts
+		},
+
 		/*
-		 * polls list, filtered by current category and sorted
+		 * Server side filter for the current route (category or poll group)
 		 */
-		pollsFilteredSorted(state: PollsStore): Poll[] {
+		listFilter(): Pick<PollListQuery, 'category' | 'pollGroup'> {
 			const sessionStore = useSessionStore()
 			const pollGroupsStore = usePollGroupsStore()
 
-			// if we are in a group route, return the polls of the current group
 			if (sessionStore.route.name === 'group') {
-				return pollGroupsStore.pollsInCurrendPollGroup
+				// -1 matches no poll group, if the slug is unknown
+				return { pollGroup: pollGroupsStore.currentPollGroup?.id ?? -1 }
 			}
-
-			return orderBy(
-				state.polls.filter((poll: Poll) =>
-					this.currentCategory?.filterCondition(poll),
-				) ?? [],
-				[sortColumnsMapping[state.sort.by]],
-				[state.sort.reverse ? 'desc' : 'asc'],
-			)
+			return { category: this.currentCategory.id }
 		},
 
 		/*
-		 * Chunked filtered and sorted polls for main view
+		 * Server side filter and sorting of the current route
 		 */
-		chunkedList(): Poll[] {
-			return this.pollsFilteredSorted.slice(0, this.loaded)
-		},
-
-		pollsCount(state: PollsStore): { [key: string]: number } {
-			const count: Record<FilterType, number> = {} as Record<
-				FilterType,
-				number
-			>
-
-			for (const [key, category] of Object.entries(state.categories)) {
-				count[key as FilterType] = state.polls.filter((poll: Poll) =>
-					category.filterCondition(poll),
-				).length
+		listQuery(): Omit<PollListQuery, 'offset' | 'limit'> {
+			return {
+				...this.listFilter,
+				sortBy: this.sort.by,
+				sortDirection: this.sort.reverse ? 'desc' : 'asc',
 			}
-
-			return count
 		},
 
-		/*
-		 * Sliced filtered and sorted polls for dashboard
-		 */
 		dashboardList(state: PollsStore): Poll[] {
-			return orderBy(
-				state.polls.filter((poll: Poll) =>
-					state.categories.relevant.filterCondition(poll),
-				),
-				['created'],
-				['desc'],
-			).slice(0, 7)
+			return state.list.polls
 		},
 
-		loaded(state: PollsStore): number {
-			return state.meta.chunks.loaded * state.meta.chunks.size
+		pollsLoading(state: PollsStore): boolean {
+			return state.list.status === 'loading'
 		},
 
-		datePolls(state: PollsStore): Poll[] {
-			return state.polls.filter(
-				(poll: Poll) => poll.type === 'datePoll' && !poll.status.isArchived,
-			)
+		hasMore(state: PollsStore): boolean {
+			return state.list.polls.length < state.list.total
 		},
 
-		pollsLoading(state): boolean {
-			return state.meta.status === 'loading'
+		hasMoreDatePolls(state: PollsStore): boolean {
+			return state.datePolls.polls.length < state.datePolls.total
 		},
-
-		countByCategory: (state: PollsStore) => (filterId: FilterType) =>
-			state.polls.filter((poll: Poll) =>
-				state.categories[filterId].filterCondition(poll),
-			).length,
 	},
 
 	actions: {
 		/**
-		 * Load all polls and poll groups from the API.
-		 * This will set the `polls` and `pollGroups` state properties.
+		 * Load the poll counts and the poll groups for the navigation.
+		 * Does not load the polls lists.
 		 *
-		 * This will also set the `meta.status` to `Loading` while the request is in progress,
-		 * and to `Loaded` or `Error` when the request is finished.
-		 *
-		 * @param {boolean} forced - If false, loading polls will only be done, when the status is not `Loaded`.
-		 * @throws {Error} If the request fails and is not canceled.
-		 * @return {Promise<void>}
+		 * @param {boolean} forced - If false, reuse loaded data or a running request
 		 */
-		async load(forced: boolean = true): Promise<void> {
-			const pollGroupsStore = usePollGroupsStore()
-
-			if (
-				this.meta.status === 'loading'
-				|| (!forced && this.meta.status === 'loaded')
-			) {
-				Logger.debug('Polls already loaded or loading, skipping load', {
-					status: this.meta.status,
-					forced,
-				})
-				return
+		async loadMeta(forced: boolean = true): Promise<void> {
+			if (!forced && (metaRequest || this.listMeta.status === 'loaded')) {
+				return metaRequest ?? undefined
 			}
 
-			this.meta.status = 'loading'
+			const pollGroupsStore = usePollGroupsStore()
+			this.listMeta.status = 'loading'
 
-			try {
-				const response = await PollsAPI.getPolls()
-				this.polls = response.data.polls
-				pollGroupsStore.pollGroups = response.data.pollGroups
-				this.meta.status = 'loaded'
-			} catch (error) {
-				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
-					return
+			const request = (async () => {
+				try {
+					const response = await PollsAPI.getPollsMeta()
+					this.listMeta = {
+						counts: response.data.counts,
+						// php returns empty maps as arrays
+						pollGroupCounts: { ...response.data.pollGroupCounts },
+						status: 'loaded',
+					}
+					pollGroupsStore.pollGroups = response.data.pollGroups
+				} catch (error) {
+					if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+						return
+					}
+					this.listMeta.status = 'error'
+					Logger.error('Error loading poll list meta data', { error })
+					throw error
 				}
-				this.meta.status = 'error'
-				Logger.error('Error loading polls', { error })
+			})()
+
+			metaRequest = request
+			try {
+				await request
+			} finally {
+				if (metaRequest === request) {
+					metaRequest = null
+				}
+			}
+		},
+
+		/**
+		 * Load the first page of the current list (category or poll group)
+		 * Previously loaded polls are replaced.
+		 *
+		 * @param {number} limit - Number of polls to load
+		 */
+		async loadList(limit?: number): Promise<void> {
+			const sessionStore = useSessionStore()
+			const pollGroupsStore = usePollGroupsStore()
+
+			// poll groups are needed to resolve the slug of the group route
+			if (
+				sessionStore.route.name === 'group'
+				&& !pollGroupsStore.currentPollGroup
+			) {
+				const metaWasLoaded = this.listMeta.status === 'loaded'
+				await this.loadMeta(false)
+
+				// the slug is not part of the cached poll groups, e.g. because the
+				// group was created in another session, so refresh them once
+				if (metaWasLoaded && !pollGroupsStore.currentPollGroup) {
+					await this.loadMeta(true)
+				}
+			}
+
+			// pinned, so every page of this load uses the same filter and sorting,
+			// even if the route or the sorting changes in between
+			const query = this.listQuery
+			await fetchInto(
+				this.list,
+				(offset, limit) => PollsAPI.getPolls({ ...query, offset, limit }),
+				limit ?? this.meta.pageSize,
+				false,
+			)
+		},
+
+		/**
+		 * Append the next page to the current list
+		 */
+		async loadMore(): Promise<void> {
+			if (this.list.status === 'loading' || !this.hasMore) {
+				return
+			}
+			const query = this.listQuery
+			await fetchInto(
+				this.list,
+				(offset, limit) => PollsAPI.getPolls({ ...query, offset, limit }),
+				this.meta.pageSize,
+				true,
+			)
+		},
+
+		/**
+		 * Load the newest relevant polls for the dashboard widget
+		 */
+		async loadDashboard(): Promise<void> {
+			await fetchInto(
+				this.list,
+				(offset, limit) =>
+					PollsAPI.getPolls({
+						category: 'relevant',
+						sortBy: 'created',
+						sortDirection: 'desc',
+						offset,
+						limit,
+					}),
+				DASHBOARD_POLLS,
+				false,
+			)
+		},
+
+		/**
+		 * Load the first page of the non archived date polls
+		 *
+		 * @param {number} limit - Number of polls to load
+		 */
+		async loadDatePolls(limit?: number): Promise<void> {
+			await fetchInto(
+				this.datePolls,
+				(offset, limit) => PollsAPI.getDatePolls(offset, limit),
+				limit ?? this.meta.pageSize,
+				false,
+			)
+		},
+
+		async loadMoreDatePolls(): Promise<void> {
+			if (this.datePolls.status === 'loading' || !this.hasMoreDatePolls) {
+				return
+			}
+			await fetchInto(
+				this.datePolls,
+				(offset, limit) => PollsAPI.getDatePolls(offset, limit),
+				this.meta.pageSize,
+				true,
+			)
+		},
+
+		/**
+		 * Load the newest polls of a category or poll group for its navigation entry
+		 *
+		 * @param {FilterType | number} key - Category id or poll group id
+		 */
+		async loadNavigationList(key: FilterType | number): Promise<void> {
+			try {
+				const response = await PollsAPI.getNavigationPolls({
+					...(typeof key === 'number'
+						? { pollGroup: key }
+						: { category: key }),
+					sortBy: 'created',
+					sortDirection: 'desc',
+					offset: 0,
+					limit: this.meta.maxPollsInNavigation,
+				})
+				this.navigationPolls[key] = response.data.polls
+			} catch (error) {
+				Logger.error('Error loading navigation polls', { error, key })
 				throw error
 			}
 		},
 
 		/**
-		 * Sliced filtered and sorted polls for navigation
-		 * @param filterList - List of poll IDs to filter by
+		 * Refresh everything that was loaded before, after polls changed.
+		 * Lists keep the number of already loaded polls.
 		 */
-		groupList(filterList: number[]): Poll[] {
-			const pollsStore = usePollsStore()
-			return orderBy(
-				pollsStore.polls.filter((poll: Poll) => filterList.includes(poll.id))
-					?? [],
-				['created'],
-				['desc'],
-			).slice(0, pollsStore.meta.maxPollsInNavigation)
+		async load(): Promise<void> {
+			const requests: Promise<void>[] = [
+				this.loadMeta(),
+				// refresh already expanded navigation entries, object keys are strings
+				...Object.keys(this.navigationPolls).map((key) =>
+					this.loadNavigationList(
+						/^\d+$/.test(key) ? Number(key) : (key as FilterType),
+					),
+				),
+			]
+			if (this.list.status !== '') {
+				requests.push(
+					this.loadList(
+						Math.max(this.list.polls.length, this.meta.pageSize),
+					),
+				)
+			}
+			if (this.datePolls.status !== '') {
+				requests.push(
+					this.loadDatePolls(
+						Math.max(this.datePolls.polls.length, this.meta.pageSize),
+					),
+				)
+			}
+			await Promise.all(requests)
 		},
 
-		addOrUpdatePollGroupInList(payload: { poll: Poll }) {
-			this.polls = this.polls
-				.filter((p) => p.id !== payload.poll?.id)
-				.concat(payload.poll)
+		/**
+		 * Update a poll after its poll groups changed
+		 * and refresh the counts and the current list
+		 *
+		 * @param payload
+		 * @param payload.poll
+		 */
+		async addOrUpdatePollGroupInList(payload: { poll: Poll }): Promise<void> {
+			this.list.polls = this.list.polls.map((poll) =>
+				poll.id === payload.poll.id ? payload.poll : poll,
+			)
+			await this.load()
 		},
 
 		async changeOwner(payload: { pollId: number; userId: string }) {
@@ -377,14 +541,6 @@ export const usePollsStore = defineStore('polls', {
 			} finally {
 				this.load()
 			}
-		},
-
-		addChunk(): void {
-			this.meta.chunks.loaded = this.meta.chunks.loaded + 1
-		},
-
-		resetChunks(): void {
-			this.meta.chunks.loaded = 1
 		},
 
 		async clone(payload: { pollId: number }): Promise<void> {

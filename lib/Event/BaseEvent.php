@@ -26,7 +26,6 @@ abstract class BaseEvent extends Event {
 	protected UserMapper $userMapper;
 	protected UserSession $userSession;
 
-
 	public function __construct(
 		protected Poll|Comment|Share|Option|Vote $eventObject,
 	) {

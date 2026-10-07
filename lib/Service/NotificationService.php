@@ -27,7 +27,6 @@ class NotificationService {
 		$this->notificationManager->markProcessed($notification);
 	}
 
-
 	/**
 	 * Remove all notifications for a specific poll and the current user.
 	 *
