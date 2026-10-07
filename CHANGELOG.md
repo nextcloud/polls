@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [8.3.11] - 2026-10-07
+- Remove deleted limitation on get poll
+- Paginate poll list and load navigation counts separately
+
 ## [8.3.10] - 2025-08-29
  - fix creation of duplicated index
 
