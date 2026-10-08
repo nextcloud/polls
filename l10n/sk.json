@@ -494,7 +494,7 @@
     "Invalid email address." : "neplatná emailová adresa.",
     "You will receive your personal link after clicking \"OK\"." : "Po kliknutí na \"OK\" dostanete svoj osobný odkaz.",
     "Enter your email address to get your personal access link." : "Zadajte vašu e-mailovú adresu a získajte tak vlastný prístupový odkaz.",
-    "Email could not be sent to {emailAddress}" : "Pošta nemôže byť znova odoslaná na {emailAddress}",
+    "Email could not be sent to {emailAddress}" : "E-mail sa nepodarilo odoslať na adresu {emailAddress}",
     "Error registering to poll" : "Chyba registrácie do hlasovania",
     "Register to this poll" : "Zaregistrovať sa do tejto ankety",
     "Enter your name or a nickname" : "Zadajte vaše meno alebo prezývku",

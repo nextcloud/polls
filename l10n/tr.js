@@ -768,7 +768,7 @@ OC.L10N.register(
     "Sort by access level" : "Erişim düzeyine göre sırala",
     "Owner" : "Sahip",
     "Sort by name of the owner" : "Sahibin adına göre sırala",
-    "Expiration" : "Geçerlilik süresi sonu",
+    "Expiration" : "Geçerlilik sonu",
     "Sort by expiration date" : "Bitiş tarihine göre sırala",
     "Sort by activity" : "Etkinliğe göre sırala",
     "Relevant" : "İlişkili",
