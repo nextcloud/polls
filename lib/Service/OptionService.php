@@ -334,7 +334,8 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function shift(int $pollId, int $step, string $unit): array {
-		$this->getPoll($pollId);
+		$this->getPoll($pollId)
+			->request(Poll::PERMISSION_POLL_EDIT);
 
 		if ($this->poll->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Shifting is only available in date polls');
