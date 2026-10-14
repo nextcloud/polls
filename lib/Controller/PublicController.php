@@ -27,6 +27,7 @@ use OCA\Polls\Service\VoteService;
 use OCA\Polls\Service\WatchService;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\AnonRateLimit;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
@@ -396,6 +397,7 @@ class PublicController extends BaseController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[AnonRateLimit(limit: Application::PUBLIC_RATE_LIMIT, period: Application::PUBLIC_RATE_LIMIT_PERIOD)]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/check/username')]
 	public function validatePublicDisplayName(string $displayName, string $token): JSONResponse {
@@ -405,8 +407,7 @@ class PublicController extends BaseController {
 	}
 
 	/**
-	 * Validate it the user name is reserved
-	 * return false, if this username already exists as a user or as a participant of the poll
+	 * Roll the dice to generate a random username
 	 * @param string $token Share token
 	 */
 	#[PublicPage]
@@ -440,6 +441,7 @@ class PublicController extends BaseController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[AnonRateLimit(limit: Application::PUBLIC_RATE_LIMIT, period: Application::PUBLIC_RATE_LIMIT_PERIOD)]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'PUT', url: '/s/{token}/name/{displayName}')]
 	public function setDisplayName(string $token, string $displayName): JSONResponse {
@@ -487,6 +489,7 @@ class PublicController extends BaseController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[AnonRateLimit(limit: Application::PUBLIC_RATE_LIMIT, period: Application::PUBLIC_RATE_LIMIT_PERIOD)]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/register')]
 	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): JSONResponse {

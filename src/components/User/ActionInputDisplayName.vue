@@ -14,6 +14,7 @@ import { useRoute } from 'vue-router'
 import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 import EditAccountIcon from 'vue-material-design-icons/AccountEditOutline.vue'
 import { ValidatorAPI } from '../../Api/index.ts'
+import { isRateLimited, showRateLimitError } from '../../helpers/modules/rateLimit.ts'
 import { useSessionStore } from '../../stores/session.ts'
 
 const route = useRoute()
@@ -64,7 +65,10 @@ const validatePublicUsername = debounce(async function () {
 			sessionStore.share.user.displayName,
 		)
 		setStatus('success')
-	} catch {
+	} catch (error) {
+		if (isRateLimited(error)) {
+			showRateLimitError()
+		}
 		setStatus('error')
 	}
 }, 500)

@@ -17,6 +17,7 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import InputDiv from '@/components/Base/modules/InputDiv.vue'
 import { PublicAPI, ValidatorAPI } from '@/Api'
 import { setCookie } from '@/helpers/modules/cookieHelper'
+import { isRateLimited, showRateLimitError } from '@/helpers/modules/rateLimit'
 import { useSessionStore } from '@/stores/session'
 
 const route = useRoute()
@@ -57,6 +58,9 @@ const userNameHint = computed(() => {
 			username: userName.value,
 		})
 	}
+	if (checkStatus.value.userName === 'error') {
+		return t('polls', 'Too many requests. Please wait a few minutes and try again.')
+	}
 	return ''
 })
 
@@ -73,6 +77,11 @@ const validatePublicUsername = debounce(async function (): Promise<void> {
 		checkStatus.value.userName = 'valid'
 	} catch (error) {
 		if ((error as AxiosError).code === 'ERR_CANCELED') {
+			return
+		}
+
+		if (isRateLimited(error)) {
+			checkStatus.value.userName = 'error'
 			return
 		}
 
@@ -184,6 +193,10 @@ async function submitRegistration(): Promise<void> {
 		}
 	} catch (error) {
 		if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+			return
+		}
+		if (isRateLimited(error)) {
+			showRateLimitError()
 			return
 		}
 		showError(t('polls', 'Error registering to poll', { error }))
