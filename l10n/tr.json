@@ -489,6 +489,7 @@
     "Checking name …" : "Ad denetleniyor…",
     "A name is required." : "Bir ad yazılmalıdır.",
     "The name {username} is invalid or reserved." : "{username} kullanıcı adı geçersiz ya da ayrılmış.",
+    "Too many requests. Please wait a few minutes and try again." : "Çok fazla sayıda istek yapıldı. Lütfen bir kaç dakika bekleyip yeniden deneyin.",
     "Checking email address …" : "E-posta adresi denetleniyor…",
     "An email address is required." : "Bir e-posta adresi yazılması zorunludur.",
     "Invalid email address." : "E-posta adresi geçersiz.",

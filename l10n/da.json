@@ -489,6 +489,7 @@
     "Checking name …" : "Kontrollerer navnet …",
     "A name is required." : "Der kræves et navn.",
     "The name {username} is invalid or reserved." : "Navnet {username} er ugyldigt eller reserveret.",
+    "Too many requests. Please wait a few minutes and try again." : "For mange forespørgsler. Vent et par minutter, og prøv igen.",
     "Checking email address …" : "Kontrollerer e-mailadressen …",
     "An email address is required." : "Der kræves en e-mailadresse.",
     "Invalid email address." : "Ugyldig e-mailadresse.",

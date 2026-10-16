@@ -489,6 +489,7 @@
     "Checking name …" : "Kontroluje sa meno …",
     "A name is required." : "Meno je povinné.",
     "The name {username} is invalid or reserved." : "Meno {username} je neplatné alebo rezervované",
+    "Too many requests. Please wait a few minutes and try again." : "Príliš veľa požiadaviek. Počkajte niekoľko minút a skúste to znova.",
     "Checking email address …" : "Kontroluje sa e-mailová adresa …",
     "An email address is required." : "E-mailová adresa je povinná.",
     "Invalid email address." : "neplatná emailová adresa.",
