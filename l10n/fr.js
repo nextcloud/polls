@@ -491,6 +491,7 @@ OC.L10N.register(
     "Checking name …" : "Vérification du nom…",
     "A name is required." : "Un nom est requis.",
     "The name {username} is invalid or reserved." : "Le nom {username} est invalide ou réservé.",
+    "Too many requests. Please wait a few minutes and try again." : "Trop de requêtes. Veuillez patienter quelques minutes et réessayer.",
     "Checking email address …" : "Vérification de l'adresse e-mail…",
     "An email address is required." : "Une adresse e-mail est requise.",
     "Invalid email address." : "Adresse e-mail invalide.",

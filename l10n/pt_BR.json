@@ -489,6 +489,7 @@
     "Checking name …" : "Verificando nome …",
     "A name is required." : "Um nome é obrigatório.",
     "The name {username} is invalid or reserved." : "O nome {username} é inválido ou reservado.",
+    "Too many requests. Please wait a few minutes and try again." : "Excesso de solicitações. Aguarde alguns minutos e tente novamente.",
     "Checking email address …" : "Verificando endereço de e-mail …",
     "An email address is required." : "É obrigatório um endereço de e-mail.",
     "Invalid email address." : "Endereço de e-mail inválido.",

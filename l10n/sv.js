@@ -491,6 +491,7 @@ OC.L10N.register(
     "Checking name …" : "Kontrollerar namnet …",
     "A name is required." : "Ett namn krävs.",
     "The name {username} is invalid or reserved." : "Namnet {username} är ogiltigt eller reserverat.",
+    "Too many requests. Please wait a few minutes and try again." : "För många förfrågningar. Vänta några minuter och försök igen.",
     "Checking email address …" : "Kontrollerar e-postadressen …",
     "An email address is required." : "En e-postadress krävs.",
     "Invalid email address." : "Ogiltig e-postadress.",

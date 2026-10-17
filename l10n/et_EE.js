@@ -491,6 +491,7 @@ OC.L10N.register(
     "Checking name …" : "Kontrollin nime…",
     "A name is required." : "Nimi on nõutav.",
     "The name {username} is invalid or reserved." : "Kasutajanimi „{username}“ on vigane või piiratud kasutusega.",
+    "Too many requests. Please wait a few minutes and try again." : "Liiga palju päringuid. Palun oota mõne hetke ja proovi uuesti.",
     "Checking email address …" : "Kontrollin e-posti addressi…",
     "An email address is required." : "E-posti aadress on nõutav.",
     "Invalid email address." : "Vigane e-posti aadress.",
