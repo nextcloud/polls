@@ -81,7 +81,15 @@ class JanitorCron extends TimedJob {
 			$deleted['shares'] = $this->shareMapper->purgeDeletedShares($purgeBefore);
 
 			// purge orphaned votes; Votes without any corresponding option
-			$deleted['orphaned votes'] = $this->voteMapper->removeOrphanedVotes();
+			// Skipped while hashes are known to be out of sync, otherwise votes of an
+			// option whose hash could not be written would be deleted as orphaned
+			if ($this->tableManager->getFailedHashUpdates() === 0) {
+				$deleted['orphaned votes'] = $this->voteMapper->removeOrphanedVotes();
+			} else {
+				$this->logger->warning('JanitorCron: Skipped removing orphaned votes, {count} hash update(s) failed', [
+					'count' => $this->tableManager->getFailedHashUpdates(),
+				]);
+			}
 
 			// delete polls after defined days after archiving date
 			$autoDeleteOffset = $this->appSettings->getAutoDeleteOffsetDays();

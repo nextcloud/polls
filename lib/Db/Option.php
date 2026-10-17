@@ -74,7 +74,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	public $id = null;
 	protected int $pollId = 0;
 	protected string $pollOptionText = '';
-	protected string $pollOptionHash = '';
+	protected ?string $pollOptionHash = '';
 	protected ?string $description = '';
 	protected int $timestamp = 0;
 	protected int $duration = 0;
@@ -218,7 +218,17 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getPollOptionHashInDB(): string {
-		return $this->pollOptionHash;
+		// Oracle stores an empty string as null
+		return (string)$this->pollOptionHash;
+	}
+
+	/**
+	 * Get the raw timestamp column, opposed to getTimestamp(), which derives it from
+	 * the iso timestamp. Needed where the stored value matters, i.e. the unique index
+	 * over poll_id, poll_option_hash and timestamp
+	 */
+	public function getTimestampInDB(): int {
+		return $this->timestamp;
 	}
 	/**
 	 * Get the order of the option. If the option has a valid timestamp,
