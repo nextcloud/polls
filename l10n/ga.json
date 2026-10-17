@@ -489,6 +489,7 @@
     "Checking name …" : "Ag seiceáil ainm …",
     "A name is required." : "Tá ainm ag teastáil.",
     "The name {username} is invalid or reserved." : "Tá an t-ainm {username} neamhbhailí nó in áirithe.",
+    "Too many requests. Please wait a few minutes and try again." : "An iomarca iarratas. Fan cúpla nóiméad, le do thoil, agus bain triail as arís.",
     "Checking email address …" : "Ag seiceáil an seoladh ríomhphoist …",
     "An email address is required." : "Tá seoladh ríomhphoist ag teastáil.",
     "Invalid email address." : "Sheoladh ríomhphoist neamhbhailí.",

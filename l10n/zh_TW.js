@@ -491,6 +491,7 @@ OC.L10N.register(
     "Checking name …" : "正在檢查名稱⋯⋯",
     "A name is required." : "名稱為必填。",
     "The name {username} is invalid or reserved." : "名稱 {username} 無效或已被保留。",
+    "Too many requests. Please wait a few minutes and try again." : "太多請求。請等待數分鐘並重試。",
     "Checking email address …" : "正在檢查電子郵件地址⋯⋯",
     "An email address is required." : "電子郵件地址為必填。",
     "Invalid email address." : "無效的電子郵件地址。",
