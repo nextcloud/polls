@@ -31,6 +31,7 @@
     "extends @nextcloud/browserslist-config"
   ],
   "dependencies": {
+    "@mdi/js": "^7.4.47",
     "@nextcloud/auth": "^2.5.1",
     "@nextcloud/axios": "^2.5.0",
     "@nextcloud/dialogs": "^7.0.0-rc.1",
