@@ -384,7 +384,7 @@ OC.L10N.register(
     "Clone to option sequence" : "Clonează într-o serie de opțiuni",
     "Create a sequence of date options starting with {dateOption}." : "Creează o serie de opțiuni de dată începând cu {dateOption}.",
     "Step unit" : "Unitatea pasului",
-    "Step width" : "Mărimea pasului",
+    "Step width" : "Dimensiunea pasului",
     "Amount" : "Valoare",
     "Restore option" : "Restaurează opțiunea",
     "Delete option" : "Șterge opțiunea",
