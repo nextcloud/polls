@@ -39,6 +39,8 @@ OC.L10N.register(
     "Configuration" : "Configuración",
     "Change name" : "Cambiar nombre",
     "Email options" : "Opciones de correo electrónico",
+    "Navigation" : "Navegación",
+    "Show all" : "Mostrar todo",
     "Details" : "Detalles",
     "Sharing" : "Compartiendo",
     "Comments" : "Comentarios",

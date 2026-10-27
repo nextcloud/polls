@@ -65,6 +65,8 @@ OC.L10N.register(
     "never" : "aldrei",
     "Error cloning poll." : "Villa við að klóna könnun.",
     "Back" : "Til baka",
+    "Descending" : "Lækkandi",
+    "Ascending" : "Hækkandi",
     "Legal notice" : "Lagaleg atriði",
     "Privacy policy" : "Meðferð persónulegra gagna",
     "Invalid email address." : "Ógilt tölvupóstfang.",

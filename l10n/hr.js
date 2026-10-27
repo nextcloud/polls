@@ -140,6 +140,8 @@ OC.L10N.register(
     "Error cloning poll." : "Pogreška pri kloniranju ankete.",
     "Back" : "Natrag",
     "Take over" : "Preuzmi",
+    "Descending" : "Silazno",
+    "Ascending" : "Uzlazno",
     "Legal notice" : "Pravna obavijest",
     "Privacy policy" : "Pravila o privatnosti",
     "Invalid email address." : "Nevažeća adresa e-pošte.",

@@ -59,6 +59,8 @@ OC.L10N.register(
     "Description" : "Descripción",
     "never" : "nunca",
     "Back" : "Atrás",
+    "Descending" : "Descendente",
+    "Ascending" : "Ascendente",
     "Legal notice" : "Aviso legal",
     "Privacy policy" : "Política de privacidad",
     "Group share" : "Group share",
