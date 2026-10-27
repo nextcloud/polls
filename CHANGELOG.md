@@ -5,6 +5,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [8.3.12] - 2026-10-27
+- Distinguis shares visually in NcSelect 
+
 ## [8.3.11] - 2026-10-07
 - Remove deleted limitation on get poll
 - Paginate poll list and load navigation counts separately
