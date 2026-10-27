@@ -4,15 +4,24 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import debounce from 'lodash/debounce'
 import { t } from '@nextcloud/l10n'
+import {
+	mdiAccount,
+	mdiAccountGroup,
+	mdiAccountMultiple,
+	mdiAccountMultipleOutline,
+	mdiCardAccountDetails,
+	mdiEmail,
+	mdiShareVariant,
+} from '@mdi/js'
 
 import NcSelectUsers from '@nextcloud/vue/components/NcSelectUsers'
 
 import { AppSettingsAPI } from '../../Api'
 import { Logger } from '../../helpers'
-import { ISearchType, User } from '../../Types'
+import { ISearchType, User, UserType } from '../../Types'
 import type { AxiosError } from '@nextcloud/axios'
 
 interface Props {
@@ -36,6 +45,72 @@ const {
 const users = ref<User[]>([])
 const isLoading = ref(false)
 
+// Same icons as core (`icon-user`, `icon-teams`), calendar and contacts:
+// account = Account, group = AccountMultiple, team = AccountGroup,
+// contact group = AccountMultipleOutline
+const typeDecoration: Partial<Record<UserType, { path: string; name: string }>> = {
+	user: { path: mdiAccount, name: t('polls', 'Account') },
+	admin: { path: mdiAccount, name: t('polls', 'Account') },
+	group: { path: mdiAccountMultiple, name: t('polls', 'Group') },
+	contactGroup: {
+		path: mdiAccountMultipleOutline,
+		name: t('polls', 'Contact group'),
+	},
+	circle: { path: mdiAccountGroup, name: t('polls', 'Team') },
+	contact: { path: mdiCardAccountDetails, name: t('polls', 'Contact') },
+	email: { path: mdiEmail, name: t('polls', 'Email') },
+	external: { path: mdiShareVariant, name: t('polls', 'External') },
+}
+
+type UserOption = {
+	id: string
+	displayName: string
+	user?: string
+	isNoUser: boolean
+	subname: string
+	iconSvg?: string
+	iconName?: string
+	source: User
+}
+
+/**
+ * Shape a search result for NcSelectUsers/NcListItemIcon like files_sharing does:
+ * real avatar for accounts, a subname and a trailing type icon for every type,
+ * so accounts without an avatar picture are not mistaken for initials-only entries.
+ *
+ * @param user search result
+ */
+function toOption(user: User): UserOption {
+	const decoration = typeDecoration[user.type]
+	const isAccount = user.type === 'user' || user.type === 'admin'
+	return {
+		// groups and accounts may share the same id
+		id: `${user.type}:${user.id}`,
+		displayName: user.displayName,
+		user: isAccount ? user.id : undefined,
+		isNoUser: !isAccount,
+		subname:
+			user.emailAddress && user.emailAddress !== user.displayName
+				? user.emailAddress
+				: (decoration?.name ?? ''),
+		iconSvg: decoration
+			? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="${decoration.path}"/></svg>`
+			: undefined,
+		iconName: decoration?.name,
+		source: user,
+	}
+}
+
+const options = computed(() => users.value.map(toOption))
+
+// consumers get the untouched search result, the option is for display only
+const selected = computed({
+	get: () => (model.value ? toOption(model.value) : undefined),
+	set: (option: UserOption | undefined) => {
+		model.value = option?.source
+	},
+})
+
 const loadUsersAsync = debounce(async function (query: string) {
 	if (!query) {
 		users.value = []
@@ -57,8 +132,8 @@ const loadUsersAsync = debounce(async function (query: string) {
 	}
 }, 250)
 
-async function optionSelected(user: User) {
-	emit('userSelected', user)
+function optionSelected(option: UserOption) {
+	emit('userSelected', option.source)
 }
 
 const selectProps = {
@@ -79,9 +154,9 @@ const selectProps = {
 <template>
 	<NcSelectUsers
 		id="ajax"
-		v-model="model"
+		v-model="selected"
 		v-bind="selectProps"
-		:options="users"
+		:options="options"
 		@option:selected="optionSelected"
 		@search="loadUsersAsync">
 		<template #selection="{ values, isOpen }">
