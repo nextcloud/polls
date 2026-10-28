@@ -217,6 +217,7 @@ OC.L10N.register(
     "Unknown error" : "Ukjent feil",
     "Reveal them" : "Avslør dem",
     "Maybe" : "Kanskje",
+    "Loading …" : "Laster inn ...",
     "Previous day" : "Forrige dag",
     "Next day" : "Neste dag",
     "Please wait…" : "Vennligst vent...",
