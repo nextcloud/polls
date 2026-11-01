@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
  - No invitation mail was sent after successful registration with email address
+ - Require edit permission for shifting date options
 
 ## [9.3.0] - 2026-09-16
 
