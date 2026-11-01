@@ -31,11 +31,13 @@ const previewOptions = computed(() => optionsStore.options.slice(0, MAX_OPTIONS)
 
 function optionLabel(option: (typeof optionsStore.options)[0]): string {
 	if (pollStore.type === 'datePoll') {
-		const { optionStart, optionEnd, isSameTime, isFullDays, isSameDay } =
-			getDatesFromOption(option)
+		const { optionStart, optionEnd, isSameTime, isFullDays, isSameDay }
+			= getDatesFromOption(option)
 		const fmt = isFullDays ? DateTime.DATE_MED : DateTime.DATETIME_MED
 		const start = optionStart.toLocaleString(fmt)
-		if (isSameTime || (isFullDays && isSameDay)) return start
+		if (isSameTime || (isFullDays && isSameDay)) {
+			return start
+		}
 		return `${start} – ${optionEnd.toLocaleString(fmt)}`
 	}
 	return option.text

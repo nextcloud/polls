@@ -44,8 +44,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 		const counts: Record<number, number> = {}
 		const pollsStore = usePollsStore()
 		pollGroups.value.forEach((group) => {
-			counts[group.id] = pollsStore.polls.filter((poll) =>
-				group.pollIds.includes(poll.id),).length
+			counts[group.id] = pollsStore.polls.filter((poll) => group.pollIds.includes(poll.id)).length
 		})
 		return counts
 	})
@@ -55,22 +54,18 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 	 *
 	 * @return {PollGroup[]} Sorted poll groups, sorted by title in ascending order
 	 */
-	const pollGroupsSorted = computed((): PollGroup[] =>
-		orderBy(
-			pollGroups.value.filter(
-				(group) => countPollsInPollGroups.value[group.id] > 0,
-			),
-			['title'],
-			['asc'],
-		),)
+	const pollGroupsSorted = computed((): PollGroup[] => orderBy(
+		pollGroups.value.filter((group) => countPollsInPollGroups.value[group.id] > 0),
+		['title'],
+		['asc'],
+	))
 
 	const pollsInCurrendPollGroup = computed((): Poll[] => {
 		const pollsStore = usePollsStore()
 		if (!currentPollGroup.value) {
 			return []
 		}
-		return pollsStore.polls.filter((poll) =>
-			currentPollGroup.value?.pollIds.includes(poll.id),)
+		return pollsStore.polls.filter((poll) => currentPollGroup.value?.pollIds.includes(poll.id))
 	})
 
 	/**
@@ -191,9 +186,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 
 			if (response.data.pollGroup === null) {
 				// If the poll group was removed (=== null), remove it from the store
-				pollGroups.value = pollGroups.value.filter(
-					(group) => group.id !== payload.pollGroupId,
-				)
+				pollGroups.value = pollGroups.value.filter((group) => group.id !== payload.pollGroupId)
 				return
 			}
 			// Otherwise, update the poll group in the store

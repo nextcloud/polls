@@ -29,35 +29,21 @@ export const useComboStore = defineStore('combo', {
 	}),
 
 	getters: {
-		poll: (state) => (pollId: number) =>
-			state.polls.find((poll: Poll) => poll.id === pollId),
-		votesInPoll: (state) => (pollId: number) =>
-			state.votes.filter((vote: Vote) => vote.pollId === pollId),
-		participantsInPoll: (state) => (pollId: number) =>
-			state.participants.filter(
-				(participant: Participant) => participant.pollId === pollId,
-			),
-		pollIsListed: (state) => (pollId: number) =>
-			!!state.polls.find((poll: Poll) => poll.id === pollId),
+		poll: (state) => (pollId: number) => state.polls.find((poll: Poll) => poll.id === pollId),
+		votesInPoll: (state) => (pollId: number) => state.votes.filter((vote: Vote) => vote.pollId === pollId),
+		participantsInPoll: (state) => (pollId: number) => state.participants.filter((participant: Participant) => participant.pollId === pollId),
+		pollIsListed: (state) => (pollId: number) => !!state.polls.find((poll: Poll) => poll.id === pollId),
 		pollCombo: (state) => state.polls.map((poll: Poll) => poll.id),
 		optionBelongsToPoll:
-			(state) => (payload: { text: string; pollId: number }) =>
-				!!state.options.find(
-					(option) =>
-						option.text === payload.text
-						&& option.pollId === payload.pollId,
-				),
+			(state) => (payload: { text: string, pollId: number }) => !!state.options.find((option) => option.text === payload.text
+				&& option.pollId === payload.pollId),
 		uniqueOptions: (state) => sortBy(uniqueOptions(state.options), 'timestamp'),
 
 		getVote:
-			(state) =>
-			(payload: { userId: string; optionText: string; pollId: number }) => {
-				const found = state.votes.find(
-					(vote: Vote) =>
-						vote.user.id === payload.userId
-						&& vote.optionText === payload.optionText
-						&& vote.pollId === payload.pollId,
-				)
+			(state) => (payload: { userId: string, optionText: string, pollId: number }) => {
+				const found = state.votes.find((vote: Vote) => vote.user.id === payload.userId
+					&& vote.optionText === payload.optionText
+					&& vote.pollId === payload.pollId)
 				if (found === undefined) {
 					return {
 						answer: '',
@@ -87,22 +73,16 @@ export const useComboStore = defineStore('combo', {
 		},
 
 		removePoll(payload: { pollId: number }) {
-			this.polls = this.polls.filter(
-				(poll: Poll) => poll.id !== payload.pollId,
-			)
+			this.polls = this.polls.filter((poll: Poll) => poll.id !== payload.pollId)
 		},
 
 		removeVotes(payload: { pollId: number }) {
-			this.votes = this.votes.filter(
-				(vote: Vote) => vote.pollId !== payload.pollId,
-			)
+			this.votes = this.votes.filter((vote: Vote) => vote.pollId !== payload.pollId)
 			this.participants = uniqueParticipants(this.votes)
 		},
 
 		removeOptions(payload: { pollId: number }) {
-			this.options = this.options.filter(
-				(option: Option) => option.pollId !== payload.pollId,
-			)
+			this.options = this.options.filter((option: Option) => option.pollId !== payload.pollId)
 		},
 
 		async verifyPollsFromSettings() {
@@ -118,10 +98,7 @@ export const useComboStore = defineStore('combo', {
 			const pollsStore = usePollsStore()
 			this.polls.forEach((comboPoll: Poll) => {
 				if (
-					pollsStore.polls.findIndex(
-						(poll) =>
-							poll.id === comboPoll.id && !poll.status.isArchived,
-					) < 0
+					pollsStore.polls.findIndex((poll) => poll.id === comboPoll.id && !poll.status.isArchived) < 0
 				) {
 					this.removePoll({ pollId: comboPoll.id })
 				}

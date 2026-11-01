@@ -17,9 +17,7 @@ const emptyContentProps = {
 	name: t('polls', 'No activity yet'),
 }
 
-const showEmptyContent = computed(
-	() => activityStore.getActivitiesForPoll.length === 0,
-)
+const showEmptyContent = computed(() => activityStore.getActivitiesForPoll.length === 0)
 
 onMounted(() => {
 	activityStore.load()

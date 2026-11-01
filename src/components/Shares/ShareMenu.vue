@@ -40,11 +40,8 @@ const pollStore = usePollStore()
 
 const actionsRef = ref<InstanceType<typeof NcActions> | null>(null)
 
-const isDirectShare = computed(
-	() =>
-		share.groupId === pollGroupsStore.currentPollGroup?.id
-		|| share.pollId === pollStore.id,
-)
+const isDirectShare = computed(() => share.groupId === pollGroupsStore.currentPollGroup?.id
+	|| share.pollId === pollStore.id)
 
 const resolving = ref(false)
 const label = ref({
@@ -89,26 +86,22 @@ const resendInvitation = computed<ButtonProps>(() => ({
 function handleInvitationResults(sentResult: SentResults) {
 	if (sentResult?.sentMails) {
 		sentResult.sentMails.forEach((item) => {
-			showSuccess(
-				t('polls', 'Invitation sent to {displayName} ({emailAddress})', {
-					emailAddress: item.emailAddress,
-					displayName: item.displayName,
-				}),
-			)
+			showSuccess(t('polls', 'Invitation sent to {displayName} ({emailAddress})', {
+				emailAddress: item.emailAddress,
+				displayName: item.displayName,
+			}))
 		})
 	}
 	if (sentResult?.abortedMails) {
 		sentResult.abortedMails.forEach((item) => {
-			showError(
-				t(
-					'polls',
-					'Error sending invitation to {displayName} ({emailAddress})',
-					{
-						emailAddress: item.emailAddress,
-						displayName: item.displayName,
-					},
-				),
-			)
+			showError(t(
+				'polls',
+				'Error sending invitation to {displayName} ({emailAddress})',
+				{
+					emailAddress: item.emailAddress,
+					displayName: item.displayName,
+				},
+			))
 		})
 	}
 }
@@ -121,7 +114,9 @@ const resolveGroups = computed<ButtonProps>(() => ({
 		&& ['contactGroup', 'circle'].includes(share.type),
 	name: t('polls', 'Resolve group into individual invitations'),
 	action: async () => {
-		if (resolving.value) return
+		if (resolving.value) {
+			return
+		}
 
 		try {
 			resolving.value = true
@@ -209,15 +204,13 @@ const lockShareButton = computed<ButtonProps>(() => ({
 				await sharesStore.lock({ share })
 			}
 		} catch {
-			showError(
-				t(
-					'polls',
-					'Error while changing lock status of share {displayName}',
-					{
-						displayName: share.user.displayName,
-					},
-				),
-			)
+			showError(t(
+				'polls',
+				'Error while changing lock status of share {displayName}',
+				{
+					displayName: share.user.displayName,
+				},
+			))
 		}
 	},
 }))
@@ -233,15 +226,13 @@ const deleteShareButton = computed<ButtonProps>(() => ({
 				await sharesStore.delete({ share })
 			}
 		} catch {
-			showError(
-				t(
-					'polls',
-					'Error while changing deleted status of share {displayName}',
-					{
-						displayName: share.user.displayName,
-					},
-				),
-			)
+			showError(t(
+				'polls',
+				'Error while changing deleted status of share {displayName}',
+				{
+					displayName: share.user.displayName,
+				},
+			))
 		}
 	},
 }))

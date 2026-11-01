@@ -33,29 +33,22 @@ export const useSharesStore = defineStore('shares', {
 
 			// sharetype which are active without sending an invitation
 			const directShareTypes = ['user', 'group', 'admin', 'public']
-			return state.shares.filter(
-				(share) =>
-					!share.locked
-					&& (directShareTypes.includes(share.type)
-						|| (invitationTypes.includes(share.type)
-							&& (share.type === 'external'
-								|| share.invitationSent
-								|| share.voted))),
-			)
+			return state.shares.filter((share) => !share.locked
+				&& (directShareTypes.includes(share.type)
+					|| (invitationTypes.includes(share.type)
+						&& (share.type === 'external'
+							|| share.invitationSent
+							|| share.voted))))
 		},
 
 		locked: (state) => state.shares.filter((share) => !!share.locked),
-		unsentInvitations: (state) =>
-			state.shares.filter(
-				(share) =>
-					(share.user.emailAddress
-						|| share.type === 'group'
-						|| share.type === 'contactGroup'
-						|| share.type === 'circle')
-					&& !share.invitationSent
-					&& !share.locked
-					&& !share.voted,
-			),
+		unsentInvitations: (state) => state.shares.filter((share) => (share.user.emailAddress
+			|| share.type === 'group'
+			|| share.type === 'contactGroup'
+			|| share.type === 'circle')
+		&& !share.invitationSent
+		&& !share.locked
+		&& !share.voted),
 		public: (state) => state.shares.filter((share) => share.type === 'public'),
 		hasShares: (state) => state.shares.length > 0,
 		hasLocked() {
@@ -149,9 +142,7 @@ export const useSharesStore = defineStore('shares', {
 		async addPublicShare(): Promise<void> {
 			const sessionStore = useSessionStore()
 			try {
-				const response = await SharesAPI.addPublicShare(
-					sessionStore.currentPollId,
-				)
+				const response = await SharesAPI.addPublicShare(sessionStore.currentPollId)
 				this.pushOrUpdate(response.data)
 			} catch (error) {
 				this.handleError(error, 'Error adding public share', {
@@ -161,9 +152,7 @@ export const useSharesStore = defineStore('shares', {
 		},
 
 		pushOrUpdate(payload: { share: Share }): void {
-			const foundIndex = this.shares.findIndex(
-				(share: Share) => share.id === payload.share.id,
-			)
+			const foundIndex = this.shares.findIndex((share: Share) => share.id === payload.share.id)
 			if (foundIndex === -1) {
 				this.shares.push(payload.share)
 				return
@@ -204,7 +193,7 @@ export const useSharesStore = defineStore('shares', {
 			}
 		},
 
-		async writeLabel(payload: { token: string; label: string }): Promise<void> {
+		async writeLabel(payload: { token: string, label: string }): Promise<void> {
 			try {
 				const response = await SharesAPI.writeLabel(
 					payload.token,
@@ -288,7 +277,9 @@ export const useSharesStore = defineStore('shares', {
 		},
 
 		handleError(error: unknown, message: string, payload?: unknown): void {
-			if ((error as AxiosError)?.code === 'ERR_CANCELED') return
+			if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+				return
+			}
 
 			Logger.error(message, {
 				error,

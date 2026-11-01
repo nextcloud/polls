@@ -19,9 +19,7 @@ export const useActivityStore = defineStore('activity', {
 		async load(): Promise<void> {
 			const sessionStore = useSessionStore()
 			try {
-				const response = await ActivityAPI.getActivities(
-					sessionStore.currentPollId,
-				)
+				const response = await ActivityAPI.getActivities(sessionStore.currentPollId)
 				this.activities = response.data.ocs.data
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
@@ -36,11 +34,8 @@ export const useActivityStore = defineStore('activity', {
 		getActivitiesForPoll(state): Activity[] {
 			const sessionStore = useSessionStore()
 			// TODO: Learn: Why is activity.object_id === sessionStore.currentPollId always false?
-			return state.activities.filter(
-				(activity: Activity) =>
-					activity.object_type === 'poll'
-					&& activity.object_id === Number(sessionStore.currentPollId),
-			)
+			return state.activities.filter((activity: Activity) => activity.object_type === 'poll'
+				&& activity.object_id === Number(sessionStore.currentPollId))
 		},
 	},
 })

@@ -21,9 +21,7 @@ const emit = defineEmits(['deleted'])
 const pollsStore = usePollsStore()
 const sessionStore = useSessionStore()
 
-const adminAccess = computed(
-	() => !poll.permissions.view && sessionStore.currentUser.isAdmin,
-)
+const adminAccess = computed(() => !poll.permissions.view && sessionStore.currentUser.isAdmin)
 
 function dialogOK() {
 	try {

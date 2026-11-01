@@ -14,8 +14,8 @@ import type { User } from '../../Types/index.ts'
 import { createCancelTokenHandler, httpInstance } from './HttpApi.js'
 
 export type SentResults = {
-	sentMails: { emailAddress: string; displayName: string }[]
-	abortedMails: { emailAddress: string; displayName: string }[]
+	sentMails: { emailAddress: string, displayName: string }[]
+	abortedMails: { emailAddress: string, displayName: string }[]
 }
 
 // eslint-disable-next-line prefer-const -- assigned below, after `shares` is fully defined
@@ -170,9 +170,7 @@ const shares = {
 		})
 	},
 
-	inviteAll(
-		pollId: number,
-	): Promise<AxiosResponse<{ poll: number; sentResult: SentResults }>> {
+	inviteAll(pollId: number): Promise<AxiosResponse<{ poll: number, sentResult: SentResults }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/inviteAll`,

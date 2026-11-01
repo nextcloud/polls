@@ -66,9 +66,7 @@ const vInputFocus = {
 	},
 }
 
-const numericModelValue = computed(() =>
-	typeof model.value === 'number' ? model.value : parseInt(model.value),
-)
+const numericModelValue = computed(() => typeof model.value === 'number' ? model.value : parseInt(model.value))
 
 const computedSignalingClass = computed(() => {
 	if (signalingClass === 'valid') {
@@ -83,29 +81,18 @@ const computedSignalingClass = computed(() => {
 	return signalingClass
 })
 
-const checking = computed(
-	() => !useNumModifiers && computedSignalingClass.value === 'checking',
-)
-const error = computed(
-	() =>
-		!checking.value
-		&& !useNumModifiers
-		&& computedSignalingClass.value === 'error',
-)
-const success = computed(
-	() =>
-		!checking.value
-		&& !useNumModifiers
-		&& computedSignalingClass.value === 'success'
-		&& !submit,
-)
-const showSubmit = computed(
-	() =>
-		!checking.value
-		&& !useNumModifiers
-		&& submit
-		&& computedSignalingClass.value !== 'error',
-)
+const checking = computed(() => !useNumModifiers && computedSignalingClass.value === 'checking')
+const error = computed(() => !checking.value
+	&& !useNumModifiers
+	&& computedSignalingClass.value === 'error')
+const success = computed(() => !checking.value
+	&& !useNumModifiers
+	&& computedSignalingClass.value === 'success'
+	&& !submit)
+const showSubmit = computed(() => !checking.value
+	&& !useNumModifiers
+	&& submit
+	&& computedSignalingClass.value !== 'error')
 
 /**
  * Check if numMin is less than numMax, if both are set
@@ -113,9 +100,7 @@ const showSubmit = computed(
  */
 function assertBoundaries() {
 	if (numMin && numMax && numMin >= numMax) {
-		Logger.warn(
-			'numMin is greater or equal than numMax. Validation will be skipped.',
-		)
+		Logger.warn('numMin is greater or equal than numMax. Validation will be skipped.')
 		return false
 	}
 	return true
@@ -226,7 +211,7 @@ const inputClass = computed(() => [
 				:class="inputClass"
 				@input="emit('input')"
 				@change="emit('change')"
-				@keyup.enter="emit('submit')" />
+				@keyup.enter="emit('submit')">
 
 			<SpinnerIconAnimated v-if="checking" class="signaling-icon spinner" />
 			<AlertIcon v-else-if="error" class="signaling-icon error" />

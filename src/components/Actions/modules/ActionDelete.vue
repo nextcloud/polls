@@ -33,17 +33,15 @@ const deleteInterval = ref<null | NodeJS.Timeout>(null)
 const deleteTimeout = ref<null | NodeJS.Timeout>(null)
 const countdown = ref(4)
 
-const countdownTitle = computed(() =>
-	n(
-		'polls',
-		'Deleting in {countdown} second',
-		'Deleting in {countdown} seconds',
-		countdown.value,
-		{ countdown: countdown.value },
-	),)
+const countdownTitle = computed(() => n(
+	'polls',
+	'Deleting in {countdown} second',
+	'Deleting in {countdown} seconds',
+	countdown.value,
+	{ countdown: countdown.value },
+))
 
-const computedTitle = computed(() =>
-	deleteTimeout.value ? countdownTitle.value : name,)
+const computedTitle = computed(() => deleteTimeout.value ? countdownTitle.value : name)
 
 function deleteItem(): void {
 	// delete immediately

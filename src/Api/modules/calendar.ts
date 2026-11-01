@@ -22,9 +22,7 @@ const calendar = {
 			].handleRequestCancellation().signal,
 		})
 	},
-	getEvents(
-		optionId: number,
-	): Promise<AxiosResponse<{ events: CalendarEvent[] }>> {
+	getEvents(optionId: number): Promise<AxiosResponse<{ events: CalendarEvent[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `option/${optionId}/events`,

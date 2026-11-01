@@ -30,9 +30,7 @@ const contentHeight = ref(0)
 const height = ref(minHeight)
 
 // Max height is either the content height or capped by maxHeightVh
-const maxHeight = computed(() =>
-	Math.min(contentHeight.value, window.innerHeight * (maxHeightVh / 100)),
-)
+const maxHeight = computed(() => Math.min(contentHeight.value, window.innerHeight * (maxHeightVh / 100)))
 
 // Effective minimum height: either minHeight or capped by maxHeight
 const effectiveMinHeight = computed(() => Math.min(minHeight, maxHeight.value))
@@ -59,7 +57,9 @@ function getClientY(event: MouseEvent | TouchEvent): number {
 
 // Start dragging the resize handle
 function startResize(event: MouseEvent | TouchEvent) {
-	if (noCollapse) return
+	if (noCollapse) {
+		return
+	}
 
 	drag.startY = getClientY(event)
 	drag.startHeight = height.value
@@ -76,7 +76,9 @@ function onMove(event: MouseEvent | TouchEvent) {
 	const y = getClientY(event)
 	const dy = y - drag.startY
 
-	if (Math.abs(dy) > 3) drag.isDragging = true
+	if (Math.abs(dy) > 3) {
+		drag.isDragging = true
+	}
 
 	let newHeight = drag.startHeight + dy
 	newHeight = Math.max(
@@ -88,7 +90,9 @@ function onMove(event: MouseEvent | TouchEvent) {
 
 // Stop dragging – or toggle between min/max if it was just a click
 function stopResize() {
-	if (noCollapse) return
+	if (noCollapse) {
+		return
+	}
 
 	document.removeEventListener('mousemove', onMove)
 	document.removeEventListener('touchmove', onMove)
@@ -100,8 +104,8 @@ function stopResize() {
 	} else {
 		requestAnimationFrame(() => {
 			drag.isDragging = false
-			height.value =
-				height.value > effectiveMinHeight.value + 10
+			height.value
+				= height.value > effectiveMinHeight.value + 10
 					? effectiveMinHeight.value
 					: maxHeight.value
 		})
@@ -110,7 +114,9 @@ function stopResize() {
 
 function updateOverflowIndicators() {
 	const el = containerRef.value
-	if (!el) return
+	if (!el) {
+		return
+	}
 
 	hasTopOverflow.value = el.scrollTop > 0
 	hasBottomOverflow.value = el.scrollTop + el.clientHeight < el.scrollHeight
@@ -126,7 +132,9 @@ onMounted(() => {
 	if (slotWrapper.value) {
 		// Watch actual content size via ResizeObserver
 		observer = new ResizeObserver(() => {
-			if (!slotWrapper.value) return
+			if (!slotWrapper.value) {
+				return
+			}
 
 			// If collapse is disabled, always follow content size (with 50vh cap)
 			if (noCollapse) {
@@ -154,8 +162,8 @@ onMounted(() => {
 
 			// Set initial height only once
 			if (!drag.hasInitializedHeight) {
-				const target =
-					initialState === 'min' ? effectiveMinHeight.value : newMax
+				const target
+					= initialState === 'min' ? effectiveMinHeight.value : newMax
 
 				drag.isDragging = true // disable transition
 				height.value = target

@@ -26,11 +26,9 @@ function toggleArchive() {
 	try {
 		pollStore.toggleArchive({ pollId: pollStore.id })
 	} catch {
-		showError(
-			pollStore.status.isArchived
-				? t('polls', 'Error restoring poll.')
-				: t('polls', 'Error archiving poll.'),
-		)
+		showError(pollStore.status.isArchived
+			? t('polls', 'Error restoring poll.')
+			: t('polls', 'Error archiving poll.'))
 	}
 }
 

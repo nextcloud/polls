@@ -64,7 +64,7 @@ const userNameHint = computed(() => {
 	return ''
 })
 
-const validatePublicUsername = debounce(async function (): Promise<void> {
+const validatePublicUsername = debounce(async function(): Promise<void> {
 	if (userName.value.length < 1) {
 		checkStatus.value.userName = 'missing'
 		return
@@ -121,10 +121,10 @@ const emailAddressHint = computed(() => {
 	return ''
 })
 
-const validateEmailAddress = debounce(async function (): Promise<void> {
+const validateEmailAddress = debounce(async function(): Promise<void> {
 	if (emailAddress.value.length < 1) {
-		checkStatus.value.email =
-			sessionStore.share.publicPollEmail === 'mandatory' ? 'missing' : 'empty'
+		checkStatus.value.email
+			= sessionStore.share.publicPollEmail === 'mandatory' ? 'missing' : 'empty'
 		return
 	}
 
@@ -145,13 +145,10 @@ const validateEmailAddress = debounce(async function (): Promise<void> {
 	}
 }, 500)
 
-const registrationIsValid = computed(
-	() =>
-		checkStatus.value.userName === 'valid'
-		&& (checkStatus.value.email === 'valid'
-			|| (emailAddress.value.length === 0
-				&& sessionStore.share.publicPollEmail !== 'mandatory')),
-)
+const registrationIsValid = computed(() => checkStatus.value.userName === 'valid'
+	&& (checkStatus.value.email === 'valid'
+		|| (emailAddress.value.length === 0
+			&& sessionStore.share.publicPollEmail !== 'mandatory')))
 
 function routeToPersonalShare(token: string): void {
 	router.push({
@@ -185,11 +182,9 @@ async function submitRegistration(): Promise<void> {
 			sessionStore.currentUser.emailAddress
 			&& !sessionStore.share.invitationSent
 		) {
-			showError(
-				t('polls', 'Email could not be sent to {emailAddress}', {
-					emailAddress: sessionStore.currentUser.emailAddress,
-				}),
-			)
+			showError(t('polls', 'Email could not be sent to {emailAddress}', {
+				emailAddress: sessionStore.currentUser.emailAddress,
+			}))
 		}
 	} catch (error) {
 		if ((error as AxiosError)?.code === 'ERR_CANCELED') {
@@ -206,12 +201,9 @@ async function submitRegistration(): Promise<void> {
 	}
 }
 
-const disableSubmit = computed(
-	() =>
-		!registrationIsValid.value
-		|| checkStatus.value.userName === 'checking'
-		|| sendRegistration.value,
-)
+const disableSubmit = computed(() => !registrationIsValid.value
+	|| checkStatus.value.userName === 'checking'
+	|| sendRegistration.value)
 
 onMounted(() => {
 	userName.value = sessionStore.currentUser.displayName

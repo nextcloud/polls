@@ -21,24 +21,18 @@ interface Props {
 
 const { option, timezone, otherTimeZone, sequence } = defineProps<Props>()
 
-const sequenceDuration = computed(() =>
-	sequence?.repetitions
-		? Duration.fromObject({
-				[sequence.unit.id]: sequence.stepWidth * sequence.repetitions,
-			})
-		: Duration.fromObject({ millisecond: 0 }),
-)
+const sequenceDuration = computed(() => sequence?.repetitions
+	? Duration.fromObject({
+			[sequence.unit.id]: sequence.stepWidth * sequence.repetitions,
+		})
+	: Duration.fromObject({ millisecond: 0 }))
 
 // computed last from dateTime repetition
-const lastRepetitionDateTime = computed(() =>
-	option.getDateTime().plus(sequenceDuration.value),
-)
+const lastRepetitionDateTime = computed(() => option.getDateTime().plus(sequenceDuration.value))
 
-const repetitionCaption = computed(() =>
-	sequence?.repetitions
-		? n('polls', '%n repetition', 'Last of %n repetitions', sequence.repetitions)
-		: '',
-)
+const repetitionCaption = computed(() => sequence?.repetitions
+	? n('polls', '%n repetition', 'Last of %n repetitions', sequence.repetitions)
+	: '')
 
 const simpleDate = computed(() => {
 	const dates = getDates(option.getDateTime(), option.getDuration(), otherTimeZone)

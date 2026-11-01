@@ -57,11 +57,8 @@ const timeDisplay = computed(() => {
 	return `${eventStart.value.toLocaleString(DateTime.TIME_SIMPLE)} - ${eventEnd.value.toLocaleString(DateTime.TIME_SIMPLE)}`
 })
 
-const showJustDays = computed(
-	() =>
-		!eventEnd.value.hasSame(eventStart.value.minus({ second: 1 }), 'day')
-		|| calendarEvent.allDay,
-)
+const showJustDays = computed(() => !eventEnd.value.hasSame(eventStart.value.minus({ second: 1 }), 'day')
+	|| calendarEvent.allDay)
 
 const statusClass = computed(() => calendarEvent.status.toLowerCase())
 

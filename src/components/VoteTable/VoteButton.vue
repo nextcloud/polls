@@ -39,11 +39,10 @@ const richAnswers: { [key in Answer]: richAnswer } = {
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
 
-const vote = computed(() =>
-	votesStore.getVote({
-		option,
-		user,
-	}),)
+const vote = computed(() => votesStore.getVote({
+	option,
+	user,
+}))
 
 const nextAnswer = computed<richAnswer>(() => {
 	if (['no', ''].includes(vote.value.answer)) {

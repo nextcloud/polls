@@ -38,9 +38,7 @@ const pollsStore = usePollsStore()
 const pollGroupsStore = usePollGroupsStore()
 const sessionStore = useSessionStore()
 
-const adminAccess = computed(
-	() => !poll.permissions.view && sessionStore.currentUser.isAdmin,
-)
+const adminAccess = computed(() => !poll.permissions.view && sessionStore.currentUser.isAdmin)
 
 const showDeleteDialog = ref(false)
 const showTransferDialog = ref(false)
@@ -69,9 +67,7 @@ const takeOverDialog = {
 	],
 }
 
-async function toggleSubMenu(
-	action: 'addToGroup' | 'removeFromGroup' | null = null,
-) {
+async function toggleSubMenu(action: 'addToGroup' | 'removeFromGroup' | null = null) {
 	subMenu.value = subMenu.value === action ? null : action
 }
 
@@ -83,12 +79,10 @@ async function removePollFromGroup(pollId: number, pollGroupId: number) {
 			pollGroupId,
 		})
 		if (!pollGroupsStore.currentPollGroup) {
-			showInfo(
-				t(
-					'polls',
-					'The poll group was deleted by removing the last member.',
-				),
-			)
+			showInfo(t(
+				'polls',
+				'The poll group was deleted by removing the last member.',
+			))
 			if (route.meta.groupPage) {
 				router.push({ name: 'root' })
 			}

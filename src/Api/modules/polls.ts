@@ -10,8 +10,8 @@ import type { ApiEmailAdressList, FullPollResponse } from './api.types'
 import { createCancelTokenHandler, httpInstance } from './HttpApi.js'
 
 export type Confirmations = {
-	sentMails: { emailAddress: string; displayName: string }[]
-	abortedMails: { emailAddress: string; displayName: string; reason: string }[]
+	sentMails: { emailAddress: string, displayName: string }[]
+	abortedMails: { emailAddress: string, displayName: string, reason: string }[]
 	countSentMails: number
 	countAbortedMails: number
 }
@@ -176,9 +176,7 @@ const polls = {
 		})
 	},
 
-	sendConfirmation(
-		pollId: number,
-	): Promise<AxiosResponse<{ confirmations: Confirmations }>> {
+	sendConfirmation(pollId: number): Promise<AxiosResponse<{ confirmations: Confirmations }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/confirmation`,
@@ -188,9 +186,7 @@ const polls = {
 		})
 	},
 
-	getParticipantsEmailAddresses(
-		pollId: string | number | string[],
-	): Promise<AxiosResponse<ApiEmailAdressList[]>> {
+	getParticipantsEmailAddresses(pollId: string | number | string[]): Promise<AxiosResponse<ApiEmailAdressList[]>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/addresses`,
@@ -200,9 +196,7 @@ const polls = {
 		})
 	},
 
-	getSubscription(
-		pollId: number,
-	): Promise<AxiosResponse<{ subscribed: boolean }>> {
+	getSubscription(pollId: number): Promise<AxiosResponse<{ subscribed: boolean }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/subscription`,

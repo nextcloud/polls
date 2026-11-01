@@ -46,7 +46,7 @@ function setStatus(status: StatusResults) {
 	inputProps.value.showTrailingButton = status === 'success'
 }
 
-const validatePublicUsername = debounce(async function () {
+const validatePublicUsername = debounce(async function() {
 	if (sessionStore.share.user.displayName.length < 1) {
 		setStatus('unchanged')
 		return

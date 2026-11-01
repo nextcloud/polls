@@ -27,7 +27,7 @@ const pollGroups = {
 		pollId: number,
 		pollGroupId?: number,
 		pollGroupName?: string,
-	): Promise<AxiosResponse<{ pollGroup: PollGroup; poll: Poll }>> {
+	): Promise<AxiosResponse<{ pollGroup: PollGroup, poll: Poll }>> {
 		let url
 		let verb = 'PUT'
 		let data = {}
@@ -39,9 +39,7 @@ const pollGroups = {
 			url = `pollgroup/new/poll/${pollId}`
 			data = { pollGroupName }
 		} else {
-			throw new Error(
-				'You must provide either a pollGroupId or a pollGroupName',
-			)
+			throw new Error('You must provide either a pollGroupId or a pollGroupName')
 		}
 
 		return httpInstance.request({
@@ -57,7 +55,7 @@ const pollGroups = {
 	removePollFromGroup(
 		pollGroupId: number,
 		pollId: number,
-	): Promise<AxiosResponse<{ pollGroup: PollGroup | null; poll: Poll }>> {
+	): Promise<AxiosResponse<{ pollGroup: PollGroup | null, poll: Poll }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `pollgroup/${pollGroupId}/poll/${pollId}`,

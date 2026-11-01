@@ -22,11 +22,10 @@ const { option, user, currentUser = false } = defineProps<Props>()
 
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
-const vote = computed(() =>
-	votesStore.getVote({
-		option,
-		user,
-	}),)
+const vote = computed(() => votesStore.getVote({
+	option,
+	user,
+}))
 
 const iconAnswer = computed(() => {
 	if (option.locked && currentUser && !pollStore.isClosed) {
