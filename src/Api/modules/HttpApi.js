@@ -41,7 +41,7 @@ httpInstance.interceptors.request.use((config) => {
 	return config
 })
 /**
- * @typedef {{ handleRequestCancellation: (subKey?: string) => AbortController }} CancelTokenHandlerEntry
+ * @typedef {{ handleRequestCancellation: (subKey?: string | number) => AbortController }} CancelTokenHandlerEntry
  */
 
 /**
