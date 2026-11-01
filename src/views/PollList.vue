@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 import { showError } from '@nextcloud/dialogs'
@@ -12,7 +12,6 @@ import { t, n } from '@nextcloud/l10n'
 
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 
 import HeaderBar from '../components/Base/modules/HeaderBar.vue'
 import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
@@ -50,12 +49,13 @@ const title = computed(() => {
 })
 
 const showMore = computed(
-	() => pollsStore.hasMore && pollsStore.list.status !== 'loading',
+	() =>
+		pollsStore.chunkedList.length < pollsStore.pollsFilteredSorted.length
+		&& pollsStore.meta.status !== 'loading',
 )
 
-// after an error the observer would fire on every remount and retry endlessly
-const autoLoadMore = computed(
-	() => showMore.value && pollsStore.list.status !== 'error',
+const countLoadedPolls = computed(() =>
+	Math.min(pollsStore.chunkedList.length, pollsStore.pollsFilteredSorted.length),
 )
 
 const infoLoaded = computed(() =>
@@ -63,10 +63,10 @@ const infoLoaded = computed(() =>
 		'polls',
 		'{loadedPolls} of {countPolls} poll loaded.',
 		'{loadedPolls} of {countPolls} polls loaded.',
-		pollsStore.list.total,
+		pollsStore.pollsFilteredSorted.length,
 		{
-			loadedPolls: pollsStore.list.polls.length,
-			countPolls: pollsStore.list.total,
+			loadedPolls: countLoadedPolls.value,
+			countPolls: pollsStore.pollsFilteredSorted.length,
 		},
 	),
 )
@@ -80,7 +80,7 @@ const description = computed(() => {
 })
 
 const emptyPollListnoPolls = computed(
-	() => pollsStore.list.status !== 'loading' && pollsStore.list.polls.length < 1,
+	() => pollsStore.pollsFilteredSorted.length < 1,
 )
 
 const loadingOverlayProps = {
@@ -111,42 +111,20 @@ function gotoPoll(pollId: number) {
 	})
 }
 
-const loadingMore = ref(false)
-
 /**
- * Append the next page
+ *
  */
 async function loadMore() {
-	loadingMore.value = true
 	try {
-		await pollsStore.loadMore()
+		pollsStore.addChunk()
 	} catch {
 		showError(t('polls', 'Error loading more polls'))
-	} finally {
-		loadingMore.value = false
 	}
 }
 
-/**
- * Load the first page of the current category or poll group
- */
-async function loadList() {
-	// the route watcher also fires, when leaving the list
-	if (!['list', 'group'].includes(sessionStore.route.name as string)) {
-		return
-	}
-	try {
-		await pollsStore.loadList()
-	} catch {
-		showError(t('polls', 'Error loading polls'))
-	}
-}
-
-// the store reads the route from the session store
-watch(() => sessionStore.route.currentRoute, loadList)
-watch(() => [pollsStore.sort.by, pollsStore.sort.reverse], loadList)
-
-onMounted(loadList)
+onMounted(() => {
+	pollsStore.load(false)
+})
 </script>
 
 <template>
@@ -174,7 +152,7 @@ onMounted(loadList)
 				name="list"
 				class="poll-list__list">
 				<PollItem
-					v-for="poll in pollsStore.list.polls"
+					v-for="poll in pollsStore.chunkedList"
 					:key="poll.id"
 					:poll="poll"
 					@goto-poll="gotoPoll(poll.id)">
@@ -190,16 +168,8 @@ onMounted(loadList)
 				</PollItem>
 			</TransitionGroup>
 
-			<div
-				v-if="loadingMore"
-				class="observer_section load_more_loading"
-				role="status">
-				<NcLoadingIcon :size="32" />
-				<span>{{ t('polls', 'Loading more polls…') }}</span>
-			</div>
-
 			<IntersectionObserver
-				v-else-if="autoLoadMore"
+				v-if="showMore"
 				key="observer"
 				class="observer_section"
 				@visible="loadMore">
@@ -209,13 +179,6 @@ onMounted(loadList)
 				</div>
 			</IntersectionObserver>
 
-			<div v-else-if="showMore" class="observer_section">
-				<div class="clickable_load_more" @click="loadMore">
-					{{ infoLoaded }}
-					{{ t('polls', 'Click here to load more') }}
-				</div>
-			</div>
-
 			<NcEmptyContent v-if="emptyPollListnoPolls" v-bind="emptyContentProps">
 				<template #icon>
 					<PollsAppIcon />
@@ -223,7 +186,7 @@ onMounted(loadList)
 			</NcEmptyContent>
 		</div>
 		<LoadingOverlay
-			:show="pollsStore.list.status === 'loading' && !loadingMore"
+			:show="pollsStore.meta.status === 'loading'"
 			v-bind="loadingOverlayProps" />
 	</NcAppContent>
 </template>
@@ -241,11 +204,6 @@ onMounted(loadList)
 	justify-content: center;
 	align-items: center;
 	padding: 1rem 0;
-}
-
-.load_more_loading {
-	gap: 8px;
-	color: var(--color-text-maxcontrast);
 }
 
 .clickable_load_more {

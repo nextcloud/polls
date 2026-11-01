@@ -40,18 +40,42 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 
 	/**
 	 * Sort poll groups by title in ascending order
-	 * Groups without accessible polls are hidden
 	 * @return {PollGroup[]} Sorted poll groups, sorted by title in ascending order
 	 */
-	const pollGroupsSorted = computed((): PollGroup[] => {
-		const pollsStore = usePollsStore()
-		return orderBy(
+	const pollGroupsSorted = computed((): PollGroup[] =>
+		orderBy(
 			pollGroups.value.filter(
-				(group) => (pollsStore.listMeta.pollGroupCounts[group.id] ?? 0) > 0,
+				(group) => countPollsInPollGroups.value[group.id] > 0,
 			),
 			['title'],
 			['asc'],
+		),
+	)
+
+	const pollsInCurrendPollGroup = computed((): Poll[] => {
+		const pollsStore = usePollsStore()
+		if (!currentPollGroup.value) {
+			return []
+		}
+		return pollsStore.polls.filter((poll) =>
+			currentPollGroup.value?.pollIds.includes(poll.id),
 		)
+	})
+
+	/**
+	 * Count of polls in each poll group and return pollgroupid and count as list
+	 * with the pollgroupid as key and the count as value
+	 * @return {Record<number, number>} An object where the keys are poll group IDs and the values are the counts of polls in those groups
+	 */
+	const countPollsInPollGroups = computed((): Record<number, number> => {
+		const counts: Record<number, number> = {}
+		const pollsStore = usePollsStore()
+		pollGroups.value.forEach((group) => {
+			counts[group.id] = pollsStore.polls.filter((poll) =>
+				group.pollIds.includes(poll.id),
+			).length
+		})
+		return counts
 	})
 
 	/**
@@ -132,7 +156,6 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 		groupTitle?: string
 	}) {
 		const pollsStore = usePollsStore()
-		let poll: Poll
 
 		try {
 			const response = await PollGroupsAPI.addPollToGroup(
@@ -141,7 +164,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 				payload.groupTitle,
 			)
 			addOrUpdatePollGroupInList({ pollGroup: response.data.pollGroup })
-			poll = response.data.poll
+			pollsStore.addOrUpdatePollGroupInList({ poll: response.data.poll })
 		} catch (error) {
 			if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 				return
@@ -150,22 +173,16 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 				error,
 				payload,
 			})
-			// resync the lists, the refresh must not mask the error of the write
-			await pollsStore.load().catch(() => undefined)
+			pollsStore.load()
 			throw error
 		}
-
-		await refreshPollLists(
-			poll,
-			'Error refreshing the polls after adding a poll to a group',
-		)
 	}
 
 	async function removePollFromGroup(payload: {
 		pollGroupId: number
 		pollId: number
 	}): Promise<void> {
-		let poll: Poll
+		const pollsStore = usePollsStore()
 
 		try {
 			const response = await PollGroupsAPI.removePollFromGroup(
@@ -173,49 +190,28 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 				payload.pollId,
 			)
 
+			// update poll in the polls store
+			pollsStore.addOrUpdatePollGroupInList({ poll: response.data.poll })
+
 			if (response.data.pollGroup === null) {
 				// If the poll group was removed (=== null), remove it from the store
 				pollGroups.value = pollGroups.value.filter(
 					(group) => group.id !== payload.pollGroupId,
 				)
-			} else {
-				// Otherwise, update the poll group in the store
-				addOrUpdatePollGroupInList({ pollGroup: response.data.pollGroup })
-			}
-			poll = response.data.poll
-		} catch (error) {
-			if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 				return
 			}
-			Logger.error('Error removing poll from group', {
-				error,
-				payload,
-			})
-			throw error
-		}
-
-		await refreshPollLists(
-			poll,
-			'Error refreshing the polls after removing a poll from a group',
-		)
-	}
-
-	/**
-	 * Update the poll in the polls store and refresh the counts and lists
-	 *
-	 * Only called after the write succeeded, so a failing refresh is logged
-	 * instead of being reported to the caller as a failed write
-	 *
-	 * @param poll the poll as returned by the write
-	 * @param message log message of a failing refresh
-	 */
-	async function refreshPollLists(poll: Poll, message: string): Promise<void> {
-		const pollsStore = usePollsStore()
-
-		try {
-			await pollsStore.addOrUpdatePollGroupInList({ poll })
+			// Otherwise, update the poll group in the store
+			addOrUpdatePollGroupInList({ pollGroup: response.data.pollGroup })
 		} catch (error) {
-			Logger.error(message, { error })
+			if ((error as AxiosError)?.code !== 'ERR_CANCELED') {
+				Logger.error('Error removing poll from group', {
+					error,
+					payload,
+				})
+				throw error
+			}
+		} finally {
+			// pollsStore.load()
 		}
 	}
 
@@ -231,7 +227,9 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 		pollGroups,
 		updating,
 		pollGroupsSorted,
+		countPollsInPollGroups,
 		currentPollGroup,
+		pollsInCurrendPollGroup,
 		addablePollGroups,
 		setCurrentPollGroup,
 		setPollGroupElement: addOrUpdatePollGroupInList,

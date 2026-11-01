@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\OptionService;
@@ -44,57 +46,31 @@ class PollController extends BaseController {
 	}
 
 	/**
-	 * Get one page of the current user's polls
-	 * @param string $category Poll list category, see Poll::CATEGORIES; ignored if $pollGroup is set
-	 * @param int|null $pollGroup Only list polls of this poll group
-	 * @param string|null $type Only list polls of this type (datePoll or textPoll)
-	 * @param string $sortBy Sort column, see PollService::SORT_COLUMNS
-	 * @param string $sortDirection 'asc' or 'desc'
-	 * @param int $offset Number of polls to skip
-	 * @param int $limit Page size, max PollService::MAX_PAGE_SIZE
-	 *
-	 * psalm-return JSONResponse<array{polls: array<int, Poll>, total: int}>
-	 */
-	#[NoAdminRequired]
-	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
-	#[FrontpageRoute(verb: 'GET', url: '/polls')]
-	public function listPolls(
-		string $category = Poll::CATEGORY_RELEVANT,
-		?int $pollGroup = null,
-		?string $type = null,
-		string $sortBy = PollService::SORT_CREATED,
-		string $sortDirection = 'desc',
-		int $offset = 0,
-		int $limit = 20,
-	): JSONResponse {
-		return $this->response(fn () => $this->pollService->listPollsPaged(
-			$category,
-			$pollGroup,
-			$type,
-			$sortBy,
-			$sortDirection,
-			$offset,
-			$limit,
-		));
-	}
-
-	/**
-	 * Get poll counts per category and poll group and the poll groups for the navigation
-	 *
+	 * Get list of polls
 	 * psalm-return JSONResponse<array{
-	 * 	counts: array<string, int>,
-	 * 	pollGroupCounts: array<int, int>,
+	 * 	polls: array<int, Poll>,
+	 * 		permissions: array{
+	 * 			pollCreationAllowed: bool,
+	 * 			comboAllowed: bool
+	 * 		},
 	 * 	pollGroups: array<int, PollGroup>
 	 * }>
 	 */
 	#[NoAdminRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
-	#[FrontpageRoute(verb: 'GET', url: '/polls/meta')]
-	public function listPollsMeta(): JSONResponse {
-		return $this->response(fn () => array_merge(
-			$this->pollService->getPollListCounts(),
-			['pollGroups' => $this->pollGroupService->listPollGroups()],
-		));
+	#[FrontpageRoute(verb: 'GET', url: '/polls')]
+	public function listPolls(): JSONResponse {
+		return $this->response(function () {
+			$appSettings = Container::queryClass(AppSettings::class);
+			return [
+				'polls' => $this->pollService->listPolls(),
+				'permissions' => [
+					'pollCreationAllowed' => $appSettings->getPollCreationAllowed(),
+					'comboAllowed' => $appSettings->getComboAllowed(),
+				],
+				'pollGroups' => $this->pollGroupService->listPollGroups(),
+			];
+		});
 	}
 
 	/**

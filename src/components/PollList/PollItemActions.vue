@@ -106,14 +106,10 @@ async function removePollFromGroup(pollId: number, pollGroupId: number) {
 
 async function addPollToPollGroup(pollId: number, pollGroupId: number) {
 	subMenu.value = null
-	try {
-		await pollGroupsStore.addPollToPollGroup({
-			pollId,
-			pollGroupId,
-		})
-	} catch {
-		showError(t('polls', 'Error adding poll to group.'))
-	}
+	pollGroupsStore.addPollToPollGroup({
+		pollId,
+		pollGroupId,
+	})
 }
 
 async function addPollToNewPollGroup(pollId: number) {

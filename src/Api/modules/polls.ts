@@ -8,7 +8,6 @@ import type { AxiosResponse } from '@nextcloud/axios'
 import type { ApiEmailAdressList, FullPollResponse } from './api.types'
 import type { PollGroup } from '../../stores/pollGroups.types'
 import type { Poll, PollConfiguration, PollType } from '../../stores/poll.types'
-import type { PollListMeta, PollListQuery } from '../../stores/polls.types'
 
 export type Confirmations = {
 	sentMails: { emailAddress: string; displayName: string }[]
@@ -18,65 +17,23 @@ export type Confirmations = {
 }
 
 const polls = {
-	getPolls(
-		query: PollListQuery,
-	): Promise<AxiosResponse<{ polls: Poll[]; total: number }>> {
-		return httpInstance.request({
-			method: 'GET',
-			url: 'polls',
-			params: { ...query, time: +new Date() },
-			cancelToken:
-				cancelTokenHandlerObject[
-					this.getPolls.name
-				].handleRequestCancellation().token,
-		})
-	},
-
-	// no cancel token, several navigation entries may load at the same time
-	getNavigationPolls(
-		query: PollListQuery,
-	): Promise<AxiosResponse<{ polls: Poll[]; total: number }>> {
-		return httpInstance.request({
-			method: 'GET',
-			url: 'polls',
-			params: { ...query, time: +new Date() },
-		})
-	},
-
-	// separate method for an own cancel token, independent of the main list
-	getDatePolls(
-		offset: number,
-		limit: number,
-	): Promise<AxiosResponse<{ polls: Poll[]; total: number }>> {
-		return httpInstance.request({
-			method: 'GET',
-			url: 'polls',
-			params: {
-				category: 'all',
-				type: 'datePoll',
-				sortBy: 'created',
-				sortDirection: 'desc',
-				offset,
-				limit,
-				time: +new Date(),
-			},
-			cancelToken:
-				cancelTokenHandlerObject[
-					this.getDatePolls.name
-				].handleRequestCancellation().token,
-		})
-	},
-
-	getPollsMeta(): Promise<
-		AxiosResponse<PollListMeta & { pollGroups: PollGroup[] }>
+	getPolls(): Promise<
+		AxiosResponse<{
+			polls: Poll[]
+			permissions: {
+				pollCreationAllowed: boolean
+				comboAllowed: true
+			}
+			pollGroups: PollGroup[]
+		}>
 	> {
 		return httpInstance.request({
 			method: 'GET',
-			url: 'polls/meta',
+			url: 'polls',
 			params: { time: +new Date() },
 			cancelToken:
 				cancelTokenHandlerObject[
-					this.getPollsMeta.name
+					this.getPolls.name
 				].handleRequestCancellation().token,
 		})
 	},

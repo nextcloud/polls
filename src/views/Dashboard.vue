@@ -28,11 +28,11 @@ const pollsStore = usePollsStore()
 /**
  * Load the polls
  */
-async function loadPolls(): Promise<void> {
+function loadPolls(): void {
 	Logger.debug('Loading polls in dashboard widget')
 	try {
-		await pollsStore.loadDashboard()
-	} catch {
+		pollsStore.load()
+	} catch (error) {
 		showError(t('polls', 'Error setting dashboard list'))
 	}
 }

@@ -160,30 +160,8 @@ async function pollAdded(payLoad: { id: number; title: string }) {
 	})
 }
 
-/**
- * Load the newest polls of a navigation entry, when it gets expanded
- *
- * @param open - New open state of the entry
- * @param key - Category id or poll group id
- */
-async function loadNavigationList(open: boolean, key: FilterType | number) {
-	if (!open || !sessionStore.appSettings.navigationPollsInList) {
-		return
-	}
-	try {
-		await pollsStore.loadNavigationList(key)
-	} catch {
-		showError(t('polls', 'Error loading polls'))
-	}
-}
-
-onMounted(async () => {
-	try {
-		await pollsStore.loadMeta(false)
-	} catch {
-		// without the meta data the counters stay at 0 and no poll group is listed
-		showError(t('polls', 'Error loading poll list'))
-	}
+onMounted(() => {
+	pollsStore.load(false)
 })
 </script>
 
@@ -220,31 +198,30 @@ onMounted(async () => {
 					name: 'group',
 					params: { slug: pollGroup.slug },
 				}"
-				:open="false"
-				@update:open="loadNavigationList($event, pollGroup.id)">
+				:open="false">
 				<template #icon>
 					<GroupIcon :size="iconSize" />
 				</template>
 				<template #counter>
 					<NcCounterBubble
 						:count="
-							pollsStore.listMeta.pollGroupCounts[pollGroup.id] ?? 0
+							pollGroupsStore.countPollsInPollGroups[pollGroup.id]
 						" />
 				</template>
 				<ul v-if="sessionStore.appSettings.navigationPollsInList">
 					<PollNavigationItems
-						v-for="poll in pollsStore.navigationList(pollGroup.id)"
+						v-for="poll in pollsStore.groupList(pollGroup.pollIds)"
 						:key="poll.id"
 						:poll="poll"
 						@toggle-archive="toggleArchive(poll.id)"
 						@clone-poll="clonePoll(poll.id)"
 						@delete-poll="deletePoll(poll.id)" />
 					<NcAppNavigationItem
-						v-if="pollsStore.navigationPolls[pollGroup.id]?.length === 0"
+						v-if="pollsStore.groupList(pollGroup.pollIds).length === 0"
 						:name="t('polls', 'No polls found for this category')" />
 					<NcAppNavigationItem
 						v-if="
-							(pollsStore.listMeta.pollGroupCounts[pollGroup.id] ?? 0)
+							pollsStore.groupList(pollGroup.pollIds).length
 							> pollsStore.meta.maxPollsInNavigation
 						"
 						class="force-not-active"
@@ -271,8 +248,7 @@ onMounted(async () => {
 					name: 'list',
 					params: { type: pollCategory.id },
 				}"
-				:open="false"
-				@update:open="loadNavigationList($event, pollCategory.id)">
+				:open="false">
 				<template #icon>
 					<Component
 						:is="getIconComponent(pollCategory.id)"
@@ -292,12 +268,12 @@ onMounted(async () => {
 						@delete-poll="deletePoll(poll.id)" />
 					<NcAppNavigationItem
 						v-if="
-							pollsStore.navigationPolls[pollCategory.id]?.length === 0
+							pollsStore.navigationList(pollCategory.id).length === 0
 						"
 						:name="t('polls', 'No polls found for this category')" />
 					<NcAppNavigationItem
 						v-if="
-							pollsStore.pollsCount[pollCategory.id]
+							pollsStore.navigationList(pollCategory.id).length
 							> pollsStore.meta.maxPollsInNavigation
 						"
 						class="force-not-active"
