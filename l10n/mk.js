@@ -81,6 +81,7 @@ OC.L10N.register(
     "Access" : "Пристап",
     "Owner" : "Сопственик",
     "Expiration" : "Рок на траење",
+    "Sort by expiration date" : "Сортирај по рок на траење",
     "Archive" : "Архива",
     "Administration" : "Администрација"
 },
