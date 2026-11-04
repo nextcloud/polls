@@ -16,7 +16,7 @@ const GuestBubble = {
 		},
 	},
 
-	setup(props: { user: string; displayName: string }) {
+	setup(props: { user: string, displayName: string }) {
 		return () => h('span', props.displayName)
 	},
 }

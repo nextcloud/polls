@@ -39,7 +39,7 @@ const sortDirection = computed({
  * @param sort.by
  * @param sort.reverse
  */
-function setSort(sort: { by?: SortOption; reverse?: boolean }) {
+function setSort(sort: { by?: SortOption, reverse?: boolean }) {
 	if (sort.by !== undefined) {
 		pollsStore.sort.by = sort.by
 	}

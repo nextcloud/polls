@@ -39,11 +39,9 @@ async function addOptionsList() {
 			showSuccess(t('polls', 'Options added'))
 			newPollTexts.value = ''
 		} catch {
-			showError(
-				t('polls', 'Error adding options', {
-					optionText: newPollTexts.value,
-				}),
-			)
+			showError(t('polls', 'Error adding options', {
+				optionText: newPollTexts.value,
+			}))
 		}
 	}
 }

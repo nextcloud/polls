@@ -4,8 +4,8 @@
  */
 import type {
 	RouteLocationNormalized,
-	RouteRecordRaw
-} from 'vue-router';
+	RouteRecordRaw,
+} from 'vue-router'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { emit } from '@nextcloud/event-bus'
@@ -313,73 +313,71 @@ const router = createRouter({
 // Initialize activeRoute with the router's starting location.
 activeRoute.value = router.currentRoute.value
 
-router.beforeEach(
-	async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
-		activeRoute.value = to
+router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+	activeRoute.value = to
 
-		const sessionStore = useSessionStore()
-		const pollStore = usePollStore()
-		const votesStore = useVotesStore()
-		const optionsStore = useOptionsStore()
-		const subscriptionStore = useSubscriptionStore()
-		const preferencesStore = usePreferencesStore()
+	const sessionStore = useSessionStore()
+	const pollStore = usePollStore()
+	const votesStore = useVotesStore()
+	const optionsStore = useOptionsStore()
+	const subscriptionStore = useSubscriptionStore()
+	const preferencesStore = usePreferencesStore()
 
-		sessionStore.navigationStatus = 'loading'
-		emit(Event.TransitionsOff, 0)
+	sessionStore.navigationStatus = 'loading'
+	emit(Event.TransitionsOff, 0)
 
-		if (from.meta.votePage) {
-			pollStore.$reset()
-			votesStore.$reset()
-			optionsStore.$reset()
-			subscriptionStore.$reset()
-		}
+	if (from.meta.votePage) {
+		pollStore.$reset()
+		votesStore.$reset()
+		optionsStore.$reset()
+		subscriptionStore.$reset()
+	}
 
-		// if the previous and the requested routes have the same name and
-		// the watcher is active, we can do a cheap loading
-		if (
-			to.name === from.name
-			&& sessionStore.watcher.mode !== 'noPolling'
-			&& sessionStore.watcher.status !== 'stopped'
-		) {
-			// first load app context -> session and preferences
-			Logger.info('Context loading skipped (cheap loading)')
-			return
-		}
+	// if the previous and the requested routes have the same name and
+	// the watcher is active, we can do a cheap loading
+	if (
+		to.name === from.name
+		&& sessionStore.watcher.mode !== 'noPolling'
+		&& sessionStore.watcher.status !== 'stopped'
+	) {
+		// first load app context -> session and preferences
+		Logger.info('Context loading skipped (cheap loading)')
+		return
+	}
 
-		try {
-			await sessionStore.loadSession()
+	try {
+		await sessionStore.loadSession()
 
-			Settings.defaultLocale =
-				sessionStore.currentUser.localeCodeIntl
+		Settings.defaultLocale
+			= sessionStore.currentUser.localeCodeIntl
 				|| sessionStore.currentUser.languageCodeIntl
 
-			if (sessionStore.userStatus.isLoggedin) {
-				await preferencesStore.load()
-			}
-
-			Logger.info('Context loaded')
-		} catch (error) {
-			Logger.error('Could not load context', { error })
-
-			if (!sessionStore.userStatus.isLoggedin) {
-				// if the user is not logged in, redirect to the login page
-				window.location.replace(generateUrl('login'))
-				return false
-			}
-
-			// if context can't be loaded, redirect to not found page
-			return {
-				name: 'notfound',
-			}
+		if (sessionStore.userStatus.isLoggedin) {
+			await preferencesStore.load()
 		}
-	},
-)
+
+		Logger.info('Context loaded')
+	} catch (error) {
+		Logger.error('Could not load context', { error })
+
+		if (!sessionStore.userStatus.isLoggedin) {
+			// if the user is not logged in, redirect to the login page
+			window.location.replace(generateUrl('login'))
+			return false
+		}
+
+		// if context can't be loaded, redirect to not found page
+		return {
+			name: 'notfound',
+		}
+	}
+})
 
 router.beforeResolve(async (to: RouteLocationNormalized) => {
 	const sessionStore = useSessionStore()
-	const watcherActive =
-		sessionStore.watcher.mode !== 'noPolling'
-		&& sessionStore.watcher.status !== 'stopped'
+	const watcherActive
+		= sessionStore.watcher.mode !== 'noPolling'
+			&& sessionStore.watcher.status !== 'stopped'
 
 	if (to.meta.listPage) {
 		return handleListPage(watcherActive)

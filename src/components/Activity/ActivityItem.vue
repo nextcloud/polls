@@ -29,12 +29,10 @@ const message = computed(() => {
 		&& parameters.after.id.startsWith('dt:')
 	) {
 		const dateTime = parameters.after.id.slice(3)
-		parameters.after.name = DateTime.fromISO(dateTime).toLocaleString(
-			DateTime.DATETIME_SHORT,
-		)
+		parameters.after.name = DateTime.fromISO(dateTime).toLocaleString(DateTime.DATETIME_SHORT)
 	}
 
-	Object.keys(parameters).forEach(function (key) {
+	Object.keys(parameters).forEach(function(key) {
 		const { type } = parameters[key]
 
 		switch (type) {
@@ -95,9 +93,7 @@ const message = computed(() => {
 		<div class="activity-item__content">
 			<span
 				:title="dateActivity.toLocaleString(DateTime.DATETIME_SHORT)"
-				class="activity-item__date"
-				>{{ dateActivity.toRelative() }}</span
-			>
+				class="activity-item__date">{{ dateActivity.toRelative() }}</span>
 			<NcRichText :text="message.subject" :arguments="message.parameters" />
 		</div>
 	</div>

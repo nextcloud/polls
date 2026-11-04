@@ -45,26 +45,21 @@ const title = computed(() => {
 	return pollCategories[route.params.type as FilterType].title
 })
 
-const showMore = computed(
-	() =>
-		pollsStore.chunkedList.length < pollsStore.pollsFilteredSorted.length
-		&& pollsStore.meta.status !== 'loading',
-)
+const showMore = computed(() => pollsStore.chunkedList.length < pollsStore.pollsFilteredSorted.length
+	&& pollsStore.meta.status !== 'loading')
 
-const countLoadedPolls = computed(() =>
-	Math.min(pollsStore.chunkedList.length, pollsStore.pollsFilteredSorted.length),)
+const countLoadedPolls = computed(() => Math.min(pollsStore.chunkedList.length, pollsStore.pollsFilteredSorted.length))
 
-const infoLoaded = computed(() =>
-	n(
-		'polls',
-		'{loadedPolls} of {countPolls} poll loaded.',
-		'{loadedPolls} of {countPolls} polls loaded.',
-		pollsStore.pollsFilteredSorted.length,
-		{
-			loadedPolls: countLoadedPolls.value,
-			countPolls: pollsStore.pollsFilteredSorted.length,
-		},
-	),)
+const infoLoaded = computed(() => n(
+	'polls',
+	'{loadedPolls} of {countPolls} poll loaded.',
+	'{loadedPolls} of {countPolls} polls loaded.',
+	pollsStore.pollsFilteredSorted.length,
+	{
+		loadedPolls: countLoadedPolls.value,
+		countPolls: pollsStore.pollsFilteredSorted.length,
+	},
+))
 
 const description = computed(() => {
 	if (route.meta.groupPage) {
@@ -74,9 +69,7 @@ const description = computed(() => {
 	return pollCategories[route.params.type as FilterType].description
 })
 
-const emptyPollListnoPolls = computed(
-	() => pollsStore.pollsFilteredSorted.length < 1,
-)
+const emptyPollListnoPolls = computed(() => pollsStore.pollsFilteredSorted.length < 1)
 
 const loadingOverlayProps = {
 	name: t('polls', 'Loading overview…'),
@@ -131,7 +124,7 @@ async function loadMore() {
 				<ActionToggleSidebar
 					v-if="
 						pollGroupsStore.currentPollGroup?.owner.id
-						=== sessionStore.currentUser.id
+							=== sessionStore.currentUser.id
 					" />
 			</template>
 		</HeaderBar>
@@ -151,7 +144,7 @@ async function loadMore() {
 						<PollItemActions
 							v-if="
 								poll.permissions.edit
-								|| sessionStore.appPermissions.pollCreation
+									|| sessionStore.appPermissions.pollCreation
 							"
 							:key="`actions-${poll.id}`"
 							:poll="poll" />

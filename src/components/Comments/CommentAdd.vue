@@ -20,8 +20,8 @@ const pollStore = usePollStore()
 const comment = ref('')
 const confidential = ref(false)
 
-const confidentialText =
-	pollStore.owner.id === sessionStore.currentUser.id
+const confidentialText
+	= pollStore.owner.id === sessionStore.currentUser.id
 		? t('polls', 'Only visible to me')
 		: t('polls', 'Only visible to {displayName}', {
 				displayName: pollStore.owner.displayName,

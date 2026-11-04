@@ -32,9 +32,7 @@ const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
 const preferencesStore = usePreferencesStore()
 const sessionStore = useSessionStore()
-const CalendarPeek = defineAsyncComponent(
-	() => import('../Calendar/CalendarPeek.vue'),
-)
+const CalendarPeek = defineAsyncComponent(() => import('../Calendar/CalendarPeek.vue'))
 
 const chunksLoading = ref(false)
 
@@ -43,12 +41,9 @@ const tableStyle = computed(() => ({
 	'--options-count': `${optionsStore.options.length}`,
 }))
 
-const showCalendarPeek = computed(
-	() =>
-		pollStore.type === 'datePoll'
-		&& getCurrentUser()
-		&& preferencesStore.user.calendarPeek,
-)
+const showCalendarPeek = computed(() => pollStore.type === 'datePoll'
+	&& getCurrentUser()
+	&& preferencesStore.user.calendarPeek)
 
 function isCurrentUser(participant: User) {
 	return participant.id === sessionStore.currentUser.id
@@ -96,8 +91,7 @@ function isVotable(participant: User, option: Option) {
 			class="option-item-spacer"
 			stickyTop
 			stickyLeft
-			:activateBottomShadow="!downPage">
-		</StickyDiv>
+			:activateBottomShadow="!downPage" />
 
 		<StickyDiv
 			v-if="pollStore.permissions.seeResults"

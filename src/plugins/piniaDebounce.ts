@@ -21,7 +21,6 @@ declare module 'pinia' {
  * @param root0
  * @param root0.store
  */
-export function debouncePlugin ({ store }: PiniaPluginContext) {
-	store.$debounce = <T extends AnyFunction>(fn: T, wait: number): T =>
-		debounce(fn.bind(store), wait) as unknown as T
+export function debouncePlugin({ store }: PiniaPluginContext) {
+	store.$debounce = <T extends AnyFunction>(fn: T, wait: number): T => debounce(fn.bind(store), wait) as unknown as T
 }

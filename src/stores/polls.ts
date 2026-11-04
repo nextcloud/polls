@@ -39,8 +39,7 @@ export const usePollsStore = defineStore('polls', {
 
 	getters: {
 		navigationCategories(): PollCategory[] {
-			return Object.values(pollCategories).filter((category) =>
-				category.showInNavigation(),)
+			return Object.values(pollCategories).filter((category) => category.showInNavigation())
 		},
 
 		currentCategory(): PollCategory {
@@ -63,8 +62,7 @@ export const usePollsStore = defineStore('polls', {
 			}
 
 			return orderBy(
-				state.polls.filter((poll: Poll) =>
-					this.currentCategory?.filterCondition(poll),) ?? [],
+				state.polls.filter((poll: Poll) => this.currentCategory?.filterCondition(poll)) ?? [],
 				[state.sort.by.sortProperty],
 				[state.sort.reverse ? 'desc' : 'asc'],
 			)
@@ -74,14 +72,11 @@ export const usePollsStore = defineStore('polls', {
 		 * Sliced filtered and sorted polls for navigation
 		 */
 		navigationList:
-			(state: PollsStore) =>
-			(filterId: FilterType): Poll[] =>
-				orderBy(
-					state.polls.filter((poll: Poll) =>
-						pollCategories[filterId].filterCondition(poll),) ?? [],
-					[sortOption.interaction.sortProperty],
-					['desc'],
-				).slice(0, state.meta.maxPollsInNavigation),
+			(state: PollsStore) => (filterId: FilterType): Poll[] => orderBy(
+				state.polls.filter((poll: Poll) => pollCategories[filterId].filterCondition(poll)) ?? [],
+				[sortOption.interaction.sortProperty],
+				['desc'],
+			).slice(0, state.meta.maxPollsInNavigation),
 
 		/*
 		 * Chunked filtered and sorted polls for main view
@@ -97,8 +92,7 @@ export const usePollsStore = defineStore('polls', {
 			>
 
 			for (const [key, category] of Object.entries(pollCategories)) {
-				count[key as FilterType] = state.polls.filter((poll: Poll) =>
-					category.filterCondition(poll),).length
+				count[key as FilterType] = state.polls.filter((poll: Poll) => category.filterCondition(poll)).length
 			}
 
 			return count
@@ -109,8 +103,7 @@ export const usePollsStore = defineStore('polls', {
 		 */
 		dashboardList(state: PollsStore): Poll[] {
 			return orderBy(
-				state.polls.filter((poll: Poll) =>
-					pollCategories.relevant.filterCondition(poll),),
+				state.polls.filter((poll: Poll) => pollCategories.relevant.filterCondition(poll)),
 				['created'],
 				['desc'],
 			).slice(0, 7)
@@ -121,18 +114,14 @@ export const usePollsStore = defineStore('polls', {
 		},
 
 		datePolls(state: PollsStore): Poll[] {
-			return state.polls.filter(
-				(poll: Poll) => poll.type === 'datePoll' && !poll.status.isArchived,
-			)
+			return state.polls.filter((poll: Poll) => poll.type === 'datePoll' && !poll.status.isArchived)
 		},
 
 		pollsLoading(state): boolean {
 			return state.meta.status === 'loading'
 		},
 
-		countByCategory: (state: PollsStore) => (filterId: FilterType) =>
-			state.polls.filter((poll: Poll) =>
-				pollCategories[filterId].filterCondition(poll),).length,
+		countByCategory: (state: PollsStore) => (filterId: FilterType) => state.polls.filter((poll: Poll) => pollCategories[filterId].filterCondition(poll)).length,
 	},
 
 	actions: {
@@ -195,7 +184,7 @@ export const usePollsStore = defineStore('polls', {
 			const pollsStore = usePollsStore()
 			return orderBy(
 				pollsStore.polls.filter((poll: Poll) => filterList.includes(poll.id))
-					?? [],
+				?? [],
 				['created'],
 				['desc'],
 			).slice(0, pollsStore.meta.maxPollsInNavigation)
@@ -207,7 +196,7 @@ export const usePollsStore = defineStore('polls', {
 				.concat(payload.poll)
 		},
 
-		async changeOwner(payload: { pollId: number; userId: string }) {
+		async changeOwner(payload: { pollId: number, userId: string }) {
 			try {
 				await PollsAPI.changeOwner(payload.pollId, payload.userId)
 			} catch (error) {

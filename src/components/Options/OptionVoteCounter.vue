@@ -20,8 +20,8 @@ interface Props {
 	showMaybe?: boolean
 }
 
-const showList =
-	pollStore.permissions.seeResults && pollStore.permissions.seeUsernames
+const showList
+	= pollStore.permissions.seeResults && pollStore.permissions.seeUsernames
 </script>
 
 <template>

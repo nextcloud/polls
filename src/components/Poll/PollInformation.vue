@@ -71,24 +71,17 @@ const resultsCaption = computed(() => {
 	return t('polls', 'Results are visible')
 })
 
-const accessCaption = computed(() =>
-	pollStore.configuration.access === 'private'
-		? t('polls', 'Private poll')
-		: t('polls', 'Openly accessible poll'),)
+const accessCaption = computed(() => pollStore.configuration.access === 'private'
+	? t('polls', 'Private poll')
+	: t('polls', 'Openly accessible poll'))
 
 const currentTimeZone = sessionStore.currentTimezoneName
 const countAllYesVotes = computed(() => votesStore.countAllVotesByAnswer('yes'))
 const countAllMaybeVotes = computed(() => votesStore.countAllVotesByAnswer('maybe'))
-const countAllNoVotes = computed(
-	() =>
-		optionsStore.options.length * pollStore.status.countParticipants
-		- (countAllYesVotes.value + countAllMaybeVotes.value),
-)
-const countUsedVotes = computed(
-	() =>
-		pollStore.configuration.maxVotesPerUser
-		- pollStore.currentUserStatus.yesVotes,
-)
+const countAllNoVotes = computed(() => optionsStore.options.length * pollStore.status.countParticipants
+	- (countAllYesVotes.value + countAllMaybeVotes.value))
+const countUsedVotes = computed(() => pollStore.configuration.maxVotesPerUser
+	- pollStore.currentUserStatus.yesVotes)
 </script>
 
 <template>
@@ -158,7 +151,7 @@ const countUsedVotes = computed(
 				<ShowResultsOnClosedIcon
 					v-else-if="
 						pollStore.configuration.showResults === 'closed'
-						&& pollStore.isClosed
+							&& pollStore.isClosed
 					" />
 				<ShowResultsIcon v-else />
 			</template>
@@ -167,7 +160,7 @@ const countUsedVotes = computed(
 		<BadgeDiv
 			v-if="
 				pollStore.status.countParticipants
-				&& pollStore.permissions.seeResults
+					&& pollStore.permissions.seeResults
 			">
 			<template #icon>
 				<ParticipantsIcon />

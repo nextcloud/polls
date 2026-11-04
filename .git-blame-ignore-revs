@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Reformat after switching from prettier to eslint stylistic rules
+4ff181acb9a38fc67bd252ba6125838f94ec6307

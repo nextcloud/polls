@@ -21,16 +21,11 @@ const { startDate, duration, timezone = undefined } = defineProps<Props>()
 
 const sessionStore = useSessionStore()
 
-const useTimeZone = computed(
-	() =>
-		timezone
-		|| sessionStore.currentTimezoneName
-		|| Intl.DateTimeFormat().resolvedOptions().timeZone,
-)
+const useTimeZone = computed(() => timezone
+	|| sessionStore.currentTimezoneName
+	|| Intl.DateTimeFormat().resolvedOptions().timeZone)
 
-const optionDateTimes = computed(() =>
-	getDates(startDate, duration, useTimeZone.value),
-)
+const optionDateTimes = computed(() => getDates(startDate, duration, useTimeZone.value))
 </script>
 
 <template>
@@ -83,8 +78,8 @@ const optionDateTimes = computed(() =>
 				optionDateTimes.isSameDay && !optionDateTimes.isSameTime
 					? optionDateTimes.interval.toLocaleString(DateTime.TIME_SIMPLE)
 					: optionDateTimes.optionStart.toLocaleString(
-							DateTime.TIME_SIMPLE,
-						)
+						DateTime.TIME_SIMPLE,
+					)
 			}}
 		</div>
 

@@ -29,11 +29,9 @@ async function dialogOK() {
 			pollId: poll.id,
 			userId: newUser.value ? newUser.value.id : '',
 		})
-		showSuccess(
-			t('polls', 'Transfered poll to {user}.', {
-				user: newUser.value ? newUser.value.displayName : '',
-			}),
-		)
+		showSuccess(t('polls', 'Transfered poll to {user}.', {
+			user: newUser.value ? newUser.value.displayName : '',
+		}))
 	} catch {
 		showError(t('polls', 'Error transfering poll.'))
 	} finally {

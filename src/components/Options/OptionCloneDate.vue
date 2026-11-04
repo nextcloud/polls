@@ -32,8 +32,7 @@ const sequence = ref<Sequence>({
 	repetitions: 1,
 })
 
-const dateBaseOptionString = computed(() =>
-	option.getDateTime().toLocaleString(DateTime.DATETIME_FULL),)
+const dateBaseOptionString = computed(() => option.getDateTime().toLocaleString(DateTime.DATETIME_FULL))
 
 /**
  *

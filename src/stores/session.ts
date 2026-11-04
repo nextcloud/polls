@@ -119,19 +119,19 @@ export const useSessionStore = defineStore('session', {
 			}
 
 			if (route.meta.listPage && route.params.type) {
-				windowTitle.name =
-					pollCategories[route.params.type as FilterType].title
+				windowTitle.name
+					= pollCategories[route.params.type as FilterType].title
 			} else if (route.meta.groupPage) {
 				const pollGroupsStore = usePollGroupsStore()
-				windowTitle.name =
-					pollGroupsStore.currentPollGroup?.titleExt
-					|| pollGroupsStore.currentPollGroup?.name
-					|| ''
+				windowTitle.name
+					= pollGroupsStore.currentPollGroup?.titleExt
+						|| pollGroupsStore.currentPollGroup?.name
+						|| ''
 			} else if (route.meta.publicVotePage) {
 				windowTitle.name = pollStore.configuration.title
 			} else if (route.meta.votePage) {
-				windowTitle.name =
-					pollStore.configuration.title ?? t('polls', 'Enter title')
+				windowTitle.name
+					= pollStore.configuration.title ?? t('polls', 'Enter title')
 			}
 
 			return `${windowTitle.prefix} – ${windowTitle.name}`

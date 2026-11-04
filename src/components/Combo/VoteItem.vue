@@ -23,14 +23,11 @@ const { option, user, poll } = defineProps<Props>()
 
 const comboStore = useComboStore()
 
-const answer = computed(
-	() =>
-		comboStore.getVote({
-			userId: user.id,
-			optionText: option.text,
-			pollId: poll.id,
-		}).answer as Answer,
-)
+const answer = computed(() => comboStore.getVote({
+	userId: user.id,
+	optionText: option.text,
+	pollId: poll.id,
+}).answer as Answer)
 
 const iconAnswer = computed(() => {
 	if (['no', ''].includes(answer.value)) {
@@ -39,13 +36,10 @@ const iconAnswer = computed(() => {
 	return answer.value
 })
 
-const foreignOption = computed(
-	() =>
-		!comboStore.optionBelongsToPoll({
-			text: option.text,
-			pollId: poll.id,
-		}),
-)
+const foreignOption = computed(() => !comboStore.optionBelongsToPoll({
+	text: option.text,
+	pollId: poll.id,
+}))
 </script>
 
 <template>

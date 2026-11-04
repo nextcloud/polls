@@ -69,3 +69,22 @@ Manage your polls and create new ones | Many configuration options | Share your 
 Please read the [Code of Conduct](https://nextcloud.com/community/code-of-conduct/). This document offers some guidance to ensure Nextcloud participants can cooperate effectively in a positive and inspiring atmosphere, and to explain how together we can strengthen and support each other.
 
 For more information please review the [guidelines for contributing](https://github.com/nextcloud/server/blob/master/.github/CONTRIBUTING.md) to this repository.
+
+### Note: Prettier got removed from the project and all relies on eslint rules.
+To avoid unwanted formattings from the build in prettier formatter in vscode add a local `.vscode/settings.json`:
+```json
+{
+	"prettier.enable": false,
+	"eslint.format.enable": true,
+	"eslint.validate": ["javascript", "typescript", "vue"],
+	"[javascript]": { "editor.defaultFormatter": "dbaeumer.vscode-eslint" },
+	"[typescript]": { "editor.defaultFormatter": "dbaeumer.vscode-eslint" },
+	"[vue]": { "editor.defaultFormatter": "dbaeumer.vscode-eslint" },
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	}
+}
+```
+
+This requires the [ESLint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint).
+For other editors, configure ESLint as formatter or run `npm run lint:fix`.

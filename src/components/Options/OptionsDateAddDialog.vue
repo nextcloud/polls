@@ -31,9 +31,7 @@ const optionsStore = useOptionsStore()
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 
-const successColor = getComputedStyle(document.documentElement).getPropertyValue(
-	'--color-success',
-)
+const successColor = getComputedStyle(document.documentElement).getPropertyValue('--color-success')
 
 /**
  * Ref to store the result of adding an option
@@ -83,9 +81,7 @@ const dateTimeOptionsFiltered = computed(() => {
  *
  * @return ref DateTime
  */
-const startDateTime = ref(
-	ceilDate(DateTime.now().setZone(sessionStore.currentTimezoneName), 15),
-)
+const startDateTime = ref(ceilDate(DateTime.now().setZone(sessionStore.currentTimezoneName), 15))
 
 /**
  * The duration input used for the input fields
@@ -102,12 +98,11 @@ const durationInput = ref<DurationType>({
  * Computed duration as Duration from Luxon
  * Set duration to 1 Day if allDay is true and duration is 0
  */
-const duration = computed(() =>
-	durationInput.value.amount < 1 && allDay.value
-		? Duration.fromObject({ day: 1 })
-		: Duration.fromObject({
-				[durationInput.value.unit.id]: durationInput.value.amount,
-			}).rescale(),)
+const duration = computed(() => durationInput.value.amount < 1 && allDay.value
+	? Duration.fromObject({ day: 1 })
+	: Duration.fromObject({
+			[durationInput.value.unit.id]: durationInput.value.amount,
+		}).rescale())
 
 /**
  * Resulting option based on the inputs
@@ -152,11 +147,8 @@ function resetduratonUnits(): void {
 /**
  * Computed if the user's timezone is different from the poll's timezone
  */
-const differentTimezones = computed(
-	() =>
-		pollStore.getTimezoneName
-		!== Intl.DateTimeFormat().resolvedOptions().timeZone,
-)
+const differentTimezones = computed(() => pollStore.getTimezoneName
+	!== Intl.DateTimeFormat().resolvedOptions().timeZone)
 
 function setZone(): void {
 	startDateTime.value = startDateTime.value.setZone(
@@ -344,8 +336,7 @@ const SequenceUnitSelectProps = computed(() => ({
 				:option="newOption"
 				:sequence="sequenceInput"
 				:timezone="sessionStore.currentTimezoneName"
-				:otherTimeZone="otherTimeZoneName">
-			</OptionsPreviewBox>
+				:otherTimeZone="otherTimeZoneName" />
 
 			<div class="bottom-line">
 				<div

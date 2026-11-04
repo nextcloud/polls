@@ -24,8 +24,7 @@ const pollGroupName = computed({
 		})
 	},
 })
-const checkName = computed(() =>
-	pollGroupsStore.currentPollGroup?.name ? '' : 'error',)
+const checkName = computed(() => pollGroupsStore.currentPollGroup?.name ? '' : 'error')
 
 const inputProps = {
 	placeholder: t('polls', 'Enter title'),

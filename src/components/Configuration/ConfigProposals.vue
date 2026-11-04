@@ -24,8 +24,8 @@ const allowProposals = computed({
 const pollExpire = computed({
 	get: () => pollStore.getProposalExpirationDateTime.toJSDate(),
 	set: (value) => {
-		pollStore.configuration.proposalsExpire =
-			DateTime.fromJSDate(value).toUnixInteger()
+		pollStore.configuration.proposalsExpire
+			= DateTime.fromJSDate(value).toUnixInteger()
 		pollStore.write()
 	},
 })
