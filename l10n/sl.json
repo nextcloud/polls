@@ -82,6 +82,8 @@
     "You have confirmed option {optionTitle}" : "Potrdili ste možnost {optionTitle} ",
     "{actor} has confirmed option {optionTitle}" : "{actor} ima potrjeno možnost {optionTitle}",
     "You have unconfirmed option {optionTitle}" : "Imate nepotrjeno možnost {optionTitle}",
+    "{actor} has unconfirmed option {optionTitle}" : "{actor}ima nepotrjeno možnost{optionTitle}",
+    "{actor} has deleted option {optionTitle}" : "{actor}je izbrisal možnost{optionTitle}",
     "You have added poll {pollTitle}" : "Dodate anketo {pollTitle}",
     "{actor} has added poll {pollTitle}" : "{actor} doda anketo {pollTitle}",
     "You have archived poll {pollTitle}" : "Arhivirate anketo {pollTitle}",
