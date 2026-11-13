@@ -51,7 +51,7 @@ export const useCommentsStore = defineStore('comments', {
 			}
 		},
 
-		async add(payload: { message: string; confidential: boolean }) {
+		async add(payload: { message: string, confidential: boolean }) {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
@@ -90,9 +90,7 @@ export const useCommentsStore = defineStore('comments', {
 		},
 
 		setItem(payload: { comment: Comment }) {
-			const index = this.comments.findIndex(
-				(comment) => comment.id === payload.comment.id,
-			)
+			const index = this.comments.findIndex((comment) => comment.id === payload.comment.id)
 
 			if (index < 0) {
 				this.comments.push(payload.comment)

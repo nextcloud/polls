@@ -83,7 +83,7 @@ function showSettings() {
  * @param payLoad.id
  * @param payLoad.title
  */
-async function pollAdded(payLoad: { id: number; title: string }) {
+async function pollAdded(payLoad: { id: number, title: string }) {
 	createDlgToggle.value = false
 	router.push({
 		name: 'vote',
@@ -101,14 +101,14 @@ onMounted(() => {
 		<ActionAddPoll
 			v-if="
 				preferencesStore.useActionAddPollInNavigation
-				&& sessionStore.appPermissions.pollCreation
+					&& sessionStore.appPermissions.pollCreation
 			"
 			buttonMode="navigation" />
 
 		<NcAppNavigationNew
 			v-else-if="
 				preferencesStore.useNcAppNavigationNew
-				&& sessionStore.appPermissions.pollCreation
+					&& sessionStore.appPermissions.pollCreation
 			"
 			buttonClass="icon-add"
 			:text="t('polls', 'New poll')"
@@ -153,7 +153,7 @@ onMounted(() => {
 					<NcAppNavigationItem
 						v-if="
 							pollsStore.groupList(pollGroup.pollIds).length
-							> pollsStore.meta.maxPollsInNavigation
+								> pollsStore.meta.maxPollsInNavigation
 						"
 						class="force-not-active"
 						:to="{
@@ -201,7 +201,7 @@ onMounted(() => {
 					<NcAppNavigationItem
 						v-if="
 							pollsStore.navigationList(pollCategory.id).length
-							> pollsStore.meta.maxPollsInNavigation
+								> pollsStore.meta.maxPollsInNavigation
 						"
 						class="force-not-active"
 						:to="{

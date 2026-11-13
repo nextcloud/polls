@@ -36,35 +36,23 @@ const { poll, noLink = false } = defineProps<Props>()
 const pollStore = usePollStore()
 const preferencesStore = usePreferencesStore()
 
-const expirationDateTime = computed(() =>
-	DateTime.fromMillis(poll.configuration.expire * 1000),)
+const expirationDateTime = computed(() => DateTime.fromMillis(poll.configuration.expire * 1000))
 
-const expirationTitle = computed(() =>
-	t('polls', poll.status.isExpired ? 'Expired {dateTime}' : 'Expires {dateTime}', {
-		dateTime: DateTime.fromMillis(
-			poll.configuration.expire * 1000,
-		).toLocaleString(DateTime.DATETIME_SHORT) as string,
-	}),)
+const expirationTitle = computed(() => t('polls', poll.status.isExpired ? 'Expired {dateTime}' : 'Expires {dateTime}', {
+	dateTime: DateTime.fromMillis(poll.configuration.expire * 1000).toLocaleString(DateTime.DATETIME_SHORT) as string,
+}))
 
-const lastInteractionDateTime = computed(() =>
-	DateTime.fromMillis(poll.status.lastInteraction * 1000),)
+const lastInteractionDateTime = computed(() => DateTime.fromMillis(poll.status.lastInteraction * 1000))
 
-const lastInteractionTitle = computed(() =>
-	t('polls', 'Last activity {dateTime}', {
-		dateTime: DateTime.fromMillis(
-			poll.status.lastInteraction * 1000,
-		).toLocaleString(DateTime.DATETIME_SHORT) as string,
-	}),)
+const lastInteractionTitle = computed(() => t('polls', 'Last activity {dateTime}', {
+	dateTime: DateTime.fromMillis(poll.status.lastInteraction * 1000).toLocaleString(DateTime.DATETIME_SHORT) as string,
+}))
 
-const archiveDateTime = computed(() =>
-	DateTime.fromMillis(poll.status.archivedDate * 1000),)
+const archiveDateTime = computed(() => DateTime.fromMillis(poll.status.archivedDate * 1000))
 
-const closeToClosing = computed(
-	() =>
-		!poll.status.isExpired
-		&& poll.configuration.expire
-		&& expirationDateTime.value.diffNow('hours').hours < 36,
-)
+const closeToClosing = computed(() => !poll.status.isExpired
+	&& poll.configuration.expire
+	&& expirationDateTime.value.diffNow('hours').hours < 36)
 
 const expiryClass = computed(() => {
 	if (poll.status.isExpired) {
@@ -121,9 +109,7 @@ const pollDetails = computed(() => {
 	}
 })
 
-const descriptionLine = computed(
-	() => poll.configuration.description || pollDetails.value.description,
-)
+const descriptionLine = computed(() => poll.configuration.description || pollDetails.value.description)
 </script>
 
 <template>
@@ -191,15 +177,17 @@ const descriptionLine = computed(
 						count: poll.status.countParticipants,
 					})
 				">
-				<template #icon> <ParticipantsIcon :size="16" /> </template>
+				<template #icon>
+					<ParticipantsIcon :size="16" />
+				</template>
 				{{ poll.status.countParticipants }}
 			</BadgeSmallDiv>
 
 			<BadgeSmallDiv
 				v-if="
 					preferencesStore.user.verbosePollsList
-					&& !poll.status.isArchived
-					&& poll.configuration.access === 'private'
+						&& !poll.status.isArchived
+						&& poll.configuration.access === 'private'
 				"
 				:title="
 					t('polls', 'Private poll, only invited participants have access')
@@ -212,8 +200,8 @@ const descriptionLine = computed(
 			<BadgeSmallDiv
 				v-if="
 					preferencesStore.user.verbosePollsList
-					&& !poll.status.isArchived
-					&& poll.configuration.access === 'open'
+						&& !poll.status.isArchived
+						&& poll.configuration.access === 'open'
 				"
 				:title="
 					t('polls', 'Open poll, accessible to all users of this instance')
@@ -237,7 +225,7 @@ const descriptionLine = computed(
 			<BadgeSmallDiv
 				v-if="
 					preferencesStore.user.verbosePollsList
-					&& poll.currentUserStatus.userRole === 'admin'
+						&& poll.currentUserStatus.userRole === 'admin'
 				"
 				:title="t('polls', 'You have been granted administrative rights')">
 				<template #icon>
@@ -248,7 +236,7 @@ const descriptionLine = computed(
 			<BadgeSmallDiv
 				v-if="
 					preferencesStore.user.verbosePollsList
-					&& poll.currentUserStatus.countVotes
+						&& poll.currentUserStatus.countVotes
 				"
 				:title="t('polls', 'You participated')">
 				<template #icon>

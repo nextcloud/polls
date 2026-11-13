@@ -19,7 +19,7 @@ import AdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
 import UserItem from '../User/UserItem.vue'
 import ShareMenu from './ShareMenu.vue'
 
-const { share, tag = 'div' } = defineProps<{ share: Share; tag?: string }>()
+const { share, tag = 'div' } = defineProps<{ share: Share, tag?: string }>()
 
 const emit = defineEmits(['showQrCode'])
 

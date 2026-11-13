@@ -20,42 +20,25 @@ const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const sharesStore = useSharesStore()
 
-const showTimezoneHint = computed(
-	() =>
-		pollStore.type === 'datePoll'
-		&& Intl.DateTimeFormat().resolvedOptions().timeZone
-			!== pollStore.getTimezoneName,
-)
+const showTimezoneHint = computed(() => pollStore.type === 'datePoll'
+	&& Intl.DateTimeFormat().resolvedOptions().timeZone
+	!== pollStore.getTimezoneName)
 
-const showUnpublishedPollCard = computed(
-	() =>
-		pollStore.configuration.access === 'private'
-		&& !sharesStore.hasShares
-		&& pollStore.permissions.edit
-		&& optionsStore.options.length,
-)
-const showAddProposalsCard = computed(
-	() =>
-		pollStore.permissions.addOptions
-		&& pollStore.isProposalOpen
-		&& !pollStore.isClosed,
-)
-const showSendConfirmationsCard = computed(
-	() =>
-		pollStore.permissions.edit
-		&& pollStore.isClosed
-		&& optionsStore.confirmed.length > 0,
-)
-const showClosedCard = computed(
-	() => pollStore.isClosed && !showSendConfirmationsCard.value,
-)
-const showLimitCard = computed(
-	() =>
-		pollStore.permissions.vote
-		&& !pollStore.isClosed
-		&& (pollStore.configuration.maxVotesPerOption
-			|| pollStore.configuration.maxVotesPerUser),
-)
+const showUnpublishedPollCard = computed(() => pollStore.configuration.access === 'private'
+	&& !sharesStore.hasShares
+	&& pollStore.permissions.edit
+	&& optionsStore.options.length)
+const showAddProposalsCard = computed(() => pollStore.permissions.addOptions
+	&& pollStore.isProposalOpen
+	&& !pollStore.isClosed)
+const showSendConfirmationsCard = computed(() => pollStore.permissions.edit
+	&& pollStore.isClosed
+	&& optionsStore.confirmed.length > 0)
+const showClosedCard = computed(() => pollStore.isClosed && !showSendConfirmationsCard.value)
+const showLimitCard = computed(() => pollStore.permissions.vote
+	&& !pollStore.isClosed
+	&& (pollStore.configuration.maxVotesPerOption
+		|| pollStore.configuration.maxVotesPerUser))
 </script>
 
 <template>

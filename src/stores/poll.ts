@@ -195,7 +195,7 @@ export const usePollStore = defineStore('poll', {
 			return (
 				(this.isProposalExpirySet
 					&& this.getProposalExpirationDateTime.diffNow().as('seconds')
-						> 0)
+					> 0)
 				|| (!this.isProposalExpirySet && this.isProposalAllowed)
 			)
 		},
@@ -248,9 +248,7 @@ export const usePollStore = defineStore('poll', {
 
 		descriptionMarkDown(): string {
 			marked.use(gfmHeadingId(markedPrefix))
-			return DOMPurify.sanitize(
-				marked.parse(this.configuration.description).toString(),
-			)
+			return DOMPurify.sanitize(marked.parse(this.configuration.description).toString())
 		},
 	},
 
@@ -286,9 +284,7 @@ export const usePollStore = defineStore('poll', {
 
 				this.$patch(response.data.poll)
 
-				sessionStore.setViewMode(
-					response.data.poll.configuration.forcedDisplayMode,
-				)
+				sessionStore.setViewMode(response.data.poll.configuration.forcedDisplayMode)
 
 				this.meta.status = 'loaded'
 			} catch (error) {
@@ -301,7 +297,7 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 
-		async add(payload: { type: PollType; title: string }): Promise<Poll | void> {
+		async add(payload: { type: PollType, title: string }): Promise<Poll | void> {
 			const pollsStore = usePollsStore()
 
 			try {

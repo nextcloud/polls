@@ -12,13 +12,12 @@ import CardDiv from '../Base/modules/CardDiv.vue'
 const route = useRoute()
 const cardType = 'warning'
 
-const cardText = computed(() =>
-	route.meta.publicVotePage
-		? t(
-				'polls',
-				'This share is locked and allows only read access. Registering is not possible.',
-			)
-		: t('polls', 'Voting is locked and you have just read access to this poll.'),)
+const cardText = computed(() => route.meta.publicVotePage
+	? t(
+			'polls',
+			'This share is locked and allows only read access. Registering is not possible.',
+		)
+	: t('polls', 'Voting is locked and you have just read access to this poll.'))
 </script>
 
 <template>

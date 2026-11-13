@@ -46,7 +46,7 @@ function setStatus(status: StatusResults) {
 	inputProps.value.showTrailingButton = status === 'success'
 }
 
-const validate = debounce(async function () {
+const validate = debounce(async function() {
 	if (
 		sessionStore.share.user.emailAddress
 		=== sessionStore.currentUser.emailAddress
@@ -71,18 +71,14 @@ async function submit() {
 		await sessionStore.updateEmailAddress({
 			emailAddress: sessionStore.share.user.emailAddress,
 		})
-		showSuccess(
-			t('polls', 'Email address {emailAddress} saved.', {
-				emailAddress: sessionStore.share.user.emailAddress,
-			}),
-		)
+		showSuccess(t('polls', 'Email address {emailAddress} saved.', {
+			emailAddress: sessionStore.share.user.emailAddress,
+		}))
 		setStatus('unchanged')
 	} catch {
-		showError(
-			t('polls', 'Error saving email address {emailAddress}', {
-				emailAddress: sessionStore.share.user.emailAddress,
-			}),
-		)
+		showError(t('polls', 'Error saving email address {emailAddress}', {
+			emailAddress: sessionStore.share.user.emailAddress,
+		}))
 		setStatus('error')
 	}
 }

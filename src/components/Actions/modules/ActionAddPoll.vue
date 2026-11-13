@@ -45,7 +45,7 @@ const showConfirmationDialog = ref(false)
  * @param payLoad.id
  * @param payLoad.title
  */
-function addedPoll(payLoad: { id: number; title: string }) {
+function addedPoll(payLoad: { id: number, title: string }) {
 	newPoll.value = payLoad
 
 	// close modal and show the confirmation dialog
@@ -53,10 +53,9 @@ function addedPoll(payLoad: { id: number; title: string }) {
 	showConfirmationDialog.value = true
 }
 
-const confirmationDialogMessage = computed(() =>
-	t('polls', '"{pollTitle}" has been successfully created.', {
-		pollTitle: newPoll.value.title,
-	}),)
+const confirmationDialogMessage = computed(() => t('polls', '"{pollTitle}" has been successfully created.', {
+	pollTitle: newPoll.value.title,
+}))
 const confirmationDialogName = t('polls', 'Poll created')
 const confirmationDialogProps = {
 	buttons: [

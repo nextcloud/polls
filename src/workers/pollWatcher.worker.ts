@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2025 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import type { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import type { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import type {
 	WatcherData,
 	WatcherMode,
@@ -20,7 +20,7 @@ let http: AxiosInstance
 let consecutiveErrors = 0
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-function sendMessage (message: WorkerResponse) {
+function sendMessage(message: WorkerResponse) {
 	self.postMessage(message)
 }
 self.onmessage = async (props: MessageEvent<WatcherProps>) => {
@@ -86,8 +86,8 @@ self.onmessage = async (props: MessageEvent<WatcherProps>) => {
 			consecutiveErrors = 0
 
 			if (response.status === 200 && response.data.updates?.length > 0) {
-				lastUpdated =
-					response.data.updates[response.data.updates.length - 1].updated
+				lastUpdated
+					= response.data.updates[response.data.updates.length - 1].updated
 
 				sendMessage({
 					type: 'update',

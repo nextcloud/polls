@@ -49,11 +49,7 @@ export const useVotesStore = defineStore('votes', {
 
 			const { localeCodeIntl } = sessionStore.currentUser
 			const collator = new Intl.Collator(localeCodeIntl || navigator.language)
-			return Array.from(
-				new Map(
-					state.votes.map((vote) => [vote.user.id, vote.user]),
-				).values(),
-			).sort((a, b) => collator.compare(a.displayName, b.displayName))
+			return Array.from(new Map(state.votes.map((vote) => [vote.user.id, vote.user])).values()).sort((a, b) => collator.compare(a.displayName, b.displayName))
 		},
 
 		loadedParticipants(state: VotesStore): number {
@@ -78,9 +74,7 @@ export const useVotesStore = defineStore('votes', {
 			const sessionStore = useSessionStore()
 			const pollStore = usePollStore()
 			if (pollStore.viewMode === 'list-view') {
-				return ['user', 'external', 'admin'].includes(
-					sessionStore.currentUser.type,
-				)
+				return ['user', 'external', 'admin'].includes(sessionStore.currentUser.type)
 					? [sessionStore.currentUser]
 					: []
 			}
@@ -88,7 +82,7 @@ export const useVotesStore = defineStore('votes', {
 			if (
 				this.participants.length > state.meta.chunks.size
 				&& this.participants.length
-					> state.meta.chunks.loaded * state.meta.chunks.size
+				> state.meta.chunks.loaded * state.meta.chunks.size
 			) {
 				// if the number of cells is greater than the performance threshold, return an empty array
 				return this.sortedParticipants.slice(
@@ -115,16 +109,12 @@ export const useVotesStore = defineStore('votes', {
 			const participants = Array.from(this.participants)
 
 			// find the current user
-			const currentUserIndex = participants.findIndex(
-				(user) => user.id === sessionStore.currentUser?.id,
-			)
+			const currentUserIndex = participants.findIndex((user) => user.id === sessionStore.currentUser?.id)
 
 			if (
 				currentUserIndex < 0
 				&& !pollStore.status.isExpired
-				&& ['user', 'external', 'admin'].includes(
-					sessionStore.currentUser.type,
-				)
+				&& ['user', 'external', 'admin'].includes(sessionStore.currentUser.type)
 			) {
 				// add current user to the begining of the list if not already present
 				// and if the poll is not expired
@@ -139,17 +129,15 @@ export const useVotesStore = defineStore('votes', {
 			// TODO: Future usage: This is only valid for simple votes (not ranked)
 			if (state.sortByOption > 0 && pollStore.votingVariant === 'simple') {
 				// Build a lookup map once (O(n)) instead of calling .find() per comparison (O(n²))
-				const voteAnswerByUserId = new Map(
-					state.votes
-						.filter((vote) => vote.optionId === state.sortByOption)
-						.map((vote) => [vote.user.id, vote.answer]),
-				)
+				const voteAnswerByUserId = new Map(state.votes
+					.filter((vote) => vote.optionId === state.sortByOption)
+					.map((vote) => [vote.user.id, vote.answer]))
 
 				participants.sort((aUser, bUser) => {
-					const aAnswer =
-						answerSortOrder[voteAnswerByUserId.get(aUser.id) ?? '']
-					const bAnswer =
-						answerSortOrder[voteAnswerByUserId.get(bUser.id) ?? '']
+					const aAnswer
+						= answerSortOrder[voteAnswerByUserId.get(aUser.id) ?? '']
+					const bAnswer
+						= answerSortOrder[voteAnswerByUserId.get(bUser.id) ?? '']
 
 					if (aAnswer < bAnswer) {
 						return -1
@@ -204,12 +192,10 @@ export const useVotesStore = defineStore('votes', {
 		 * @param state
 		 */
 		votesByKey(state): Map<string, Vote> {
-			return new Map(
-				state.votes.map((vote) => [
-					`${vote.optionId}:${vote.user.id}`,
-					vote,
-				]),
-			)
+			return new Map(state.votes.map((vote) => [
+				`${vote.optionId}:${vote.user.id}`,
+				vote,
+			]))
 		},
 
 		hasVotes: (state) => state.votes.length > 0,
@@ -234,11 +220,8 @@ export const useVotesStore = defineStore('votes', {
 				: ['yes', 'maybe', 'no']
 
 			return this.votes
-				.filter(
-					(vote) =>
-						vote.optionText === payload.optionText
-						&& matchingAnswer.includes(vote.answer),
-				)
+				.filter((vote) => vote.optionText === payload.optionText
+					&& matchingAnswer.includes(vote.answer))
 				.map((vote) => vote.user)
 				.sort((a, b) => {
 					const { localeCodeIntl } = sessionStore.currentUser
@@ -249,7 +232,7 @@ export const useVotesStore = defineStore('votes', {
 				})
 		},
 
-		getVote(payload: { user: User; option: Option }): Vote {
+		getVote(payload: { user: User, option: Option }): Vote {
 			return (
 				this.votesByKey.get(`${payload.option.id}:${payload.user.id}`) ?? {
 					answer: '',
@@ -293,13 +276,10 @@ export const useVotesStore = defineStore('votes', {
 			}
 		},
 
-		setItem(payload: { option: Option; vote: Vote }) {
-			const index = this.votes.findIndex(
-				(vote: Vote) =>
-					vote.pollId === payload.option.pollId
-					&& vote.user.id === payload.vote.user.id
-					&& vote.optionText === payload.option.text,
-			)
+		setItem(payload: { option: Option, vote: Vote }) {
+			const index = this.votes.findIndex((vote: Vote) => vote.pollId === payload.option.pollId
+				&& vote.user.id === payload.vote.user.id
+				&& vote.optionText === payload.option.text)
 			if (index > -1) {
 				this.votes[index] = { ...this.votes[index], ...payload.vote }
 				return
@@ -307,7 +287,7 @@ export const useVotesStore = defineStore('votes', {
 			this.votes.push(payload.vote)
 		},
 
-		setOptimistic(payload: { option: Option; setTo: Answer }) {
+		setOptimistic(payload: { option: Option, setTo: Answer }) {
 			const sessionStore = useSessionStore()
 			this.setItem({
 				option: payload.option,
@@ -324,7 +304,7 @@ export const useVotesStore = defineStore('votes', {
 			})
 		},
 
-		async set(payload: { option: Option; setTo: Answer }) {
+		async set(payload: { option: Option, setTo: Answer }) {
 			this.setOptimistic(payload)
 
 			const sessionStore = useSessionStore()

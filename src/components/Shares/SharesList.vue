@@ -75,8 +75,8 @@ async function addShare(user: User) {
 			<SharePublicAdd
 				v-if="
 					sessionStore.appPermissions.publicShares
-					&& sessionStore.appPermissions.addShares
-					&& sessionStore.appPermissions.addSharesExternal
+						&& sessionStore.appPermissions.addShares
+						&& sessionStore.appPermissions.addSharesExternal
 				"
 				tag="li" />
 

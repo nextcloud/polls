@@ -171,8 +171,8 @@ export function usePollWatcher(interval = 30000) {
 
 		// Handle messages from worker
 		worker.onmessage = (e: MessageEvent<WorkerResponse>) => {
-			const { type, message, updates, status, mode, lastUpdate, params } =
-				e.data
+			const { type, message, updates, status, mode, lastUpdate, params }
+				= e.data
 
 			sessionStore.watcher = <Watcher>{
 				...sessionStore.watcher,
@@ -204,7 +204,9 @@ export function usePollWatcher(interval = 30000) {
 
 					break
 				case 'status':
-					if (message) Logger.info(`[PollWatcher] ${message}`, { params })
+					if (message) {
+						Logger.info(`[PollWatcher] ${message}`, { params })
+					}
 
 					if (status === 'modeChanged') {
 						sessionStore.loadSession().catch((error) => {
@@ -217,9 +219,7 @@ export function usePollWatcher(interval = 30000) {
 
 					break
 				default:
-					Logger.warn(
-						`[PollWatcher] Unknown message type: ${type satisfies never}`,
-					)
+					Logger.warn(`[PollWatcher] Unknown message type: ${type satisfies never}`)
 			}
 		}
 	}

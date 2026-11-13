@@ -11,12 +11,10 @@ import CardDiv from '../Base/modules/CardDiv.vue'
 
 const emit = defineEmits(['sendConfirmationSuccess', 'sendConfirmationError'])
 const cardType = ref('info')
-const confirmationSendMessage = ref(
-	t(
-		'polls',
-		'You have confirmed options. Inform your participants about the result via email.',
-	),
-)
+const confirmationSendMessage = ref(t(
+	'polls',
+	'You have confirmed options. Inform your participants about the result via email.',
+))
 
 /**
  *

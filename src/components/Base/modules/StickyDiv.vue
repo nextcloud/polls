@@ -61,7 +61,7 @@ const stickyClass = computed(() => ({
 	<div class="sticky-div" :class="[stickyClass]" :style="style">
 		<div class="stage" :style="style">
 			<slot name="default">
-				<div class="inner"></div>
+				<div class="inner" />
 			</slot>
 		</div>
 	</div>

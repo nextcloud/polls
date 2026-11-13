@@ -16,7 +16,8 @@ const comboStore = useComboStore()
 	<div
 		v-for="poll in pollsStore.datePolls"
 		:key="poll.id"
-		class="poll-item" :class="[{ listed: comboStore.pollIsListed(poll.id) }]"
+		class="poll-item"
+		:class="[{ listed: comboStore.pollIsListed(poll.id) }]"
 		@click="comboStore.togglePollItem(poll.id)">
 		<UserItem :user="poll.owner" condensed />
 		<div class="poll-title-box">

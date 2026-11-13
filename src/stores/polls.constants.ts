@@ -71,12 +71,11 @@ export const pollCategories: PollCategoryList = {
 		pinned: false,
 		iconComponent: RelevantIcon,
 		showInNavigation: () => true,
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived
+		filterCondition: (poll: Poll) => !poll.status.isArchived
 			&& DateTime.fromSeconds(poll.status.relevantThreshold).diffNow('days')
 				.days > -100
-			&& (poll.currentUserStatus.isInvolved
-				|| (poll.permissions.view && poll.configuration.access !== 'open')),
+				&& (poll.currentUserStatus.isInvolved
+					|| (poll.permissions.view && poll.configuration.access !== 'open')),
 	},
 	my: {
 		id: 'my',
@@ -86,8 +85,7 @@ export const pollCategories: PollCategoryList = {
 		pinned: false,
 		iconComponent: MyPollsIcon,
 		showInNavigation: () => useSessionStore().appPermissions.pollCreation,
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived && poll.currentUserStatus.isOwner,
+		filterCondition: (poll: Poll) => !poll.status.isArchived && poll.currentUserStatus.isOwner,
 	},
 	private: {
 		id: 'private',
@@ -97,8 +95,7 @@ export const pollCategories: PollCategoryList = {
 		pinned: false,
 		iconComponent: PrivatePollsIcon,
 		showInNavigation: () => useSessionStore().appPermissions.pollCreation,
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived
+		filterCondition: (poll: Poll) => !poll.status.isArchived
 			&& poll.permissions.view
 			&& poll.configuration.access === 'private',
 	},
@@ -110,8 +107,7 @@ export const pollCategories: PollCategoryList = {
 		pinned: false,
 		iconComponent: ParticipatedIcon,
 		showInNavigation: () => true,
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived && poll.currentUserStatus.countVotes > 0,
+		filterCondition: (poll: Poll) => !poll.status.isArchived && poll.currentUserStatus.countVotes > 0,
 	},
 	open: {
 		id: 'open',
@@ -124,8 +120,7 @@ export const pollCategories: PollCategoryList = {
 		pinned: false,
 		iconComponent: OpenPollIcon,
 		showInNavigation: () => useSessionStore().appPermissions.pollCreation,
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived && poll.configuration.access === 'open',
+		filterCondition: (poll: Poll) => !poll.status.isArchived && poll.configuration.access === 'open',
 	},
 	all: {
 		id: 'all',
@@ -135,8 +130,7 @@ export const pollCategories: PollCategoryList = {
 		pinned: false,
 		iconComponent: AllPollsIcon,
 		showInNavigation: () => true,
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived && poll.permissions.view,
+		filterCondition: (poll: Poll) => !poll.status.isArchived && poll.permissions.view,
 	},
 	closed: {
 		id: 'closed',
@@ -146,8 +140,7 @@ export const pollCategories: PollCategoryList = {
 		pinned: false,
 		iconComponent: ClosedPollsIcon,
 		showInNavigation: () => true,
-		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived
+		filterCondition: (poll: Poll) => !poll.status.isArchived
 			&& poll.status.isExpired
 			&& poll.permissions.view,
 	},
@@ -159,8 +152,7 @@ export const pollCategories: PollCategoryList = {
 		pinned: true,
 		iconComponent: ArchivedPollsIcon,
 		showInNavigation: () => useSessionStore().appPermissions.pollCreation,
-		filterCondition: (poll: Poll) =>
-			poll.status.isArchived && poll.permissions.view,
+		filterCondition: (poll: Poll) => poll.status.isArchived && poll.permissions.view,
 	},
 	admin: {
 		id: 'admin',
@@ -173,7 +165,6 @@ export const pollCategories: PollCategoryList = {
 		pinned: true,
 		iconComponent: AdministrationIcon,
 		showInNavigation: () => !!useSessionStore().currentUser?.isAdmin,
-		filterCondition: (poll: Poll) =>
-			useSessionStore().currentUser.id !== poll.owner.id,
+		filterCondition: (poll: Poll) => useSessionStore().currentUser.id !== poll.owner.id,
 	},
 }

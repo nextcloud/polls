@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import type { DateTime } from 'luxon';
+import type { DateTime } from 'luxon'
 import type { Option } from '@/stores/options.types'
 
 import { Duration, Interval } from 'luxon'
@@ -45,15 +45,15 @@ export function getDates(
 	optionStart = optionStart.setZone(timezone)
 
 	// Special handling for full-day options with zero duration: treat as 1 day
-	const duration =
-		optionDuration.as('days') === 0
-		&& optionStart.valueOf() === optionStart.startOf('day').valueOf()
+	const duration
+		= optionDuration.as('days') === 0
+			&& optionStart.valueOf() === optionStart.startOf('day').valueOf()
 			? Duration.fromObject({ days: 1 })
 			: optionDuration
 
-	const isFullDays =
-		optionStart.valueOf() === optionStart.startOf('day').valueOf()
-		&& duration.hours + duration.minutes === 0
+	const isFullDays
+		= optionStart.valueOf() === optionStart.startOf('day').valueOf()
+			&& duration.hours + duration.minutes === 0
 
 	// Subtract 1 millisecond from full-day end dates for display purposes
 	const optionEnd = optionStart

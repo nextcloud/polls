@@ -52,7 +52,7 @@ const userItemClass = computed(() => ({
 			<NcActions
 				v-if="
 					user.id !== sessionStore.currentUser.id
-					&& pollStore.permissions.changeForeignVotes
+						&& pollStore.permissions.changeForeignVotes
 				"
 				class="user-menu"
 				placement="right"
@@ -77,8 +77,7 @@ const userItemClass = computed(() => ({
 				placement="right"
 				variant="tertiary-no-background"
 				forceMenu
-				noMenuIcon>
-			</VoteMenu>
+				noMenuIcon />
 		</template>
 	</UserItem>
 </template>

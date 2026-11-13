@@ -11,17 +11,14 @@ import InputDiv from '../../Base/modules/InputDiv.vue'
 import { usePreferencesStore } from '../../../stores/preferences.ts'
 const preferencesStore = usePreferencesStore()
 
-const calendarChoices = computed(() =>
-	preferencesStore.availableCalendars.map((calendar) => ({
-		calendarUri: calendar.calendarUri,
-		name: calendar.name,
-		displayColor: calendar.displayColor,
-		selected: preferencesStore.user.checkCalendarsUris.includes(
-			calendar.calendarUri,
-		),
-	})),)
+const calendarChoices = computed(() => preferencesStore.availableCalendars.map((calendar) => ({
+	calendarUri: calendar.calendarUri,
+	name: calendar.name,
+	displayColor: calendar.displayColor,
+	selected: preferencesStore.user.checkCalendarsUris.includes(calendar.calendarUri),
+})))
 
-function clickedCalendar (calendar) {
+function clickedCalendar(calendar) {
 	if (preferencesStore.user.checkCalendarsUris.includes(calendar.calendarUri)) {
 		preferencesStore.removeCheckCalendar(calendar)
 	} else {

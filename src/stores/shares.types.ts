@@ -7,16 +7,16 @@ import type { User } from '../Types/index.ts'
 
 import { defaultUser } from '../Types/index.ts'
 
-export type ShareType =
-	| 'email'
-	| 'external'
-	| 'contact'
-	| 'user'
-	| 'group'
-	| 'admin'
-	| 'public'
-	| 'circle'
-	| 'contactGroup'
+export type ShareType
+	= | 'email'
+		| 'external'
+		| 'contact'
+		| 'user'
+		| 'group'
+		| 'admin'
+		| 'public'
+		| 'circle'
+		| 'contactGroup'
 
 export type PublicPollEmailConditions = 'mandatory' | 'optional' | 'disabled'
 

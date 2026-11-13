@@ -7,13 +7,13 @@ import type { Component } from 'vue'
 import type { Chunking, StatusResults } from '../Types/index.ts'
 import type { Poll } from './poll.types'
 
-export type SortType =
-	| 'created'
-	| 'title'
-	| 'access'
-	| 'owner'
-	| 'expire'
-	| 'interaction'
+export type SortType
+	= | 'created'
+		| 'title'
+		| 'access'
+		| 'owner'
+		| 'expire'
+		| 'interaction'
 
 export type SortOption = {
 	id: SortType
@@ -24,16 +24,16 @@ export type SortOption = {
 
 export type SortDirection = 'asc' | 'desc'
 
-export type FilterType =
-	| 'relevant'
-	| 'my'
-	| 'private'
-	| 'participated'
-	| 'open'
-	| 'all'
-	| 'closed'
-	| 'archived'
-	| 'admin'
+export type FilterType
+	= | 'relevant'
+		| 'my'
+		| 'private'
+		| 'participated'
+		| 'open'
+		| 'all'
+		| 'closed'
+		| 'archived'
+		| 'admin'
 
 export type PollCategory = {
 	id: FilterType

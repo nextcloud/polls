@@ -55,11 +55,9 @@ async function add() {
 
 		resetInput()
 		if (poll) {
-			showSuccess(
-				t('polls', 'Poll "{pollTitle}" added', {
-					pollTitle: poll.configuration.title,
-				}),
-			)
+			showSuccess(t('polls', 'Poll "{pollTitle}" added', {
+				pollTitle: poll.configuration.title,
+			}))
 
 			emit('add')
 
@@ -69,11 +67,9 @@ async function add() {
 			})
 		}
 	} catch {
-		showError(
-			t('polls', 'Error while creating Poll "{pollTitle}"', {
-				pollTitle: title.value,
-			}),
-		)
+		showError(t('polls', 'Error while creating Poll "{pollTitle}"', {
+			pollTitle: title.value,
+		}))
 	} finally {
 		adding.value = false
 	}

@@ -21,7 +21,11 @@ const {
 		class="material-design-icon spinner"
 		role="img">
 		<svg viewBox="0 0 100 100" :width="size" :height="size">
-			<circle cx="50" cy="50" r="45" :stroke="fillColor" />
+			<circle
+				cx="50"
+				cy="50"
+				r="45"
+				:stroke="fillColor" />
 		</svg>
 	</span>
 </template>

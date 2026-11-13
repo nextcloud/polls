@@ -111,9 +111,7 @@ const collapsibleProps = computed<CollapsibleProps>(() => ({
  * In table-view, the sticky header bar and the vote header should merge
  * to a single header bar, once the vote header reaches it's sticky position ,too
  */
-const mergeHeaders = computed(
-	() => pollStore.viewMode === 'table-view' && !tableObserverVisible.value,
-)
+const mergeHeaders = computed(() => pollStore.viewMode === 'table-view' && !tableObserverVisible.value)
 
 /*
  * Report scrolled, if the table observer is not visible except the headers
@@ -121,11 +119,8 @@ const mergeHeaders = computed(
  */
 const scrolled = computed(() => !topObserverVisible.value && !mergeHeaders.value)
 
-const showBottomObserver = computed(
-	() =>
-		votesStore.countHiddenParticipants > 0
-		&& pollStore.viewMode === 'table-view',
-)
+const showBottomObserver = computed(() => votesStore.countHiddenParticipants > 0
+	&& pollStore.viewMode === 'table-view')
 
 onMounted(() => {
 	emit(Event.TransitionsOff, 500)

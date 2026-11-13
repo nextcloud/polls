@@ -71,7 +71,7 @@ function getDescription(job: Job): string {
 	return t('polls', 'Description is missing.')
 }
 
-function getLastRun(job: Job): { text: string; title: string } {
+function getLastRun(job: Job): { text: string, title: string } {
 	switch (job.lastRun) {
 		case -1:
 			return {
@@ -91,9 +91,7 @@ function getLastRun(job: Job): { text: string; title: string } {
 		default:
 			return {
 				text: DateTime.fromSeconds(job.lastRun).toRelative() as string,
-				title: DateTime.fromSeconds(job.lastRun).toLocaleString(
-					DateTime.DATETIME_SHORT,
-				),
+				title: DateTime.fromSeconds(job.lastRun).toLocaleString(DateTime.DATETIME_SHORT),
 			}
 	}
 }

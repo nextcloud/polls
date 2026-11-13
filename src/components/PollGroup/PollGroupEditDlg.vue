@@ -32,12 +32,10 @@ async function updatePollGroup() {
 					name: 'group',
 					params: { slug: pollGroup.slug },
 				})
-				showInfo(
-					t(
-						'polls',
-						'Note: Based on the name change, the URL has also changed',
-					),
-				)
+				showInfo(t(
+					'polls',
+					'Note: Based on the name change, the URL has also changed',
+				))
 			}
 		}
 	} catch {
