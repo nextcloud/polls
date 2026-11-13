@@ -33,13 +33,11 @@ const InlineLink = {
 	},
 
 	setup(
-		props: { text: string; href: string; target: string | null },
+		props: { text: string, href: string, target: string | null },
 		{ attrs }: { attrs: Record<string, unknown> },
 	) {
 		return () => {
-			const match = props.text.match(
-				/^([\s\S]*)\[link\]([\s\S]*)\[\/link\]([\s\S]*)$/,
-			)
+			const match = props.text.match(/^([\s\S]*)\[link\]([\s\S]*)\[\/link\]([\s\S]*)$/)
 
 			if (!match) {
 				return h('span', props.text)

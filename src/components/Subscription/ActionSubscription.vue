@@ -14,12 +14,11 @@ import { useSubscriptionStore } from '../../stores/subscription.ts'
 const subscriptionStore = useSubscriptionStore()
 const sessionStore = useSessionStore()
 
-const label = computed(() =>
-	sessionStore.share.user.emailAddress
-		? t('polls', 'Receive notification email on activity to {emailAddress}', {
-				emailAddress: sessionStore.share.user.emailAddress,
-			})
-		: t('polls', 'Receive notification email on activity'),)
+const label = computed(() => sessionStore.share.user.emailAddress
+	? t('polls', 'Receive notification email on activity to {emailAddress}', {
+			emailAddress: sessionStore.share.user.emailAddress,
+		})
+	: t('polls', 'Receive notification email on activity'))
 </script>
 
 <template>

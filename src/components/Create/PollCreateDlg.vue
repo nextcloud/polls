@@ -56,11 +56,9 @@ async function addPoll() {
 		if (poll) {
 			pollId.value = poll.id
 
-			showSuccess(
-				t('polls', '"{pollTitle}" has been added', {
-					pollTitle: poll.configuration.title,
-				}),
-			)
+			showSuccess(t('polls', '"{pollTitle}" has been added', {
+				pollTitle: poll.configuration.title,
+			}))
 			emit('added', {
 				id: poll.id,
 				title: poll.configuration.title,
@@ -68,11 +66,9 @@ async function addPoll() {
 			resetPoll()
 		}
 	} catch {
-		showError(
-			t('polls', 'Error while creating Poll "{pollTitle}"', {
-				pollTitle: pollTitle.value,
-			}),
-		)
+		showError(t('polls', 'Error while creating Poll "{pollTitle}"', {
+			pollTitle: pollTitle.value,
+		}))
 	} finally {
 		// unblock the modal
 		adding.value = false

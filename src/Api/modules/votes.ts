@@ -53,9 +53,7 @@ const votes = {
 		})
 	},
 
-	removeOrphanedVotes(
-		pollId: number,
-	): Promise<AxiosResponse<RemoveVotesResponse>> {
+	removeOrphanedVotes(pollId: number): Promise<AxiosResponse<RemoveVotesResponse>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `poll/${pollId}/votes/orphaned`,

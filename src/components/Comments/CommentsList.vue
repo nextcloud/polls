@@ -21,7 +21,8 @@ const alternativestyle = preferencesStore.user.useCommentsAlternativeStyling
 	<TransitionGroup
 		tag="ul"
 		name="list"
-		class="comments" :class="[{ alternativestyle }]"
+		class="comments"
+		:class="[{ alternativestyle }]"
 		:style="cssVar">
 		<CommentItem
 			v-for="comment in commentsStore.groupedComments"

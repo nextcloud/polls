@@ -33,7 +33,7 @@ const emit = defineEmits(['userSelected'])
 const users = shallowRef<User[]>([])
 const isLoading = ref(false)
 
-const loadUsersAsync = debounce(async function (query: string) {
+const loadUsersAsync = debounce(async function(query: string) {
 	if (!query) {
 		users.value = []
 		return

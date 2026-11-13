@@ -24,7 +24,7 @@ const sessionStore = useSessionStore()
 			<template
 				v-if="
 					sessionStore.appSettings.finalImprintUrl
-					&& sessionStore.appSettings.finalPrivacyUrl
+						&& sessionStore.appSettings.finalPrivacyUrl
 				">
 				·
 			</template>

@@ -10,9 +10,7 @@ import { createCancelTokenHandler, httpInstance } from './HttpApi.js'
 let cancelTokenHandlerObject: ReturnType<typeof createCancelTokenHandler>
 
 const validators = {
-	validateEmailAddress(
-		emailAddress: string,
-	): Promise<AxiosResponse<{ result: boolean; emailAddress: string }>> {
+	validateEmailAddress(emailAddress: string): Promise<AxiosResponse<{ result: boolean, emailAddress: string }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `check/emailaddress/${emailAddress}`,

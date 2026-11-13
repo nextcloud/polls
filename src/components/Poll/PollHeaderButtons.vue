@@ -21,12 +21,9 @@ const caption = t('polls', 'Poll information')
 
 const ExportPoll = defineAsyncComponent(() => import('../Export/ExportPoll.vue'))
 
-const showUserMenu = computed(
-	() =>
-		!route.meta.publicVotePage
-		|| pollStore.permissions.vote
-		|| pollStore.permissions.subscribe,
-)
+const showUserMenu = computed(() => !route.meta.publicVotePage
+	|| pollStore.permissions.vote
+	|| pollStore.permissions.subscribe)
 
 onBeforeUnmount(() => {
 	pollStore.$reset()

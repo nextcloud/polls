@@ -39,9 +39,7 @@ interface Props {
 	label?: string
 }
 
-const computedRoleType = computed<UserType | VirtualUserItemType>(
-	() => user.type ?? virtualUserType,
-)
+const computedRoleType = computed<UserType | VirtualUserItemType>(() => user.type ?? virtualUserType)
 const emailAddressComputed = computed(() => {
 	if (
 		showEmail

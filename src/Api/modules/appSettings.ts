@@ -23,9 +23,7 @@ const appSettings = {
 		})
 	},
 
-	writeAppSettings(
-		appSettings: AppSettingsStore,
-	): Promise<AxiosResponse<{ appSettings: AppSettingsStore }>> {
+	writeAppSettings(appSettings: AppSettingsStore): Promise<AxiosResponse<{ appSettings: AppSettingsStore }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'settings/app',

@@ -21,7 +21,7 @@ useSortable(listRef, optionsStore.options, {
 	animation: 200,
 	group: 'options',
 	disabled: false,
-	onUpdate: (e: { oldIndex: number; newIndex: number }) => {
+	onUpdate: (e: { oldIndex: number, newIndex: number }) => {
 		onSort({ oldIndex: e.oldIndex, newIndex: e.newIndex })
 		// nextTick required here as moveArrayElement is executed in a microtask
 		// so we need to wait until the next tick until that is finished.
@@ -41,7 +41,7 @@ const componentStyle = {
  * @param event.oldIndex
  * @param event.newIndex
  */
-function onSort(event: { oldIndex: number; newIndex: number }) {
+function onSort(event: { oldIndex: number, newIndex: number }) {
 	optionsStore.changeOrder(event.oldIndex, event.newIndex)
 }
 </script>

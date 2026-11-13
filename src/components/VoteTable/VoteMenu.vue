@@ -86,11 +86,9 @@ async function deleteEmailAddress() {
 		await sessionStore.deleteEmailAddress()
 		showSuccess(t('polls', 'Email address deleted.'))
 	} catch {
-		showError(
-			t('polls', 'Error deleting email address {emailAddress}', {
-				emailAddress: sessionStore.share.user.emailAddress,
-			}),
-		)
+		showError(t('polls', 'Error deleting email address {emailAddress}', {
+			emailAddress: sessionStore.share.user.emailAddress,
+		}))
 	}
 }
 
@@ -101,18 +99,14 @@ async function resendInvitation() {
 	try {
 		const response = await sessionStore.resendInvitation()
 		if (response) {
-			showSuccess(
-				t('polls', 'Invitation resent to {emailAddress}', {
-					emailAddress: response.data.share.user.emailAddress,
-				}),
-			)
+			showSuccess(t('polls', 'Invitation resent to {emailAddress}', {
+				emailAddress: response.data.share.user.emailAddress,
+			}))
 		}
 	} catch {
-		showError(
-			t('polls', 'Mail could not be resent to {emailAddress}', {
-				emailAddress: sessionStore.share.user.emailAddress,
-			}),
-		)
+		showError(t('polls', 'Mail could not be resent to {emailAddress}', {
+			emailAddress: sessionStore.share.user.emailAddress,
+		}))
 	}
 }
 
@@ -120,12 +114,12 @@ async function resendInvitation() {
  *
  */
 async function copyLink() {
-	const personalLink =
-		window.location.origin
-		+ router.resolve({
-			name: 'publicVote',
-			params: { token: sessionStore.publicToken },
-		}).href
+	const personalLink
+		= window.location.origin
+			+ router.resolve({
+				name: 'publicVote',
+				params: { token: sessionStore.publicToken },
+			}).href
 
 	try {
 		await navigator.clipboard.writeText(personalLink)
@@ -155,7 +149,7 @@ const displayNameInputProps = ref<InputProps>({
 	label: t('polls', 'Change name'),
 })
 
-const validateDisplayName = debounce(async function () {
+const validateDisplayName = debounce(async function() {
 	if (sessionStore.share.user.displayName.length < 1) {
 		setDisplayNameStatus('error')
 		return
@@ -216,7 +210,7 @@ const eMailInputProps = ref<InputProps>({
 	label: t('polls', 'Edit email address'),
 })
 
-const validateEMail = debounce(async function () {
+const validateEMail = debounce(async function() {
 	if (
 		sessionStore.share.user.emailAddress
 		=== sessionStore.currentUser.emailAddress
@@ -251,18 +245,14 @@ async function submitEmail() {
 		await sessionStore.updateEmailAddress({
 			emailAddress: sessionStore.share.user.emailAddress,
 		})
-		showSuccess(
-			t('polls', 'Email address {emailAddress} saved.', {
-				emailAddress: sessionStore.share.user.emailAddress,
-			}),
-		)
+		showSuccess(t('polls', 'Email address {emailAddress} saved.', {
+			emailAddress: sessionStore.share.user.emailAddress,
+		}))
 		setEMailStatus('unchanged')
 	} catch {
-		showError(
-			t('polls', 'Error saving email address {emailAddress}', {
-				emailAddress: sessionStore.share.user.emailAddress,
-			}),
-		)
+		showError(t('polls', 'Error saving email address {emailAddress}', {
+			emailAddress: sessionStore.share.user.emailAddress,
+		}))
 		setEMailStatus('error')
 	}
 }
@@ -332,7 +322,7 @@ async function submitEmail() {
 		<NcActionButton
 			v-if="
 				sessionStore.share?.type === 'external'
-				&& sessionStore.share.user.emailAddress
+					&& sessionStore.share.user.emailAddress
 			"
 			:name="t('polls', 'Remove email address')"
 			:aria-label="t('polls', 'Remove email address')"

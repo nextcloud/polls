@@ -39,9 +39,7 @@ async function clickAction() {
 
 	try {
 		disableButton.value = true
-		const result = await PollsAPI.sendConfirmation(
-			parseInt(route.params.id as string),
-		)
+		const result = await PollsAPI.sendConfirmation(parseInt(route.params.id as string))
 		confirmations.value = result.data.confirmations
 		showModal.value = true
 		sendButtonCaption.value = t('polls', 'See result')

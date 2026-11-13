@@ -14,20 +14,18 @@ import { usePollStore } from '../../stores/poll.ts'
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 
-const orphanedVotesText = computed(() =>
-	n(
-		'polls',
-		'%n orphaned vote reduces your vote quota.',
-		'%n orphaned votes reduce your vote quota.',
-		pollStore.currentUserStatus.orphanedVotes,
-	),)
+const orphanedVotesText = computed(() => n(
+	'polls',
+	'%n orphaned vote reduces your vote quota.',
+	'%n orphaned votes reduce your vote quota.',
+	pollStore.currentUserStatus.orphanedVotes,
+))
 
-const votesLeft = computed(() =>
-	pollStore.configuration.maxVotesPerUser - pollStore.currentUserStatus.yesVotes
+const votesLeft = computed(() => pollStore.configuration.maxVotesPerUser - pollStore.currentUserStatus.yesVotes
 	> 0
-		? pollStore.configuration.maxVotesPerUser
-			- pollStore.currentUserStatus.yesVotes
-		: 0,)
+	? pollStore.configuration.maxVotesPerUser
+	- pollStore.currentUserStatus.yesVotes
+	: 0)
 
 const optionsAvailableText = computed(() => {
 	if (optionsStore.countOptionsLeft === 0) {
@@ -57,10 +55,9 @@ const votesLeftText = computed(() => {
 	)
 })
 
-const cardType = computed(() =>
-	pollStore.configuration.maxVotesPerUser && votesLeft.value < 1
-		? 'error'
-		: 'info',)
+const cardType = computed(() => pollStore.configuration.maxVotesPerUser && votesLeft.value < 1
+	? 'error'
+	: 'info')
 </script>
 
 <template>
@@ -74,7 +71,7 @@ const cardType = computed(() =>
 		<div
 			v-if="
 				pollStore.currentUserStatus.orphanedVotes
-				&& pollStore.configuration.maxVotesPerUser
+					&& pollStore.configuration.maxVotesPerUser
 			">
 			<b>{{ orphanedVotesText }}</b>
 		</div>
@@ -82,7 +79,7 @@ const cardType = computed(() =>
 		<template
 			v-if="
 				pollStore.currentUserStatus.orphanedVotes
-				&& pollStore.configuration.maxVotesPerUser
+					&& pollStore.configuration.maxVotesPerUser
 			"
 			#button>
 			<ActionDeleteOrphanedVotes />

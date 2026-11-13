@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import type { ButtonVariant } from '@nextcloud/vue/components/NcButton';
+import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import { t } from '@nextcloud/l10n'
 import { computed, ref } from 'vue'
@@ -42,12 +42,9 @@ const anonDialog = {
 	],
 }
 
-const showLockAnonymous = computed(
-	() =>
-		pollStore.permissions.deanonymize
-		&& pollStore.status.isAnonymous
-		&& !pollStore.status.isRealAnonymous,
-)
+const showLockAnonymous = computed(() => pollStore.permissions.deanonymize
+	&& pollStore.status.isAnonymous
+	&& !pollStore.status.isRealAnonymous)
 
 /**
  *
@@ -69,11 +66,8 @@ function lockAnonymous() {
 	emit('change')
 }
 
-const disabledState = computed(
-	() =>
-		(pollStore.status.isAnonymous && !pollStore.permissions.deanonymize)
-		|| pollStore.status.isRealAnonymous,
-)
+const disabledState = computed(() => (pollStore.status.isAnonymous && !pollStore.permissions.deanonymize)
+	|| pollStore.status.isRealAnonymous)
 </script>
 
 <template>
