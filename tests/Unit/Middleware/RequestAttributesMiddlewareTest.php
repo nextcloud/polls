@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace OCA\Polls\Tests\Unit\Middleware;
 
 use OCA\Polls\Attributes\ShareTokenRequired;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Middleware\RequestAttributesMiddleware;
@@ -22,9 +24,12 @@ use OCP\AppFramework\Http\TooManyRequestsResponse;
 use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
+use OCP\IAppConfig;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\ISession;
+use OCP\IUser;
+use OCP\IUserManager;
 use OCP\Security\Bruteforce\IThrottler;
 use OCP\Security\Bruteforce\MaxDelayReached;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -57,6 +62,9 @@ class RequestAttributesMiddlewareTest extends TestCase {
 	private IRequest&MockObject $request;
 	private UserSession&MockObject $userSession;
 	private IThrottler&MockObject $throttler;
+	private PollMapper&MockObject $pollMapper;
+	private IUserManager&MockObject $userManager;
+	private IAppConfig&MockObject $appConfig;
 	private RequestAttributesMiddleware $middleware;
 	private TokenTestController $controller;
 	private TokenTestOCSController $ocsController;
@@ -67,6 +75,9 @@ class RequestAttributesMiddlewareTest extends TestCase {
 		$this->request->method('getRemoteAddress')->willReturn(self::REMOTE_ADDRESS);
 		$this->userSession = $this->createMock(UserSession::class);
 		$this->throttler = $this->createMock(IThrottler::class);
+		$this->pollMapper = $this->createMock(PollMapper::class);
+		$this->userManager = $this->createMock(IUserManager::class);
+		$this->appConfig = $this->createMock(IAppConfig::class);
 		$urlGenerator = $this->createMock(IURLGenerator::class);
 		$urlGenerator->method('linkToRoute')->with('core.login.showLoginForm')->willReturn(self::LOGIN_URL);
 
@@ -76,6 +87,9 @@ class RequestAttributesMiddlewareTest extends TestCase {
 			$this->userSession,
 			$this->throttler,
 			$urlGenerator,
+			$this->pollMapper,
+			$this->userManager,
+			$this->appConfig,
 		);
 		$this->controller = new TokenTestController('polls', $this->request);
 		$this->ocsController = new TokenTestOCSController('polls', $this->request);
@@ -117,6 +131,57 @@ class RequestAttributesMiddlewareTest extends TestCase {
 		$this->throttler->expects($this->never())->method('registerAttempt');
 
 		$this->middleware->beforeController($this->controller, 'validated');
+	}
+
+	/**
+	 * Prepare a valid token for a poll owned by an account with the given state
+	 */
+	private function withPollOwner(bool $ownerEnabled, string $hideDisabledUserShares = 'yes'): void {
+		$this->withToken('validToken');
+		$share = new Share();
+		$share->setPollId(1);
+		$share->setToken('validToken');
+		$this->userSession->method('getShare')->willReturn($share);
+
+		$poll = new Poll();
+		$poll->setOwner('alice');
+		$this->pollMapper->method('get')->with(1)->willReturn($poll);
+
+		$owner = $this->createMock(IUser::class);
+		$owner->method('isEnabled')->willReturn($ownerEnabled);
+		$this->userManager->method('get')->with('alice')->willReturn($owner);
+
+		$this->appConfig->method('getValueString')
+			->with('files_sharing', 'hide_disabled_user_shares', 'yes')
+			->willReturn($hideDisabledUserShares);
+	}
+
+	public function testShareOfDisabledOwnerIsRejectedWithoutRegisteringAttempt(): void {
+		$this->withPollOwner(ownerEnabled: false);
+		$this->throttler->expects($this->never())->method('registerAttempt');
+
+		try {
+			$this->middleware->beforeController($this->controller, 'validated');
+			$this->fail('Share of a disabled owner must be rejected');
+		} catch (ShareNotFoundException $e) {
+			$response = $this->middleware->afterException($this->controller, 'validated', $e);
+			$this->assertInstanceOf(JSONResponse::class, $response);
+			$this->assertSame(Http::STATUS_NOT_FOUND, $response->getStatus());
+		}
+	}
+
+	public function testShareOfEnabledOwnerIsAccepted(): void {
+		$this->withPollOwner(ownerEnabled: true);
+
+		$this->middleware->beforeController($this->controller, 'validated');
+		$this->addToAssertionCount(1);
+	}
+
+	public function testShareOfDisabledOwnerIsAcceptedIfNotHiddenByConfig(): void {
+		$this->withPollOwner(ownerEnabled: false, hideDisabledUserShares: 'no');
+
+		$this->middleware->beforeController($this->controller, 'validated');
+		$this->addToAssertionCount(1);
 	}
 
 	public function testUnknownTokenIsRegisteredAndRejectedWithJson(): void {
