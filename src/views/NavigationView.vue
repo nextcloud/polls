@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { onMounted, ref } from 'vue'

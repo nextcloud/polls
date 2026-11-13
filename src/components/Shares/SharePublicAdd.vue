@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import type { VirtualUserItemType } from '../../Types/index.ts'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import NcActions from '@nextcloud/vue/components/NcActions'

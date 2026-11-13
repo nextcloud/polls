@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { showSuccess } from '@nextcloud/dialogs'
+import { showSuccess } from '@nextcloud/dialogs/toast'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import debounce from 'lodash/debounce'
 import {
@@ -25,7 +25,6 @@ import { usePollGroupsStore } from './stores/pollGroups.ts'
 import { useSessionStore } from './stores/session.ts'
 import { Event } from './Types/index.ts'
 
-import '@nextcloud/dialogs/style.css'
 import './assets/scss/vars.scss'
 import './assets/scss/hacks.scss'
 import './assets/scss/print.scss'

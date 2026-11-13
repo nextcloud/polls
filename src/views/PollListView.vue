@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import type { FilterType } from '../stores/polls.types'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { n, t } from '@nextcloud/l10n'
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'

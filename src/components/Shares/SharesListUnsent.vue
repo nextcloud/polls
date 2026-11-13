@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { showError, showSuccess } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import NcButton from '@nextcloud/vue/components/NcButton'
 import EmailAlertIcon from 'vue-material-design-icons/EmailAlertOutline.vue'

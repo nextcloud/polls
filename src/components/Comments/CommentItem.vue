@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import type { Comment, CommentsGrouped } from '../../stores/comments.types'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import linkifyStr from 'linkify-string'
 import { DateTime } from 'luxon'

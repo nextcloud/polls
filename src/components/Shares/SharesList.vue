@@ -7,7 +7,7 @@
 import type { Share } from '../../stores/shares.types'
 import type { User } from '../../Types/index.ts'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import { ref } from 'vue'
 import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'

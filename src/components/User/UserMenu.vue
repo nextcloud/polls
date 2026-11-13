@@ -9,7 +9,7 @@ import type { ViewMode } from '../../stores/preferences.types'
 import type { StatusResults } from '../../Types/index.ts'
 import type { TimeZoneOption } from '@/Types/dateTime'
 
-import { showError, showSuccess } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs/toast'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { NcActionRadio } from '@nextcloud/vue'

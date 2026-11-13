@@ -8,7 +8,7 @@ import type { AxiosError } from '@nextcloud/axios'
 import type { DurationType, TimeZoneOption } from '../../Types/dateTime.ts'
 import type { Sequence, SimpleOption } from '@/stores/options.types'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import { DateTime, Duration } from 'luxon'
 import { computed, ref } from 'vue'
