@@ -44,9 +44,7 @@ const regex = /[:\\/?*[\]]/g
 const workBook = ref<null | WorkBook>(null)
 const sheetData = ref<Sheet>([])
 const emailAddresses = ref<ApiEmailAdressList[]>([])
-const sheetName = computed(() =>
-	pollStore.configuration.title.replaceAll(regex, '').slice(0, 31),
-)
+const sheetName = computed(() => pollStore.configuration.title.replaceAll(regex, '').slice(0, 31))
 
 function s2ab(s: string) {
 	const buf = new ArrayBuffer(s.length) // convert s to arrayBuffer
@@ -95,9 +93,7 @@ async function exportFile(exportFormat: ExportFormat) {
 			participantsHeader.push(t('polls', 'Email address'))
 			fromHeader.push('')
 			toHeader.push('')
-			const response = await PollsAPI.getParticipantsEmailAddresses(
-				route.params.id,
-			)
+			const response = await PollsAPI.getParticipantsEmailAddresses(route.params.id)
 			emailAddresses.value = response.data
 		} catch (error) {
 			if ((error as AxiosError).name === 'CanceledError') {
@@ -121,35 +117,21 @@ async function exportFile(exportFormat: ExportFormat) {
 	} else if (['csv'].includes(exportFormat)) {
 		sheetData.value.push([
 			...participantsHeader,
-			...optionsStore.options.map((option) =>
-				getDatesFromOption(option).interval.toISO(),
-			),
+			...optionsStore.options.map((option) => getDatesFromOption(option).interval.toISO()),
 		])
 	} else if (['html'].includes(exportFormat)) {
 		sheetData.value.push([
 			...participantsHeader,
-			...optionsStore.options.map((option) =>
-				getDatesFromOption(option).interval.toLocaleString(
-					DateTime.DATETIME_MED_WITH_WEEKDAY,
-				),
-			),
+			...optionsStore.options.map((option) => getDatesFromOption(option).interval.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)),
 		])
 	} else {
 		sheetData.value.push([
 			...fromHeader,
-			...optionsStore.options.map((option) =>
-				getDatesFromOption(option).optionStart.toLocaleString(
-					DateTime.DATETIME_MED_WITH_WEEKDAY,
-				),
-			),
+			...optionsStore.options.map((option) => getDatesFromOption(option).optionStart.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)),
 		])
 		sheetData.value.push([
 			...toHeader,
-			...optionsStore.options.map((option) =>
-				getDatesFromOption(option).optionEnd.toLocaleString(
-					DateTime.DATETIME_MED_WITH_WEEKDAY,
-				),
-			),
+			...optionsStore.options.map((option) => getDatesFromOption(option).optionEnd.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)),
 		])
 	}
 
@@ -188,37 +170,25 @@ function addVotesArray(style: ArrayStyle) {
 		const votesLine = [participant.displayName]
 		try {
 			if (pollStore.permissions.edit) {
-				votesLine.push(
-					emailAddresses.value.find(
-						(item) => item.displayName === participant.displayName,
-					)?.emailAddress ?? '',
-				)
+				votesLine.push(emailAddresses.value.find((item) => item.displayName === participant.displayName)?.emailAddress ?? '')
 			}
 
 			optionsStore.options.forEach((option) => {
 				if (style === 'symbols') {
-					votesLine.push(
-						votesStore.getVote({
-							user: participant,
-							option,
-						}).answerSymbol ?? '❌',
-					)
+					votesLine.push(votesStore.getVote({
+						user: participant,
+						option,
+					}).answerSymbol ?? '❌')
 				} else if (style === 'raw') {
-					votesLine.push(
-						votesStore.getVote({
-							user: participant,
-							option,
-						}).answer,
-					)
+					votesLine.push(votesStore.getVote({
+						user: participant,
+						option,
+					}).answer)
 				} else {
-					votesLine.push(
-						getAnswerTranslated(
-							votesStore.getVote({
-								user: participant,
-								option,
-							}).answer,
-						),
-					)
+					votesLine.push(getAnswerTranslated(votesStore.getVote({
+						user: participant,
+						option,
+					}).answer))
 				}
 			})
 

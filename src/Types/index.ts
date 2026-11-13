@@ -15,38 +15,38 @@ export enum Event {
 }
 
 export type ButtonMode = 'navigation' | 'actionMenu' | 'native'
-export type StatusResults =
-	| 'error'
-	| 'warning'
-	| 'success'
-	| 'loading'
-	| 'loaded'
-	| 'unchanged'
-	| ''
+export type StatusResults
+	= | 'error'
+		| 'warning'
+		| 'success'
+		| 'loading'
+		| 'loaded'
+		| 'unchanged'
+		| ''
 
-export type SignalingType =
-	| ''
-	| 'empty'
-	| 'error'
-	| 'valid'
-	| 'invalid'
-	| 'success'
-	| 'checking'
-	| 'missing'
+export type SignalingType
+	= | ''
+		| 'empty'
+		| 'error'
+		| 'valid'
+		| 'invalid'
+		| 'success'
+		| 'checking'
+		| 'missing'
 
-export type UserType =
-	| 'email'
-	| 'external'
-	| 'contact'
-	| 'user'
-	| 'group'
-	| 'admin'
-	| 'public'
-	| 'circle'
-	| 'contactGroup'
-	| 'deleted'
-	| 'anonymous'
-	| ''
+export type UserType
+	= | 'email'
+		| 'external'
+		| 'contact'
+		| 'user'
+		| 'group'
+		| 'admin'
+		| 'public'
+		| 'circle'
+		| 'contactGroup'
+		| 'deleted'
+		| 'anonymous'
+		| ''
 
 export type VirtualUserItemType = 'addPublicLink' | 'internalAccess'
 

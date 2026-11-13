@@ -36,22 +36,14 @@ const votesStore = useVotesStore()
 
 const cloneModal = ref(false)
 
-const deleteOrRestoreStaticText = computed(() =>
-	option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option'),)
+const deleteOrRestoreStaticText = computed(() => option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option'))
 
-const deleteAllowed = computed(
-	() => (option.isOwner || pollStore.permissions.edit) && !pollStore.isClosed,
-)
-const confirmAllowed = computed(
-	() => !option.deleted && pollStore.isClosed && pollStore.permissions.edit,
-)
-const cloneAllowed = computed(
-	() =>
-		pollStore.type === 'datePoll'
-		&& !option.deleted
-		&& !pollStore.isClosed
-		&& pollStore.permissions.edit,
-)
+const deleteAllowed = computed(() => (option.isOwner || pollStore.permissions.edit) && !pollStore.isClosed)
+const confirmAllowed = computed(() => !option.deleted && pollStore.isClosed && pollStore.permissions.edit)
+const cloneAllowed = computed(() => pollStore.type === 'datePoll'
+	&& !option.deleted
+	&& !pollStore.isClosed
+	&& pollStore.permissions.edit)
 const proposalHint = computed(() => {
 	if (!option.owner || option.isOwner) {
 		return null

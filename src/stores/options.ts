@@ -29,18 +29,18 @@ import { useVotesStore } from './votes.ts'
 
 export const hydrateOption = (dto: OptionDto): Option => withLuxon(dto)
 
-function withLuxon <T extends HasIsoFields>(dto: T): T & OptionDurationMethod & OptionTimestampMethod {
-  return {
-	...dto,
+function withLuxon<T extends HasIsoFields>(dto: T): T & OptionDurationMethod & OptionTimestampMethod {
+	return {
+		...dto,
 
-	getDuration() {
-		return Duration.fromISO(this.isoDuration ?? 'PT0S').rescale()
-	},
+		getDuration() {
+			return Duration.fromISO(this.isoDuration ?? 'PT0S').rescale()
+		},
 
-	getDateTime() {
-		return DateTime.fromISO(this.isoTimestamp ?? new Date().toISOString())
-	},
-}
+		getDateTime() {
+			return DateTime.fromISO(this.isoTimestamp ?? new Date().toISOString())
+		},
+	}
 }
 
 export const useOptionsStore = defineStore('options', {
@@ -51,15 +51,11 @@ export const useOptionsStore = defineStore('options', {
 
 	getters: {
 		countAvailable(state): number {
-			return state.options.filter(
-				(option) => !option.locked && !option.deleted,
-			).length
+			return state.options.filter((option) => !option.locked && !option.deleted).length
 		},
 
 		countVotedByCurrentUser(state): number {
-			return state.options.filter(
-				(option) => option.votes.currentUser === 'yes',
-			).length
+			return state.options.filter((option) => option.votes.currentUser === 'yes').length
 		},
 
 		countOptionsLeft(): number {
@@ -102,12 +98,9 @@ export const useOptionsStore = defineStore('options', {
 
 		find(option: SimpleOption): Option | undefined {
 			if (option) {
-				return this.options.find(
-					(opt) =>
-						opt.getDateTime().toSeconds()
-							=== option.getDateTime().toSeconds()
-						&& opt.getDuration().equals(option.getDuration()),
-				)
+				return this.options.find((opt) => opt.getDateTime().toSeconds()
+					=== option.getDateTime().toSeconds()
+					&& opt.getDuration().equals(option.getDuration()))
 			}
 		},
 
@@ -144,17 +137,14 @@ export const useOptionsStore = defineStore('options', {
 
 		updateOption(payload: { option: OptionDto }) {
 			const hydrated = hydrateOption(payload.option)
-			const index = this.options.findIndex(
-				(option) => option.id === hydrated.id,
-			)
+			const index = this.options.findIndex((option) => option.id === hydrated.id)
 
 			if (index < 0) {
 				this.options.push(hydrated)
 			} else {
 				this.options.splice(index, 1, hydrated)
 			}
-			this.options.sort((a, b) =>
-				a.order < b.order ? -1 : a.order > b.order ? 1 : 0,)
+			this.options.sort((a, b) => a.order < b.order ? -1 : a.order > b.order ? 1 : 0)
 		},
 
 		async add(
@@ -287,12 +277,8 @@ export const useOptionsStore = defineStore('options', {
 		},
 
 		async confirm(payload: { option: Option }) {
-			const index = this.options.findIndex(
-				(option: Option) => option.id === payload.option.id,
-			)
-			this.options[index].confirmed = Math.abs(
-				this.options[index].confirmed - 1,
-			)
+			const index = this.options.findIndex((option: Option) => option.id === payload.option.id)
+			this.options[index].confirmed = Math.abs(this.options[index].confirmed - 1)
 
 			try {
 				const response = await OptionsAPI.confirmOption(payload.option.id)
@@ -336,7 +322,7 @@ export const useOptionsStore = defineStore('options', {
 			}
 		},
 
-		async sequence(payload: { option: Option; sequence: Sequence }) {
+		async sequence(payload: { option: Option, sequence: Sequence }) {
 			try {
 				const response = await OptionsAPI.addOptionsSequence(
 					payload.option.id,

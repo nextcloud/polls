@@ -25,9 +25,7 @@ interface Props {
 	virtualUserType?: VirtualUserItemType
 	user: User
 }
-const computedIsGuest = computed(
-	() => route.meta.publicVotePage || user.isNoUser !== false,
-)
+const computedIsGuest = computed(() => route.meta.publicVotePage || user.isNoUser !== false)
 
 const avatarUserId = computed(() => {
 	if (virtualUserType || user.isNoUser) {

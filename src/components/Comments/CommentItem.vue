@@ -27,9 +27,7 @@ const preferencesStore = usePreferencesStore()
 
 const commentedDateTime = computed(() => DateTime.fromSeconds(comment.timestamp))
 
-const isCurrentUser = computed(
-	() => sessionStore.currentUser?.id === comment.user.id,
-)
+const isCurrentUser = computed(() => sessionStore.currentUser?.id === comment.user.id)
 
 const isConfidential = computed(() => comment.confidential > 0)
 const confidentialRecipient = computed(() => {
@@ -74,11 +72,8 @@ async function restoreComment(comment: Comment) {
 		showError(t('polls', 'Error while restoring the comment'))
 	}
 }
-const deletable = computed(
-	() =>
-		comment.user.id === sessionStore.currentUser?.id
-		|| pollStore.currentUserStatus.isOwner,
-)
+const deletable = computed(() => comment.user.id === sessionStore.currentUser?.id
+	|| pollStore.currentUserStatus.isOwner)
 </script>
 
 <template>
@@ -110,7 +105,8 @@ const deletable = computed(
 			<div
 				v-for="subComment in comment.comments"
 				:key="subComment.id"
-				class="comment-item__sub-comment" :class="[
+				class="comment-item__sub-comment"
+				:class="[
 					{ deletable },
 					{ deleted: subComment.deleted },
 				]">

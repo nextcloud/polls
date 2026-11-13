@@ -41,7 +41,7 @@ httpInstance.interceptors.request.use((config) => {
 	return config
 })
 /**
- * @typedef {{ handleRequestCancellation: (subKey?: string) => AbortController }} CancelTokenHandlerEntry
+ * @typedef {{ handleRequestCancellation: (subKey?: string | number) => AbortController }} CancelTokenHandlerEntry
  */
 
 /**
@@ -51,7 +51,7 @@ httpInstance.interceptors.request.use((config) => {
  * @param {Record<string, unknown>} apiObject apiObject
  * @return {Record<string, CancelTokenHandlerEntry>}
  */
-function createCancelTokenHandler (apiObject) {
+function createCancelTokenHandler(apiObject) {
 	const cancelTokenHandler = {}
 	Object.getOwnPropertyNames(apiObject).forEach((propertyName) => {
 		const handlers = {}

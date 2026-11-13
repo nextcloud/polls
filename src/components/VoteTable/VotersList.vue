@@ -20,12 +20,10 @@ const { option, answerFilter } = defineProps<Props>()
 
 const votesStore = useVotesStore()
 
-const voters = computed(() =>
-	votesStore.getVotersByOptionAndAnswer({
-		optionText: option.text,
-		answer: answerFilter,
-	}),
-)
+const voters = computed(() => votesStore.getVotersByOptionAndAnswer({
+	optionText: option.text,
+	answer: answerFilter,
+}))
 </script>
 
 <template>

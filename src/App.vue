@@ -49,20 +49,15 @@ const appClass = computed(() => [
 	},
 ])
 
-const UserSettingsDlg = defineAsyncComponent(
-	() => import('./components/Settings/UserSettingsDlg.vue'),
-)
+const UserSettingsDlg = defineAsyncComponent(() => import('./components/Settings/UserSettingsDlg.vue'))
 
 const useNavigation = computed(() => sessionStore.userStatus.isLoggedin)
-const useSidebar = computed(
-	() =>
-		pollStore.permissions.edit
-		|| pollStore.permissions.comment
-		|| route.meta.comboPage
-		|| (route.meta.groupPage
-			&& pollGroupsStore.currentPollGroup?.owner.id
-				=== sessionStore.currentUser.id),
-)
+const useSidebar = computed(() => pollStore.permissions.edit
+	|| pollStore.permissions.comment
+	|| route.meta.comboPage
+	|| (route.meta.groupPage
+		&& pollGroupsStore.currentPollGroup?.owner.id
+		=== sessionStore.currentUser.id))
 
 /**
  * Turn off transitions
@@ -85,7 +80,7 @@ function transitionsOff(delay: number) {
 	}
 }
 
-const debouncedNotify = debounce(async function (payload: {
+const debouncedNotify = debounce(async function(payload: {
 	store: string
 	message: string
 }) {

@@ -19,19 +19,13 @@ import { useSharesStore } from '../../stores/shares.ts'
 const pollStore = usePollStore()
 const sharesStore = useSharesStore()
 
-const isNoAccessSet = computed(
-	() =>
-		pollStore.configuration.access === 'private'
-		&& !sharesStore.hasShares
-		&& pollStore.permissions.edit,
-)
+const isNoAccessSet = computed(() => pollStore.configuration.access === 'private'
+	&& !sharesStore.hasShares
+	&& pollStore.permissions.edit)
 
-const closeToClosing = computed(
-	() =>
-		!pollStore.isClosed
-		&& pollStore.configuration.expire
-		&& pollStore.getExpirationDateTime.diffNow().as('days') < 1,
-)
+const closeToClosing = computed(() => !pollStore.isClosed
+	&& pollStore.configuration.expire
+	&& pollStore.getExpirationDateTime.diffNow().as('days') < 1)
 
 const subTexts = computed(() => {
 	const subTexts = []
@@ -86,9 +80,7 @@ const subTexts = computed(() => {
 			text: pollStore.getExpirationDateTime.toRelative() as string,
 			class: 'closed',
 			iconComponent: ClosedPollIcon,
-			title: pollStore.getExpirationDateTime.toLocaleString(
-				DateTime.DATETIME_SHORT,
-			) as string,
+			title: pollStore.getExpirationDateTime.toLocaleString(DateTime.DATETIME_SHORT) as string,
 		})
 		return subTexts
 	}
@@ -102,9 +94,7 @@ const subTexts = computed(() => {
 			}),
 			class: closeToClosing.value ? 'closing' : 'open',
 			iconComponent: ExpirationIcon,
-			title: pollStore.getExpirationDateTime.toLocaleString(
-				DateTime.DATETIME_SHORT,
-			) as string,
+			title: pollStore.getExpirationDateTime.toLocaleString(DateTime.DATETIME_SHORT) as string,
 		})
 		return subTexts
 	}
@@ -118,9 +108,7 @@ const subTexts = computed(() => {
 			}),
 			class: 'proposal',
 			iconComponent: ProposalsIcon,
-			title: pollStore.getProposalExpirationDateTime.toLocaleString(
-				DateTime.DATETIME_SHORT,
-			) as string,
+			title: pollStore.getProposalExpirationDateTime.toLocaleString(DateTime.DATETIME_SHORT) as string,
 		})
 		return subTexts
 	}
@@ -134,9 +122,7 @@ const subTexts = computed(() => {
 			}),
 			class: 'proposal',
 			iconComponent: ProposalsIcon,
-			title: pollStore.getProposalExpirationDateTime.toLocaleString(
-				DateTime.DATETIME_SHORT,
-			) as string,
+			title: pollStore.getProposalExpirationDateTime.toLocaleString(DateTime.DATETIME_SHORT) as string,
 		})
 		return subTexts
 	}
@@ -147,9 +133,7 @@ const subTexts = computed(() => {
 			text: pollStore.getCreationDateTime.toRelative(),
 			class: 'created',
 			iconComponent: CreationIcon,
-			title: pollStore.getCreationDateTime.toLocaleString(
-				DateTime.DATETIME_SHORT,
-			) as string,
+			title: pollStore.getCreationDateTime.toLocaleString(DateTime.DATETIME_SHORT) as string,
 		})
 	}
 
@@ -163,7 +147,8 @@ const subTexts = computed(() => {
 			v-for="subText in subTexts"
 			:key="subText.id"
 			:title="subText.title"
-			class="sub-text" :class="[subText.class]">
+			class="sub-text"
+			:class="[subText.class]">
 			<Component :is="subText.iconComponent" :size="16" />
 			<span class="sub-text">{{ subText.text }}</span>
 		</span>

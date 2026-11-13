@@ -42,7 +42,9 @@ export function useResizeObserver(elementId: string, elWidthOffset: number = 0) 
 	})
 
 	onUnmounted(() => {
-		if (resizeObserver.value) resizeObserver.value.disconnect()
+		if (resizeObserver.value) {
+			resizeObserver.value.disconnect()
+		}
 	})
 
 	return { isBelowWidthOffset }

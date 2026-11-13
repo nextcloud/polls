@@ -28,23 +28,17 @@ async function addOption(): Promise<void> {
 	if (newPollText.value) {
 		try {
 			await optionsStore.add({ text: newPollText.value } as SimpleOption)
-			showSuccess(
-				t('polls', '{optionText} added', { optionText: newPollText.value }),
-			)
+			showSuccess(t('polls', '{optionText} added', { optionText: newPollText.value }))
 			newPollText.value = ''
 		} catch (error) {
 			if ((error as AxiosError).response?.status === 409) {
-				showError(
-					t('polls', '{optionText} already exists', {
-						optionText: newPollText.value,
-					}),
-				)
+				showError(t('polls', '{optionText} already exists', {
+					optionText: newPollText.value,
+				}))
 			} else {
-				showError(
-					t('polls', 'Error adding {optionText}', {
-						optionText: newPollText.value,
-					}),
-				)
+				showError(t('polls', 'Error adding {optionText}', {
+					optionText: newPollText.value,
+				}))
 			}
 		}
 	}

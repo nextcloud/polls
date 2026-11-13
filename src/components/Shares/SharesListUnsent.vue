@@ -26,26 +26,22 @@ async function sendAllInvitations() {
 		const result = await sharesStore.inviteAll({ pollId: pollStore.id })
 
 		result.sentMails.forEach((item) => {
-			showSuccess(
-				t('polls', 'Invitation sent to {displayName} ({emailAddress})', {
-					emailAddress: item.emailAddress,
-					displayName: item.displayName,
-				}),
-			)
+			showSuccess(t('polls', 'Invitation sent to {displayName} ({emailAddress})', {
+				emailAddress: item.emailAddress,
+				displayName: item.displayName,
+			}))
 		})
 
 		result.abortedMails.forEach((item) => {
 			Logger.error('Mail could not be sent!', { recipient: item })
-			showError(
-				t(
-					'polls',
-					'Error sending invitation to {displayName} ({emailAddress})',
-					{
-						emailAddress: item.emailAddress,
-						displayName: item.displayName,
-					},
-				),
-			)
+			showError(t(
+				'polls',
+				'Error sending invitation to {displayName} ({emailAddress})',
+				{
+					emailAddress: item.emailAddress,
+					displayName: item.displayName,
+				},
+			))
 		})
 	} catch {
 		showError(t('polls', 'Error sending invitations'))

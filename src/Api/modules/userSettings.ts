@@ -22,9 +22,7 @@ const userSettings = {
 		})
 	},
 
-	writeUserSettings(
-		preferences: UserPreferences,
-	): Promise<AxiosResponse<{ preferences: UserPreferences }>> {
+	writeUserSettings(preferences: UserPreferences): Promise<AxiosResponse<{ preferences: UserPreferences }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'preferences',

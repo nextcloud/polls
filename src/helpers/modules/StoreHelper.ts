@@ -13,7 +13,7 @@ import { usePollStore } from '../../stores/poll.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
 const StoreHelper = {
-	updateStores(data: { poll?: Poll; votes?: Vote[]; options?: OptionDto[] }) {
+	updateStores(data: { poll?: Poll, votes?: Vote[], options?: OptionDto[] }) {
 		const pollStore = usePollStore()
 		const votesStore = useVotesStore()
 		const optionsStore = useOptionsStore()
@@ -25,9 +25,7 @@ const StoreHelper = {
 			votesStore.votes = data.votes as Vote[]
 		}
 		if (Object.hasOwn(data, 'options')) {
-			optionsStore.options = optionsStore.optionsDtoToOptions(
-				data.options as OptionDto[],
-			)
+			optionsStore.options = optionsStore.optionsDtoToOptions(data.options as OptionDto[])
 		}
 	},
 }

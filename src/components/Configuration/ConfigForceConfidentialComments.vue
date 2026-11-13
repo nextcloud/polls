@@ -13,8 +13,8 @@ const emit = defineEmits(['change'])
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
-const description =
-	pollStore.owner.id === sessionStore.currentUser.id
+const description
+	= pollStore.owner.id === sessionStore.currentUser.id
 		? t(
 				'polls',
 				'Force confidential comments (only visible to you and the author)',

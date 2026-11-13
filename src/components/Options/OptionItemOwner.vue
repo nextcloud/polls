@@ -25,11 +25,8 @@ const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 const optionsStore = useOptionsStore()
 
-const showDelete = computed(
-	() =>
-		!pollStore.permissions.edit
-		&& sessionStore.currentUser.id === option.owner?.id,
-)
+const showDelete = computed(() => !pollStore.permissions.edit
+	&& sessionStore.currentUser.id === option.owner?.id)
 </script>
 
 <template>
