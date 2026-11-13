@@ -15,15 +15,15 @@ defineOptions({ inheritAttrs: false })
 
 const {
 	condensed = false,
-	description,
+	description = '',
 	disabled = false,
 	hideNames = false,
 	showEmail = false,
 	tag = 'div',
-	virtualUserType,
+	virtualUserType = undefined,
 	user = defaultUser,
 	itemStyle = {},
-	label,
+	label = undefined,
 } = defineProps<Props>()
 
 interface Props {
@@ -40,7 +40,7 @@ interface Props {
 }
 
 const computedRoleType = computed<UserType | VirtualUserItemType>(() => user.type ?? virtualUserType)
-const emailAddressComputed = computed(() => {
+const computedEmailAddress = computed(() => {
 	if (
 		showEmail
 		&& user.emailAddress !== user.displayName
@@ -69,7 +69,7 @@ const computedDescription = computed(() => {
 	if (user.type === 'anonymous') {
 		return t('polls', 'Anonymized participant')
 	}
-	return emailAddressComputed
+	return computedEmailAddress
 })
 
 const computedLabel = computed(() => {

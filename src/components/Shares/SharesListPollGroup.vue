@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import type { User } from '../../Types/index.ts'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import ShareIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 import ConfigBox from '../Base/modules/ConfigBox.vue'

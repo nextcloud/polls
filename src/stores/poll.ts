@@ -15,7 +15,7 @@ import type {
 } from './poll.types'
 import type { ViewMode } from './preferences.types'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import DOMPurify from 'dompurify'

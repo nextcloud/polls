@@ -8,7 +8,7 @@ import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import type { Poll } from '../../stores/poll.types'
 import type { User } from '../../Types/index.ts'
 
-import { showError, showSuccess } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import { computed, ref } from 'vue'
 import NcDialog from '@nextcloud/vue/components/NcDialog'

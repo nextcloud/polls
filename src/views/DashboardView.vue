@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import type { Poll } from '../stores/poll.types'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import { generateUrl } from '@nextcloud/router'
 import { onMounted } from 'vue'

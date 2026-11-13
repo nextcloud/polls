@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import type { StatusResults } from '../../Types/index.ts'
 
-import { showError, showSuccess } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import debounce from 'lodash/debounce'
 import { ref } from 'vue'

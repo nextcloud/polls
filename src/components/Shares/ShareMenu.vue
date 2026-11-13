@@ -8,7 +8,7 @@ import type { AxiosError } from '@nextcloud/axios'
 import type { SentResults } from '../../Api/modules/shares.ts'
 import type { Share } from '../../stores/shares.types'
 
-import { showError, showSuccess } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import { computed, onMounted, ref } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'

@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import type { CollapsibleProps } from '../components/Base/modules/CollapsibleArea.vue'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { emit } from '@nextcloud/event-bus'
 import { n, t } from '@nextcloud/l10n'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'

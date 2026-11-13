@@ -7,7 +7,7 @@
 import type { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import type { Poll } from '../../stores/poll.types'
 
-import { showError, showInfo } from '@nextcloud/dialogs'
+import { showError, showInfo } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'

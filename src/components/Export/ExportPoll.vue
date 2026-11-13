@@ -9,7 +9,7 @@ import type { Sheet, WorkBook } from 'xlsx'
 import type { ApiEmailAdressList } from '../../Api/index.ts'
 import type { Answer } from '../../stores/votes.types'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import DOMPurify from 'dompurify'
 import { saveAs } from 'file-saver'

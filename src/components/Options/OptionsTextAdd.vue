@@ -7,7 +7,7 @@
 import type { AxiosError } from '@nextcloud/axios'
 import type { SimpleOption } from '../../stores/options.types'
 
-import { showError, showSuccess } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import { ref } from 'vue'
 import InputDiv from '../Base/modules/InputDiv.vue'

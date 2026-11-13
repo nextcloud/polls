@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'

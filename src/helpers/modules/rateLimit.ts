@@ -5,7 +5,7 @@
 
 import type { AxiosError } from '@nextcloud/axios'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 
 /**

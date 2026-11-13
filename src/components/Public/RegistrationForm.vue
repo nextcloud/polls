@@ -7,7 +7,7 @@
 import type { AxiosError } from '@nextcloud/axios'
 import type { SignalingType } from '@/Types'
 
-import { showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import debounce from 'lodash/debounce'
 import { computed, onMounted, ref } from 'vue'

@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import type { User } from '../../Types/index.ts'
 
-import { showSuccess } from '@nextcloud/dialogs'
+import { showSuccess } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import { computed } from 'vue'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'

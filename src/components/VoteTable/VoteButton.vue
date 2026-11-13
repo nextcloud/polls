@@ -9,7 +9,7 @@ import type { Option } from '../../stores/options.types'
 import type { Answer } from '../../stores/votes.types'
 import type { User } from '../../Types/index.ts'
 
-import { showError, showSuccess } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import debounce from 'lodash/debounce'
 import { computed, onUnmounted } from 'vue'

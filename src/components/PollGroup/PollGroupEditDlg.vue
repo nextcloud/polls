@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { showError, showInfo } from '@nextcloud/dialogs'
+import { showError, showInfo } from '@nextcloud/dialogs/toast'
 import { t } from '@nextcloud/l10n'
 import { useRoute, useRouter } from 'vue-router'
 import SpeakerIcon from 'vue-material-design-icons/BullhornOutline.vue'
