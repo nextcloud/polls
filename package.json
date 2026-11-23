@@ -59,7 +59,7 @@
     "sortablejs": "^1.15.7",
     "vue": "^3.5.44",
     "vue-material-design-icons": "^5.4.0",
-    "vue-router": "^4.6.4",
+    "vue-router": "^4.6.5",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
