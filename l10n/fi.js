@@ -179,6 +179,7 @@ OC.L10N.register(
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n \"Ehkä\"-ääni","%n \"Ehkä\"-ääntä"],
     "Description" : "Kuvaus",
     "Archived poll" : "Arkistoitu kysely",
+    "Archived {relativeTime}" : "Arkistoidut {relativeTime}",
     "never" : "ei koskaan",
     "Poll owner: {ownerName}" : "Kyselyn omistaja: {ownerName}",
     "Error cloning poll." : "Virhe kyselyä kloonatessa.",
