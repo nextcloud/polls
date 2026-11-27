@@ -9,9 +9,12 @@ namespace OCA\Polls\Middleware;
 
 use Exception;
 use OCA\Polls\Attributes\ShareTokenRequired;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\Share;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
@@ -22,9 +25,11 @@ use OCP\AppFramework\Middleware;
 use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
+use OCP\IAppConfig;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
+use OCP\IUserManager;
 use OCP\Security\Bruteforce\IThrottler;
 use OCP\Security\Bruteforce\MaxDelayReached;
 use ReflectionMethod;
@@ -45,6 +50,9 @@ class RequestAttributesMiddleware extends Middleware {
 		protected UserSession $userSession,
 		protected IThrottler $throttler,
 		protected IURLGenerator $urlGenerator,
+		protected PollMapper $pollMapper,
+		protected IUserManager $userManager,
+		protected IAppConfig $appConfig,
 	) {
 	}
 
@@ -86,7 +94,7 @@ class RequestAttributesMiddleware extends Middleware {
 	 * brute force settings (auth.bruteforce.*, bruteforcesettings allow list).
 	 *
 	 * @throws MaxDelayReached if the maximum of failed attempts is reached
-	 * @throws ShareNotFoundException if the share token does not exist
+	 * @throws ShareNotFoundException if the share token does not exist or the poll owner is disabled
 	 */
 	private function protectShareToken(): void {
 		$remoteAddress = $this->request->getRemoteAddress();
@@ -98,12 +106,35 @@ class RequestAttributesMiddleware extends Middleware {
 		}
 
 		try {
-			$this->userSession->getShare();
+			$share = $this->userSession->getShare();
 		} catch (ShareNotFoundException $e) {
 			$this->throttler->registerAttempt(self::BRUTEFORCE_ACTION, $remoteAddress);
 			$this->rejectedToken = $e;
 			throw $e;
 		}
+
+		if ($this->isHiddenDisabledOwnerShare($share)) {
+			$this->rejectedToken = new ShareNotFoundException('Token ' . $share->getToken() . ' does not exist');
+			throw $this->rejectedToken;
+		}
+	}
+
+	/**
+	 * Shares of polls owned by a disabled account are hidden, following the
+	 * server's files_sharing.hide_disabled_user_shares setting
+	 */
+	private function isHiddenDisabledOwnerShare(Share $share): bool {
+		if ($this->appConfig->getValueString('files_sharing', 'hide_disabled_user_shares', 'yes') !== 'yes') {
+			return false;
+		}
+
+		try {
+			$ownerId = $this->pollMapper->get($share->getPollIdOrFail())->getOwner();
+		} catch (DoesNotExistException) {
+			return false;
+		}
+
+		return $this->userManager->get($ownerId)?->isEnabled() === false;
 	}
 
 	public function afterException(Controller $controller, string $methodName, Exception $exception): Response {
