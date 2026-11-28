@@ -23,4 +23,17 @@ class VoteListener extends BaseListener {
 			throw new InvalidClassException;
 		}
 	}
+
+	/**
+	 * Do not publish vote activities for anonymous polls.
+	 * The activity names the voter and is delivered to the poll owner, who could
+	 * then match it against the changing results and de-anonymize the vote.
+	 * See https://github.com/nextcloud/polls/issues/5192
+	 */
+	protected function addActivity() : void {
+		if ($this->event instanceof VoteEvent && $this->event->isPollAnonymous()) {
+			return;
+		}
+		parent::addActivity();
+	}
 }
