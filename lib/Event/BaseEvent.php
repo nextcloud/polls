@@ -52,6 +52,13 @@ abstract class BaseEvent extends Event {
 		return $this->poll->getOwner();
 	}
 
+	/**
+	 * True for anonymous polls, including locked anonymous polls (anonymous < 0)
+	 */
+	public function isPollAnonymous(): bool {
+		return $this->poll->getAnonymous() !== 0;
+	}
+
 	public function getActor(): string {
 		if ($this->userSession->getCurrentUserId() !== '') {
 			return $this->userSession->getCurrentUserId();
